@@ -8,12 +8,21 @@ javascript:
     data: { datasets: #{{@data.to_json}} },
     options: {
       scales: {
-          xAxes: [{
-              type: 'time',
-              time: {
-                parser: timeFormat
-              }
-          }]
-      }
+        xAxes: [{
+          type: 'time',
+          time: {
+            displayFormats: {second: 'HH:mm:ss'}
+          },
+          distribution: 'series',
+          offset: true,
+          ticks: {
+            source: 'data',
+            autoSkip: true,
+            autoSkipPadding: 75,
+            maxRotation: 0,
+            sampleSize: 100
+          }
+        }]
+      },
     }
   });
