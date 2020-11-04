@@ -1,0 +1,19 @@
+
+canvas#myChart height="400" width="400"
+javascript:
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var timeFormat = 'HH:mm:ss';
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: { datasets: #{{@data.to_json}} },
+    options: {
+      scales: {
+          xAxes: [{
+              type: 'time',
+              time: {
+                parser: timeFormat
+              }
+          }]
+      }
+    }
+  });
