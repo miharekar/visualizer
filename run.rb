@@ -53,5 +53,7 @@ get "/" do
     }
   end.compact.sort_by{ |d| d[:label] }
 
+  @temperature_data, @data = @data.partition { |d| d[:label] =~ /Temperature/ }
+
   slim :index
 end

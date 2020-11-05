@@ -1,11 +1,54 @@
 
-canvas#myChart height="400" width="400"
+canvas#mainChart width="100%"
+br
+canvas#temperatureChart width="100%"
+
 javascript:
-  var ctx = document.getElementById('myChart').getContext('2d');
   var timeFormat = 'HH:mm:ss';
-  var myChart = new Chart(ctx, {
+
+  var ctx = document.getElementById('mainChart').getContext('2d');
+  var mainChart = new Chart(ctx, {
     type: 'line',
     data: { datasets: #{{@data.to_json}} },
+    options: {
+      scales: {
+        xAxes: [{
+          type: 'time',
+          time: {
+            displayFormats: {second: 'HH:mm:ss'}
+          },
+          distribution: 'series',
+          offset: true,
+          ticks: {
+            source: 'data',
+            autoSkip: true,
+            autoSkipPadding: 75,
+            maxRotation: 0,
+            sampleSize: 100
+          }
+        }]
+      },
+      tooltips: {
+          intersect: false,
+          mode: 'index',
+          callbacks: {
+            label: function(tooltipItem, myData) {
+              var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+              if (label) {
+                label += ': ';
+              }
+              label += parseFloat(tooltipItem.value).toFixed(2);
+              return label;
+            }
+          }
+        }
+    }
+  });
+
+  var tctx = document.getElementById('temperatureChart').getContext('2d');
+  var temperatureChart = new Chart(tctx, {
+    type: 'line',
+    data: { datasets: #{{@temperature_data.to_json}} },
     options: {
       scales: {
         xAxes: [{
