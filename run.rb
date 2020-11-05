@@ -15,17 +15,17 @@ def parse_shot_file(file)
 end
 
 CHART_CONFIG = {
-  "espresso_pressure" => {title: "Pressure", border_color: "#222222", background_color: "#222222", border_dash: [], fill: true},
-  "espresso_weight" => {title: "Weight", border_color: "#000000", background_color: "#000000", border_dash: [], fill: true},
-  "espresso_flow" => {title: "Flow", border_color: "#444444", background_color: "#444444", border_dash: [], fill: true},
-  "espresso_flow_weight" => {title: "Flow Weight", border_color: "#00FF00", background_color: "#00FF00", border_dash: [], fill: true},
-  "espresso_temperature_basket" => {title: "Temperature Basket", border_color: "#FFEE00", background_color: "#FFEE00", border_dash: [], fill: false},
-  "espresso_temperature_mix" => {title: "Temperature Mix", border_color: "#FFFF00", background_color: "#FFFF00", border_dash: [], fill: false},
-  "espresso_water_dispensed" => {title: "Water Dispensed", border_color: "#0000FF", background_color: "#0000FF", border_dash: [], fill: true},
-  "espresso_temperature_goal" => {title: "Temperature Goal", border_color: "#FF0000", background_color: "#FF0000", border_dash: [5, 5], fill: false},
-  "espresso_flow_weight_raw"  => {title: "Flow Weight Raw", border_color: "#00FF00", background_color: "#00FF00", border_dash: [], fill: false},
-  "espresso_pressure_goal" => {title: "Pressure Goal", border_color: "#FF0000", background_color: "#FF0000", border_dash: [5, 5], fill: false},
-  "espresso_flow_goal" => {title: "Flow Goal", border_color: "#FF0000", background_color: "#FF0000", border_dash: [5, 5], fill: false},
+  "espresso_pressure" => {title: "Pressure", border_color: "rgba(5, 199, 147, 1)", background_color: "rgba(5, 199, 147, 0.7)", border_dash: [], fill: true},
+  "espresso_weight" => {title: "Weight", border_color: "rgba(143, 100, 0, 1)", background_color: "rgba(143, 100, 0, 0.7)", border_dash: [], fill: true},
+  "espresso_flow" => {title: "Flow", border_color: "rgba(31, 183, 234, 1)", background_color: "rgba(31, 183, 234, 0.7)", border_dash: [], fill: true},
+  "espresso_flow_weight" => {title: "Flow Weight", border_color: "rgba(17, 138, 178, 1)", background_color: "rgba(17, 138, 178, 0.7)", border_dash: [], fill: true},
+  "espresso_temperature_basket" => {title: "Temperature Basket", border_color: "rgba(240, 86, 122, 1)", background_color: "rgba(240, 86, 122, 0.7)", border_dash: [], fill: false},
+  "espresso_temperature_mix" => {title: "Temperature Mix", border_color: "rgba(206, 18, 62, 1)", background_color: "rgba(206, 18, 62, 0.7)", border_dash: [], fill: false},
+  "espresso_water_dispensed" => {title: "Water Dispensed", border_color: "rgba(31, 183, 234, 1)", background_color: "rgba(31, 183, 234, 0.7)", border_dash: [], fill: true},
+  "espresso_temperature_goal" => {title: "Temperature Goal", border_color: "rgba(150, 13, 45, 1)", background_color: "rgba(150, 13, 45, 0.7)", border_dash: [5, 5], fill: false},
+  "espresso_flow_weight_raw"  => {title: "Flow Weight Raw", border_color: "rgba(17, 138, 178, 1)", background_color: "rgba(17, 138, 178, 1)", border_dash: [], fill: false},
+  "espresso_pressure_goal" => {title: "Pressure Goal", border_color: "rgba(3, 99, 74, 1)", background_color: "rgba(3, 99, 74, 1)", border_dash: [5, 5], fill: false},
+  "espresso_flow_goal" => {title: "Flow Goal", border_color: "rgba(9, 72, 93, 1)", background_color: "rgba(9, 72, 93, 1)", border_dash: [5, 5], fill: false},
 }
 
 get "/" do
@@ -51,7 +51,7 @@ get "/" do
       fill: CHART_CONFIG[d[:label]][:fill],
       pointRadius: 0,
     }
-  end.compact
+  end.compact.sort_by{ |d| d[:label] }
 
   slim :index
 end
