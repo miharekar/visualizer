@@ -29,7 +29,11 @@ CHART_CONFIG = {
 }
 
 get "/" do
-  file = File.read("test.shot")
+  slim :index
+end
+
+post "/" do
+  file = File.read(params['file']['tempfile'])
   @start_time = Time.at(file[/clock ([\d]+)/, 1].to_i)
   @data = parse_shot_file(file).map do |key, values|
     {
@@ -55,5 +59,5 @@ get "/" do
 
   @temperature_data, @data = @data.partition { |d| d[:label] =~ /Temperature/ }
 
-  slim :index
+  slim :chart
 end
