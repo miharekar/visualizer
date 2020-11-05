@@ -10,8 +10,8 @@ def parse_shot_file(file)
   file.lines.map do |line|
     next unless line =~ /\{[\-\d\. ]{10,}\}/
     key, values = line.split(" {")
-    [key, values.split(" ")]
-  end.compact.to_h
+    {label: key,data: values.split(" ")}
+  end.compact
 end
 
 CHART_CONFIG = {
@@ -35,15 +35,10 @@ end
 post "/" do
   file = File.read(params['file']['tempfile'])
   @start_time = Time.at(file[/clock ([\d]+)/, 1].to_i)
-  @data = parse_shot_file(file).map do |key, values|
-    {
-      label: key,
-      data: values
-    }
-  end
-  elapsed = @data.find { |d| d[:label] == "espresso_elapsed" }
+  parsed_file = parse_shot_file(file)
+  elapsed = parsed_file.find { |d| d[:label] == "espresso_elapsed" }
   @time = elapsed[:data].map { |i| (@start_time + i.to_f) }
-  @data = @data.map do |d|
+  @data = parsed_file.map do |d|
     next if d[:label] == "espresso_elapsed"
 
     {
