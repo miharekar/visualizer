@@ -44,6 +44,11 @@ post "/" do
   @data = parsed_file.map do |d|
     next if d[:label] == "espresso_elapsed"
 
+    unless CHART_CONFIG.key?(d[:label])
+      p "Missing #{d[:label]}"
+      next
+    end
+
     {
       label: CHART_CONFIG[d[:label]][:title],
       data: d[:data].map.with_index { |v, i| {t: @time[i].to_f * 1000, y: v} },
