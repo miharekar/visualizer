@@ -1,0 +1,43 @@
+AllCops:
+  NewCops: enable
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: no_space
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented
+
+Layout/LineLength:
+  Enabled: false
+
+Layout/DotPosition:
+  Enabled: true
+  EnforcedStyle: trailing
+
+Style/RaiseArgs:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/Send:
+  Enabled: true
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
