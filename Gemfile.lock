@@ -6,9 +6,12 @@ GEM
     multi_json (1.15.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nio4r (2.5.4)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    puma (5.0.4)
+      nio4r (~> 2.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -35,9 +38,13 @@ PLATFORMS
 
 DEPENDENCIES
   pry
+  puma
   sinatra
   sinatra-contrib
   slim
+
+RUBY VERSION
+   ruby 2.6.6p146
 
 BUNDLED WITH
    2.1.4
