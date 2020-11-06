@@ -1,9 +1,13 @@
 doctype html
 html
   head
+    meta content="width=device-width, initial-scale=1" name="viewport"
     script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.bundle.min.js"
-    script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"
-    script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"
+    script src="https://cdn.jsdelivr.net/npm/hammerjs@latest/hammer.min.js"
+    script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@latest/dist/chartjs-plugin-zoom.min.js"
+    script src="/application.js"
+    link href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" rel="stylesheet"
+    link href="/application.css" rel="stylesheet"
     title Decent Espresso Shot Visualizer
   body
     == yield

@@ -8,6 +8,8 @@ if development?
   require "pry"
 end
 
+set :public_folder, "public"
+
 def parse_shot_file(file)
   file.lines.map do |line|
     next unless line =~ /\{[\-\d. ]{10,}\}/

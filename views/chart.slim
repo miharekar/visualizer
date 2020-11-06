@@ -1,61 +1,19 @@
-h1 Chart
-canvas#mainChart width="100%"
-h2 Temperature Chart
-canvas#temperatureChart width="100%"
-h2 Upload a different file
-form action="/" method="POST" enctype="multipart/form-data"
-  input type="file" name="file"
-  input type="submit" value="Upload .shot file"
+.pure-g
+  .pure-u-1-24
+  .pure-u-22-24
+    h1 Chart
+    canvas#mainChart width="100%"
+    h1 Temperature Chart
+    canvas#temperatureChart width="100%"
+    h2.blue Upload a different file
+    form.pure-form.pure-form-stacked action="/" method="POST" enctype="multipart/form-data"
+      fieldset
+        label for="file" Select your .shot file
+        input type="file" name="file"
+      button.pure-button.pure-button-primary type="submit" Upload
+  .pure-u-1-24
 
 javascript:
-  var timeFormat = 'HH:mm:ss';
-
-  var options = {
-  scales: {
-    xAxes: [{
-      type: 'time',
-      time: {
-        displayFormats: {second: 'HH:mm:ss'}
-      },
-      distribution: 'series',
-      offset: true,
-      ticks: {
-        source: 'data',
-        autoSkip: true,
-        autoSkipPadding: 75,
-        maxRotation: 0,
-        sampleSize: 100
-      }
-    }]
-  },
-  plugins: {
-    zoom: {
-      pan: {
-        enabled: true,
-        mode: 'x'
-      },
-      zoom: {
-        enabled: true,
-        mode: 'x'
-      }
-    }
-  },
-  tooltips: {
-      intersect: false,
-      mode: 'index',
-      callbacks: {
-        label: function(tooltipItem, myData) {
-          var label = myData.datasets[tooltipItem.datasetIndex].label || '';
-          if (label) {
-            label += ': ';
-          }
-          label += parseFloat(tooltipItem.value).toFixed(2);
-          return label;
-        }
-      }
-    }
-  }
-
   var ctx = document.getElementById('mainChart').getContext('2d');
   var mainChart = new Chart(ctx, {
     type: 'line',
