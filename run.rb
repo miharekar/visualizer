@@ -15,7 +15,7 @@ def parse_shot_file(file)
     next unless line =~ /\{[\-\d. ]{10,}\}/
 
     key, values = line.split(" {")
-    {label: key, data: values.split(" ")}
+    {label: key, data: values.split(" ").map { |v| v == "-1.0" ? nil : v }}
   end.compact
 end
 
