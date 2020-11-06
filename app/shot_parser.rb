@@ -15,12 +15,12 @@ class ShotParser
     "espresso_flow_goal" => {title: "Flow Goal", border_color: "rgba(9, 72, 93, 1)", background_color: "rgba(9, 72, 93, 1)", border_dash: [5, 5], fill: false}
   }.freeze
 
-  attr_reader :timeframe, :temperature_data, :data_without_temperature
+  attr_reader :start_time, :temperature_data, :data_without_temperature
 
   def initialize(file)
     @file = file
     @parsed = parsed_file
-    @timeframe = parsed_timeframe
+    @start_time = Time.at(@file[/clock (\d+)/, 1].to_i)
     @temperature_data, @data_without_temperature = chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label] =~ /Temperature/ }
   end
 
@@ -36,12 +36,13 @@ class ShotParser
   end
 
   def parsed_timeframe
-    start_time = Time.at(@file[/clock (\d+)/, 1].to_i)
     elapsed = @parsed.find { |d| d[:label] == "espresso_elapsed" }
     elapsed[:data].map { |i| (start_time + i.to_f) }
   end
 
   def chart_data
+    timeframe = parsed_timeframe
+
     @parsed.map do |d|
       next if !CHART_CONFIG.key?(d[:label]) || d[:label] == "espresso_elapsed"
 

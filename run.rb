@@ -10,12 +10,6 @@ get "/" do
 end
 
 post "/" do
-  file = File.read(params["file"]["tempfile"])
-  shot = ShotParser.new(file)
-
-  @time = shot.timeframe
-  @temperature_data = shot.temperature_data
-  @data = shot.data_without_temperature
-
+  @shot = ShotParser.new(File.read(params["file"]["tempfile"]))
   slim :chart
 end
