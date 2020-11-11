@@ -1,19 +1,20 @@
-var timeFormat = 'HH:mm:ss';
 var options = {
   scales: {
     xAxes: [{
-      type: 'time',
+      type: "time",
       time: {
-        displayFormats: { second: 'HH:mm:ss' }
+        displayFormats: {
+          second: "ss.SS[s]"
+        },
+        tooltipFormat: "ss.SS[s]",
       },
-      distribution: 'series',
+      distribution: "series",
       offset: true,
       ticks: {
-        source: 'data',
+        source: "data",
         autoSkip: true,
-        autoSkipPadding: 75,
-        maxRotation: 0,
-        sampleSize: 100
+        autoSkipPadding: 50,
+        maxRotation: 0
       }
     }]
   },
@@ -21,22 +22,22 @@ var options = {
     zoom: {
       pan: {
         enabled: true,
-        mode: 'x'
+        mode: "x"
       },
       zoom: {
         enabled: true,
-        mode: 'x'
+        mode: "x"
       }
     }
   },
   tooltips: {
     intersect: false,
-    mode: 'index',
+    mode: "index",
     callbacks: {
       label: function (tooltipItem, myData) {
-        var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+        var label = myData.datasets[tooltipItem.datasetIndex].label || "";
         if (label) {
-          label += ': ';
+          label += ": ";
         }
         label += parseFloat(tooltipItem.value).toFixed(2);
         return label;

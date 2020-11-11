@@ -35,14 +35,8 @@ class ShotParser
     end.compact
   end
 
-  def parsed_timeframe
-    elapsed = @parsed.find { |d| d[:label] == "espresso_elapsed" }
-    elapsed[:data].map { |i| (start_time + i.to_f) }
-  end
-
   def chart_data
-    timeframe = parsed_timeframe
-
+    timeframe = @parsed.find { |d| d[:label] == "espresso_elapsed" }[:data]
     @parsed.map do |d|
       next if !CHART_CONFIG.key?(d[:label]) || d[:label] == "espresso_elapsed"
 
