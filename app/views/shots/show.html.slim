@@ -20,7 +20,7 @@ javascript:
   var ctx = document.getElementById('mainChart').getContext('2d');
   var mainChart = new Chart(ctx, {
     type: 'line',
-    data: { datasets: #{{@data_without_temperature.to_json}} },
+    data: { datasets: #{{@main_data.to_json}} },
     options: window.chartOptions
   });
 
