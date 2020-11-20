@@ -17,3 +17,13 @@
 .blue {
   color: #008ed4;
 }
+
+.relative {
+  position: relative;
+}
+
+.reset-zoom {
+  position: absolute;
+  top: 50px;
+  right: 30px;
+}

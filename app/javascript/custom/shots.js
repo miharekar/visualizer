@@ -1,4 +1,5 @@
 import Chart from "chart.js";
+require("chartjs-plugin-crosshair")
 
 window.chartOptions = {
   scales: {
@@ -21,16 +22,12 @@ window.chartOptions = {
     }]
   },
   plugins: {
-    zoom: {
-      pan: {
-        enabled: true,
-        mode: "x"
+    crosshair: {
+      line: {
+        color: '#000',
+        dashPattern: [5, 5]
       },
-      zoom: {
-        enabled: true,
-        mode: "x"
-      }
-    }
+    },
   },
   tooltips: {
     intersect: false,
