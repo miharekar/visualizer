@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    meta content="width=device-width, initial-scale=1" name="viewport"
+    title Decent Espresso Shot Visualizer
+    = csrf_meta_tags
+    = csp_meta_tag
+    link href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" rel="stylesheet"
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    = yield

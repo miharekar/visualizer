@@ -1,14 +1,19 @@
 class ShotsController < ApplicationController
-  before_action :set_shot, only: [:show]
-
   # GET /shots/1
   def show
     @shot = Shot.find(params[:id])
+    @temperature_data, @data_without_temperature = @shot.data.sort_by { |d| d[:label] }.partition { |d| d["label"].include?("Temperature") }
+  end
+
+  # GET /shots/new
+  def new
+    @shot = Shot.new
   end
 
   # POST /shots
   def create
-    @shot = Shot.new(shot_params)
+    shot = ShotParser.new(File.read(params["file"]))
+    @shot = Shot.new(start_time: shot.start_time, data: shot.chart_data)
 
     if @shot.save
       redirect_to @shot, notice: "Shot was successfully created."
@@ -21,6 +26,6 @@ class ShotsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def shot_params
-    params.require(:shot).permit(:start_time, :data)
+    params.permit(:file)
   end
 end
