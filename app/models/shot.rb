@@ -1,0 +1,2 @@
+class Shot < ApplicationRecord
+end

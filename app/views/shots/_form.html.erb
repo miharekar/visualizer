@@ -1,0 +1,27 @@
+<%= form_with(model: shot, local: true) do |form| %>
+  <% if shot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(shot.errors.count, "error") %> prohibited this shot from being saved:</h2>
+
+      <ul>
+        <% shot.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :start_time %>
+    <%= form.datetime_select :start_time %>
+  </div>
+
+  <div class="field">
+    <%= form.label :data %>
+    <%= form.text_field :data %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
