@@ -5,18 +5,13 @@ class ShotsController < ApplicationController
     @temperature_data, @data_without_temperature = @shot.data.sort_by { |d| d[:label] }.partition { |d| d["label"].include?("Temperature") }
   end
 
-  # GET /shots/new
-  def new
-    @shot = Shot.new
-  end
-
   # POST /shots
   def create
     shot = ShotParser.new(File.read(params["file"]))
-    @shot = Shot.new(start_time: shot.start_time, data: shot.chart_data)
+    @shot = Shot.new(start_time: shot.start_time, data: shot.data)
 
     if @shot.save
-      redirect_to @shot, notice: "Shot was successfully created."
+      redirect_to @shot
     else
       render :new
     end
