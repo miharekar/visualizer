@@ -1,7 +1,8 @@
 .pure-g
   .pure-u-1-24
   .pure-u-22-24
-    h1 Chart of shot at #{@shot.start_time.strftime("%d.%m.%Y at %H:%M")}
+    h1 #{@shot.profile_title}
+    h2 #{@shot.start_time.strftime("%d.%m.%Y at %H:%M")}
     canvas#mainChart width="100%"
     h1 Temperature Chart
     canvas#temperatureChart width="100%"

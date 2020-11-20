@@ -15,7 +15,7 @@ class ShotParser
     "espresso_flow_goal" => {title: "Flow Goal", border_color: "rgba(9, 72, 93, 1)", background_color: "rgba(9, 72, 93, 1)", border_dash: [5, 5], fill: false}
   }.freeze
 
-  attr_reader :start_time, :data
+  attr_reader :start_time, :data, :profile_title
 
   def initialize(file)
     @file = file
@@ -45,8 +45,13 @@ class ShotParser
 
   def parsed_file
     @file.lines.map do |line|
-      match = line.match(/(?<label>\w+) \{(?<data>[\-\d. ]+)\}/)
+      match = line.match(/(?<label>\w+) \{(?<data>[\-\d. ]+)\}|profile_title \{(?<title>.+)\}/)
       next unless match
+
+      if match[:title].present?
+        @profile_title = match[:title]
+        next
+      end
 
       {label: match[:label], data: match[:data].split(" ").map { |v| v == "-1.0" ? nil : v }}
     end.compact

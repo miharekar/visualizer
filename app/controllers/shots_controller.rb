@@ -7,8 +7,12 @@ class ShotsController < ApplicationController
 
   # POST /shots
   def create
-    shot = ShotParser.new(File.read(params["file"]))
-    @shot = Shot.new(start_time: shot.start_time, data: shot.data)
+    parsed_shot = ShotParser.new(File.read(params["file"]))
+    @shot = Shot.new(
+      start_time: parsed_shot.start_time,
+      profile_title: parsed_shot.profile_title,
+      data: parsed_shot.data
+    )
 
     if @shot.save
       redirect_to @shot
