@@ -21,7 +21,7 @@ class ShotParser
         next
       end
 
-      {label: match[:label], data: match[:data].split(" ").map { |v| v == "-1.0" ? nil : v }}
+      {label: match[:label], data: match[:data].split(" ")}
     end.compact
   end
 end
