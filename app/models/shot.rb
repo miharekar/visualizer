@@ -28,7 +28,7 @@ class Shot < ApplicationRecord
 
       {
         label: CHART_CONFIG[d["label"]][:title],
-        data: d["data"].map.with_index { |v, i| {t: timeframe[i].to_f * 1000, y: (Float(v).negative? ? nil : v)} },
+        data: d["data"].map.with_index { |v, i| {t: timeframe[i].to_f * 1000, y: (v.to_f.negative? ? nil : v)} },
         borderColor: CHART_CONFIG[d["label"]][:border_color],
         backgroundColor: CHART_CONFIG[d["label"]][:background_color],
         borderDash: CHART_CONFIG[d["label"]][:border_dash],
@@ -50,11 +50,11 @@ class Shot < ApplicationRecord
     {
       label: CHART_CONFIG["espresso_resistance"][:title],
       data: pressure.map.with_index do |v, i|
-        f = Float(flow[i][:y])
+        f = flow[i][:y].to_f
         if f.zero?
           {t: v[:t], y: nil}
         else
-          r = Float(v[:y]) / f
+          r = v[:y].to_f / f
           {t: v[:t], y: (r > 15 ? nil : r)}
         end
       end,
