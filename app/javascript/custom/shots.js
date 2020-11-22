@@ -101,7 +101,7 @@ function chart_from_data(data, skin) {
   }).filter(e => e);
 }
 
-function showChart(skin) {
+function drawChart(skin) {
   const ctx = document.getElementById("mainChart").getContext("2d");
   mainChart = new Chart(ctx, {
     type: "line",
@@ -116,19 +116,23 @@ function showChart(skin) {
   });
 }
 
+function showChart() {
+  if (document.getElementById("checkbox-skin-dsx").checked) {
+    document.getElementsByTagName("body")[0].classList.add("black")
+    drawChart("dsx")
+  } else {
+    document.getElementsByTagName("body")[0].classList.remove("black")
+    drawChart("classic")
+  }
+}
+
 document.addEventListener("turbolinks:load", function () {
+  showChart()
   if (document.getElementById("skin-picker")) {
-    showChart("classic")
     document.getElementById("skin-picker").addEventListener("change", function () {
       mainChart.destroy()
       temperatureChart.destroy()
-      if (document.getElementById("checkbox-skin-dsx").checked) {
-        document.getElementsByTagName("body")[0].classList.add("black")
-        showChart("dsx")
-      } else {
-        document.getElementsByTagName("body")[0].classList.remove("black")
-        showChart("classic")
-      }
+      showChart()
     })
   }
 })

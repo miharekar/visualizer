@@ -7,11 +7,11 @@
       fieldset
         .legend Skin:
         label.pure-radio for="checkbox-skin-classic"
-          input#checkbox-skin-classic checked="checked" name="skin" type="radio" value="classic"
-          | Classic
+          input#checkbox-skin-classic name="skin" type="radio" value="classic" checked=("true" if !params[:dsx].present?)
+          ' &nbsp;Classic
         label.pure-radio for="checkbox-skin-dsx"
-          input#checkbox-skin-dsx name="skin" type="radio" value="dsx"
-          | DSx
+          input#checkbox-skin-dsx name="skin" type="radio" value="dsx" checked=("true" if params[:dsx].present?)
+          ' &nbsp;DSx
 
     .relative
       canvas#mainChart width="100%"
