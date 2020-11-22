@@ -57,7 +57,7 @@ const chartColors = {
   "espresso_flow_weight_raw": { title: "Flow Weight Raw", borderColor: "rgba(17, 138, 178, 1)", backgroundColor: "rgba(17, 138, 178, 1)", borderDash: [], fill: false, hidden: false },
   "espresso_pressure_goal": { title: "Pressure Goal", borderColor: "rgba(3, 99, 74, 1)", backgroundColor: "rgba(3, 99, 74, 1)", borderDash: [5, 5], fill: false, hidden: false },
   "espresso_flow_goal": { title: "Flow Goal", borderColor: "rgba(9, 72, 93, 1)", backgroundColor: "rgba(9, 72, 93, 1)", borderDash: [5, 5], fill: false, hidden: false },
-  "espresso_resistance": { title: "Resistance", borderColor: "rgba(229, 229, 0, 1)", backgroundColor: "rgba(229, 229, 0, 1)", borderDash: [5, 5], fill: false, hidden: false }
+  "espresso_resistance": { title: "Resistance", borderColor: "rgba(229, 229, 0, 1)", backgroundColor: "rgba(229, 229, 0, 1)", borderDash: [], fill: false, hidden: false }
 }
 
 window.chart_from_data = function (data) {
