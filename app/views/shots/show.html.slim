@@ -17,16 +17,16 @@
   .pure-u-1-24
 
 javascript:
-  var ctx = document.getElementById('mainChart').getContext('2d');
-  var mainChart = new Chart(ctx, {
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  const mainChart = new Chart(ctx, {
     type: 'line',
-    data: { datasets: #{{@main_data.to_json}} },
+    data: { datasets: window.chart_from_data(#{{@main_data.to_json}}) },
     options: window.chartOptions
   });
 
-  var tctx = document.getElementById('temperatureChart').getContext('2d');
-  var temperatureChart = new Chart(tctx, {
+  const tctx = document.getElementById('temperatureChart').getContext('2d');
+  const temperatureChart = new Chart(tctx, {
     type: 'line',
-    data: { datasets: #{{@temperature_data.to_json}} },
+    data: { datasets: window.chart_from_data(#{{@temperature_data.to_json}}) },
     options: window.chartOptions
   });

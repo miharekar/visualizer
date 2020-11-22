@@ -2,7 +2,7 @@ class ShotsController < ApplicationController
   # GET /shots/1
   def show
     @shot = Shot.find(params[:id])
-    @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("Temperature") }
+    @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
   end
 
   # POST /shots
