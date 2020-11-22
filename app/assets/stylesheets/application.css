@@ -14,6 +14,11 @@
  *= require_self
  */
 
+.black {
+  background-color: #000;
+  color: #fff;
+}
+
 .blue {
   color: #008ed4;
 }

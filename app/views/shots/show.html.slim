@@ -3,6 +3,16 @@
   .pure-u-22-24
     h1 #{@shot.profile_title}
     h2 #{@shot.start_time.strftime("%d.%m.%Y at %H:%M")}
+    form#skin-picker.pure-form
+      fieldset
+        .legend Skin:
+        label.pure-radio for="checkbox-skin-classic"
+          input#checkbox-skin-classic checked="checked" name="skin" type="radio" value="classic"
+          | Classic
+        label.pure-radio for="checkbox-skin-dsx"
+          input#checkbox-skin-dsx name="skin" type="radio" value="dsx"
+          | DSx
+
     .relative
       canvas#mainChart width="100%"
     h1 Temperature Chart
@@ -17,16 +27,5 @@
   .pure-u-1-24
 
 javascript:
-  const ctx = document.getElementById('mainChart').getContext('2d');
-  const mainChart = new Chart(ctx, {
-    type: 'line',
-    data: { datasets: window.chart_from_data(#{{@main_data.to_json}}) },
-    options: window.chartOptions
-  });
-
-  const tctx = document.getElementById('temperatureChart').getContext('2d');
-  const temperatureChart = new Chart(tctx, {
-    type: 'line',
-    data: { datasets: window.chart_from_data(#{{@temperature_data.to_json}}) },
-    options: window.chartOptions
-  });
+  window.mainData = #{{@main_data.to_json}}
+  window.temperatureData = #{{@temperature_data.to_json}}
