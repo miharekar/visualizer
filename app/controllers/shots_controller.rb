@@ -3,6 +3,7 @@ class ShotsController < ApplicationController
   def show
     @shot = Shot.find(params[:id])
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
+    @skins = skins_from_params
   end
 
   # POST /shots
@@ -23,8 +24,16 @@ class ShotsController < ApplicationController
 
   private
 
-  # Only allow a trusted parameter "white list" through.
-  def shot_params
-    params.permit(:file)
+  def skins_from_params
+    skins = %w[Classic DSx].map do |skin|
+      {
+        name: skin.downcase,
+        label: skin,
+        checked: params.key?(skin.downcase) || params[:skin]&.casecmp?(skin)
+      }
+    end
+    skins[0][:checked] = true unless skins.find { |s| s[:checked] }
+
+    skins
   end
 end
