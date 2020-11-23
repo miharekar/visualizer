@@ -1,5 +1,5 @@
 import Chart from "chart.js"
-require("chartjs-plugin-crosshair")
+require("chartjs-plugin-crosshair/src/index.js")
 
 const chartOptions = {
   scales: {

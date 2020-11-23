@@ -1848,10 +1848,9 @@ chartjs-color@^2.1.0:
     chartjs-color-string "^0.6.0"
     color-convert "^1.9.3"
 
-chartjs-plugin-crosshair@^1.1.6:
+"chartjs-plugin-crosshair@https://github.com/miharekar/chartjs-plugin-crosshair":
   version "1.1.6"
-  resolved "https://registry.yarnpkg.com/chartjs-plugin-crosshair/-/chartjs-plugin-crosshair-1.1.6.tgz#3874c3114a5c2ea5d5569a200ef0b32425107ed2"
-  integrity sha512-faqHKnZzhNYh2ahIKaxTWB9ZX5afRJkQ+7jsZ8u0Z+PE4YPcs1jNCCKwWINWacYaryh6ih/OT6pLmMnkNMusHQ==
+  resolved "https://github.com/miharekar/chartjs-plugin-crosshair#8c7f5398ed30cba72e1297156203c1d9725a93a7"
   dependencies:
     chart.js "^2.9.3"
 
