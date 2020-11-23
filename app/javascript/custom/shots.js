@@ -61,16 +61,16 @@ function getColors() {
       "espresso_temperature_goal": { title: "Temperature Goal", borderColor: "rgba(150, 13, 45, 1)", backgroundColor: "rgba(150, 13, 45, 0.7)", borderDash: [5, 5], fill: false, hidden: false, borderWidth: 3 },
     },
     dsx: {
-      "espresso_pressure": { title: "Pressure", borderColor: "#18c37e", backgroundColor: "#18c37e", borderDash: [], fill: false, borderWidth: 1 },
-      "espresso_weight": { title: "Weight", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [], fill: false, hidden: true, borderWidth: 0 },
-      "espresso_flow": { title: "Flow", borderColor: "#4e85f4", backgroundColor: "#4e85f4", borderDash: [], fill: false, borderWidth: 1 },
-      "espresso_flow_weight": { title: "Flow Weight", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [5, 5], fill: false, borderWidth: 1 },
-      "espresso_pressure_goal": { title: "Pressure Goal", borderColor: "#69fdb3", backgroundColor: "#69fdb3", borderDash: [5, 5], fill: false, borderWidth: 1 },
-      "espresso_flow_goal": { title: "Flow Goal", borderColor: "#7aaaff", backgroundColor: "#7aaaff", borderDash: [5, 5], fill: false, borderWidth: 1 },
-      "espresso_resistance": { title: "Resistance", borderColor: "#e5e500", backgroundColor: "#e5e500", borderDash: [], fill: false, borderWidth: 1 },
-      "espresso_temperature_basket": { title: "Temperature Basket", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [], fill: false, borderWidth: 1 },
-      "espresso_temperature_mix": { title: "Temperature Mix", borderColor: "#ff9900", backgroundColor: "#ff9900", borderDash: [], fill: false, hidden: false, borderWidth: 1 },
-      "espresso_temperature_goal": { title: "Temperature Goal", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [5, 5], fill: false, borderWidth: 1 },
+      "espresso_pressure": { title: "Pressure", borderColor: "#18c37e", backgroundColor: "#18c37e", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_weight": { title: "Weight", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [], fill: false, hidden: true, borderWidth: 0, lineTension: 0 },
+      "espresso_flow": { title: "Flow", borderColor: "#4e85f4", backgroundColor: "#4e85f4", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_flow_weight": { title: "Flow Weight", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_pressure_goal": { title: "Pressure Goal", borderColor: "#69fdb3", backgroundColor: "#69fdb3", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_flow_goal": { title: "Flow Goal", borderColor: "#7aaaff", backgroundColor: "#7aaaff", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_resistance": { title: "Resistance", borderColor: "#e5e500", backgroundColor: "#e5e500", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_temperature_basket": { title: "Temperature Basket", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_temperature_mix": { title: "Temperature Mix", borderColor: "#ff9900", backgroundColor: "#ff9900", borderDash: [], fill: false, hidden: false, borderWidth: 1, lineTension: 0 },
+      "espresso_temperature_goal": { title: "Temperature Goal", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
     }
   }
   return colors[selectedSkin]
@@ -93,6 +93,7 @@ function chart_from_data(data) {
         fill: current.fill,
         hidden: current.hidden,
         borderWidth: current.borderWidth,
+        lineTension: current.lineTension,
         pointRadius: 0,
       }
     }
