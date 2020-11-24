@@ -34,7 +34,7 @@ const chartOptions = {
     mode: "index",
     callbacks: {
       label: function (tooltipItem, myData) {
-        var label = myData.datasets[tooltipItem.datasetIndex].label || ""
+        let label = myData.datasets[tooltipItem.datasetIndex].label || ""
         if (label) {
           label += ": "
         }
@@ -77,7 +77,7 @@ function getColors() {
   return colors[selectedSkin]
 }
 
-var mainChart, temperatureChart, selectedSkin;
+let mainChart, temperatureChart, selectedSkin;
 
 function chart_from_data(data) {
   const colors = getColors()
@@ -118,7 +118,7 @@ function drawChart() {
 }
 
 function setURLParams() {
-  var queryParams = new URLSearchParams(window.location.search)
+  let queryParams = new URLSearchParams(window.location.search)
   queryParams.delete("dsx")
   queryParams.set("skin", selectedSkin)
   history.replaceState(null, null, "?" + queryParams.toString())
@@ -136,8 +136,8 @@ function selectSkin() {
 }
 
 document.addEventListener("turbolinks:load", function () {
-  drawChart()
   if (document.getElementById("skin-picker")) {
+    drawChart()
     document.getElementById("skin-picker").addEventListener("change", function () {
       mainChart.destroy()
       temperatureChart.destroy()

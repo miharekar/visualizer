@@ -1,11 +1,11 @@
 .pure-g
   .pure-u-1-24
   .pure-u-22-24
-    h1.blue Upload your .shot file
-
-    = form_with(url: {action: :create}, multipart: true, class: "pure-form pure-form-stacked") do |f|
-      fieldset
-        label for="file" Select your .shot file
-        = file_field_tag 'file'
-      button.pure-button.pure-button-primary type="submit" Upload
+    h1.blue.center Upload your .shot file
+    #drop-area
+      = form_with(url: {action: :create}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
+        fieldset
+          label for="file" Select your .shot file
+          = file_field_tag 'file'
+        button.submit_button.pure-button.pure-button-primary type="submit" Upload
   .pure-u-1-24

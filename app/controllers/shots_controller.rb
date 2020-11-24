@@ -16,7 +16,11 @@ class ShotsController < ApplicationController
     )
 
     if @shot.save
-      redirect_to @shot
+      if params.key?(:drag)
+        render json: {id: @shot.id}
+      else
+        redirect_to @shot
+      end
     else
       render :new
     end

@@ -15,12 +15,16 @@
  */
 
 .black {
-  background-color: #000;
-  color: #fff;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 
 .blue {
-  color: #008ed4;
+  color: rgb(0, 142, 212);
+}
+
+.center {
+  text-align: center;
 }
 
 .relative {
@@ -31,4 +35,18 @@
   position: absolute;
   top: 50px;
   right: 30px;
+}
+
+#drop-area {
+  border: 2px dashed rgb(204, 204, 204);
+  border-radius: 10px;
+  width: 80vw;
+  max-width: 480px;
+  margin: auto;
+  padding: 20px;
+}
+
+#drop-area.highlight {
+  border-color:  rgb(0, 141, 212);
+  background-color: rgba(0, 141, 212, 0.3);
 }

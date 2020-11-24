@@ -16,12 +16,13 @@
     h1 Temperature Chart
     .relative
       canvas#temperatureChart width="100%"
-    h2.blue Upload a different file
-    = form_with(url: {action: :create}, multipart: true, class: "pure-form pure-form-stacked") do |f|
-      fieldset
-        label for="file" Select your .shot file
-        = file_field_tag 'file'
-      button.pure-button.pure-button-primary type="submit" Upload
+    h2.blue.center Upload a different file
+    #drop-area
+      = form_with(url: {action: :create}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
+        fieldset
+          label for="file" Select your .shot file
+          = file_field_tag 'file'
+        button.submit_button.pure-button.pure-button-primary type="submit" Upload
   .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
 
 javascript:
