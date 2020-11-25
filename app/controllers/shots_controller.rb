@@ -4,6 +4,7 @@ class ShotsController < ApplicationController
     @shot = Shot.find(params[:id])
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @skins = skins_from_params
+    @stages = @shot.stages
   end
 
   # POST /shots

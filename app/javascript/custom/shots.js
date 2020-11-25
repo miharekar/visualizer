@@ -1,5 +1,6 @@
 import Chart from "chart.js"
 require("chartjs-plugin-crosshair/src/index.js")
+require("chartjs-plugin-annotation")
 
 const chartOptions = {
   scales: {
@@ -79,7 +80,7 @@ function getColors() {
 
 let mainChart, temperatureChart, selectedSkin;
 
-function chart_from_data(data) {
+function chartFromData(data) {
   const colors = getColors()
   return data.map(function (v) {
     if (v.label in colors) {
@@ -101,19 +102,40 @@ function chart_from_data(data) {
   }).filter(e => e)
 }
 
+function annotationsFromData(stages) {
+  return stages.map(function (v) {
+    return {
+      type: "line",
+      mode: "vertical",
+      scaleID: "x-axis-0",
+      value: v,
+      borderColor: "#888"
+    }
+  })
+}
+
 function drawChart() {
   selectSkin()
   const ctx = document.getElementById("mainChart").getContext("2d")
+  const annotations = {
+    annotation: {
+      annotations: annotationsFromData(window.shotStages)
+    }
+  }
+  const options = {
+    ...chartOptions,
+    ...annotations
+  }
   mainChart = new Chart(ctx, {
     type: "line",
-    data: { datasets: chart_from_data(window.mainData) },
-    options: chartOptions
+    data: { datasets: chartFromData(window.mainData) },
+    options: options
   })
   const tctx = document.getElementById("temperatureChart").getContext("2d")
   temperatureChart = new Chart(tctx, {
     type: "line",
-    data: { datasets: chart_from_data(window.temperatureData) },
-    options: chartOptions
+    data: { datasets: chartFromData(window.temperatureData) },
+    options: options
   })
 }
 

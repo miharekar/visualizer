@@ -7,6 +7,7 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-annotation": "^0.5.7",
     "chartjs-plugin-crosshair": "https://github.com/miharekar/chartjs-plugin-crosshair",
     "turbolinks": "^5.2.0"
   },

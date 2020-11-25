@@ -7,6 +7,22 @@ class Shot < ApplicationRecord
     chart_from_data + calculated_chart_data
   end
 
+  def stages
+    indices = []
+    data.select { |d| d["label"].end_with?("_goal") }.each do |goal|
+      goal["data"].each_with_index do |a, i|
+        next if i < 4
+
+        b = goal["data"][i - 1]
+        c = goal["data"][i - 2]
+        d = goal["data"][i - 3]
+        e = goal["data"][i - 4]
+        indices << i if e == d && d == c && c == b && b != a
+      end
+    end
+    chart_from_data.first[:data].values_at(*indices.uniq).pluck(:t)
+  end
+
   private
 
   def chart_from_data
