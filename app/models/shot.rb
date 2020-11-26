@@ -12,7 +12,7 @@ class Shot < ApplicationRecord
     data.select { |d| d["label"].end_with?("_goal") }.each do |goal|
       data = goal["data"].map(&:to_f)
       data.each.with_index do |a, i|
-        next if i < 2
+        next if i < 5
 
         b = data[i - 1]
         c = data[i - 2]
@@ -20,6 +20,8 @@ class Shot < ApplicationRecord
         indices << i if diff2.abs > 0.1
       end
     end
+
+    return [] if indices.empty?
 
     indices = indices.sort.uniq
     selected = [indices.first]

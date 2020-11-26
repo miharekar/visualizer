@@ -8,4 +8,7 @@
           label for="file" Select your .shot file
           = file_field_tag 'file'
         button.submit_button.pure-button.pure-button-primary type="submit" Upload
+
+    h2.center.top-margin
+      = link_to("Or take a look at a completely random shot", @random_shot, class: 'green')
   .pure-u-1-24

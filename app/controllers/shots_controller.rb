@@ -1,5 +1,8 @@
 class ShotsController < ApplicationController
-  # GET /shots/1
+  def new
+    @random_shot = Shot.order("RANDOM()").first
+  end
+
   def show
     @shot = Shot.find(params[:id])
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
@@ -7,7 +10,6 @@ class ShotsController < ApplicationController
     @stages = @shot.stages
   end
 
-  # POST /shots
   def create
     parsed_shot = ShotParser.new(File.read(params["file"]))
     @shot = Shot.new(
