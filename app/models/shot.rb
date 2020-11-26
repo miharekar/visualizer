@@ -10,17 +10,24 @@ class Shot < ApplicationRecord
   def stages
     indices = []
     data.select { |d| d["label"].end_with?("_goal") }.each do |goal|
-      goal["data"].each_with_index do |a, i|
-        next if i < 4
+      data = goal["data"].map(&:to_f)
+      data.each.with_index do |a, i|
+        next if i < 2
 
-        b = goal["data"][i - 1]
-        c = goal["data"][i - 2]
-        d = goal["data"][i - 3]
-        e = goal["data"][i - 4]
-        indices << i if e == d && d == c && c == b && b != a
+        b = data[i - 1]
+        c = data[i - 2]
+        diff2 = ((a - b) - (b - c))
+        indices << i if diff2.abs > 0.1
       end
     end
-    chart_from_data.first[:data].values_at(*indices.uniq).pluck(:t)
+
+    indices = indices.sort.uniq
+    selected = [indices.first]
+    indices.each do |index|
+      selected << index if (index - selected.last) > 5
+    end
+
+    chart_from_data.first[:data].values_at(*selected).pluck(:t)
   end
 
   private
