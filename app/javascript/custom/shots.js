@@ -19,13 +19,21 @@ const chartOptions = {
         autoSkip: true,
         autoSkipPadding: 50,
         maxRotation: 0
+      },
+      gridLines: {
+        display: false
+      }
+    }],
+    yAxes: [{
+      gridLines: {
+        color: "rgba(128, 128, 128, 0.5)"
       }
     }]
   },
   plugins: {
     crosshair: {
       line: {
-        color: "#888",
+        color: "rgba(128, 128, 128, 1)",
         dashPattern: [5, 5]
       },
     },
@@ -109,7 +117,7 @@ function annotationsFromData(stages) {
       mode: "vertical",
       scaleID: "x-axis-0",
       value: v,
-      borderColor: "#888"
+      borderColor: "rgba(128, 128, 128, 1)"
     }
   })
 }
