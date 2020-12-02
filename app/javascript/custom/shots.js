@@ -26,7 +26,7 @@ const chartOptions = {
     }],
     yAxes: [{
       gridLines: {
-        color: "rgba(128, 128, 128, 0.5)"
+        color: "rgba(128, 128, 128, 0.35)"
       }
     }]
   },
