@@ -147,10 +147,9 @@ function drawChart() {
   })
 }
 
-function setURLParams() {
+function setURLSkin(skin) {
   let queryParams = new URLSearchParams(window.location.search)
-  queryParams.delete("dsx")
-  queryParams.set("skin", selectedSkin)
+  queryParams.set("skin", skin)
   history.replaceState(null, null, "?" + queryParams.toString())
 }
 
@@ -158,11 +157,16 @@ function selectSkin() {
   if (document.getElementById("checkbox-skin-dsx").checked) {
     document.getElementsByTagName("body")[0].classList.add("black")
     selectedSkin = "dsx"
+    setURLSkin("dsx")
+  } else if (document.getElementById("checkbox-skin-white-dsx").checked) {
+    document.getElementsByTagName("body")[0].classList.remove("black")
+    selectedSkin = "dsx"
+    setURLSkin("white-dsx")
   } else {
     document.getElementsByTagName("body")[0].classList.remove("black")
     selectedSkin = "classic"
+    setURLSkin("classic")
   }
-  setURLParams()
 }
 
 document.addEventListener("turbolinks:load", function () {

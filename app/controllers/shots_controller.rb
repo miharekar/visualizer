@@ -32,11 +32,11 @@ class ShotsController < ApplicationController
   private
 
   def skins_from_params
-    skins = %w[Classic DSx].map do |skin|
+    skins = ["Classic", "DSx", "White DSx"].map do |skin|
       {
-        name: skin.downcase,
+        name: skin.parameterize,
         label: skin,
-        checked: params.key?(skin.downcase) || params[:skin]&.casecmp?(skin)
+        checked: params[:skin] == skin.parameterize
       }
     end
     skins[0][:checked] = true unless skins.find { |s| s[:checked] }
