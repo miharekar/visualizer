@@ -170,6 +170,7 @@ function selectSkin() {
     selectedSkin = "classic"
     setURLSkin("classic")
   }
+  document.querySelectorAll(".reset-zoom ").forEach(e => e.remove());
 }
 
 document.addEventListener("turbolinks:load", function () {
