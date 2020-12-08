@@ -57,18 +57,18 @@ const chartOptions = {
 function getColors() {
   const colors = {
     classic: {
-      "espresso_pressure": { title: "Pressure (bar)", borderColor: "rgba(5, 199, 147, 1)", backgroundColor: "rgba(5, 199, 147, 0.7)", borderDash: [], fill: true, hidden: false },
+      "espresso_pressure": { title: "Pressure (bar)", borderColor: "rgba(5, 199, 147, 1)", backgroundColor: "rgba(5, 199, 147, 0.4)", borderDash: [], fill: false, hidden: false },
       "espresso_pressure_goal": { title: "Pressure Goal (bar)", borderColor: "rgba(3, 99, 74, 1)", backgroundColor: "rgba(3, 99, 74, 1)", borderDash: [5, 5], fill: false, hidden: false },
-      "espresso_water_dispensed": { title: "Water Dispensed (ml)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.7)", borderDash: [], fill: true, hidden: false },
-      "espresso_weight": { title: "Weight (g)", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 0.7)", borderDash: [], fill: true, hidden: true },
-      "espresso_flow": { title: "Flow (ml/s)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.7)", borderDash: [], fill: true, hidden: false },
-      "espresso_flow_weight": { title: "Weight (g/s)", borderColor: "rgba(17, 138, 178, 1)", backgroundColor: "rgba(17, 138, 178, 0.7)", borderDash: [], fill: true, hidden: false },
-      "espresso_flow_weight_raw": { title: "Weight (g/s) Raw", borderColor: "rgba(17, 138, 178, 1)", backgroundColor: "rgba(17, 138, 178, 1)", borderDash: [], fill: false, hidden: false },
+      "espresso_water_dispensed": { title: "Water Dispensed (ml)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.4)", borderDash: [], fill: false, hidden: false },
+      "espresso_weight": { title: "Weight (g)", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 0.4)", borderDash: [], fill: false, hidden: true },
+      "espresso_flow": { title: "Flow (ml/s)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.4)", borderDash: [], fill: true, hidden: false },
+      "espresso_flow_weight": { title: "Weight (g/s)", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 0.4)", borderDash: [], fill: true, hidden: false },
+      "espresso_flow_weight_raw": { title: "Weight (g/s) Raw", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 1)", borderDash: [], fill: false, hidden: true },
       "espresso_flow_goal": { title: "Flow Goal (ml/s)", borderColor: "rgba(9, 72, 93, 1)", backgroundColor: "rgba(9, 72, 93, 1)", borderDash: [5, 5], fill: false, hidden: false },
-      "espresso_resistance": { title: "Resistance (lΩ)", borderColor: "rgba(229, 229, 0, 1)", backgroundColor: "rgba(229, 229, 0, 1)", borderDash: [], fill: false, hidden: false },
-      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "e73249", backgroundColor: "rgba(240, 86, 122, 0.7)", borderDash: [], fill: false, hidden: false },
-      "espresso_temperature_mix": { title: "Temperature Mix °C", borderColor: "rgba(206, 18, 62, 1)", backgroundColor: "rgba(206, 18, 62, 0.7)", borderDash: [], fill: false, hidden: false },
-      "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "rgba(150, 13, 45, 1)", backgroundColor: "rgba(150, 13, 45, 0.7)", borderDash: [5, 5], fill: false, hidden: false },
+      "espresso_resistance": { title: "Resistance (lΩ)", borderColor: "rgba(229, 229, 0, 1)", backgroundColor: "rgba(229, 229, 0, 0.4)", borderDash: [], fill: false, hidden: false },
+      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "e73249", backgroundColor: "rgba(240, 86, 122, 0.4)", borderDash: [], fill: false, hidden: false },
+      "espresso_temperature_mix": { title: "Temperature Mix °C", borderColor: "rgba(206, 18, 62, 1)", backgroundColor: "rgba(206, 18, 62, 0.4)", borderDash: [], fill: false, hidden: false },
+      "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "rgba(150, 13, 45, 1)", backgroundColor: "rgba(150, 13, 45, 0.4)", borderDash: [5, 5], fill: false, hidden: false },
     },
     dsx: {
       "espresso_pressure": { title: "Pressure (bar)", borderColor: "#18c37e", backgroundColor: "#18c37e", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
