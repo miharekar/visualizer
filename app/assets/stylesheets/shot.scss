@@ -1,0 +1,44 @@
+.black {
+  background-color: $black;
+  color: $white;
+}
+
+.blue {
+  color: $blue;
+}
+
+.green {
+  color: $green;
+}
+
+.center {
+  text-align: center;
+}
+
+.top-margin {
+  margin-top: 2em;
+}
+
+.relative {
+  position: relative;
+}
+
+.reset-zoom {
+  position: absolute;
+  top: 50px;
+  right: 30px;
+}
+
+#drop-area {
+  border: 2px dashed rgb(204, 204, 204);
+  border-radius: 10px;
+  width: 80vw;
+  max-width: 480px;
+  margin: auto;
+  padding: 20px;
+}
+
+#drop-area.highlight {
+  border-color: $highlight-border;
+  background-color: $highlight-background;
+}
