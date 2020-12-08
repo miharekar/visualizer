@@ -89,7 +89,7 @@ function getSettings() {
   return settings[selectedSkin]
 }
 
-let mainChart, temperatureChart, selectedSkin;
+let mainChart, temperatureChart, selectedSkin, lastPath, lastSkin;
 
 function chartFromData(data) {
   const settings = getSettings()
@@ -126,7 +126,6 @@ function annotationsFromData(stages) {
 }
 
 function drawChart() {
-  selectSkin()
   const ctx = document.getElementById("mainChart").getContext("2d")
   const annotations = {
     annotation: {
@@ -150,36 +149,64 @@ function drawChart() {
   })
 }
 
-function setURLSkin(skin) {
-  let queryParams = new URLSearchParams(window.location.search)
-  queryParams.set("skin", skin)
-  history.replaceState(null, null, "?" + queryParams.toString())
+function reloadWithSkin(skin) {
+  const loc = window.location
+  let queryParams = new URLSearchParams(loc.search)
+
+  if (queryParams.get("skin") !== skin && !(skin === "classic" && queryParams.get("skin") === null)) {
+    queryParams.set("skin", skin)
+    Turbolinks.visit(loc.origin + loc.pathname + "?" + queryParams.toString())
+  } else {
+    applySkin(skin)
+  }
 }
 
 function selectSkin() {
   if (document.getElementById("checkbox-skin-dsx").checked) {
-    document.getElementsByTagName("body")[0].classList.add("black")
-    selectedSkin = "dsx"
-    setURLSkin("dsx")
+    reloadWithSkin("dsx")
   } else if (document.getElementById("checkbox-skin-white-dsx").checked) {
-    document.getElementsByTagName("body")[0].classList.remove("black")
-    selectedSkin = "dsx"
-    setURLSkin("white-dsx")
+    reloadWithSkin("white-dsx")
   } else {
-    document.getElementsByTagName("body")[0].classList.remove("black")
-    selectedSkin = "classic"
-    setURLSkin("classic")
+    reloadWithSkin("classic")
   }
-  document.querySelectorAll(".reset-zoom ").forEach(e => e.remove());
 }
 
-document.addEventListener("turbolinks:load", function () {
+function applySkin(skin) {
+  if (skin === "dsx") {
+    document.getElementById("checkbox-skin-dsx").checked = true
+    document.getElementsByTagName("body")[0].classList.add("black")
+    selectedSkin = "dsx"
+  } else if (skin === "white-dsx") {
+    document.getElementById("checkbox-skin-white-dsx").checked = true
+    document.getElementsByTagName("body")[0].classList.remove("black")
+    selectedSkin = "dsx"
+  } else {
+    document.getElementById("checkbox-skin-classic").checked = true
+    document.getElementsByTagName("body")[0].classList.remove("black")
+    selectedSkin = "classic"
+  }
+}
+
+document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementById("skin-picker")) {
+    const queryParams = new URLSearchParams(window.location.search)
+    let currentSkin = queryParams.get("skin")
+
+    if (currentSkin === null) {
+      currentSkin = "classic"
+    }
+
+    if (xhr.target.location.pathname === lastPath && lastSkin !== currentSkin) {
+      applySkin(currentSkin)
+    } else {
+      selectSkin()
+    }
     drawChart()
+    lastPath = window.location.pathname
+    lastSkin = currentSkin
+
     document.getElementById("skin-picker").addEventListener("change", function () {
-      mainChart.destroy()
-      temperatureChart.destroy()
-      drawChart()
+      selectSkin()
     })
   }
 })
