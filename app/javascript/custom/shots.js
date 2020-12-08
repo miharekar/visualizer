@@ -54,8 +54,8 @@ const chartOptions = {
   }
 }
 
-function getColors() {
-  const colors = {
+function getSettings() {
+  const settings = {
     classic: {
       "espresso_pressure": { title: "Pressure (bar)", borderColor: "rgba(5, 199, 147, 1)", backgroundColor: "rgba(5, 199, 147, 0.4)", borderDash: [], fill: false, hidden: false },
       "espresso_pressure_goal": { title: "Pressure Goal (bar)", borderColor: "rgba(3, 99, 74, 1)", backgroundColor: "rgba(3, 99, 74, 1)", borderDash: [5, 5], fill: false, hidden: false },
@@ -71,28 +71,28 @@ function getColors() {
       "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "rgba(150, 13, 45, 1)", backgroundColor: "rgba(150, 13, 45, 0.4)", borderDash: [5, 5], fill: false, hidden: false },
     },
     dsx: {
-      "espresso_pressure": { title: "Pressure (bar)", borderColor: "#18c37e", backgroundColor: "#18c37e", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
-      "espresso_pressure_goal": { title: "Pressure Goal (bar)", borderColor: "#69fdb3", backgroundColor: "#69fdb3", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_pressure": { title: "Pressure (bar)", borderColor: "#18c37e", backgroundColor: "#18c37e", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_pressure_goal": { title: "Pressure Goal (bar)", borderColor: "#69fdb3", backgroundColor: "#69fdb3", borderDash: [5, 5], fill: false, borderWidth: 2, lineTension: 0 },
       "espresso_weight": { title: "Weight (g)", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [], fill: false, hidden: true, borderWidth: 0, lineTension: 0 },
-      "espresso_flow": { title: "Flow (ml/s)", borderColor: "#4e85f4", backgroundColor: "#4e85f4", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
-      "espresso_flow_weight": { title: "Weight (g/s)", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
-      "espresso_flow_goal": { title: "Flow Goal (ml/s)", borderColor: "#7aaaff", backgroundColor: "#7aaaff", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
-      "espresso_resistance": { title: "Resistance (lΩ)", borderColor: "#e5e500", backgroundColor: "#e5e500", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
-      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [], fill: false, borderWidth: 1, lineTension: 0 },
-      "espresso_temperature_mix": { title: "Temperature Mix °C", borderColor: "#ff9900", backgroundColor: "#ff9900", borderDash: [], fill: false, hidden: false, borderWidth: 1, lineTension: 0 },
-      "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [5, 5], fill: false, borderWidth: 1, lineTension: 0 },
+      "espresso_flow": { title: "Flow (ml/s)", borderColor: "#4e85f4", backgroundColor: "#4e85f4", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_flow_weight": { title: "Weight (g/s)", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_flow_goal": { title: "Flow Goal (ml/s)", borderColor: "#7aaaff", backgroundColor: "#7aaaff", borderDash: [5, 5], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_resistance": { title: "Resistance (lΩ)", borderColor: "#e5e500", backgroundColor: "#e5e500", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_temperature_mix": { title: "Temperature Mix °C", borderColor: "#ff9900", backgroundColor: "#ff9900", borderDash: [], fill: false, hidden: false, borderWidth: 2, lineTension: 0 },
+      "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [5, 5], fill: false, borderWidth: 2, lineTension: 0 },
     }
   }
-  return colors[selectedSkin]
+  return settings[selectedSkin]
 }
 
 let mainChart, temperatureChart, selectedSkin;
 
 function chartFromData(data) {
-  const colors = getColors()
+  const settings = getSettings()
   return data.map(function (v) {
-    if (v.label in colors) {
-      const current = colors[v.label]
+    if (v.label in settings) {
+      const current = settings[v.label]
       return {
         label: current.title,
         data: v.data,
