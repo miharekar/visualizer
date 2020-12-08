@@ -3,6 +3,9 @@ require("chartjs-plugin-crosshair/src/index.js")
 require("chartjs-plugin-annotation")
 
 const chartOptions = {
+  animation: {
+    duration: 0
+  },
   scales: {
     xAxes: [{
       type: "time",
