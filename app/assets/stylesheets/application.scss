@@ -15,4 +15,34 @@
 
  @import "colors";
  @import "shot";
- @import "ribbon";
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -50px;
+}
+
+.footer {
+  height: 50px;
+}
+
+.push {
+  height: 100px;
+}
+
+.d-none {
+  display:none;
+}
+
+@media screen and (min-width: 35.5em) {
+  .d-sm-block {
+    display: block;
+  }
+  .d-sm-none {
+    display:none;
+  }
+}

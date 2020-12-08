@@ -11,6 +11,13 @@
   color: $green;
 }
 
+.muted {
+  color: $muted;
+  a {
+    color: $blue;
+  }
+}
+
 .center {
   text-align: center;
 }
