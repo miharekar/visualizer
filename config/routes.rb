@@ -5,5 +5,7 @@ Rails.application.routes.draw do
 
   root "shots#new"
 
-  resources :shots, only: %i[show new create]
+  resources :shots, only: %i[show new create] do
+    get :random, on: :collection
+  end
 end

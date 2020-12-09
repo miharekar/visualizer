@@ -1,6 +1,6 @@
 class ShotsController < ApplicationController
-  def new
-    @random_shot = Shot.order("RANDOM()").first
+  def random
+    redirect_to Shot.order("RANDOM()").first
   end
 
   def show
