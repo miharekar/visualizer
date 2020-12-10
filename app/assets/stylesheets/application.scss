@@ -39,7 +39,11 @@ canvas {
 }
 
 .d-none {
-  display:none;
+  display: none;
+}
+
+.d-inline {
+  display: inline!important;
 }
 
 .small-margin-bottom {
@@ -60,6 +64,6 @@ canvas {
     display: block;
   }
   .d-sm-none {
-    display:none;
+    display: none;
   }
 }

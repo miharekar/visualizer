@@ -51,9 +51,9 @@
           = enjoyment
     form#skin-picker.pure-form
       fieldset
-        .legend Skin:
+        .legend.pure-radio.d-inline Skin:&nbsp;
         - @skins.each do |skin|
-          label.pure-radio for="checkbox-skin-#{skin[:name]}"
+          label.d-inline.pure-radio for="checkbox-skin-#{skin[:name]}"
             input id="checkbox-skin-#{skin[:name]}" name="skin" type="radio" value="#{skin[:name]}" checked=("true" if skin[:checked])
             ' &nbsp;#{skin[:label]}
 
