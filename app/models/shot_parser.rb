@@ -29,15 +29,15 @@ class ShotParser
   end
 
   def extract_title(line)
-    match = line.match(/profile_title \{?(?<title>.+?)\}?\s*$/)
+    match = line.match(/profile_title \{?(?<title>[^{}]+)\}?\s*?$/)
     return unless match && match[:title].present?
 
     @profile_title = match[:title].strip
   end
 
   def extract_extra(line)
-    markers = %w[drink_weight bean_brand bean_type roast_date roast_level grinder_model grinder_setting drink_tds drink_ey espresso_enjoyment].map do |m|
-      /#{m} \{?(?<#{m}>.+?)\}?\s*$/
+    markers = %w[drink_weight bean_brand bean_type roast_date roast_level grinder_model grinder_setting drink_tds drink_ey espresso_enjoyment DSx_bean_weight grinder_dose_weight bean_weight].map do |m|
+      /#{m} \{?(?<#{m}>[^{}]+)\}?\s*?$/
     end
     match = line.match(Regexp.union(markers))
     return unless match

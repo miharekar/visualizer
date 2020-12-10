@@ -189,6 +189,13 @@ function applySkin(skin) {
   }
 }
 
+function localTime() {
+  const time = new Date(document.getElementById("with-time").dataset.time * 1000)
+  const locale = window.navigator.userLanguage || window.navigator.language
+
+  document.getElementById("with-time").innerHTML = time.toLocaleString(locale)
+}
+
 document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementById("skin-picker")) {
     const queryParams = new URLSearchParams(window.location.search)
@@ -204,6 +211,7 @@ document.addEventListener("turbolinks:load", function (xhr) {
       selectSkin()
     }
     drawChart()
+    localTime()
     lastPath = window.location.pathname
     lastSkin = currentSkin
 

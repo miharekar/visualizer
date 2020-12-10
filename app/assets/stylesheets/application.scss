@@ -42,6 +42,19 @@ canvas {
   display:none;
 }
 
+.small-margin-bottom {
+  margin-bottom: 0.3em;
+}
+
+.small-margin-top {
+  margin-top: 0.3em;
+}
+
+.small-margin {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
 @media screen and (min-width: 35.5em) {
   .d-sm-block {
     display: block;
