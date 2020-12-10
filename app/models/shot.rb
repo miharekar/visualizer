@@ -79,6 +79,7 @@ end
 #
 #  id            :uuid             not null, primary key
 #  data          :jsonb
+#  extra         :jsonb
 #  profile_title :string
 #  start_time    :datetime
 #  created_at    :datetime         not null

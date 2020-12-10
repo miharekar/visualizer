@@ -21,6 +21,10 @@ html, body {
   margin: 0;
 }
 
+canvas {
+  min-height: 500px;
+}
+
 .wrapper {
   min-height: 100%;
   margin-bottom: -50px;

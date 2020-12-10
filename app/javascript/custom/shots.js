@@ -3,6 +3,8 @@ require("chartjs-plugin-crosshair/src/index.js")
 require("chartjs-plugin-annotation")
 
 const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
   animation: {
     duration: 0
   },

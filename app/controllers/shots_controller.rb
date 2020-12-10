@@ -15,7 +15,8 @@ class ShotsController < ApplicationController
     @shot = Shot.new(
       start_time: parsed_shot.start_time,
       profile_title: parsed_shot.profile_title,
-      data: parsed_shot.data
+      data: parsed_shot.data,
+      extra: parsed_shot.extra
     )
 
     if @shot.save
