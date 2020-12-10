@@ -35,10 +35,18 @@ class Shot < ApplicationRecord
   private
 
   def chart_from_data
+    timeframe_count = timeframe.count
+    timeframe_last = timeframe.last.to_f
+    timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
     @chart_from_data ||= data.map do |d|
       next if RELEVANT_LABELS.exclude?(d["label"]) || d["label"] == "espresso_elapsed"
 
-      {label: d["label"], data: d["data"].map.with_index { |v, i| {t: timeframe[i].to_f * 1000, y: (v.to_f.negative? ? nil : v)} }}
+      data = d["data"].map.with_index do |v, i|
+        t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
+
+        {t: t.to_f * 1000, y: (v.to_f.negative? ? nil : v)}
+      end
+      {label: d["label"], data: data}
     end.compact
   end
 
