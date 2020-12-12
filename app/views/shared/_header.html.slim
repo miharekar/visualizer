@@ -13,11 +13,13 @@
         - else
           - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
             li.pure-menu-item
-              = form_with(url: user_session_path, model: User, method: :post, class: "pure-form") do |f|
+              = form_with(url: user_session_path, model: User, method: :post, class: "pure-form d-none d-sm-block") do |f|
                 = f.email_field :email, placeholder: "Email", size: 12, autocomplete: "email"
                 = f.password_field :password, placeholder: "Password", size: 12, autocomplete: "current-password"
                 = f.hidden_field :remember_me, value: 1
-                button.pure-button.menu-button type="submit" Sign in
+                button.pure-button.menu-button type="submit" Sign In
+            li.pure-menu-item
+              = link_to "Sign In", new_user_session_path, class: 'pure-menu-link d-sm-none'
           - if ['passwords', 'registrations'].include?(controller_name)
             li.pure-menu-item
               = link_to "Sign In", new_user_session_path, class: 'pure-menu-link'

@@ -1,4 +1,4 @@
-h2.blue Sign up
+h2.blue Sign Up
 = form_with(model: resource, as: resource_name, url: registration_path(resource_name), class: "pure-form pure-form-stacked") do |f|
   = render "devise/shared/error_messages", resource: resource
   .fieldset
@@ -17,6 +17,6 @@ h2.blue Sign up
       = f.label :password_confirmation
       = f.password_field :password_confirmation, autocomplete: "new-password"
       br
-    = f.submit "Sign up", class: "pure-button pure-button-primary"
+    = f.submit "Sign Up", class: "pure-button pure-button-primary"
 br
 = render "devise/shared/links"
