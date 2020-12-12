@@ -1,0 +1,15 @@
+- weight = extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
+- if weight
+  = weight
+  | g
+- if  weight && extra.key?("drink_weight")
+  | :
+- if extra.key?("drink_weight")
+  = extra["drink_weight"]
+  | g
+  '
+- ratio = extra["drink_weight"].to_f / weight.to_f
+- if  weight && extra.key?("drink_weight") && ratio > 0
+  | (1:
+  = ratio.round(1)
+  |)

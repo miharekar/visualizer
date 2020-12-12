@@ -1,0 +1,19 @@
+table.pure-table.pure-table-bordered
+  thead
+    tr
+      th Shot at
+      th Profile
+      th Weight
+      th Beans
+      th Grinder
+      th
+  tbody
+    - @shots.each do |shot|
+      tr
+        td.local-time data-time=shot.start_time.to_i
+          = shot.start_time
+        td = shot.profile_title
+        td = render "extra_weight", extra: shot[:extra]
+        td = render "extra_beans", extra: shot[:extra]
+        td = render "extra_grinder", extra: shot[:extra]
+        td = link_to "Show", shot

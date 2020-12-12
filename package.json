@@ -9,6 +9,7 @@
     "chart.js": "^2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
     "chartjs-plugin-crosshair": "https://github.com/miharekar/chartjs-plugin-crosshair",
+    "purecss": "^2.0.3",
     "turbolinks": "^5.2.0"
   },
   "version": "0.2.0",

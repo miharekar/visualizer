@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
+  before_action :authenticate_user!, only: :index
+
+  def index
+    @shots = Shot.where(user: current_user).order(start_time: :desc)
+  end
+
   def random
     redirect_to Shot.order("RANDOM()").first
   end
@@ -15,6 +21,7 @@ class ShotsController < ApplicationController
   def create
     parsed_shot = ShotParser.new(File.read(params["file"]))
     @shot = Shot.new(
+      user: current_user,
       start_time: parsed_shot.start_time,
       profile_title: parsed_shot.profile_title,
       data: parsed_shot.data,

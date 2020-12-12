@@ -1,20 +1,22 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_self
- */
+  * This is a manifest file that'll be compiled into application.css, which will include all the files
+  * listed below.
+  *
+  * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+  * vendor/assets/stylesheets directory can be referenced here using a relative path.
+  *
+  * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+  * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+  * files in this directory. Styles in this file should be added after the last require_* statement.
+  * It is generally better to create a new file per style scope.
+  *
+  *= require purecss/build/pure
+  *= require purecss/build/grids-responsive
+  *= require_self
+*/
 
- @import "colors";
- @import "shot";
+@import "colors";
+@import "shot";
 
 html, body {
   height: 100%;
@@ -44,6 +46,28 @@ canvas {
 
 .d-inline {
   display: inline!important;
+}
+
+.header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.pure-menu-active > .pure-menu-link,
+.pure-menu-link:hover,
+.pure-menu-link:focus {
+    background-color: $green-light;
+}
+
+.pure-menu-horizontal .pure-menu-list {
+  display:block;
+}
+
+.pure-pull-right {
+  float: right;
+  input, button {
+    margin-right: 5px;
+  }
 }
 
 .small-margin-bottom {

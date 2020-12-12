@@ -189,12 +189,7 @@ function applySkin(skin) {
   }
 }
 
-function localTime() {
-  const time = new Date(document.getElementById("with-time").dataset.time * 1000)
-  const locale = window.navigator.userLanguage || window.navigator.language
 
-  document.getElementById("with-time").innerHTML = time.toLocaleString(locale)
-}
 
 document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementById("skin-picker")) {
@@ -211,12 +206,20 @@ document.addEventListener("turbolinks:load", function (xhr) {
       selectSkin()
     }
     drawChart()
-    localTime()
     lastPath = window.location.pathname
     lastSkin = currentSkin
 
     document.getElementById("skin-picker").addEventListener("change", function () {
       selectSkin()
     })
+  }
+
+  if (document.getElementsByClassName("local-time").length > 0) {
+    const locale = window.navigator.userLanguage || window.navigator.language
+
+    Array.from(document.getElementsByClassName("local-time")).forEach((el) => {
+      const time = new Date(el.dataset.time * 1000)
+      el.innerHTML = time.toLocaleString(locale)
+    });
   }
 })

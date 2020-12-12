@@ -5,8 +5,6 @@ html
     title Decent Espresso Shot Visualizer
     = csrf_meta_tags
     = csp_meta_tag
-    link href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" rel="stylesheet"
-    link href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css" rel="stylesheet"
     link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"
     link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"
     link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"
@@ -17,6 +15,11 @@ html
     = javascript_pack_tag "application", "data-turbolinks-track": "reload"
   body
     .wrapper
-      = yield
+      .pure-g
+      .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
+      .pure-u-22-24.pure-u-lg-20-24.pure-u-xl-3-5
+        = render "shared/header"
+        = yield
+      .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
       .push
     = render "shared/footer"

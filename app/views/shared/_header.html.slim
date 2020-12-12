@@ -1,0 +1,20 @@
+.header
+  .home-menu.pure-menu.pure-menu-horizontal
+    ul.pure-menu-list
+      - if user_signed_in?
+        li.pure-menu-item
+          = link_to "Your Shots", shots_path, class: 'pure-menu-link'
+      li.pure-menu-item
+        = link_to "Upload", new_shot_path, class: 'pure-menu-link'
+      .pure-pull-right
+        - if user_signed_in?
+          li.pure-menu-item
+              = link_to "Sign Out", destroy_user_session_path, class: 'pure-menu-link', method: :delete
+        - else
+          li.pure-menu-item
+            = form_with(url: user_session_path, model: User, method: :post, class: "pure-form") do |f|
+              = f.email_field :email, placeholder: "Email"
+              = f.password_field :password, placeholder: "Password"
+              button.pure-button.pure-button-primary type="submit" Sign in
+          li.pure-menu-item
+            = link_to "Sign Up", new_user_registration_path, class: 'pure-menu-link'

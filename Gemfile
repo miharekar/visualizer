@@ -14,7 +14,9 @@ gem "turbolinks", "~> 5"
 gem "bootsnap", ">= 1.4.2", require: false
 
 gem "slim"
+gem "devise"
 gem "dalli"
+gem "sendgrid-ruby"
 
 group :development, :test do
   gem "pry-byebug"
@@ -23,6 +25,7 @@ end
 group :development do
   gem "web-console", ">= 3.3.0"
   gem "listen", "~> 3.2"
+  gem "letter_opener"
   gem "annotate"
   gem "rubocop", require: false
   gem "rubocop-rails", require: false

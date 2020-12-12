@@ -1,7 +1,8 @@
-$white: rgb(255, 255, 255);
-$blue: rgb(0, 142, 212);
-$green: rgb(5, 199, 147);
-$black: rgb(0, 0, 0);
-$muted: rgb(108, 117, 125);
-$highlight-background: rgba(0, 141, 212, 0.3);
-$highlight-border: rgb(0, 141, 212);
+$white: hsl(0, 0%, 100%);
+$blue: hsl(200, 100%, 42%);
+$green: hsl(164, 95%, 40%);
+$green-light: hsl(164, 80%, 90%);
+$black: hsl(0, 0%, 0%);
+$muted: hsl(208, 7%, 46%);
+$highlight-background: hsla(200, 100%, 42%, 0.3);
+$highlight-border: hsl(200, 100%, 42%);

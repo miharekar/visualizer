@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Shot < ApplicationRecord
+  belongs_to :user, optional: true
+
   RELEVANT_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
 
   def chart_data
@@ -92,4 +94,13 @@ end
 #  start_time    :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  user_id       :uuid
+#
+# Indexes
+#
+#  index_shots_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
