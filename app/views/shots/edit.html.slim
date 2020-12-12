@@ -1,9 +1,16 @@
 h1.small-margin-bottom = render "title", shot: @shot
-= form_with(model: @shot, class: "pure-form pure-form-stacked") do |f|
-  .field
-    = f.label :profile_title
-    = f.text_field :profile_title
-    br
-  = f.submit "Save shot", class: "pure-button pure-button-primary"
-  '
-  = link_to "Delete shot", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error"
+= form_with(model: @shot, class: "pure-form pure-form-aligned") do |f|
+  fieldset
+    .pure-control-group
+      = f.label :profile_title
+      = f.text_field :profile_title
+      br
+    - Shot::EXTRA_DATA.each do |data|
+      .pure-control-group
+        = f.label data
+        = f.text_field data
+        br
+    .pure-controls
+      = f.submit "Save shot", class: "pure-button pure-button-primary"
+      '
+      = link_to "Delete shot", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error"

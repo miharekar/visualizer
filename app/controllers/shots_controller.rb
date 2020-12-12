@@ -61,7 +61,7 @@ class ShotsController < ApplicationController
   end
 
   def shot_params
-    params.require(:shot).permit(:profile_title)
+    params.require(:shot).permit(:profile_title, *Shot::EXTRA_DATA)
   end
 
   def skins_from_params

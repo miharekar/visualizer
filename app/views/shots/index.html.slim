@@ -13,8 +13,8 @@ table.pure-table.pure-table-bordered
           td.local-time data-time=shot.start_time.to_i
             = shot.start_time
           td = shot.profile_title
-          td = render "extra_weight", extra: shot[:extra]
-          td = render "extra_beans", extra: shot[:extra]
+          td = render "extra_weight", shot: shot
+          td = render "extra_beans", shot: shot
           td.nowrap
             = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
             '

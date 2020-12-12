@@ -4,7 +4,7 @@
     - if @shot.user == current_user
       '
       = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
-  = render "extra", extra: @shot[:extra]
+  = render "extra", shot: @shot
   form#skin-picker.pure-form
     fieldset
       .legend.pure-radio.d-inline Skin:&nbsp;

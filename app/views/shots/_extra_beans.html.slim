@@ -1,4 +1,3 @@
-- ["bean_brand", "bean_type", "roast_date"].each do |k|
-  - if extra.key?(k)
-    = extra[k]
-    '
+- ["bean_brand", "bean_type", "roast_date"].map { |m| shot.public_send(m) }.select { |v| v.present? }.each do |v|
+  = v
+  '

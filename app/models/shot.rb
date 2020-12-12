@@ -5,6 +5,18 @@ class Shot < ApplicationRecord
 
   RELEVANT_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
 
+  EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date drink_tds drink_ey espresso_enjoyment].freeze
+
+  (EXTRA_DATA - ["bean_weight"]).each do |data|
+    define_method data do
+      attributes[data].presence || extra[data]
+    end
+  end
+
+  def bean_weight
+    attributes["bean_weight"].presence || extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
+  end
+
   def chart_data
     chart_from_data + calculated_chart_data
   end
@@ -87,14 +99,24 @@ end
 #
 # Table name: shots
 #
-#  id            :uuid             not null, primary key
-#  data          :jsonb
-#  extra         :jsonb
-#  profile_title :string
-#  start_time    :datetime
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  user_id       :uuid
+#  id                 :uuid             not null, primary key
+#  bean_brand         :string
+#  bean_type          :string
+#  bean_weight        :string
+#  data               :jsonb
+#  drink_ey           :string
+#  drink_tds          :string
+#  drink_weight       :string
+#  espresso_enjoyment :string
+#  extra              :jsonb
+#  grinder_model      :string
+#  grinder_setting    :string
+#  profile_title      :string
+#  roast_date         :string
+#  start_time         :datetime
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  user_id            :uuid
 #
 # Indexes
 #

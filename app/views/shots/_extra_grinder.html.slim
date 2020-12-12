@@ -1,4 +1,3 @@
-- ["grinder_model", "grinder_setting"].each do |k|
-      - if extra.key?(k)
-        = extra[k]
-        | &nbsp;
+- ["grinder_model", "grinder_setting"].map { |m| shot.public_send(m) }.select { |v| v.present? }.each do |v|
+  = v
+  '
