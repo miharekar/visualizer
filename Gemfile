@@ -14,6 +14,7 @@ gem "turbolinks", "~> 5"
 gem "bootsnap", ">= 1.4.2", require: false
 
 gem "slim"
+gem "dalli"
 
 group :development, :test do
   gem "pry-byebug"

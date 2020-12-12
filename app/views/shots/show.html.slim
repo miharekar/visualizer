@@ -1,77 +1,36 @@
-.pure-g
-  .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
-  .pure-u-22-24.pure-u-lg-20-24.pure-u-xl-3-5
-    h3.small-margin-bottom
-      = @shot.profile_title
-      | &nbsp;
-      span#with-time data-time=@shot.start_time.to_i
-        = @shot.start_time.strftime("%d.%m.%Y at %H:%M")
-    - if @shot.extra.present?
-      h3.small-margin
-        - weight = @shot.extra["DSx_bean_weight"].presence || @shot.extra["grinder_dose_weight"].presence || @shot.extra["bean_weight"].presence
-        - if weight
-          = weight
-          | g
-        - if  weight && @shot.extra.key?("drink_weight")
-          | :
-        - if @shot.extra.key?("drink_weight")
-          = @shot.extra["drink_weight"]
-          | g&nbsp;
-        - if  weight && @shot.extra.key?("drink_weight")
-          | (1:
-          = (@shot.extra["drink_weight"].to_f / weight.to_f).round(1)
-          |)
-      h3.small-margin
-        - ["bean_brand", "bean_type", "roast_date"].each do |k|
-          - if @shot.extra.key?(k)
-            = @shot.extra[k]
-            | &nbsp;
-      h3.small-margin
-        - ["grinder_model", "grinder_setting"].each do |k|
-          - if @shot.extra.key?(k)
-            = @shot.extra[k]
-            | &nbsp;
-      h3.small-margin-top
-        - tds = @shot.extra["drink_tds"].to_f
-        - ey = @shot.extra["drink_ey"].to_f
-        - enjoyment = @shot.extra["espresso_enjoyment"].to_f
-        - if tds > 0
-          | TDS&nbsp;
-          = tds
-          | %&nbsp;
-        - if tds > 0 && ey > 0
-          | /&nbsp;
-        - if ey > 0
-          | EY&nbsp;
-          = ey
-        - if ey > 0 && enjoyment > 0
-          | ,&nbsp;
-        - if enjoyment > 0
-          | Enjoyment&nbsp;
-          = enjoyment
-    form#skin-picker.pure-form
-      fieldset
-        .legend.pure-radio.d-inline Skin:&nbsp;
-        - @skins.each do |skin|
-          label.d-inline.pure-radio for="checkbox-skin-#{skin[:name]}"
-            input id="checkbox-skin-#{skin[:name]}" name="skin" type="radio" value="#{skin[:name]}" checked=("true" if skin[:checked])
-            ' &nbsp;#{skin[:label]}
-
-    .relative
-      canvas#mainChart width="100%"
-    h1 Temperature Chart
-    .relative
-      canvas#temperatureChart width="100%"
-    h2.blue.center Upload a different file
-    #drop-area
-      = form_with(url: {action: :create}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
+- cache [@shot, params[:skin]] do
+  .pure-g
+    .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
+    .pure-u-22-24.pure-u-lg-20-24.pure-u-xl-3-5
+      h3.small-margin-bottom
+        = @shot.profile_title
+        | &nbsp;
+        span#with-time data-time=@shot.start_time.to_i
+          = @shot.start_time.strftime("%d.%m.%Y at %H:%M")
+        = render "extra", extra: @shot[:extra]
+      form#skin-picker.pure-form
         fieldset
-          label for="file" Select your .shot file
-          = file_field_tag 'file'
-        button.submit_button.pure-button.pure-button-primary type="submit" Upload
-  .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
+          .legend.pure-radio.d-inline Skin:&nbsp;
+          - @skins.each do |skin|
+            label.d-inline.pure-radio for="checkbox-skin-#{skin[:name]}"
+              input id="checkbox-skin-#{skin[:name]}" name="skin" type="radio" value="#{skin[:name]}" checked=("true" if skin[:checked])
+              ' &nbsp;#{skin[:label]}
 
-javascript:
-  window.mainData = #{{@main_data.to_json}}
-  window.temperatureData = #{{@temperature_data.to_json}}
-  window.shotStages = #{{@stages.to_json}}
+      .relative
+        canvas#mainChart width="100%"
+      h1 Temperature Chart
+      .relative
+        canvas#temperatureChart width="100%"
+      h2.blue.center Upload a different file
+      #drop-area
+        = form_with(url: {action: :create}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
+          fieldset
+            label for="file" Select your .shot file
+            = file_field_tag 'file'
+          button.submit_button.pure-button.pure-button-primary type="submit" Upload
+    .pure-u-1-24.pure-u-lg-2-24.pure-u-xl-1-5
+
+  javascript:
+    window.mainData = #{{@main_data.to_json}}
+    window.temperatureData = #{{@temperature_data.to_json}}
+    window.shotStages = #{{@stages.to_json}}

@@ -72,6 +72,7 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
+    dalli (2.7.11)
     erubi (1.10.0)
     ffi (1.13.1)
     globalid (0.4.2)
@@ -215,6 +216,7 @@ PLATFORMS
 DEPENDENCIES
   annotate
   bootsnap (>= 1.4.2)
+  dalli
   listen (~> 3.2)
   pg
   pry-byebug

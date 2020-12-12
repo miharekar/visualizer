@@ -1,0 +1,44 @@
+- if @shot.extra.present?
+  h3.small-margin
+    - weight = @shot.extra["DSx_bean_weight"].presence || @shot.extra["grinder_dose_weight"].presence || @shot.extra["bean_weight"].presence
+    - if weight
+      = weight
+      | g
+    - if  weight && @shot.extra.key?("drink_weight")
+      | :
+    - if @shot.extra.key?("drink_weight")
+      = @shot.extra["drink_weight"]
+      | g&nbsp;
+    - ratio = @shot.extra["drink_weight"].to_f / weight.to_f
+    - if  weight && @shot.extra.key?("drink_weight") && ratio > 0
+      | (1:
+      = ratio.round(1)
+      |)
+  h3.small-margin
+    - ["bean_brand", "bean_type", "roast_date"].each do |k|
+      - if @shot.extra.key?(k)
+        = @shot.extra[k]
+        | &nbsp;
+  h3.small-margin
+    - ["grinder_model", "grinder_setting"].each do |k|
+      - if @shot.extra.key?(k)
+        = @shot.extra[k]
+        | &nbsp;
+  h3.small-margin-top
+    - tds = @shot.extra["drink_tds"].to_f
+    - ey = @shot.extra["drink_ey"].to_f
+    - enjoyment = @shot.extra["espresso_enjoyment"].to_f
+    - if tds > 0
+      | TDS&nbsp;
+      = tds
+      | %&nbsp;
+    - if tds > 0 && ey > 0
+      | /&nbsp;
+    - if ey > 0
+      | EY&nbsp;
+      = ey
+    - if ey > 0 && enjoyment > 0
+      | ,&nbsp;
+    - if enjoyment > 0
+      | Enjoyment&nbsp;
+      = enjoyment
