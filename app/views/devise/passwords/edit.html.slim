@@ -1,0 +1,17 @@
+h2.blue Change your password
+= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "pure-form pure-form-stacked" }) do |f|
+  = render "devise/shared/error_messages", resource: resource
+  = f.hidden_field :reset_password_token
+  .field
+    = f.label :password, "New password"
+    = f.password_field :password, autocomplete: "new-password"
+    span.pure-form-message
+      = @minimum_password_length
+      |  characters minimum
+    br
+  .field
+    = f.label :password_confirmation, "Confirm new password"
+    = f.password_field :password_confirmation, autocomplete: "new-password"
+    br
+  .actions
+    = f.submit "Change my password", class: "pure-button pure-button-primary"
