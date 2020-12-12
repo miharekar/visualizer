@@ -4,8 +4,6 @@
     - if @shot.user == current_user
       '
       = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
-      '
-      = link_to "Delete", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error button-header"
   = render "extra", extra: @shot[:extra]
   form#skin-picker.pure-form
     fieldset

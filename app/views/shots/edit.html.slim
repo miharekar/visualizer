@@ -4,4 +4,6 @@ h1.small-margin-bottom = render "title", shot: @shot
     = f.label :profile_title
     = f.text_field :profile_title
     br
-  = f.submit "Save", class: "pure-button pure-button-primary"
+  = f.submit "Save shot", class: "pure-button pure-button-primary"
+  '
+  = link_to "Delete shot", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error"
