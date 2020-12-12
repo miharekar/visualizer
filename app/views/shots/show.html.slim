@@ -1,10 +1,12 @@
 - cache [@shot, params[:skin]] do
   h3.small-margin-bottom
-    = @shot.profile_title
-    | &nbsp;
-    span.local-time data-time=@shot.start_time.to_i
-      = @shot.start_time.strftime("%d.%m.%Y at %H:%M")
-    = render "extra", extra: @shot[:extra]
+    = render "title", shot: @shot
+    - if @shot.user == current_user
+      '
+      = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
+      '
+      = link_to "Delete", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error button-header"
+  = render "extra", extra: @shot[:extra]
   form#skin-picker.pure-form
     fieldset
       .legend.pure-radio.d-inline Skin:&nbsp;

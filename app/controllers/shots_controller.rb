@@ -45,7 +45,8 @@ class ShotsController < ApplicationController
   def edit; end
 
   def update
-    @shot.update(params)
+    @shot.update(shot_params)
+    redirect_to action: :show
   end
 
   def destroy
@@ -57,6 +58,10 @@ class ShotsController < ApplicationController
 
   def load_shot
     @shot = Shot.where(user: current_user).find(params[:id])
+  end
+
+  def shot_params
+    params.require(:shot).permit(:profile_title)
   end
 
   def skins_from_params

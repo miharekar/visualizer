@@ -1,0 +1,7 @@
+h1.small-margin-bottom = render "title", shot: @shot
+= form_with(model: @shot, class: "pure-form pure-form-stacked") do |f|
+  .field
+    = f.label :profile_title
+    = f.text_field :profile_title
+    br
+  = f.submit "Save", class: "pure-button pure-button-primary"
