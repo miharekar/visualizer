@@ -18,7 +18,8 @@
 @import "colors";
 @import "shot";
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -45,7 +46,7 @@ canvas {
 }
 
 .d-inline {
-  display: inline!important;
+  display: inline !important;
 }
 
 .header {
@@ -56,27 +57,23 @@ canvas {
 .pure-menu-active > .pure-menu-link,
 .pure-menu-link:hover,
 .pure-menu-link:focus {
-    background-color: $green-light;
+  background-color: $green-light;
 }
 
 .pure-menu-horizontal .pure-menu-list {
-  display:block;
+  display: block;
 }
 
 .pure-pull-right {
   float: right;
-  input, button {
+  input,
+  button {
     margin-right: 5px;
   }
 }
 
 .nowrap {
   white-space: nowrap;
-}
-
-.button-error {
-  color: $white;
-  background: $red;
 }
 
 .button-small {

@@ -1,0 +1,9 @@
+h2.blue Forgot your password?
+= form_with(model: resource, as: resource_name, url: password_path(resource_name), class: "pure-form pure-form-stacked") do |f|
+  = render "devise/shared/error_messages", resource: resource
+  .field
+    = f.label :email
+    = f.email_field :email, autofocus: true, autocomplete: "email"
+  .actions
+    = f.submit "Send me instructions", class: "pure-button pure-button-primary"
+= render "devise/shared/links"

@@ -4,7 +4,47 @@ $grey: hsl(0, 0%, 47%);
 $blue: hsl(200, 100%, 42%);
 $green: hsl(164, 95%, 40%);
 $green-light: hsl(164, 80%, 90%);
+$orange: hsl(29, 84%, 48%);
 $red: hsl(0, 57%, 51%);
 $muted: hsl(208, 7%, 46%);
 $highlight-background: hsla(200, 100%, 42%, 0.3);
 $highlight-border: hsl(200, 100%, 42%);
+
+.black {
+  background-color: $black;
+  color: $white;
+}
+
+.blue {
+  color: $blue;
+}
+
+.green {
+  color: $green;
+}
+
+a.green:hover,
+a.blue:hover {
+  text-decoration: none;
+}
+
+.muted {
+  color: $muted;
+
+  a {
+    color: $blue;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.button-error {
+  color: $white;
+  background: $red;
+}
+
+.button-warning {
+  color: $white;
+  background: $orange;
+}
