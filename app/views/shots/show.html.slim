@@ -1,7 +1,7 @@
 - cache [@shot, params[:skin]] do
   h3.small-margin-bottom
     = render "title", shot: @shot
-    - if @shot.user == current_user
+    - if current_user && @shot.user == current_user
       '
       = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
   = render "extra", shot: @shot

@@ -7,6 +7,10 @@ class Shot < ApplicationRecord
 
   EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date drink_tds drink_ey espresso_enjoyment].freeze
 
+  def extra
+    @extra ||= super.presence || {}
+  end
+
   (EXTRA_DATA - ["bean_weight"]).each do |data|
     define_method data do
       attributes[data].presence || extra[data]
