@@ -185,7 +185,6 @@ GEM
       rack (>= 1.1)
       rubocop (>= 0.90.0, < 2.0)
     ruby-progressbar (1.10.1)
-    ruby_http_client (3.5.1)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -196,8 +195,6 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sendgrid-ruby (6.3.7)
-      ruby_http_client (~> 3.4)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -251,7 +248,6 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   sass-rails (>= 6)
-  sendgrid-ruby
   slim
   turbolinks (~> 5)
   web-console (>= 3.3.0)
