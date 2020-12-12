@@ -70,6 +70,28 @@ canvas {
   }
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
+.button-error {
+  color: $white;
+  background: $red;
+}
+
+.button-small {
+  font-size: 85%;
+}
+
+.menu-button {
+  color: $grey;
+  background-color: unset;
+  &:hover {
+    background-image: unset;
+    background-color: $green-light;
+  }
+}
+
 .small-margin-bottom {
   margin-bottom: 0.3em;
 }
