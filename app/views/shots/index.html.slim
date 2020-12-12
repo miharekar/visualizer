@@ -5,15 +5,17 @@ table.pure-table.pure-table-bordered
       th Profile
       th Weight
       th Beans
-      th Grinder
       th
   tbody
     - @shots.each do |shot|
-      tr
-        td.local-time data-time=shot.start_time.to_i
-          = shot.start_time
-        td = shot.profile_title
-        td = render "extra_weight", extra: shot[:extra]
-        td = render "extra_beans", extra: shot[:extra]
-        td = render "extra_grinder", extra: shot[:extra]
-        td = link_to "Show", shot
+      - cache shot
+        tr
+          td.local-time data-time=shot.start_time.to_i
+            = shot.start_time
+          td = shot.profile_title
+          td = render "extra_weight", extra: shot[:extra]
+          td = render "extra_beans", extra: shot[:extra]
+          td.nowrap
+            = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
+            '
+            = link_to "Delete", shot_path(shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-small button-error"

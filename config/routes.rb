@@ -5,9 +5,15 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  root "shots#new"
+  unauthenticated do
+    root "shots#new"
+  end
 
-  resources :shots, only: %i[show new create index] do
+  authenticated :user do
+    root "shots#index", as: :authenticated_root
+  end
+
+  resources :shots, only: %i[show new create index destroy] do
     get :random, on: :collection
   end
 end

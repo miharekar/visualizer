@@ -39,6 +39,12 @@ class ShotsController < ApplicationController
     end
   end
 
+  def destroy
+    @shot = Shot.where(user: current_user).find(params[:id])
+    @shot.destroy
+    redirect_to action: :index
+  end
+
   private
 
   def skins_from_params
