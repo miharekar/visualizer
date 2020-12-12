@@ -18,4 +18,4 @@ table.pure-table.pure-table-bordered
           td.nowrap
             = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
             '
-            = link_to "Delete", shot_path(shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-small button-error"
+            = link_to "Edit", edit_shot_path(shot), class: "pure-button button-small button-warning"

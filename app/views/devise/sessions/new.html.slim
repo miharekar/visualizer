@@ -1,4 +1,4 @@
-h2.blue Log in
+h2.blue Sign in
 = form_with(model: resource, as: resource_name, url: session_path(resource_name), class: "pure-form pure-form-stacked") do |f|
   .field
     = f.label :email
@@ -9,6 +9,6 @@ h2.blue Log in
     = f.password_field :password, autocomplete: "current-password"
     = f.hidden_field :remember_me, value: 1
     br
-  = f.submit "Log in", class: "pure-button pure-button-primary"
+  = f.submit "Sign in", class: "pure-button pure-button-primary"
 br
 = render "devise/shared/links"

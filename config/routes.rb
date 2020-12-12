@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     root "shots#index", as: :authenticated_root
   end
 
-  resources :shots, only: %i[show new create index destroy] do
+  resources :shots do
     get :random, on: :collection
   end
 end

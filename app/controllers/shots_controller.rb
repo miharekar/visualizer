@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
-  before_action :authenticate_user!, only: :index
+  before_action :authenticate_user!, except: %i[new show random create]
+  before_action :load_shot, only: %i[edit update destroy]
+
+  def new; end
 
   def index
     @shots = Shot.where(user: current_user).order(start_time: :desc)
@@ -39,13 +42,22 @@ class ShotsController < ApplicationController
     end
   end
 
+  def edit; end
+
+  def update
+    @shot.update(params)
+  end
+
   def destroy
-    @shot = Shot.where(user: current_user).find(params[:id])
     @shot.destroy
     redirect_to action: :index
   end
 
   private
+
+  def load_shot
+    @shot = Shot.where(user: current_user).find(params[:id])
+  end
 
   def skins_from_params
     skins = ["Classic", "DSx", "White DSx"].map do |skin|

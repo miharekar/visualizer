@@ -11,11 +11,16 @@
           li.pure-menu-item
               = link_to "Sign Out", destroy_user_session_path, class: 'pure-menu-link', method: :delete
         - else
-          li.pure-menu-item
-            = form_with(url: user_session_path, model: User, method: :post, class: "pure-form") do |f|
-              = f.email_field :email, placeholder: "Email", size: 12, autocomplete: "email"
-              = f.password_field :password, placeholder: "Password", size: 12, autocomplete: "current-password"
-              = f.hidden_field :remember_me, value: 1
-              button.pure-button.menu-button type="submit" Sign in
-          li.pure-menu-item
-            = link_to "Sign Up", new_user_registration_path, class: 'pure-menu-link'
+          - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
+            li.pure-menu-item
+              = form_with(url: user_session_path, model: User, method: :post, class: "pure-form") do |f|
+                = f.email_field :email, placeholder: "Email", size: 12, autocomplete: "email"
+                = f.password_field :password, placeholder: "Password", size: 12, autocomplete: "current-password"
+                = f.hidden_field :remember_me, value: 1
+                button.pure-button.menu-button type="submit" Sign in
+          - if ['passwords', 'registrations'].include?(controller_name)
+            li.pure-menu-item
+              = link_to "Sign In", new_user_session_path, class: 'pure-menu-link'
+          - if controller_name != 'registrations'
+            li.pure-menu-item
+              = link_to "Sign Up", new_user_registration_path, class: 'pure-menu-link'
