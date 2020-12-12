@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_12_161746) do
+ActiveRecord::Schema.define(version: 2020_12_12_193727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2020_12_12_161746) do
     t.string "bean_brand"
     t.string "bean_type"
     t.string "roast_date"
+    t.text "comment"
     t.index ["user_id"], name: "index_shots_on_user_id"
   end
 

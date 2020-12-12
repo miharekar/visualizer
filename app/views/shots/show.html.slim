@@ -5,6 +5,7 @@
       '
       = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
   = render "extra", shot: @shot
+  = simple_format(@shot.comment)
   form#skin-picker.pure-form
     fieldset
       .legend.pure-radio.d-inline Skin:&nbsp;

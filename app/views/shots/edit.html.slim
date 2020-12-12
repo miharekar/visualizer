@@ -10,6 +10,10 @@ h1.small-margin-bottom = render "title", shot: @shot
         = f.label data
         = f.text_field data
         br
+    .pure-control-group
+      = f.label :comment
+      = f.text_area :comment, size: "60x10", class: "pure-input-1-2"
+      br
     .pure-controls
       = f.submit "Save shot", class: "pure-button pure-button-primary"
       '
