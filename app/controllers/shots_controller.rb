@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShotsController < ApplicationController
   def random
     redirect_to Shot.order("RANDOM()").first
