@@ -8,7 +8,7 @@
   | g
   '
 - ratio = shot.drink_weight.to_f / shot.bean_weight.to_f
-- if  shot.bean_weight.present? && shot.drink_weight.present?&& ratio > 0
+- if  shot.bean_weight.present? && shot.drink_weight.present? && ratio > 0 && ratio.finite?
   | (1:
   = ratio.round(1)
   |)

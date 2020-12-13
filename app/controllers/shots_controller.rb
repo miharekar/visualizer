@@ -21,15 +21,16 @@ class ShotsController < ApplicationController
     @stages = @shot.stages
   end
 
+  def bulk
+    params[:files].each do |file|
+      shot_from_file(file).save
+    end
+
+    redirect_to action: :index
+  end
+
   def create
-    parsed_shot = ShotParser.new(File.read(params["file"]))
-    @shot = Shot.new(
-      user: current_user,
-      start_time: parsed_shot.start_time,
-      profile_title: parsed_shot.profile_title,
-      data: parsed_shot.data,
-      extra: parsed_shot.extra
-    )
+    @shot = shot_from_file(params["file"])
 
     if @shot.save
       if params.key?(:drag)
@@ -62,6 +63,17 @@ class ShotsController < ApplicationController
 
   def shot_params
     params.require(:shot).permit(:profile_title, :comment, *Shot::EXTRA_DATA)
+  end
+
+  def shot_from_file(file)
+    parsed_shot = ShotParser.new(File.read(file))
+    Shot.new(
+      user: current_user,
+      start_time: parsed_shot.start_time,
+      profile_title: parsed_shot.profile_title,
+      data: parsed_shot.data,
+      extra: parsed_shot.extra
+    )
   end
 
   def skins_from_params

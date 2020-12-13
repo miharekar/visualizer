@@ -189,8 +189,6 @@ function applySkin(skin) {
   }
 }
 
-
-
 document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementById("skin-picker")) {
     const queryParams = new URLSearchParams(window.location.search)

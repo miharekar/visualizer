@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   end
 
   resources :shots do
-    get :random, on: :collection
+    collection do
+      get :random
+      post :bulk
+    end
   end
 end

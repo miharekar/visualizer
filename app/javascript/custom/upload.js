@@ -29,15 +29,25 @@ document.addEventListener("turbolinks:load", function () {
       xhr.addEventListener(
         "readystatechange",
         function () {
-          if (xhr.readyState == 4 && xhr.status == 200) {
-            let queryParams = new URLSearchParams(window.location.search)
-            let id = JSON.parse(xhr.responseText).id
-            Turbolinks.visit("/shots/" + id + "?" + queryParams.toString())
+          if (dropArea.dataset.bulk === "true") {
+            Turbolinks.visit("/shots")
+          } else {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+              let queryParams = new URLSearchParams(window.location.search)
+              let id = JSON.parse(xhr.responseText).id
+              Turbolinks.visit("/shots/" + id + "?" + queryParams.toString())
+            }
           }
         },
         false
       );
-      formData.append("file", file)
+      if (dropArea.dataset.bulk === "true") {
+        [...e.dataTransfer.files].forEach(file => {
+          formData.append("files[]", file)
+        })
+      } else {
+        formData.append("file", e.dataTransfer.files[0])
+      }
       xhr.send(formData)
     };
 
