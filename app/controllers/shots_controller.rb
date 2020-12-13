@@ -7,7 +7,7 @@ class ShotsController < ApplicationController
   def new; end
 
   def index
-    @shots = Shot.where(user: current_user).order(start_time: :desc)
+    @shots = current_user.shots.order(start_time: :desc)
   end
 
   def random
@@ -58,7 +58,7 @@ class ShotsController < ApplicationController
   private
 
   def load_shot
-    @shot = Shot.where(user: current_user).find(params[:id])
+    @shot = current_user.shots.find(params[:id])
   end
 
   def shot_params
