@@ -5,11 +5,46 @@ h1.small-margin-bottom = render "title", shot: @shot
       = f.label :profile_title
       = f.text_field :profile_title
       br
-    - Shot::EXTRA_DATA.each do |data|
-      .pure-control-group
-        = f.label data
-        = f.text_field data
-        br
+    .pure-control-group
+      = f.label :bean_weight
+      = f.text_field :bean_weight
+      br
+    .pure-control-group
+      = f.label :drink_weight
+      = f.text_field :drink_weight
+      br
+    .pure-control-group
+      = f.label :grinder_model
+      = f.text_field :grinder_model
+      br
+    .pure-control-group
+      = f.label :grinder_setting
+      = f.text_field :grinder_setting
+      br
+    .pure-control-group
+      = f.label :bean_brand
+      = f.text_field :bean_brand
+      br
+    .pure-control-group
+      = f.label :bean_type
+      = f.text_field :bean_type
+      br
+    .pure-control-group
+      = f.label :roast_date
+      = f.text_field :roast_date
+      br
+    .pure-control-group
+      = f.label :drink_tds
+      = f.text_field :drink_tds
+      br
+    .pure-control-group
+      = f.label :drink_ey
+      = f.text_field :drink_ey
+      br
+    .pure-control-group
+      = f.label :espresso_enjoyment
+      = f.text_field :espresso_enjoyment
+      br
     .pure-control-group
       = f.label :comment
       = f.text_area :comment, size: "60x10", class: "pure-input-1-2"
