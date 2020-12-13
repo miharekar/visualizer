@@ -3,11 +3,16 @@
 class ShotsController < ApplicationController
   before_action :authenticate_user!, except: %i[new show random create]
   before_action :load_shot, only: %i[edit update destroy]
+  before_action :load_users_shots, only: %i[index edit]
+
+  def index; end
 
   def new; end
 
-  def index
-    @shots = current_user.shots.order(start_time: :desc)
+  def edit
+    @grinder_models = @shots.map(&:grinder_model).uniq.compact
+    @bean_brands = @shots.map(&:bean_brand).uniq.compact
+    @bean_types = @shots.map(&:bean_type).uniq.compact
   end
 
   def random
@@ -43,8 +48,6 @@ class ShotsController < ApplicationController
     end
   end
 
-  def edit; end
-
   def update
     @shot.update(shot_params)
     redirect_to action: :show
@@ -59,6 +62,10 @@ class ShotsController < ApplicationController
 
   def load_shot
     @shot = current_user.shots.find(params[:id])
+  end
+
+  def load_users_shots
+    @shots = current_user.shots.order(start_time: :desc)
   end
 
   def shot_params

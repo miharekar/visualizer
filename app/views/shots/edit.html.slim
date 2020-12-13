@@ -15,7 +15,10 @@ h1.small-margin-bottom = render "title", shot: @shot
       br
     .pure-control-group
       = f.label :grinder_model
-      = f.text_field :grinder_model
+      = f.text_field :grinder_model, list:"grinder-model-list"
+      datalist#grinder-model-list
+        - @grinder_models.each do |grinder_model|
+          option = grinder_model
       br
     .pure-control-group
       = f.label :grinder_setting
@@ -23,11 +26,17 @@ h1.small-margin-bottom = render "title", shot: @shot
       br
     .pure-control-group
       = f.label :bean_brand
-      = f.text_field :bean_brand
+      = f.text_field :bean_brand, list:"bean-brand-list"
+      datalist#bean-brand-list
+        - @bean_brands.each do |bean_brand|
+          option = bean_brand
       br
     .pure-control-group
       = f.label :bean_type
-      = f.text_field :bean_type
+      = f.text_field :bean_type, list:"bean-type-list"
+      datalist#bean-type-list
+        - @bean_types.each do |bean_type|
+          option = bean_type
       br
     .pure-control-group
       = f.label :roast_date
