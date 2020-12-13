@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ShotParser
-  attr_reader :start_time, :data, :extra, :profile_title
+  attr_reader :start_time, :data, :extra, :profile_title, :sha
 
   def initialize(file)
     @file = file
@@ -9,6 +9,7 @@ class ShotParser
     @extra = {}
     parse_file
     @start_time = Time.at(@file[/clock (\d+)/, 1].to_i).utc
+    @sha = Digest::SHA256.base64digest(data.to_json)
   end
 
   private

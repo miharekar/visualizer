@@ -1,24 +1,25 @@
-table.pure-table.pure-table-bordered
-  thead
-    tr
-      th Shot at
-      th Profile
-      th Weight
-      th Beans
-      th
-  tbody
-    - @shots.each do |shot|
-      - cache shot
-        tr
-          td.local-time data-time=shot.start_time.to_i
-            = shot.start_time
-          td = shot.profile_title
-          td = render "extra_weight", shot: shot
-          td = render "extra_beans", shot: shot
-          td.nowrap
-            = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
-            '
-            = link_to "Edit", edit_shot_path(shot), class: "pure-button button-small button-warning"
+- if @shots.any?
+  table.pure-table.pure-table-bordered
+    thead
+      tr
+        th Shot at
+        th Profile
+        th Weight
+        th Beans
+        th
+    tbody
+      - @shots.each do |shot|
+        - cache shot
+          tr
+            td.local-time data-time=shot.start_time.to_i
+              = shot.start_time
+            td = shot.profile_title
+            td = render "extra_weight", shot: shot
+            td = render "extra_beans", shot: shot
+            td.nowrap
+              = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
+              '
+              = link_to "Edit", edit_shot_path(shot), class: "pure-button button-small button-warning"
 
 h2.blue.center Bulk Upload
 #drop-area data-bulk="true"

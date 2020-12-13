@@ -107,6 +107,7 @@ end
 #  bean_brand         :string
 #  bean_type          :string
 #  bean_weight        :string
+#  comment            :text
 #  data               :jsonb
 #  drink_ey           :string
 #  drink_tds          :string
@@ -117,6 +118,7 @@ end
 #  grinder_setting    :string
 #  profile_title      :string
 #  roast_date         :string
+#  sha                :string
 #  start_time         :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -124,6 +126,7 @@ end
 #
 # Indexes
 #
+#  index_shots_on_sha      (sha)
 #  index_shots_on_user_id  (user_id)
 #
 # Foreign Keys

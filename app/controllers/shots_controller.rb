@@ -67,13 +67,12 @@ class ShotsController < ApplicationController
 
   def shot_from_file(file)
     parsed_shot = ShotParser.new(File.read(file))
-    Shot.new(
-      user: current_user,
-      start_time: parsed_shot.start_time,
-      profile_title: parsed_shot.profile_title,
-      data: parsed_shot.data,
-      extra: parsed_shot.extra
-    )
+    Shot.find_or_create_by(user: current_user, sha: parsed_shot.sha) do |shot|
+      shot.start_time = parsed_shot.start_time
+      shot.profile_title = parsed_shot.profile_title
+      shot.data = parsed_shot.data
+      shot.extra = parsed_shot.extra
+    end
   end
 
   def skins_from_params
