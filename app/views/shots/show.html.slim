@@ -1,4 +1,4 @@
-- cache [@shot, params[:skin], current_user] do
+- cache [@shot, params[:skin], current_user, @timezone] do
   h3.small-margin-bottom
     = render "title", shot: @shot
     - if current_user && @shot.user == current_user

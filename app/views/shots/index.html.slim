@@ -18,7 +18,7 @@ h2.blue.center Your Shots
         th
     tbody
       - @shots.each do |shot|
-        - cache shot
+        - cache [shot, @timezone]
           tr
             - if @timezone.present?
               td.nowrap
