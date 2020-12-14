@@ -21,7 +21,7 @@ class ShotsController < ApplicationController
 
   def show
     @shot = Shot.find(params[:id])
-    @chart_data = prepare_chart_data
+    @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @skins = skins_from_params
     @stages = @shot.stages
   end
@@ -95,12 +95,5 @@ class ShotsController < ApplicationController
     skins[0][:checked] = true unless skins.find { |s| s[:checked] }
 
     skins
-  end
-
-  def prepare_chart_data
-    @shot.chart_data.sort_by { |d| d[:label] }.map do |d|
-      d[:axis] = d[:label].include?("temperature") ? "right" : "left"
-      d
-    end
   end
 end
