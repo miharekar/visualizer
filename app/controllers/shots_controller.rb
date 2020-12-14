@@ -28,7 +28,7 @@ class ShotsController < ApplicationController
 
   def bulk
     Array(params[:files]).each do |file|
-      shot_from_file(file).save
+      shot_from_file(file)&.save
     end
 
     redirect_to action: :index
@@ -37,7 +37,7 @@ class ShotsController < ApplicationController
   def create
     @shot = shot_from_file(params["file"])
 
-    if @shot.save
+    if @shot&.save
       if params.key?(:drag)
         render json: {id: @shot.id}
       else
@@ -73,6 +73,8 @@ class ShotsController < ApplicationController
   end
 
   def shot_from_file(file)
+    return unless file
+
     parsed_shot = ShotParser.new(File.read(file))
     Shot.find_or_create_by(user: current_user, sha: parsed_shot.sha) do |shot|
       shot.start_time = parsed_shot.start_time
