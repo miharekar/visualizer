@@ -14,22 +14,25 @@ h2.blue.center Your Shots
       tr
         th Shot at
         th Profile
-        th Weight
-        th Beans
+        th Extra
         th
     tbody
       - @shots.each do |shot|
         - cache shot
           tr
             - if @timezone.present?
-              td
+              td.nowrap
                 = shot.start_time.in_time_zone(@timezone).to_s(:short)
             - else
               td.local-time data-time=shot.start_time.to_i
                 = shot.start_time.to_s(:short)
             td = shot.profile_title
-            td = render "extra_weight", shot: shot
-            td = render "extra_beans", shot: shot
+            td
+              = render "extra_beans", shot: shot, no_roast: true
+              br
+              = render "extra_weight", shot: shot
+              br
+              = render "extra_grinder", shot: shot
             td.nowrap
               = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
               '

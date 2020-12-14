@@ -1,3 +1,7 @@
-- ["bean_brand", "bean_type", "roast_date"].map { |m| shot.public_send(m) }.select { |v| v.present? }.each do |v|
+- if defined?(no_roast)
+  - bean_vars = ["bean_brand", "bean_type"]
+- else
+  - bean_vars = ["bean_brand", "bean_type", "roast_date"]
+- bean_vars.map { |m| shot.public_send(m) }.select { |v| v.present? }.each do |v|
   = v
   '
