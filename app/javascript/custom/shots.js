@@ -211,13 +211,4 @@ document.addEventListener("turbolinks:load", function (xhr) {
       selectSkin()
     })
   }
-
-  if (document.getElementsByClassName("local-time").length > 0) {
-    const locale = window.navigator.userLanguage || window.navigator.language
-
-    Array.from(document.getElementsByClassName("local-time")).forEach((el) => {
-      const time = new Date(el.dataset.time * 1000)
-      el.innerHTML = time.toLocaleString(locale)
-    });
-  }
 })

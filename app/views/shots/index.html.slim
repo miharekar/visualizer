@@ -21,8 +21,12 @@ h2.blue.center Your Shots
       - @shots.each do |shot|
         - cache shot
           tr
-            td.local-time data-time=shot.start_time.to_i
-              = shot.start_time
+            - if @timezone.present?
+              td
+                = shot.start_time.in_time_zone(@timezone).to_s(:short)
+            - else
+              td.local-time data-time=shot.start_time.to_i
+                = shot.start_time.to_s(:short)
             td = shot.profile_title
             td = render "extra_weight", shot: shot
             td = render "extra_beans", shot: shot
