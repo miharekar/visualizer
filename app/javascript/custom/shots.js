@@ -30,8 +30,22 @@ const chartOptions = {
       }
     }],
     yAxes: [{
-      gridLines: {
-        color: "rgba(128, 128, 128, 0.35)"
+      id: "y-axis-left",
+      position: "left",
+      type: "linear",
+      gridLines: { color: "rgba(128, 128, 128, 0.35)" },
+      ticks: {
+        min: 0,
+        max: 16
+      }
+    }, {
+      id: "y-axis-right",
+      position: "right",
+      type: "linear",
+      gridLines: false,
+      ticks: {
+        min: 30,
+        max: 110
       }
     }]
   },
@@ -91,7 +105,7 @@ function getSettings() {
   return settings[selectedSkin]
 }
 
-let mainChart, temperatureChart, selectedSkin, lastPath, lastSkin;
+let chart, selectedSkin, lastPath, lastSkin;
 
 function chartFromData(data) {
   const settings = getSettings()
@@ -110,6 +124,7 @@ function chartFromData(data) {
         borderWidth: current.borderWidth,
         lineTension: current.lineTension,
         pointRadius: 0,
+        yAxisID: "y-axis-" + v.axis,
       }
     }
   }).filter(e => e)
@@ -128,7 +143,7 @@ function annotationsFromData(stages) {
 }
 
 function drawChart() {
-  const ctx = document.getElementById("mainChart").getContext("2d")
+  const ctx = document.getElementById("chart").getContext("2d")
   const annotations = {
     annotation: {
       annotations: annotationsFromData(window.shotStages)
@@ -138,15 +153,9 @@ function drawChart() {
     ...chartOptions,
     ...annotations
   }
-  mainChart = new Chart(ctx, {
+  chart = new Chart(ctx, {
     type: "line",
-    data: { datasets: chartFromData(window.mainData) },
-    options: options
-  })
-  const tctx = document.getElementById("temperatureChart").getContext("2d")
-  temperatureChart = new Chart(tctx, {
-    type: "line",
-    data: { datasets: chartFromData(window.temperatureData) },
+    data: { datasets: chartFromData(window.chartData) },
     options: options
   })
 }
