@@ -27,7 +27,7 @@ class ShotsController < ApplicationController
   end
 
   def bulk
-    params[:files].each do |file|
+    Array(params[:files]).each do |file|
       shot_from_file(file).save
     end
 
