@@ -16,6 +16,7 @@ gem "bootsnap", ">= 1.4.2", require: false
 gem "slim"
 gem "devise"
 gem "dalli"
+gem "rollbar"
 
 group :development, :test do
   gem "pry-byebug"

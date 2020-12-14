@@ -166,6 +166,7 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.4)
+    rollbar (3.1.1)
     rubocop (1.6.1)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
@@ -244,6 +245,7 @@ DEPENDENCIES
   pry-byebug
   puma
   rails
+  rollbar
   rubocop
   rubocop-performance
   rubocop-rails
