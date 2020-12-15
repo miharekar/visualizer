@@ -4,6 +4,14 @@ Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
   match "(*any)", to: redirect { |_, req| "https://visualizer.coffee#{req.fullpath}" }, via: :all, constraints: {host: "decent-visualizer.herokuapp.com"}
 
+  namespace :api do
+    resources :shots, only: [] do
+      collection do
+        post :upload
+      end
+    end
+  end
+
   devise_for :users
 
   unauthenticated do
