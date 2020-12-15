@@ -28,14 +28,18 @@ class ShotsController < ApplicationController
 
   def bulk
     Array(params[:files]).each do |file|
-      Shot.from_file(current_user, file)&.save
+      next unless file
+
+      Shot.from_file_content(current_user, File.read(file))&.save
     end
 
     redirect_to action: :index
   end
 
   def create
-    @shot = Shot.from_file(current_user, params["file"])
+    return unless params[:file]
+
+    @shot = Shot.from_file_content(current_user, File.read(params[:file]))
 
     if @shot&.save
       if params.key?(:drag)
