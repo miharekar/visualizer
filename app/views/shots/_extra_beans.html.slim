@@ -1,7 +1,9 @@
-- if defined?(no_roast)
-  - bean_vars = ["bean_brand", "bean_type"]
-- else
-  - bean_vars = ["bean_brand", "bean_type", "roast_date"]
-- bean_vars.map { |m| shot.public_send(m) }.select { |v| v.present? }.each do |v|
-  = v
+- if shot.bean_brand.present?
+  = shot.bean_brand
   '
+- if shot.bean_type.present?
+  = shot.bean_type
+  '
+- if defined?(show_roast_date) && shot.roast_date.present?
+  ' on
+  = shot.roast_date

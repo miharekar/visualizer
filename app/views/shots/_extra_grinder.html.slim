@@ -1,3 +1,6 @@
-- ["grinder_model", "grinder_setting"].map { |m| shot.public_send(m) }.select { |v| v.present? }.each do |v|
-  = v
+- if shot.grinder_model.present?
+  = shot.grinder_model
   '
+- if shot.grinder_setting.present?
+  ' @
+  = shot.grinder_setting
