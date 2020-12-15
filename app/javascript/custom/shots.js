@@ -122,28 +122,26 @@ function annotationsFromData(stages) {
       mode: "vertical",
       scaleID: "x-axis-0",
       value: v,
-      borderColor: "rgba(128, 128, 128, 1)"
+      borderColor: "rgba(128, 128, 128, 1)",
+      borderWidth: 1
     }
   })
 }
 
 function drawChart() {
+  if (typeof mainChart !== 'undefined') { mainChart.destroy() }
+  if (typeof temperatureChart !== 'undefined') { temperatureChart.destroy() }
   const ctx = document.getElementById("mainChart").getContext("2d")
+  const tctx = document.getElementById("temperatureChart").getContext("2d")
   const annotations = {
-    annotation: {
-      annotations: annotationsFromData(window.shotStages)
-    }
+    annotation: { annotations: annotationsFromData(window.shotStages) }
   }
-  const options = {
-    ...chartOptions,
-    ...annotations
-  }
+  const options = { ...chartOptions, ...annotations }
   mainChart = new Chart(ctx, {
     type: "line",
     data: { datasets: chartFromData(window.mainData) },
     options: options
   })
-  const tctx = document.getElementById("temperatureChart").getContext("2d")
   temperatureChart = new Chart(tctx, {
     type: "line",
     data: { datasets: chartFromData(window.temperatureData) },
