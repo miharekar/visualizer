@@ -1,11 +1,16 @@
 
 h2.blue.center Bulk Upload
+= render "shared/flash"
 #drop-area data-bulk="true"
   = form_with(url: {action: :bulk}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
     fieldset
       label for="files" Select your .shot files
       = file_field_tag "files", multiple: true, name: "files[]"
     button.submit_button.pure-button.pure-button-primary type="submit" Upload
+#loader.d-none
+#error.d-none
+  p.red.center
+    strong Something went wrong
 
 h2.blue.center Your Shots
 - if @shots.any?

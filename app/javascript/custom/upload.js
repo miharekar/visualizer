@@ -1,10 +1,23 @@
+function fadeAwayFlash() {
+  setTimeout(function () {
+    Array.from(document.getElementsByClassName("fade-away")).forEach((el) => {
+      el.style.height = el.scrollHeight + "px";
+      window.setTimeout(function () {
+        el.style.height = "0";
+        el.style.opacity = "0";
+      }, 1);
+    });
+  }, 5000);
+}
+
 document.addEventListener("turbolinks:load", function () {
   const dropArea = document.getElementById("drop-area");
+
   if (dropArea) {
-
-
+    const loader = document.getElementById("loader");
+    const error = document.getElementById("error");
     const form = document.getElementById("shot-upload-form");
-    const token = document.getElementsByName('csrf-token')[0].content
+    const token = document.getElementsByName("csrf-token")[0].content
 
     const preventDefaults = e => {
       e.preventDefault()
@@ -20,6 +33,9 @@ document.addEventListener("turbolinks:load", function () {
     };
 
     const handleDrop = e => {
+      dropArea.classList.add("d-none")
+      loader.classList.remove("d-none")
+
       const file = e.dataTransfer.files[0]
       let xhr = new XMLHttpRequest()
       let formData = new FormData()
@@ -29,13 +45,19 @@ document.addEventListener("turbolinks:load", function () {
       xhr.addEventListener(
         "readystatechange",
         function () {
-          if (dropArea.dataset.bulk === "true") {
-            Turbolinks.visit("/shots")
-          } else {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-              let queryParams = new URLSearchParams(window.location.search)
-              let id = JSON.parse(xhr.responseText).id
-              Turbolinks.visit("/shots/" + id + "?" + queryParams.toString())
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              if (dropArea.dataset.bulk === "true") {
+                Turbolinks.visit("/shots")
+                fadeAwayFlash()
+              } else {
+                let queryParams = new URLSearchParams(window.location.search)
+                let id = JSON.parse(xhr.responseText).id
+                Turbolinks.visit("/shots/" + id + "?" + queryParams.toString())
+              }
+            } else {
+              loader.classList.add("d-none")
+              error.classList.remove("d-none")
             }
           }
         },

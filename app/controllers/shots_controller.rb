@@ -31,7 +31,12 @@ class ShotsController < ApplicationController
       Shot.from_file(current_user, file: file)&.save
     end
 
-    redirect_to action: :index
+    flash[:notice] = "Shots succesfully uploaded."
+    if params.key?(:drag)
+      head :ok
+    else
+      redirect_to({action: :index})
+    end
   end
 
   def create

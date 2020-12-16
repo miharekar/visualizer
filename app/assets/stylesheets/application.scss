@@ -45,6 +45,12 @@ canvas {
   height: 100px;
 }
 
+.fade-away {
+  height: auto;
+  overflow: hidden;
+  transition: height 350ms ease-in-out, opacity 750ms ease-in-out;
+}
+
 .d-none {
   display: none;
 }

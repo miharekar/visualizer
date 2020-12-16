@@ -1,0 +1,3 @@
+- flash.each do |name, msg|
+  p.center.blue.toggle-content.is-visible.fade-away
+    = content_tag :strong, msg, id: "flash_#{name}"
