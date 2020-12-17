@@ -1,13 +1,20 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
-  before_action :authenticate_user!, except: %i[new show random create]
+  before_action :authenticate_user!, except: %i[new show random create chart]
   before_action :load_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index edit]
+  before_action :skins_from_params, only: %i[show chart]
 
   def index; end
 
   def new; end
+
+  def chart
+    @no_header = true
+    @shot = Shot.find(params[:shot_id])
+    _, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
+  end
 
   def edit
     @grinder_models = @shots.map(&:grinder_model).uniq.compact
@@ -22,7 +29,6 @@ class ShotsController < ApplicationController
   def show
     @shot = Shot.find(params[:id])
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
-    @skins = skins_from_params
     @stages = @shot.stages
   end
 
@@ -78,15 +84,13 @@ class ShotsController < ApplicationController
   end
 
   def skins_from_params
-    skins = ["Classic", "DSx", "White DSx"].map do |skin|
+    @skins = ["Classic", "DSx", "White DSx"].map do |skin|
       {
         name: skin.parameterize,
         label: skin,
         checked: params[:skin] == skin.parameterize
       }
     end
-    skins[0][:checked] = true unless skins.find { |s| s[:checked] }
-
-    skins
+    @skins[0][:checked] = true unless @skins.find { |s| s[:checked] }
   end
 end

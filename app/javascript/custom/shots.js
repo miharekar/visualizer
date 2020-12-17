@@ -131,22 +131,40 @@ function annotationsFromData(stages) {
 function drawChart() {
   if (typeof mainChart !== 'undefined') { mainChart.destroy() }
   if (typeof temperatureChart !== 'undefined') { temperatureChart.destroy() }
-  const ctx = document.getElementById("mainChart").getContext("2d")
-  const tctx = document.getElementById("temperatureChart").getContext("2d")
-  const annotations = {
-    annotation: { annotations: annotationsFromData(window.shotStages) }
+
+  let annotations = {}
+  if (window.shotStages !== undefined) {
+    annotations = {
+      annotation: { annotations: annotationsFromData(window.shotStages) }
+    }
   }
-  const options = { ...chartOptions, ...annotations }
-  mainChart = new Chart(ctx, {
-    type: "line",
-    data: { datasets: chartFromData(window.mainData) },
-    options: options
-  })
-  temperatureChart = new Chart(tctx, {
-    type: "line",
-    data: { datasets: chartFromData(window.temperatureData) },
-    options: options
-  })
+
+  let legend = {}
+  if (window.hideLegend !== undefined) {
+    legend = {
+      legend: { display: false }
+    }
+  }
+
+  const options = { ...chartOptions, ...annotations, ...legend }
+
+  if (document.getElementById("temperatureChart")) {
+    const tctx = document.getElementById("temperatureChart").getContext("2d")
+    temperatureChart = new Chart(tctx, {
+      type: "line",
+      data: { datasets: chartFromData(window.temperatureData) },
+      options: options
+    })
+  }
+
+  if (document.getElementById("mainChart")) {
+    const ctx = document.getElementById("mainChart").getContext("2d")
+    mainChart = new Chart(ctx, {
+      type: "line",
+      data: { datasets: chartFromData(window.mainData) },
+      options: options
+    })
+  }
 }
 
 function reloadWithSkin(skin) {
@@ -188,12 +206,13 @@ function applySkin(skin) {
 }
 
 document.addEventListener("turbolinks:load", function (xhr) {
-  if (document.getElementById("skin-picker")) {
+  if (document.getElementById("mainChart")) {
     const queryParams = new URLSearchParams(window.location.search)
     let currentSkin = queryParams.get("skin")
 
     if (currentSkin === null) {
       currentSkin = "classic"
+      lastPath = xhr.target.location.pathname
     }
 
     if (xhr.target.location.pathname === lastPath && lastSkin !== currentSkin) {

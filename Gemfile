@@ -19,6 +19,7 @@ gem "dalli"
 gem "rollbar"
 
 gem "tickly"
+gem "selenium-webdriver"
 
 group :development, :test do
   gem "pry-byebug"

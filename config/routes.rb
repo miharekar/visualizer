@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
 
   resources :shots do
+    get :chart
     collection do
       get :random
       post :bulk

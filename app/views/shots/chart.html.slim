@@ -1,0 +1,14 @@
+form#skin-picker.pure-form.d-none
+  fieldset
+    .legend.pure-radio.d-inline Skin:&nbsp;
+    - @skins.each do |skin|
+      label.d-inline.pure-radio for="checkbox-skin-#{skin[:name]}"
+        input id="checkbox-skin-#{skin[:name]}" name="skin" type="radio" value="#{skin[:name]}" checked=("true" if skin[:checked])
+        ' &nbsp;#{skin[:label]}
+
+.relative
+  canvas#mainChart width="100%"
+
+javascript:
+  window.mainData = #{{@main_data.to_json}}
+  window.hideLegend = true
