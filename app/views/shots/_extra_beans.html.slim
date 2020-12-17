@@ -4,6 +4,11 @@
 - if shot.bean_type.present?
   = shot.bean_type
   '
-- if defined?(show_roast_date) && shot.roast_date.present?
-  ' on
-  = shot.roast_date
+- if defined?(show_roast_date)
+  - if shot.roast_level.present?
+    | (
+    = shot.roast_level
+    ' )
+  - if shot.roast_date.present?
+    ' on
+    = shot.roast_date

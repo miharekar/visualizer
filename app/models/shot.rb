@@ -3,8 +3,8 @@
 class Shot < ApplicationRecord
   belongs_to :user, optional: true
 
-  RELEVANT_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
-  EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date drink_tds drink_ey espresso_enjoyment].freeze
+  DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
+  EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes].freeze
 
   def self.from_file(user, file: nil, content: nil)
     if file.present?
@@ -17,8 +17,9 @@ class Shot < ApplicationRecord
 
     parsed_shot = ShotParser.new(file_content)
     find_or_create_by(user: user, sha: parsed_shot.sha) do |shot|
-      shot.start_time = parsed_shot.start_time
       shot.profile_title = parsed_shot.profile_title
+      shot.start_time = parsed_shot.start_time
+      shot.timeframe = parsed_shot.timeframe
       shot.data = parsed_shot.data
       shot.extra = parsed_shot.extra
     end
@@ -44,8 +45,8 @@ class Shot < ApplicationRecord
 
   def stages
     indices = []
-    data.select { |d| d["label"].end_with?("_goal") }.each do |goal|
-      data = goal["data"].map(&:to_f)
+    data.select { |label, _| label.end_with?("_goal") }.each do |_label, data|
+      data = data.map(&:to_f)
       data.each.with_index do |a, i|
         next if i < 5
 
@@ -73,15 +74,13 @@ class Shot < ApplicationRecord
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f
     timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
-    @chart_from_data ||= data.map do |d|
-      next if RELEVANT_LABELS.exclude?(d["label"]) || d["label"] == "espresso_elapsed"
-
-      data = d["data"].map.with_index do |v, i|
+    @chart_from_data ||= data.map do |label, data|
+      data = data.map.with_index do |v, i|
         t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
 
         {t: t.to_f * 1000, y: (v.to_f.negative? ? nil : v)}
       end
-      {label: d["label"], data: data}
+      {label: label, data: data}
     end.compact
   end
 
@@ -110,10 +109,6 @@ class Shot < ApplicationRecord
   def flow_data
     @flow_data ||= chart_from_data.find { |d| d[:label] == "espresso_flow" }[:data]
   end
-
-  def timeframe
-    @timeframe ||= data.find { |d| d["label"] == "espresso_elapsed" }["data"]
-  end
 end
 
 # == Schema Information
@@ -124,12 +119,12 @@ end
 #  bean_brand         :string
 #  bean_type          :string
 #  bean_weight        :string
-#  comment            :text
 #  data               :jsonb
 #  drink_ey           :string
 #  drink_tds          :string
 #  drink_weight       :string
 #  espresso_enjoyment :string
+#  espresso_notes     :text
 #  extra              :jsonb
 #  grinder_model      :string
 #  grinder_setting    :string
@@ -137,6 +132,7 @@ end
 #  roast_date         :string
 #  sha                :string
 #  start_time         :datetime
+#  timeframe          :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :uuid

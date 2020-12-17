@@ -1,49 +1,71 @@
 # frozen_string_literal: true
 
 class ShotParser
-  attr_reader :start_time, :data, :extra, :profile_title, :sha
+  attr_reader :start_time, :data, :extra, :timeframe, :profile_title, :sha
 
   def initialize(file)
     @file = file
-    @data = []
+    @data = {}
     @extra = {}
+    @start_chars_to_ignore = %i[c b]
     parse_file
-    @start_time = Time.at(@file[/clock (\d+)/, 1].to_i).utc
-    @sha = Digest::SHA256.base64digest(data.to_json)
+
+    @sha = Digest::SHA256.base64digest(data.sort.to_json)
   end
 
   private
 
   def parse_file
-    @file.lines.each do |line|
-      extract_data(line) ||
-        extract_extra(line) ||
-        extract_title(line)
+    parsed = Tickly::Parser.new.parse(@file)
+    parsed.each do |name, data|
+      extract_data_from(name, data)
+      next unless name == "settings"
+
+      data.each do |setting_name, setting_data|
+        next if @start_chars_to_ignore.include?(setting_name)
+
+        extract_data_from("setting_#{setting_name.strip}", setting_data)
+      end
     end
   end
 
-  def extract_data(line)
-    match = line.match(/(?<label>\w+) \{(?<data>[\-\d. ]+)\}/)
-    return unless match
-
-    @data << {label: match[:label], data: match[:data].split}
+  def extract_data_from(name, data)
+    method = "extract_#{name}"
+    data = @start_chars_to_ignore.include?(data.first) ? data[1..] : data
+    __send__(method, data) if respond_to?(method, true)
   end
 
-  def extract_title(line)
-    match = line.match(/profile_title \{?(?<title>[^{}]+)\}?\s*?$/)
-    return unless match && match[:title].present?
-
-    @profile_title = match[:title].strip
+  def extract_clock(data)
+    @start_time = Time.at(data.to_i).utc
   end
 
-  def extract_extra(line)
-    markers = %w[drink_weight bean_brand bean_type roast_date roast_level grinder_model grinder_setting drink_tds drink_ey espresso_enjoyment DSx_bean_weight grinder_dose_weight bean_weight].map do |m|
-      /#{m} \{?(?<#{m}>[^{}]+)\}?\s*?$/
+  def extract_espresso_elapsed(data)
+    @timeframe = data
+  end
+
+  def extract_setting_profile_title(data)
+    @profile_title = handle_array_string(data)
+  end
+
+  Shot::DATA_LABELS.each do |name|
+    define_method("extract_#{name}") do |data|
+      @data[name] = data
     end
-    match = line.match(Regexp.union(markers))
-    return unless match
+  end
 
-    key, value = match.named_captures.find { |_, v| !v.nil? }
-    @extra[key] = value.strip
+  (Shot::EXTRA_DATA + %w[DSx_bean_weight grinder_dose_weight]).each do |name|
+    define_method("extract_setting_#{name}") do |data|
+      @extra[name] = handle_array_string(data)
+    end
+  end
+
+  def handle_array_string(data)
+    return data unless data.is_a?(Array)
+
+    if data.any? { |c| c.is_a?(Array) }
+      data.map { |line| line.join(" ") }.join("\n")
+    else
+      data.join(" ")
+    end
   end
 end

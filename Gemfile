@@ -18,6 +18,8 @@ gem "devise"
 gem "dalli"
 gem "rollbar"
 
+gem "tickly"
+
 group :development, :test do
   gem "pry-byebug"
 end
