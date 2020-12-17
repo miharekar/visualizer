@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
@@ -12,6 +14,8 @@ class ScreenshotTakerJob < ApplicationJob
     @driver.close
     upload = Cloudinary::Uploader.upload("tmp/screenshot-#{shot.id}.png")
     shot.update(cloudinary_id: upload["public_id"])
+  rescue StandardError
+    Rails.logger.info("Something went wrong")
   end
 
   private
