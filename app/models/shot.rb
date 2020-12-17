@@ -6,6 +6,8 @@ class Shot < ApplicationRecord
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
   EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes].freeze
 
+  after_create :schedule_screenshot
+
   def self.from_file(user, file)
     return if file.blank?
 
@@ -63,6 +65,10 @@ class Shot < ApplicationRecord
   end
 
   private
+
+  def schedule_screenshot
+    ScreenshotTakerJob.perform_later(self)
+  end
 
   def chart_from_data
     timeframe_count = timeframe.count
