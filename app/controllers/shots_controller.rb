@@ -28,7 +28,7 @@ class ShotsController < ApplicationController
 
   def show
     @shot = Shot.find(params[:id])
-    ScreenshotTakerJob.perform_later(@shot) unless File.exist?(@shot.screenshot_path)
+    ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @stages = @shot.stages
   end

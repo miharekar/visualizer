@@ -32,8 +32,9 @@
 
 /public/packs
 /public/packs-test
-/public/screenshots
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+.env

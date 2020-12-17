@@ -1,6 +1,7 @@
 - content_for :meta_tags
   meta content="#{@shot.profile_title}" property="og:title"
-  meta content="https://visualizer.coffee/screenshots/#{@shot.id}.png" property="og:image"
+  - if @shot.cloudinary_id.present?
+    meta content="#{cl_image_path(@shot.cloudinary_id)}" property="og:image"
   meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
   meta content="summary_large_image" name="twitter:card"
 

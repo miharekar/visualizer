@@ -17,6 +17,7 @@ gem "slim"
 gem "devise"
 gem "dalli"
 gem "rollbar"
+gem "cloudinary"
 gem "delayed_job_active_record"
 
 gem "tickly"
@@ -24,6 +25,7 @@ gem "selenium-webdriver"
 
 group :development, :test do
   gem "pry-byebug"
+  gem "dotenv-rails"
 end
 
 group :development do

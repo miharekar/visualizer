@@ -1,15 +1,17 @@
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
-  def perform(shot)
-    return if File.exist?(shot.screenshot_path)
+  def perform(shot, force: false)
+    shot.cloudinary_id = false if force
+    return if shot.cloudinary_id.present?
 
     setup_driver
-    FileUtils.mkdir_p("public/screenshots/")
     @driver.navigate.to("https://visualizer.coffee/shots/#{shot.id}/chart")
     @driver.manage.window.resize_to(767, 500)
-    @driver.save_screenshot(shot.screenshot_path)
+    @driver.save_screenshot("tmp/screenshot-#{shot.id}.png")
     @driver.close
+    upload = Cloudinary::Uploader.upload("tmp/screenshot-#{shot.id}.png")
+    shot.update(cloudinary_id: upload["public_id"])
   end
 
   private
