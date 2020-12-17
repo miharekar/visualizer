@@ -1,3 +1,9 @@
+- content_for :meta_tags
+  meta content="#{@shot.profile_title}" property="og:title"
+  meta content="https://visualizer.coffee/screenshots/#{@shot.id}.png" property="og:image"
+  meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
+  meta content="summary_large_image" name="twitter:card"
+
 h3.small-margin-bottom
   = render "title", shot: @shot
   - if current_user && @shot.user == current_user

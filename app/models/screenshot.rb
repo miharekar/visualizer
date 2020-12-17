@@ -1,14 +1,27 @@
 # frozen_string_literal: true
 
 class Screenshot
-  attr_reader :driver
+  attr_reader :shot_id
 
-  def capture
-    setup
-    take_photo
+  def capture(shot_id)
+    @path = Rails.root.join("public/screenshots/#{shot_id}.png")
+    take_photo(shot_id)
   end
 
-  def setup
+  private
+
+  def take_photo(id)
+    return if File.exist?(@path)
+
+    setup_driver
+    FileUtils.mkdir_p("public/screenshots/")
+    @driver.navigate.to("http://localhost:3000/shots/#{id}/chart")
+    @driver.manage.window.resize_to(767, 500)
+    @driver.save_screenshot(@path)
+    @driver.close
+  end
+
+  def setup_driver
     chrome_shim = ENV.fetch("GOOGLE_CHROME_SHIM", nil)
     chrome_bin = ENV.fetch("GOOGLE_CHROME_BIN", nil)
 
@@ -20,17 +33,7 @@ class Screenshot
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     options.binary = chrome_shim if chrome_shim
-    @driver = Selenium::WebDriver.for :chrome, options: options
-  end
 
-  def tmp_file_path
-    Rails.root.join("tmp", "screenshot-test.png")
-  end
-
-  def take_photo
-    driver.navigate.to("http://localhost:3000/shots/cc5baa19-8476-4ab1-8aee-e4941a1e50fa/chart")
-    driver.manage.window.resize_to(767, 500)
-    driver.save_screenshot tmp_file_path
-    driver.close
+    @driver = Selenium::WebDriver.for(:chrome, options: options)
   end
 end

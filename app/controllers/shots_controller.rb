@@ -28,6 +28,7 @@ class ShotsController < ApplicationController
 
   def show
     @shot = Shot.find(params[:id])
+    Screenshot.new.capture(@shot.id)
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @stages = @shot.stages
   end
