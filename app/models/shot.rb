@@ -6,16 +6,10 @@ class Shot < ApplicationRecord
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
   EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes].freeze
 
-  def self.from_file(user, file: nil, content: nil)
-    if file.present?
-      file_content = File.read(file)
-    elsif content.present?
-      file_content = content
-    else
-      return
-    end
+  def self.from_file(user, file)
+    return if file.blank?
 
-    parsed_shot = ShotParser.new(file_content)
+    parsed_shot = ShotParser.new(File.read(file))
     find_or_create_by(user: user, sha: parsed_shot.sha) do |shot|
       shot.profile_title = parsed_shot.profile_title
       shot.start_time = parsed_shot.start_time

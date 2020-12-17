@@ -35,7 +35,7 @@ class ShotsController < ApplicationController
 
   def bulk
     Array(params[:files]).each do |file|
-      Shot.from_file(current_user, file: file)&.save
+      Shot.from_file(current_user, file)&.save
     end
 
     flash[:notice] = "Shots succesfully uploaded."
@@ -47,7 +47,7 @@ class ShotsController < ApplicationController
   end
 
   def create
-    @shot = Shot.from_file(current_user, file: params["file"])
+    @shot = Shot.from_file(current_user, params["file"])
 
     if @shot&.save
       if params.key?(:drag)

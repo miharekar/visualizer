@@ -3,7 +3,7 @@
 module Api
   class ShotsController < Api::BaseController
     def upload
-      shot = Shot.from_file(current_user, file: params[:file], content: params[:content])
+      shot = Shot.from_file(current_user, params[:file])
       if shot&.save
         render json: {id: shot.id}
       else
