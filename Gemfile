@@ -17,6 +17,7 @@ gem "slim"
 gem "devise"
 gem "dalli"
 gem "rollbar"
+gem "delayed_job_active_record"
 
 gem "tickly"
 gem "selenium-webdriver"

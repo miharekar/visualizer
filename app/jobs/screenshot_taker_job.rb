@@ -1,25 +1,18 @@
-# frozen_string_literal: true
+class ScreenshotTakerJob < ApplicationJob
+  queue_as :default
 
-class Screenshot
-  attr_reader :shot_id
-
-  def capture(shot_id)
-    @path = Rails.root.join("public/screenshots/#{shot_id}.png")
-    take_photo(shot_id)
-  end
-
-  private
-
-  def take_photo(id)
-    return if File.exist?(@path)
+  def perform(shot)
+    return if File.exist?(shot.screenshot_path)
 
     setup_driver
     FileUtils.mkdir_p("public/screenshots/")
-    @driver.navigate.to("http://localhost:3000/shots/#{id}/chart")
+    @driver.navigate.to("https://visualizer.coffee/shots/#{shot.id}/chart")
     @driver.manage.window.resize_to(767, 500)
-    @driver.save_screenshot(@path)
+    @driver.save_screenshot(shot.screenshot_path)
     @driver.close
   end
+
+  private
 
   def setup_driver
     chrome_shim = ENV.fetch("GOOGLE_CHROME_SHIM", nil)

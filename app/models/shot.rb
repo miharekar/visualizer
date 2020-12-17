@@ -25,6 +25,10 @@ class Shot < ApplicationRecord
     end
   end
 
+  def screenshot_path
+    @screenshot_path ||= Rails.root.join("public/screenshots/#{id}.png")
+  end
+
   def extra
     @extra ||= super.presence || {}
   end
