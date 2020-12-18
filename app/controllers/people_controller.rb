@@ -7,6 +7,11 @@ class PeopleController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @shots = @user.shots
+
+    if @user.public
+      @shots = @user.shots.order(start_time: :desc)
+    else
+      redirect_to :root
+    end
   end
 end
