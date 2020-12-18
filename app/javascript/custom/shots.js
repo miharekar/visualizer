@@ -91,7 +91,7 @@ function getSettings() {
   return settings[selectedSkin]
 }
 
-let mainChart, temperatureChart, selectedSkin, lastPath, lastSkin;
+let mainChart, temperatureChart, selectedSkin;
 
 function chartFromData(data) {
   const settings = getSettings()
@@ -167,65 +167,15 @@ function drawChart() {
   }
 }
 
-function reloadWithSkin(skin) {
-  const loc = window.location
-  let queryParams = new URLSearchParams(loc.search)
-
-  if (queryParams.get("skin") !== skin && !(skin === "classic" && queryParams.get("skin") === null)) {
-    queryParams.set("skin", skin)
-    Turbolinks.visit(loc.origin + loc.pathname + "?" + queryParams.toString())
-  } else {
-    applySkin(skin)
-  }
-}
-
-function selectSkin() {
-  if (document.getElementById("checkbox-skin-dsx").checked) {
-    reloadWithSkin("dsx")
-  } else if (document.getElementById("checkbox-skin-white-dsx").checked) {
-    reloadWithSkin("white-dsx")
-  } else {
-    reloadWithSkin("classic")
-  }
-}
-
-function applySkin(skin) {
-  if (skin === "dsx") {
-    document.getElementById("checkbox-skin-dsx").checked = true
-    document.getElementsByTagName("body")[0].classList.add("black")
-    selectedSkin = "dsx"
-  } else if (skin === "white-dsx") {
-    document.getElementById("checkbox-skin-white-dsx").checked = true
-    document.getElementsByTagName("body")[0].classList.remove("black")
-    selectedSkin = "dsx"
-  } else {
-    document.getElementById("checkbox-skin-classic").checked = true
-    document.getElementsByTagName("body")[0].classList.remove("black")
-    selectedSkin = "classic"
-  }
-}
-
 document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementById("mainChart")) {
-    const queryParams = new URLSearchParams(window.location.search)
-    let currentSkin = queryParams.get("skin")
-
-    if (currentSkin === null) {
-      currentSkin = "classic"
-      lastPath = xhr.target.location.pathname
-    }
-
-    if (xhr.target.location.pathname === lastPath && lastSkin !== currentSkin) {
-      applySkin(currentSkin)
+    if (window.selectedSkin === null || window.selectedSkin === "") {
+      selectedSkin = "classic"
+    } else if (window.selectedSkin === "white-dsx") {
+      selectedSkin = "dsx"
     } else {
-      selectSkin()
+      selectedSkin = window.selectedSkin
     }
     drawChart()
-    lastPath = window.location.pathname
-    lastSkin = currentSkin
-
-    document.getElementById("skin-picker").addEventListener("change", function () {
-      selectSkin()
-    })
   }
 })

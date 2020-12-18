@@ -14,7 +14,7 @@ html
 
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
     = javascript_pack_tag "application", "data-turbolinks-track": "reload"
-  body
+  body class=('black' if current_user&.skin&.parameterize == "dsx")
     .wrapper
       .pure-g
       .pure-u-md-1-24.pure-u-lg-2-24.pure-u-xl-1-5

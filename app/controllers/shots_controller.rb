@@ -4,7 +4,6 @@ class ShotsController < ApplicationController
   before_action :authenticate_user!, except: %i[new show random create chart]
   before_action :load_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index edit]
-  before_action :skins_from_params, only: %i[show chart]
 
   def index; end
 
@@ -82,16 +81,5 @@ class ShotsController < ApplicationController
 
   def shot_params
     params.require(:shot).permit(:profile_title, *Shot::EXTRA_DATA)
-  end
-
-  def skins_from_params
-    @skins = Shot::SKINS.map do |skin|
-      {
-        name: skin.parameterize,
-        label: skin,
-        checked: params[:skin] == skin.parameterize
-      }
-    end
-    @skins[0][:checked] = true unless @skins.find { |s| s[:checked] }
   end
 end
