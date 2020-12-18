@@ -7,6 +7,8 @@
             = link_to "Your Shots", shots_path, class: 'pure-menu-link'
         li.pure-menu-item
           = link_to "Upload", new_shot_path, class: 'pure-menu-link'
+        li.pure-menu-item
+          = link_to "Decent People", people_path, class: 'pure-menu-link'
         .pure-pull-right
           - if user_signed_in?
             li.pure-menu-item

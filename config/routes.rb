@@ -30,6 +30,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get :people, to: "people#index"
+  get "people/:id", to: "people#show", as: :users_shots
+
   resources :profiles, only: %i[edit update] do
     collection do
       get :edit
