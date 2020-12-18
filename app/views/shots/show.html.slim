@@ -26,6 +26,10 @@ form#skin-picker.pure-form
 - cache @shot do
   .relative
     canvas#mainChart width="100%"
+  - if @shot.cloudinary_id.present?
+    .right
+      a.green href="#{cl_image_path(@shot.cloudinary_id)}" target="_blank" Share this chart as an image
+      | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   h1 Temperature Chart
   .relative
     canvas#temperatureChart width="100%"

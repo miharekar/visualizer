@@ -24,12 +24,20 @@ body {
   margin: 0;
 }
 
-canvas {
-  min-height: 500px;
+.center {
+  text-align: center;
 }
 
-#temperatureChart {
-  min-height: 300px;
+.right {
+  text-align: right;
+}
+
+.top-margin {
+  margin-top: 2em;
+}
+
+.relative {
+  position: relative;
 }
 
 .wrapper {

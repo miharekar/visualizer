@@ -1,19 +1,11 @@
 @import "colors";
 
-.center {
-  text-align: center;
+canvas {
+  min-height: 500px;
 }
 
-.right {
-  text-align: right;
-}
-
-.top-margin {
-  margin-top: 2em;
-}
-
-.relative {
-  position: relative;
+#temperatureChart {
+  min-height: 300px;
 }
 
 .reset-zoom {
