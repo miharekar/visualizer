@@ -99,7 +99,8 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.10.0)
-    ffi (1.13.1)
+    ffi (1.14.0)
+    flamegraph (0.9.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     http-accept (1.7.0)
@@ -149,6 +150,8 @@ GEM
     puma (5.1.1)
       nio4r (~> 2.0)
     rack (2.2.3)
+    rack-mini-profiler (2.2.0)
+      rack (>= 1.2.0)
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -238,6 +241,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    stackprof (0.2.16)
     temple (0.8.2)
     thor (1.0.1)
     tickly (2.1.7)
@@ -278,11 +282,13 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   dotenv-rails
+  flamegraph
   letter_opener
   listen (~> 3.2)
   pg
   pry-byebug
   puma
+  rack-mini-profiler
   rails
   rollbar
   rubocop
@@ -291,6 +297,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   slim
+  stackprof
   tickly
   turbolinks (~> 5)
   web-console (>= 3.3.0)
