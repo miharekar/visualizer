@@ -1,8 +1,16 @@
+- link_params = request.parameters.slice(:bean_type, :bean_brand) if controller.is_a?(ShotsController) && shot.user == current_user
+
 - if shot.bean_brand.present?
-  = link_to shot.bean_brand, current_path(bean_brand: shot.bean_brand), class: 'blue'
+  - if link_params
+    = link_to shot.bean_brand, shots_path(link_params.merge(bean_brand: shot.bean_brand)), class: 'blue'
+  - else
+    = shot.bean_brand
   '
 - if shot.bean_type.present?
-  = link_to shot.bean_type, current_path(bean_type: shot.bean_type), class: 'blue'
+  - if link_params
+    = link_to shot.bean_type, shots_path(link_params.merge(bean_type: shot.bean_type)), class: 'blue'
+  - else
+    = shot.bean_type
   '
 - if defined?(show_roast_date)
   - if shot.roast_level.present?
