@@ -29,4 +29,11 @@ Rails.application.routes.draw do
       post :bulk
     end
   end
+
+  resources :profiles, only: %i[edit update] do
+    collection do
+      get :edit
+      patch :update
+    end
+  end
 end

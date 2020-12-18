@@ -85,7 +85,7 @@ class ShotsController < ApplicationController
   end
 
   def skins_from_params
-    @skins = ["Classic", "DSx", "White DSx"].map do |skin|
+    @skins = Shot::SKINS.map do |skin|
       {
         name: skin.parameterize,
         label: skin,

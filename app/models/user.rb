@@ -6,6 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
   has_many :shots, dependent: :nullify
+
+  validates :name, presence: true, if: :public?
 end
 
 # == Schema Information
@@ -15,9 +17,12 @@ end
 #  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  name                   :string
+#  public                 :boolean          default(FALSE)
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  skin                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #

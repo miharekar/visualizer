@@ -10,6 +10,8 @@
         .pure-pull-right
           - if user_signed_in?
             li.pure-menu-item
+              = link_to "Edit Profile", edit_profiles_path, class: 'pure-menu-link'
+            li.pure-menu-item
                 = link_to "Sign Out", destroy_user_session_path, class: 'pure-menu-link', method: :delete
           - else
             - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
