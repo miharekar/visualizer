@@ -5,7 +5,11 @@ class ShotsController < ApplicationController
   before_action :load_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index edit]
 
-  def index; end
+  def index
+    %i[bean_brand bean_type].each do |filter|
+      @shots = @shots.select { |s| s.public_send(filter) == params[filter] } if params[filter]
+    end
+  end
 
   def new; end
 

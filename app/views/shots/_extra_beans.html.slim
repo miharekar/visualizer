@@ -1,8 +1,8 @@
 - if shot.bean_brand.present?
-  = shot.bean_brand
+  = link_to shot.bean_brand, current_path(bean_brand: shot.bean_brand), class: 'blue'
   '
 - if shot.bean_type.present?
-  = shot.bean_type
+  = link_to shot.bean_type, current_path(bean_type: shot.bean_type), class: 'blue'
   '
 - if defined?(show_roast_date)
   - if shot.roast_level.present?

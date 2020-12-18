@@ -12,5 +12,14 @@ h2.blue.center Bulk Upload
   p.red.center
     strong Something went wrong
 
-h2.blue.center Your Shots
+h2.blue.center
+  ' Your Shots
+  - if params[:bean_type]
+    ' of
+    = params[:bean_type]
+    '
+  - if params[:bean_brand]
+    ' by
+    = params[:bean_brand]
+
 = render "list", shots: @shots
