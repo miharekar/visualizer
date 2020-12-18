@@ -11,25 +11,23 @@ h3.small-margin-bottom
     '
     = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
 
-- cache [@shot, 'extra'] do
-  = render "extra", shot: @shot
-  = simple_format(@shot.espresso_notes)
+= render "extra", shot: @shot
+= simple_format(@shot.espresso_notes)
 
-- cache @shot do
-  .relative
-    canvas#mainChart width="100%"
-  - if @shot.cloudinary_id.present?
-    .right
-      a.green href="#{cl_image_path(@shot.cloudinary_id)}" target="_blank" Share this chart as an image
-      | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  h1 Temperature Chart
-  .relative
-    canvas#temperatureChart width="100%"
-  h2.blue.center Upload a different shot
-  = render "upload_form"
+.relative
+  canvas#mainChart width="100%"
+- if @shot.cloudinary_id.present?
+  .right
+    a.green href="#{cl_image_path(@shot.cloudinary_id)}" target="_blank" Share this chart as an image
+    | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+h1 Temperature Chart
+.relative
+  canvas#temperatureChart width="100%"
+h2.blue.center Upload a different shot
+= render "upload_form"
 
-  javascript:
-    window.selectedSkin = "#{{current_user&.skin&.parameterize}}"
-    window.mainData = #{{@main_data.to_json}}
-    window.temperatureData = #{{@temperature_data.to_json}}
-    window.shotStages = #{{@stages.to_json}}
+javascript:
+  window.selectedSkin = "#{{current_user&.skin&.parameterize}}"
+  window.mainData = #{{@main_data.to_json}}
+  window.temperatureData = #{{@temperature_data.to_json}}
+  window.shotStages = #{{@stages.to_json}}

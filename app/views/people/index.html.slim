@@ -1,15 +1,14 @@
 
 h2.blue.center Decent People
 - if @users.any?
-  - cache @users
-    table.pure-table.pure-table-bordered.centered
-      thead
+  table.pure-table.pure-table-bordered.centered
+    thead
+      tr
+        th Name
+        th
+    tbody
+      - @users.each do |user|
         tr
-          th Name
-          th
-      tbody
-        - @users.each do |user|
-          tr
-            td = user.name
-            td.nowrap
-              = link_to "See Their Shots", users_shots_path(user.id), class: "pure-button button-small pure-button-primary"
+          td = user.name
+          td.nowrap
+            = link_to "See Their Shots", users_shots_path(user.id), class: "pure-button button-small pure-button-primary"

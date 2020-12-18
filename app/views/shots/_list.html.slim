@@ -1,30 +1,29 @@
 - if shots.any?
-  - cache shots
-    table.pure-table.pure-table-bordered.centered
-      thead
+  table.pure-table.pure-table-bordered.centered
+    thead
+      tr
+        th Shot at
+        th Profile
+        th Extra
+        th
+    tbody
+      - shots.each do |shot|
         tr
-          th Shot at
-          th Profile
-          th Extra
-          th
-      tbody
-        - shots.each do |shot|
-          tr
-            - if @timezone.present?
-              td.nowrap
-                = shot.start_time.in_time_zone(@timezone).to_s(:short)
-            - else
-              td.local-time data-time=shot.start_time.to_i
-                = shot.start_time.to_s(:short)
-            td = shot.profile_title
-            td
-              = render "shots/extra_beans", shot: shot
-              br
-              = render "shots/extra_weight", shot: shot
-              br
-              = render "shots/extra_grinder", shot: shot
+          - if @timezone.present?
             td.nowrap
-              = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
-              - if shot.user == current_user
-                '
-                = link_to "Edit", edit_shot_path(shot), class: "pure-button button-small button-warning"
+              = shot.start_time.in_time_zone(@timezone).to_s(:short)
+          - else
+            td.local-time data-time=shot.start_time.to_i
+              = shot.start_time.to_s(:short)
+          td = shot.profile_title
+          td
+            = render "shots/extra_beans", shot: shot
+            br
+            = render "shots/extra_weight", shot: shot
+            br
+            = render "shots/extra_grinder", shot: shot
+          td.nowrap
+            = link_to "Show", shot, class: "pure-button button-small pure-button-primary"
+            - if shot.user == current_user
+              '
+              = link_to "Edit", edit_shot_path(shot), class: "pure-button button-small button-warning"
