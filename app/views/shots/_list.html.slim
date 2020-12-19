@@ -4,7 +4,8 @@
       tr
         th Shot at
         th Profile
-        th Extra
+        th
+        th.no-left-border Extra
         th
     tbody
       - shots.each do |shot|
@@ -17,6 +18,12 @@
               = shot.start_time.to_s(:short)
           td = shot.profile_title
           td
+            - if shot.espresso_enjoyment.to_i > 0
+              - hue = (124 / 100 * shot.espresso_enjoyment.to_i).round
+              .dot style="background-color: hsl(#{hue}, 70%, 50%);"
+                .number
+                  = shot.espresso_enjoyment
+          td.no-left-border
             = render "shots/extra_beans", shot: shot
             br
             = render "shots/extra_weight", shot: shot

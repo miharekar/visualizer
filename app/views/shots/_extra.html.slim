@@ -7,7 +7,6 @@ h3.small-margin
 h3.small-margin
   - tds = shot.drink_tds.to_f
   - ey = shot.drink_ey.to_f
-  - enjoyment = shot.espresso_enjoyment.to_f
   - if tds > 0
     | TDS&nbsp;
     = tds
@@ -17,8 +16,3 @@ h3.small-margin
   - if ey > 0
     | EY&nbsp;
     = ey
-  - if ey > 0 && enjoyment > 0
-    | ,&nbsp;
-  - if enjoyment > 0
-    | Enjoyment&nbsp;
-    = enjoyment

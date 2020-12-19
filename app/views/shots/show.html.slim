@@ -6,6 +6,12 @@
   meta content="summary_large_image" name="twitter:card"
 
 h3.small-margin-bottom
+  - if @shot.espresso_enjoyment.to_i > 0
+    - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
+    .dot style="background-color: hsl(#{hue}, 70%, 50%);"
+      .number
+        = @shot.espresso_enjoyment
+    '
   = render "title", shot: @shot
   - if current_user && @shot.user == current_user
     '

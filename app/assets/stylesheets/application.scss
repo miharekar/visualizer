@@ -17,6 +17,7 @@
 
 @import "colors";
 @import "shot";
+@import "range";
 
 html,
 body {
@@ -99,6 +100,10 @@ body {
 .button-header {
   font-size: 65%;
   vertical-align: bottom;
+}
+
+.vertical-middle {
+  vertical-align: middle;
 }
 
 .menu-button {

@@ -9,6 +9,7 @@ require("@rails/activestorage").start()
 require("channels")
 
 require("custom/shots")
+require("custom/range")
 require("custom/time")
 require("custom/upload")
 

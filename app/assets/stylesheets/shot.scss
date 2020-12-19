@@ -45,3 +45,21 @@ canvas {
     transform: rotate(360deg);
   }
 }
+
+.no-left-border {
+  border-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  color: $white;
+  .number {
+    font-size: 14px;
+    text-align: center;
+    padding-top: 4px;
+  }
+}

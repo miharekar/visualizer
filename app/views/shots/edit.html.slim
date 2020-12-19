@@ -52,7 +52,8 @@ h1.small-margin-bottom = render "title", shot: @shot
       br
     .pure-control-group
       = f.label :espresso_enjoyment
-      = f.text_field :espresso_enjoyment
+      = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range"
+      = f.text_field :espresso_enjoyment, disabled: true, class: "shot-range-target"
       br
     .pure-control-group
       = f.label :espresso_notes
