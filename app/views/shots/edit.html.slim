@@ -53,7 +53,10 @@ h1.small-margin-bottom = render "title", shot: @shot
     .pure-control-group
       = f.label :espresso_enjoyment
       = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range"
-      = f.text_field :espresso_enjoyment, disabled: true, class: "shot-range-target"
+      - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
+      .dot style="background-color: hsl(#{hue}, 70%, 50%);"
+        .number
+          = @shot.espresso_enjoyment
       br
     .pure-control-group
       = f.label :espresso_notes
