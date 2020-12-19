@@ -10,7 +10,7 @@ class ShotParser
     @start_chars_to_ignore = %i[c b]
     parse_file
 
-    @sha = Digest::SHA256.base64digest(data.sort.to_json)
+    @sha = Digest::SHA256.base64digest(data.sort.to_json) if data.present?
   end
 
   private
@@ -27,6 +27,7 @@ class ShotParser
         extract_data_from("setting_#{setting_name.strip}", setting_data)
       end
     end
+  rescue SystemStackError # rubocop:disable Lint/SuppressedException
   end
 
   def extract_data_from(name, data)
