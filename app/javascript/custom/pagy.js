@@ -6,6 +6,7 @@ function pagyRequest() {
   const loadMoreLink = document.getElementById("pagy-load-more")
   if (response.next !== null) {
     loadMoreLink.dataset.page = response.next
+    loadMoreLink.classList.remove("d-none")
   } else {
     loadMoreLink.parentNode.parentNode.removeChild(loadMoreLink.parentNode);
   }
@@ -14,8 +15,7 @@ function pagyRequest() {
 function loadNextPage(page, params) {
   const loc = window.location
   let queryParams = new URLSearchParams(loc.search)
-
-  if (params !== null) {
+  if (params !== null && Object.keys(params).length > 0) {
     Object.keys(params).forEach(function (key) {
       queryParams.set(key, params[key])
     })
@@ -31,8 +31,9 @@ function loadNextPage(page, params) {
 
 function loadMore(event) {
   event.preventDefault()
+  event.target.classList.add("d-none")
   const data = event.target.dataset
-  loadNextPage(data.page, data.params)
+  loadNextPage(data.page, JSON.parse(data.params))
 }
 
 document.addEventListener("turbolinks:load", function (xhr) {

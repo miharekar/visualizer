@@ -12,5 +12,5 @@
         = render shot
   - if @pagy.next
     p.center
-      a#pagy-load-more.blue href="#" data-page="#{@pagy.next}" data-params="#{@filter_params.presence.to_json}"
+      a#pagy-load-more.blue href="#" data-page="#{@pagy.next}" data-params="#{@filter_params.to_json}"
         | Load more…
