@@ -9,8 +9,8 @@
         th
     tbody#pagy
       - shots.each do |shot|
-        = render "shots/shot", shot: shot
-    javascript:
-      pagyNextPage = #{@pagy.next || "undefined"};
-      pagyParams = #{{@filter_params.present? ? @filter_params.to_json : "undefined"}};
-      loadNextPagyPage();
+        = render shot
+  - if @pagy.next
+    p.center
+      a#pagy-load-more.blue href="#" data-page="#{@pagy.next}" data-params="#{@filter_params.presence.to_json}"
+        | Load more…

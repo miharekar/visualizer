@@ -3,18 +3,21 @@ function pagyRequest() {
   const response = JSON.parse(this.responseText)
   pagy.innerHTML += response.html
 
+  const loadMoreLink = document.getElementById("pagy-load-more")
   if (response.next !== null) {
-    loadNextPage(response.next)
+    loadMoreLink.dataset.page = response.next
+  } else {
+    loadMoreLink.parentNode.parentNode.removeChild(loadMoreLink.parentNode);
   }
 }
 
-function loadNextPage(page) {
+function loadNextPage(page, params) {
   const loc = window.location
   let queryParams = new URLSearchParams(loc.search)
 
-  if (window.pagyParams !== undefined) {
-    Object.keys(window.pagyParams).forEach(function (key) {
-      queryParams.set(key, window.pagyParams[key])
+  if (params !== null) {
+    Object.keys(params).forEach(function (key) {
+      queryParams.set(key, params[key])
     })
   }
   queryParams.set("page", page)
@@ -26,8 +29,14 @@ function loadNextPage(page) {
   req.send()
 }
 
-window.loadNextPagyPage = function () {
-  if (window.pagyNextPage !== undefined) {
-    loadNextPage(window.pagyNextPage)
-  }
+function loadMore(event) {
+  event.preventDefault()
+  const data = event.target.dataset
+  loadNextPage(data.page, data.params)
 }
+
+document.addEventListener("turbolinks:load", function (xhr) {
+  if (document.getElementById("pagy-load-more")) {
+    document.getElementById("pagy-load-more").addEventListener("click", loadMore)
+  }
+})

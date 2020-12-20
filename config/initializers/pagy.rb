@@ -103,7 +103,7 @@ require "pagy/extras/array"
 
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
-Pagy::VARS[:items] = 50
+Pagy::VARS[:items] = 30
 
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables
