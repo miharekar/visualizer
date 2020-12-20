@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   private
 
   def setup_profiler
-    Rack::MiniProfiler.authorize_request if current_user && current_user.email == "miha@mr.si"
+    # Rack::MiniProfiler.authorize_request if current_user && current_user.email == "miha@mr.si"
   end
 
   def set_timezone
