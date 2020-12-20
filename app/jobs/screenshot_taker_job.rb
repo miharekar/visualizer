@@ -3,6 +3,10 @@
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
+  rescue_from(ActiveJob::DeserializationError) do |_e|
+    true
+  end
+
   def perform(shot, force: false)
     shot.cloudinary_id = false if force
     return if shot.cloudinary_id.present?

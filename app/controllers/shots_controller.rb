@@ -50,6 +50,8 @@ class ShotsController < ApplicationController
     ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @stages = @shot.stages
+  rescue ActiveRecord::RecordNotFound
+    redirect_to :root
   end
 
   def bulk
