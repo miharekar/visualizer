@@ -6,7 +6,7 @@ function pagyRequest() {
   const loadMoreLink = document.getElementById("pagy-load-more")
   if (response.next !== null) {
     loadMoreLink.dataset.page = response.next
-    loadMoreLink.classList.remove("d-none")
+    loadMoreLink.style.opacity = 1
   } else {
     loadMoreLink.parentNode.parentNode.removeChild(loadMoreLink.parentNode);
   }
@@ -31,7 +31,7 @@ function loadNextPage(page, params) {
 
 function loadMore(event) {
   event.preventDefault()
-  event.target.classList.add("d-none")
+  event.target.style.opacity = 0
   const data = event.target.dataset
   loadNextPage(data.page, JSON.parse(data.params))
 }
