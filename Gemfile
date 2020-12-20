@@ -15,6 +15,8 @@ gem "bootsnap", ">= 1.4.2", require: false
 
 gem "slim"
 gem "devise"
+gem "pagy"
+
 gem "dalli"
 gem "rollbar"
 gem "cloudinary"

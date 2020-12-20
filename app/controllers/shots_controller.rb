@@ -1,14 +1,30 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
+  include Pagy::Backend
+
   before_action :authenticate_user!, except: %i[new show random create chart]
   before_action :load_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index edit]
 
+  FILTER_PARAMS = %i[bean_brand bean_type].freeze
+
   def index
-    %i[bean_brand bean_type].each do |filter|
-      @shots = @shots.select { |s| s.public_send(filter) == params[filter] } if params[filter]
+    @filter_params = {}
+    FILTER_PARAMS.each do |filter|
+      if params[filter]
+        @shots = @shots.select { |s| s.public_send(filter) == params[filter] }
+        @filter_params[filter] = params[filter]
+      end
     end
+
+    if @shots.is_a?(Array)
+      @pagy, @shots = pagy_array(@shots)
+    else
+      @pagy, @shots = pagy(@shots)
+    end
+
+    render json: {next: @pagy.next, html: render_to_string(partial: "shots/pagy", locals: {shots: @shots})} if params[:page]
   end
 
   def new; end
