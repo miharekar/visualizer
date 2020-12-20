@@ -2,7 +2,7 @@
 
 class PeopleController < ApplicationController
   def index
-    @users = User.where(public: true)
+    @users = User.where(public: true).order(:name)
   end
 
   def show
