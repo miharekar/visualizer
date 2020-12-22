@@ -15,7 +15,7 @@ const chartOptions = {
         displayFormats: {
           second: "ss.SS[s]"
         },
-        tooltipFormat: "ss.SS[s]",
+        tooltipFormat: "mm:ss:SS",
       },
       distribution: "series",
       offset: true,

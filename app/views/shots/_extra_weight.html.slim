@@ -1,14 +1,21 @@
-- if shot.bean_weight.present?
+- bean_weight = shot.bean_weight.to_f
+- drink_weight = shot.drink_weight.to_f
+- ratio = drink_weight / bean_weight
+
+- if bean_weight > 0
   = shot.bean_weight
   | g
-- if  shot.bean_weight.present? && shot.drink_weight.present?
+- if  bean_weight > 0 && drink_weight > 0
   | :
-- if shot.drink_weight.present?
+- if drink_weight > 0
   = shot.drink_weight
   | g
   '
-- ratio = shot.drink_weight.to_f / shot.bean_weight.to_f
-- if  shot.bean_weight.present? && shot.drink_weight.present? && ratio > 0 && ratio.finite?
+- if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite?
   | (1:
   = ratio.round(1)
   |)
+- if bean_weight > 0 || drink_weight > 0
+  '  in
+= shot.timeframe.last.to_f.round(1)
+| s
