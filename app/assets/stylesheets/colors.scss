@@ -52,8 +52,11 @@ a.blue:hover {
 
 .pure-menu-active > .pure-menu-link,
 .pure-menu-link:hover,
-.pure-menu-link:focus {
+.pure-menu-link:focus,
+.pure-menu-item .pure-button:hover,
+.pure-menu-item .pure-button:focus {
   background-color: $green-light;
+  color: $black;
 }
 
 .black {
@@ -71,7 +74,9 @@ a.blue:hover {
 
   .pure-menu-active > .pure-menu-link,
   .pure-menu-link:hover,
-  .pure-menu-link:focus {
+  .pure-menu-link:focus,
+  .pure-menu-item .pure-button:hover,
+  .pure-menu-item .pure-button:focus {
     background-color: $green-bright;
     color: $white;
   }

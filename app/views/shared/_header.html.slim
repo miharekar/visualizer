@@ -14,7 +14,7 @@
             li.pure-menu-item
               = link_to "Edit Profile", edit_profiles_path, class: 'pure-menu-link'
             li.pure-menu-item
-                = button_to "Sign Out", destroy_user_session_path, class: 'pure-menu-link', method: :delete
+                = button_to "Sign Out", destroy_user_session_path, class: 'pure-button menu-button', method: :delete
           - else
             - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
               li.pure-menu-item
