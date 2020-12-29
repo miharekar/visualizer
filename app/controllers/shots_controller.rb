@@ -42,7 +42,7 @@ class ShotsController < ApplicationController
   end
 
   def random
-    redirect_to Shot.order("RANDOM()").first
+    redirect_to Shot.where(user: User.where(public: true)).order("RANDOM()").first
   end
 
   def show
