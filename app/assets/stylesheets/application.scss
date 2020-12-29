@@ -83,8 +83,7 @@ body {
 
 .pure-pull-right {
   float: right;
-  input,
-  button {
+  .right-margin {
     margin-right: 5px;
   }
 }
@@ -113,6 +112,14 @@ body {
     background-image: unset;
     background-color: $green-light;
   }
+}
+
+.pure-menu-link {
+  background-color: transparent;
+  border: none;
+  margin-right: 0;
+  cursor: pointer;
+  color: $grey;
 }
 
 .small-margin-bottom {

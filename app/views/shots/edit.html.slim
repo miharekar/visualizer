@@ -65,4 +65,4 @@ h1.small-margin-bottom = render "title", shot: @shot
     .pure-controls
       = f.submit "Save shot", class: "pure-button pure-button-primary"
       '
-      = link_to "Delete shot", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error"
+      = button_to "Delete shot", shot_path(@shot), method: :delete, data: {confirm: "Are you sure?"}, class: "pure-button button-error"
