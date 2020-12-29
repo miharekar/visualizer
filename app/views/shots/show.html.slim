@@ -16,6 +16,8 @@ h3.small-margin-bottom
   - if current_user && @shot.user == current_user
     '
     = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
+    '
+    = button_to "Delete", shot_path(@shot), method: :delete, data: {confirm: "Are you sure you want to delete this shot?"}, class: "pure-button button-error button-header", form_class: "d-inline"
 
 = render "extra", shot: @shot
 = simple_format(@shot.espresso_notes)

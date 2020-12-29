@@ -64,6 +64,3 @@ h1.small-margin-bottom = render "title", shot: @shot
       br
     .pure-controls
       = f.submit "Save shot", class: "pure-button pure-button-primary"
-.pure-form.pure-form-aligned
-  .pure-controls
-    = button_to "Delete shot", shot_path(@shot), method: :delete, data: {confirm: "Are you sure you want to delete this shot?"}, class: "pure-button button-error"

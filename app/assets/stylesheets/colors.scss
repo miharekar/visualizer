@@ -59,6 +59,10 @@ a.blue:hover {
   color: $black;
 }
 
+.pure-button {
+  font-weight: inherit;
+}
+
 .black {
   background-color: $black;
   color: $white;
