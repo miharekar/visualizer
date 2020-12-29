@@ -1,5 +1,3 @@
-import { Turbo, cable } from "@hotwired/turbo-rails"
-
 function fadeAwayFlash() {
   setTimeout(function () {
     Array.from(document.getElementsByClassName("fade-away")).forEach((el) => {
@@ -12,7 +10,7 @@ function fadeAwayFlash() {
   }, 5000);
 }
 
-document.addEventListener("turbo:load", function () {
+document.addEventListener("turbolinks:load", function () {
   const dropArea = document.getElementById("drop-area");
 
   if (dropArea) {
@@ -50,12 +48,12 @@ document.addEventListener("turbo:load", function () {
           if (xhr.readyState == 4) {
             if (xhr.status == 200) {
               if (dropArea.dataset.bulk === "true") {
-                Turbo.visit("/shots")
+                Turbolinks.visit("/shots")
                 fadeAwayFlash()
               } else {
                 let queryParams = new URLSearchParams(window.location.search)
                 let id = JSON.parse(xhr.responseText).id
-                Turbo.visit("/shots/" + id + "?" + queryParams.toString())
+                Turbolinks.visit("/shots/" + id + "?" + queryParams.toString())
               }
             } else {
               loader.classList.add("d-none")

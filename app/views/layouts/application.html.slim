@@ -12,8 +12,8 @@ html
     link href="/site.webmanifest" rel="manifest"
     link color="#000000" href="/safari-pinned-tab.svg" rel="mask-icon"
 
-    = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
-    = javascript_pack_tag "application", "data-turbo-track": "reload"
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
+    = javascript_pack_tag "application", "data-turbolinks-track": "reload"
   body class=('black' if current_user&.skin&.parameterize == "dsx")
     .wrapper
       .pure-g

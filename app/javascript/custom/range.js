@@ -1,4 +1,4 @@
-document.addEventListener("turbo:load", function (xhr) {
+document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementsByClassName("shot-range").length > 0) {
     Array.from(document.getElementsByClassName("shot-range")).forEach((el) => {
       dot = el.parentElement.getElementsByClassName("dot")[0]

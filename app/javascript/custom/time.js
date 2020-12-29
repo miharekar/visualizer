@@ -14,7 +14,7 @@ function setTimezoneCookie() {
   document.cookie = "browser.timezone=" + (timezone || "") + "; path=/";
 }
 
-document.addEventListener("turbo:load", function (xhr) {
+document.addEventListener("turbolinks:load", function (xhr) {
   convertTimeToLocal()
   setTimezoneCookie()
 })

@@ -38,7 +38,7 @@ function loadMore(event) {
   loadNextPage(data.page, JSON.parse(data.params))
 }
 
-document.addEventListener("turbo:load", function (xhr) {
+document.addEventListener("turbolinks:load", function (xhr) {
   if (document.getElementById("pagy-load-more")) {
     document.getElementById("pagy-load-more").addEventListener("click", loadMore)
   }

@@ -10,7 +10,7 @@ gem "pg"
 gem "puma"
 gem "sass-rails", ">= 6"
 gem "webpacker", "~> 4.0"
-gem "turbo-rails"
+gem "turbolinks", "~> 5"
 gem "bootsnap", ">= 1.4.2", require: false
 
 gem "slim"
