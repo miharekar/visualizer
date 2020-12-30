@@ -9,6 +9,10 @@ h2.blue.center Decent People
     tbody
       - @users.each do |user|
         tr
-          td = user.name
+          td
+            img.vertical-middle src="#{user.gravatar_url}?s=25&d=blank"
+            span.vertical-middle
+              '
+              = user.name
           td.nowrap
             = link_to "See Their Shots", users_shots_path(user.id), class: "pure-button button-small pure-button-primary"

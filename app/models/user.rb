@@ -8,6 +8,11 @@ class User < ApplicationRecord
   has_many :shots, dependent: :nullify
 
   validates :name, presence: true, if: :public?
+
+  def gravatar_url
+    hash = Digest::MD5.hexdigest(email.to_s.downcase)
+    "https://www.gravatar.com/avatar/#{hash}.jpg"
+  end
 end
 
 # == Schema Information
