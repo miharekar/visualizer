@@ -87,7 +87,8 @@ class ShotsController < ApplicationController
   end
 
   def destroy
-    @shot.destroy
+    @shot.destroy!
+    flash[:alert] = "Shot succesfully deleted."
     redirect_to action: :index
   end
 
