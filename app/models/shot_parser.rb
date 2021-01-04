@@ -45,7 +45,7 @@ class ShotParser
   end
 
   def extract_setting_profile_title(data)
-    @profile_title = handle_array_string(data)
+    @profile_title = handle_array_string(data).force_encoding("UTF-8")
   end
 
   Shot::DATA_LABELS.each do |name|
@@ -56,7 +56,7 @@ class ShotParser
 
   (Shot::EXTRA_DATA + %w[DSx_bean_weight grinder_dose_weight]).each do |name|
     define_method("extract_setting_#{name}") do |data|
-      @extra[name] = handle_array_string(data)
+      @extra[name] = handle_array_string(data).force_encoding("UTF-8")
     end
   end
 
