@@ -167,7 +167,7 @@ function drawChart() {
   }
 }
 
-document.addEventListener("turbolinks:load", function (xhr) {
+document.addEventListener("turbo:load", function (xhr) {
   if (document.getElementById("mainChart")) {
     if (window.selectedSkin === null || window.selectedSkin === "") {
       selectedSkin = "classic"

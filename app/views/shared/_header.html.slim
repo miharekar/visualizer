@@ -18,7 +18,7 @@
           - else
             - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
               li.pure-menu-item
-                = form_with(url: user_session_path, model: User, method: :post, class: "pure-form d-none d-sm-block") do |f|
+                = form_with(url: user_session_path, model: User, method: :post, class: "pure-form d-none d-sm-block", data: {turbo: false}) do |f|
                   = f.email_field :email, placeholder: "Email", size: 12, autocomplete: "email", class: "right-margin"
                   = f.password_field :password, placeholder: "Password", size: 12, autocomplete: "current-password", class: "right-margin"
                   = f.hidden_field :remember_me, value: 1
