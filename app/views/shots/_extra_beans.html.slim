@@ -1,4 +1,4 @@
-- link_params = request.parameters.slice(:bean_type, :bean_brand) if controller.is_a?(ShotsController) && shot.user == current_user
+- link_params = request.parameters.slice(:bean_type, :bean_brand) if controller.is_a?(ShotsController) && current_user && shot.user == current_user
 
 - if shot.bean_brand.present?
   - if link_params
