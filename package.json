@@ -2,7 +2,7 @@
   "name": "decent_visualizer_rails",
   "private": true,
   "dependencies": {
-    "@hotwired/turbo-rails": "https://github.com/hotwired/turbo/archive/dev-builds/latest.tar.gz",
+    "@hotwired/turbo": "https://github.com/hotwired/turbo/archive/dev-builds/latest.tar.gz",
     "@rails/actioncable": "^6.1",
     "@rails/activestorage": "^6.1",
     "@rails/webpacker": "5.2.1",

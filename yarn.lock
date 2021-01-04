@@ -828,7 +828,7 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@hotwired/turbo-rails@https://github.com/hotwired/turbo/archive/dev-builds/latest.tar.gz":
+"@hotwired/turbo@https://github.com/hotwired/turbo/archive/dev-builds/latest.tar.gz":
   version "7.0.0-beta.1"
   resolved "https://github.com/hotwired/turbo/archive/dev-builds/latest.tar.gz#383cdc21c4de93e28751b10189bab9c4d3a68a51"
 
