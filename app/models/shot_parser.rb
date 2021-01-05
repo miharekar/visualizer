@@ -54,7 +54,7 @@ class ShotParser
     end
   end
 
-  (Shot::EXTRA_DATA + %w[DSx_bean_weight grinder_dose_weight]).each do |name|
+  (Shot::EXTRA_DATA + %w[bean_weight DSx_bean_weight grinder_dose_weight]).each do |name|
     define_method("extract_setting_#{name}") do |data|
       @extra[name] = handle_array_string(data).force_encoding("UTF-8")
     end

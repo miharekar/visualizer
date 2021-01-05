@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_073713) do
+ActiveRecord::Schema.define(version: 2021_01_05_104509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2020_12_18_073713) do
     t.string "sha"
     t.jsonb "timeframe"
     t.string "cloudinary_id"
+    t.string "roast_level"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["user_id"], name: "index_shots_on_user_id"
   end

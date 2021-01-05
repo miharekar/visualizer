@@ -5,7 +5,7 @@ class Shot < ApplicationRecord
 
   SKINS = ["Classic", "DSx", "White DSx"].freeze
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
-  EXTRA_DATA = %w[bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes].freeze
+  EXTRA_DATA = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes].freeze
 
   validates :start_time, :data, :sha, presence: true
 
@@ -21,6 +21,7 @@ class Shot < ApplicationRecord
       shot.timeframe = parsed_shot.timeframe
       shot.data = parsed_shot.data
       shot.extra = parsed_shot.extra
+      shot.extract_fields_from_extra
     end
   end
 
@@ -28,14 +29,11 @@ class Shot < ApplicationRecord
     @extra ||= super.presence || {}
   end
 
-  (EXTRA_DATA - ["bean_weight"]).each do |data|
-    define_method data do
-      attributes[data].presence || extra[data]
+  def extract_fields_from_extra
+    EXTRA_DATA.each do |attr|
+      public_send("#{attr}=", extra[attr].presence)
     end
-  end
-
-  def bean_weight
-    attributes["bean_weight"].presence || extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
+    self.bean_weight = extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
   end
 
   def chart_data
@@ -133,6 +131,7 @@ end
 #  grinder_setting    :string
 #  profile_title      :string
 #  roast_date         :string
+#  roast_level        :string
 #  sha                :string
 #  start_time         :datetime
 #  timeframe          :jsonb
