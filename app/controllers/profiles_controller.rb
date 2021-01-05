@@ -7,6 +7,7 @@ class ProfilesController < ApplicationController
 
   def update
     if current_user.update(profile_params)
+      flash[:notice] = "Profile succesfully updated."
       redirect_to shots_path
     else
       render :edit

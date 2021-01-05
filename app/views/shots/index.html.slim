@@ -1,6 +1,6 @@
-
+.center
+  = render "shared/flash"
 h2.blue.center Bulk Upload
-= render "shared/flash"
 #drop-area data-bulk="true"
   = form_with(url: {action: :bulk}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
     fieldset
