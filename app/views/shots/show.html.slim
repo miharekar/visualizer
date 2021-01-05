@@ -5,6 +5,14 @@
   meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
   meta content="summary_large_image" name="twitter:card"
 
+- if @shot.user && current_user != @shot.user && @shot.user.public? && @shot.user.name.present?
+  h2
+    span.vertical-middle
+      ' Shot by
+      = link_to "#{@shot.user.name}", users_shots_path(@shot.user_id), class: "blue"
+      '
+    img.vertical-middle src="#{@shot.user.gravatar_url}?s=30&d=blank"
+
 h3.small-margin-bottom
   - if @shot.espresso_enjoyment.to_i > 0
     - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round

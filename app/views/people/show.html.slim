@@ -1,4 +1,5 @@
 h2.blue.center
+  span.vertical-middle
+    ' Shots by #{@user.name}
   img.vertical-middle src="#{@user.gravatar_url}?s=50&d=blank"
-  span.vertical-middle  #{@user.name}'s Shots
 = render "shots/list", shots: @shots
