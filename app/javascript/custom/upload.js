@@ -1,4 +1,4 @@
-import * as Turbo from "@hotwired/turbo";
+import { Turbo } from "@hotwired/turbo-rails"
 
 function fadeAwayFlash() {
   setTimeout(function () {

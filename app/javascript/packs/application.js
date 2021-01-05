@@ -3,7 +3,7 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-import Turbo from "@hotwired/turbo"
+import "@hotwired/turbo-rails"
 
 // require("channels")
 // require("@rails/activestorage").start()
