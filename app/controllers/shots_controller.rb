@@ -36,9 +36,10 @@ class ShotsController < ApplicationController
   end
 
   def edit
-    @grinder_models = @shots.map(&:grinder_model).uniq.compact
-    @bean_brands = @shots.map(&:bean_brand).uniq.compact
-    @bean_types = @shots.map(&:bean_type).uniq.compact
+    %i[grinder_model bean_brand bean_type].each do |method|
+      unique_values = Rails.cache.fetch("#{@shots.cache_key_with_version}/#{method}") { @shots.map(&method).uniq.compact }
+      instance_variable_set("@#{method.to_s.pluralize}", unique_values)
+    end
   end
 
   def random
