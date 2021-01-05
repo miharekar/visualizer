@@ -29,6 +29,7 @@ gem "tickly"
 gem "selenium-webdriver"
 
 group :development, :test do
+  gem "pry-rails"
   gem "pry-byebug"
   gem "dotenv-rails"
 end
