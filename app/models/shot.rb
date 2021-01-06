@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Shot < ApplicationRecord
+  extend Memoist
+
   belongs_to :user, optional: true
 
   SKINS = ["Classic", "DSx", "White DSx"].freeze
@@ -25,10 +27,6 @@ class Shot < ApplicationRecord
     end
   end
 
-  def extra
-    @extra ||= super.presence || {}
-  end
-
   def extract_fields_from_extra
     EXTRA_DATA.each do |attr|
       public_send("#{attr}=", extra[attr].presence)
@@ -36,11 +34,19 @@ class Shot < ApplicationRecord
     self.bean_weight = extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
   end
 
-  def chart_data
-    chart_from_data + calculated_chart_data
+  memoize def extra
+    super.presence || {}
   end
 
-  def stages
+  memoize def duration
+    timeframe[data["espresso_flow"].size - 1].to_f
+  end
+
+  memoize def chart_data
+    chart_from_data + [resistance_chart]
+  end
+
+  memoize def stages
     indices = []
     data.select { |label, _| label.end_with?("_goal") }.each do |_label, data|
       data = data.map(&:to_f)
@@ -62,7 +68,7 @@ class Shot < ApplicationRecord
       selected << index if (index - selected.last) > 5
     end
 
-    chart_from_data.first[:data].values_at(*selected).pluck(:t)
+    chart_data.first[:data].values_at(*selected).pluck(:t)
   end
 
   private
@@ -71,11 +77,11 @@ class Shot < ApplicationRecord
     ScreenshotTakerJob.perform_later(self)
   end
 
-  def chart_from_data
+  memoize def chart_from_data
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f
     timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
-    @chart_from_data ||= data.map do |label, data|
+    data.map do |label, data|
       data = data.map.with_index do |v, i|
         t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
 
@@ -85,11 +91,9 @@ class Shot < ApplicationRecord
     end.compact
   end
 
-  def calculated_chart_data
-    @calculated_chart_data ||= [resistance_chart]
-  end
-
-  def resistance_chart
+  memoize def resistance_chart
+    pressure_data = chart_from_data.find { |d| d[:label] == "espresso_pressure" }[:data]
+    flow_data = chart_from_data.find { |d| d[:label] == "espresso_flow" }[:data]
     data = pressure_data.map.with_index do |v, i|
       f = flow_data[i][:y].to_f
       if f.zero?
@@ -101,14 +105,6 @@ class Shot < ApplicationRecord
     end
 
     {label: "espresso_resistance", data: data}
-  end
-
-  def pressure_data
-    @pressure_data ||= chart_from_data.find { |d| d[:label] == "espresso_pressure" }[:data]
-  end
-
-  def flow_data
-    @flow_data ||= chart_from_data.find { |d| d[:label] == "espresso_flow" }[:data]
   end
 end
 

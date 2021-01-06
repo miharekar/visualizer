@@ -13,6 +13,7 @@ const chartOptions = {
       type: "time",
       time: {
         displayFormats: {
+          millisecond: "ss.SS[s]",
           second: "ss.SS[s]"
         },
         tooltipFormat: "mm:ss:SS",
