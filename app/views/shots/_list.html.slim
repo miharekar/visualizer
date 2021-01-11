@@ -6,7 +6,8 @@
         th Profile
         th
         th.no-left-border Extra
-        th
+        - if current_user && shots.first.user == current_user
+          th
     tbody#pagy
       - shots.each do |shot|
         = render shot
