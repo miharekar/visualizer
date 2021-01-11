@@ -1,4 +1,4 @@
-// Not used yet but can be useful
+import { Turbo } from "@hotwired/turbo-rails"
 
 function rowClickListener(event) {
   let element = event.target || event.srcElement

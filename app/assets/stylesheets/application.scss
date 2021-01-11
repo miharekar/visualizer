@@ -122,6 +122,10 @@ body {
   color: $grey;
 }
 
+[data-href] {
+  cursor: pointer;
+}
+
 .small-margin-bottom {
   margin-bottom: 0.3em;
 }

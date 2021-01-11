@@ -10,6 +10,7 @@ import "@hotwired/turbo-rails"
 // require("@rails/activestorage").start()
 
 require("custom/shots")
+require("custom/links")
 require("custom/range")
 require("custom/time")
 require("custom/upload")

@@ -1,4 +1,4 @@
-tr
+tr data-href="#{shot_path(shot)}"
   - if @timezone.present?
     td.nowrap
       = shot.start_time.in_time_zone(@timezone).to_s(:short)
