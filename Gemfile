@@ -26,9 +26,11 @@ gem "memoist"
 gem "tickly"
 gem "selenium-webdriver"
 
+gem "pry-rails"
+gem "pry-byebug"
+
 group :development, :test do
-  gem "pry-rails"
-  gem "pry-byebug"
+
   gem "dotenv-rails"
 end
 
