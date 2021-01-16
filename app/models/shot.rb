@@ -17,14 +17,14 @@ class Shot < ApplicationRecord
     return if file.blank?
 
     parsed_shot = ShotParser.new(File.read(file))
-    find_or_create_by(user: user, sha: parsed_shot.sha) do |shot|
-      shot.profile_title = parsed_shot.profile_title
-      shot.start_time = parsed_shot.start_time
-      shot.timeframe = parsed_shot.timeframe
-      shot.data = parsed_shot.data
-      shot.extra = parsed_shot.extra
-      shot.extract_fields_from_extra
-    end
+    shot = find_or_initialize_by(user: user, sha: parsed_shot.sha)
+    shot.profile_title = parsed_shot.profile_title
+    shot.start_time = parsed_shot.start_time
+    shot.timeframe = parsed_shot.timeframe
+    shot.data = parsed_shot.data
+    shot.extra = parsed_shot.extra
+    shot.extract_fields_from_extra
+    shot
   end
 
   def extract_fields_from_extra
