@@ -13,6 +13,7 @@ gem "webpacker", "~> 4.0"
 gem "turbo-rails"
 gem "bootsnap", ">= 1.4.2", require: false
 
+gem "tailwindcss-rails", "~> 0.2.0"
 gem "slim"
 gem "devise"
 gem "pagy"

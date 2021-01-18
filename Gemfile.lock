@@ -128,13 +128,13 @@ GEM
     mime-types-data (3.2020.1104)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
-    mini_portile2 (2.5.0)
     minitest (5.14.3)
     msgpack (1.3.3)
     netrc (0.11.0)
     nio4r (2.5.4)
-    nokogiri (1.11.1)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.11.1-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.11.1-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     pagy (3.10.0)
@@ -244,6 +244,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    tailwindcss-rails (0.2.0)
+      rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.0.1)
     tickly (2.1.7)
@@ -274,6 +276,8 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-darwin-19
+  x86_64-linux
 
 DEPENDENCIES
   annotate
@@ -299,6 +303,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   slim
+  tailwindcss-rails (~> 0.2.0)
   tickly
   turbo-rails
   web-console (>= 3.3.0)
@@ -308,4 +313,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.1.4
+   2.2.1

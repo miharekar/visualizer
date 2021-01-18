@@ -9,8 +9,7 @@
     "@rails/webpacker": "5.2.1",
     "chart.js": "^2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
-    "chartjs-plugin-crosshair": "https://github.com/miharekar/chartjs-plugin-crosshair",
-    "purecss": "^2.0.3"
+    "chartjs-plugin-crosshair": "https://github.com/miharekar/chartjs-plugin-crosshair"
   },
   "version": "0.2.0",
   "devDependencies": {
