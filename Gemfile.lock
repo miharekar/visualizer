@@ -244,7 +244,9 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    tailwindcss-rails (0.2.0)
+    stimulus-rails (0.1.4)
+      rails (>= 6.0.0)
+    tailwindcss-rails (0.2.1)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.0.1)
@@ -303,7 +305,8 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   slim
-  tailwindcss-rails (~> 0.2.0)
+  stimulus-rails
+  tailwindcss-rails
   tickly
   turbo-rails
   web-console (>= 3.3.0)

@@ -13,7 +13,9 @@ gem "webpacker", "~> 4.0"
 gem "turbo-rails"
 gem "bootsnap", ">= 1.4.2", require: false
 
-gem "tailwindcss-rails", "~> 0.2.0"
+gem "stimulus-rails"
+gem "tailwindcss-rails"
+
 gem "slim"
 gem "devise"
 gem "pagy"
