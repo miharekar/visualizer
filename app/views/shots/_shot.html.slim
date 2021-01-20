@@ -1,11 +1,11 @@
 tr data-href="#{shot_path(shot)}"
   - if @timezone.present?
     td.nowrap
-      = shot.start_time.in_time_zone(@timezone).to_s(:short)
+      = link_to shot.start_time.in_time_zone(@timezone).to_s(:short), shot, class: 'blue'
   - else
-    td.local-time data-time=shot.start_time.to_i
-      = shot.start_time.to_s(:short)
-  td = link_to shot.profile_title, shot, class: 'blue'
+    td.nowrap
+      = link_to shot.start_time.to_s(:short), shot, class: 'blue local-time', data: {time: shot.start_time.to_i}
+  td = shot.profile_title
   td
     - if shot.espresso_enjoyment.to_i > 0
       - hue = (124 / 100 * shot.espresso_enjoyment.to_i).round
