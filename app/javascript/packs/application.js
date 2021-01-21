@@ -18,7 +18,6 @@ require("custom/time")
 require("custom/upload")
 require("custom/pagy")
 
-
 import "controllers"
 
 require("stylesheets/application.scss")

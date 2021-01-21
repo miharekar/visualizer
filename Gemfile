@@ -19,6 +19,7 @@ gem "tailwindcss-rails"
 gem "slim"
 gem "devise"
 gem "pagy"
+gem "active_link_to"
 
 gem "dalli"
 gem "rollbar"
