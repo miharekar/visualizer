@@ -2,7 +2,7 @@
   "name": "decent_visualizer_rails",
   "private": true,
   "dependencies": {
-    "@hotwired/turbo-rails": "^7.0.0-beta.3",
+    "@hotwired/turbo-rails": "^7.0.0-beta.4",
     "@rails/actioncable": "^6.1",
     "@rails/activestorage": "^6.1",
     "@rails/ujs": "^6.1.1",

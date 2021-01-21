@@ -17,12 +17,12 @@ export default class extends Controller {
   }
 
   transform() {
+    this.menuShown = !this.menuShown
     if (this.menuShown) {
       enter(this.transformableTarget)
     } else {
       leave(this.transformableTarget)
     }
-    this.menuShown = !menuClassList.contains("hidden")
   }
 
   hide(event) {

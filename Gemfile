@@ -9,10 +9,10 @@ gem "rails"
 gem "pg"
 gem "puma"
 gem "sass-rails", ">= 6"
-gem "webpacker", git: "https://github.com/rails/webpacker.git", ref: "b6c2180"
-gem "turbo-rails"
+gem 'webpacker', '~> 5.0'
 gem "bootsnap", ">= 1.4.2", require: false
 
+gem "turbo-rails"
 gem "stimulus-rails"
 gem "tailwindcss-rails"
 

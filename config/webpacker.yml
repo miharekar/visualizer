@@ -16,7 +16,7 @@ default: &default
   cache_manifest: false
 
   # Extract and emit a css file
-  extract_css: true
+  extract_css: false
 
   static_assets_extensions:
     - .jpg
@@ -51,29 +51,19 @@ development:
   <<: *default
   compile: true
 
-  # Set to false if using HMR for CSS
-  extract_css: true
-
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
     https: false
     host: localhost
     port: 3035
     public: localhost:3035
-    # Hot Module Replacement updates modules while the application is running without a full reload
     hmr: false
-    # Inline should be set to true if using HMR; it inserts a script to take care of live reloading
+    # Inline should be set to true if using HMR
     inline: true
-    # Should we show a full-screen overlay in the browser when there are compiler errors or warnings?
     overlay: true
-    # Should we use gzip compression?
     compress: true
-    # Note that apps that do not check the host are vulnerable to DNS rebinding attacks
     disable_host_check: true
-    # This option lets the browser open with your local IP
     use_local_ip: false
-    # When enabled, nothing except the initial startup information will be written to the console.
-    # This also means that errors or warnings from webpack are not visible.
     quiet: false
     pretty: false
     headers:
@@ -94,6 +84,9 @@ production:
 
   # Production depends on precompilation of packs prior to booting for performance.
   compile: false
+
+  # Extract and emit a css file
+  extract_css: true
 
   # Cache manifest.json for performance
   cache_manifest: true
