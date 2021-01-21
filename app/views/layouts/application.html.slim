@@ -14,7 +14,6 @@ html
     link href="https://rsms.me/inter/inter.css" rel="stylesheet"
     = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
     = javascript_pack_tag "application", "data-turbo-track": "reload"
-    = stimulus_include_tags
   body class=('black' if current_user&.skin&.parameterize == "dsx")
     .wrapper
       .pure-g
