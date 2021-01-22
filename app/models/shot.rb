@@ -7,7 +7,7 @@ class Shot < ApplicationRecord
 
   SKINS = ["Classic", "DSx", "White DSx"].freeze
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
-  EXTRA_DATA = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes].freeze
+  EXTRA_DATA = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
 
   validates :start_time, :data, :sha, presence: true
 
@@ -114,6 +114,7 @@ end
 #
 #  id                 :uuid             not null, primary key
 #  bean_brand         :string
+#  bean_notes         :text
 #  bean_type          :string
 #  bean_weight        :string
 #  data               :jsonb

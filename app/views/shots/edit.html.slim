@@ -63,6 +63,10 @@ h1.small-margin-bottom = render "title", shot: @shot
           = @shot.espresso_enjoyment
       br
     .pure-control-group
+      = f.label :bean_notes
+      = f.text_area :bean_notes, size: "60x10", class: "pure-input-1-2"
+      br
+    .pure-control-group
       = f.label :espresso_notes
       = f.text_area :espresso_notes, size: "60x10", class: "pure-input-1-2"
       br
