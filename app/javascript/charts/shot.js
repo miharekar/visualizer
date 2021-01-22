@@ -1,7 +1,3 @@
-import Chart from "chart.js"
-require("chartjs-plugin-crosshair/src/index.js")
-require("chartjs-plugin-annotation")
-
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,

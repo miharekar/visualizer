@@ -3,21 +3,15 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
+// import "channels"
+// import * as ActiveStorage from "@rails/activestorage"
+// ActiveStorage.start()
+
 import Rails from "@rails/ujs"
-import "@hotwired/turbo-rails"
-import * as ActiveStorage from "@rails/activestorage"
-import "channels"
-
 Rails.start()
-ActiveStorage.start()
+import "@hotwired/turbo-rails"
 
-require("custom/shots")
-require("custom/links")
-require("custom/range")
-require("custom/time")
-require("custom/upload")
-require("custom/pagy")
-
+import "custom"
 import "controllers"
 
 require("stylesheets/application.scss")
