@@ -15,7 +15,7 @@ html
     = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
     = javascript_pack_tag "application", "data-turbo-track": "reload"
     = stylesheet_pack_tag "application", "data-turbo-track": "reload"
-  body class=('black' if current_user&.skin&.parameterize == "dsx")
+  body class=('dark' if current_user&.skin&.parameterize == "dsx")
     .wrapper
       .pure-g
       .pure-u-md-1-24.pure-u-lg-2-24.pure-u-xl-1-5

@@ -15,25 +15,18 @@
                 - else
                   = active_link_to "Upload", new_shot_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
                 = active_link_to "Decent People", people_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
-          .hidden.md:block
-            .ml-4.flex.items-center.md:ml-6
-              button.bg-gray-800.p-1.rounded-full.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
-                span.sr-only View notifications
-                /! Heroicon name: bell
-                svg.h-6.w-6 aria-hidden="true" fill="none" stroke="currentColor" viewbox=("0 0 24 24") xmlns="http://www.w3.org/2000/svg"
-                  path d=("M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9") stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-              /! Profile dropdown
-              .ml-3.relative
-                div
-                  button#user-menu.max-w-xs.bg-gray-800.rounded-full.flex.items-center.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white aria-haspopup="true" data-action=("click->menu#transform click@window->menu#hide") data-menu-target="button"
-                    span.sr-only Open user menu
-                    img.h-8.w-8.rounded-full alt="" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" /
-                .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.ring-1.ring-black.ring-opacity-5.hidden aria-labelledby="user-menu" aria-orientation="vertical" data-menu-target="transformable" data-transition-enter=("transition ease-out duration-100") data-transition-enter-end=("transform opacity-100 scale-100") data-transition-enter-start=("transform opacity-0 scale-95") data-transition-leave=("transition ease-in duration-75") data-transition-leave-end=("transform opacity-0 scale-95") data-transition-leave-start=("transform opacity-100 scale-100") role="menu"
-                  a.block.px-4.py-2.text-sm.text-gray-700.hover:bg-gray-100 href="#" role="menuitem"
-                    | Your
-                    | Profile
-                  a.block.px-4.py-2.text-sm.text-gray-700.hover:bg-gray-100 href="#" role="menuitem"  Settings
-                  a.block.px-4.py-2.text-sm.text-gray-700.hover:bg-gray-100 href="#" role="menuitem"  Sign out
+          - if user_signed_in?
+            .hidden.md:block
+              .ml-4.flex.items-center.md:ml-6
+                /! Profile dropdown
+                .ml-3.relative
+                  div
+                    button#user-menu.max-w-xs.bg-gray-800.rounded-full.flex.items-center.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white aria-haspopup="true" data-action=("click->menu#transform click@window->menu#hide") data-menu-target="button"
+                      span.sr-only Open user menu
+                      img.h-8.w-8.rounded-full src="#{current_user.gravatar_url}?s=64&d=mp"
+                  .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.dark:bg-black.ring-1.ring-black.ring-opacity-5.hidden aria-labelledby="user-menu" aria-orientation="vertical" data-menu-target="transformable" data-transition-enter=("transition ease-out duration-100") data-transition-enter-end=("transform opacity-100 scale-100") data-transition-enter-start=("transform opacity-0 scale-95") data-transition-leave=("transition ease-in duration-75") data-transition-leave-end=("transform opacity-0 scale-95") data-transition-leave-start=("transform opacity-100 scale-100") role="menu"
+                    = link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900"
+                    = button_to "Sign Out", destroy_user_session_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900", method: :delete
           .-mr-2.flex.md:hidden
             /! Mobile menu button
             button.bg-gray-800.inline-flex.items-center.justify-center.p-2.rounded-md.text-gray-400.hover:text-white.hover:bg-gray-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white data-action="click->menu#toggle"
@@ -55,62 +48,17 @@
           - else
             = active_link_to "Upload", new_shot_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
           = active_link_to "Decent People", people_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
-        .pt-4.pb-3.border-t.border-gray-700
-          .flex.items-center.px-5
-            .flex-shrink-0
-              img.h-10.w-10.rounded-full alt="" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" /
-            .ml-3
-              .text-base.font-medium.leading-none.text-white Tom Cook
-              .text-sm.font-medium.leading-none.text-gray-400 tom@example.com
-            button.ml-auto.bg-gray-800.flex-shrink-0.p-1.rounded-full.text-gray-400.hover:text-white.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white
-              span.sr-only View notifications
-              /! Heroicon name: bell
-              svg.h-6.w-6 aria-hidden="true" fill="none" stroke="currentColor" viewbox=("0 0 24 24") xmlns="http://www.w3.org/2000/svg"
-                path d=("M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9") stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
-          .mt-3.px-2.space-y-1
-            a.block.px-3.py-2.rounded-md.text-base.font-medium.text-gray-400.hover:text-white.hover:bg-gray-700 href="#"
-              | Your
-              | Profile
-            a.block.px-3.py-2.rounded-md.text-base.font-medium.text-gray-400.hover:text-white.hover:bg-gray-700 href="#"  Settings
-            a.block.px-3.py-2.rounded-md.text-base.font-medium.text-gray-400.hover:text-white.hover:bg-gray-700 href="#"
-              | Sign
-              | out
-    header.bg-white.shadow
-      .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
-        h1.text-3xl.font-bold.leading-tight.text-gray-900
-          | Dashboard
-    main
-      .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-        .header
-          .home-menu.pure-menu.pure-menu-horizontal
-            ul.pure-menu-list
-              - if user_signed_in?
-                li.pure-menu-item
-                  = link_to "Your Shots", shots_path, class: 'pure-menu-link'
-              - else
-                li.pure-menu-item
-                  = link_to "Upload", new_shot_path, class: 'pure-menu-link'
-              li.pure-menu-item
-                = link_to "Decent People", people_path, class: 'pure-menu-link'
-              .pure-pull-right
-                - if user_signed_in?
-                  li.pure-menu-item
-                    = link_to "Edit Profile", edit_profiles_path, class: 'pure-menu-link'
-                  li.pure-menu-item
-                      = button_to "Sign Out", destroy_user_session_path, class: 'pure-button menu-button', method: :delete
-                - else
-                  - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
-                    li.pure-menu-item
-                      = form_with(url: user_session_path, model: User, method: :post, class: "pure-form d-none d-sm-block", data: {turbo: false}) do |f|
-                        = f.email_field :email, placeholder: "Email", size: 12, autocomplete: "email", class: "right-margin"
-                        = f.password_field :password, placeholder: "Password", size: 12, autocomplete: "current-password", class: "right-margin"
-                        = f.hidden_field :remember_me, value: 1
-                        button.pure-button.menu-button type="submit" Sign In
-                    li.pure-menu-item
-                      = link_to "Sign In", new_user_session_path, class: 'pure-menu-link d-sm-none'
-                  - if ['passwords', 'registrations'].include?(controller_name)
-                    li.pure-menu-item
-                      = link_to "Sign In", new_user_session_path, class: 'pure-menu-link'
-                  - if controller_name != 'registrations'
-                    li.pure-menu-item
-                      = link_to "Sign Up", new_user_registration_path, class: 'pure-menu-link'
+        - if user_signed_in?
+          .pt-4.pb-3.border-t.border-gray-700
+            .flex.items-center.px-5
+              .flex-shrink-0
+                img.h-10.w-10.rounded-full alt="" src="#{current_user.gravatar_url}?s=80&d=mp"
+              .ml-3
+                .text-base.font-medium.leading-none.text-white Tom Cook
+                .text-sm.font-medium.leading-none.text-gray-400 tom@example.com
+            .mt-3.px-2.space-y-1
+              a.block.px-3.py-2.rounded-md.text-base.font-medium.text-gray-400.hover:text-white.hover:bg-gray-700 href="#"
+                | Your Profile
+              a.block.px-3.py-2.rounded-md.text-base.font-medium.text-gray-400.hover:text-white.hover:bg-gray-700 href="#"  Settings
+              a.block.px-3.py-2.rounded-md.text-base.font-medium.text-gray-400.hover:text-white.hover:bg-gray-700 href="#"
+                | Sign out

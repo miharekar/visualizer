@@ -1,3 +1,45 @@
+
+    header.bg-white.shadow
+      .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+        h1.text-3xl.font-bold.leading-tight.text-gray-900
+          | Dashboard
+    main
+      .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+        .header
+          .home-menu.pure-menu.pure-menu-horizontal
+            ul.pure-menu-list
+              - if user_signed_in?
+                li.pure-menu-item
+                  = link_to "Your Shots", shots_path, class: 'pure-menu-link'
+              - else
+                li.pure-menu-item
+                  = link_to "Upload", new_shot_path, class: 'pure-menu-link'
+              li.pure-menu-item
+                = link_to "Decent People", people_path, class: 'pure-menu-link'
+              .pure-pull-right
+                - if user_signed_in?
+                  li.pure-menu-item
+                    = link_to "Edit Profile", edit_profiles_path, class: 'pure-menu-link'
+                  li.pure-menu-item
+                    = button_to "Sign Out", destroy_user_session_path, class: 'pure-button menu-button', method: :delete
+                - else
+                  - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
+                    li.pure-menu-item
+                      = form_with(url: user_session_path, model: User, method: :post, class: "pure-form d-none d-sm-block", data: {turbo: false}) do |f|
+                        = f.email_field :email, placeholder: "Email", size: 12, autocomplete: "email", class: "right-margin"
+                        = f.password_field :password, placeholder: "Password", size: 12, autocomplete: "current-password", class: "right-margin"
+                        = f.hidden_field :remember_me, value: 1
+                        button.pure-button.menu-button type="submit" Sign In
+                    li.pure-menu-item
+                      = link_to "Sign In", new_user_session_path, class: 'pure-menu-link d-sm-none'
+                  - if ['passwords', 'registrations'].include?(controller_name)
+                    li.pure-menu-item
+                      = link_to "Sign In", new_user_session_path, class: 'pure-menu-link'
+                  - if controller_name != 'registrations'
+                    li.pure-menu-item
+                      = link_to "Sign Up", new_user_registration_path, class: 'pure-menu-link'
+
+
 - unless defined?(@no_header)
   .header
     .home-menu.pure-menu.pure-menu-horizontal
