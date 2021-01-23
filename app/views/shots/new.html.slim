@@ -3,11 +3,9 @@ header.bg-white.dark:bg-gray-900.shadow
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       ' Upload your .shot file
 main.flex-1
+  = render "shared/flash"
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    .center
-      = render "shared/flash"
     = render "upload_form"
-
     - unless user_signed_in?
       h2.center.top-margin
         = link_to("Or take a look at a completely random shot", {action: :random}, {class: 'green'})

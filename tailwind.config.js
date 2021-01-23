@@ -9,15 +9,10 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      black: colors.black,
-      white: colors.white,
-      gray: colors.warmGray,
-      indigo: colors.indigo,
-      red: colors.rose,
-      yellow: colors.amber,
+    extend: {
+      colors: {
+        gray: colors.warmGray,
+      }
     },
     fontFamily: {
       sans: ['Inter var', ...defaultTheme.fontFamily.sans],

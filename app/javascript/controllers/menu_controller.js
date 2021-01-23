@@ -1,6 +1,5 @@
 
 import { Controller } from "stimulus"
-// import the enter leave functions
 import { enter, leave } from "el-transition";
 
 export default class extends Controller {

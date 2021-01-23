@@ -10,9 +10,8 @@ header.bg-white.dark:bg-gray-900.shadow
         ' by
         = params[:bean_brand]
 main.flex-1
+  = render "shared/flash"
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    .center
-      = render "shared/flash"
     h2.blue.center Bulk Upload
     #drop-area data-bulk="true"
       = form_with(url: {action: :bulk}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|

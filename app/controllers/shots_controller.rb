@@ -56,11 +56,12 @@ class ShotsController < ApplicationController
   end
 
   def bulk
-    Array(params[:files]).each do |file|
+    files = Array(params[:files])
+    files.each do |file|
       Shot.from_file(current_user, file)&.save
     end
 
-    flash[:notice] = "Shots succesfully uploaded."
+    flash[:notice] = "#{'Shot'.pluralize(files.count)} succesfully uploaded."
     if params.key?(:drag)
       head :ok
     else
