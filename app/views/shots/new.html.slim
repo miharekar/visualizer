@@ -4,6 +4,8 @@ header.bg-white.dark:bg-gray-900.shadow
       ' Upload your .shot file
 main.flex-1
   = render "shared/flash"
+  #error.hidden
+    = render "shared/banner", name: "alert", message: "Something went wrong"
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
     = render "upload_form"
     - unless user_signed_in?

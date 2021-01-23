@@ -35,8 +35,8 @@ document.addEventListener("turbo:load", function () {
     };
 
     const handleDrop = e => {
-      dropArea.classList.add("d-none")
-      loader.classList.remove("d-none")
+      dropArea.classList.add("hidden")
+      loader.classList.remove("hidden")
 
       const file = e.dataTransfer.files[0]
       let xhr = new XMLHttpRequest()
@@ -58,8 +58,12 @@ document.addEventListener("turbo:load", function () {
                 Turbo.visit("/shots/" + id + "?" + queryParams.toString())
               }
             } else {
-              loader.classList.add("d-none")
-              error.classList.remove("d-none")
+              loader.classList.add("hidden")
+              error.classList.remove("hidden")
+              Array.from(error.children).forEach(child => {
+                child.classList.remove("hidden")
+              })
+              dropArea.classList.remove("hidden")
             }
           }
         },

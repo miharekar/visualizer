@@ -5,7 +5,6 @@
   meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
   meta content="summary_large_image" name="twitter:card"
 
-
 header.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
@@ -23,6 +22,9 @@ header.bg-white.dark:bg-gray-900.shadow
         span.local-time data-time=@shot.start_time.to_i
           = @shot.start_time.to_s(:short)
 main.flex-1
+  = render "shared/flash"
+  #error.hidden
+    = render "shared/banner", name: "alert", message: "Something went wrong"
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
     h3.small-margin-bottom
       - if @shot.espresso_enjoyment.to_i > 0
