@@ -26,7 +26,7 @@ main.flex-1
   #error.hidden
     = render "shared/banner", name: "alert", message: "Something went wrong"
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    h3.small-margin-bottom
+    h3.small-margin-bottom data-controller="modal"
       - if @shot.espresso_enjoyment.to_i > 0
         - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
         .dot style="background-color: hsl(#{hue}, 70%, 50%);"
@@ -38,8 +38,8 @@ main.flex-1
         '
         = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
         '
-        = button_to "Delete", shot_path(@shot), method: :delete, data: {confirm: "Are you sure you want to delete this shot?"}, class: "pure-button button-error button-header", form_class: "d-inline"
-
+        = button_to "Delete", shot_path(@shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete #{@shot.profile_title} from #{@shot.start_time.in_time_zone(@timezone).to_s(:short)}?"}, class: "pure-button button-error button-small", form_class: "d-inline"
+      = render "shared/modal"
     = render "extra", shot: @shot
     = simple_format(@shot.bean_notes)
     = simple_format(@shot.espresso_notes)

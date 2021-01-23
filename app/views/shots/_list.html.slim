@@ -1,20 +1,22 @@
 = turbo_stream_from current_user
 
-- if shots.any?
-  table.pure-table.pure-table-bordered.centered
-    thead
-      tr
-        th Shot at
-        th Profile
-        th
-        th.no-left-border Extra
-        - if current_user && shots.first.user == current_user
+#shots-list data-controller="modal"
+  - if shots.any?
+    table.pure-table.pure-table-bordered.centered
+      thead
+        tr
+          th Shot at
+          th Profile
           th
-    tbody#pagy
-      - shots.each do |shot|
-        = render shot
-  - if @pagy.next
-    p.center
-      a#pagy-load-more.blue href="#" data-page="#{@pagy.next}" data-params="#{@filter_params.to_json}"
-        | Load more…
-    #pagy-loader.centered.hidden
+          th.no-left-border Extra
+          - if current_user && shots.first.user == current_user
+            th
+      tbody#pagy
+        - shots.each do |shot|
+          = render shot
+    - if @pagy.next
+      p.center
+        a#pagy-load-more.blue href="#" data-page="#{@pagy.next}" data-params="#{@filter_params.to_json}"
+          | Load more…
+      #pagy-loader.centered.hidden
+  = render "shared/modal"

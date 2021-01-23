@@ -92,7 +92,14 @@ class ShotsController < ApplicationController
     @shot.destroy!
 
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@shot) }
+      format.turbo_stream do
+        if request.referer.ends_with?("shots/#{@shot.id}")
+          flash[:notice] = "Shot succesfully deleted."
+          redirect_to action: :index
+        else
+          render turbo_stream: turbo_stream.remove(@shot)
+        end
+      end
       format.html do
         flash[:notice] = "Shot succesfully deleted."
         redirect_to action: :index
