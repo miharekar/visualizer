@@ -7,6 +7,7 @@ ruby "2.7.2"
 
 gem "rails"
 gem "pg"
+gem "redis"
 gem "puma"
 gem "sass-rails", ">= 6"
 gem 'webpacker', '~> 5.0'

@@ -1,4 +1,4 @@
-tr data-href="#{shot_path(shot)}"
+tr data-href="#{shot_path(shot)}" id=dom_id(shot)
   - if @timezone.present?
     td.nowrap
       = link_to shot.start_time.in_time_zone(@timezone).to_s(:short), shot, class: 'blue'

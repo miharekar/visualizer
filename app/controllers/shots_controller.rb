@@ -90,8 +90,14 @@ class ShotsController < ApplicationController
 
   def destroy
     @shot.destroy!
-    flash[:alert] = "Shot succesfully deleted."
-    redirect_to action: :index
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(@shot) }
+      format.html do
+        flash[:notice] = "Shot succesfully deleted."
+        redirect_to action: :index
+      end
+    end
   end
 
   private

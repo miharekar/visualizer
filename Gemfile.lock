@@ -193,6 +193,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redis (4.2.5)
     regexp_parser (2.0.3)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -304,6 +305,7 @@ DEPENDENCIES
   pry-rails
   puma
   rails
+  redis
   rollbar
   rubocop
   rubocop-performance
