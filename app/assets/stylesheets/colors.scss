@@ -1,7 +1,7 @@
 $white: hsl(0, 0%, 100%);
 $black: hsl(0, 0%, 0%);
-$grey: hsl(0, 0%, 47%);
-$dark-grey: hsl(0, 0%, 20%);
+$gray: hsl(0, 0%, 47%);
+$dark-gray: hsl(0, 0%, 20%);
 $blue: hsl(200, 100%, 42%);
 $green: hsl(164, 95%, 40%);
 $green-light: hsl(164, 80%, 80%);
@@ -68,7 +68,7 @@ a.blue:hover {
   color: $white;
 
   .pure-table thead {
-    background-color: $dark-grey;
+    background-color: $dark-gray;
     color: $white;
   }
 

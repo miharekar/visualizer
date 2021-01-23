@@ -2,7 +2,7 @@ header.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       ' Forgot your password?
-main
+main.flex-1
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
     = form_with(model: resource, as: resource_name, url: password_path(resource_name), class: "pure-form pure-form-stacked") do |f|
       = render "devise/shared/error_messages", resource: resource

@@ -14,7 +14,7 @@
           = link_to "#{@shot.user.name}", users_shots_path(@shot.user_id), class: "blue"
           '
         img.vertical-middle src="#{@shot.user.gravatar_url}?s=30&d=blank"
-main
+main.flex-1
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
     h3.small-margin-bottom
       - if @shot.espresso_enjoyment.to_i > 0

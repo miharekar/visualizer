@@ -1,14 +1,16 @@
 - unless defined?(@no_header)
-  footer.footer
-    .center.muted.d-sm-none
+  footer.text-gray-400.text-center.shadow.p-4
+    .md:hidden
       ' © #{Date.today.year}
-      a href='https://mr.si/' Miha Rekar
-      | .
-    .center.muted.d-none.d-sm-block
-      ' © #{Date.today.year}
-      a href='https://mr.si/' Miha Rekar
-      | . Comments and suggestions are welcomed on
-      a< href="https://github.com/miharekar/decent-visualizer" GitHub
-      | .&nbsp;
+      a.text-gray-800.underline.hover:no-underline href="https://mr.si/" Miha Rekar
+      ' .
       a href="https://github.com/sponsors/miharekar"
-        img style="border: 0;vertical-align: bottom;" src="https://img.shields.io/badge/Sponsor-EA4AAA?style=flat&logo=github"
+        img.inline.align-text-top src="https://img.shields.io/badge/Sponsor%20This-EA4AAA?style=flat&logo=github"
+    .hidden.md:block
+      ' © #{Date.today.year}
+      a.text-gray-800.underline.hover:no-underline href="https://mr.si/" Miha Rekar
+      | . Comments and suggestions are welcomed on
+      a.text-gray-800.underline.hover:no-underline< href="https://github.com/miharekar/decent-visualizer" GitHub
+      ' .
+      a href="https://github.com/sponsors/miharekar"
+        img.inline.align-text-top src="https://img.shields.io/badge/Sponsor%20This-EA4AAA?style=flat&logo=github"

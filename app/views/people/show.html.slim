@@ -4,6 +4,6 @@ header.bg-white.dark:bg-gray-900.shadow
       span.vertical-middle
         ' Shots by #{@user.name}
       img.vertical-middle src="#{@user.gravatar_url}?s=50&d=blank"
-main
+main.flex-1
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
     = render "shots/list", shots: @shots

@@ -104,7 +104,7 @@ body {
 }
 
 .menu-button {
-  color: $grey;
+  color: $gray;
   background-color: unset;
   &:hover {
     background-image: unset;
@@ -117,7 +117,7 @@ body {
   border: none;
   margin-right: 0;
   cursor: pointer;
-  color: $grey;
+  color: $gray;
 }
 
 [data-href] {
