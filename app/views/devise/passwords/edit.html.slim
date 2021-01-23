@@ -1,17 +1,22 @@
-h2.blue Change your password
-= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "pure-form pure-form-stacked" }) do |f|
-  = render "devise/shared/error_messages", resource: resource
-  = f.hidden_field :reset_password_token
-  .field
-    = f.label :password, "New password"
-    = f.password_field :password, autocomplete: "new-password"
-    span.pure-form-message
-      = @minimum_password_length
-      |  characters minimum
-    br
-  .field
-    = f.label :password_confirmation, "Confirm new password"
-    = f.password_field :password_confirmation, autocomplete: "new-password"
-    br
-  .actions
-    = f.submit "Change my password", class: "pure-button pure-button-primary"
+header.bg-white.shadow
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+    h1.text-3xl.font-bold.leading-tight.text-gray-900
+      ' Change your password
+main
+  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+    = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "pure-form pure-form-stacked" }) do |f|
+      = render "devise/shared/error_messages", resource: resource
+      = f.hidden_field :reset_password_token
+      .field
+        = f.label :password, "New password"
+        = f.password_field :password, autocomplete: "new-password"
+        span.pure-form-message
+          = @minimum_password_length
+          |  characters minimum
+        br
+      .field
+        = f.label :password_confirmation, "Confirm new password"
+        = f.password_field :password_confirmation, autocomplete: "new-password"
+        br
+      .actions
+        = f.submit "Change my password", class: "pure-button pure-button-primary"

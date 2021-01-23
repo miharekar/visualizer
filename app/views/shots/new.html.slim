@@ -1,8 +1,13 @@
-.center
-  = render "shared/flash"
-h1.blue.center Upload your .shot file
-= render "upload_form"
+header.bg-white.shadow
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+    h1.text-3xl.font-bold.leading-tight.text-gray-900
+      ' Upload your .shot file
+main
+  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+    .center
+      = render "shared/flash"
+    = render "upload_form"
 
-- unless user_signed_in?
-  h2.center.top-margin
-    = link_to("Or take a look at a completely random shot", {action: :random}, {class: 'green'})
+    - unless user_signed_in?
+      h2.center.top-margin
+        = link_to("Or take a look at a completely random shot", {action: :random}, {class: 'green'})

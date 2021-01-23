@@ -16,12 +16,6 @@ html
     = stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload"
     = stylesheet_packs_with_chunks_tag "application", "data-turbo-track": "reload"
   body class=('dark' if current_user&.skin&.parameterize == "dsx")
-    .wrapper
-      .pure-g
-      .pure-u-md-1-24.pure-u-lg-2-24.pure-u-xl-1-5
-      .pure-u-md-22-24.pure-u-lg-20-24.pure-u-xl-3-5
-        = render "shared/header"
-        = yield
-      .pure-u-md-1-24.pure-u-lg-2-24.pure-u-xl-1-5
-      .push
+    = render "shared/header"
+    = yield
     = render "shared/footer"

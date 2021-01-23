@@ -1,25 +1,28 @@
-.center
-  = render "shared/flash"
-h2.blue.center Bulk Upload
-#drop-area data-bulk="true"
-  = form_with(url: {action: :bulk}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
-    fieldset
-      label for="files" Select your .shot files
-      = file_field_tag "files", multiple: true, name: "files[]"
-    button.submit_button.pure-button.pure-button-primary type="submit" Upload
-#loader.centered.d-none
-#error.d-none
-  p.red.center
-    strong Something went wrong
+header.bg-white.shadow
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+    h1.text-3xl.font-bold.leading-tight.text-gray-900
+      ' Your Shots
+      - if params[:bean_type]
+        ' of
+        = params[:bean_type]
+        '
+      - if params[:bean_brand]
+        ' by
+        = params[:bean_brand]
+main
+  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+    .center
+      = render "shared/flash"
+    h2.blue.center Bulk Upload
+    #drop-area data-bulk="true"
+      = form_with(url: {action: :bulk}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
+        fieldset
+          label for="files" Select your .shot files
+          = file_field_tag "files", multiple: true, name: "files[]"
+        button.submit_button.pure-button.pure-button-primary type="submit" Upload
+    #loader.centered.d-none
+    #error.d-none
+      p.red.center
+        strong Something went wrong
 
-h2.blue.center
-  ' Your Shots
-  - if params[:bean_type]
-    ' of
-    = params[:bean_type]
-    '
-  - if params[:bean_brand]
-    ' by
-    = params[:bean_brand]
-
-= render "list", shots: @shots
+    = render "list", shots: @shots

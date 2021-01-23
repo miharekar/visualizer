@@ -1,18 +1,22 @@
-
-h2.blue.center Decent People
-- if @users.any?
-  table.pure-table.pure-table-bordered.centered
-    thead
-      tr
-        th Name
-        th
-    tbody
-      - @users.each do |user|
-        tr
-          td
-            img.vertical-middle src="#{user.gravatar_url}?s=25&d=blank"
-            span.vertical-middle
-              '
-              = user.name
-          td.nowrap
-            = link_to "See Their Shots", users_shots_path(user.id), class: "pure-button button-small pure-button-primary"
+header.bg-white.shadow
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+    h1.text-3xl.font-bold.leading-tight.text-gray-900
+      ' Decent People
+main
+  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+    - if @users.any?
+      table.pure-table.pure-table-bordered.centered
+        thead
+          tr
+            th Name
+            th
+        tbody
+          - @users.each do |user|
+            tr
+              td
+                img.vertical-middle src="#{user.gravatar_url}?s=25&d=blank"
+                span.vertical-middle
+                  '
+                  = user.name
+              td.nowrap
+                = link_to "See Their Shots", users_shots_path(user.id), class: "pure-button button-small pure-button-primary"

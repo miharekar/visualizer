@@ -1,15 +1,20 @@
-h1.blue Edit Profile
-= form_with(model: current_user, url: profiles_path, class: "pure-form pure-form-stacked") do |f|
-  fieldset
-    = f.label :name
-    = f.text_field :name
-    - if f.object.errors.any?{|e| e.attribute == :name && e.type == :blank }
-      span.pure-form-message.red Name is required for public profiles
-    br
-    = f.label :skin
-    = f.select :skin, Shot::SKINS
-    br
-    = f.label :public
-    = f.check_box :public
-  .pure-controls
-    = f.submit "Save", class: "pure-button pure-button-primary"
+header.bg-white.shadow
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+    h1.text-3xl.font-bold.leading-tight.text-gray-900
+      ' Edit Profile
+main
+  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+    = form_with(model: current_user, url: profiles_path, class: "pure-form pure-form-stacked") do |f|
+      fieldset
+        = f.label :name
+        = f.text_field :name
+        - if f.object.errors.any?{|e| e.attribute == :name && e.type == :blank }
+          span.pure-form-message.red Name is required for public profiles
+        br
+        = f.label :skin
+        = f.select :skin, Shot::SKINS
+        br
+        = f.label :public
+        = f.check_box :public
+      .pure-controls
+        = f.submit "Save", class: "pure-button pure-button-primary"
