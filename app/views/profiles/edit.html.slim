@@ -1,20 +1,28 @@
 header.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
-      ' Edit Profile
+      ' Edit Your Profile
 main.flex-1
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    = form_with(model: current_user, url: profiles_path, class: "pure-form pure-form-stacked") do |f|
-      fieldset
-        = f.label :name
-        = f.text_field :name
-        - if f.object.errors.any?{|e| e.attribute == :name && e.type == :blank }
-          span.pure-form-message.red Name is required for public profiles
-        br
-        = f.label :skin
-        = f.select :skin, Shot::SKINS
-        br
-        = f.label :public
-        = f.check_box :public
-      .pure-controls
-        = f.submit "Save", class: "pure-button pure-button-primary"
+    .md:grid.md:grid-cols-3.md:gap-6
+      .md:col-span-1
+        .px-4.sm:px-0
+          - if current_user.public
+            h3.text-lg.font-medium.leading-6.text-gray-900.dark:text-gray-100
+              ' Your profile is
+              strong PUBLIC
+              ' .
+            p.mt-1.text-sm.text-gray-600.dark:text-gray-400
+              ' Anyone can see you and all of your shots in
+              = link_to "Decent People", people_path, class: "underline"
+              ' .
+          - else
+            h3.text-lg.font-medium.leading-6.text-gray-900.dark:text-gray-100
+              ' Your profile is
+              strong PRIVATE
+              ' .
+            p.mt-1.text-sm.text-gray-600.dark:text-gray-400
+              ' People can still view any of your shots if you give them a direct link, but you are not visible in
+              = link_to "Decent People", people_path, class: "underline"
+              ' .
+      = render "form"

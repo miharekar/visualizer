@@ -7,10 +7,13 @@ class ProfilesController < ApplicationController
 
   def update
     if current_user.update(profile_params)
-      flash[:notice] = "Profile succesfully updated."
-      redirect_to shots_path
+      flash[:notice] = "Profile successfully updated."
+      redirect_to controller: "shots", action: :index
     else
-      render :edit
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(current_user, partial: "form") }
+        format.html { render :edit }
+      end
     end
   end
 

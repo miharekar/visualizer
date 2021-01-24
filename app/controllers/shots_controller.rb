@@ -61,7 +61,7 @@ class ShotsController < ApplicationController
       Shot.from_file(current_user, file)&.save
     end
 
-    flash[:notice] = "#{'Shot'.pluralize(files.count)} succesfully uploaded."
+    flash[:notice] = "#{'Shot'.pluralize(files.count)} successfully uploaded."
     if params.key?(:drag)
       head :ok
     else
@@ -94,14 +94,14 @@ class ShotsController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         if request.referer.ends_with?("shots/#{@shot.id}")
-          flash[:notice] = "Shot succesfully deleted."
+          flash[:notice] = "Shot successfully deleted."
           redirect_to action: :index
         else
           render turbo_stream: turbo_stream.remove(@shot)
         end
       end
       format.html do
-        flash[:notice] = "Shot succesfully deleted."
+        flash[:notice] = "Shot successfully deleted."
         redirect_to action: :index
       end
     end
