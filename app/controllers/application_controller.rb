@@ -6,8 +6,7 @@ class ApplicationController < ActionController::Base
   private
 
   def set_timezone
-    return unless cookies.key?("browser.timezone")
-
-    @timezone = ActiveSupport::TimeZone.new(cookies["browser.timezone"])
+    zone = cookies["browser.timezone"] || "UTC"
+    @timezone = ActiveSupport::TimeZone.new(zone)
   end
 end
