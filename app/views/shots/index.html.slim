@@ -23,5 +23,5 @@ main.flex-1
           = file_field_tag "files", multiple: true, name: "files[]"
         button.submit_button.pure-button.pure-button-primary type="submit" Upload
     #loader.centered.hidden
-
+    = turbo_stream_from current_user
     = render "list", shots: @shots

@@ -5,4 +5,5 @@ header.bg-white.dark:bg-gray-900.shadow
       '  Shots by #{@user.name}
 main.flex-1
   .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+    = turbo_stream_from @user
     = render "shots/list", shots: @shots

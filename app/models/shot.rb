@@ -13,7 +13,7 @@ class Shot < ApplicationRecord
 
   after_create :schedule_screenshot
 
-  broadcasts_to :user
+  after_destroy_commit -> { broadcast_remove_to user }
 
   def self.from_file(user, file)
     return if file.blank?
