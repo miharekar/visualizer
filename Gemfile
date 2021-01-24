@@ -9,13 +9,10 @@ gem "rails"
 gem "pg"
 gem "redis"
 gem "puma"
-gem "sass-rails", ">= 6"
-gem 'webpacker', '~> 5.0'
+gem "webpacker", "~> 5.0"
 gem "bootsnap", ">= 1.4.2", require: false
 
 gem "turbo-rails"
-gem "stimulus-rails"
-gem "tailwindcss-rails"
 
 gem "slim"
 gem "devise"
