@@ -11,8 +11,8 @@ export default class extends Controller {
 
   confirm(event) {
     event.preventDefault()
-    this.form = event.target.parentElement
-    const data = event.target.dataset
+    this.form = event.currentTarget.parentElement
+    const data = event.currentTarget.dataset
     this.headlineTarget.innerText = data.title
     this.buttonTarget.innerText = data.title
     this.textTarget.innerText = data.text
