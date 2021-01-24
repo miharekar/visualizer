@@ -23,8 +23,6 @@ class ShotsController < ApplicationController
     else
       @pagy, @shots = pagy(@shots)
     end
-
-    render json: {next: @pagy.next, html: render_to_string(partial: "shots/pagy", locals: {shots: @shots})} if params[:page]
   end
 
   def new; end

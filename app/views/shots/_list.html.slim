@@ -15,3 +15,4 @@
             tbody.bg-white.dark:bg-gray-900.divide-y.divide-gray-200.dark:divide-gray-800
               - shots.each do |shot|
                 = render shot
+          = render partial: "shared/pagination", locals: {pagy: @pagy}
