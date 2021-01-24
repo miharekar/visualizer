@@ -99,7 +99,7 @@ class Shot < ApplicationRecord
       if f.zero?
         {t: v[:t], y: nil}
       else
-        r = v[:y].to_f / f
+        r = v[:y].to_f / f**2
         {t: v[:t], y: (r > 16 ? nil : r)}
       end
     end
