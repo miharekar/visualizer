@@ -1,27 +1,26 @@
-header.bg-white.dark:bg-gray-900.shadow
+div.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       ' Sign Up
-main.flex-1
-  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    = form_with(model: resource, as: resource_name, url: registration_path(resource_name), class: "pure-form pure-form-stacked") do |f|
-      = render "devise/shared/error_messages", resource: resource
-      .fieldset
-        .field
-          = f.label :email
-          = f.email_field :email, autofocus: true, autocomplete: "email"
-          br
-        .field
-          = f.label :password
-          = f.password_field :password, autocomplete: "new-password"
-          span.pure-form-message
-            = @minimum_password_length
-            |  characters minimum
-          br
-        .field
-          = f.label :password_confirmation
-          = f.password_field :password_confirmation, autocomplete: "new-password"
-          br
-        = f.submit "Sign Up", class: "pure-button pure-button-primary"
-    br
-    = render "devise/shared/links"
+.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+  = form_with(model: resource, as: resource_name, url: registration_path(resource_name), class: "pure-form pure-form-stacked") do |f|
+    = render "devise/shared/error_messages", resource: resource
+    .fieldset
+      .field
+        = f.label :email
+        = f.email_field :email, autofocus: true, autocomplete: "email"
+        br
+      .field
+        = f.label :password
+        = f.password_field :password, autocomplete: "new-password"
+        span.pure-form-message
+          = @minimum_password_length
+          |  characters minimum
+        br
+      .field
+        = f.label :password_confirmation
+        = f.password_field :password_confirmation, autocomplete: "new-password"
+        br
+      = f.submit "Sign Up", class: "pure-button pure-button-primary"
+  br
+  = render "devise/shared/links"

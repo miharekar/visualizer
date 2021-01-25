@@ -1,13 +1,12 @@
-header.bg-white.dark:bg-gray-900.shadow
+.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       ' Upload your .shot file
-main.flex-1
-  = render "shared/flash"
-  #error.hidden
-    = render "shared/banner", name: "alert", message: "Something went wrong"
-  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    = render "upload_form"
-    - unless user_signed_in?
-      h2.center.top-margin
-        = link_to("Or take a look at a completely random shot", {action: :random}, {class: 'green'})
+= render "shared/flash"
+#error.hidden
+  = render "shared/banner", name: "alert", message: "Something went wrong"
+.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+  = render "upload_form"
+  - unless user_signed_in?
+    h2.center.top-margin
+      = link_to("Or take a look at a completely random shot", {action: :random}, {class: 'green'})

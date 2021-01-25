@@ -1,17 +1,5 @@
 import { Turbo } from "@hotwired/turbo-rails"
 
-function fadeAwayFlash() {
-  setTimeout(function () {
-    Array.from(document.getElementsByClassName("fade-away")).forEach((el) => {
-      el.style.height = el.scrollHeight + "px";
-      window.setTimeout(function () {
-        el.style.height = "0";
-        el.style.opacity = "0";
-      }, 1);
-    });
-  }, 5000);
-}
-
 document.addEventListener("turbo:load", function () {
   const dropArea = document.getElementById("drop-area");
 
@@ -27,11 +15,15 @@ document.addEventListener("turbo:load", function () {
     };
 
     const highlight = e => {
-      dropArea.classList.add("highlight")
+      dropArea.classList.add("bg-green-50", "dark:bg-green-900")
+      dropArea.classList.add("border-green-300")
+      dropArea.classList.remove("border-gray-300")
     };
 
     const unhighlight = e => {
-      dropArea.classList.remove("highlight")
+      dropArea.classList.remove("bg-green-50", "dark:bg-green-900")
+      dropArea.classList.remove("border-green-300")
+      dropArea.classList.add("border-gray-300")
     };
 
     const handleDrop = e => {
@@ -51,7 +43,6 @@ document.addEventListener("turbo:load", function () {
             if (xhr.status == 200) {
               if (dropArea.dataset.bulk === "true") {
                 Turbo.visit("/shots")
-                fadeAwayFlash()
               } else {
                 let queryParams = new URLSearchParams(window.location.search)
                 let id = JSON.parse(xhr.responseText).id
@@ -90,6 +81,12 @@ document.addEventListener("turbo:load", function () {
     ["dragleave", "drop"].forEach(eventName => {
       dropArea.addEventListener(eventName, unhighlight, false)
     });
+
+    document.getElementById("files").onchange = function () {
+      dropArea.classList.add("hidden")
+      loader.classList.remove("hidden")
+      form.requestSubmit()
+    };
 
     dropArea.addEventListener("drop", handleDrop, false)
   }

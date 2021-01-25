@@ -5,7 +5,7 @@
   meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
   meta content="summary_large_image" name="twitter:card"
 
-header.bg-white.dark:bg-gray-900.shadow
+.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       - if @shot.user && current_user != @shot.user && @shot.user.public? && @shot.user.name.present?
@@ -21,40 +21,39 @@ header.bg-white.dark:bg-gray-900.shadow
       - else
         span.local-time data-time=@shot.start_time.to_i
           = @shot.start_time.to_s(:short)
-main.flex-1
-  = render "shared/flash"
-  #error.hidden
-    = render "shared/banner", name: "alert", message: "Something went wrong"
-  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    h3.small-margin-bottom data-controller="modal"
-      - if @shot.espresso_enjoyment.to_i > 0
-        - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
-        .dot style="background-color: hsl(#{hue}, 70%, 50%);"
-          .number
-            = @shot.espresso_enjoyment
-        '
-      span.vertical-middle = @shot.profile_title
-      - if current_user && @shot.user == current_user
-        '
-        = link_to "Edit", edit_shot_path(@shot), class: "pure-button button-warning button-header"
-        '
-        = button_to "Delete", shot_path(@shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete #{@shot.profile_title} from #{@shot.start_time.in_time_zone(@timezone).to_s(:short)}?"}, class: "pure-button button-error button-small", form_class: "d-inline"
-      = render "shared/modal"
-    = render "extra", shot: @shot
-    = simple_format(@shot.bean_notes)
-    = simple_format(@shot.espresso_notes)
+= render "shared/flash"
+#error.hidden
+  = render "shared/banner", name: "alert", message: "Something went wrong"
+.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+  h3.small-margin-bottom data-controller="modal"
+    - if @shot.espresso_enjoyment.to_i > 0
+      - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
+      .dot style="background-color: hsl(#{hue}, 70%, 50%);"
+        .number
+          = @shot.espresso_enjoyment
+      '
+    span.vertical-middle = @shot.profile_title
+    - if current_user && @shot.user == current_user
+      '
+      = link_to "Edit", edit_shot_path(@shot)
+      '
+      = button_to "Delete", shot_path(@shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete #{@shot.profile_title} from #{@shot.start_time.in_time_zone(@timezone).to_s(:short)}?"}, class: "pure-button button-error button-small", form_class: "d-inline"
+    = render "shared/modal"
+  = render "extra", shot: @shot
+  = simple_format(@shot.bean_notes)
+  = simple_format(@shot.espresso_notes)
 
-    .relative
-      canvas#mainChart width="100%"
-    - if @shot.cloudinary_id.present?
-      .right
-        a.green href="#{cl_image_path(@shot.cloudinary_id)}" target="_blank" Share this chart as an image
-        | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    h1 Temperature Chart
-    .relative
-      canvas#temperatureChart width="100%"
-    h2.blue.center Upload a different shot
-    = render "upload_form"
+  .relative
+    canvas#mainChart width="100%"
+  - if @shot.cloudinary_id.present?
+    .right
+      a.green href="#{cl_image_path(@shot.cloudinary_id)}" target="_blank" Share this chart as an image
+      | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  h1 Temperature Chart
+  .relative
+    canvas#temperatureChart width="100%"
+  h2.blue.center Upload a different shot
+  = render "upload_form"
 
 javascript:
   window.selectedSkin = "#{{current_user&.skin&.parameterize}}"

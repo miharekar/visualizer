@@ -1,20 +1,19 @@
-header.bg-white.dark:bg-gray-900.shadow
+div.bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       ' Sign In
-main.flex-1
-  = render "shared/flash"
-  .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-    = form_with(model: resource, as: resource_name, url: session_path(resource_name), class: "pure-form pure-form-stacked", data: {turbo: false}) do |f|
-      .field
-        = f.label :email
-        = f.email_field :email, autofocus: true, autocomplete: "email"
-        br
-      .field
-        = f.label :password
-        = f.password_field :password, autocomplete: "current-password"
-        = f.hidden_field :remember_me, value: 1
-        br
-      = f.submit "Sign In", class: "pure-button pure-button-primary"
-    br
-    = render "devise/shared/links"
+= render "shared/flash"
+.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+  = form_with(model: resource, as: resource_name, url: session_path(resource_name), class: "pure-form pure-form-stacked", data: {turbo: false}) do |f|
+    .field
+      = f.label :email
+      = f.email_field :email, autofocus: true, autocomplete: "email"
+      br
+    .field
+      = f.label :password
+      = f.password_field :password, autocomplete: "current-password"
+      = f.hidden_field :remember_me, value: 1
+      br
+    = f.submit "Sign In", class: "pure-button pure-button-primary"
+  br
+  = render "devise/shared/links"
