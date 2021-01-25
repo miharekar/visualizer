@@ -40,6 +40,9 @@ document.addEventListener("turbo:load", function () {
         "readystatechange",
         function () {
           if (xhr.readyState == 4) {
+            loader.classList.add("hidden")
+            dropArea.classList.remove("hidden")
+
             if (xhr.status == 200) {
               if (dropArea.dataset.bulk === "true") {
                 Turbo.visit("/shots")
@@ -49,12 +52,7 @@ document.addEventListener("turbo:load", function () {
                 Turbo.visit("/shots/" + id + "?" + queryParams.toString())
               }
             } else {
-              loader.classList.add("hidden")
               error.classList.remove("hidden")
-              Array.from(error.children).forEach(child => {
-                child.classList.remove("hidden")
-              })
-              dropArea.classList.remove("hidden")
             }
           }
         },
@@ -82,11 +80,23 @@ document.addEventListener("turbo:load", function () {
       dropArea.addEventListener(eventName, unhighlight, false)
     });
 
-    document.getElementById("files").onchange = function () {
-      dropArea.classList.add("hidden")
-      loader.classList.remove("hidden")
-      form.requestSubmit()
-    };
+    const files = document.getElementById("files")
+    if (files) {
+      document.getElementById("files").onchange = function () {
+        dropArea.classList.add("hidden")
+        loader.classList.remove("hidden")
+        form.requestSubmit()
+      }
+    }
+
+    const file = document.getElementById("file")
+    if (file) {
+      document.getElementById("file").onchange = function () {
+        dropArea.classList.add("hidden")
+        loader.classList.remove("hidden")
+        form.requestSubmit()
+      }
+    }
 
     dropArea.addEventListener("drop", handleDrop, false)
   }

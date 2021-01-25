@@ -52,8 +52,6 @@
   h1 Temperature Chart
   .relative
     canvas#temperatureChart width="100%"
-  h2.blue.center Upload a different shot
-  = render "upload_form"
 
 javascript:
   window.selectedSkin = "#{{current_user&.skin&.parameterize}}"
