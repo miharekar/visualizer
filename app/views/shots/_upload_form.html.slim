@@ -1,7 +1,0 @@
-#drop-area
-  = form_with(url: {action: :create}, multipart: true, id: "shot-upload-form", class: "pure-form pure-form-stacked") do |f|
-    fieldset
-      label for="file" Select your .shot file
-      = file_field_tag 'file'
-    button.submit_button.pure-button.pure-button-primary type="submit" Upload
-#loader.centered.hidden

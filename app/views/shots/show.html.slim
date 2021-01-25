@@ -37,21 +37,21 @@
       '
       = link_to "Edit", edit_shot_path(@shot)
       '
-      = button_to "Delete", shot_path(@shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete #{@shot.profile_title} from #{@shot.start_time.in_time_zone(@timezone).to_s(:short)}?"}, class: "pure-button button-error button-small", form_class: "d-inline"
+      = button_to "Delete", shot_path(@shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete #{@shot.profile_title} from #{@shot.start_time.in_time_zone(@timezone).to_s(:short)}?"}
     = render "shared/modal"
   = render "extra", shot: @shot
   = simple_format(@shot.bean_notes)
   = simple_format(@shot.espresso_notes)
 
   .relative
-    canvas#mainChart width="100%"
+    canvas#main-chart width="100%"
   - if @shot.cloudinary_id.present?
     .right
       a.green href="#{cl_image_path(@shot.cloudinary_id)}" target="_blank" Share this chart as an image
       | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   h1 Temperature Chart
   .relative
-    canvas#temperatureChart width="100%"
+    canvas#temperature-chart width="100%"
 
 javascript:
   window.selectedSkin = "#{{current_user&.skin&.parameterize}}"

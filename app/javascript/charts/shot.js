@@ -145,8 +145,8 @@ function drawChart() {
 
   const options = { ...chartOptions, ...annotations, ...legend }
 
-  if (document.getElementById("temperatureChart")) {
-    const tctx = document.getElementById("temperatureChart").getContext("2d")
+  if (document.getElementById("temperature-chart")) {
+    const tctx = document.getElementById("temperature-chart").getContext("2d")
     temperatureChart = new Chart(tctx, {
       type: "line",
       data: { datasets: chartFromData(window.temperatureData) },
@@ -154,8 +154,8 @@ function drawChart() {
     })
   }
 
-  if (document.getElementById("mainChart")) {
-    const ctx = document.getElementById("mainChart").getContext("2d")
+  if (document.getElementById("main-chart")) {
+    const ctx = document.getElementById("main-chart").getContext("2d")
     mainChart = new Chart(ctx, {
       type: "line",
       data: { datasets: chartFromData(window.mainData) },
@@ -165,7 +165,7 @@ function drawChart() {
 }
 
 document.addEventListener("turbo:load", function (xhr) {
-  if (document.getElementById("mainChart")) {
+  if (document.getElementById("main-chart")) {
     if (window.selectedSkin === null || window.selectedSkin === "") {
       selectedSkin = "classic"
     } else if (window.selectedSkin === "white-dsx") {

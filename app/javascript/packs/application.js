@@ -13,3 +13,4 @@ import "custom"
 import "controllers"
 
 require("stylesheets/application.scss")
+require("stylesheets/custom.scss")
