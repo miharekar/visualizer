@@ -3,7 +3,7 @@
 class ShotsController < ApplicationController
   include Pagy::Backend
 
-  before_action :authenticate_user!, except: %i[new show random create chart]
+  before_action :authenticate_user!, except: %i[show chart]
   before_action :load_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index edit]
 
@@ -25,8 +25,6 @@ class ShotsController < ApplicationController
     end
   end
 
-  def new; end
-
   def chart
     @no_header = true
     @shot = Shot.find(params[:shot_id])
@@ -40,10 +38,6 @@ class ShotsController < ApplicationController
     end
   end
 
-  def random
-    redirect_to Shot.where(user: User.where(public: true)).order("RANDOM()").first
-  end
-
   def show
     @shot = Shot.find(params[:id])
     ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
@@ -53,7 +47,7 @@ class ShotsController < ApplicationController
     redirect_to :root
   end
 
-  def bulk
+  def create
     files = Array(params[:files])
     files.each do |file|
       Shot.from_file(current_user, file)&.save
@@ -64,20 +58,6 @@ class ShotsController < ApplicationController
       head :ok
     else
       redirect_to({action: :index})
-    end
-  end
-
-  def create
-    @shot = Shot.from_file(current_user, params["file"])
-
-    if @shot&.save
-      if params.key?(:drag)
-        render json: {id: @shot.id}
-      else
-        redirect_to @shot
-      end
-    else
-      render :new
     end
   end
 

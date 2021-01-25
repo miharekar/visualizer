@@ -15,19 +15,15 @@ Rails.application.routes.draw do
   devise_for :users
 
   unauthenticated do
-    root "shots#new"
+    root to: "home#show"
   end
 
   authenticated :user do
     root "shots#index", as: :authenticated_root
   end
 
-  resources :shots do
+  resources :shots, except: [:new] do
     get :chart
-    collection do
-      get :random
-      post :bulk
-    end
   end
 
   get :people, to: "people#index"

@@ -42,9 +42,13 @@ export default class extends Controller {
     this.hide()
   }
 
-  close(event) {
+  keydown(event) {
     if (event.keyCode == 27) {
+      event.preventDefault()
       this.hide()
+    } else if (event.keyCode == 13) {
+      event.preventDefault()
+      this.delete()
     }
   }
 }

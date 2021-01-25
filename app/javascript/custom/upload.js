@@ -44,13 +44,7 @@ document.addEventListener("turbo:load", function () {
             dropArea.classList.remove("hidden")
 
             if (xhr.status == 200) {
-              if (dropArea.dataset.bulk === "true") {
-                Turbo.visit("/shots")
-              } else {
-                let queryParams = new URLSearchParams(window.location.search)
-                let id = JSON.parse(xhr.responseText).id
-                Turbo.visit("/shots/" + id + "?" + queryParams.toString())
-              }
+              Turbo.visit("/shots")
             } else {
               error.classList.remove("hidden")
             }
@@ -58,13 +52,9 @@ document.addEventListener("turbo:load", function () {
         },
         false
       );
-      if (dropArea.dataset.bulk === "true") {
-        [...e.dataTransfer.files].forEach(file => {
-          formData.append("files[]", file)
-        })
-      } else {
-        formData.append("file", e.dataTransfer.files[0])
-      }
+      [...e.dataTransfer.files].forEach(file => {
+        formData.append("files[]", file)
+      })
       xhr.send(formData)
     };
 
