@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
   match "(*any)", to: redirect { |_, req| "https://visualizer.coffee#{req.fullpath}" }, via: :all, constraints: {host: "decent-visualizer.herokuapp.com"}
 
+  root to: "home#show"
+
   namespace :api do
     resources :shots, only: [] do
       collection do
@@ -13,14 +15,6 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-
-  unauthenticated do
-    root to: "home#show"
-  end
-
-  authenticated :user do
-    root "shots#index", as: :authenticated_root
-  end
 
   resources :shots, except: [:new] do
     get :chart
