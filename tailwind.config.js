@@ -5,9 +5,7 @@ const forms = require('@tailwindcss/forms')
 module.exports = {
   purge: [
     './app/**/*.js',
-    './app/**/*.slim',
-    './app/**/*.erb',
-    './app/**/*.html'
+    './tmp/*.html.erb'
   ],
   darkMode: 'class',
   theme: {
