@@ -5,6 +5,7 @@
 
 // import * as ActiveStorage from "@rails/activestorage"
 // ActiveStorage.start()
+import "form-request-submit-polyfill"
 
 import "channels"
 import "@hotwired/turbo-rails"
