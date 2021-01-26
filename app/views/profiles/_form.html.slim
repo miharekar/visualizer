@@ -7,7 +7,7 @@
       .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
         .grid.grid-cols-3.gap-6
           .col-span-3.sm:col-span-2
-            - has_error = f.object.errors.any?{|e| e.attribute == :name && e.type == :blank }
+            - has_error = f.object.errors.any?{ |e| e.attribute == :name && e.type == :blank }
             - if has_error
               - extra_classes = "ring-1 ring-red-500 border-red-500"
             = f.label :name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
