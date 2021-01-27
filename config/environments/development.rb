@@ -71,5 +71,10 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  config.active_job.queue_adapter = :delayed_job
+  config.active_job.queue_adapter = :good_job
+  config.good_job = {
+    execution_mode: :async,
+    max_threads: 4,
+    poll_interval: 30
+  }
 end

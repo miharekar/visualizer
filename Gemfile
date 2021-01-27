@@ -22,7 +22,7 @@ gem "active_link_to"
 gem "dalli"
 gem "rollbar"
 gem "cloudinary"
-gem "delayed_job_active_record"
+gem "good_job"
 gem "memoist"
 
 gem "tickly"
@@ -32,7 +32,6 @@ gem "pry-rails"
 gem "pry-byebug"
 
 group :development, :test do
-
   gem "dotenv-rails"
 end
 
