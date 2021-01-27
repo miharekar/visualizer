@@ -1,77 +1,12 @@
 .bg-white.dark:bg-gray-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
+      ' Edit Shot
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-  = form_with(model: @shot, class: "pure-form pure-form-aligned") do |f|
-    fieldset
-      .pure-control-group
-        = f.label :profile_title
-        = f.text_field :profile_title
-        br
-      .pure-control-group
-        = f.label :bean_weight
-        = f.text_field :bean_weight
-        br
-      .pure-control-group
-        = f.label :drink_weight
-        = f.text_field :drink_weight
-        br
-      .pure-control-group
-        = f.label :grinder_model
-        = f.text_field :grinder_model, list:"grinder-model-list"
-        datalist#grinder-model-list
-          - @grinder_models.each do |grinder_model|
-            option = grinder_model
-        br
-      .pure-control-group
-        = f.label :grinder_setting
-        = f.text_field :grinder_setting
-        br
-      .pure-control-group
-        = f.label :bean_brand
-        = f.text_field :bean_brand, list:"bean-brand-list"
-        datalist#bean-brand-list
-          - @bean_brands.each do |bean_brand|
-            option = bean_brand
-        br
-      .pure-control-group
-        = f.label :bean_type
-        = f.text_field :bean_type, list:"bean-type-list"
-        datalist#bean-type-list
-          - @bean_types.each do |bean_type|
-            option = bean_type
-        br
-      .pure-control-group
-        = f.label :roast_date
-        = f.text_field :roast_date
-        br
-      .pure-control-group
-        = f.label :roast_level
-        = f.text_field :roast_level
-        br
-      .pure-control-group
-        = f.label :drink_tds
-        = f.text_field :drink_tds
-        br
-      .pure-control-group
-        = f.label :drink_ey
-        = f.text_field :drink_ey
-        br
-      .pure-control-group
-        = f.label :espresso_enjoyment
-        = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range"
-        - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
-        .dot style="background-color: hsl(#{hue}, 70%, 50%);"
-          .number
-            = @shot.espresso_enjoyment
-        br
-      .pure-control-group
-        = f.label :bean_notes
-        = f.text_area :bean_notes, size: "60x10", class: "pure-input-1-2"
-        br
-      .pure-control-group
-        = f.label :espresso_notes
-        = f.text_area :espresso_notes, size: "60x10", class: "pure-input-1-2"
-        br
-      .pure-controls
-        = f.submit "Save shot", class: "pure-button pure-button-primary"
+  .md:grid.md:grid-cols-3.md:gap-6
+    .md:col-span-1
+      .px-4.sm:px-0
+        p.mt-1.text-sm.text-gray-600.dark:text-gray-400
+          ' You're editing shot made on
+          = @shot.start_time.in_time_zone(@timezone).to_s(:long)
+    = render "form"

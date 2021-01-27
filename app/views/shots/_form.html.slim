@@ -1,0 +1,68 @@
+- content_for :meta_tags
+  meta name="turbo-cache-control" content="no-cache"
+
+.mt-5.md:mt-0.md:col-span-2 id=dom_id(@shot)
+  = form_with(model: @shot) do |f|
+    .shadow.sm:rounded-md.sm:overflow-hidden
+      .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
+        .grid.grid-cols-6.gap-6
+          .col-span-6.sm:col-span-4
+            = f.label :espresso_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            .flex.mt-1 data-controller="range"
+              - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
+              .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
+                .text-white.py-1.text-center data-range-target="number"
+                  = @shot.espresso_enjoyment
+              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
+          .col-span-6.sm:col-span-4
+            = f.label :profile_title, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :profile_title, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :bean_weight, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :bean_weight, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :drink_weight, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :drink_weight, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :grinder_model, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :grinder_model, list:"grinder-model-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+            datalist#grinder-model-list
+              - @grinder_models.each do |grinder_model|
+                option = grinder_model
+          .col-span-6.sm:col-span-3
+            = f.label :grinder_setting, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :grinder_setting, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :bean_brand, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :bean_brand, list:"bean-brand-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+            datalist#bean-brand-list
+              - @bean_brands.each do |bean_brand|
+                option = bean_brand
+          .col-span-6.sm:col-span-3
+            = f.label :bean_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :bean_type, list:"bean-type-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+            datalist#bean-type-list
+              - @bean_types.each do |bean_type|
+                option = bean_type
+          .col-span-6.sm:col-span-3
+            = f.label :roast_date, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :roast_date, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :roast_level, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :roast_level, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :drink_tds, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :drink_tds, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-6.sm:col-span-3
+            = f.label :drink_ey, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :drink_ey, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        div
+          = f.label :bean_notes, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+          .mt-1
+            = f.text_area :bean_notes, rows: 5, class: "shadow-sm focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+        div
+          = f.label :espresso_notes, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+          .mt-1
+            = f.text_area :espresso_notes, rows: 5, class: "shadow-sm focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+      .px-4.py-3.bg-gray-50.dark:bg-gray-700.text-right.sm:px-6
+        = f.submit "Save", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

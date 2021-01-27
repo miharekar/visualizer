@@ -9,10 +9,9 @@ tr id=dom_id(shot)
     .flex.items-center
       - if shot.espresso_enjoyment.to_i > 0
         - hue = (124 / 100 * shot.espresso_enjoyment.to_i).round
-        .h-8.w-8
-          .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
-            .text-white.py-1.text-center
-              = shot.espresso_enjoyment
+        .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
+          .text-white.py-1.text-center
+            = shot.espresso_enjoyment
       .sm.ml-3
         .text-sm.text-gray-900.dark:text-gray-100
           = shot.start_time.in_time_zone(@timezone).to_s(:long)
