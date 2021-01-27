@@ -28,6 +28,7 @@ end
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  skin                   :string
+#  supporter              :boolean
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
