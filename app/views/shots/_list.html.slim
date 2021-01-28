@@ -1,4 +1,4 @@
-.flex.flex-col
+#shot-list.flex.flex-col
   .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
     .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
       - if shots.any?
@@ -15,4 +15,5 @@
             tbody.bg-white.dark:bg-gray-900.divide-y.divide-gray-200.dark:divide-gray-800
               - shots.each do |shot|
                 = render shot
-          = render partial: "shared/pagination", locals: {pagy: @pagy}
+          - url = nil unless defined?(url)
+          = render partial: "shared/pagination", locals: {pagy: pagy, url: url}

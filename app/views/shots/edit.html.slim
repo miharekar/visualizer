@@ -8,5 +8,6 @@
       .px-4.sm:px-0
         p.mt-1.text-sm.text-gray-600.dark:text-gray-400
           ' You're editing shot made on
-          = @shot.start_time.in_time_zone(@timezone).to_s(:long)
+          strong = @shot.start_time.in_time_zone(@timezone).to_s(:long)
+          ' .
     = render "form"

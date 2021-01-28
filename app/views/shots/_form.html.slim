@@ -8,7 +8,7 @@
         .grid.grid-cols-6.gap-6
           .col-span-6.sm:col-span-4
             = f.label :espresso_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            .flex.mt-1 data-controller="range"
+            .flex.items-center.mt-1 data-controller="range"
               - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
               .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="number"

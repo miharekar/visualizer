@@ -5,24 +5,11 @@ class ShotsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[show chart]
   before_action :load_shot, only: %i[edit update destroy]
-  before_action :load_users_shots, only: %i[index edit]
 
   FILTER_PARAMS = %i[bean_brand bean_type].freeze
 
   def index
-    @filter_params = {}
-    FILTER_PARAMS.each do |filter|
-      if params[filter]
-        @shots = @shots.select { |s| s.public_send(filter) == params[filter] }
-        @filter_params[filter] = params[filter]
-      end
-    end
-
-    if @shots.is_a?(Array)
-      @pagy, @shots = pagy_array(@shots)
-    else
-      @pagy, @shots = pagy(@shots)
-    end
+    load_shots_with_pagy
   end
 
   def chart
@@ -32,8 +19,9 @@ class ShotsController < ApplicationController
   end
 
   def edit
+    shots = current_user.shots
     %i[grinder_model bean_brand bean_type].each do |method|
-      unique_values = Rails.cache.fetch("#{@shots.cache_key_with_version}/#{method}") { @shots.map(&method).uniq.compact }
+      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method) }
       instance_variable_set("@#{method.to_s.pluralize}", unique_values)
     end
   end
@@ -75,7 +63,12 @@ class ShotsController < ApplicationController
           flash[:notice] = "Shot successfully deleted."
           redirect_to action: :index
         else
-          render turbo_stream: turbo_stream.remove(@shot)
+          load_shots_with_pagy
+          if @shots.any?
+            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy, url: shots_path(extra_params)})
+          else
+            redirect_to action: :index
+          end
         end
       end
       format.html do
@@ -91,11 +84,25 @@ class ShotsController < ApplicationController
     @shot = current_user.shots.find(params[:id])
   end
 
-  def load_users_shots
-    @shots = current_user.shots.order(start_time: :desc)
-  end
-
   def shot_params
     params.require(:shot).permit(:profile_title, :bean_weight, *Shot::EXTRA_DATA)
+  end
+
+  def load_shots_with_pagy
+    @shots = current_user.shots.order(start_time: :desc)
+    FILTER_PARAMS.each do |filter|
+      next if params[filter].blank?
+
+      @shots = @shots.where(filter => params[filter]) if params[filter]
+    end
+    @pagy, @shots = pagy(@shots)
+  end
+
+  def extra_params
+    FILTER_PARAMS.map do |filter|
+      next if params[filter].blank?
+
+      [filter, params[filter]]
+    end.compact.to_h
   end
 end

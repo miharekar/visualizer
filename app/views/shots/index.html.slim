@@ -42,4 +42,4 @@
                     p.pl-1 or drag and drop them here
 .max-w-7xl.mx-auto.pb-6.sm:px-6.lg:px-8
   = turbo_stream_from current_user
-  = render "list", shots: @shots
+  = render "list", shots: @shots, pagy: @pagy
