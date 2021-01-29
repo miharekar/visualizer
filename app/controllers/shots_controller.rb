@@ -51,6 +51,7 @@ class ShotsController < ApplicationController
 
   def update
     @shot.update(shot_params)
+    flash[:notice] = "Shot successfully updated."
     redirect_to action: :show
   end
 

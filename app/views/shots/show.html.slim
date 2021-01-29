@@ -1,3 +1,11 @@
+
+- full_crud = controller.is_a?(ShotsController) && current_user && @shot.user == current_user
+- link_params = request.parameters.slice(:bean_type, :bean_brand) if full_crud
+- bean_weight = @shot.bean_weight.to_f
+- drink_weight = @shot.drink_weight.to_f
+- ratio = drink_weight / bean_weight
+- enjoyment = @shot.espresso_enjoyment.to_i
+
 - content_for :meta_tags
   meta content="#{@shot.profile_title}" property="og:title"
   - if @shot.cloudinary_id.present?
@@ -5,8 +13,9 @@
   meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
   meta content="summary_large_image" name="twitter:card"
 
-.bg-white.dark:bg-gray-900.shadow
-  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+.bg-white.dark:bg-gray-900.shadow  data-controller="modal"
+  = render "shared/modal"
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8.flex.items-center
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
       - if @shot.user && current_user != @shot.user && @shot.user.public? && @shot.user.name.present?
         img.inline.align-text-bottom.h-10.w-10.rounded-full src="#{@shot.user.gravatar_url}?s=80&d=mp"
@@ -15,31 +24,80 @@
         '  on
       - else
         ' Shot on
-      - if @timezone
-        span
-          = @shot.start_time.in_time_zone(@timezone).to_s(:short)
-      - else
-        span.local-time data-time=@shot.start_time.to_i
-          = @shot.start_time.to_s(:short)
+      = @shot.start_time.in_time_zone(@timezone).to_s(:long)
+    - if full_crud
+      span.ml-2
+        a.cursor-pointer.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-600.rounded-md.shadow-sm.text-sm.font-medium.text-gray-700.bg-white.dark:bg-gray-800.dark:text-gray-300.hover:bg-yellow-50.dark:hover:bg-yellow-900 href=edit_shot_path
+          /! Heroicon name: pencil
+          svg.-ml-1.-mr-1.h-4.w-4.text-gray-500.dark:text-gray-300 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+            path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+      span.ml-2
+        = button_to shot_path, method: :delete, form_class: "inline-flex items-center", class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete shot from #{@shot.start_time.in_time_zone(@timezone).to_s(:long)}?"} do
+          svg.-ml-1.-mr-1.h-4.w-4.text-gray-500.dark:text-gray-300 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+            path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"
+
 = render "shared/flash"
-#error.hidden
-  = render "shared/banner", name: "alert", message: "Something went wrong"
-.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-  h3.small-margin-bottom data-controller="modal"
-    - if @shot.espresso_enjoyment.to_i > 0
-      - hue = (124 / 100 * @shot.espresso_enjoyment.to_i).round
-      .dot style="background-color: hsl(#{hue}, 70%, 50%);"
-        .number
-          = @shot.espresso_enjoyment
-      '
-    span.vertical-middle = @shot.profile_title
-    - if current_user && @shot.user == current_user
-      '
-      = link_to "Edit", edit_shot_path(@shot)
-      '
-      = button_to "Delete", shot_path(@shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete #{@shot.profile_title} from #{@shot.start_time.in_time_zone(@timezone).to_s(:short)}?"}
-    = render "shared/modal"
-  = render "extra", shot: @shot
+
+.max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
+  .flex
+    .flex-shrink-0
+      - if enjoyment > 0
+        - hue = (124.0 / 100 * enjoyment).round
+        .flex.items-center.justify-center.h-12.w-12.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
+          .text-white.py-1.text-center
+            = @shot.espresso_enjoyment
+    div class=("ml-4" if enjoyment > 0)
+      .text-lg.leading-6.font-medium.text-gray-900
+        = @shot.profile_title
+      .mt-2.text-base.text-gray-500
+        .flex.flex-col
+          span.text-gray-500.dark:text-gray-400
+            - if @shot.bean_brand.present?
+              - if link_params
+                = link_to @shot.bean_brand, shots_path(link_params.merge(bean_brand: @shot.bean_brand)), class: "underline hover:text-gray-400 dark:hover:text-gray-500"
+              - else
+                = @shot.bean_brand
+              '
+            - if @shot.bean_type.present?
+              - if link_params
+                = link_to @shot.bean_type, shots_path(link_params.merge(bean_type: @shot.bean_type)), class: "underline hover:text-gray-400 dark:hover:text-gray-500"
+              - else
+                = @shot.bean_type
+              '
+            - if @shot.roast_level.present?
+              | (
+              = @shot.roast_level
+              ' )
+            - if @shot.roast_date.present?
+              ' on
+              = @shot.roast_date
+          span.text-gray-500.dark:text-gray-400
+            - if bean_weight > 0
+              = @shot.bean_weight
+              | g
+            - if  bean_weight > 0 && drink_weight > 0
+              | :
+            - if drink_weight > 0
+              = @shot.drink_weight
+              | g
+              '
+            - if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite?
+              | (1:
+              = ratio.round(1)
+              |)
+            - if bean_weight > 0 || drink_weight > 0
+              '  in
+            = @shot.duration.round(1)
+            | s
+          span.text-gray-500.dark:text-gray-400
+            - if @shot.grinder_model.present?
+              = @shot.grinder_model
+              '
+            - if @shot.grinder_setting.present?
+              ' @
+              = @shot.grinder_setting
+    .ml-4
+
   = simple_format(@shot.bean_notes)
   = simple_format(@shot.espresso_notes)
 
