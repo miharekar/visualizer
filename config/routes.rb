@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   match "(*any)", to: redirect { |_, req| "https://visualizer.coffee#{req.fullpath}" }, via: :all, constraints: {host: "decent-visualizer.herokuapp.com"}
 
   root to: "home#show"
+  get "/privacy", to: "home#privacy"
 
   namespace :api do
     resources :shots, only: [] do

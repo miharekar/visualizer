@@ -1,6 +1,7 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 const forms = require('@tailwindcss/forms')
+const prose = require('@tailwindcss/typography')
 
 module.exports = {
   purge: [
@@ -21,5 +22,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [forms],
+  plugins: [forms, prose],
 }

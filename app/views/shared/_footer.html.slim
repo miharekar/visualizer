@@ -1,12 +1,16 @@
 - unless defined?(@no_header)
-  .p-4.text-center.shadow.text-gray-400.dark:text-gray-500.dark:bg-gray-900
-    .md:hidden
-      ' © #{Date.today.year}
-      a.text-gray-800.dark:text-gray-200.underline.hover:no-underline href="https://mr.si/" Miha Rekar
-      ' .
-    .hidden.md:block
-      ' © #{Date.today.year}
-      a.text-gray-800.dark:text-gray-200.underline.hover:no-underline href="https://mr.si/" Miha Rekar
-      | . Comments and suggestions are welcomed on
-      a.text-gray-800.dark:text-gray-200.underline.hover:no-underline< href="https://github.com/miharekar/decent-visualizer" GitHub
-      ' .
+  .p-4.shadow.text-gray-400.dark:text-gray-500.dark:bg-gray-900
+    .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8.flex.justify-between.mx-auto
+      div
+        .md:hidden
+          ' © #{Date.today.year}
+          a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
+          ' .
+        .hidden.md:block
+          ' © #{Date.today.year}
+          a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
+          | . Comments and suggestions are welcomed on
+          a.text-gray-800.dark:text-gray-200.underline.hover:no-underline< target="_blank" href="https://github.com/miharekar/decent-visualizer" GitHub
+          ' .
+      a.underline.hover:no-underline href="/privacy"
+        ' Privacy Policy
