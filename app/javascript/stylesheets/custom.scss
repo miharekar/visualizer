@@ -1,11 +1,13 @@
 #main-chart {
-  min-height: 500px;
-  max-height: 500px;
+  height: 600px !important;
 }
 
 #temperature-chart {
-  min-height: 300px;
-  max-height: 300px;
+  height: 400px !important;
+}
+
+.reset-zoom {
+  @apply absolute right-5 top-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900;
 }
 
 .shot-range {
