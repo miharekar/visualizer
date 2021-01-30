@@ -5,8 +5,8 @@
         a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.text-sm.font-medium.rounded-md.text-gray-700.bg-white.dark:bg-gray-900.hover:text-gray-500 href=custom_pagy_url_for(pagy.prev, pagy, url)
           | Previous
       - else
-        div
-      span.py-2.text-sm
+        span
+      span.whitespace-nowrap.py-2.text-sm
         ' Page
         = pagy.page
         '  /
@@ -15,7 +15,7 @@
         a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.text-sm.font-medium.rounded-md.text-gray-700.bg-white.dark:bg-gray-900.hover:text-gray-500 href=custom_pagy_url_for(pagy.next, pagy, url)
           | Next
       - else
-        div
+        span
     .hidden.md:flex-1.md:flex.md:items-center.md:justify-between
       div
       nav.relative.z-0.inline-flex.shadow-sm.-space-x-px
