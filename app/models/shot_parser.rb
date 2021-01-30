@@ -31,6 +31,8 @@ class ShotParser
   end
 
   def extract_data_from(name, data)
+    return if data.blank?
+
     method = "extract_#{name}"
     data = @start_chars_to_ignore.include?(data.first) ? data[1..] : data
     __send__(method, data) if respond_to?(method, true)
