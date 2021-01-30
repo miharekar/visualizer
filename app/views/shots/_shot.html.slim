@@ -9,7 +9,7 @@ tr id=dom_id(shot)
     .flex.items-center
       - if shot.espresso_enjoyment.to_i > 0
         - hue = (124.0 / 100 * shot.espresso_enjoyment.to_i).round
-        .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
+        .flex-shrink-0.h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
           .text-white.py-1.text-center
             = shot.espresso_enjoyment
       .sm.ml-3
