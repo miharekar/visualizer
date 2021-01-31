@@ -11,4 +11,8 @@ module ApplicationHelper
       "#{url}#{join_char}page=#{number}"
     end
   end
+
+  def avatar_url(user, size)
+    user.avatar.attached? ? url_for(user.avatar) : "#{user.gravatar_url}?s=#{size}&d=mp"
+  end
 end

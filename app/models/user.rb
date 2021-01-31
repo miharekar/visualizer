@@ -7,6 +7,8 @@ class User < ApplicationRecord
 
   has_many :shots, dependent: :nullify
 
+  has_one_attached :avatar
+
   validates :name, presence: true, if: :public?
 
   def gravatar_url
