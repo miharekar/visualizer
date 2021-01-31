@@ -4,6 +4,8 @@
 - bean_weight = @shot.bean_weight.to_f
 - drink_weight = @shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight
+- tds = @shot.drink_tds.to_f
+- ey = @shot.drink_ey.to_f
 - enjoyment = @shot.espresso_enjoyment.to_i
 
 - content_for :meta_tags
@@ -95,6 +97,17 @@
           - if @shot.grinder_setting.present?
             ' @
             = @shot.grinder_setting
+        div
+          - if tds > 0
+            ' TDS
+            = tds
+            ' %
+          - if tds > 0 && ey > 0
+            '
+          - if ey > 0
+            ' EY
+            = ey
+            ' %
         - if @shot.bean_notes.present?
           .mt-1
             .font-medium.text-gray-900.dark:text-gray-100 Bean notes:
