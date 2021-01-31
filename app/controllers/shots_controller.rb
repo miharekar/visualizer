@@ -86,7 +86,7 @@ class ShotsController < ApplicationController
   end
 
   def shot_params
-    params.require(:shot).permit(:profile_title, :bean_weight, *Shot::EXTRA_DATA)
+    params.require(:shot).permit(:profile_title, :bean_weight, *Shot::EXTRA_DATA_METHODS)
   end
 
   def load_shots_with_pagy
