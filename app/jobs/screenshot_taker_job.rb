@@ -8,6 +8,8 @@ class ScreenshotTakerJob < ApplicationJob
   end
 
   def perform(shot, force: false)
+    return if Rails.env.development?
+
     shot.cloudinary_id = false if force
     return if shot.cloudinary_id.present?
 
