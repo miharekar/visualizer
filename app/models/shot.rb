@@ -9,6 +9,7 @@ class Shot < ApplicationRecord
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
   EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight]).freeze
+  MAX_RESISTANCE_VALUE = 16
 
   validates :start_time, :data, :sha, presence: true
 
@@ -46,11 +47,7 @@ class Shot < ApplicationRecord
   end
 
   memoize def chart_data
-    if data.key?("espresso_resistance")
-      chart_from_data
-    else
-      chart_from_data + [resistance_chart]
-    end
+    chart_from_data + [resistance_chart]
   end
 
   memoize def stages
@@ -110,15 +107,21 @@ class Shot < ApplicationRecord
   end
 
   memoize def resistance_chart
-    pressure_data = chart_from_data.find { |d| d[:label] == "espresso_pressure" }[:data]
-    flow_data = chart_from_data.find { |d| d[:label] == "espresso_flow" }[:data]
-    data = pressure_data.map.with_index do |v, i|
-      f = flow_data[i][:y].to_f
-      if f.zero?
-        {t: v[:t], y: nil}
-      else
-        r = v[:y].to_f / f**2
-        {t: v[:t], y: (r > 16 ? nil : r)}
+    if data.key?("espresso_resistance")
+      resistance_data = chart_from_data.find { |d| d[:label] == "espresso_resistance" }[:data]
+      data = resistance_data.map { |d| d[:y].to_f > MAX_RESISTANCE_VALUE ? {y: nil, t: d[:t]} : d }
+      chart_from_data.delete_if { |d| d[:label] == "espresso_resistance" }
+    else
+      pressure_data = chart_from_data.find { |d| d[:label] == "espresso_pressure" }[:data]
+      flow_data = chart_from_data.find { |d| d[:label] == "espresso_flow" }[:data]
+      data = pressure_data.map.with_index do |v, i|
+        f = flow_data[i][:y].to_f
+        if f.zero?
+          {t: v[:t], y: nil}
+        else
+          r = v[:y].to_f / f**2
+          {t: v[:t], y: (r > MAX_RESISTANCE_VALUE ? nil : r)}
+        end
       end
     end
 
