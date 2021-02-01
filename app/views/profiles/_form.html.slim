@@ -7,11 +7,11 @@
       .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
         .grid.grid-cols-3.gap-6
           .col-span-3.sm:col-span-2
-            label.block.text-sm.font-medium.text-gray-700
+            label.block.text-sm.font-medium.text-gray-700.dark:text-gray-300
               | Avatar
             .mt-2.flex.items-center data-controller="avatar"
               img.h-12.w-12.rounded-full src=avatar_url(current_user, 96)
-              = f.label :avatar, "Change", data: {avatar_target: "label"}, class: "ml-3 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              = f.label :avatar, "Change", data: {avatar_target: "label"}, class: "cursor-pointer ml-3 bg-white dark:bg-gray-800 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               = f.file_field :avatar, data: {action: "input->avatar#update"}, class: "hidden"
           .col-span-3.sm:col-span-2
             - has_error = f.object.errors.any?{ |e| e.attribute == :name && e.type == :blank }
