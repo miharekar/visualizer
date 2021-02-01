@@ -3,7 +3,7 @@
 require "slim/erb_converter"
 
 namespace :slim_to_erb do
-  task :convert do
+  task convert: :environment do
     FileUtils.rm_f("tmp/compiled.html.erb")
     File.open(Rails.root.join("tmp/compiled.html.erb"), "w+") do |compiled|
       Dir.glob(Rails.root.join("app/views/**/*.html.slim")).each do |slim_template|
