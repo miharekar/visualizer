@@ -22,6 +22,9 @@
             - if has_error
               p.text-sm.font-medium.text-red-500 Name is required for public profiles
           .col-span-3.sm:col-span-2
+            = f.label :timezone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+          .col-span-3.sm:col-span-2
             = f.label :skin, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             = f.select :skin, Shot::SKINS, {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
           .col-span-3.sm:col-span-2

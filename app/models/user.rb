@@ -31,6 +31,7 @@ end
 #  reset_password_token   :string
 #  skin                   :string
 #  supporter              :boolean
+#  timezone               :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
