@@ -6,7 +6,7 @@ class Shot < ApplicationRecord
   belongs_to :user, optional: true
 
   SKINS = ["Classic", "DSx", "White DSx"].freeze
-  DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance].freeze
+  DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
   EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight]).freeze
 
@@ -46,29 +46,44 @@ class Shot < ApplicationRecord
   end
 
   memoize def chart_data
-    chart_from_data + [resistance_chart]
+    if data.key?("espresso_resistance")
+      chart_from_data
+    else
+      chart_from_data + [resistance_chart]
+    end
   end
 
   memoize def stages
     indices = []
-    data.select { |label, _| label.end_with?("_goal") }.each do |_label, data|
-      data = data.map(&:to_f)
-      data.each.with_index do |a, i|
-        next if i < 5
+    if data.key?("espresso_state_change")
+      current = data["espresso_state_change"].find { |s| !s.to_i.zero? }
+      data["espresso_state_change"].each.with_index do |s, i|
+        next if s.to_i.zero? || s == current
 
-        b = data[i - 1]
-        c = data[i - 2]
-        diff2 = ((a - b) - (b - c))
-        indices << i if diff2.abs > 0.1
+        indices << i
+        current = s
       end
-    end
+      selected = indices
+    else
+      data.select { |label, _| label.end_with?("_goal") }.each do |_label, data|
+        data = data.map(&:to_f)
+        data.each.with_index do |a, i|
+          next if i < 5
 
-    return [] if indices.empty?
+          b = data[i - 1]
+          c = data[i - 2]
+          diff2 = ((a - b) - (b - c))
+          indices << i if diff2.abs > 0.1
+        end
+      end
 
-    indices = indices.sort.uniq
-    selected = [indices.first]
-    indices.each do |index|
-      selected << index if (index - selected.last) > 5
+      if indices.any?
+        indices = indices.sort.uniq
+        selected = [indices.first]
+        indices.each do |index|
+          selected << index if (index - selected.last) > 5
+        end
+      end
     end
 
     chart_data.first[:data].values_at(*selected).pluck(:t)
