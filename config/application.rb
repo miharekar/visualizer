@@ -19,6 +19,8 @@ require "rails"
   require railtie
 end
 
+require "good_job/engine"
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

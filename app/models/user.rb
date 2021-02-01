@@ -22,6 +22,7 @@ end
 # Table name: users
 #
 #  id                     :uuid             not null, primary key
+#  admin                  :boolean
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  name                   :string

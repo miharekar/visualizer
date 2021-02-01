@@ -15,6 +15,10 @@ Rails.application.routes.draw do
     end
   end
 
+  authenticate :user, ->(user) { user.admin? } do
+    mount GoodJob::Engine => "jobs"
+  end
+
   devise_for :users
 
   resources :shots, except: [:new] do
