@@ -19,6 +19,7 @@ gem "devise"
 gem "pagy"
 gem "active_link_to"
 
+gem "mini_magick"
 gem "dalli"
 gem "rollbar"
 gem "cloudinary"
