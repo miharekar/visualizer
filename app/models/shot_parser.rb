@@ -65,7 +65,7 @@ class ShotParser
   def handle_array_string(data)
     return data unless data.is_a?(Array)
 
-    if data.any? { |c| c.is_a?(Array) }
+    if data.all? { |c| c.is_a?(Array) }
       data.map { |line| line.join(" ") }.join("\n")
     else
       data.join(" ")
