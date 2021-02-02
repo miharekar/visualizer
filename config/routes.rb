@@ -8,7 +8,8 @@ Rails.application.routes.draw do
   get "/privacy", to: "home#privacy"
 
   namespace :api do
-    resources :shots, only: [] do
+    resources :shots, only: [:index] do
+      get :download
       collection do
         post :upload
       end
