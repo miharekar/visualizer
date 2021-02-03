@@ -1,3 +1,23 @@
+GIT
+  remote: https://github.com/ghiculescu/devise.git
+  revision: 749449d27f46f0cff4c9c6ddb923b4aff04e3b82
+  branch: error-code-422
+  specs:
+    devise (4.7.3)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
+
+GIT
+  remote: https://github.com/heartcombo/responders.git
+  revision: 413eae16b794c1f352af2cfc577611e1de0e8844
+  specs:
+    responders (3.0.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -84,12 +104,6 @@ GEM
     concurrent-ruby (1.1.8)
     crass (1.0.6)
     dalli (2.7.11)
-    devise (4.7.3)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
-      responders
-      warden (~> 1.2.3)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
@@ -198,9 +212,6 @@ GEM
       ffi (~> 1.0)
     redis (4.2.5)
     regexp_parser (2.0.3)
-    responders (3.0.1)
-      actionpack (>= 5.0)
-      railties (>= 5.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -282,7 +293,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   cloudinary
   dalli
-  devise
+  devise!
   dotenv-rails
   good_job
   letter_opener
@@ -296,6 +307,7 @@ DEPENDENCIES
   puma
   rails
   redis
+  responders!
   rollbar
   rubocop
   rubocop-performance

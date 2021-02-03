@@ -15,7 +15,8 @@ gem "bootsnap", ">= 1.4.2", require: false
 gem "turbo-rails"
 
 gem "slim"
-gem "devise"
+gem "devise", git: "https://github.com/ghiculescu/devise.git", branch: "error-code-422"
+gem "responders", git: "https://github.com/heartcombo/responders.git"
 gem "pagy"
 gem "active_link_to"
 
