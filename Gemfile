@@ -12,6 +12,9 @@ gem "puma"
 gem "webpacker", "~> 5.0"
 gem "bootsnap", ">= 1.4.2", require: false
 
+gem "kramdown"
+gem "kramdown-parser-gfm"
+
 gem "turbo-rails"
 
 gem "slim"

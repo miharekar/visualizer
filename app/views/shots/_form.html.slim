@@ -60,9 +60,17 @@
           = f.label :bean_notes, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
           .mt-1
             = f.text_area :bean_notes, rows: 5, class: "shadow-sm focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+            .mt-2.text-sm.text-gray-500.dark:text-gray-400
+              ' Supports
+              a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
+              ' .
         div
           = f.label :espresso_notes, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
           .mt-1
             = f.text_area :espresso_notes, rows: 5, class: "shadow-sm focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+            .mt-2.text-sm.text-gray-500.dark:text-gray-400
+              ' Supports
+              a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
+              ' .
       .px-4.py-3.bg-gray-50.dark:bg-gray-700.text-right.sm:px-6
         = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

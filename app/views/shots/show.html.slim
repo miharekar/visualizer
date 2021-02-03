@@ -109,13 +109,13 @@
             = ey
             ' %
         - if @shot.bean_notes.present?
-          .mt-1
+          .mt-2
             .font-medium.text-gray-900.dark:text-gray-100 Bean notes:
-            = simple_format(@shot.bean_notes)
+            = markdown_text_from(@shot.bean_notes)
         - if @shot.espresso_notes.present?
-          .mt-1
+          .mt-2
             .font-medium.text-gray-900.dark:text-gray-100 Espresso notes:
-            = simple_format(@shot.espresso_notes)
+            = markdown_text_from(@shot.espresso_notes)
 
 .max-w-7xl.mx-auto.pb-6.px-2.sm:px-6.lg:px-8
   .relative.pb-6

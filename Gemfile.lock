@@ -126,6 +126,10 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.8)
       concurrent-ruby (~> 1.0)
+    kramdown (2.3.0)
+      rexml
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.7.0)
@@ -296,6 +300,8 @@ DEPENDENCIES
   devise!
   dotenv-rails
   good_job
+  kramdown
+  kramdown-parser-gfm
   letter_opener
   listen (~> 3.2)
   memoist
