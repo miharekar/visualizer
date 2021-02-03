@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ghiculescu/devise.git
-  revision: 749449d27f46f0cff4c9c6ddb923b4aff04e3b82
+  revision: 20cdcab7b022cf76cab218954972be9f9604d3fc
   branch: error-code-422
   specs:
     devise (4.7.3)
