@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   end
 
   get :people, to: "people#index"
-  get "people/:id", to: "people#show", as: :users_shots
+  get "people/:slug", to: "people#show", as: :users_shots
 
   resources :profiles, only: %i[edit update] do
     collection do

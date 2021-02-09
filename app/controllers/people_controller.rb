@@ -8,7 +8,12 @@ class PeopleController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by(slug: params[:slug])
+
+    if @user.nil?
+      user = User.find(params[:slug])
+      return redirect_to users_shots_path(slug: user.slug), status: :moved_permanently
+    end
 
     if @user.public
       @shots = @user.shots.order(start_time: :desc)
