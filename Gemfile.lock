@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ghiculescu/devise.git
-  revision: 20cdcab7b022cf76cab218954972be9f9604d3fc
+  revision: ef40fca5a193fd88e3f1bde0da51da45bd8ac25c
   branch: error-code-422
   specs:
     devise (4.7.3)
@@ -92,7 +92,7 @@ GEM
     aws_cf_signer (0.1.3)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    bootsnap (1.7.0)
+    bootsnap (1.7.2)
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -155,7 +155,7 @@ GEM
     minitest (5.14.3)
     msgpack (1.4.2)
     netrc (0.11.0)
-    nio4r (2.5.4)
+    nio4r (2.5.5)
     nokogiri (1.11.1-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.11.1-x86_64-linux)
@@ -175,7 +175,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.2.0)
+    puma (5.2.1)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)

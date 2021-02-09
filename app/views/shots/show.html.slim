@@ -36,6 +36,17 @@
         ' Shot on
         = @shot.start_time.in_time_zone(@timezone).to_s(:long)
     - if full_crud
+      span.flex.ml-3 data-controller="clipboard"
+        input.hidden.mr-3.text-xs.rounded-full size=1 type="text" value="#{request.url}" readonly="readonly" data-clipboard-target="source"
+        a.cursor-pointer.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-600.rounded-md.shadow-sm.text-sm.font-medium.text-gray-700.bg-white.dark:bg-gray-800.dark:text-gray-300.hover:bg-gray-50.dark:hover:bg-gray-900 data-action="clipboard#copy" href="#" data-clipboard-target="container"
+          /! Heroicon name: clipboard-copy
+          svg.-ml-1.-mr-1.h-4.w-4.text-gray-500.dark:text-gray-300 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="copy"
+            path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z"
+            path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z"
+          /! Heroicon name: clipboard-check
+          svg.hidden.-ml-1.-mr-1.h-4.w-4.text-green-500.dark:text-green-300 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="check"
+            path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"
+            path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"
       span.ml-3
         a.cursor-pointer.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-600.rounded-md.shadow-sm.text-sm.font-medium.text-gray-700.bg-white.dark:bg-gray-800.dark:text-gray-300.hover:bg-gray-50.dark:hover:bg-gray-900 href=edit_shot_path
           /! Heroicon name: pencil
