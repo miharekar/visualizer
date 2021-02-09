@@ -6,11 +6,12 @@ html
     title Decent Espresso Shot Visualizer
     = csrf_meta_tags
     = csp_meta_tag
-    link rel="apple-touch-icon" href="/apple-touch-icon.png"
-    link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"
-    link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"
-    link href="/site.webmanifest" rel="manifest"
-    link color="#000000" href="/safari-pinned-tab.svg" rel="mask-icon"
+    link rel="icon" type="image/png" href="/favicon.ico?v=1"
+    link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1"
+    link rel="icon" href="/favicon-32x32.png?v=1" sizes="32x32" type="image/png"
+    link rel="icon" href="/favicon-16x16.png?v=1" sizes="16x16" type="image/png"
+    link rel="manifest" href="/site.webmanifest"
+    link rel="mask-icon" color="#000000" href="/safari-pinned-tab.svg?v=1"
     link href="https://rsms.me/inter/inter.css" rel="stylesheet"
     = javascript_packs_with_chunks_tag "application", "chart", "data-turbo-track": "reload", defer: true
     = stylesheet_packs_with_chunks_tag "application", "data-turbo-track": "reload"
