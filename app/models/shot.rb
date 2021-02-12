@@ -44,7 +44,8 @@ class Shot < ApplicationRecord
   end
 
   memoize def duration
-    timeframe[data["espresso_flow"].size - 1].to_f
+    index = [data["espresso_flow"].size, timeframe.size].min
+    timeframe[index - 1].to_f
   end
 
   memoize def chart_data
