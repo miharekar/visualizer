@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     get :chart
   end
 
+  resources :search, only: [:index]
+
   get :people, to: "people#index"
   get "people/:slug", to: "people#show", as: :users_shots
 

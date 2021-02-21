@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
+  scope :visible, -> { where(public: true) }
+
   validates :name, presence: true, if: :public?
 
   def gravatar_url

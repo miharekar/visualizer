@@ -3,8 +3,6 @@
 class Shot < ApplicationRecord
   extend Memoist
 
-  belongs_to :user, optional: true
-
   SKINS = ["Classic", "DSx", "White DSx"].freeze
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   DATA_LABELS_TO_IGNORE = %w[espresso_resistance espresso_resistance_weight espresso_state_change].freeze
@@ -12,11 +10,15 @@ class Shot < ApplicationRecord
   EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight]).freeze
   MAX_RESISTANCE_VALUE = 16
 
-  validates :start_time, :data, :sha, presence: true
+  belongs_to :user, optional: true
+
+  scope :visible, -> { joins(:user).where(users: {public: true}) }
 
   after_create :schedule_screenshot
 
   after_destroy_commit -> { broadcast_remove_to user }
+
+  validates :start_time, :data, :sha, presence: true
 
   def self.from_file(user, file)
     return if file.blank?

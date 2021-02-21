@@ -43,12 +43,14 @@ export default class extends Controller {
   }
 
   keydown(event) {
-    if (event.keyCode == 27) {
-      event.preventDefault()
-      this.hide()
-    } else if (event.keyCode == 13) {
-      event.preventDefault()
-      this.delete()
+    if (this.modalShown) {
+      if (event.keyCode == 27) {
+        event.preventDefault()
+        this.hide()
+      } else if (event.keyCode == 13) {
+        event.preventDefault()
+        this.delete()
+      }
     }
   }
 }

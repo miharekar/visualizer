@@ -1,0 +1,27 @@
+.bg-white.dark:bg-gray-900.shadow
+  .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+    h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
+      ' Search
+.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+  .mt-5.md:mt-0
+    = form_with(url: {action: :index}, method: :get) do |f|
+      .shadow.sm:rounded-md.sm:overflow-hidden
+        .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
+          .grid.grid-cols-6.gap-6
+            .col-span-6.sm:col-span-2
+              = f.label :bean_brand, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+              = f.text_field :bean_brand, value: params[:bean_brand], list:"bean-brand-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              datalist#bean-brand-list
+                - @bean_brands.each do |bean_brand|
+                  option = bean_brand
+            .col-span-6.sm:col-span-2
+              = f.label :bean_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+              = f.text_field :bean_type, value: params[:bean_type], list:"bean-type-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              datalist#bean-type-list
+                - @bean_types.each do |bean_type|
+                  option = bean_type
+            .col-span-6.sm:col-span-2
+              label.hidden.md:block &nbsp;
+              = f.submit "Search", class: "cursor-pointer py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+  .mt-5
+    = render "shots/list", shots: @shots, pagy: @pagy, include_person: true

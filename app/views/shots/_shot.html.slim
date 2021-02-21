@@ -1,3 +1,4 @@
+- include_person = false unless defined?(include_person)
 - full_crud = controller.is_a?(ShotsController) && current_user && shot.user == current_user
 - link_params = request.parameters.slice(:bean_type, :bean_brand) if full_crud
 - bean_weight = shot.bean_weight.to_f
@@ -17,6 +18,14 @@ tr id=dom_id(shot)
           = shot.start_time.in_time_zone(@timezone).to_s(:long)
         .text-sm.text-gray-500.dark:text-gray-400
           = shot.profile_title
+        - if include_person
+          .flex.items-center
+            img.h-4.w-4.rounded-full src=avatar_url(shot.user, 48)
+            .ml-1.text-sm.text-gray-500.dark:text-gray-400 = shot.user.name
+            - if shot.user.supporter
+              a href="https://github.com/sponsors/miharekar" title="Supporter" target="_blank"
+                svg.ml-1.h-4.w-4.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
   td.py-4.px-1.sm:px-4
     .flex.flex-col
       span.text-sm.text-gray-500.dark:text-gray-400
