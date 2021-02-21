@@ -5,7 +5,8 @@ module ApplicationHelper
 
   def markdown_text_from(input)
     tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table thead tbody th tr td]
-    text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags: tags)
+    attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[style]
+    text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags: tags, attributes: attributes)
     tag.div(text, class: "prose dark:prose-dark")
   end
 

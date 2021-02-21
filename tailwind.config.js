@@ -2,6 +2,8 @@ const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 const forms = require('@tailwindcss/forms')
 const prose = require('@tailwindcss/typography')
+const fontFamily = defaultTheme.fontFamily
+fontFamily['sans'] = ['Inter var', ...defaultTheme.fontFamily.sans]
 
 module.exports = {
   purge: [
@@ -78,9 +80,7 @@ module.exports = {
         },
       }),
     },
-    fontFamily: {
-      sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-    },
+    fontFamily: fontFamily,
   },
   variants: {
     extend: {
