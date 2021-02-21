@@ -4,7 +4,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def markdown_text_from(input)
-    tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table tr td]
+    tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table thead tbody th tr td]
     text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags: tags)
     tag.div(text, class: "prose dark:prose-dark")
   end
