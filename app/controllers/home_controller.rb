@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
     @shot_count = Shot.count
     @user_count = User.count
-    @shot_counts = Shot.where(created_at: (1.month.ago..)).group("created_at::date").count
+    @shot_counts = Shot.where(created_at: ("01.02.2021".to_date..)).order("created_at::date").group("created_at::date").count
     @shot_counts = {
       labels: @shot_counts.keys,
       datasets: [{
