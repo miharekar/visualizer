@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   end
 
   resources :search, only: [:index]
+  resources :stats, only: [:index]
 
   get :people, to: "people#index"
   get "people/:slug", to: "people#show", as: :users_shots

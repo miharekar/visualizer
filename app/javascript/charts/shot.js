@@ -182,21 +182,11 @@ document.addEventListener("turbo:load", function (xhr) {
       type: "line",
       data: window.shotCounts,
       options: {
-        events: [],
-        tooltips: {
-          enabled: false
-        },
         legend: {
           display: false
         },
         scales: {
           xAxes: [{
-            ticks: {
-              source: "data",
-              autoSkip: true,
-              autoSkipPadding: 50,
-              maxRotation: 0
-            },
             gridLines: {
               display: false
             }

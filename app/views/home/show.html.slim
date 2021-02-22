@@ -24,11 +24,3 @@
       .mt-3.sm:mt-0.sm:ml-3
         a.w-full.flex.items-center.justify-center.px-8.py-3.border.border-transparent.text-base.font-medium.rounded-md.text-green-700.bg-green-100.hover:bg-green-200.md:py-4.md:text-lg.md:px-10 href=new_user_session_path
           | Sign In
-
-.hidden.md:block.mb-12.max-w-4xl.mx-auto.px-4
-  h2.mb-6.text-center.text-4xl.tracking-tight.font-extrabold.text-green-600
-    ' Uploaded .shot files by day
-  canvas#shot-counts-chart width="100%"
-
-javascript:
-  window.shotCounts = #{{@shot_counts.to_json}}
