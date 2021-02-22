@@ -175,4 +175,39 @@ document.addEventListener("turbo:load", function (xhr) {
     }
     drawChart()
   }
+
+  if (document.getElementById("shot-counts-chart")) {
+    const ctx = document.getElementById("shot-counts-chart").getContext("2d")
+    new Chart(ctx, {
+      type: "line",
+      data: window.shotCounts,
+      options: {
+        events: [],
+        tooltips: {
+          enabled: false
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              source: "data",
+              autoSkip: true,
+              autoSkipPadding: 50,
+              maxRotation: 0
+            },
+            gridLines: {
+              display: false
+            }
+          }],
+          yAxes: [{
+            gridLines: {
+              color: "rgba(128, 128, 128, 0.35)"
+            }
+          }]
+        },
+      }
+    })
+  }
 })
