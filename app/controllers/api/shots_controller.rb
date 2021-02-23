@@ -16,7 +16,8 @@ module Api
       shot = shot.find_by(id: params[:shot_id])
 
       if shot
-        allowed_attrs = %w[start_time data profile_title extra user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes timeframe roast_level bean_notes]
+        allowed_attrs = %w[start_time profile_title extra user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
+        allowed_attrs += %w[timeframe data] if params[:essentials].blank?
         render json: shot.attributes.slice(*allowed_attrs)
       else
         head :unprocessable_entity
