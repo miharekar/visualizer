@@ -6,14 +6,6 @@ module Sluggable
   class_methods do
     attr_reader :slug_source
 
-    def find_by_slug_or_id(slug_or_id)
-      find_by(slug: slug_or_id) || find_by(id: slug_or_id)
-    end
-
-    def find_by_slug_or_id!(slug_or_id)
-      find_by(slug: slug_or_id) || find(slug_or_id)
-    end
-
     def slug_from(column)
       @slug_source = column
     end

@@ -11,8 +11,8 @@ class PeopleController < ApplicationController
     @user = User.find_by(slug: params[:slug])
 
     if @user.nil?
-      user = User.find(params[:slug])
-      return redirect_to users_shots_path(slug: user.slug), status: :moved_permanently
+      @user = User.find(params[:slug])
+      return redirect_to users_shots_path(slug: @user.slug), status: :moved_permanently if @user.public?
     end
 
     if @user.public
