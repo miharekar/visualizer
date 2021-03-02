@@ -5,7 +5,7 @@
 - drink_weight = shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight
 
-tr id=dom_id(shot)
+tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_path(shot)
   td.py-4.px-1.sm:px-4
     .flex.items-center
       - if shot.espresso_enjoyment.to_i > 0
