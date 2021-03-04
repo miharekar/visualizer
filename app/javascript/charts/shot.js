@@ -68,7 +68,7 @@ function getSettings() {
       "espresso_flow_weight_raw": { title: "Weight (g/s) Raw", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 1)", borderDash: [], fill: false, hidden: true },
       "espresso_flow_goal": { title: "Flow Goal (ml/s)", borderColor: "rgba(9, 72, 93, 1)", backgroundColor: "rgba(9, 72, 93, 1)", borderDash: [5, 5], fill: false, hidden: false },
       "espresso_resistance": { title: "Resistance (lΩ)", borderColor: "rgba(229, 229, 0, 1)", backgroundColor: "rgba(229, 229, 0, 0.4)", borderDash: [], fill: false, hidden: false },
-      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "e73249", backgroundColor: "rgba(240, 86, 122, 0.4)", borderDash: [], fill: false, hidden: false },
+      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "rgba(231, 50, 73, 1)", backgroundColor: "rgba(240, 86, 122, 0.4)", borderDash: [], fill: false, hidden: false },
       "espresso_temperature_mix": { title: "Temperature Mix °C", borderColor: "rgba(206, 18, 62, 1)", backgroundColor: "rgba(206, 18, 62, 0.4)", borderDash: [], fill: false, hidden: false },
       "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "rgba(150, 13, 45, 1)", backgroundColor: "rgba(150, 13, 45, 0.4)", borderDash: [5, 5], fill: false, hidden: false },
     },
@@ -80,9 +80,9 @@ function getSettings() {
       "espresso_flow_weight": { title: "Weight (g/s)", borderColor: "#a2693d", backgroundColor: "#a2693d", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
       "espresso_flow_goal": { title: "Flow Goal (ml/s)", borderColor: "#7aaaff", backgroundColor: "#7aaaff", borderDash: [5, 5], fill: false, borderWidth: 2, lineTension: 0 },
       "espresso_resistance": { title: "Resistance (lΩ)", borderColor: "#e5e500", backgroundColor: "#e5e500", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
-      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_temperature_basket": { title: "Temperature Basket °C", borderColor: "rgba(231, 50, 73, 1)", backgroundColor: "rgba(231, 50, 73, 1)", borderDash: [], fill: false, borderWidth: 2, lineTension: 0 },
       "espresso_temperature_mix": { title: "Temperature Mix °C", borderColor: "#ff9900", backgroundColor: "#ff9900", borderDash: [], fill: false, hidden: false, borderWidth: 2, lineTension: 0 },
-      "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "#e73249", backgroundColor: "#e73249", borderDash: [5, 5], fill: false, borderWidth: 2, lineTension: 0 },
+      "espresso_temperature_goal": { title: "Temperature Goal °C", borderColor: "rgba(231, 50, 73, 1)", backgroundColor: "rgba(231, 50, 73, 1)", borderDash: [5, 5], fill: false, borderWidth: 2, lineTension: 0 },
     }
   }
   return settings[selectedSkin]
