@@ -3,9 +3,11 @@ import { Turbo } from "@hotwired/turbo-rails"
 
 export default class extends Controller {
   view(event) {
-    if (["TR", "TD", "SPAN", "DIV"].includes(event.target.nodeName)) {
-      event.preventDefault()
-      Turbo.visit(event.currentTarget.dataset.url)
+    let currentElement = event.target
+    while (currentElement != event.currentTarget) {
+      if (["A", "BUTTON"].includes(currentElement.tagName)) { return }
+      currentElement = currentElement.parentElement
     }
+    Turbo.visit(event.currentTarget.dataset.url)
   }
 }
