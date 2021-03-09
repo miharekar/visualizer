@@ -1,24 +1,26 @@
 - unless defined?(@no_header)
   .p-4.shadow.text-gray-400.dark:text-gray-500.dark:bg-gray-900
-    .max-w-7xl.mx-auto.sm:px-10.lg:px-12.flex.justify-between
+    .max-w-7xl.mx-auto.sm:px-10.lg:px-12
       div
-        .whitespace-nowrap.md:hidden
-          ' © #{Date.today.year}
-          a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
-          ' .
-          a.text-green-700.dark:text-green-500.underline.hover:no-underline< target="_blank" href="https://github.com/miharekar/decent-visualizer/discussions" Discussions
-          ' .
-        .whitespace-nowrap.hidden.md:block.lg:hidden
-          ' © #{Date.today.year}
-          a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
-          | . Suggestions welcomed on
-          a.text-green-700.dark:text-green-500.underline.hover:no-underline< target="_blank" href="https://github.com/miharekar/decent-visualizer/discussions" Visualizer Discussions
-          ' .
-        .whitespace-nowrap.hidden.lg:block
-          ' © #{Date.today.year}
-          a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
-          | . Comments and suggestions are welcomed on
-          a.text-green-700.dark:text-green-500.underline.hover:no-underline< target="_blank" href="https://github.com/miharekar/decent-visualizer/discussions" Visualizer Discussions
-          ' .
-      a.whitespace-nowrap.underline.hover:no-underline href="/privacy"
-        ' Privacy Policy
+        .whitespace-nowrap.md:hidden.flex.justify-between
+          span
+            ' ©
+            a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
+          a.text-green-700.dark:text-green-500.underline.hover:no-underline target="_blank" href="https://github.com/miharekar/decent-visualizer/discussions" Discussions
+          a.whitespace-nowrap.underline.hover:no-underline href="/privacy" Privacy Policy
+        .hidden.md:flex.lg:hidden.justify-between
+          span
+            ' © #{Date.today.year}
+            a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
+            ' . Suggestions welcomed on
+            a.text-green-700.dark:text-green-500.underline.hover:no-underline target="_blank" href="https://github.com/miharekar/decent-visualizer/discussions" Discussions
+            ' .
+          a.whitespace-nowrap.underline.hover:no-underline href="/privacy" Privacy Policy
+        .whitespace-nowrap.hidden.lg:flex.justify-between
+          span
+            ' © #{Date.today.year}
+            a.text-gray-800.dark:text-gray-200.underline.hover:no-underline target="_blank" href="https://mr.si/" Miha Rekar
+            ' . Comments and suggestions are welcomed on
+            a.text-green-700.dark:text-green-500.underline.hover:no-underline target="_blank" href="https://github.com/miharekar/decent-visualizer/discussions" Visualizer Discussions
+            ' .
+          a.whitespace-nowrap.underline.hover:no-underline href="/privacy" Privacy Policy
