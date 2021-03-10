@@ -61,7 +61,7 @@ function getSettings() {
     classic: {
       "espresso_pressure": { title: "Pressure (bar)", borderColor: "rgba(5, 199, 147, 1)", backgroundColor: "rgba(5, 199, 147, 0.4)", borderDash: [], fill: false, hidden: false },
       "espresso_pressure_goal": { title: "Pressure Goal (bar)", borderColor: "rgba(3, 99, 74, 1)", backgroundColor: "rgba(3, 99, 74, 1)", borderDash: [5, 5], fill: false, hidden: false },
-      "espresso_water_dispensed": { title: "Water Dispensed (ml)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.4)", borderDash: [], fill: false, hidden: false },
+      "espresso_water_dispensed": { title: "Water Dispensed (ml)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.4)", borderDash: [], fill: false, hidden: true },
       "espresso_weight": { title: "Weight (g)", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 0.4)", borderDash: [], fill: false, hidden: true },
       "espresso_flow": { title: "Flow (ml/s)", borderColor: "rgba(31, 183, 234, 1)", backgroundColor: "rgba(31, 183, 234, 0.4)", borderDash: [], fill: true, hidden: false },
       "espresso_flow_weight": { title: "Weight (g/s)", borderColor: "rgba(143, 100, 0, 1)", backgroundColor: "rgba(143, 100, 0, 0.4)", borderDash: [], fill: true, hidden: false },

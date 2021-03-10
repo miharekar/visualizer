@@ -103,10 +103,13 @@ class Shot < ApplicationRecord
     data.map do |label, data|
       next if DATA_LABELS_TO_IGNORE.include?(label)
 
+      times10 = label == "espresso_water_dispensed"
       data = data.map.with_index do |v, i|
         t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
-
-        {t: t.to_f * 1000, y: (v.to_f.negative? ? nil : v)}
+        v = v.to_f
+        v *= 10 if times10
+        v = nil if v.negative?
+        {t: t.to_f * 1000, y: v}
       end
       {label: label, data: data}
     end.compact
