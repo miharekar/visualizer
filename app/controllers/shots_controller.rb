@@ -31,6 +31,14 @@ class ShotsController < ApplicationController
     # TODO: Rethink this ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @stages = @shot.stages
+
+    @highcharts_data = @main_data.map do |line|
+      {
+        name: line[:label],
+        data: line[:data].map { |d| [d[:t], d[:y]] },
+        visible: %w[espresso_water_dispensed espresso_weight].exclude?(line[:label])
+      }
+    end
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end
