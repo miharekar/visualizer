@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ghiculescu/devise.git
-  revision: c03cc426b998501bfe3bd7395d7ab29083af48b5
+  revision: 25124d5db77daf3ed1335d4d863e5651cba4c553
   branch: error-code-422
   specs:
     devise (4.7.3)
@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://github.com/heartcombo/responders.git
-  revision: 4506b7d580621b31aca5793307ad797fd60dd1fb
+  revision: 3611f8c95171eaa87122e2e1ada5a3e0695ddd06
   specs:
     responders (3.0.1)
       actionpack (>= 5.2)
@@ -156,12 +156,12 @@ GEM
     msgpack (1.4.2)
     netrc (0.11.0)
     nio4r (2.5.7)
-    nokogiri (1.11.1-x86_64-darwin)
+    nokogiri (1.11.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.11.1-x86_64-linux)
+    nokogiri (1.11.2-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (3.11.0)
+    pagy (3.12.0)
     parallel (1.20.1)
     parser (3.0.0.0)
       ast (~> 2.4.1)
