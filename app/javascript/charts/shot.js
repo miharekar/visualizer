@@ -1,42 +1,76 @@
-var Highcharts = require('highcharts');
-//require('highcharts/modules/boost')(Highcharts);
+import Highcharts from "highcharts"
 
-function drawChart() {
-  const chart = Highcharts.chart('container', {
-    chart: {
-      zoomType: 'x',
+const chartOptions = {
+  xAxis: {
+    type: "datetime",
+    dateTimeLabelFormats: {
+      day: "",
+      second: "%M:%S",
+    },
+    crosshair: true
+  },
+  yAxis: {
+    title: false
+  },
+  tooltip: {
+    xDateFormat: "%M:%S.%L",
+    shared: true
+  },
+  plotOptions: {
+    series: {
       animation: false,
-      height: 600
-    },
-    title: false,
-    xAxis: {
-      type: 'datetime'
-    },
-    yAxis: {
-      title: false
-    },
-    plotOptions: {
-      series: {
-        animation: false,
-        marker: {
-          enabled: false,
-          states: {
-            hover: {
-              enabled: false
-            }
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: false
           }
         }
       }
-    },
-    credits: {
-      enabled: false
-    },
-    series: window.highchartsData
-  });
+    }
+  },
+  credits: {
+    enabled: false
+  },
 }
 
-document.addEventListener("turbo:load", function (xhr) {
-  if (document.getElementById("container")) {
-    drawChart()
+function drawShotChart() {
+  const custom = {
+    chart: {
+      zoomType: "x",
+      height: 600,
+    },
+    title: {
+      text: "Shot Chart"
+    },
+    series: window.shotData
+  }
+  const options = { ...chartOptions, ...custom }
+
+  Highcharts.chart("shot-chart", options)
+}
+
+function drawTemperatureChart() {
+  const custom = {
+    chart: {
+      zoomType: "x",
+      height: 400,
+    },
+    title: {
+      text: "Temperature Chart"
+    },
+    series: window.temperatureData
+  }
+  const options = { ...chartOptions, ...custom }
+
+  Highcharts.chart("temperature-chart", options)
+}
+
+document.addEventListener("turbo:load", function () {
+  if (document.getElementById("shot-chart")) {
+    drawShotChart()
+  }
+  if (document.getElementById("temperature-chart")) {
+    drawTemperatureChart()
   }
 })

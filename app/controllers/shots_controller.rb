@@ -32,11 +32,18 @@ class ShotsController < ApplicationController
     @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
     @stages = @shot.stages
 
-    @highcharts_data = @main_data.map do |line|
+    @shot_data = @main_data.map do |line|
       {
         name: line[:label],
         data: line[:data].map { |d| [d[:t], d[:y]] },
         visible: %w[espresso_water_dispensed espresso_weight].exclude?(line[:label])
+      }
+    end
+
+    @temperature_data = @temperature_data.map do |line|
+      {
+        name: line[:label],
+        data: line[:data].map { |d| [d[:t], d[:y]] }
       }
     end
   rescue ActiveRecord::RecordNotFound

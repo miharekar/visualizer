@@ -139,10 +139,13 @@
             .font-medium.text-gray-900.dark:text-gray-100 Notes:
             = markdown_text_from(@shot.espresso_notes)
 
-.max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
-  #container
+.max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
+  #shot-chart
+.max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
+  #temperature-chart
 
 javascript:
   window.selectedSkin = "#{{current_user&.skin&.parameterize}}"
-  window.highchartsData = #{{@highcharts_data.to_json}}
+  window.shotData = #{{@shot_data.to_json}}
+  window.temperatureData = #{{@temperature_data.to_json}}
   window.shotStages = #{{@stages.to_json}}
