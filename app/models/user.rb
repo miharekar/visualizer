@@ -30,6 +30,7 @@ end
 #  admin                  :boolean
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  hide_shot_times        :boolean
 #  name                   :string
 #  public                 :boolean          default(FALSE)
 #  remember_created_at    :datetime
