@@ -1,5 +1,7 @@
 - include_person = false unless defined?(include_person)
-- full_crud = controller.is_a?(ShotsController) && current_user && shot.user == current_user
+- owner = current_user && shot.user == current_user
+- full_crud = controller.is_a?(ShotsController) && owner
+- show_timestamp = owner || !shot.user.hide_shot_times?
 - link_params = request.parameters.slice(:bean_type, :bean_brand) if full_crud
 - bean_weight = shot.bean_weight.to_f
 - drink_weight = shot.drink_weight.to_f
@@ -15,9 +17,10 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
             = shot.espresso_enjoyment
       .sm
         .text-sm.text-gray-900.dark:text-gray-100
-          = shot.start_time.in_time_zone(@timezone).to_s(:long)
-        .text-sm.text-gray-500.dark:text-gray-400
           = shot.profile_title
+        - if show_timestamp
+          .text-sm.text-gray-500.dark:text-gray-400
+            = shot.start_time.in_time_zone(@timezone).to_s(:long)
         - if include_person
           .flex.items-center
             img.h-4.w-4.rounded-full src=avatar_url(shot.user, 48)

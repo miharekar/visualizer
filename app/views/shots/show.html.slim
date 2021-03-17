@@ -1,5 +1,6 @@
-
-- full_crud = controller.is_a?(ShotsController) && current_user && @shot.user == current_user
+- owner = current_user && @shot.user.present? && @shot.user == current_user
+- full_crud = controller.is_a?(ShotsController) && owner
+- show_timestamp = owner || !@shot.user&.hide_shot_times?
 - link_params = request.parameters.slice(:bean_type, :bean_brand) if full_crud
 - bean_weight = @shot.bean_weight.to_f
 - drink_weight = @shot.drink_weight.to_f
@@ -19,7 +20,7 @@
   = render "shared/modal"
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8.flex.items-center.justify-between
     h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
-      - if @shot.user && current_user != @shot.user && @shot.user.public? && @shot.user.name.present?
+      - if !owner && @shot.user.public?
         .flex.items-center.flex-wrap
           img.h-10.w-10.rounded-full src=avatar_url(@shot.user, 80)
           span.ml-2.mt-1
@@ -29,9 +30,10 @@
             a href="https://github.com/sponsors/miharekar" title="Supporter" target="_blank"
               svg.ml-1.mt-1.h-9.w-9.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                 path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-          span.ml-2.mt-1
-            ' on
-            = @shot.start_time.in_time_zone(@timezone).to_s(:long)
+          - if show_timestamp
+            span.ml-2.mt-1
+              ' on
+              = @shot.start_time.in_time_zone(@timezone).to_s(:long)
       - else
         = @shot.start_time.in_time_zone(@timezone).to_s(:long)
     - if full_crud
