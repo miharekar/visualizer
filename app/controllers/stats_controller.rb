@@ -6,6 +6,8 @@ class StatsController < ApplicationController
   def index
     redirect_to :shots unless current_user.admin?
 
+    @shot_count = Shot.count
+    @user_count = User.count
     @shot_counts = Shot.order("created_at::date").group("created_at::date").count
     @shot_counts = {
       labels: @shot_counts.keys,
