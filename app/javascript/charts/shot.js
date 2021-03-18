@@ -18,7 +18,8 @@ const chartOptions = {
     xDateFormat: "%M:%S.%L",
     shared: true,
     borderRadius: 10,
-    shadow: false
+    shadow: false,
+    borderWidth: 0
   },
   plotOptions: {
     series: {
@@ -34,6 +35,9 @@ const chartOptions = {
       states: {
         hover: {
           enabled: false
+        },
+        inactive: {
+          enabled: false
         }
       }
     }
@@ -46,10 +50,9 @@ const chartOptions = {
 function drawShotChart() {
   const custom = {
     chart: {
-      type: "spline",
       zoomType: "x",
       height: 650,
-      styledMode: true
+      backgroundColor: window.dark ? "#000" : "#fff"
     },
     series: window.shotData
   }
@@ -61,10 +64,9 @@ function drawShotChart() {
 function drawTemperatureChart() {
   const custom = {
     chart: {
-      type: "spline",
       zoomType: "x",
       height: 400,
-      styledMode: true
+      backgroundColor: window.dark ? "#000" : "#fff"
     },
     series: window.temperatureData
   }

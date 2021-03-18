@@ -145,7 +145,7 @@
   #temperature-chart
 
 javascript:
-  window.selectedSkin = "#{{current_user&.skin&.parameterize}}"
+  window.dark = document.body.classList.contains("dark")
   window.shotData = #{{@chart.shot_data.to_json}}
   window.temperatureData = #{{@chart.temperature_data.to_json}}
   window.shotStages = #{{@chart.stages.to_json}}

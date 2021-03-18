@@ -29,7 +29,7 @@ class ShotsController < ApplicationController
   def show
     @shot = Shot.find(params[:id])
     # TODO: Rethink this ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
-    @chart = ShotChart.new(@shot)
+    @chart = ShotChart.new(@shot, current_user.skin)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end

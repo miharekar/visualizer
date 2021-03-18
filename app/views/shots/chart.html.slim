@@ -2,6 +2,6 @@
   canvas#main-chart width="100%"
 
 javascript:
-  window.selectedSkin = "#{{current_user&.skin&.parameterize}}"
-  window.mainData = #{{@main_data.to_json}}
+  window.shotData = #{{@chart.shot_data.to_json}}
+  window.shotStages = #{{@chart.stages.to_json}}
   window.hideLegend = true
