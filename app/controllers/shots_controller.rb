@@ -15,7 +15,7 @@ class ShotsController < ApplicationController
   def chart
     @no_header = true
     @shot = Shot.find(params[:shot_id])
-    # TODO: Use ShotChart
+    @chart = ShotChart.new(@shot)
   end
 
   def edit
@@ -29,7 +29,7 @@ class ShotsController < ApplicationController
   def show
     @shot = Shot.find(params[:id])
     # TODO: Rethink this ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
-    @chart = ShotChart.new(@shot, current_user.skin)
+    @chart = ShotChart.new(@shot, skin: current_user&.skin)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end

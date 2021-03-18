@@ -37,9 +37,9 @@ class ShotChart
 
   attr_reader :shot, :skin, :chart_data, :stages
 
-  def initialize(shot, skin)
+  def initialize(shot, skin: nil)
     @shot = shot
-    @skin = SKIN_SETTINGS[skin.presence.split.last || "Classic"]
+    @skin = SKIN_SETTINGS[skin.present? ? skin.split.last : "Classic"]
     @chart_data = chart_from_data + [resistance_chart]
     indices = shot.data.key?("espresso_state_change") ? stages_from_state_change(shot.data["espresso_state_change"]) : detect_stages_from_data(shot.data)
     @stages = chart_data.first[:data].values_at(*indices).map { |d| {value: d.first} }

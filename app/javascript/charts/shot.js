@@ -56,7 +56,17 @@ function drawShotChart() {
     },
     series: window.shotData
   }
-  const options = { ...chartOptions, ...custom }
+
+  let legendOptions = {}
+  if (window.hideLegend) {
+    legendOptions = {
+      legend: {
+        enabled: false
+      }
+    }
+  }
+
+  const options = { ...chartOptions, ...legendOptions, ...custom }
 
   Highcharts.chart("shot-chart", options)
 }
