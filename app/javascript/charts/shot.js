@@ -7,14 +7,18 @@ const chartOptions = {
       day: "",
       second: "%M:%S",
     },
-    crosshair: true
+    crosshair: true,
+    plotLines: window.shotStages
   },
+  title: false,
   yAxis: {
     title: false
   },
   tooltip: {
     xDateFormat: "%M:%S.%L",
-    shared: true
+    shared: true,
+    borderRadius: 10,
+    shadow: false
   },
   plotOptions: {
     series: {
@@ -25,6 +29,11 @@ const chartOptions = {
           hover: {
             enabled: false
           }
+        }
+      },
+      states: {
+        hover: {
+          enabled: false
         }
       }
     }
@@ -37,11 +46,10 @@ const chartOptions = {
 function drawShotChart() {
   const custom = {
     chart: {
+      type: "spline",
       zoomType: "x",
-      height: 600,
-    },
-    title: {
-      text: "Shot Chart"
+      height: 650,
+      styledMode: true
     },
     series: window.shotData
   }
@@ -53,11 +61,10 @@ function drawShotChart() {
 function drawTemperatureChart() {
   const custom = {
     chart: {
+      type: "spline",
       zoomType: "x",
       height: 400,
-    },
-    title: {
-      text: "Temperature Chart"
+      styledMode: true
     },
     series: window.temperatureData
   }

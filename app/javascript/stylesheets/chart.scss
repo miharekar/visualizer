@@ -1,0 +1,15 @@
+@import "highcharts/css/highcharts";
+
+.highcharts-tooltip-box {
+  fill: rgb(0, 0, 0);
+  fill-opacity: 0.7;
+  stroke-width: 0;
+}
+
+.highcharts-tooltip text {
+  fill: rgb(255, 255, 255);
+}
+
+.highcharts-series-inactive {
+  opacity: 1 !important;
+}

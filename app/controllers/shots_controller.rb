@@ -15,7 +15,7 @@ class ShotsController < ApplicationController
   def chart
     @no_header = true
     @shot = Shot.find(params[:shot_id])
-    _, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
+    # TODO: Use ShotChart
   end
 
   def edit
@@ -29,23 +29,7 @@ class ShotsController < ApplicationController
   def show
     @shot = Shot.find(params[:id])
     # TODO: Rethink this ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
-    @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
-    @stages = @shot.stages
-
-    @shot_data = @main_data.map do |line|
-      {
-        name: line[:label],
-        data: line[:data].map { |d| [d[:t], d[:y]] },
-        visible: %w[espresso_water_dispensed espresso_weight].exclude?(line[:label])
-      }
-    end
-
-    @temperature_data = @temperature_data.map do |line|
-      {
-        name: line[:label],
-        data: line[:data].map { |d| [d[:t], d[:y]] }
-      }
-    end
+    @chart = ShotChart.new(@shot)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end

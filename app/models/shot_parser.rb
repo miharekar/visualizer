@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ShotParser
+  EXTRA_DATA_CAPTURE = (Shot::EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight]).freeze
+
   attr_reader :start_time, :data, :extra, :timeframe, :profile_title, :sha
 
   def initialize(file)
@@ -56,7 +58,7 @@ class ShotParser
     end
   end
 
-  Shot::EXTRA_DATA_CAPTURE.each do |name|
+  EXTRA_DATA_CAPTURE.each do |name|
     define_method("extract_setting_#{name}") do |data|
       @extra[name] = handle_array_string(data).force_encoding("UTF-8")
     end
