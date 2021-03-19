@@ -1,9 +1,5 @@
 import Highcharts from "highcharts"
 
-function isObject(obj) {
-  return obj && typeof obj === 'object'
-}
-
 Highcharts.wrap(Highcharts.Chart.prototype, 'zoom', function (proceed) {
   proceed.apply(this, [].slice.call(arguments, 1))
 
@@ -17,32 +13,56 @@ Highcharts.wrap(Highcharts.Chart.prototype, 'zoom', function (proceed) {
   }
 })
 
+function isObject(obj) {
+  return obj && typeof obj === 'object'
+}
+
+function mostCommon(arr) {
+  return arr.sort((a, b) =>
+    arr.filter(v => v === a).length
+    - arr.filter(v => v === b).length
+  ).pop();
+}
+
 function handleMouse(e) {
-  const currentChart = this
+  const thisChart = this
+
   Highcharts.charts.forEach(function (chart) {
-    if (currentChart === chart.renderTo) return
+    if (thisChart === chart.renderTo) return
 
-    const event = chart.pointer.normalize(e)
-    let point
-    for (let j = 0; j < chart.series.length && !point; ++j) {
-      point = chart.series[j].searchPoint(event, true)
-    }
-    if (!point) return
+    e = chart.pointer.normalize(e)
+    let points = [];
+    chart.series.forEach(function (p) {
+      points.push(p.searchPoint(e, true))
+    })
+    if (!points.length) return
 
-    if (e.type === "mousemove") {
-      point.plotY = chart.chartHeight / 2
-      point.onMouseOver()
-      chart.xAxis[0].drawCrosshair(event, point)
-    } else {
-      point.onMouseOut()
-      chart.tooltip.hide(point)
-      chart.xAxis[0].hideCrosshair()
-    }
+    let visiblePoints = []
+    let xValues = []
+    points.forEach(function (p) {
+      if (p && p.series.visible) {
+        visiblePoints.push(p)
+        xValues.push(p.clientX)
+      }
+    })
+    if (!visiblePoints.length) return
+
+    const x = mostCommon(xValues)
+    let selectedPoints = []
+    visiblePoints.forEach(function (p) {
+      if (p.clientX === x) {
+        selectedPoints.push(p)
+      }
+    })
+    if (!selectedPoints.length) return
+
+    chart.tooltip.refresh(selectedPoints)
+    chart.xAxis[0].drawCrosshair(e, selectedPoints[0])
   })
 }
 
 function syncExtremes(e) {
-  var thisChart = this.chart
+  const thisChart = this.chart
 
   if (e.trigger !== "syncExtremes") {
     Highcharts.charts.forEach(function (chart) {
