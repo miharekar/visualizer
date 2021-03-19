@@ -8,16 +8,9 @@ class StatsController < ApplicationController
 
     @shot_count = Shot.count
     @user_count = User.count
-    @shot_counts = Shot.order("created_at::date").group("created_at::date").count
-    @shot_counts = {
-      labels: @shot_counts.keys,
-      datasets: [{
-        backgroundColor: "rgb(209, 250, 229)",
-        borderColor: "rgb(4, 120, 87)",
-        fill: false,
-        label: "Uploaded .shots",
-        data: @shot_counts.values
-      }]
-    }
+    @shot_chart = [{
+      name: "Shots per day",
+      data: Shot.order("created_at::date").group("created_at::date").count.map { |date, count| [date.to_time.to_i * 1000, count] }
+    }]
   end
 end
