@@ -59,9 +59,12 @@ function mouseLeave(e) {
     if (!isObject(chart)) return
 
     const hoverPoint = getHoverPoint(chart, e)
-    hoverPoint.onMouseOut()
-    chart.tooltip.hide(hoverPoint)
-    chart.xAxis[0].hideCrosshair()
+
+    if (hoverPoint) {
+      hoverPoint.onMouseOut()
+      chart.tooltip.hide(hoverPoint)
+      chart.xAxis[0].hideCrosshair()
+    }
   })
 }
 
