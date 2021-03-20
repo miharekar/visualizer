@@ -88,83 +88,88 @@ function syncExtremes(e) {
   }
 }
 
-let colors
-if (window.dark) {
-  colors = {
-    background: "#000000",
-    label: "#999999",
-    gridLine: "#191919",
-    line: "#332914",
-    legend: "#cccccc",
-    legendHover: "#ffffff",
-    legendHidden: "#333333"
+function getColors() {
+  if (window.dark) {
+    return {
+      background: "#000000",
+      label: "#999999",
+      gridLine: "#191919",
+      line: "#332914",
+      legend: "#cccccc",
+      legendHover: "#ffffff",
+      legendHidden: "#333333"
+    }
   }
-}
-else {
-  colors = {
-    background: "#ffffff",
-    label: "#666666",
-    gridLine: "#e6e6e6",
-    line: "#ccd6eb",
-    legend: "#333333",
-    legendHover: "#000000",
-    legendHidden: "#cccccc"
+  else {
+    return {
+      background: "#ffffff",
+      label: "#666666",
+      gridLine: "#e6e6e6",
+      line: "#ccd6eb",
+      legend: "#333333",
+      legendHover: "#000000",
+      legendHidden: "#cccccc"
+    }
   }
 }
 
-const chartOptions = {
-  title: false,
-  xAxis: {
-    type: "datetime",
-    dateTimeLabelFormats: { day: "", second: "%M:%S" },
-    events: { setExtremes: syncExtremes },
-    crosshair: true,
-    plotLines: window.shotStages,
-    labels: { style: { color: colors.label } },
-    gridLineColor: colors.gridLine,
-    lineColor: colors.line,
-    tickColor: colors.line,
-  },
-  yAxis: {
+function commonOptions() {
+  const colors = getColors()
+  return {
     title: false,
-    labels: { style: { color: colors.label } },
-    gridLineColor: colors.gridLine,
-    lineColor: colors.line,
-    tickColor: colors.line,
-  },
-  tooltip: {
-    xDateFormat: "%M:%S.%L",
-    shared: true,
-    borderRadius: 10,
-    shadow: false,
-    borderWidth: 0
-  },
-  legend: {
-    itemStyle: { color: colors.legend },
-    itemHoverStyle: { color: colors.legendHover },
-    itemHiddenStyle: { color: colors.legendHidden }
-  },
-  plotOptions: {
-    series: {
-      animation: false,
-      marker: {
-        enabled: false,
+    xAxis: {
+      type: "datetime",
+      dateTimeLabelFormats: { day: "", second: "%M:%S" },
+      events: { setExtremes: syncExtremes },
+      crosshair: true,
+      labels: { style: { color: colors.label } },
+      gridLineColor: colors.gridLine,
+      lineColor: colors.line,
+      tickColor: colors.line,
+    },
+    yAxis: {
+      title: false,
+      labels: { style: { color: colors.label } },
+      gridLineColor: colors.gridLine,
+      lineColor: colors.line,
+      tickColor: colors.line,
+    },
+    tooltip: {
+      xDateFormat: "%M:%S.%L",
+      shared: true,
+      borderRadius: 10,
+      shadow: false,
+      borderWidth: 0
+    },
+    legend: {
+      itemStyle: { color: colors.legend },
+      itemHoverStyle: { color: colors.legendHover },
+      itemHiddenStyle: { color: colors.legendHidden }
+    },
+    plotOptions: {
+      series: {
+        animation: false,
+        marker: {
+          enabled: false,
+          states: {
+            hover: { enabled: false }
+          }
+        },
         states: {
-          hover: { enabled: false }
+          hover: { enabled: false },
+          inactive: { enabled: false }
         }
-      },
-      states: {
-        hover: { enabled: false },
-        inactive: { enabled: false }
       }
+    },
+    credits: {
+      enabled: false
     }
-  },
-  credits: {
-    enabled: false
   }
 }
 
 function drawShotChart() {
+  const colors = getColors()
+
   const custom = {
     chart: {
       zoomType: "x",
@@ -183,12 +188,15 @@ function drawShotChart() {
     }
   }
 
-  const options = { ...chartOptions, ...legendOptions, ...custom }
+  let options = { ...commonOptions(), ...legendOptions, ...custom }
+  options.xAxis.plotLines = window.shotStages
 
   Highcharts.chart("shot-chart", options)
 }
 
 function drawTemperatureChart() {
+  const colors = getColors()
+
   const custom = {
     chart: {
       zoomType: "x",
@@ -197,7 +205,9 @@ function drawTemperatureChart() {
     },
     series: window.temperatureData
   }
-  const options = { ...chartOptions, ...custom }
+
+  let options = { ...commonOptions(), ...custom }
+  options.xAxis.plotLines = window.shotStages
 
   Highcharts.chart("temperature-chart", options)
 }
