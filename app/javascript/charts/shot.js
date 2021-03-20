@@ -1,11 +1,11 @@
 import Highcharts from "highcharts"
 
-Highcharts.wrap(Highcharts.Chart.prototype, 'zoom', function (proceed) {
+Highcharts.wrap(Highcharts.Chart.prototype, "zoom", function (proceed) {
   proceed.apply(this, [].slice.call(arguments, 1))
 
   if (!isObject(this.resetZoomButton)) {
     Highcharts.charts.forEach(function (chart) {
-      if (isObject(chart.resetZoomButton)) {
+      if (isObject(chart) && isObject(chart.resetZoomButton)) {
         chart.resetZoomButton.destroy()
         chart.resetZoomButton = undefined
       }
@@ -14,24 +14,29 @@ Highcharts.wrap(Highcharts.Chart.prototype, 'zoom', function (proceed) {
 })
 
 function isObject(obj) {
-  return obj && typeof obj === 'object'
+  return obj && typeof obj === "object"
 }
 
 function mostCommon(arr) {
   return arr.sort((a, b) =>
     arr.filter(v => v === a).length
     - arr.filter(v => v === b).length
-  ).pop();
+  ).pop()
 }
 
-function handleMouse(e) {
+function syncMouseEvents(element) {
+  element.addEventListener("mousemove", syncMouse)
+  element.addEventListener("mouseleave", syncMouse)
+}
+
+function syncMouse(e) {
   const thisChart = this
 
   Highcharts.charts.forEach(function (chart) {
-    if (thisChart === chart.renderTo) return
+    if (!isObject(chart) || thisChart === chart.renderTo) return
 
     e = chart.pointer.normalize(e)
-    let points = [];
+    let points = []
     chart.series.forEach(function (p) {
       points.push(p.searchPoint(e, true))
     })
@@ -66,7 +71,7 @@ function syncExtremes(e) {
 
   if (e.trigger !== "syncExtremes") {
     Highcharts.charts.forEach(function (chart) {
-      if (chart === thisChart) return
+      if (!isObject(chart) || chart === thisChart) return
 
       if (chart.xAxis[0].setExtremes) {
         chart.xAxis[0].setExtremes(e.min, e.max, undefined, false, { trigger: "syncExtremes" })
@@ -79,22 +84,49 @@ function syncExtremes(e) {
   }
 }
 
+let colors
+if (window.dark) {
+  colors = {
+    background: "#000000",
+    label: "#999999",
+    gridLine: "#191919",
+    line: "#332914",
+    legend: "#cccccc",
+    legendHover: "#ffffff",
+    legendHidden: "#333333"
+  }
+}
+else {
+  colors = {
+    background: "#ffffff",
+    label: "#666666",
+    gridLine: "#e6e6e6",
+    line: "#ccd6eb",
+    legend: "#333333",
+    legendHover: "#000000",
+    legendHidden: "#cccccc"
+  }
+}
+
 const chartOptions = {
+  title: false,
   xAxis: {
     type: "datetime",
-    dateTimeLabelFormats: {
-      day: "",
-      second: "%M:%S",
-    },
-    events: {
-      setExtremes: syncExtremes
-    },
+    dateTimeLabelFormats: { day: "", second: "%M:%S" },
+    events: { setExtremes: syncExtremes },
     crosshair: true,
-    plotLines: window.shotStages
+    plotLines: window.shotStages,
+    labels: { style: { color: colors.label } },
+    gridLineColor: colors.gridLine,
+    lineColor: colors.line,
+    tickColor: colors.line,
   },
-  title: false,
   yAxis: {
-    title: false
+    title: false,
+    labels: { style: { color: colors.label } },
+    gridLineColor: colors.gridLine,
+    lineColor: colors.line,
+    tickColor: colors.line,
   },
   tooltip: {
     xDateFormat: "%M:%S.%L",
@@ -103,30 +135,29 @@ const chartOptions = {
     shadow: false,
     borderWidth: 0
   },
+  legend: {
+    itemStyle: { color: colors.legend },
+    itemHoverStyle: { color: colors.legendHover },
+    itemHiddenStyle: { color: colors.legendHidden }
+  },
   plotOptions: {
     series: {
       animation: false,
       marker: {
         enabled: false,
         states: {
-          hover: {
-            enabled: false
-          }
+          hover: { enabled: false }
         }
       },
       states: {
-        hover: {
-          enabled: false
-        },
-        inactive: {
-          enabled: false
-        }
+        hover: { enabled: false },
+        inactive: { enabled: false }
       }
     }
   },
   credits: {
     enabled: false
-  },
+  }
 }
 
 function drawShotChart() {
@@ -134,7 +165,7 @@ function drawShotChart() {
     chart: {
       zoomType: "x",
       height: 650,
-      backgroundColor: window.dark ? "#000" : "#fff"
+      backgroundColor: colors.background
     },
     series: window.shotData
   }
@@ -158,7 +189,7 @@ function drawTemperatureChart() {
     chart: {
       zoomType: "x",
       height: 400,
-      backgroundColor: window.dark ? "#000" : "#fff"
+      backgroundColor: colors.background
     },
     series: window.temperatureData
   }
@@ -168,16 +199,18 @@ function drawTemperatureChart() {
 }
 
 document.addEventListener("turbo:load", function () {
+  Highcharts.charts.forEach(function (chart) {
+    if (isObject(chart)) { chart.destroy() }
+  })
+
   const shotChart = document.getElementById("shot-chart")
   const temperatureChart = document.getElementById("temperature-chart")
   if (shotChart) {
     drawShotChart()
-    shotChart.addEventListener("mousemove", handleMouse)
-    shotChart.addEventListener("mouseleave", handleMouse)
+    syncMouseEvents(shotChart)
   }
   if (temperatureChart) {
     drawTemperatureChart()
-    temperatureChart.addEventListener("mousemove", handleMouse)
-    temperatureChart.addEventListener("mouseleave", handleMouse)
+    syncMouseEvents(temperatureChart)
   }
 })
