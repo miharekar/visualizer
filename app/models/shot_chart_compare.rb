@@ -20,7 +20,10 @@ class ShotChartCompare < ShotChart
   def setting_for(label)
     return super unless label.end_with?(SUFFIX)
 
-    setting = skin[label.sub(SUFFIX, "")]
+    og_label = label.sub(SUFFIX, "")
+    return unless skin.key?(og_label)
+
+    setting = skin[og_label]
     setting.merge(title: [setting[:title], " Comparison"].join)
   end
 
