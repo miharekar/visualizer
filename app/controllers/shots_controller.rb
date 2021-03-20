@@ -98,7 +98,7 @@ class ShotsController < ApplicationController
   end
 
   def load_shots_with_pagy
-    @shots = current_user.shots.order(start_time: :desc)
+    @shots = current_user.shots.by_start_time
     FILTER_PARAMS.each do |filter|
       next if params[filter].blank?
 

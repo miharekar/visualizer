@@ -17,7 +17,7 @@ class PeopleController < ApplicationController
     end
 
     if @user.public
-      @shots = @user.shots.order(start_time: :desc)
+      @shots = @user.shots.by_start_time
       @pagy, @shots = pagy(@shots)
     else
       redirect_to :root

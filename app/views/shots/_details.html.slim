@@ -1,4 +1,4 @@
-- owner = current_user && shot.user && shot.user == current_user
+- owner = current_user && shot.user == current_user
 - show_start_time = start_time && (owner || !shot.user&.hide_shot_times?)
 - link_params = request.parameters.slice(:bean_type, :bean_brand) if link_params
 - bean_weight = shot.bean_weight.to_f
@@ -46,7 +46,7 @@
         - if bean_weight > 0
           = shot.bean_weight
           | g
-        - if  bean_weight > 0 && drink_weight > 0
+        - if bean_weight > 0 && drink_weight > 0
           | :
         - if drink_weight > 0
           = shot.drink_weight

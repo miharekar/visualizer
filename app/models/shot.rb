@@ -8,7 +8,8 @@ class Shot < ApplicationRecord
 
   belongs_to :user, optional: true
 
-  scope :visible, -> { joins(:user).where(users: {public: true}) }
+  scope :visible, -> { includes(:user).where(users: {public: true}) }
+  scope :by_start_time, -> { order(start_time: :desc) }
 
   # TODO: Rethink this after_create :ensure_screenshot
 
