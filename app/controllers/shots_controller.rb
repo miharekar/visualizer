@@ -30,6 +30,9 @@ class ShotsController < ApplicationController
     @shot = Shot.find(params[:id])
     # TODO: Rethink this @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, skin: current_user&.skin)
+    return if current_user.nil? || @shot.user != current_user
+
+    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end

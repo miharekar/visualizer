@@ -1,4 +1,4 @@
-- owner = current_user && @shot.user.present? && @shot.user == current_user
+- owner = current_user && @shot.user == current_user
 - show_timestamp = owner || !@shot.user&.hide_shot_times?
 
 - content_for :meta_tags
@@ -8,7 +8,7 @@
   meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
   meta content="summary_large_image" name="twitter:card"
 
-.bg-white.dark:bg-gray-900.shadow  data-controller="modal"
+.bg-white.dark:bg-gray-900.shadow data-controller="modal"
   = render "shared/modal"
   - if owner || @shot.user&.public?
     .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8.flex.items-center.justify-between
@@ -56,7 +56,16 @@
 
 .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
   = render "details", shot: @shot, link_params: owner, start_time: false
-
+  - if owner
+    .flex
+      .flex-1
+        .mt-3 data-controller="comparison"
+          select.w-full.border.border-gray-300.bg-white.dark:bg-gray-800.rounded-md.shadow-sm.focus:outline-none.focus:ring-green-500.focus:border-green-500 data-action="change->comparison#compare" data-shot-id="#{@shot.id}"
+            option Compare with another shot
+            - @compare_shots.each do |id, title, time|
+              option value=id
+                = [title, time.in_time_zone(@timezone).to_s(:long)].join(" @ ")
+      .md:flex-1
 .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
   #shot-chart
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
