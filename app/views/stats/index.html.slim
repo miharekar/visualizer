@@ -5,6 +5,7 @@
 
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
   p.mt-3.text-base.text-gray-500.sm:mt-5.sm:text-lg.sm:max-w-xl.sm:mx-auto.md:mt-5.md:text-xl.lg:mx-0
+  ' Visualizer has
   strong
     ' #{@user_count}
   ' users who've uploaded
@@ -13,7 +14,9 @@
   ' shots
 
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
-  #shot-counts-chart
+  #shot-uploaded-chart
+  #shot-brewed-chart
 
 javascript:
-  window.shotChartData = #{{@shot_chart.to_json}}
+  window.uploadedChartData = #{{@uploaded_chart.to_json}}
+  window.brewedChartData = #{{@brewed_chart.to_json}}
