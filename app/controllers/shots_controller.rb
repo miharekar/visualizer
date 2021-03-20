@@ -14,7 +14,7 @@ class ShotsController < ApplicationController
 
   def chart
     @no_header = true
-    @shot = Shot.find(params[:shot_id])
+    @shot = Shot.find(params[:id])
     @chart = ShotChart.new(@shot)
   end
 
@@ -28,10 +28,16 @@ class ShotsController < ApplicationController
 
   def show
     @shot = Shot.find(params[:id])
-    # TODO: Rethink this ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
+    # TODO: Rethink this @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, skin: current_user&.skin)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
+  end
+
+  def compare
+    @shot = Shot.find(params[:id])
+    @comparison = Shot.find(params[:comparison])
+    @chart = ShotChartCompare.new(@shot, @comparison, skin: current_user&.skin)
   end
 
   def create

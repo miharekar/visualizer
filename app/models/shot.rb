@@ -10,7 +10,7 @@ class Shot < ApplicationRecord
 
   scope :visible, -> { joins(:user).where(users: {public: true}) }
 
-  # TODO: Rethink this after_create :schedule_screenshot
+  # TODO: Rethink this after_create :ensure_screenshot
 
   after_destroy_commit -> { broadcast_remove_to user }
 
@@ -44,9 +44,9 @@ class Shot < ApplicationRecord
     timeframe[index - 1].to_f
   end
 
-  private
+  def ensure_screenshot
+    return if cloudinary_id.present?
 
-  def schedule_screenshot
     # TODO: Rethink this ScreenshotTakerJob.perform_later(self)
   end
 end

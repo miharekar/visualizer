@@ -19,6 +19,7 @@
   },
   "version": "0.2.0",
   "devDependencies": {
+    "speedscope": "^1.13.0",
     "webpack": "^4.0.0",
     "webpack-dev-server": "^3.11.0"
   },

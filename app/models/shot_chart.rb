@@ -13,8 +13,8 @@ class ShotChart
       "espresso_water_dispensed" => {title: "Water Dispensed", color: "rgb(31, 183, 234)", suffix: " ml", hidden: true, type: "spline"},
       "espresso_weight" => {title: "Weight", color: "rgb(143, 100, 0)", suffix: " g", hidden: true, type: "spline"},
       "espresso_flow" => {title: "Flow", color: "rgb(31, 183, 234)", suffix: " ml/s", type: "spline"},
-      "espresso_flow_weight" => {title: "Weight", color: "rgb(143, 100, 0)", suffix: " g/s", type: "spline"},
-      "espresso_flow_weight_raw" => {title: "Weight Raw", color: "rgb(143, 100, 0)", suffix: " g/s", hidden: true, type: "spline"},
+      "espresso_flow_weight" => {title: "Weight Flow", color: "rgb(143, 100, 0)", suffix: " g/s", type: "spline"},
+      "espresso_flow_weight_raw" => {title: "Weight Flow Raw", color: "rgb(143, 100, 0)", suffix: " g/s", hidden: true, type: "spline"},
       "espresso_flow_goal" => {title: "Flow Goal", color: "rgb(9, 72, 93)", suffix: " ml/s", dashed: true, type: "spline"},
       "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ", type: "spline"},
       "espresso_temperature_basket" => {title: "Temperature Basket", color: "rgb(231, 50, 73)", suffix: " °C", type: "spline"},
@@ -24,7 +24,7 @@ class ShotChart
     "DSx" => {
       "espresso_pressure" => {title: "Pressure", color: "#18c37e", suffix: " bar"},
       "espresso_pressure_goal" => {title: "Pressure Goal", color: "#69fdb3", suffix: " bar", dashed: true},
-      "espresso_weight" => {title: "Weight", color: "#a2693d", suffix: " g", hidden: true},
+      "espresso_weight" => {title: "Weight Flow", color: "#a2693d", suffix: " g", hidden: true},
       "espresso_flow" => {title: "Flow", color: "#4e85f4", suffix: " ml/s"},
       "espresso_flow_weight" => {title: "Weight", color: "#a2693d", suffix: " g/s"},
       "espresso_flow_goal" => {title: "Flow Goal", color: "#7aaaff", suffix: " ml/s", dashed: true},
@@ -35,30 +35,38 @@ class ShotChart
     }
   }.freeze
 
-  attr_reader :shot, :skin, :chart_data, :stages
+  attr_reader :shot, :skin, :processed_shot_data
 
   def initialize(shot, skin: nil)
     @shot = shot
     @skin = SKIN_SETTINGS[skin.present? ? skin.split.last : "Classic"]
-    @chart_data = chart_from_data + [resistance_chart]
-    indices = shot.data.key?("espresso_state_change") ? stages_from_state_change(shot.data["espresso_state_change"]) : detect_stages_from_data(shot.data)
-    @stages = chart_data.first[:data].values_at(*indices).map { |d| {value: d.first} }
-    @temperature_data, @main_data = chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
+    prepare_chart_data
+    @temperature_data, @main_data = processed_shot_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
   end
 
-  def shot_data
+  def shot_chart
     for_highcharts(@main_data)
   end
 
-  def temperature_data
+  def temperature_chart
     for_highcharts(@temperature_data)
+  end
+
+  memoize def stages
+    indices = shot.data.key?("espresso_state_change") ? stages_from_state_change(shot.data["espresso_state_change"]) : detect_stages_from_data(shot.data)
+    processed_shot_data.first[:data].values_at(*indices).map { |d| {value: d.first} }
   end
 
   private
 
+  def prepare_chart_data
+    @processed_shot_data = process_data(shot)
+    @processed_shot_data = (processed_shot_data + [resistance_chart])
+  end
+
   def for_highcharts(data)
     data.map do |line|
-      setting = skin[line[:label]]
+      setting = setting_for(line[:label])
       next if setting.blank?
 
       {
@@ -76,29 +84,13 @@ class ShotChart
     end.compact
   end
 
-  memoize def chart_from_data
-    timeframe = shot.timeframe
-    timeframe_count = timeframe.count
-    timeframe_last = timeframe.last.to_f
-    timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
-    shot.data.map do |label, data|
-      next if DATA_LABELS_TO_IGNORE.include?(label)
-
-      times10 = label == "espresso_water_dispensed"
-      data = data.map.with_index do |v, i|
-        t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
-        v = v.to_f
-        v *= 10 if times10
-        v = nil if v.negative?
-        [t.to_f * 1000, v]
-      end
-      {label: label, data: data}
-    end.compact
+  def setting_for(label)
+    skin[label]
   end
 
   def resistance_chart
-    pressure_data = chart_from_data.find { |d| d[:label] == "espresso_pressure" }[:data]
-    flow_data = chart_from_data.find { |d| d[:label] == "espresso_flow" }[:data]
+    pressure_data = processed_shot_data.find { |d| d[:label] == "espresso_pressure" }[:data]
+    flow_data = processed_shot_data.find { |d| d[:label] == "espresso_flow" }[:data]
     data = pressure_data.map.with_index do |(t, v), i|
       f = flow_data[i].second.to_f
       if f.zero?
@@ -123,6 +115,26 @@ class ShotChart
       current = s
     end
     indices
+  end
+
+  def process_data(shot, label_suffix: nil)
+    timeframe = shot.timeframe
+    timeframe_count = timeframe.count
+    timeframe_last = timeframe.last.to_f
+    timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
+    shot.data.map do |label, data|
+      next if DATA_LABELS_TO_IGNORE.include?(label)
+
+      times10 = label == "espresso_water_dispensed"
+      data = data.map.with_index do |v, i|
+        t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
+        v = v.to_f
+        v *= 10 if times10
+        v = nil if v.negative?
+        [t.to_f * 1000, v]
+      end
+      {label: [label, label_suffix].join, data: data}
+    end.compact
   end
 
   def detect_stages_from_data(data)

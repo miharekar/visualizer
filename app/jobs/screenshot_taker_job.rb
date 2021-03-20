@@ -8,10 +8,8 @@ class ScreenshotTakerJob < ApplicationJob
   end
 
   def perform(shot, force: false)
-    return if Rails.env.development?
-
-    shot.cloudinary_id = false if force
-    return if shot.cloudinary_id.present?
+    shot.cloudinary_id = nil if force
+    return if shot.cloudinary_id.present? || Rails.env.development?
 
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument("--headless")
