@@ -37,6 +37,8 @@ function syncMouse(e) {
     let hoverPoints = []
     if (hoverPoint) {
       chart.series.forEach(function (s) {
+        if (!s.visible) return
+
         const point = Highcharts.find(s.points, function (p) {
           return p.x === hoverPoint.x && !p.isNull
         })
