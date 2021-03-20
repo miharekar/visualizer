@@ -14,7 +14,7 @@ class Shot < ApplicationRecord
 
   scope :visible, -> { joins(:user).where(users: {public: true}) }
 
-  after_create :schedule_screenshot
+  # TODO: Rethink this after_create :schedule_screenshot
 
   after_destroy_commit -> { broadcast_remove_to user }
 
@@ -93,7 +93,7 @@ class Shot < ApplicationRecord
   private
 
   def schedule_screenshot
-    ScreenshotTakerJob.perform_later(self)
+    # TODO: Rethink this ScreenshotTakerJob.perform_later(self)
   end
 
   memoize def chart_from_data
