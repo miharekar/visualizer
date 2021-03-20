@@ -1,0 +1,88 @@
+- owner = current_user && shot.user && shot.user == current_user
+- show_start_time = start_time && (owner || !shot.user&.hide_shot_times?)
+- link_params = request.parameters.slice(:bean_type, :bean_brand) if link_params
+- bean_weight = shot.bean_weight.to_f
+- drink_weight = shot.drink_weight.to_f
+- ratio = drink_weight / bean_weight
+- tds = shot.drink_tds.to_f
+- ey = shot.drink_ey.to_f
+- enjoyment = shot.espresso_enjoyment.to_i
+
+.flex
+  .flex-shrink-0
+    - if enjoyment > 0
+      - hue = (124.0 / 100 * enjoyment).round
+      .flex.items-center.justify-center.h-12.w-12.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
+        .text-white.py-1.text-center
+          = shot.espresso_enjoyment
+  div class=("ml-4" if enjoyment > 0)
+    .text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-100
+      = shot.profile_title
+    .mt-2.text-base.text-gray-600.dark:text-gray-400
+      - if show_start_time
+        div
+          = shot.start_time.in_time_zone(@timezone).to_s(:long)
+      div
+        - if shot.bean_brand.present?
+          - if link_params
+            = link_to shot.bean_brand, shots_path(link_params.merge(bean_brand: shot.bean_brand)), class: "underline hover:text-gray-400 dark:hover:text-gray-500"
+          - else
+            = shot.bean_brand
+          '
+        - if shot.bean_type.present?
+          - if link_params
+            = link_to shot.bean_type, shots_path(link_params.merge(bean_type: shot.bean_type)), class: "underline hover:text-gray-400 dark:hover:text-gray-500"
+          - else
+            = shot.bean_type
+          '
+        - if shot.roast_level.present?
+          | (
+          = shot.roast_level
+          ' )
+        - if shot.roast_date.present?
+          ' on
+          = shot.roast_date
+      div
+        - if bean_weight > 0
+          = shot.bean_weight
+          | g
+        - if  bean_weight > 0 && drink_weight > 0
+          | :
+        - if drink_weight > 0
+          = shot.drink_weight
+          | g
+          '
+        - if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite?
+          | (1:
+          = ratio.round(1)
+          |)
+        - if bean_weight > 0 || drink_weight > 0
+          '  in
+        = shot.duration.round(1)
+        | s
+      div
+        - if shot.grinder_model.present?
+          = shot.grinder_model
+          '
+        - if shot.grinder_setting.present?
+          ' @
+          = shot.grinder_setting
+      div
+        - if tds > 0
+          ' TDS
+          = tds
+          ' %
+        - if tds > 0 && ey > 0
+          '
+        - if ey > 0
+          ' EY
+          = ey
+          ' %
+      - if shot.bean_notes.present?
+        .mt-2
+          .font-medium.text-gray-900.dark:text-gray-100 Bean notes:
+          = markdown_text_from(shot.bean_notes)
+      - if shot.espresso_notes.present?
+        .mt-2
+          .font-medium.text-gray-900.dark:text-gray-100 Notes:
+          = markdown_text_from(shot.espresso_notes)
