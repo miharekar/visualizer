@@ -17,16 +17,14 @@ function isObject(obj) {
   return obj && typeof obj === "object"
 }
 
-function mostCommon(arr) {
-  return arr.sort((a, b) =>
-    arr.filter(v => v === a).length
-    - arr.filter(v => v === b).length
-  ).pop()
-}
-
 function syncMouseEvents(element) {
   element.addEventListener("mousemove", syncMouse)
-  element.addEventListener("mouseleave", syncMouse)
+  element.addEventListener("mouseleave", mouseLeave)
+}
+
+function getHoverPoint(chart, e) {
+  e = chart.pointer.normalize(e)
+  return chart.pointer.findNearestKDPoint(chart.series, true, e)
 }
 
 function syncMouse(e) {
@@ -35,34 +33,35 @@ function syncMouse(e) {
   Highcharts.charts.forEach(function (chart) {
     if (!isObject(chart) || thisChart === chart.renderTo) return
 
-    e = chart.pointer.normalize(e)
-    let points = []
-    chart.series.forEach(function (p) {
-      points.push(p.searchPoint(e, true))
-    })
-    if (!points.length) return
+    const hoverPoint = getHoverPoint(chart, e)
+    let hoverPoints = []
+    if (hoverPoint) {
+      chart.series.forEach(function (s) {
+        const point = Highcharts.find(s.points, function (p) {
+          return p.x === hoverPoint.x && !p.isNull
+        })
 
-    let visiblePoints = []
-    let xValues = []
-    points.forEach(function (p) {
-      if (p && p.series.visible) {
-        visiblePoints.push(p)
-        xValues.push(p.clientX)
-      }
-    })
-    if (!visiblePoints.length) return
+        if (isObject(point)) {
+          hoverPoints.push(point)
+        }
+      })
+    }
 
-    const x = mostCommon(xValues)
-    let selectedPoints = []
-    visiblePoints.forEach(function (p) {
-      if (p.clientX === x) {
-        selectedPoints.push(p)
-      }
-    })
-    if (!selectedPoints.length) return
+    if (hoverPoints.length) {
+      chart.tooltip.refresh(hoverPoints)
+      chart.xAxis[0].drawCrosshair(e, hoverPoints[0])
+    }
+  })
+}
 
-    chart.tooltip.refresh(selectedPoints)
-    chart.xAxis[0].drawCrosshair(e, selectedPoints[0])
+function mouseLeave(e) {
+  Highcharts.charts.forEach(function (chart) {
+    if (!isObject(chart)) return
+
+    const hoverPoint = getHoverPoint(chart, e)
+    hoverPoint.onMouseOut()
+    chart.tooltip.hide(hoverPoint)
+    chart.xAxis[0].hideCrosshair()
   })
 }
 
