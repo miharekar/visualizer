@@ -23,7 +23,10 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :shots, except: [:new] do
-    get :chart
+    member do
+      get :chart
+      get "/compare/:comparison", to: "shots#compare"
+    end
   end
 
   resources :search, only: [:index]

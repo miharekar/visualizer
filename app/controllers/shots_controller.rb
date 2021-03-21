@@ -14,8 +14,8 @@ class ShotsController < ApplicationController
 
   def chart
     @no_header = true
-    @shot = Shot.find(params[:shot_id])
-    _, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
+    @shot = Shot.find(params[:id])
+    @chart = ShotChart.new(@shot)
   end
 
   def edit
@@ -28,11 +28,19 @@ class ShotsController < ApplicationController
 
   def show
     @shot = Shot.find(params[:id])
-    # TODO: Rethink this ScreenshotTakerJob.perform_later(@shot) if @shot.cloudinary_id.blank?
-    @temperature_data, @main_data = @shot.chart_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
-    @stages = @shot.stages
+    # TODO: Rethink this @shot.ensure_screenshot
+    @chart = ShotChart.new(@shot, skin: current_user&.skin)
+    return if current_user.nil? || @shot.user != current_user
+
+    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
+  end
+
+  def compare
+    @shot = Shot.find(params[:id])
+    @comparison = Shot.find(params[:comparison])
+    @chart = ShotChartCompare.new(@shot, @comparison, skin: current_user&.skin)
   end
 
   def create
@@ -90,7 +98,7 @@ class ShotsController < ApplicationController
   end
 
   def load_shots_with_pagy
-    @shots = current_user.shots.order(start_time: :desc)
+    @shots = current_user.shots.by_start_time
     FILTER_PARAMS.each do |filter|
       next if params[filter].blank?
 

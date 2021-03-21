@@ -13,8 +13,7 @@ class SearchController < ApplicationController
       instance_variable_set("@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
     end
 
-    @shots = @shots.includes(:user).order(start_time: :desc)
-
+    @shots = @shots.includes(:user).by_start_time
     @shots = @shots.where("bean_brand ILIKE ?", "%#{params[:bean_brand]}%") if params[:bean_brand].present?
     @shots = @shots.where("bean_type ILIKE ?", "%#{params[:bean_type]}%") if params[:bean_type].present?
 

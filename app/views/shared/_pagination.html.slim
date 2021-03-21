@@ -29,14 +29,14 @@
             /! Heroicon name: chevron-left
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"
-        - pagy.series.each do |item|        # series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]
-          - if item.is_a?(Integer)          # page link
+        - pagy.series.each do |item|
+          - if item.is_a?(Integer)
             a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(item, pagy, url)
               = item
-          - elsif item.is_a?(String)        # current page
+          - elsif item.is_a?(String)
             span.opacity-25.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700
               = item
-          - elsif item == :gap              # page gap
+          - elsif item == :gap
             span.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700
               ' …
         - if pagy.next

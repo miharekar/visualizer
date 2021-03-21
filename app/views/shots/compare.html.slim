@@ -1,0 +1,17 @@
+.max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
+  .flex.flex-col.md:flex-row
+    .flex-1
+      = render "details", shot: @shot, link_params: false, start_time: true
+    .flex-1.mt-6.md:ml-3.md:mt-0
+      = render "details", shot: @comparison, link_params: false, start_time: true
+
+.max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
+  #shot-chart
+.max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
+  #temperature-chart
+
+javascript:
+  window.dark = document.body.classList.contains("dark")
+  window.shotData = #{{@chart.shot_chart.to_json}}
+  window.temperatureData = #{{@chart.temperature_chart.to_json}}
+  window.shotStages = []
