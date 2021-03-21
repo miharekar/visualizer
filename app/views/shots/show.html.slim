@@ -71,6 +71,25 @@
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
   #temperature-chart
 
+.social.max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
+  h3.text-lg.font-medium
+    | Share this shot
+  ul.list-none
+    li.inline-block.pr-4: a [
+      href="https://twitter.com/intent/tweet?url=https://visualizer.coffee/shots/#{@shot.id}&text=Check%20out%20this%20espresso%20profile!&hashtags=visualizecoffee,decentespresso"
+      title="Share this shot on Twitter"
+      target="_blank"
+      rel="noopener noreferrer"
+    ]
+      | Twitter
+    li.inline-block.pr-4: a [
+      href="https://www.facebook.com/sharer/sharer.php?u=https://visualizer.coffee/shots/#{@shot.id}"
+      title="Share this shot on Facebook"
+      target="_blank"
+      rel="noopener noreferrer"
+    ]
+      | Facebook
+
 javascript:
   window.dark = document.body.classList.contains("dark")
   window.shotData = #{{@chart.shot_chart.to_json}}
