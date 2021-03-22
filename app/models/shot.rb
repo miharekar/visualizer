@@ -11,7 +11,7 @@ class Shot < ApplicationRecord
   scope :visible, -> { includes(:user).where(users: {public: true}) }
   scope :by_start_time, -> { order(start_time: :desc) }
 
-  # TODO: Rethink this after_create :ensure_screenshot
+  after_create :ensure_screenshot
 
   after_destroy_commit -> { broadcast_remove_to user }
 
@@ -48,7 +48,7 @@ class Shot < ApplicationRecord
   def ensure_screenshot
     return if cloudinary_id.present?
 
-    # TODO: Rethink this ScreenshotTakerJob.perform_later(self)
+    ScreenshotTakerJob.perform_later(self)
   end
 end
 

@@ -28,7 +28,7 @@ class ShotsController < ApplicationController
 
   def show
     @shot = Shot.find(params[:id])
-    # TODO: Rethink this @shot.ensure_screenshot
+    @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, skin: current_user&.skin)
     return if current_user.nil? || @shot.user != current_user
 
