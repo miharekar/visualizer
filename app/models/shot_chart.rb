@@ -22,15 +22,15 @@ class ShotChart
       "espresso_temperature_goal" => {title: "Temperature Goal", color: "rgb(150, 13, 45)", suffix: " °C", dashed: true, type: "spline"}
     },
     "DSx" => {
-      "espresso_pressure" => {title: "Pressure", color: "#18c37e", suffix: " bar"},
-      "espresso_pressure_goal" => {title: "Pressure Goal", color: "#69fdb3", suffix: " bar", dashed: true},
-      "espresso_weight" => {title: "Weight Flow", color: "#a2693d", suffix: " g", hidden: true},
-      "espresso_flow" => {title: "Flow", color: "#4e85f4", suffix: " ml/s"},
-      "espresso_flow_weight" => {title: "Weight", color: "#a2693d", suffix: " g/s"},
-      "espresso_flow_goal" => {title: "Flow Goal", color: "#7aaaff", suffix: " ml/s", dashed: true},
-      "espresso_resistance" => {title: "Resistance", color: "#e5e500", suffix: " lΩ"},
+      "espresso_pressure" => {title: "Pressure", color: "rgb(24, 195, 126)", suffix: " bar"},
+      "espresso_pressure_goal" => {title: "Pressure Goal", color: "rgb(105, 253, 179)", suffix: " bar", dashed: true},
+      "espresso_weight" => {title: "Weight Flow", color: "rgb(162, 105, 61)", suffix: " g", hidden: true},
+      "espresso_flow" => {title: "Flow", color: "rgb(78, 133, 244)", suffix: " ml/s"},
+      "espresso_flow_weight" => {title: "Weight", color: "rgb(162, 105, 61)", suffix: " g/s"},
+      "espresso_flow_goal" => {title: "Flow Goal", color: "rgb(122, 170, 255)", suffix: " ml/s", dashed: true},
+      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ"},
       "espresso_temperature_basket" => {title: "Temperature Basket", color: "rgb(231, 50, 73)", suffix: " °C"},
-      "espresso_temperature_mix" => {title: "Temperature Mix", color: "#ff9900", suffix: " °C"},
+      "espresso_temperature_mix" => {title: "Temperature Mix", color: "rgb(255, 153, 0)", suffix: " °C"},
       "espresso_temperature_goal" => {title: "Temperature Goal", color: "rgb(231, 50, 73)", suffix: " °C", dashed: true}
     }
   }.freeze
@@ -79,6 +79,7 @@ class ShotChart
           valueDecimals: 2,
           valueSuffix: setting[:suffix]
         },
+        opacity: 0.8,
         type: setting[:type]
       }
     end.compact

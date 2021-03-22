@@ -24,7 +24,10 @@ class ShotChartCompare < ShotChart
     return unless skin.key?(og_label)
 
     setting = skin[og_label]
-    setting.merge(title: [setting[:title], " Comparison"].join)
+    setting.merge(
+      title: [setting[:title], " Comparison"].join,
+      color: setting[:color].sub(/^rgb\((.*)\)$/, "rgba(\\1, 0.6)")
+    )
   end
 
   def normalize_processed_shot_data
