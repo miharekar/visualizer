@@ -16,20 +16,6 @@ on_worker_boot do
   # Worker specific setup for Rails 4.1+
   # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
   ActiveRecord::Base.establish_connection
-  GoodJob.restart
-end
-
-before_fork do
-  GoodJob.shutdown
-end
-
-on_worker_shutdown do
-  GoodJob.shutdown
-end
-
-MAIN_PID = Process.pid
-at_exit do
-  GoodJob.shutdown if Process.pid == MAIN_PID
 end
 
 plugin :tmp_restart
