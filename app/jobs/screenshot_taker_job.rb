@@ -16,7 +16,7 @@ class ScreenshotTakerJob < ApplicationJob
     options.add_argument("--hide-scrollbars")
     driver = Selenium::WebDriver.for(:chrome, options: options)
     driver.navigate.to("https://visualizer.coffee/shots/#{shot.id}/chart")
-    driver.manage.window.resize_to(767, 500)
+    driver.manage.window.resize_to(800, 500)
     driver.save_screenshot("tmp/screenshot-#{shot.id}.png")
     driver.quit
 

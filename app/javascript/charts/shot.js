@@ -173,7 +173,7 @@ function drawShotChart() {
   const custom = {
     chart: {
       zoomType: "x",
-      height: 650,
+      height: window.chartHeight,
       backgroundColor: colors.background
     },
     series: window.shotData
