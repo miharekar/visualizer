@@ -30,6 +30,8 @@ class ShotParser
       end
     end
   rescue SystemStackError # rubocop:disable Lint/SuppressedException
+  rescue Tickly::Parser::Error => e
+    Rollbar.error(e, file: @file)
   end
 
   def extract_data_from(name, data)
