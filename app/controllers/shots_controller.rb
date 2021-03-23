@@ -3,7 +3,7 @@
 class ShotsController < ApplicationController
   include Pagy::Backend
 
-  before_action :authenticate_user!, except: %i[show chart]
+  before_action :authenticate_user!, except: %i[show compare chart]
   before_action :load_shot, only: %i[edit update destroy]
 
   FILTER_PARAMS = %i[bean_brand bean_type].freeze
