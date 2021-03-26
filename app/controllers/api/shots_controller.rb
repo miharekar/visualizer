@@ -2,6 +2,8 @@
 
 module Api
   class ShotsController < Api::BaseController
+    include CloudinaryHelper
+
     skip_before_action :verify_current_user, only: [:download]
 
     def index
@@ -18,7 +20,9 @@ module Api
       if shot
         allowed_attrs = %w[start_time profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
         allowed_attrs += %w[timeframe data] if params[:essentials].blank?
-        render json: shot.attributes.slice(*allowed_attrs)
+        json = shot.attributes.slice(*allowed_attrs)
+        json = json.merge(image_preview: cl_image_path(shot.cloudinary_id)) if shot.cloudinary_id.present?
+        render json: json
       else
         head :unprocessable_entity
       end
