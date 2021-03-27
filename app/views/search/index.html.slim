@@ -6,21 +6,16 @@
   = form_with(url: {action: :index}, method: :get) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
       .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
-        .grid.grid-cols-6.gap-6
-          .col-span-3.sm:col-span-2
-            = f.label :bean_brand, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.text_field :bean_brand, value: params[:bean_brand], list:"bean-brand-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-            datalist#bean-brand-list
-              - @bean_brands.each do |bean_brand|
-                option = bean_brand
-          .col-span-3.sm:col-span-2
-            = f.label :bean_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.text_field :bean_type, value: params[:bean_type], list:"bean-type-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-            datalist#bean-type-list
-              - @bean_types.each do |bean_type|
-                option = bean_type
-          .col-span-3.sm:col-span-2
-            label.hidden.sm:block &nbsp;
-            = f.submit "Search", class: "cursor-pointer py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        .grid.grid-cols-12.gap-6
+          - SearchController::FILTERS.each do |filter|
+            .col-span-6.sm:col-span-3
+              = f.label filter, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+              = f.text_field filter, value: params[filter], list:"#{filter.to_s.dasherize}-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              datalist id="#{filter.to_s.dasherize}-list"
+                - @filters[filter].each do |option|
+                  option = option
+          .col-span-6.sm:col-span-3
+            label.block &nbsp;
+            = f.submit "Search", class: "cursor-pointer py-2 px-4 border border-transparent block w-full sm:w-auto shadow-sm sm:text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
   .mt-5
     = render "shots/list", shots: @shots, pagy: @pagy, include_person: true
