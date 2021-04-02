@@ -13,7 +13,11 @@ class ShotChartCompare < ShotChart
   private
 
   def prepare_chart_data
-    @processed_shot_data = process_data(shot) + process_data(comparison, label_suffix: SUFFIX)
+    comparison_data = process_data(comparison, label_suffix: SUFFIX)
+    pp comparison_data.map{|d| d[:label]}
+    pressure_data = comparison_data.find { |d| d[:label] == "espresso_pressure_comparison" }[:data]
+    flow_data = comparison_data.find { |d| d[:label] == "espresso_flow_comparison" }[:data]
+    @processed_shot_data = super + comparison_data + [resistance_chart(pressure_data, flow_data, label_suffix: SUFFIX)]
     normalize_processed_shot_data
   end
 

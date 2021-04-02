@@ -4,7 +4,7 @@ class ShotChart
   extend Memoist
 
   DATA_LABELS_TO_IGNORE = %w[espresso_resistance espresso_resistance_weight espresso_state_change].freeze
-  MAX_RESISTANCE_VALUE = 16
+  MAX_RESISTANCE_VALUE = 19
   SKINS = ["Classic", "DSx", "White DSx"].freeze
   SKIN_SETTINGS = {
     "Classic" => {
@@ -16,7 +16,7 @@ class ShotChart
       "espresso_flow_weight" => {title: "Weight Flow", color: "rgb(143, 100, 0)", suffix: " g/s", type: "spline"},
       "espresso_flow_weight_raw" => {title: "Weight Flow Raw", color: "rgb(143, 100, 0)", suffix: " g/s", hidden: true, type: "spline"},
       "espresso_flow_goal" => {title: "Flow Goal", color: "rgb(9, 72, 93)", suffix: " ml/s", dashed: true, type: "spline"},
-      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ", type: "spline"},
+      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ", hidden: true, type: "spline"},
       "espresso_temperature_basket" => {title: "Temperature Basket", color: "rgb(231, 50, 73)", suffix: " °C", type: "spline"},
       "espresso_temperature_mix" => {title: "Temperature Mix", color: "rgb(206, 18, 62)", suffix: " °C", type: "spline"},
       "espresso_temperature_goal" => {title: "Temperature Goal", color: "rgb(150, 13, 45)", suffix: " °C", dashed: true, type: "spline"}
@@ -28,7 +28,7 @@ class ShotChart
       "espresso_flow" => {title: "Flow", color: "rgb(78, 133, 244)", suffix: " ml/s"},
       "espresso_flow_weight" => {title: "Weight", color: "rgb(162, 105, 61)", suffix: " g/s"},
       "espresso_flow_goal" => {title: "Flow Goal", color: "rgb(122, 170, 255)", suffix: " ml/s", dashed: true},
-      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ"},
+      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ", hidden: true},
       "espresso_temperature_basket" => {title: "Temperature Basket", color: "rgb(231, 50, 73)", suffix: " °C"},
       "espresso_temperature_mix" => {title: "Temperature Mix", color: "rgb(255, 153, 0)", suffix: " °C"},
       "espresso_temperature_goal" => {title: "Temperature Goal", color: "rgb(231, 50, 73)", suffix: " °C", dashed: true}
@@ -61,7 +61,9 @@ class ShotChart
 
   def prepare_chart_data
     @processed_shot_data = process_data(shot)
-    @processed_shot_data = (processed_shot_data + [resistance_chart])
+    pressure_data = @processed_shot_data.find { |d| d[:label] == "espresso_pressure" }[:data]
+    flow_data = @processed_shot_data.find { |d| d[:label] == "espresso_flow" }[:data]
+    @processed_shot_data = processed_shot_data + [resistance_chart(pressure_data, flow_data)]
   end
 
   def for_highcharts(data)
@@ -89,9 +91,7 @@ class ShotChart
     skin[label]
   end
 
-  def resistance_chart
-    pressure_data = processed_shot_data.find { |d| d[:label] == "espresso_pressure" }[:data]
-    flow_data = processed_shot_data.find { |d| d[:label] == "espresso_flow" }[:data]
+  def resistance_chart(pressure_data, flow_data, label_suffix: nil)
     data = pressure_data.map.with_index do |(t, v), i|
       f = flow_data[i].second.to_f
       if f.zero?
@@ -103,7 +103,7 @@ class ShotChart
       [t, v]
     end
 
-    {label: "espresso_resistance", data: data}
+    {label: ["espresso_resistance", label_suffix].join, data: data}
   end
 
   def stages_from_state_change(data)
