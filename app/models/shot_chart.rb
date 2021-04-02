@@ -41,7 +41,7 @@ class ShotChart
     @shot = shot
     @skin = SKIN_SETTINGS[skin.present? ? skin.split.last : "Classic"]
     prepare_chart_data
-    @temperature_data, @main_data = processed_shot_data.sort_by { |d| d[:label] }.partition { |d| d[:label].include?("temperature") }
+    @temperature_data, @main_data = processed_shot_data.sort.partition { |key, _v| key.include?("temperature") }
   end
 
   def shot_chart
@@ -54,26 +54,24 @@ class ShotChart
 
   memoize def stages
     indices = shot.data.key?("espresso_state_change") ? stages_from_state_change(shot.data["espresso_state_change"]) : detect_stages_from_data(shot.data)
-    processed_shot_data.first[:data].values_at(*indices).map { |d| {value: d.first} }
+    processed_shot_data.first.second.values_at(*indices).map { |d| {value: d.first} }
   end
 
   private
 
   def prepare_chart_data
     @processed_shot_data = process_data(shot)
-    pressure_data = @processed_shot_data.find { |d| d[:label] == "espresso_pressure" }[:data]
-    flow_data = @processed_shot_data.find { |d| d[:label] == "espresso_flow" }[:data]
-    @processed_shot_data = processed_shot_data + [resistance_chart(pressure_data, flow_data)]
+    @processed_shot_data["espresso_resistance"] = resistance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"])
   end
 
   def for_highcharts(data)
-    data.map do |line|
-      setting = setting_for(line[:label])
+    data.map do |label, d|
+      setting = setting_for(label)
       next if setting.blank?
 
       {
         name: setting[:title],
-        data: line[:data],
+        data: d,
         color: setting[:color],
         visible: !setting[:hidden],
         dashStyle: setting[:dashed] ? "Dash" : "Solid",
@@ -91,8 +89,8 @@ class ShotChart
     skin[label]
   end
 
-  def resistance_chart(pressure_data, flow_data, label_suffix: nil)
-    data = pressure_data.map.with_index do |(t, v), i|
+  def resistance_chart(pressure_data, flow_data)
+    pressure_data.map.with_index do |(t, v), i|
       f = flow_data[i].second.to_f
       if f.zero?
         v = nil
@@ -102,8 +100,6 @@ class ShotChart
       end
       [t, v]
     end
-
-    {label: ["espresso_resistance", label_suffix].join, data: data}
   end
 
   def stages_from_state_change(data)
@@ -134,8 +130,8 @@ class ShotChart
         v = nil if v.negative?
         [t.to_f * 1000, v]
       end
-      {label: [label, label_suffix].join, data: data}
-    end.compact
+      [[label, label_suffix].join, data]
+    end.compact.to_h
   end
 
   def detect_stages_from_data(data)

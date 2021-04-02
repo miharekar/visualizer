@@ -13,11 +13,9 @@ class ShotChartCompare < ShotChart
   private
 
   def prepare_chart_data
-    comparison_data = process_data(comparison, label_suffix: SUFFIX)
-    pp comparison_data.map{|d| d[:label]}
-    pressure_data = comparison_data.find { |d| d[:label] == "espresso_pressure_comparison" }[:data]
-    flow_data = comparison_data.find { |d| d[:label] == "espresso_flow_comparison" }[:data]
-    @processed_shot_data = super + comparison_data + [resistance_chart(pressure_data, flow_data, label_suffix: SUFFIX)]
+    super
+    @processed_shot_data = @processed_shot_data.merge(process_data(comparison, label_suffix: SUFFIX))
+    @processed_shot_data["espresso_resistance_comparison"] = resistance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"])
     normalize_processed_shot_data
   end
 
@@ -35,11 +33,11 @@ class ShotChartCompare < ShotChart
   end
 
   def normalize_processed_shot_data
-    longest = processed_shot_data.max_by { |line| line[:data].size }
-    timeframe = longest[:data].map(&:first)
-    processed_shot_data.each do |line|
-      line[:data].size.times do |i|
-        line[:data][i][0] = timeframe[i]
+    longest = processed_shot_data.max_by { |_k, v| v.size }
+    timeframe = longest.second.map(&:first)
+    processed_shot_data.each do |_k, v|
+      v.size.times do |i|
+        v[i][0] = timeframe[i]
       end
     end
   end
