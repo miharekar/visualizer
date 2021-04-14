@@ -31,7 +31,7 @@ gem "good_job"
 gem "memoist"
 
 gem "tickly"
-gem "selenium-webdriver"
+gem "ferrum"
 
 gem "pry-rails"
 gem "pry-byebug"

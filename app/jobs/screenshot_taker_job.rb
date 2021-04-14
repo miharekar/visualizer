@@ -3,7 +3,7 @@
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
-  rescue_from(ActiveJob::DeserializationError) do |_e|
+  rescue_from(ActiveJob::DeserializationError) do
     true
   end
 
@@ -11,18 +11,12 @@ class ScreenshotTakerJob < ApplicationJob
     shot.cloudinary_id = nil if force
     return if shot.cloudinary_id.present? || Rails.env.development?
 
-    options = Selenium::WebDriver::Chrome::Options.new
-    options.add_argument("--headless")
-    options.add_argument("--hide-scrollbars")
-    driver = Selenium::WebDriver.for(:chrome, options: options)
-    driver.navigate.to("https://visualizer.coffee/shots/#{shot.id}/chart")
-    driver.manage.window.resize_to(800, 500)
-    driver.save_screenshot("tmp/screenshot-#{shot.id}.png")
-    driver.quit
+    browser = Ferrum::Browser.new(window_size: [800, 500])
+    browser.go_to("https://visualizer.coffee/shots/#{shot.id}/chart")
+    browser.screenshot(path: "tmp/screenshot-#{shot.id}.png")
+    browser.quit
 
     upload = Cloudinary::Uploader.upload("tmp/screenshot-#{shot.id}.png")
     shot.update(cloudinary_id: upload["public_id"])
-  rescue StandardError
-    Rails.logger.info("Something went wrong")
   end
 end
