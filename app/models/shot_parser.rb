@@ -29,8 +29,7 @@ class ShotParser
         extract_data_from("setting_#{setting_name.strip}", setting_data)
       end
     end
-  rescue SystemStackError # rubocop:disable Lint/SuppressedException
-  rescue Tickly::Parser::Error => e
+  rescue SystemStackError, StandardError => e
     Rollbar.error(e, file: @file)
   end
 
