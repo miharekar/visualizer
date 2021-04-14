@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationJob < ActiveJob::Base
+  include Rollbar::ActiveJob
+
   # Automatically retry jobs that encountered a deadlock
   retry_on StandardError, wait: :exponentially_longer, attempts: 3
 
