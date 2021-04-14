@@ -45,7 +45,7 @@ Rollbar.configure do |config|
   # Enable asynchronous reporting (using sucker_punch)
   # config.use_sucker_punch
 
-  config.use_active_job
+  config.use_sidekiq "queue" => "high"
 
   # Enable delayed reporting (using Sidekiq)
   # config.use_sidekiq
