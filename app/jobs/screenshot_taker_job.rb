@@ -18,5 +18,7 @@ class ScreenshotTakerJob < ApplicationJob
 
     upload = Cloudinary::Uploader.upload("tmp/screenshot-#{shot.id}.png")
     shot.update(cloudinary_id: upload["public_id"])
+  rescue Ferrum::TimeoutError, Ferrum::ProcessTimeoutError
+    Rails.logger.info("Something went wrong with Ferrum")
   end
 end
