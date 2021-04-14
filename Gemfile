@@ -27,7 +27,7 @@ gem "mini_magick"
 gem "dalli"
 gem "rollbar"
 gem "cloudinary"
-gem "good_job"
+gem "sidekiq"
 gem "memoist"
 
 gem "tickly"

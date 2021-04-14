@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
   match "(*any)", to: redirect { |_, req| "https://visualizer.coffee#{req.fullpath}" }, via: :all, constraints: {host: "decent-visualizer.herokuapp.com"}
@@ -17,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   authenticate :user, ->(user) { user.admin? } do
-    mount GoodJob::Engine => "jobs"
+    mount Sidekiq::Web => "/sidekiq"
   end
 
   devise_for :users
