@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
   resources :search, only: [:index]
   resources :stats, only: [:index]
+  resources :sponsorships, only: [:create]
 
   get :people, to: "people#index"
   get "people/:slug", to: "people#show", as: :users_shots
