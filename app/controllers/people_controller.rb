@@ -4,7 +4,7 @@ class PeopleController < ApplicationController
   include Pagy::Backend
 
   def index
-    @users = User.visible.order(:name).with_attached_avatar
+    @users = User.visible.by_name.with_attached_avatar
     @counts = Shot.visible.group(:user_id).count
   end
 

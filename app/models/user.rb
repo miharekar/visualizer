@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
 
   scope :visible, -> { where(public: true) }
+  scope :by_name, -> { order("LOWER(name)") }
 
   validates :name, presence: true, if: :public?
 
