@@ -56,8 +56,10 @@ class ShotParser
 
     @data["espresso_state_change"] = parsed["state_change"]
 
-    # TODO: @extra [14] pry(#<ShotParser>)> EXTRA_DATA_CAPTURE.join(",")
-    # => "drink_weight,grinder_model,grinder_setting,bean_brand,bean_type,roast_level,roast_date,drink_tds,drink_ey,espresso_enjoyment,espresso_notes,bean_notes,bean_weight,DSx_bean_weight,grinder_dose_weight"
+    settings = parsed.dig("app", "data", "settings")
+    EXTRA_DATA_CAPTURE.each do |key|
+      @extra[key] = settings[key]
+    end
   rescue JSON::ParserError, TypeError
     false
   end
