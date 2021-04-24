@@ -2,6 +2,11 @@
 
 class ShotParser
   EXTRA_DATA_CAPTURE = (Shot::EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight]).freeze
+  JSON_MAPPING = {
+    "_weight" => "by_weight",
+    "_weight_raw" => "by_weight_raw",
+    "_goal" => "goal"
+  }.freeze
 
   attr_reader :start_time, :data, :extra, :timeframe, :profile_title, :sha
 
@@ -18,6 +23,46 @@ class ShotParser
   private
 
   def parse_file
+    json_parse || tcl_parse
+  rescue SystemStackError, StandardError => e
+    Rollbar.error(e, file: @file)
+  end
+
+  def json_parse
+    parsed = JSON.parse(@file)
+
+    extract_clock(parsed["timestamp"])
+    extract_espresso_elapsed(parsed["elapsed"])
+    @profile_title = parsed["profile"]["title"]
+
+    %w[pressure flow resistance].each do |key|
+      @data["espresso_#{key}"] = parsed.dig(key, key)
+
+      JSON_MAPPING.each do |suffix, subkey|
+        value = parsed.dig(key, subkey)
+        next if value.blank?
+
+        @data["espresso_#{key}#{suffix}"] = value
+      end
+    end
+
+    %w[basket mix goal].each do |key|
+      @data["espresso_temperature_#{key}"] = parsed.dig("temperature", key)
+    end
+
+    %w[weight water_dispensed].each do |key|
+      @data["espresso_#{key}"] = parsed.dig("totals", key)
+    end
+
+    @data["espresso_state_change"] = parsed["state_change"]
+
+    # TODO: @extra [14] pry(#<ShotParser>)> EXTRA_DATA_CAPTURE.join(",")
+    # => "drink_weight,grinder_model,grinder_setting,bean_brand,bean_type,roast_level,roast_date,drink_tds,drink_ey,espresso_enjoyment,espresso_notes,bean_notes,bean_weight,DSx_bean_weight,grinder_dose_weight"
+  rescue JSON::ParserError, TypeError
+    false
+  end
+
+  def tcl_parse
     parsed = Tickly::Parser.new.parse(@file)
     parsed.each do |name, data|
       extract_data_from(name, data)
@@ -29,8 +74,6 @@ class ShotParser
         extract_data_from("setting_#{setting_name.strip}", setting_data)
       end
     end
-  rescue SystemStackError, StandardError => e
-    Rollbar.error(e, file: @file)
   end
 
   def extract_data_from(name, data)
