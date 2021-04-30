@@ -24,7 +24,7 @@ class ShotParser
 
   def parse_file
     json_parse || tcl_parse
-  rescue SystemStackError, StandardError => e
+  rescue SystemStackError, StandardError, Tickly::Parser::Error => e
     Rollbar.error(e, file: @file)
   end
 
