@@ -1,0 +1,56 @@
+- bean_weight = shot.bean_weight.to_f
+- drink_weight = shot.drink_weight.to_f
+- ratio = drink_weight / bean_weight
+- tds = shot.drink_tds.to_f
+- ey = shot.drink_ey.to_f
+
+- if shot.bean_brand.present?
+  = shot.bean_brand
+  '
+- if shot.bean_type.present?
+  = shot.bean_type
+
+- if shot.bean_brand.present? || shot.bean_type.present?
+  '  |
+
+- if bean_weight > 0
+  = shot.bean_weight
+  | g
+- if bean_weight > 0 && drink_weight > 0
+  | :
+- if drink_weight > 0
+  = shot.drink_weight
+  | g
+  '
+- if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite?
+  | (1:
+  = ratio.round(1)
+  |)
+- if bean_weight > 0 || drink_weight > 0
+  '  in
+= shot.duration.round(1)
+| s
+
+- if shot.grinder_model.present? || shot.grinder_setting.present?
+  '  |
+
+- if shot.grinder_model.present?
+  = shot.grinder_model
+  '
+- if shot.grinder_setting.present?
+  ' @
+  = shot.grinder_setting
+
+- if tds > 0 || ey > 0
+  '  |
+
+- if tds > 0
+  ' TDS
+  = tds
+  ' %
+- if tds > 0 && ey > 0
+  '
+- if ey > 0
+  ' EY
+  = ey
+  ' %

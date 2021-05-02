@@ -2,11 +2,14 @@
 - show_timestamp = owner || !@shot.user&.hide_shot_times?
 
 - content_for :meta_tags
-  meta content="#{@shot.profile_title}" property="og:title"
+  - description = render "meta_description", shot: @shot
+  meta name="description" content=description
+  meta name="twitter:card" content="summary_large_image"
+  meta property="og:title" content="#{@shot.profile_title}"
   - if @shot.cloudinary_id.present?
-    meta content="#{cl_image_path(@shot.cloudinary_id)}" property="og:image"
-  meta content="https://visualizer.coffee/shots/#{@shot.id}" property="og:url"
-  meta content="summary_large_image" name="twitter:card"
+    meta property="og:image" content="#{cl_image_path(@shot.cloudinary_id)}"
+  meta property="og:url" content="https://visualizer.coffee/shots/#{@shot.id}"
+  meta property="og:description" content=description
 
 .bg-white.dark:bg-gray-900.shadow data-controller="modal"
   = render "shared/modal"
@@ -55,7 +58,7 @@
 = render "shared/flash"
 
 .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
-  = render "details", shot: @shot, link_params: owner, start_time: false, name: false
+  = render "details", shot: @shot, start_time: false, name: false
   - if owner
     .flex
       .flex-1

@@ -1,7 +1,6 @@
 - owner = current_user && shot.user == current_user
 - show_start_time = start_time && (owner || !shot.user&.hide_shot_times?)
 - show_name = name && shot.user && shot.user.public? && shot.user != current_user
-- link_params = request.parameters.slice(:bean_type, :bean_brand) if link_params
 - bean_weight = shot.bean_weight.to_f
 - drink_weight = shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight
@@ -34,16 +33,10 @@
           = shot.start_time.in_time_zone(@timezone).to_s(:long)
       div
         - if shot.bean_brand.present?
-          - if link_params
-            = link_to shot.bean_brand, shots_path(link_params.merge(bean_brand: shot.bean_brand)), class: "underline hover:text-gray-400 dark:hover:text-gray-500"
-          - else
-            = shot.bean_brand
+          = shot.bean_brand
           '
         - if shot.bean_type.present?
-          - if link_params
-            = link_to shot.bean_type, shots_path(link_params.merge(bean_type: shot.bean_type)), class: "underline hover:text-gray-400 dark:hover:text-gray-500"
-          - else
-            = shot.bean_type
+          = shot.bean_type
           '
         - if shot.roast_level.present?
           | (
