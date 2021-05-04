@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ShotParser
-  EXTRA_DATA_CAPTURE = (Shot::EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight]).freeze
+  EXTRA_DATA_CAPTURE = (Shot::EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight enable_fahrenheit]).freeze
   JSON_MAPPING = {
     "_weight" => "by_weight",
     "_weight_raw" => "by_weight_raw",

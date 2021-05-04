@@ -64,7 +64,7 @@ class ShotChart
   end
 
   def for_highcharts(data)
-    data.map do |label, d|
+    data.filter_map do |label, d|
       setting = setting_for(label)
       next if setting.blank?
 
@@ -81,7 +81,7 @@ class ShotChart
         opacity: 0.8,
         type: setting[:type]
       }
-    end.compact
+    end
   end
 
   def setting_for(label)
@@ -118,19 +118,21 @@ class ShotChart
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f
     timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
-    shot.data.map do |label, data|
+    shot.data.filter_map do |label, data|
       next if DATA_LABELS_TO_IGNORE.include?(label)
 
       times10 = label == "espresso_water_dispensed"
+      fahrenheit = shot.fahrenheit? && label.include?("temperature")
       data = data.map.with_index do |v, i|
         t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
         v = v.to_f
         v *= 10 if times10
+        v = (v - 32) * 5 / 9 if fahrenheit
         v = nil if v.negative?
         [t.to_f * 1000, v]
       end
       [[label, label_suffix].join, data]
-    end.compact.to_h
+    end.to_h
   end
 
   def detect_stages_from_data(data)

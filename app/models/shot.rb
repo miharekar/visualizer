@@ -37,6 +37,10 @@ class Shot < ApplicationRecord
     self.bean_weight = extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
   end
 
+  def fahrenheit?
+    extra["enable_fahrenheit"].to_i == 1
+  end
+
   memoize def extra
     super.presence || {}
   end
