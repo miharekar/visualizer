@@ -1,5 +1,6 @@
 
 import { Controller } from "stimulus"
+import { navigator } from "@hotwired/turbo"
 import { enter, leave } from "el-transition";
 
 export default class extends Controller {
@@ -38,7 +39,7 @@ export default class extends Controller {
   }
 
   delete() {
-    this.form.requestSubmit()
+    navigator.submitForm(this.form)
     this.hide()
   }
 

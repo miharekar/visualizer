@@ -10,7 +10,6 @@
     "@tailwindcss/typography": "^0.4.0",
     "autoprefixer": "^10.2.3",
     "el-transition": "^0.0.7",
-    "form-request-submit-polyfill": "^2.0.0",
     "highcharts": "^9.0.1",
     "is-svg": "^4.2.2",
     "postcss": "^8.2.4",
