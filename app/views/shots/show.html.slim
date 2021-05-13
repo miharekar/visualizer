@@ -6,8 +6,8 @@
   meta name="description" content=description
   meta name="twitter:card" content="summary_large_image"
   meta property="og:title" content="#{@shot.profile_title}"
-  - if @shot.cloudinary_id.present?
-    meta property="og:image" content="#{cl_image_path(@shot.cloudinary_id)}"
+  - if @shot.screenshot?
+    meta property="og:image" content="#{@shot.screenshot_url}"
   meta property="og:url" content="https://visualizer.coffee/shots/#{@shot.id}"
   meta property="og:description" content=description
 

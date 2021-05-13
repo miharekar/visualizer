@@ -2,6 +2,7 @@
 
 class Shot < ApplicationRecord
   extend Memoist
+  include CloudinaryHelper
 
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
@@ -50,8 +51,20 @@ class Shot < ApplicationRecord
     timeframe[index - 1].to_f
   end
 
+  def screenshot?
+    s3_etag.present? || cloudinary_id.present?
+  end
+
+  def screenshot_url
+    if s3_etag.present?
+      "#{ENV['BUCKET_URL']}/screenshots/#{id}.png"
+    elsif cloudinary_id.present?
+      cl_image_path(cloudinary_id)
+    end
+  end
+
   def ensure_screenshot
-    return if cloudinary_id.present?
+    return if screenshot?
 
     ScreenshotTakerJob.perform_later(self)
   end
@@ -78,6 +91,7 @@ end
 #  profile_title      :string
 #  roast_date         :string
 #  roast_level        :string
+#  s3_etag            :string
 #  sha                :string
 #  start_time         :datetime
 #  timeframe          :jsonb

@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://github.com/heartcombo/responders.git
-  revision: 3611f8c95171eaa87122e2e1ada5a3e0695ddd06
+  revision: cf72db400492bf19a2169bd7b6de68e7036df30e
   specs:
     responders (3.0.1)
       actionpack (>= 5.2)
@@ -94,6 +94,22 @@ GEM
       railties (>= 5.2)
       stackprof (~> 0.2)
     ast (2.4.2)
+    aws-eventstream (1.1.1)
+    aws-partitions (1.455.0)
+    aws-sdk-core (3.114.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.239.0)
+      aws-sigv4 (~> 1.1)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.43.0)
+      aws-sdk-core (~> 3, >= 3.112.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.94.1)
+      aws-sdk-core (~> 3, >= 3.112.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.1)
+    aws-sigv4 (1.2.3)
+      aws-eventstream (~> 1, >= 1.0.2)
     aws_cf_signer (0.1.3)
     bcrypt (3.1.16)
     bindex (0.8.1)
@@ -130,6 +146,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
+    jmespath (1.4.0)
     kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -167,7 +184,7 @@ GEM
     nokogiri (1.11.3-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (4.5.1)
+    pagy (4.7.0)
     parallel (1.20.1)
     parser (3.0.1.1)
       ast (~> 2.4.1)
@@ -181,7 +198,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.2.2)
+    puma (5.3.1)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -217,7 +234,7 @@ GEM
       thor (~> 1.0)
     rainbow (3.0.0)
     rake (13.0.3)
-    rb-fsevent (0.10.4)
+    rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.2.5)
@@ -302,6 +319,7 @@ DEPENDENCIES
   active_link_to
   annotate
   app_profiler
+  aws-sdk-s3
   bootsnap (>= 1.4.2)
   cloudinary
   dalli

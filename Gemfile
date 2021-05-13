@@ -27,6 +27,7 @@ gem "mini_magick"
 gem "dalli"
 gem "rollbar"
 gem "cloudinary"
+gem "aws-sdk-s3"
 gem "sidekiq"
 gem "memoist"
 

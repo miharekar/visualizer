@@ -7,17 +7,22 @@ class ScreenshotTakerJob < ApplicationJob
     true
   end
 
-  def perform(shot, force: false)
-    shot.cloudinary_id = nil if force
-    return if shot.cloudinary_id.present? || Rails.env.development?
+  def perform(shot)
+    return if shot.screenshot? || Rails.env.development?
 
     browser = Ferrum::Browser.new(window_size: [800, 500])
     browser.go_to("https://visualizer.coffee/shots/#{shot.id}/chart")
     browser.screenshot(path: "tmp/screenshot-#{shot.id}.png")
     browser.quit
 
-    upload = Cloudinary::Uploader.upload("tmp/screenshot-#{shot.id}.png")
-    shot.update(cloudinary_id: upload["public_id"])
+    client = Aws::S3::Client.new
+    response = client.put_object(
+      acl: "public-read",
+      body: File.read("tmp/screenshot-#{shot.id}.png"),
+      bucket: "visualizer-coffee",
+      key: "screenshots/#{shot.id}.png"
+    )
+    shot.update(s3_etag: response.etag) if response&.etag
   rescue Ferrum::TimeoutError, Ferrum::ProcessTimeoutError
     Rails.logger.info("Something went wrong with Ferrum")
   end
