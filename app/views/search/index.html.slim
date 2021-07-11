@@ -18,23 +18,23 @@
             = f.label :user, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             = f.collection_select :user, @filters[:user], :id, :name, {selected: params[:user], include_blank: true}, {class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"}
           .col-span-6.md:col-span-5
-            = f.label :min_espresso_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.label :min_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             .flex.items-center.mt-1 data-controller="range"
-              - min = params[:min_espresso_enjoyment].presence || 0
+              - min = params[:min_enjoyment].presence || 0
               - hue = (124.0 / 100 * min.to_i).round
               .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="number"
                   = min
-              = f.range_field :min_espresso_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
+              = f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
           .col-span-6.md:col-span-5
-            = f.label :max_espresso_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.label :max_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             .flex.items-center.mt-1 data-controller="range"
-              - max = params[:max_espresso_enjoyment].presence || 100
+              - max = params[:max_enjoyment].presence || 100
               - hue = (124.0 / 100 * max.to_i).round
               .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="number"
                   = max
-              = f.range_field :max_espresso_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
+              = f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
           .col-span-6.md:hidden
           .col-span-6.md:col-span-2
             label.block &nbsp;

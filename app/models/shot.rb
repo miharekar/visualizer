@@ -83,7 +83,7 @@ end
 #  drink_ey           :string
 #  drink_tds          :string
 #  drink_weight       :string
-#  espresso_enjoyment :string
+#  espresso_enjoyment :integer
 #  espresso_notes     :text
 #  extra              :jsonb
 #  grinder_model      :string

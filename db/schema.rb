@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_075549) do
+ActiveRecord::Schema.define(version: 2021_07_11_171212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_075549) do
     t.uuid "user_id"
     t.string "drink_tds"
     t.string "drink_ey"
-    t.string "espresso_enjoyment"
+    t.integer "espresso_enjoyment"
     t.string "bean_weight"
     t.string "drink_weight"
     t.string "grinder_model"
