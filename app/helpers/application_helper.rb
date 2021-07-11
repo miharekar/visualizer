@@ -10,9 +10,9 @@ module ApplicationHelper
     tag.div(text, class: "prose dark:prose-dark")
   end
 
-  def custom_pagy_url_for(number, pagy, url)
+  def custom_pagy_url_for(pagy, number, url)
     if url.blank?
-      pagy_url_for(number, pagy)
+      pagy_url_for(pagy, number)
     else
       join_char = url.include?("?") ? "&" : "?"
       "#{url}#{join_char}page=#{number}"

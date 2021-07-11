@@ -2,7 +2,7 @@
   .bg-gray-50.dark:bg-gray-800.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.dark:border-gray-800.sm:px-6
     .flex-1.flex.justify-between.md:hidden
       - if pagy.prev
-        a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.text-sm.font-medium.rounded-md.text-gray-700.bg-white.dark:bg-gray-900.hover:text-gray-500 href=custom_pagy_url_for(pagy.prev, pagy, url)
+        a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.text-sm.font-medium.rounded-md.text-gray-700.bg-white.dark:bg-gray-900.hover:text-gray-500 href=custom_pagy_url_for(pagy, pagy.prev, url)
           | Previous
       - else
         span
@@ -12,7 +12,7 @@
         '  /
         = pagy.pages
       - if pagy.next
-        a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.text-sm.font-medium.rounded-md.text-gray-700.bg-white.dark:bg-gray-900.hover:text-gray-500 href=custom_pagy_url_for(pagy.next, pagy, url)
+        a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.text-sm.font-medium.rounded-md.text-gray-700.bg-white.dark:bg-gray-900.hover:text-gray-500 href=custom_pagy_url_for(pagy, pagy.next, url)
           | Next
       - else
         span
@@ -20,7 +20,7 @@
       div
       nav.relative.z-0.inline-flex.shadow-sm.-space-x-px
         - if pagy.prev
-          a.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-500.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(pagy.prev, pagy, url)
+          a.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-500.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(pagy, pagy.prev, url)
             /! Heroicon name: chevron-left
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"
@@ -31,7 +31,7 @@
               path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"
         - pagy.series.each do |item|
           - if item.is_a?(Integer)
-            a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(item, pagy, url)
+            a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(pagy, item, url)
               = item
           - elsif item.is_a?(String)
             span.opacity-25.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700
@@ -40,7 +40,7 @@
             span.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-700
               ' …
         - if pagy.next
-          a.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-500.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(pagy.next, pagy, url)
+          a.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-gray-300.dark:border-gray-700.dark:text-gray-200.bg-white.dark:bg-gray-900.text-sm.font-medium.text-gray-500.hover:bg-gray-50.dark:hover:bg-gray-800 href=custom_pagy_url_for(pagy, pagy.next, url)
             /! Heroicon name: chevron-right
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"
