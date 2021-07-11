@@ -22,10 +22,7 @@ class SearchController < ApplicationController
                end
     end
 
-    min = params[:min_enjoyment].to_i
-    max = params[:max_enjoyment].to_i
-    @shots = @shots.where(espresso_enjoyment: (min..)) if min.positive?
-    @shots = @shots.where(espresso_enjoyment: (..max)) if max < 100
+    @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment].to_i..params[:max_enjoyment].to_i))
 
     @pagy, @shots = pagy(@shots)
   end
