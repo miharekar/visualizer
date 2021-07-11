@@ -108,10 +108,10 @@ class ShotsController < ApplicationController
   end
 
   def extra_params
-    FILTER_PARAMS.map do |filter|
+    FILTER_PARAMS.filter_map do |filter|
       next if params[filter].blank?
 
       [filter, params[filter]]
-    end.compact.to_h
+    end.to_h
   end
 end

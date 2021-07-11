@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SponsorshipsMailer < ApplicationMailer
   def webhook(payload)
     @payload = payload
