@@ -42,6 +42,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "brakeman"
   gem "app_profiler"
   gem "web-console", ">= 3.3.0"
   gem "listen", "~> 3.2"

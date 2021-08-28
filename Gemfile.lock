@@ -115,6 +115,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.8.1)
       msgpack (~> 1.0)
+    brakeman (5.1.1)
     builder (3.2.4)
     byebug (11.1.3)
     cliver (0.3.2)
@@ -321,6 +322,7 @@ DEPENDENCIES
   app_profiler
   aws-sdk-s3
   bootsnap (>= 1.4.2)
+  brakeman
   cloudinary
   dalli
   devise!
