@@ -1,9 +1,13 @@
-// Load all the controllers within this directory and all subdirectories.
-// Controller files must be named *_controller.js.
-
-import { Application } from "stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
+import { Application } from "@hotwired/stimulus"
 
 const application = Application.start()
-const context = require.context("controllers", true, /_controller\.js$/)
-application.load(definitionsFromContext(context))
+
+// Configure Stimulus development experience
+application.warnings = true
+application.debug = true
+window.Stimulus = application
+
+// Import and register all your controllers from the importmap under controllers/*
+import { registerControllersFrom } from "@hotwired/stimulus-importmap-autoloader"
+const importmap = JSON.parse(document.querySelector("script[type=importmap]").text).imports
+registerControllersFrom("controllers", importmap, application)

@@ -1,5 +1,5 @@
 
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 import { navigator } from "@hotwired/turbo"
 import { enter, leave } from "el-transition";
 

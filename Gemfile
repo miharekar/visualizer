@@ -9,7 +9,6 @@ gem "rails", github: "rails/rails", branch: "main"
 gem "pg"
 gem "redis"
 gem "puma"
-gem "webpacker", "~> 5.0"
 gem "bootsnap", ">= 1.4.2", require: false
 
 gem "importmap-rails"

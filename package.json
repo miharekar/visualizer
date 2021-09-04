@@ -1,5 +1,5 @@
 {
-  "name": "decent_visualizer_rails",
+  "name": "decent_visualizer",
   "private": true,
   "dependencies": {
     "@hotwired/turbo-rails": "^7.0.0-beta.4",
