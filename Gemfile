@@ -5,20 +5,23 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.2"
 
-gem "rails"
+gem "rails", github: "rails/rails", branch: "main"
 gem "pg"
 gem "redis"
 gem "puma"
 gem "webpacker", "~> 5.0"
 gem "bootsnap", ">= 1.4.2", require: false
 
+gem "importmap-rails"
+gem "tailwindcss-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
+
 gem "kramdown"
 gem "kramdown-parser-gfm"
 
-gem "turbo-rails"
-
 gem "slim"
-gem "devise", git: "https://github.com/ghiculescu/devise.git", branch: "error-code-422"
+gem "devise", git: "https://github.com/miharekar/devise.git", branch: "rails7"
 gem "responders", git: "https://github.com/heartcombo/responders.git"
 gem "pagy"
 gem "active_link_to"
