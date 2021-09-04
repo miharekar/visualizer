@@ -9,7 +9,7 @@ gem "rails", github: "rails/rails", branch: "main"
 gem "pg"
 gem "redis"
 gem "puma"
-gem "bootsnap", ">= 1.4.2", require: false
+gem "bootsnap", require: false
 
 gem "importmap-rails"
 gem "tailwindcss-rails"
@@ -46,8 +46,8 @@ end
 group :development do
   gem "brakeman"
   gem "app_profiler"
-  gem "web-console", ">= 3.3.0"
-  gem "listen", "~> 3.2"
+  gem "web-console"
+  gem "listen"
   gem "letter_opener"
   gem "annotate"
   gem "rubocop", require: false
