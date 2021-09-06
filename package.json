@@ -1,0 +1,28 @@
+{
+  "name": "decent_visualizer",
+  "private": true,
+  "dependencies": {
+    "@tailwindcss/forms": "^0.3.3",
+    "@tailwindcss/typography": "^0.4.1",
+    "autoprefixer": "^10.3.4",
+    "postcss": "^8.3.6",
+    "postcss-cli": "^8.3.1",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^6.7.0",
+    "tailwindcss": "^2.2.9"
+  },
+  "version": "0.2.0",
+  "devDependencies": {
+    "speedscope": "^1.13.0"
+  },
+  "browserslist": [
+    "last 2 version",
+    ">1%",
+    "not dead"
+  ],
+  "scripts": {
+    "build": "postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build.css",
+    "start": "postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build.css --watch"
+  }
+}

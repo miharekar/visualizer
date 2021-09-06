@@ -201,17 +201,11 @@ GEM
     mime-types-data (3.2021.0901)
     mini_magick (4.11.0)
     mini_mime (1.1.1)
-    mini_portile2 (2.6.1)
     minitest (5.14.4)
     msgpack (1.4.2)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.12.4)
-      mini_portile2 (~> 2.6.1)
-      racc (~> 1.4)
     nokogiri (1.12.4-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.12.4-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     pagy (4.11.0)
@@ -287,9 +281,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.4.2)
-      rails (>= 6.0.0)
-    tailwindcss-rails (0.4.3)
+    stimulus-rails (0.4.1)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
@@ -316,9 +308,7 @@ GEM
     zeitwerk (2.5.0.beta3)
 
 PLATFORMS
-  ruby
-  x86_64-darwin-19
-  x86_64-linux
+  x86_64-darwin-20
 
 DEPENDENCIES
   active_link_to
@@ -353,8 +343,7 @@ DEPENDENCIES
   rubocop-rails
   sidekiq
   slim
-  stimulus-rails
-  tailwindcss-rails
+  stimulus-rails (= 0.4.1)
   tickly
   turbo-rails
   web-console
