@@ -81,7 +81,6 @@ end
 #  bean_type          :string
 #  bean_weight        :string
 #  data               :jsonb
-#  deleted_at         :datetime
 #  drink_ey           :string
 #  drink_tds          :string
 #  drink_weight       :string
