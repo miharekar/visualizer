@@ -3,6 +3,7 @@
 class Shot < ApplicationRecord
   extend Memoist
   include CloudinaryHelper
+  include SoftDeletable
 
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
@@ -80,6 +81,7 @@ end
 #  bean_type          :string
 #  bean_weight        :string
 #  data               :jsonb
+#  deleted_at         :datetime
 #  drink_ey           :string
 #  drink_tds          :string
 #  drink_weight       :string

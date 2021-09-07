@@ -6,13 +6,13 @@ module Api
 
     def index
       limit = params[:limit].presence || 10
-      shots = current_user.shots.by_start_time.first(limit.to_i).pluck(:id, :start_time)
+      shots = current_user.shots.active.by_start_time.first(limit.to_i).pluck(:id, :start_time)
 
       render json: shots.map { |id, time| {clock: time.to_i, id: id} }
     end
 
     def download
-      shot = current_user ? Shot.where(user_id: current_user.id) : Shot.visible
+      shot = current_user ? Shot.active.where(user_id: current_user.id) : Shot.active.visible
       shot = shot.find_by(id: params[:shot_id])
 
       if shot

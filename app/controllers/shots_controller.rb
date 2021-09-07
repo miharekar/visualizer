@@ -14,12 +14,12 @@ class ShotsController < ApplicationController
 
   def chart
     @no_header = true
-    @shot = Shot.find(params[:id])
+    @shot = Shot.active.find(params[:id])
     @chart = ShotChart.new(@shot)
   end
 
   def edit
-    shots = current_user.shots
+    shots = current_user.shots.active
     %i[grinder_model bean_brand bean_type].each do |method|
       unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).compact }
       instance_variable_set("@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
@@ -27,19 +27,19 @@ class ShotsController < ApplicationController
   end
 
   def show
-    @shot = Shot.find(params[:id])
+    @shot = Shot.active.find(params[:id])
     @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, skin: current_user&.skin)
     return if current_user.nil? || @shot.user != current_user
 
-    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.pluck(:id, :profile_title, :start_time)
+    @compare_shots = current_user.shots.active.where.not(id: @shot.id).by_start_time.pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end
 
   def compare
-    @shot = Shot.find(params[:id])
-    @comparison = Shot.find(params[:comparison])
+    @shot = Shot.active.find(params[:id])
+    @comparison = Shot.active.find(params[:comparison])
     @chart = ShotChartCompare.new(@shot, @comparison, skin: current_user&.skin)
   end
 
@@ -64,7 +64,7 @@ class ShotsController < ApplicationController
   end
 
   def destroy
-    @shot.destroy!
+    @shot.soft_delete!
 
     respond_to do |format|
       format.turbo_stream do
@@ -90,7 +90,7 @@ class ShotsController < ApplicationController
   private
 
   def load_shot
-    @shot = current_user.shots.find(params[:id])
+    @shot = current_user.shots.active.find(params[:id])
   end
 
   def shot_params
@@ -98,7 +98,7 @@ class ShotsController < ApplicationController
   end
 
   def load_shots_with_pagy
-    @shots = current_user.shots.by_start_time
+    @shots = current_user.shots.active.by_start_time
     FILTER_PARAMS.each do |filter|
       next if params[filter].blank?
 

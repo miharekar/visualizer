@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_11_171212) do
+ActiveRecord::Schema.define(version: 2021_09_07_052153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2021_07_11_171212) do
     t.string "roast_level"
     t.text "bean_notes"
     t.string "s3_etag"
+    t.datetime "deleted_at"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["user_id"], name: "index_shots_on_user_id"
   end
