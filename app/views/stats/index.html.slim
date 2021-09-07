@@ -16,11 +16,9 @@
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
   #shot-uploaded-chart
   #shot-brewed-chart
-  #shot-deleted-chart
   #shot-user-chart
 
 javascript:
   window.uploadedChartData = #{{@uploaded_chart.to_json}}
   window.brewedChartData = #{{@brewed_chart.to_json}}
-  window.deletedChartData = #{{@deleted_chart.to_json}}
   window.userChartData = #{{@user_chart.to_json}}
