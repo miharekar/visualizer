@@ -27,6 +27,11 @@ document.addEventListener("turbo:load", function () {
     Highcharts.chart("shot-brewed-chart", chartOptions)
   }
 
+  if (document.getElementById("shot-deleted-chart")) {
+    const chartOptions = { ...options, series: window.deletedChartData }
+    Highcharts.chart("shot-deleted-chart", chartOptions)
+  }
+
   if (document.getElementById("shot-user-chart")) {
     const chartOptions = { ...options, series: window.userChartData }
     Highcharts.chart("shot-user-chart", chartOptions)
