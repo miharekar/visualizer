@@ -1,4 +1,4 @@
-- if current_user && !current_user.supporter && current_user.shots.active.size.to_i > 100
+- if current_user && !current_user.supporter && current_user.shots.count.to_i > 100
   .origin-top.bg-pink-500 data-controller="flash" data-transition-leave="transition ease-in duration-100" data-transition-leave-end="transform scale-y-0" data-transition-leave-start="transform scale-y-100"
     .max-w-7xl.mx-auto.py-3.px-3.sm:px-6.lg:px-8
       .flex.items-center.justify-between.flex-wrap

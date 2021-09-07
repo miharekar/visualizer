@@ -6,7 +6,7 @@ class PeopleController < ApplicationController
   def index
     @users = current_user&.admin? ? User.all : User.visible.with_attached_avatar
     @users = @users.by_name
-    @counts = Shot.active.visible.group(:user_id).count
+    @counts = Shot.visible.group(:user_id).count
   end
 
   def show
@@ -18,7 +18,7 @@ class PeopleController < ApplicationController
     end
 
     if @user.public
-      @shots = @user.shots.active.by_start_time
+      @shots = @user.shots.by_start_time
       @pagy, @shots = pagy(@shots)
     else
       redirect_to :root
