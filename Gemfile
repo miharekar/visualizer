@@ -13,7 +13,7 @@ gem "bootsnap", require: false
 
 gem "importmap-rails"
 gem "turbo-rails"
-gem "stimulus-rails", "0.4.1"
+gem "stimulus-rails"
 
 gem "kramdown"
 gem "kramdown-parser-gfm"

@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: e1f90a30a2f5972eaf5a013cd6c6b634d9ea3ef7
+  revision: a692e63bf4000cdeb9f230fb395c97edd3b12b99
   branch: main
   specs:
     actioncable (7.0.0.alpha)
@@ -122,7 +122,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.496.0)
+    aws-partitions (1.499.0)
     aws-sdk-core (3.121.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -263,7 +263,7 @@ GEM
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.11.3)
+    rubocop-rails (2.12.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
@@ -283,7 +283,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.4.1)
+    stimulus-rails (0.4.2)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
@@ -346,7 +346,7 @@ DEPENDENCIES
   rubocop-rails
   sidekiq
   slim
-  stimulus-rails (= 0.4.1)
+  stimulus-rails
   tickly
   turbo-rails
   web-console
