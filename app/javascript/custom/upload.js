@@ -1,5 +1,4 @@
 import { Turbo } from "@hotwired/turbo-rails"
-import { navigator } from "@hotwired/turbo"
 
 document.addEventListener("turbo:load", function () {
   const dropArea = document.getElementById("drop-area");
@@ -76,7 +75,7 @@ document.addEventListener("turbo:load", function () {
       document.getElementById("files").onchange = function () {
         dropArea.classList.add("hidden")
         loader.classList.remove("hidden")
-        navigator.submitForm(form)
+        Turbo.navigator.submitForm(form)
       }
     }
 

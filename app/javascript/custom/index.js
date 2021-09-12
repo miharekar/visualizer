@@ -1,2 +1,2 @@
-const custom = require.context('.', true, /\.js$/)
-custom.keys().forEach(custom)
+import "custom/time"
+import "custom/upload"

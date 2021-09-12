@@ -6,6 +6,7 @@ const fontFamily = defaultTheme.fontFamily
 fontFamily['sans'] = ['Inter var', ...defaultTheme.fontFamily.sans]
 
 module.exports = {
+  mode: 'jit',
   purge: [
     './app/**/*.js',
     './tmp/*.html.erb'

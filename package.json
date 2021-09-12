@@ -1,31 +1,27 @@
 {
-  "name": "decent_visualizer_rails",
+  "name": "decent_visualizer",
   "private": true,
-  "dependencies": {
-    "@hotwired/turbo-rails": "^7.0.0-beta.4",
-    "@rails/actioncable": "^6.1",
-    "@rails/activestorage": "^6.1",
-    "@rails/webpacker": "rails/webpacker#4210dd5",
-    "@tailwindcss/forms": "^0.2.1",
-    "@tailwindcss/typography": "^0.4.0",
-    "autoprefixer": "^10.2.3",
-    "el-transition": "^0.0.7",
-    "highcharts": "^9.0.1",
-    "is-svg": "^4.2.2",
-    "postcss": "^8.2.4",
-    "stimulus": "^2.0.0",
-    "tailwindcss": "^2.0.2",
-    "webpack-cli": "3.3.12"
-  },
-  "version": "0.2.0",
+  "dependencies": {},
+  "version": "0.3.0",
   "devDependencies": {
+    "@tailwindcss/forms": "^0.3.3",
+    "@tailwindcss/typography": "^0.4.1",
+    "autoprefixer": "^10.3.4",
+    "postcss": "^8.3.6",
+    "postcss-cli": "^8.3.1",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^6.7.0",
     "speedscope": "^1.13.0",
-    "webpack": "^4.0.0",
-    "webpack-dev-server": "^3.11.0"
+    "tailwindcss": "^2.2.9"
   },
   "browserslist": [
     "last 2 version",
     ">1%",
     "not dead"
-  ]
+  ],
+  "scripts": {
+    "build": "postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build.css",
+    "watch": "postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build.css --watch"
+  }
 }

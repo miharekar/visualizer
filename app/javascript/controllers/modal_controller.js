@@ -1,6 +1,6 @@
 
-import { Controller } from "stimulus"
-import { navigator } from "@hotwired/turbo"
+import { Controller } from "@hotwired/stimulus"
+import { Turbo } from "@hotwired/turbo-rails"
 import { enter, leave } from "el-transition";
 
 export default class extends Controller {
@@ -39,7 +39,7 @@ export default class extends Controller {
   }
 
   delete() {
-    navigator.submitForm(this.form)
+    Turbo.navigator.submitForm(this.form)
     this.hide()
   }
 

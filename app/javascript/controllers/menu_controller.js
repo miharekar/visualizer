@@ -1,5 +1,5 @@
 
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 import { enter, leave } from "el-transition";
 
 export default class extends Controller {
