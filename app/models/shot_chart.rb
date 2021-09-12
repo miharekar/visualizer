@@ -34,6 +34,9 @@ class ShotChart
     }
   }.freeze
 
+  LABELS = %w[espresso_pressure espresso_pressure_goal espresso_water_dispensed espresso_weight espresso_flow espresso_flow_weight espresso_flow_goal espresso_resistance espresso_temperature_basket espresso_temperature_mix espresso_temperature_goal].freeze
+  PROPERTIES = %i[title color suffix type dashed hidden].freeze
+
   attr_reader :shot, :skin, :processed_shot_data
 
   def initialize(shot, skin: nil)

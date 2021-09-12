@@ -24,9 +24,6 @@
           .col-span-3.sm:col-span-2
             = f.label :timezone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
-          .col-span-3.sm:col-span-2
-            = f.label :skin, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.select :skin, ShotChart::SKINS, {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
           .col-span-3.sm:col-span-2 data-controller="checkbox-toggle"
             .flex.items-start
               .flex.items-center.h-5
@@ -54,5 +51,21 @@
             .col-span-3.sm:col-span-2
               = f.label :github, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
               = f.text_field :github, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          .col-span-3.hidden.sm:block
+            - skin = current_user.skin.present? ? current_user.skin.split.last : "Classic"
+            - ShotChart::LABELS.each do |label|
+              h3 = label.humanize
+              = f.color_field "#{label}-color", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              = f.select "#{label}-type", options_for_select([["Rounded", "spline"], ["Exact", ""]]), {}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+              .flex.items-start
+                .flex.items-center.h-5
+                  = f.check_box "#{label}-dashed", class: " focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                .ml-3.text-sm
+                  = f.label "#{label}-dashed", "Dashed", class: "font-medium text-gray-700 dark:text-gray-300"
+              .flex.items-start
+                .flex.items-center.h-5
+                  = f.check_box "#{label}-hidden", class: " focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                .ml-3.text-sm
+                  = f.label "#{label}-hidden", "Hidden", class: "font-medium text-gray-700 dark:text-gray-300"
       .px-4.py-3.bg-gray-50.dark:bg-gray-700.text-right.sm:px-6
         = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
