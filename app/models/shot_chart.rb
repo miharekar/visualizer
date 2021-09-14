@@ -6,17 +6,17 @@ class ShotChart
   DATA_LABELS_TO_IGNORE = %w[espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   MAX_RESISTANCE_VALUE = 19
   CHART_SETTINGS = {
-    "espresso_pressure" => {title: "Pressure", color: "#05c793", suffix: " bar"},
-    "espresso_pressure_goal" => {title: "Pressure Goal", color: "#03634a", suffix: " bar", dashed: true},
-    "espresso_water_dispensed" => {title: "Water Dispensed", color: "#1fb7ea", suffix: " ml", hidden: true},
-    "espresso_weight" => {title: "Weight", color: "#8f6400", suffix: " g", hidden: true},
-    "espresso_flow" => {title: "Flow", color: "#1fb7ea", suffix: " ml/s"},
-    "espresso_flow_weight" => {title: "Weight Flow", color: "#8f6400", suffix: " g/s"},
-    "espresso_flow_goal" => {title: "Flow Goal", color: "#09485d", suffix: " ml/s", dashed: true},
-    "espresso_resistance" => {title: "Resistance", color: "#e5e500", suffix: " lΩ", hidden: true},
-    "espresso_temperature_basket" => {title: "Temperature Basket", color: "#e73249", suffix: " °C"},
-    "espresso_temperature_mix" => {title: "Temperature Mix", color: "#ce123e", suffix: " °C"},
-    "espresso_temperature_goal" => {title: "Temperature Goal", color: "#960d2d", suffix: " °C", dashed: true}
+    "espresso_pressure" => {title: "Pressure", color: "#05c793", suffix: " bar", type: "spline"},
+    "espresso_pressure_goal" => {title: "Pressure Goal", color: "#03634a", suffix: " bar", dashed: true, type: "spline"},
+    "espresso_water_dispensed" => {title: "Water Dispensed", color: "#1fb7ea", suffix: " ml", hidden: true, type: "spline"},
+    "espresso_weight" => {title: "Weight", color: "#8f6400", suffix: " g", hidden: true, type: "spline"},
+    "espresso_flow" => {title: "Flow", color: "#1fb7ea", suffix: " ml/s", type: "spline"},
+    "espresso_flow_weight" => {title: "Weight Flow", color: "#8f6400", suffix: " g/s", type: "spline"},
+    "espresso_flow_goal" => {title: "Flow Goal", color: "#09485d", suffix: " ml/s", dashed: true, type: "spline"},
+    "espresso_resistance" => {title: "Resistance", color: "#e5e500", suffix: " lΩ", hidden: true, type: "spline"},
+    "espresso_temperature_basket" => {title: "Temperature Basket", color: "#e73249", suffix: " °C", type: "spline"},
+    "espresso_temperature_mix" => {title: "Temperature Mix", color: "#ce123e", suffix: " °C", type: "spline"},
+    "espresso_temperature_goal" => {title: "Temperature Goal", color: "#960d2d", suffix: " °C", dashed: true, type: "spline"}
   }.freeze
 
   attr_reader :shot, :chart_settings, :processed_shot_data

@@ -22,8 +22,11 @@
             - if has_error
               p.text-sm.font-medium.text-red-500 Name is required for public profiles
           .col-span-3.sm:col-span-2
-            = f.label :timezone, class: "text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+            = f.label :timezone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+          .col-span-3.sm:col-span-2
+            = f.label :skin, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.select :skin, ["Light", "Dark"], {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
           .col-span-3.sm:col-span-2 data-controller="checkbox-toggle"
             .flex.items-start
               .flex.items-center.h-5
@@ -36,13 +39,15 @@
                   ' .
             .mt-1.flex.items-start data-checkbox-toggle-target="hideable" class=("hidden" unless f.object.public)
               .flex.items-center.h-5
-                = f.check_box :hide_shot_times, class: " focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                = f.check_box :hide_shot_times, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
               .ml-3.text-sm
                 = f.label :hide_shot_times, class: "font-medium text-gray-700 dark:text-gray-300"
                 p.text-gray-500.dark:text-gray-400
                   ' Hide date and time at which your shots were made to other people.
           .col-span-3.hidden.sm:block
-            h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
+            .flex.items-center
+              h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
+              = link_to "Reset to Default", profile_reset_chart_settings_path(@profile), class: "ml-4 cursor-pointer ml-3 bg-white dark:bg-gray-800 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             - ShotChart::CHART_SETTINGS.each_key do |label|
               p.font-medium.text-sm.mt-3.text-gray-700.dark:text-gray-300
                 = label.humanize

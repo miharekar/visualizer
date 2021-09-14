@@ -47,7 +47,11 @@ class PopulateChartSettings < ActiveRecord::Migration[7.0]
         end
         chart_settings[label] = label_settings
       end
-      user.update_columns(chart_settings: chart_settings)
+
+      user.update_columns(
+        chart_settings: chart_settings,
+        skin: user.skin == "DSx" ? "Dark" : "Light"
+      )
     end
   end
 end

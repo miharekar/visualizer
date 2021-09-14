@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   get "people/:slug", to: "people#show", as: :users_shots
 
   resources :profiles, only: %i[edit update] do
+    get :reset_chart_settings
     get :edit, on: :collection
   end
 end

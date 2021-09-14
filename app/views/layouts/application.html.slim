@@ -15,7 +15,7 @@ html
     link href="https://rsms.me/inter/inter.css" rel="stylesheet"
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
-  body.flex.flex-col.h-screen class=("dark" if current_user&.skin&.parameterize == "dsx")
+  body.flex.flex-col.h-screen class=("dark" if current_user&.skin == "Dark")
     header
       = render "shared/header"
     main.flex-grow.dark:bg-black.dark:text-white
