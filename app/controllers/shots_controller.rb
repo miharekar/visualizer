@@ -15,7 +15,7 @@ class ShotsController < ApplicationController
   def chart
     @no_header = true
     @shot = Shot.find(params[:id])
-    @chart = ShotChart.new(@shot)
+    @chart = ShotChart.new(@shot, current_user&.chart_settings)
   end
 
   def edit
@@ -29,7 +29,7 @@ class ShotsController < ApplicationController
   def show
     @shot = Shot.find(params[:id])
     @shot.ensure_screenshot
-    @chart = ShotChart.new(@shot, skin: current_user&.skin)
+    @chart = ShotChart.new(@shot, current_user&.chart_settings)
     return if current_user.nil? || @shot.user != current_user
 
     @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.pluck(:id, :profile_title, :start_time)

@@ -43,7 +43,7 @@
                   ' Hide date and time at which your shots were made to other people.
           .col-span-3.hidden.sm:block
             h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
-            - ShotChart::LABELS.each do |label|
+            - ShotChart::CHART_SETTINGS.each_key do |label|
               p.font-medium.text-sm.mt-3.text-gray-700.dark:text-gray-300
                 = label.humanize
               .flex

@@ -27,6 +27,17 @@ class ProfilesController < ApplicationController
   def profile_params
     allowed_params = %i[avatar name timezone skin public hide_shot_times]
     allowed_params << %i[github supporter] if current_user.admin?
-    params.require(:user).permit(allowed_params)
+    params.require(:user).permit(allowed_params).merge(chart_settings: build_chart_settings)
+  end
+
+  def build_chart_settings
+    ShotChart::CHART_SETTINGS.keys.index_with do |label|
+      {
+        color: params["user"]["#{label}-color"],
+        type: params["user"]["#{label}-type"],
+        dashed: ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-dashed"]),
+        hidden: ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-hidden"])
+      }
+    end
   end
 end
