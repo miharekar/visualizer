@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: fdf5e0054a333c3287d67bbb775be69c52dea6f9
+  revision: 5462fbd5de1900c1b1ce1c9dc11c1a2d8cdcd809
   branch: main
   specs:
     actioncable (7.0.0.alpha)
@@ -295,7 +295,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.7)
+    unf_ext (0.0.8)
     unicode-display_width (2.0.0)
     warden (1.2.9)
       rack (>= 2.0.9)
