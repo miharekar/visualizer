@@ -8,29 +8,29 @@ class ShotChart
   SKINS = ["Classic", "DSx", "White DSx"].freeze
   SKIN_SETTINGS = {
     "Classic" => {
-      "espresso_pressure" => {title: "Pressure", color: "rgb(5, 199, 147)", suffix: " bar", type: "spline"},
-      "espresso_pressure_goal" => {title: "Pressure Goal", color: "rgb(3, 99, 74)", suffix: " bar", dashed: true, type: "spline"},
-      "espresso_water_dispensed" => {title: "Water Dispensed", color: "rgb(31, 183, 234)", suffix: " ml", hidden: true, type: "spline"},
-      "espresso_weight" => {title: "Weight", color: "rgb(143, 100, 0)", suffix: " g", hidden: true, type: "spline"},
-      "espresso_flow" => {title: "Flow", color: "rgb(31, 183, 234)", suffix: " ml/s", type: "spline"},
-      "espresso_flow_weight" => {title: "Weight Flow", color: "rgb(143, 100, 0)", suffix: " g/s", type: "spline"},
-      "espresso_flow_goal" => {title: "Flow Goal", color: "rgb(9, 72, 93)", suffix: " ml/s", dashed: true, type: "spline"},
-      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ", hidden: true, type: "spline"},
-      "espresso_temperature_basket" => {title: "Temperature Basket", color: "rgb(231, 50, 73)", suffix: " °C", type: "spline"},
-      "espresso_temperature_mix" => {title: "Temperature Mix", color: "rgb(206, 18, 62)", suffix: " °C", type: "spline"},
-      "espresso_temperature_goal" => {title: "Temperature Goal", color: "rgb(150, 13, 45)", suffix: " °C", dashed: true, type: "spline"}
+      "espresso_pressure" => {title: "Pressure", color: "#05c793", suffix: " bar", type: "spline"},
+      "espresso_pressure_goal" => {title: "Pressure Goal", color: "#03634a", suffix: " bar", dashed: true, type: "spline"},
+      "espresso_water_dispensed" => {title: "Water Dispensed", color: "#1fb7ea", suffix: " ml", hidden: true, type: "spline"},
+      "espresso_weight" => {title: "Weight", color: "#8f6400", suffix: " g", hidden: true, type: "spline"},
+      "espresso_flow" => {title: "Flow", color: "#1fb7ea", suffix: " ml/s", type: "spline"},
+      "espresso_flow_weight" => {title: "Weight Flow", color: "#8f6400", suffix: " g/s", type: "spline"},
+      "espresso_flow_goal" => {title: "Flow Goal", color: "#09485d", suffix: " ml/s", dashed: true, type: "spline"},
+      "espresso_resistance" => {title: "Resistance", color: "#e5e500", suffix: " lΩ", hidden: true, type: "spline"},
+      "espresso_temperature_basket" => {title: "Temperature Basket", color: "#e73249", suffix: " °C", type: "spline"},
+      "espresso_temperature_mix" => {title: "Temperature Mix", color: "#ce123e", suffix: " °C", type: "spline"},
+      "espresso_temperature_goal" => {title: "Temperature Goal", color: "#960d2d", suffix: " °C", dashed: true, type: "spline"}
     },
     "DSx" => {
-      "espresso_pressure" => {title: "Pressure", color: "rgb(24, 195, 126)", suffix: " bar"},
-      "espresso_pressure_goal" => {title: "Pressure Goal", color: "rgb(105, 253, 179)", suffix: " bar", dashed: true},
-      "espresso_weight" => {title: "Weight Flow", color: "rgb(162, 105, 61)", suffix: " g", hidden: true},
-      "espresso_flow" => {title: "Flow", color: "rgb(78, 133, 244)", suffix: " ml/s"},
-      "espresso_flow_weight" => {title: "Weight", color: "rgb(162, 105, 61)", suffix: " g/s"},
-      "espresso_flow_goal" => {title: "Flow Goal", color: "rgb(122, 170, 255)", suffix: " ml/s", dashed: true},
-      "espresso_resistance" => {title: "Resistance", color: "rgb(229, 229, 0)", suffix: " lΩ", hidden: true},
-      "espresso_temperature_basket" => {title: "Temperature Basket", color: "rgb(231, 50, 73)", suffix: " °C"},
-      "espresso_temperature_mix" => {title: "Temperature Mix", color: "rgb(255, 153, 0)", suffix: " °C"},
-      "espresso_temperature_goal" => {title: "Temperature Goal", color: "rgb(231, 50, 73)", suffix: " °C", dashed: true}
+      "espresso_pressure" => {title: "Pressure", color: "#18c37e", suffix: " bar"},
+      "espresso_pressure_goal" => {title: "Pressure Goal", color: "#69fdb3", suffix: " bar", dashed: true},
+      "espresso_weight" => {title: "Weight Flow", color: "#a2693d", suffix: " g", hidden: true},
+      "espresso_flow" => {title: "Flow", color: "#4e85f4", suffix: " ml/s"},
+      "espresso_flow_weight" => {title: "Weight", color: "#a2693d", suffix: " g/s"},
+      "espresso_flow_goal" => {title: "Flow Goal", color: "#7aaaff", suffix: " ml/s", dashed: true},
+      "espresso_resistance" => {title: "Resistance", color: "#e5e500", suffix: " lΩ", hidden: true},
+      "espresso_temperature_basket" => {title: "Temperature Basket", color: "#e73249", suffix: " °C"},
+      "espresso_temperature_mix" => {title: "Temperature Mix", color: "#ff9900", suffix: " °C"},
+      "espresso_temperature_goal" => {title: "Temperature Goal", color: "#e73249", suffix: " °C", dashed: true}
     }
   }.freeze
 

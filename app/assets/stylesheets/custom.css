@@ -44,3 +44,24 @@ input[type="range"]::-webkit-slider-thumb:active {
 input[type="range"]::-moz-range-thumb:active {
   cursor: -moz-grabbing;
 }
+
+input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  @apply mt-1;
+  @apply h-9 w-32;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  @apply rounded-md;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+  @apply rounded-md;
+}

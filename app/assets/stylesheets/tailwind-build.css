@@ -844,6 +844,20 @@ video {
   cursor: -webkit-grabbing;
 }input[type="range"]::-moz-range-thumb:active {
   cursor: -moz-grabbing;
+}input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  margin-top: 0.25rem;
+  height: 2.25rem;
+  width: 8rem;
+}input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 0.375rem;
+}input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: 0.375rem;
 }.visible {
 	visibility: visible;
 }.static {
@@ -910,6 +924,12 @@ video {
 	margin-left: 0.5rem;
 }.mt-1 {
 	margin-top: 0.25rem;
+}.ml-6 {
+	margin-left: 1.5rem;
+}.ml-8 {
+	margin-left: 2rem;
+}.mb-4 {
+	margin-bottom: 1rem;
 }.ml-10 {
 	margin-left: 2.5rem;
 }.-mr-2 {

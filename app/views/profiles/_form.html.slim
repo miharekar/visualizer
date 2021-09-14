@@ -4,10 +4,10 @@
 .mt-5.md:mt-0.md:col-span-2 id=dom_id(@profile)
   = form_with(model: @profile, url: profile_path(@profile)) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
-      .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
+      .px-4.py-5.bg-white.dark:bg-gray-800.sm:p-6
         .grid.grid-cols-3.gap-6
           .col-span-3.sm:col-span-2
-            label.block.text-sm.font-medium.text-gray-700.dark:text-gray-300
+            label.text-sm.font-medium.text-gray-700.dark:text-gray-300
               | Avatar
             .mt-2.flex.items-center data-controller="avatar"
               img.h-12.w-12.rounded-full src=avatar_url(@profile, 96)
@@ -17,13 +17,13 @@
             - has_error = f.object.errors.any?{ |e| e.attribute == :name && e.type == :blank }
             - if has_error
               - extra_classes = "ring-1 ring-red-500 border-red-500"
-            = f.label :name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.text_field :name, class: "#{extra_classes} mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", autocomplete: "name"
+            = f.label :name, class: "text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.text_field :name, class: "#{extra_classes} mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md", autocomplete: "name"
             - if has_error
               p.text-sm.font-medium.text-red-500 Name is required for public profiles
           .col-span-3.sm:col-span-2
-            = f.label :timezone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+            = f.label :timezone, class: "text-sm font-medium text-gray-700 dark:text-gray-300"
+            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
           .col-span-3.sm:col-span-2 data-controller="checkbox-toggle"
             .flex.items-start
               .flex.items-center.h-5
@@ -41,31 +41,39 @@
                 = f.label :hide_shot_times, class: "font-medium text-gray-700 dark:text-gray-300"
                 p.text-gray-500.dark:text-gray-400
                   ' Hide date and time at which your shots were made to other people.
+          .col-span-3.hidden.sm:block
+            h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
+            - legacy_skin = current_user.skin.present? ? current_user.skin.split.last : "Classic"
+            - ShotChart::LABELS.each do |label|
+              p.font-medium.text-sm.mt-3.text-gray-700.dark:text-gray-300
+                = label.humanize
+              .flex
+                .flex-1
+                  = f.color_field "#{label}-color", class: "mt-1 dark:bg-gray-800 w-full", value: ShotChart::SKIN_SETTINGS[legacy_skin][label][:color]
+                .flex-1.ml-6
+                  = f.select "#{label}-type", options_for_select([["Smooth", "spline"], ["Exact", ""]]), {}, {class: "mt-1 w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+                .flex-1.ml-8
+                  .flex.mt-3
+                    .flex.items-center.h-5
+                      = f.check_box "#{label}-dashed", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                    .ml-3.text-sm
+                      = f.label "#{label}-dashed", "Dashed", class: "text-gray-700 dark:text-gray-300"
+                .flex-1
+                  .flex.mt-3
+                    .flex.items-center.h-5
+                      = f.check_box "#{label}-hidden", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                    .ml-3.text-sm
+                      = f.label "#{label}-hidden", "Hidden", class: "text-gray-700 dark:text-gray-300"
           - if current_user.admin?
             .col-span-3.sm:col-span-2
+              h3.mb-4.font-medium.text-gray-700.dark:text-gray-300 Admin Area
               .flex.items-start
                 .flex.items-center.h-5
                   = f.check_box :supporter, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", data: { checkbox_toggle_target: "source", action: "checkbox-toggle#display" }
                 .ml-3.text-sm
                   = f.label :supporter, class: "font-medium text-gray-700 dark:text-gray-300"
             .col-span-3.sm:col-span-2
-              = f.label :github, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-              = f.text_field :github, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-          .col-span-3.hidden.sm:block
-            - skin = current_user.skin.present? ? current_user.skin.split.last : "Classic"
-            - ShotChart::LABELS.each do |label|
-              h3 = label.humanize
-              = f.color_field "#{label}-color", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-              = f.select "#{label}-type", options_for_select([["Rounded", "spline"], ["Exact", ""]]), {}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
-              .flex.items-start
-                .flex.items-center.h-5
-                  = f.check_box "#{label}-dashed", class: " focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
-                .ml-3.text-sm
-                  = f.label "#{label}-dashed", "Dashed", class: "font-medium text-gray-700 dark:text-gray-300"
-              .flex.items-start
-                .flex.items-center.h-5
-                  = f.check_box "#{label}-hidden", class: " focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
-                .ml-3.text-sm
-                  = f.label "#{label}-hidden", "Hidden", class: "font-medium text-gray-700 dark:text-gray-300"
+              = f.label :github, class: "text-sm font-medium text-gray-700 dark:text-gray-300"
+              = f.text_field :github, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
       .px-4.py-3.bg-gray-50.dark:bg-gray-700.text-right.sm:px-6
         = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

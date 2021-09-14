@@ -18,6 +18,7 @@ end
 
 namespace :css_assets do
   task build: :environment do
+    convert_slim_to_erb
     path = "app/assets/stylesheets/tailwind-build.css"
     File.delete(path) if File.exist?(path)
     Rails.logger.info "Postcss building…"
@@ -25,6 +26,7 @@ namespace :css_assets do
   end
 
   task watch: :environment do
+    convert_slim_to_erb
     Rails.logger.info "Postcss watching"
     system("yarn watch")
   end
