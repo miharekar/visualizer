@@ -40,7 +40,7 @@ class ShotsController < ApplicationController
   def compare
     @shot = Shot.find(params[:id])
     @comparison = Shot.find(params[:comparison])
-    @chart = ShotChartCompare.new(@shot, @comparison, skin: current_user&.skin)
+    @chart = ShotChartCompare.new(@shot, @comparison, current_user&.chart_settings)
   end
 
   def create

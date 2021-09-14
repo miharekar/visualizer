@@ -63,7 +63,7 @@ class ShotChart
           valueDecimals: 2,
           valueSuffix: setting[:suffix]
         },
-        opacity: 0.8,
+        opacity: setting[:opacity] || 0.9,
         type: setting[:type] == "spline" ? "spline" : "line"
       }
     end
