@@ -18,7 +18,8 @@ end
 
 namespace :css_assets do
   task build: :environment do
-    File.delete("app/assets/stylesheets/tailwind-build.css")
+    path = "app/assets/stylesheets/tailwind-build.css"
+    File.delete(path) if File.exist?(path)
     Rails.logger.info "Postcss building…"
     system("yarn build")
   end
