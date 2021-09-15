@@ -21,6 +21,10 @@ class User < ApplicationRecord
     hash = Digest::MD5.hexdigest(email.to_s.downcase)
     "https://www.gravatar.com/avatar/#{hash}.jpg"
   end
+
+  def chart_settings
+    super.presence || ShotChart::CHART_SETTINGS
+  end
 end
 
 # == Schema Information

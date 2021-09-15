@@ -19,7 +19,7 @@ class ProfilesController < ApplicationController
   end
 
   def reset_chart_settings
-    @profile.update(chart_settings: ShotChart::CHART_SETTINGS)
+    @profile.update(chart_settings: nil)
     flash[:notice] = "Chart settings were reset to default."
     redirect_to edit_profile_path(@profile)
   end
