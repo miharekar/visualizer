@@ -54,4 +54,12 @@ class PopulateChartSettings < ActiveRecord::Migration[7.0]
       )
     end
   end
+
+  def down
+    MigrationUser.find_each do |user|
+      user.update_columns(
+        skin: user.skin == "Dark" ? "DSx" : "Classic"
+      )
+    end
+  end
 end
