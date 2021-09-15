@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 5462fbd5de1900c1b1ce1c9dc11c1a2d8cdcd809
+  revision: 0b5c7210af13021aab488adea76cec04a0c218fc
   branch: main
   specs:
     actioncable (7.0.0.alpha)
@@ -283,7 +283,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.5.2)
+    stimulus-rails (0.5.3)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
