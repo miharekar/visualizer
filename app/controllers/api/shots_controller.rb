@@ -12,18 +12,13 @@ module Api
     end
 
     def download
-      shot = current_user ? Shot.where(user_id: current_user.id) : Shot.visible
-      shot = shot.find_by(id: params[:shot_id])
+      shot = Shot.find(params[:shot_id])
 
-      if shot
-        allowed_attrs = %w[start_time profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
-        allowed_attrs += %w[timeframe data] if params[:essentials].blank?
-        json = shot.attributes.slice(*allowed_attrs)
-        json = json.merge(image_preview: shot.screenshot_url) if shot.screenshot?
-        render json: json
-      else
-        head :unprocessable_entity
-      end
+      allowed_attrs = %w[start_time profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
+      allowed_attrs += %w[timeframe data] if params[:essentials].blank?
+      json = shot.attributes.slice(*allowed_attrs)
+      json = json.merge(image_preview: shot.screenshot_url) if shot.screenshot?
+      render json: json
     end
 
     def upload
