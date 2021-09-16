@@ -19,6 +19,12 @@ GIT
       warden (~> 1.2.3)
 
 GIT
+  remote: https://github.com/miharekar/tickly.git
+  revision: 277b63c371e5a7f9d2a2a1410087ff6f21906cae
+  specs:
+    tickly (2.1.7)
+
+GIT
   remote: https://github.com/rails/rails.git
   revision: ceb4b94baaf17f3a9f4ea795c83ec6c67211f737
   branch: main
@@ -287,7 +293,6 @@ GEM
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
-    tickly (2.1.7)
     tilt (2.0.10)
     turbo-rails (0.7.12)
       rails (>= 6.0.0)
@@ -347,7 +352,7 @@ DEPENDENCIES
   sidekiq
   slim
   stimulus-rails
-  tickly
+  tickly!
   turbo-rails
   web-console
 

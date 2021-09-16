@@ -32,7 +32,7 @@ gem "aws-sdk-s3"
 gem "sidekiq"
 gem "memoist"
 
-gem "tickly"
+gem "tickly", git: "https://github.com/miharekar/tickly.git"
 gem "ferrum"
 
 gem "pry-rails"
