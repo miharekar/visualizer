@@ -26,11 +26,7 @@ class ShotChartCompare < ShotChart
     setting = chart_settings[og_label].presence || CHART_SETTINGS[og_label]
     return unless setting
 
-    setting = CHART_SETTINGS[og_label].merge(setting).transform_keys(&:to_sym)
-    setting.merge(
-      title: [setting[:title], " Comparison"].join,
-      opacity: 0.6
-    )
+    CHART_SETTINGS[og_label].merge(setting).merge("opacity" => 0.6, "title" => "#{setting['title']} Comparison")
   end
 
   def normalize_processed_shot_data

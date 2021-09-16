@@ -39,10 +39,10 @@ class ProfilesController < ApplicationController
   def build_chart_settings
     ShotChart::CHART_SETTINGS.keys.index_with do |label|
       {
-        color: params["user"]["#{label}-color"],
-        type: params["user"]["#{label}-type"],
-        dashed: ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-dashed"]),
-        hidden: ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-hidden"])
+        "color" => params["user"]["#{label}-color"],
+        "type" => params["user"]["#{label}-type"],
+        "dashed" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-dashed"]),
+        "hidden" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-hidden"])
       }
     end
   end

@@ -54,17 +54,17 @@ class ShotChart
       next if setting.blank?
 
       {
-        name: setting[:title],
+        name: setting["title"],
         data: d,
-        color: setting[:color],
-        visible: !setting[:hidden],
-        dashStyle: setting[:dashed] ? "Dash" : "Solid",
+        color: setting["color"],
+        visible: !setting["hidden"],
+        dashStyle: setting["dashed"] ? "Dash" : "Solid",
         tooltip: {
           valueDecimals: 2,
-          valueSuffix: setting[:suffix]
+          valueSuffix: setting["suffix"]
         },
-        opacity: setting[:opacity] || 1,
-        type: setting[:type] == "spline" ? "spline" : "line"
+        opacity: setting["opacity"] || 1,
+        type: setting["type"] == "spline" ? "spline" : "line"
       }
     end
   end
@@ -73,7 +73,7 @@ class ShotChart
     setting = chart_settings[label].presence
     return CHART_SETTINGS[label] unless setting
 
-    CHART_SETTINGS[label].merge(setting).transform_keys(&:to_sym)
+    CHART_SETTINGS[label].merge(setting)
   end
 
   def resistance_chart(pressure_data, flow_data)
