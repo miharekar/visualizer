@@ -73,7 +73,7 @@ class ShotChart
     setting = chart_settings[label].presence
     return CHART_SETTINGS[label] unless setting
 
-    CHART_SETTINGS[label].merge(setting.transform_keys(&:to_sym))
+    CHART_SETTINGS[label].merge(setting).transform_keys(&:to_sym)
   end
 
   def resistance_chart(pressure_data, flow_data)
