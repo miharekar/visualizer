@@ -15,6 +15,7 @@ html
     link href="https://rsms.me/inter/inter.css" rel="stylesheet"
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
+    script(defer data-domain="visualizer.coffee" src="https://plausible.io/js/plausible.js")
   body.flex.flex-col.h-screen class=("dark" if current_user&.skin == "Dark")
     header
       = render "shared/header"
