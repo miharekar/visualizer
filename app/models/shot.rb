@@ -35,7 +35,7 @@ class Shot < ApplicationRecord
     EXTRA_DATA_METHODS.each do |attr|
       public_send("#{attr}=", extra[attr].presence)
     end
-    self.bean_weight = extra["DSx_bean_weight"].presence || extra["grinder_dose_weight"].presence || extra["bean_weight"].presence
+    self.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
   end
 
   def fahrenheit?
