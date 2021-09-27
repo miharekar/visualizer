@@ -1,5 +1,7 @@
 # [Decent Visualizer](https://visualizer.coffee/)
 
+![Ruby Tests](https://github.com/miharekar/decent-visualizer/actions/workflows/ruby-tests.yml/badge.svg)
+
 A visualizer for `.shot` files for the [Decent Espresso Machine](https://decentespresso.com/).
 
 Read [all about v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84ZvC2p1) and feel free to [join Visualizer Forum](https://decentforum.com/tag/visualizer).
