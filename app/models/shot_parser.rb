@@ -24,7 +24,15 @@ class ShotParser
 
   def parse_file
     json_parse || tcl_parse
-  rescue SystemStackError, StandardError, Tickly::Parser::Error => e
+  rescue Tickly::Parser::Error => e
+    invalid_machine = @file.split("machine {")
+    raise e unless invalid_machine.size > 1
+
+    @file = invalid_machine.first
+    retry
+  rescue SystemStackError, StandardError => e
+    raise e if Rails.env.development?
+
     Rollbar.error(e, file: @file)
   end
 

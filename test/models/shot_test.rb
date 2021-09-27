@@ -32,4 +32,9 @@ class ShotTest < ActiveSupport::TestCase
     shot = Shot.from_file(users(:miha), "test/fixtures/files/dsx_weight.shot")
     assert_equal 18.0, shot.bean_weight.to_f
   end
+
+  test "handles invalid machine string" do
+    shot = Shot.from_file(users(:miha), "test/fixtures/files/invalid_machine.shot")
+    assert_equal "Cremina lever machine", shot.profile_title
+  end
 end

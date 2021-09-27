@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 1a240cf83e03527567dea68f3c6bea5301d90113
+  revision: 53000f3a2df5c59252d019bbb8d46728b291ec74
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -108,7 +108,7 @@ GIT
       method_source
       rake (>= 0.13)
       thor (~> 1.0)
-      zeitwerk (~> 2.5.0.beta3)
+      zeitwerk (~> 2.5.0.beta4)
 
 GEM
   remote: https://rubygems.org/
@@ -128,8 +128,8 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.503.0)
-    aws-sdk-core (3.121.0)
+    aws-partitions (1.506.0)
+    aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -180,7 +180,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
-    importmap-rails (0.7.3)
+    importmap-rails (0.7.4)
       rails (>= 6.0.0)
     jmespath (1.4.0)
     kramdown (2.3.1)
@@ -289,12 +289,12 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.5.4)
+    stimulus-rails (0.6.0)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
     tilt (2.0.10)
-    turbo-rails (0.7.14)
+    turbo-rails (0.8.1)
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -312,7 +312,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.0.beta3)
+    zeitwerk (2.5.0.beta4)
 
 PLATFORMS
   x86_64-darwin-20
