@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 415c07b8631b3e8883709c42d5c572061595c640
+  revision: 2ed58965fd1072d12e68671f32e9d79a5151b43c
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -108,7 +108,7 @@ GIT
       method_source
       rake (>= 0.13)
       thor (~> 1.0)
-      zeitwerk (~> 2.5.0.beta4)
+      zeitwerk (~> 2.5.0.beta5)
 
 GEM
   remote: https://rubygems.org/
@@ -128,7 +128,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.507.0)
+    aws-partitions (1.509.0)
     aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -180,7 +180,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
-    importmap-rails (0.7.4)
+    importmap-rails (0.7.6)
       rails (>= 6.0.0)
     jmespath (1.4.0)
     kramdown (2.3.1)
@@ -255,13 +255,13 @@ GEM
       netrc (~> 0.8)
     rexml (3.2.5)
     rollbar (3.2.0)
-    rubocop (1.21.0)
+    rubocop (1.22.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
-      rubocop-ast (>= 1.9.1, < 2.0)
+      rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.12.0)
@@ -312,7 +312,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.0.beta4)
+    zeitwerk (2.5.0.beta5)
 
 PLATFORMS
   x86_64-darwin-20

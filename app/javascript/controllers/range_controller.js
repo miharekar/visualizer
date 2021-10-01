@@ -1,11 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["number", "color"]
+  static targets = ["number", "range", "color", "text"]
 
   update(event) {
     const value = event.currentTarget.value
-    this.numberTarget.innerHTML = value
-    this.colorTarget.style.backgroundColor = "hsl(" + (124 / 100 * parseInt(value)) + ", 70%, 50%)"
+    const hsl = 124 / 100 * parseInt(value)
+    if (this.hasNumberTarget) {
+      this.numberTarget.value = value
+      this.numberTarget.style.backgroundColor = "hsl(" + hsl + ", 70%, 50%)"
+    }
+    if (this.hasRangeTarget) {
+      this.rangeTarget.value = value
+    }
+    if (this.hasTextTarget) {
+      this.textTarget.innerHTML = value
+    }
+    if (this.hasColorTarget) {
+      this.colorTarget.style.backgroundColor = "hsl(" + hsl + ", 70%, 50%)"
+    }
   }
 }

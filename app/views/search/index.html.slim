@@ -23,7 +23,7 @@
               - min = params[:min_enjoyment].presence || 0
               - hue = (124.0 / 100 * min.to_i).round
               .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
-                .text-white.py-1.text-center data-range-target="number"
+                .text-white.py-1.text-center data-range-target="text"
                   = min
               = f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
           .col-span-6.md:col-span-5
@@ -32,7 +32,7 @@
               - max = params[:max_enjoyment].presence || 100
               - hue = (124.0 / 100 * max.to_i).round
               .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
-                .text-white.py-1.text-center data-range-target="number"
+                .text-white.py-1.text-center data-range-target="text"
                   = max
               = f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update"}
           .col-span-6.md:hidden
