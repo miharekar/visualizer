@@ -10,7 +10,7 @@
             = f.label :espresso_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             .flex.items-center.mt-1 data-controller="range"
               - hue = (124.0 / 100 * @shot.espresso_enjoyment.to_i).round
-              = f.number_field :espresso_enjoyment, min: 0, max: 100, style: "background-color: hsl(#{hue}, 70%, 50%);", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-gray-800", data: {action: "input->range#update", range_target: "number"}
+              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: hsl(#{hue}, 70%, 50%);", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-gray-800", data: {action: "input->range#update", range_target: "number"}
               = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update", range_target: "range"}
           .col-span-6.sm:col-span-4
             = f.label :profile_title, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"

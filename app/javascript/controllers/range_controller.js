@@ -4,7 +4,9 @@ export default class extends Controller {
   static targets = ["number", "range", "color", "text"]
 
   update(event) {
-    const value = event.currentTarget.value
+    var value = parseInt(event.currentTarget.value)
+    value = value > 100 ? 100 : value
+    value = value < 0 ? 0 : value
     const hsl = 124 / 100 * parseInt(value)
     if (this.hasNumberTarget) {
       this.numberTarget.value = value
