@@ -10,13 +10,13 @@
           - (SearchController::FILTERS - [:user]).each do |filter|
             .col-span-6.md:col-span-3
               = f.label filter, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-              = f.text_field filter, value: params[filter], list:"#{filter.to_s.dasherize}-list", class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              = f.text_field filter, value: params[filter], list:"#{filter.to_s.dasherize}-list", class: "standard-input"
               datalist id="#{filter.to_s.dasherize}-list"
                 - @filters[filter].each do |option|
                   option = option
           .col-span-6.md:col-span-3
             = f.label :user, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.collection_select :user, @filters[:user], :id, :name, {selected: params[:user], include_blank: true}, {class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"}
+            = f.collection_select :user, @filters[:user], :id, :name, {selected: params[:user], include_blank: true}, {class: "standard-input"}
           .col-span-6.md:col-span-5
             = f.label :min_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             .flex.items-center.mt-1 data-controller="range"
