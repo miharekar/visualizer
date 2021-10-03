@@ -30,9 +30,9 @@ class ShotsController < ApplicationController
     @shot = Shot.find(params[:id])
     @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, current_user&.chart_settings)
-    return if current_user.nil? || @shot.user != current_user
+    return if current_user.nil?
 
-    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.pluck(:id, :profile_title, :start_time)
+    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.where(start_time: 1.month.ago..).pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end
@@ -41,6 +41,9 @@ class ShotsController < ApplicationController
     @shot = Shot.find(params[:id])
     @comparison = Shot.find(params[:comparison])
     @chart = ShotChartCompare.new(@shot, @comparison, current_user&.chart_settings)
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "Comparison shot not found!"
+    @shot ? redirect_to(@shot) : redirect_to(:root)
   end
 
   def create
@@ -53,7 +56,7 @@ class ShotsController < ApplicationController
     if params.key?(:drag)
       head :ok
     else
-      redirect_to({action: :index})
+      redirect_to action: :index
     end
   end
 
