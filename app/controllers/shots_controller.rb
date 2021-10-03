@@ -32,7 +32,7 @@ class ShotsController < ApplicationController
     @chart = ShotChart.new(@shot, current_user&.chart_settings)
     return if current_user.nil?
 
-    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.where(start_time: 1.month.ago..).pluck(:id, :profile_title, :start_time)
+    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(20).pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end
