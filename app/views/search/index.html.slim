@@ -8,15 +8,13 @@
       .p-4.bg-white.dark:bg-gray-800.space-y-6.sm:p-4
         .grid.grid-cols-12.gap-3
           - (SearchController::FILTERS - [:user]).each do |filter|
-            .col-span-6.md:col-span-3
+            .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-controller="autocomplete"
               = f.label filter, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-              = f.text_field filter, value: params[filter], list:"#{filter.to_s.dasherize}-list", class: "standard-input"
-              datalist id="#{filter.to_s.dasherize}-list"
-                - @filters[filter].each do |option|
-                  option = option
+              = f.text_field filter, value: params[filter], class: "standard-input", data: {autocomplete_target: "input"}
+              ul.list-group data-autocomplete-target="results"
           .col-span-6.md:col-span-3
             = f.label :user, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.collection_select :user, @filters[:user], :id, :name, {selected: params[:user], include_blank: true}, {class: "standard-input"}
+            = f.collection_select :user, @users, :id, :name, {selected: params[:user], include_blank: true}, {class: "standard-input"}
           .col-span-6.md:col-span-5
             = f.label :min_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             .flex.items-center.mt-1 data-controller="range"

@@ -31,7 +31,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :search, only: [:index]
+  resources :search, only: [:index] do
+    collection do
+      get :autocomplete
+    end
+  end
   resources :stats, only: [:index]
   resources :sponsorships, only: [:create]
 
