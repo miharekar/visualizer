@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/heartcombo/responders.git
-  revision: cf72db400492bf19a2169bd7b6de68e7036df30e
+  revision: d15834ec95546c529375d6497104941be79372f6
   specs:
     responders (3.0.1)
       actionpack (>= 5.2)
@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/miharekar/devise.git
-  revision: 7353b259f8544e829921ec1d12d1d1a5688b0db8
+  revision: d862351d0a184d505bbb9c26a3679c97a597d506
   branch: rails7
   specs:
     devise (4.8.0)
@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: c2b083df913f44e664576aafe24c41ec657f8eb5
+  revision: fb1ab3460a676ce7def0819c2e92289ef2dcbe3b
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -101,7 +101,6 @@ GIT
       activesupport (= 7.0.0.alpha2)
       bundler (>= 1.15.0)
       railties (= 7.0.0.alpha2)
-      sprockets-rails (>= 2.0.0)
     railties (7.0.0.alpha2)
       actionpack (= 7.0.0.alpha2)
       activesupport (= 7.0.0.alpha2)
@@ -128,13 +127,13 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.510.0)
+    aws-partitions (1.513.0)
     aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.48.0)
+    aws-sdk-kms (1.49.0)
       aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.103.0)
@@ -255,7 +254,7 @@ GEM
       netrc (~> 0.8)
     rexml (3.2.5)
     rollbar (3.2.0)
-    rubocop (1.22.0)
+    rubocop (1.22.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -269,7 +268,7 @@ GEM
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.12.2)
+    rubocop-rails (2.12.3)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
@@ -289,7 +288,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.6.0)
+    stimulus-rails (0.7.0)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
@@ -351,6 +350,7 @@ DEPENDENCIES
   rubocop-rails
   sidekiq
   slim
+  sprockets-rails
   stimulus-rails
   tickly!
   turbo-rails

@@ -6,6 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.0.2"
 
 gem "rails", github: "rails/rails", branch: "main"
+gem "sprockets-rails"
 gem "pg"
 gem "redis"
 gem "puma"
