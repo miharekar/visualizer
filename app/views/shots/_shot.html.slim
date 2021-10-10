@@ -23,8 +23,7 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
             = shot.start_time.in_time_zone(@timezone).to_s(:long)
         - if include_person
           .flex.items-center
-            img.h-4.w-4.rounded-full src=avatar_url(shot.user, 48)
-            .ml-1.text-sm.text-gray-500.dark:text-gray-400 = shot.user.name
+            .text-sm.text-gray-500.dark:text-gray-400 = shot.user.name
             - if shot.user.supporter
               a href="https://github.com/sponsors/miharekar" title="Supporter" target="_blank"
                 svg.ml-1.h-4.w-4.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"

@@ -9,10 +9,9 @@ class SearchController < ApplicationController
 
   def index
     @shots = Shot.visible.with_avatars.by_start_time
+    @users = unique_values_for(:user)
 
-    @filters = {}
     FILTERS.each do |filter|
-      @filters[filter] = unique_values_for(filter)
       next if params[filter].blank?
 
       @shots = if filter == :user
@@ -25,6 +24,12 @@ class SearchController < ApplicationController
     @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment].to_i..params[:max_enjoyment].to_i))
 
     @pagy, @shots = pagy(@shots)
+  end
+
+  def autocomplete
+    query = params[:q].split(/\s+/).join(".*")
+    @values = unique_values_for(params[:filter]).grep(/#{query}/i)
+    render layout: false
   end
 
   def unique_values_for(filter)
