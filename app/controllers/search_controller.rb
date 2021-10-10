@@ -27,7 +27,8 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @values = unique_values_for(params[:filter]).grep(/#{params[:q]}/i)
+    query = params[:q].split(/\s+/).join(".*")
+    @values = unique_values_for(params[:filter]).grep(/#{query}/i)
     render layout: false
   end
 
