@@ -21,7 +21,8 @@ class SearchController < ApplicationController
                end
     end
 
-    @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment].to_i..params[:max_enjoyment].to_i))
+    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].present?
+    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present?
 
     @pagy, @shots = pagy(@shots)
   end
