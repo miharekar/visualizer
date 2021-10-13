@@ -16,7 +16,7 @@ Read [all about v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84Zv
 
 - Ruby (Check [.ruby-version](.ruby-version) for specific version)
   - Bundler (`gem install bundler`)
-- Node (Check [.nvmrc](.nvmrc) for specific version)
+- Node (Only needed for building assets, latest stable version will do)
 - Postgres (>= 12)
 
 ### Configuration
