@@ -4,7 +4,7 @@
 
 A visualizer for `.shot` files created by the [Decent Espresso Machine](https://decentespresso.com/).
 
-This is a [Ruby on Rails](https://rubyonrails.org/) application with a [Postgres](https://www.postgresql.org/) database and a [Node.js](https://nodejs.org/) frontend written in mainly [javascript](https://www.javascript.com/) with [Tailwind CSS](https://tailwindcss.com/).
+This is a [Ruby on Rails](https://rubyonrails.org/) application with a [Postgres](https://www.postgresql.org/) database and frontend written in mainly [javascript](https://www.javascript.com/) with [Tailwind CSS](https://tailwindcss.com/), [Turbo](https://github.com/hotwired/turbo-rails), and [Stimulus](https://stimulus.hotwired.dev/).
 
 Read [all about v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84ZvC2p1) and feel free to [join Visualizer Forum](https://decentforum.com/tag/visualizer).
 
