@@ -37,15 +37,15 @@ When it comes to deploying you will need to set some environment variables, name
     ```shell
     $ bundle install
     ```
-- Install Node packages
-    ```shell
-    $ yarn install
-    ```
 - Setup database
     ```shell
     $ ./bin/rails db:setup
     ```
-- Build assets
+- Install Node packages
+    ```shell
+    $ yarn install
+    ```
+- Build assets (optional)
     ```shell
     $ ./bin/rails css_assets:build
     ```
