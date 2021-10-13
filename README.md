@@ -16,7 +16,6 @@ Read [all about v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84Zv
 
 - Ruby (Check [.ruby-version](.ruby-version) for specific version)
   - Bundler (`gem install bundler`)
-  - Rake (`gem install rake`)
 - Node (Check [.nvmrc](.nvmrc) for specific version)
 - Postgres (>= 12)
 
@@ -32,7 +31,7 @@ TODO: What configurable environment variables are there?
     ```
 - Setup database
     ```shell
-    $ rake db:setup
+    $ ./bin/rails db:setup
     ```
 - Install Node packages
     ```shell
