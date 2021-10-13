@@ -4,31 +4,29 @@
 
 A visualizer for `.shot` files created by the [Decent Espresso Machine](https://decentespresso.com/).
 
-This is a [Ruby on Rails](https://rubyonrails.org/) application with a [Postgres](https://www.postgresql.org/) database and frontend written in mainly [javascript](https://www.javascript.com/) with [Tailwind CSS](https://tailwindcss.com/), [Turbo](https://github.com/hotwired/turbo-rails), and [Stimulus](https://stimulus.hotwired.dev/).
+Visualizer is a relatively standard [Ruby on Rails](https://rubyonrails.org/) application with a [Postgres](https://www.postgresql.org/) database.
 
 Read [all about v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84ZvC2p1) and feel free to [join Visualizer Forum](https://decentforum.com/tag/visualizer).
 
 [![](sample.png)](https://visualizer.coffee/shots/77152920-e5f5-4fd9-a54c-e84133ea1d3e)
 
-## Contributing
-
 ### Dependencies
 
 - Ruby (Check [.ruby-version](.ruby-version) for specific version)
   - Bundler (`gem install bundler`)
-- Node (Only needed for building assets, latest stable version will do)
 - Postgres (>= 12)
+- Node (Only needed for rebuilding assets)
 
 ### Configuration
 
-For local development there is nothing to configure.
+For local development, there is nothing to configure.
 
-When it comes to deploying you will need to set some environment variables, namely:
+When it comes to deploying, you will need to set some environment variables, namely:
 
-- CLOUDINARY_URL 
+- CLOUDINARY_URL
 - AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY 
-- AWS_REGION 
+- AWS_SECRET_ACCESS_KEY
+- AWS_REGION
 - BUCKET_URL
 
 ### Setup
@@ -41,12 +39,9 @@ When it comes to deploying you will need to set some environment variables, name
     ```shell
     $ ./bin/rails db:setup
     ```
-- Install Node packages
+- Rebuild assets (optional)
     ```shell
     $ yarn install
-    ```
-- Build assets (optional)
-    ```shell
     $ ./bin/rails css_assets:build
     ```
 
@@ -61,16 +56,13 @@ $ ./bin/rails server
 ```shell
 $ ./bin/rails test
 ```
+
 ### Getting help
 
-If you have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker.
+If you have questions, concerns, bug reports, etc, please open a new [GitHub Issue](https://github.com/miharekar/decent-visualizer/issues/).
 
 ### Getting involved
 
-If you're a coffee fanatic, own a Decent Espresso machine, want to learn Ruby, or just want to help in whatever way you can, then please get involved!
+If you're a coffee fanatic, own a Decent Espresso machine, want to learn Ruby, or want to help in whatever way you can, then you're welcomed to get involved!
 
-But please read the [Contribution Guidelines](CONTRIBUTING) before you do :)
-
-## Open source licensing info
-
-[LICENCE](LICENSE)
+But please read the [Contribution Guidelines](CONTRIBUTING) first 😊
