@@ -49,7 +49,7 @@ When it comes to deploying you will need to set some environment variables, name
 ### Running
 
 ```shell
-$ ./bin/rails server -b 0.0.0.0 -p 3000 -e development
+$ ./bin/rails server
 ```
 
 ### How to test
