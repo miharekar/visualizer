@@ -1,17 +1,17 @@
 # Guidance on how to contribute
 
 There are two primary ways to help:
-- Using the issue tracker
+- Using [GitHub Issues](https://github.com/miharekar/decent-visualizer/issues)
 - Changing the code
 
 
-## Using the issue tracker
+## Using GitHub Issues
 
-Use the issue tracker to suggest feature requests, report bugs, and ask questions.
+Use GitHub Issues to suggest feature requests, report bugs, and ask questions.
 This is also a great way to connect with the developers of the project as well
 as others who are interested in this solution.
 
-Use the issue tracker to find ways to contribute. Find a bug or a feature, mention in
+Use GitHub Issues to find ways to contribute. Find a bug or a feature, mention in
 the issue that you will take on that effort, then follow the _Changing the code_
 guidance below.
 
