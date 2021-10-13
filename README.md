@@ -21,7 +21,15 @@ Read [all about v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84Zv
 
 ### Configuration
 
-TODO: What configurable environment variables are there?
+For local development there is nothing to configure.
+
+When it comes to deploying you will need to set some environment variables, namely:
+
+- CLOUDINARY_URL 
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY 
+- AWS_REGION 
+- BUCKET_URL
 
 ### Setup
 
