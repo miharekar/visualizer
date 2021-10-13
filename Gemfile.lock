@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: bc590ffa70da31c60087a78e372872c2ada22374
+  revision: f2be2b013cc468eb4e10bb33ac001e48d4952f99
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -105,7 +105,7 @@ GIT
       actionpack (= 7.0.0.alpha2)
       activesupport (= 7.0.0.alpha2)
       method_source
-      rake (>= 0.13)
+      rake (>= 12.2)
       thor (~> 1.0)
       zeitwerk (~> 2.5.0.beta5)
 
@@ -127,7 +127,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.513.0)
+    aws-partitions (1.514.0)
     aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -179,7 +179,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
-    importmap-rails (0.7.6)
+    importmap-rails (0.8.1)
       rails (>= 6.0.0)
     jmespath (1.4.0)
     kramdown (2.3.1)
@@ -229,7 +229,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.5.0)
+    puma (5.5.2)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -293,7 +293,7 @@ GEM
     temple (0.8.2)
     thor (1.1.0)
     tilt (2.0.10)
-    turbo-rails (0.8.1)
+    turbo-rails (7.1.0)
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
