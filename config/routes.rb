@@ -24,6 +24,10 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get :people, to: "people#index"
+  get "people/:slug", to: "people#show", as: :users_shots
+  get :changelog, to: "changelogs#index"
+
   resources :shots, except: [:new] do
     member do
       get :chart
@@ -36,14 +40,13 @@ Rails.application.routes.draw do
       get :autocomplete
     end
   end
-  resources :stats, only: [:index]
-  resources :sponsorships, only: [:create]
-
-  get :people, to: "people#index"
-  get "people/:slug", to: "people#show", as: :users_shots
 
   resources :profiles, only: %i[edit update] do
     get :reset_chart_settings
     get :edit, on: :collection
   end
+
+  resources :stats, only: [:index]
+  resources :sponsorships, only: [:create]
+  resources :changelogs, except: %i[index show destroy]
 end

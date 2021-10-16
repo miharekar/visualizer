@@ -1,0 +1,18 @@
+<div class="bg-white dark:bg-gray-900 shadow">
+  <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100">Changelog</h1>
+    <%= link_to "New", new_changelog_path if current_user&.admin %>
+  </div>
+</div>
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+  <% @changelogs.each do |changelog| %>
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <%= changelog.published_at.strftime('%B %-d, %Y') %>:
+      <%= changelog.title %>
+    </h2>
+    <div class="mb-8">
+      <%= markdown_text_from(changelog.body) %>
+      <%= link_to "Edit", edit_changelog_path(changelog) if current_user&.admin %>
+    </div>
+  <% end %>
+</div>

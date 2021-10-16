@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 class StatsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :check_admin!
 
   def index
-    redirect_to :shots unless current_user.admin?
-
     @shot_count = Shot.count
     @user_count = User.count
     @uploaded_chart = [{

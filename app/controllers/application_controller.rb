@@ -13,4 +13,9 @@ class ApplicationController < ActionController::Base
     zone = current_user&.timezone.presence || cookies["browser.timezone"] || "UTC"
     @timezone = ActiveSupport::TimeZone.new(zone)
   end
+
+  def check_admin!
+    authenticate_user!
+    redirect_to shots_path unless current_user.admin?
+  end
 end
