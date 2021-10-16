@@ -38,6 +38,7 @@ end
 #  encrypted_password     :string           default(""), not null
 #  github                 :string
 #  hide_shot_times        :boolean
+#  last_read_change       :datetime
 #  name                   :string
 #  public                 :boolean          default(FALSE)
 #  remember_created_at    :datetime

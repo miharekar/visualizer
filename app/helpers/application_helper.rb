@@ -22,4 +22,8 @@ module ApplicationHelper
   def avatar_url(user, size)
     user.avatar.attached? ? url_for(user.avatar) : "#{user.gravatar_url}?s=#{size}&d=mp"
   end
+
+  def change_count
+    @change_count ||= Change.where("published_at > ?", current_user.last_read_change).count
+  end
 end
