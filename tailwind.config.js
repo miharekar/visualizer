@@ -13,6 +13,7 @@ module.exports = {
     enabled: purgeEnabled,
     content: [
       './app/**/*.js',
+      './app/views/**/*.erb',
       './tmp/*.html.erb'
     ]
   },

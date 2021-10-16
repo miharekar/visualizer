@@ -6,7 +6,7 @@ pin "@rails/actioncable", to: "actioncable.esm.js"
 pin "@hotwired/turbo-rails", to: "turbo.js"
 pin "@hotwired/stimulus", to: "https://ga.jspm.io/npm:@hotwired/stimulus@3.0.1/dist/stimulus.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
-pin "stimulus-autocomplete", to: "https://ga.jspm.io/npm:stimulus-autocomplete@3.0.0-rc.2/src/autocomplete.js"
+pin "stimulus-autocomplete", to: "https://ga.jspm.io/npm:stimulus-autocomplete@3.0.0-rc.3/src/autocomplete.js"
 pin "el-transition", to: "https://ga.jspm.io/npm:el-transition@0.0.7/index.js"
 pin "highcharts", to: "https://ga.jspm.io/npm:highcharts@9.2.2/highcharts.js"
 
