@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: f2be2b013cc468eb4e10bb33ac001e48d4952f99
+  revision: 573bba3ba9a653551e078802e09e8585e03dd49a
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -107,7 +107,7 @@ GIT
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
-      zeitwerk (~> 2.5.0.beta5)
+      zeitwerk (~> 2.5.0.beta6)
 
 GEM
   remote: https://rubygems.org/
@@ -127,7 +127,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.514.0)
+    aws-partitions (1.516.0)
     aws-sdk-core (3.121.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -158,7 +158,7 @@ GEM
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     crass (1.0.6)
-    dalli (2.7.11)
+    dalli (3.0.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
@@ -217,7 +217,7 @@ GEM
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (4.11.0)
+    pagy (5.0.0)
     parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
@@ -247,7 +247,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.4.0)
+    redis (4.5.1)
     regexp_parser (2.1.1)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
@@ -270,7 +270,7 @@ GEM
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.12.3)
+    rubocop-rails (2.12.4)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
@@ -290,7 +290,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.7.0)
+    stimulus-rails (0.7.1)
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
@@ -313,7 +313,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.0.beta5)
+    zeitwerk (2.5.0.beta6)
 
 PLATFORMS
   arm64-darwin-20
