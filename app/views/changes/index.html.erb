@@ -7,7 +7,7 @@
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
   <% @changes.each do |change| %>
     <div class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <h2 class="text-2xl mb-3 font-bold text-gray-900 dark:text-gray-100">
         <%= change.published_at.strftime('%B %-d, %Y') %>:
         <%= change.title %>
       </h2>
