@@ -2,7 +2,7 @@
 
 class ChangesController < ApplicationController
   before_action :check_admin!, except: %i[index]
-  before_action :set_change, only: %i[edit update destroy]
+  before_action :set_change, only: %i[edit update]
 
   def index
     current_user&.update(last_read_change: Time.zone.now)
@@ -10,7 +10,7 @@ class ChangesController < ApplicationController
   end
 
   def new
-    @change = Change.new(published_at: Time.zone.now)
+    @change = Change.new(published_at: Date.today)
   end
 
   def edit; end
