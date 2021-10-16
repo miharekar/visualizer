@@ -24,15 +24,15 @@
                   button#user-menu.max-w-xs.bg-gray-800.rounded-full.flex.items-center.text-sm.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white data-action="click->menu#transform click@window->menu#hide" data-menu-target="button"
                     img.h-8.w-8.rounded-full src=avatar_url(current_user, 64)
                   - if change_count > 0
-                    span.absolute.top-0.right-0.inline-block.w-3.h-3.transform.bg-red-600.rounded-full class=("translate-x-1/4 -translate-y-1/4")
+                    span.absolute.top-0.right-0.inline-block.w-3.h-3.transform.bg-red-600.rounded-full.translate-x-1/4.-translate-y-1/4
                 .origin-top-right.absolute.right-0.mt-2.w-48.rounded-md.shadow-lg.py-1.bg-white.dark:bg-black.ring-1.ring-black.ring-opacity-5.hidden data-menu-target="transformable" data-transition-enter="transition ease-out duration-100" data-transition-enter-end="transform opacity-100 scale-100" data-transition-enter-start="transform opacity-0 scale-95" data-transition-leave="transition ease-in duration-75" data-transition-leave-end="transform opacity-0 scale-95" data-transition-leave-start="transform opacity-100 scale-100"
-                  = link_to changelog_path, class: "block px-4 py-2  bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900" do
-                    .flex.items-center.text-gray-900
+                  = link_to changelog_path, class: "block px-4 py-2 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900" do
+                    .flex
                       .flex-grow.text-sm.text-gray-700.dark:text-gray-300
                         ' Changelog
                       - if change_count > 0
-                        .rounded-full.h-5.w-5.bg-red-500.dark:bg-red-700
-                          .text-center.text-sm.text-white
+                        .rounded-full.h-5.w-5.bg-red-600
+                          .text-center.text-sm.text-white.dark:text-black
                             = change_count
                   = link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900"
                   = button_to "Sign Out", destroy_user_session_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900", method: :delete
@@ -49,13 +49,16 @@
                 = link_to "Sign Up", new_user_registration_path, class: "px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
         .-mr-2.flex.md:hidden
           /! Mobile menu button
-          button.bg-gray-800.inline-flex.items-center.justify-center.p-2.rounded-md.text-gray-400.hover:text-white.hover:bg-gray-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white data-action="click->menu#toggle"
-            /! Heroicon name: menu
-            svg.block.h-6.w-6 data-menu-target="toggleable" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-              path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            /! Heroicon name: x
-            svg.hidden.h-6.w-6 data-menu-target="toggleable" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-              path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          span.relative.inline-block.ml-8
+            button.bg-gray-800.inline-flex.items-center.justify-center.p-2.rounded-md.text-gray-400.hover:text-white.hover:bg-gray-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-offset-gray-800.focus:ring-white data-action="click->menu#toggle"
+              /! Heroicon name: menu
+              svg.block.h-6.w-6 data-menu-target="toggleable" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              /! Heroicon name: x
+              svg.hidden.h-6.w-6 data-menu-target="toggleable" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            - if current_user && change_count > 0
+              span.absolute.top-0.right-0.inline-block.w-3.h-3.transform.bg-red-600.rounded-full.-translate-x-1.translate-y-1 data-menu-target="toggleable"
     .hidden.md:hidden data-menu-target="toggleable"
       .px-2.pt-2.pb-2.space-y-1.sm:px-3
         - if user_signed_in?
@@ -64,6 +67,14 @@
         = active_link_to "Decent People", people_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
       .border-t.border-gray-700.px-2.pt-2.pb-3.space-y-1.sm:px-3
         - if user_signed_in?
+          = active_link_to changelog_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white" do
+            .flex.items-center
+              .flex-grow
+                ' Changelog
+              - if change_count > 0
+                .rounded-full.h-5.w-5.bg-red-600
+                  .text-center.text-sm.text-white
+                    = change_count
           = active_link_to "Edit Profile", edit_profiles_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
           = button_to "Sign Out", destroy_user_session_path, class: "block w-full text-left cursor-pointer px-3 py-2 rounded-md text-base text-gray-300 bg-gray-800 hover:bg-gray-700 hover:text-white font-medium", method: :delete
         - else

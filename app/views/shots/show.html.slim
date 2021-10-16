@@ -15,7 +15,7 @@
   = render "shared/modal"
   - if owner || @shot.user&.public?
     .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8.flex.items-center.justify-between
-      h1.text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
+      h1.text-2xl.sm:text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
         - if !owner && @shot.user.public?
           .flex.items-center.flex-wrap
             img.h-10.w-10.rounded-full src=avatar_url(@shot.user, 80)

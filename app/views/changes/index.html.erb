@@ -4,7 +4,7 @@
     <%= link_to "New", new_change_path if current_user&.admin %>
   </div>
 </div>
-<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
   <% @changes.each do |change| %>
     <div class="mb-10" id=<%= dom_id(change) %>>
       <a href="<%= changelog_path(anchor: dom_id(change)) %>">
