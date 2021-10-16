@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   get :people, to: "people#index"
   get "people/:slug", to: "people#show", as: :users_shots
-  get :changelog, to: "changelogs#index"
+  get :changelog, to: "changes#index"
 
   resources :shots, except: [:new] do
     member do
@@ -48,5 +48,5 @@ Rails.application.routes.draw do
 
   resources :stats, only: [:index]
   resources :sponsorships, only: [:create]
-  resources :changelogs, except: %i[index show destroy]
+  resources :changes, except: %i[index show destroy]
 end

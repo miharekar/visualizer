@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_16_142857) do
+ActiveRecord::Schema.define(version: 2021_10_16_155049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2021_10_16_142857) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "changelogs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "changes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.text "body"
     t.datetime "published_at", precision: 6
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2021_10_16_142857) do
     t.boolean "hide_shot_times"
     t.string "github"
     t.jsonb "chart_settings"
+    t.datetime "last_read_change", precision: 6
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true

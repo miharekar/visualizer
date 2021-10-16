@@ -1,21 +1,21 @@
 <div class=" mt-5 md:mt-0 md:col-span-2">
-  <%= form_with(model: changelog) do |form| %>
-    <div class="shadow sm:rounded-md sm:overflow-hidden" id=dom_id(changelog)>
+  <%= form_with(model: change) do |form| %>
+    <div class="shadow sm:rounded-md sm:overflow-hidden" id=dom_id(change)>
       <div class="px-4 py-5 bg-white dark:bg-gray-800 space-y-6 sm:p-6">
         <div class="grid grid-cols-6 gap-6">
-          <div class="col-span-6">
+          <div class="col-span-3">
             <%= form.label :title, class: "standard-label" %>
             <%= form.text_field :title, class: "standard-input" %>
+          </div>
+          <div class="col-span-3">
+            <%= form.label :published_at, class: "standard-label" %>
+            <%= form.datetime_field :published_at, class: "standard-input" %>
           </div>
           <div class="col-span-6">
             <%= form.label :body, class: "standard-label" %>
             <div class="mt-1">
               <%= form.text_area :body, rows: 30, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800" %>
             </div>
-          </div>
-          <div class="col-span-6">
-            <%= form.label :published_at, class: "standard-label" %>
-            <%= form.date_field :published_at, class: "standard-input" %>
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Changelog < ApplicationRecord
+class Change < ApplicationRecord
 end
 
 # == Schema Information
 #
-# Table name: changelogs
+# Table name: changes
 #
 #  id           :uuid             not null, primary key
 #  body         :text
