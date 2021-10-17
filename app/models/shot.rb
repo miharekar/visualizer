@@ -24,7 +24,7 @@ class Shot < ApplicationRecord
 
     parsed_shot = ShotParser.new(File.read(file))
     shot = find_or_initialize_by(user: user, sha: parsed_shot.sha)
-    %i[profile_title start_time timeframe data extra].each do |m|
+    %i[profile_title start_time timeframe data extra profile_fields].each do |m|
       shot.public_send("#{m}=", parsed_shot.public_send(m))
     end
     shot.extract_fields_from_extra
@@ -49,6 +49,24 @@ class Shot < ApplicationRecord
   memoize def duration
     index = [data["espresso_flow"].size, timeframe.size].min
     timeframe[index - 1].to_f
+  end
+
+  def profile_file
+    return if profile_fields.blank?
+
+    content = profile_fields.to_a.sort_by(&:first).map do |k, v|
+      if v.blank?
+        v = "{}"
+      elsif /\w\s\w/.match?(v)
+        v = "{#{v}}"
+      end
+      "#{k} #{v}"
+    end
+    file = Tempfile.new(["#{profile_title} from Visualizer", ".tcl"]).tap do |f|
+      f.write(content.join("\n"))
+    end
+    file.close
+    file.path
   end
 
   def screenshot?
@@ -88,6 +106,7 @@ end
 #  extra              :jsonb
 #  grinder_model      :string
 #  grinder_setting    :string
+#  profile_fields     :jsonb
 #  profile_title      :string
 #  roast_date         :string
 #  roast_level        :string

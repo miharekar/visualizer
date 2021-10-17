@@ -3,8 +3,9 @@
 class ShotsController < ApplicationController
   include Pagy::Backend
 
-  before_action :authenticate_user!, except: %i[show compare chart]
-  before_action :load_shot, only: %i[edit update destroy]
+  before_action :authenticate_user!, except: %i[show compare chart profile]
+  before_action :load_shot, only: %i[show compare chart profile]
+  before_action :load_users_shot, only: %i[edit update destroy]
 
   FILTER_PARAMS = %i[bean_brand bean_type].freeze
 
@@ -12,22 +13,7 @@ class ShotsController < ApplicationController
     load_shots_with_pagy
   end
 
-  def chart
-    @no_header = true
-    @shot = Shot.find(params[:id])
-    @chart = ShotChart.new(@shot, current_user&.chart_settings)
-  end
-
-  def edit
-    shots = current_user.shots
-    %i[grinder_model bean_brand bean_type].each do |method|
-      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).compact }
-      instance_variable_set("@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
-    end
-  end
-
   def show
-    @shot = Shot.find(params[:id])
     @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, current_user&.chart_settings)
     return if current_user.nil?
@@ -38,12 +24,20 @@ class ShotsController < ApplicationController
   end
 
   def compare
-    @shot = Shot.find(params[:id])
     @comparison = Shot.find(params[:comparison])
     @chart = ShotChartCompare.new(@shot, @comparison, current_user&.chart_settings)
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     @shot ? redirect_to(@shot) : redirect_to(:root)
+  end
+
+  def chart
+    @no_header = true
+    @chart = ShotChart.new(@shot, current_user&.chart_settings)
+  end
+
+  def profile
+    send_file @shot.profile_file, filename: "#{@shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
   end
 
   def create
@@ -57,6 +51,14 @@ class ShotsController < ApplicationController
       head :ok
     else
       redirect_to action: :index
+    end
+  end
+
+  def edit
+    shots = current_user.shots
+    %i[grinder_model bean_brand bean_type].each do |method|
+      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).compact }
+      instance_variable_set("@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
     end
   end
 
@@ -93,6 +95,10 @@ class ShotsController < ApplicationController
   private
 
   def load_shot
+    @shot = Shot.find(params[:id])
+  end
+
+  def load_users_shot
     @shot = current_user.shots.find(params[:id])
   end
 
