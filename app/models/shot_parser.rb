@@ -86,6 +86,7 @@ class ShotParser
         extract_data_from("setting_#{setting_name.strip}", setting_data)
       end
     end
+    @profile_title = @profile_fields["profile_title"]
   end
 
   def extract_data_from(name, data)
@@ -102,10 +103,6 @@ class ShotParser
 
   def extract_espresso_elapsed(data)
     @timeframe = data
-  end
-
-  def extract_setting_profile_title(data)
-    @profile_title = handle_array_string(data).force_encoding("UTF-8")
   end
 
   def extract_profile(data)

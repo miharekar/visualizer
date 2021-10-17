@@ -51,6 +51,24 @@ class Shot < ApplicationRecord
     timeframe[index - 1].to_f
   end
 
+  def profile_file
+    return if profile_fields.blank?
+
+    content = profile_fields.to_a.sort_by(&:first).map do |k, v|
+      if v.blank?
+        v = "{}"
+      elsif /\w\s\w/.match?(v)
+        v = "{#{v}}"
+      end
+      "#{k} #{v}"
+    end
+    file = Tempfile.new(["#{profile_title} from Visualizer", ".tcl"]).tap do |f|
+      f.write(content.join("\n"))
+    end
+    file.close
+    file.path
+  end
+
   def screenshot?
     s3_etag.present? || cloudinary_id.present?
   end
