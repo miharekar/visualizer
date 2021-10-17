@@ -57,11 +57,9 @@ class Shot < ApplicationRecord
     content = profile_fields.to_a.sort_by(&:first).map do |k, v|
       v = "#{v} from Visualizer" if k == "profile_title"
       v = "#{v}\n\nDownloaded from Visualizer" if k == "profile_notes"
-      if v.blank?
-        v = "{}"
-      elsif /\w\s\w/.match?(v)
-        v = "{#{v}}"
-      end
+      v = "{}" if v.blank?
+      v = "{#{v}}" if /\w\s\w/.match?(v)
+
       "#{k} #{v}"
     end
     file = Tempfile.new(["#{profile_title} from Visualizer", ".tcl"]).tap do |f|
