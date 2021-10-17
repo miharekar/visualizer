@@ -2,13 +2,11 @@ const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 const forms = require('@tailwindcss/forms')
 const prose = require('@tailwindcss/typography')
-const tailwindMode = process.env.TAILWIND === 'full' ? {} : { mode: 'jit' }
 const purgeEnabled = process.env.TAILWIND === 'full' ? false : true
 const fontFamily = defaultTheme.fontFamily
 fontFamily['sans'] = ['Inter var', ...defaultTheme.fontFamily.sans]
 
 module.exports = {
-  ...tailwindMode,
   purge: {
     enabled: purgeEnabled,
     content: [
