@@ -13,7 +13,7 @@ espresso_flow_goal {-1.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0 6.0
 espresso_temperature_goal {95.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 81.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0 94.0}
 profile {
   "title": "JoeD's Easy blooming slow ramp to 7 bar",
-  "author": "Stéphane",
+  "author": "JoeD",
   "notes": "Downloaded from https:\/\/decentforum.com\/t\/effect-of-short-blooms-on-turbo-shots\/1016",
   "beverage_type": "espresso",
   "steps": [
@@ -143,7 +143,7 @@ settings {
 	also_load_god_shot 1
 	app_brightness 100
 	app_updates_beta_enabled 1
-	author Stéphane
+	author JoeD
 	automatically_ble_reconnect_forever_to_scale 0
 	battery_low_brightness 50
 	battery_low_trigger 60
