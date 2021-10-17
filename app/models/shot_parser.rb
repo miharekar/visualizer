@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ShotParser
-  PROFILE_FIELDS = %w[advanced_shot author beverage_type espresso_decline_time espresso_hold_time espresso_pressure espresso_temperature espresso_temperature_0 espresso_temperature_1 espresso_temperature_2 espresso_temperature_3 espresso_temperature_steps_enabled final_desired_shot_volume final_desired_shot_volume_advanced final_desired_shot_volume_advanced_count_start final_desired_shot_weight final_desired_shot_weight_advanced flow_profile_decline flow_profile_decline_time flow_profile_hold flow_profile_hold_time flow_profile_minimum_pressure flow_profile_preinfusion flow_profile_preinfusion_time maximum_flow maximum_flow_range maximum_flow_range_advanced maximum_flow_range_default maximum_pressure maximum_pressure_range maximum_pressure_range_advanced maximum_pressure_range_default preinfusion_flow_rate preinfusion_guarantee preinfusion_stop_pressure preinfusion_time pressure_end profile_hide profile_language profile_notes profile_title settings_profile_type tank_desired_water_temperature water_temperature].freeze
+  PROFILE_FIELDS = %w[advanced_shot author beverage_type espresso_decline_time espresso_hold_time espresso_pressure espresso_temperature espresso_temperature_0 espresso_temperature_1 espresso_temperature_2 espresso_temperature_3 espresso_temperature_steps_enabled final_desired_shot_volume final_desired_shot_volume_advanced final_desired_shot_volume_advanced_count_start final_desired_shot_weight final_desired_shot_weight_advanced flow_profile_decline flow_profile_decline_time flow_profile_hold flow_profile_hold_time flow_profile_minimum_pressure flow_profile_preinfusion flow_profile_preinfusion_time maximum_flow maximum_flow_range maximum_flow_range_advanced maximum_flow_range_default maximum_pressure maximum_pressure_range maximum_pressure_range_advanced maximum_pressure_range_default preinfusion_flow_rate preinfusion_guarantee preinfusion_stop_pressure preinfusion_time pressure_end profile_language profile_notes profile_title settings_profile_type].freeze
   EXTRA_DATA_CAPTURE = (Shot::EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight enable_fahrenheit]).freeze
   JSON_MAPPING = {
     "_weight" => "by_weight",
@@ -9,12 +9,13 @@ class ShotParser
     "_goal" => "goal"
   }.freeze
 
-  attr_reader :start_time, :data, :extra, :timeframe, :profile_title, :sha
+  attr_reader :start_time, :data, :extra, :timeframe, :profile_title, :profile_fields, :sha
 
   def initialize(file)
     @file = file
     @data = {}
     @extra = {}
+    @profile_fields = {}
     @start_chars_to_ignore = %i[c b]
     parse_file
 
@@ -107,6 +108,14 @@ class ShotParser
     @profile_title = handle_array_string(data).force_encoding("UTF-8")
   end
 
+  def extract_profile(data)
+    data.each do |key, value|
+      key = key[/^"(\w+)"/, 1]
+      key = "profile_#{key}" unless PROFILE_FIELDS.include?(key)
+      @profile_fields[key] = handle_array_string(value).force_encoding("UTF-8") if PROFILE_FIELDS.include?(key)
+    end
+  end
+
   Shot::DATA_LABELS.each do |name|
     define_method("extract_#{name}") do |data|
       @data[name] = data
@@ -116,6 +125,12 @@ class ShotParser
   EXTRA_DATA_CAPTURE.each do |name|
     define_method("extract_setting_#{name}") do |data|
       @extra[name] = handle_array_string(data).force_encoding("UTF-8")
+    end
+  end
+
+  PROFILE_FIELDS.each do |name|
+    define_method("extract_setting_#{name}") do |data|
+      @profile_fields[name] = handle_array_string(data).force_encoding("UTF-8")
     end
   end
 

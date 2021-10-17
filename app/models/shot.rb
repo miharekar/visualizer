@@ -24,7 +24,7 @@ class Shot < ApplicationRecord
 
     parsed_shot = ShotParser.new(File.read(file))
     shot = find_or_initialize_by(user: user, sha: parsed_shot.sha)
-    %i[profile_title start_time timeframe data extra].each do |m|
+    %i[profile_title start_time timeframe data extra profile_fields].each do |m|
       shot.public_send("#{m}=", parsed_shot.public_send(m))
     end
     shot.extract_fields_from_extra
@@ -88,6 +88,7 @@ end
 #  extra              :jsonb
 #  grinder_model      :string
 #  grinder_setting    :string
+#  profile_fields     :jsonb
 #  profile_title      :string
 #  roast_date         :string
 #  roast_level        :string
