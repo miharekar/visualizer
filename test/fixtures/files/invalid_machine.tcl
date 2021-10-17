@@ -36,7 +36,9 @@ preinfusion_stop_pressure 4
 preinfusion_time 20
 pressure_end 6.0
 profile_language en
-profile_notes {Aim for a 50 second shot time to have a thick espresso in the style of the much-loved Cremina manual lever machine. By Denis from KafaTek.}
-profile_title {Cremina lever machine}
+profile_notes {Aim for a 50 second shot time to have a thick espresso in the style of the much-loved Cremina manual lever machine. By Denis from KafaTek.
+
+Downloaded from Visualizer}
+profile_title {Cremina lever machine from Visualizer}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

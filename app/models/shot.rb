@@ -55,6 +55,8 @@ class Shot < ApplicationRecord
     return if profile_fields.blank?
 
     content = profile_fields.to_a.sort_by(&:first).map do |k, v|
+      v = "#{v} from Visualizer" if k == "profile_title"
+      v = "#{v}\n\nDownloaded from Visualizer" if k == "profile_notes"
       if v.blank?
         v = "{}"
       elsif /\w\s\w/.match?(v)

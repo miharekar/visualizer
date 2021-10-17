@@ -36,7 +36,9 @@ preinfusion_stop_pressure 4.0
 preinfusion_time 20
 pressure_end 4.0
 profile_language en
-profile_notes ...
-profile_title TurboBloom
+profile_notes {...
+
+Downloaded from Visualizer}
+profile_title {TurboBloom from Visualizer}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0
