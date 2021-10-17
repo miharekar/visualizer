@@ -1395,10 +1395,6 @@ input[type="color"]::-moz-color-swatch {
   margin-bottom: 1rem;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -1581,6 +1577,10 @@ input[type="color"]::-moz-color-swatch {
 
 .max-w-md {
   max-width: 28rem;
+}
+
+.max-w-3xl {
+  max-width: 48rem;
 }
 
 .max-w-4xl {
@@ -2789,6 +2789,11 @@ input[type="color"]::-moz-color-swatch {
   --tw-ring-color: rgba(0, 0, 0, var(--tw-ring-opacity));
 }
 
+.ring-gray-900 {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgba(28, 25, 23, var(--tw-ring-opacity));
+}
+
 .ring-red-500 {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgba(239, 68, 68, var(--tw-ring-opacity));
@@ -3012,10 +3017,6 @@ input[type="color"]::-moz-color-swatch {
   .sm\:scale-100 {
     --tw-scale-x: 1;
     --tw-scale-y: 1;
-  }
-
-  .sm\:flex-row {
-    flex-direction: row;
   }
 
   .sm\:flex-row-reverse {

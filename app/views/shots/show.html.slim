@@ -28,7 +28,7 @@
                 svg.ml-1.mt-1.h-9.w-9.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                   path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
       - else
-        .flex.sm:hidden
+        .sm:hidden
       .flex
         - if owner
           .flex data-controller="clipboard"
@@ -58,7 +58,7 @@
               svg.-ml-1.-mr-1.h-4.w-4.text-gray-500.dark:text-gray-300 fill="currentColor" viewbox=("0 0 20 20") xmlns="http://www.w3.org/2000/svg"
                 path clip-rule="evenodd" d=("M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z") fill-rule="evenodd"
       - if !header_content
-        .flex.sm:hidden
+        .sm:hidden
 
 = render "shared/flash"
 
