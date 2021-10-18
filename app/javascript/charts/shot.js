@@ -19,6 +19,8 @@ function isObject(obj) {
 
 function syncMouseEvents(element) {
   element.addEventListener("mousemove", syncMouse)
+  element.addEventListener("touchstart", syncMouse)
+  element.addEventListener("touchmove", syncMouse)
   element.addEventListener("mouseleave", mouseLeave)
 }
 
@@ -28,6 +30,9 @@ function getHoverPoint(chart, e) {
 }
 
 function syncMouse(e) {
+  e.preventDefault()
+  e.stopPropagation()
+
   const thisChart = this
 
   Highcharts.charts.forEach(function (chart) {
