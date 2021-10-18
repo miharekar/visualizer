@@ -27,20 +27,23 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 70, shot.espresso_enjoyment
     assert_equal "Neat.", shot.espresso_notes
     assert_equal "With BPlus", shot.bean_notes
-    assert_equal File.read("#{path}.tcl"), File.read(shot.profile_file)
+    assert_equal File.read("#{path}.tcl"), File.read(shot.profile_tcl)
+    assert_equal File.read("#{path}.json"), File.read(shot.profile_json)
   end
 
   test "extracts the non-zero bean weight" do
     path = "test/fixtures/files/dsx_weight"
     shot = Shot.from_file(users(:miha), "#{path}.shot")
     assert_equal 18.0, shot.bean_weight.to_f
-    assert_equal File.read("#{path}.tcl"), File.read(shot.profile_file)
+    assert_equal File.read("#{path}.tcl"), File.read(shot.profile_tcl)
+    assert_equal File.read("#{path}.json"), File.read(shot.profile_json)
   end
 
   test "handles invalid machine string" do
     path = "test/fixtures/files/invalid_machine"
     shot = Shot.from_file(users(:miha), "#{path}.shot")
     assert_equal "Cremina lever machine", shot.profile_title
-    assert_equal File.read("#{path}.tcl"), File.read(shot.profile_file)
+    assert_equal File.read("#{path}.tcl"), File.read(shot.profile_tcl)
+    assert_equal File.read("#{path}.json"), File.read(shot.profile_json)
   end
 end

@@ -4,6 +4,7 @@ class Shot < ApplicationRecord
   extend Memoist
   include CloudinaryHelper
 
+  JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
 
@@ -51,10 +52,10 @@ class Shot < ApplicationRecord
     timeframe[index - 1].to_f
   end
 
-  def profile_file
+  def profile_tcl
     return if profile_fields.blank?
 
-    content = profile_fields.to_a.sort_by(&:first).map do |k, v|
+    content = profile_fields.except("json").to_a.sort_by(&:first).map do |k, v|
       v = "#{v} from Visualizer" if k == "profile_title"
       v = "#{v}\n\nDownloaded from Visualizer" if k == "profile_notes"
       v = "{}" if v.blank?
@@ -62,11 +63,19 @@ class Shot < ApplicationRecord
 
       "#{k} #{v}"
     end
-    file = Tempfile.new(["#{profile_title} from Visualizer", ".tcl"]).tap do |f|
-      f.write(content.join("\n"))
+
+    file_from_content(["#{profile_title} from Visualizer", ".tcl"], content.join("\n"))
+  end
+
+  def profile_json
+    return if profile_fields.blank? || profile_fields["json"].blank?
+
+    json = {}
+    JSON_PROFILE_KEYS.each do |key|
+      json[key] = profile_fields["json"][key]
     end
-    file.close
-    file.path
+
+    file_from_content(["#{profile_title} from Visualizer", ".json"], JSON.pretty_generate(json))
   end
 
   def screenshot?
@@ -85,6 +94,15 @@ class Shot < ApplicationRecord
     return if screenshot?
 
     ScreenshotTakerJob.perform_later(self)
+  end
+
+  private
+
+  def file_from_content(filename, content)
+    file = Tempfile.new(filename)
+    file.write(content)
+    file.close
+    file.path
   end
 end
 

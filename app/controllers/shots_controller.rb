@@ -37,7 +37,7 @@ class ShotsController < ApplicationController
   end
 
   def profile
-    send_file @shot.profile_file, filename: "#{@shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+    send_file @shot.profile_tcl, filename: "#{@shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
   end
 
   def create

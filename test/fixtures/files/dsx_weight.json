@@ -1,0 +1,104 @@
+{
+  "title": "TurboBloom",
+  "author": "Stéphane",
+  "notes": "...",
+  "beverage_type": "espresso",
+  "steps": [
+    {
+      "name": "preinfusion",
+      "temperature": "88.5",
+      "sensor": "coffee",
+      "pump": "flow",
+      "transition": "fast",
+      "pressure": "1",
+      "flow": "8.0",
+      "seconds": "20.00",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "over",
+        "value": "4.00"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "dynamic bloom",
+      "temperature": "68.5",
+      "sensor": "coffee",
+      "pump": "flow",
+      "transition": "fast",
+      "pressure": "6.0",
+      "flow": "0",
+      "seconds": "40.00",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "under",
+        "value": "2.20"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "ramp",
+      "temperature": "78.5",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "7.0",
+      "flow": "2.2",
+      "seconds": "4.00",
+      "volume": "100",
+      "limiter": {
+        "value": "0.0",
+        "range": "1.2"
+      }
+    },
+    {
+      "name": "flat flow",
+      "temperature": "74.5",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "7.0",
+      "flow": "2.2",
+      "seconds": "2.00",
+      "volume": "100",
+      "limiter": {
+        "value": "4.5",
+        "range": "1.2"
+      }
+    },
+    {
+      "name": "decline",
+      "temperature": "70.5",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "4.00",
+      "flow": "3.200000000000001",
+      "seconds": "40.00",
+      "volume": "100",
+      "limiter": {
+        "value": "4.2",
+        "range": "1.2"
+      }
+    }
+  ],
+  "tank_temperature": "0",
+  "target_weight": "36.0",
+  "target_volume": "0",
+  "target_volume_count_start": "2",
+  "legacy_profile_type": "settings_2c",
+  "type": "advanced",
+  "lang": "en",
+  "hidden": "0",
+  "reference_file": "TurboBloom",
+  "changes_since_last_espresso": "",
+  "version": "2"
+}

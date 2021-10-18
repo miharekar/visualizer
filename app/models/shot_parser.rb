@@ -106,11 +106,10 @@ class ShotParser
   end
 
   def extract_profile(data)
-    data.each do |key, value|
-      key = key[/^"(\w+)"/, 1]
-      key = "profile_#{key}" unless PROFILE_FIELDS.include?(key)
-      @profile_fields[key] = handle_tcl_array(value).force_encoding("UTF-8") if PROFILE_FIELDS.include?(key)
-    end
+    stop = "#{data.last.join(' ')}\n}"
+    @profile_fields["json"] = JSON.parse(@file[/profile (\{(.*)#{stop})/m, 1])
+  rescue StandardError
+    nil
   end
 
   Shot::DATA_LABELS.each do |name|
@@ -130,6 +129,8 @@ class ShotParser
       @profile_fields[name] = handle_tcl_array(data).force_encoding("UTF-8")
     end
   end
+
+  def handle_steps(value); end
 
   def handle_tcl_array(data)
     return data unless data.is_a?(Array)

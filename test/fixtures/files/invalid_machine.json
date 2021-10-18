@@ -1,0 +1,68 @@
+{
+  "title": "Cremina lever machine",
+  "author": "Decent",
+  "notes": "Aim for a 50 second shot time to have a thick espresso in the style of the much-loved Cremina manual lever machine. By Denis from KafaTek.",
+  "beverage_type": "espresso",
+  "steps": [
+    {
+      "name": "preinfusion",
+      "temperature": "91.5",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "1.1",
+      "flow": "4",
+      "seconds": "5.0",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "over",
+        "value": "3.0"
+      }
+    },
+    {
+      "name": "soak",
+      "temperature": "91.5",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "1.1",
+      "flow": "0.0",
+      "seconds": "10.0",
+      "volume": "100"
+    },
+    {
+      "name": "ramp",
+      "temperature": "91.5",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "9.0",
+      "flow": "0.0",
+      "seconds": "10.0",
+      "volume": "100"
+    },
+    {
+      "name": "ramp-down",
+      "temperature": "92.0",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "3.0",
+      "flow": "0.0",
+      "seconds": "50.0",
+      "volume": "100"
+    }
+  ],
+  "tank_temperature": "0",
+  "target_weight": "0",
+  "target_volume": "0",
+  "target_volume_count_start": "0",
+  "legacy_profile_type": "settings_2c",
+  "type": "advanced",
+  "lang": "en",
+  "hidden": "0",
+  "reference_file": "Cremina",
+  "changes_since_last_espresso": "",
+  "version": "2"
+}

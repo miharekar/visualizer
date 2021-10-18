@@ -1,0 +1,104 @@
+{
+  "title": "JoeD's Easy blooming slow ramp to 7 bar",
+  "author": "JoeD",
+  "notes": "Downloaded from https://decentforum.com/t/effect-of-short-blooms-on-turbo-shots/1016",
+  "beverage_type": "espresso",
+  "steps": [
+    {
+      "name": "preinfusion",
+      "temperature": "94.0",
+      "sensor": "coffee",
+      "pump": "flow",
+      "transition": "fast",
+      "pressure": "1",
+      "flow": "6.000000000000007",
+      "seconds": "20.00",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "over",
+        "value": "5.00"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "dynamic bloom",
+      "temperature": "81.0",
+      "sensor": "coffee",
+      "pump": "flow",
+      "transition": "fast",
+      "pressure": "6.0",
+      "flow": "0",
+      "seconds": "40.00",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "under",
+        "value": "2.20"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "ramp",
+      "temperature": "94.0",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "7.0",
+      "flow": "2.2",
+      "seconds": "4.00",
+      "volume": "100",
+      "limiter": {
+        "value": "0.0",
+        "range": "1.2"
+      }
+    },
+    {
+      "name": "flat flow",
+      "temperature": "94.0",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "7.0",
+      "flow": "2.2",
+      "seconds": "2.00",
+      "volume": "100",
+      "limiter": {
+        "value": "4.0",
+        "range": "1.2"
+      }
+    },
+    {
+      "name": "decline",
+      "temperature": "94.0",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "4.00",
+      "flow": "3.200000000000001",
+      "seconds": "40.00",
+      "volume": "100",
+      "limiter": {
+        "value": "3.3",
+        "range": "1.2"
+      }
+    }
+  ],
+  "tank_temperature": "0",
+  "target_weight": "40",
+  "target_volume": "0",
+  "target_volume_count_start": "2",
+  "legacy_profile_type": "settings_2c",
+  "type": "advanced",
+  "lang": "en",
+  "hidden": "0",
+  "reference_file": "EasyBloom_SlowRampTo7",
+  "changes_since_last_espresso": "",
+  "version": "2"
+}
