@@ -75,7 +75,7 @@ class Shot < ApplicationRecord
       json[key] = profile_fields["json"][key]
     end
 
-    file_from_content(["#{profile_title} from Visualizer", ".json"], JSON.pretty_generate(json))
+    JSON.pretty_generate(json)
   end
 
   def screenshot?
