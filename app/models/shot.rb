@@ -55,9 +55,10 @@ class Shot < ApplicationRecord
   end
 
   def profile_tcl
-    return if profile_fields.blank?
+    tcl_profile = (profile_fields || {}).except("json")
+    return if tcl_profile.blank?
 
-    content = profile_fields.except("json").to_a.sort_by(&:first).map do |k, v|
+    content = tcl_profile.to_a.sort_by(&:first).map do |k, v|
       v = "#{v} from Visualizer" if k == "profile_title"
       v = "#{v}\n\nDownloaded from Visualizer" if k == "profile_notes"
       v = "{}" if v.blank?
