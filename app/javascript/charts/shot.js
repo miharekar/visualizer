@@ -30,9 +30,6 @@ function getHoverPoint(chart, e) {
 }
 
 function syncMouse(e) {
-  e.preventDefault()
-  e.stopPropagation()
-
   const thisChart = this
 
   Highcharts.charts.forEach(function (chart) {
@@ -88,7 +85,6 @@ function syncExtremes(e) {
           chart.showResetZoom()
         }
       }
-
     })
   }
 }
