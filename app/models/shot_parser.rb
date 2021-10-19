@@ -43,6 +43,7 @@ class ShotParser
 
     extract_clock(parsed["timestamp"])
     extract_espresso_elapsed(parsed["elapsed"])
+    @profile_fields["json"] = parsed["profile"]
     @profile_title = parsed["profile"]["title"]
 
     %w[pressure flow resistance].each do |key|
@@ -69,6 +70,10 @@ class ShotParser
     settings = parsed.dig("app", "data", "settings")
     EXTRA_DATA_CAPTURE.each do |key|
       @extra[key] = settings[key]
+    end
+
+    PROFILE_FIELDS.each do |key|
+      @profile_fields[key] = settings[key]
     end
   rescue JSON::ParserError, TypeError
     false

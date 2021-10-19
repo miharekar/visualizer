@@ -1,0 +1,229 @@
+{
+  "title": "Easy blooming - active pressure decline",
+  "author": "Stéphane",
+  "notes": "This profile is a more forgiving evolution of Scott Rao’s original blooming profile.",
+  "beverage_type": "espresso",
+  "steps": [
+    {
+      "name": "preinfusion",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "flow",
+      "transition": "fast",
+      "pressure": "1",
+      "flow": "6.000000000000007",
+      "seconds": "20.00",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "over",
+        "value": "4.00"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "dynamic bloom",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "flow",
+      "transition": "fast",
+      "pressure": "6.0",
+      "flow": "0",
+      "seconds": "60.00",
+      "volume": "100",
+      "exit": {
+        "type": "pressure",
+        "condition": "under",
+        "value": "2.00"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "fast pressure",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "6.9999999999999964",
+      "flow": "2.2",
+      "seconds": "4.00",
+      "volume": "100",
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "pressure hold 1",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "6.9999999999999964",
+      "flow": "2.2",
+      "seconds": "4.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "over",
+        "value": "1.60"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "P fast decline 1",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "5.699999999999997",
+      "flow": "2.2",
+      "seconds": "5.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "under",
+        "value": "1.40"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "P fast decline 2",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "5.899999999999997",
+      "flow": "2.2",
+      "seconds": "40.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "under",
+        "value": "1.40"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "pressure hold 2",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "6.9999999999999964",
+      "flow": "2.2",
+      "seconds": "8.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "over",
+        "value": "1.90"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "P decline 1",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "5.799999999999996",
+      "flow": "2.2",
+      "seconds": "8.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "under",
+        "value": "1.70"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "P decline 2",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "5.899999999999997",
+      "flow": "2.2",
+      "seconds": "40.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "under",
+        "value": "1.70"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "pressure hold 3",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "fast",
+      "pressure": "6.9999999999999964",
+      "flow": "2.2",
+      "seconds": "30.00",
+      "volume": "100",
+      "exit": {
+        "type": "flow",
+        "condition": "over",
+        "value": "2.20"
+      },
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    },
+    {
+      "name": "P slow decline",
+      "temperature": "88.00",
+      "sensor": "coffee",
+      "pump": "pressure",
+      "transition": "smooth",
+      "pressure": "5.899999999999997",
+      "flow": "2.2",
+      "seconds": "40.00",
+      "volume": "100",
+      "limiter": {
+        "value": "0",
+        "range": "0.6"
+      }
+    }
+  ],
+  "tank_temperature": "0",
+  "target_weight": "43.0",
+  "target_volume": "0",
+  "target_volume_count_start": "1",
+  "legacy_profile_type": "settings_2c",
+  "type": "advanced",
+  "lang": "en",
+  "hidden": "0",
+  "reference_file": "easy_blooming_active_pressure_decline",
+  "changes_since_last_espresso": "",
+  "version": "2"
+}

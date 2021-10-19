@@ -44,6 +44,8 @@ group :development, :test do
 end
 
 group :development do
+  gem "guard"
+  gem "guard-minitest"
   gem "brakeman"
   gem "app_profiler"
   gem "web-console"
