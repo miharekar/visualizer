@@ -65,4 +65,4 @@ If you have questions, concerns, bug reports, etc, please open a new [GitHub Iss
 
 If you're a coffee fanatic, own a Decent Espresso machine, want to learn Ruby, or want to help in whatever way you can, then you're welcomed to get involved!
 
-But please read the [Contribution Guidelines](CONTRIBUTING) first 😊
+But please read the [Contribution Guidelines](CONTRIBUTING.md) first 😊
