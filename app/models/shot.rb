@@ -23,8 +23,6 @@ class Shot < ApplicationRecord
   def self.from_file(user, file)
     return if file.blank?
 
-    Rollbar.debug("Inspecting file", file_content: File.read(file)) if user.email == "miha@mr.si"
-
     parsed_shot = ShotParser.new(File.read(file))
     shot = find_or_initialize_by(user: user, sha: parsed_shot.sha)
     %i[profile_title start_time timeframe data extra profile_fields].each do |m|
