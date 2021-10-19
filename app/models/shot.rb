@@ -73,7 +73,10 @@ class Shot < ApplicationRecord
 
     json = {}
     JSON_PROFILE_KEYS.each do |key|
-      json[key] = profile_fields["json"][key]
+      v = profile_fields["json"][key]
+      v = "#{v} from Visualizer" if key == "title"
+      v = "#{v}\n\nDownloaded from Visualizer" if key == "notes"
+      json[key] = v
     end
 
     JSON.pretty_generate(json)
