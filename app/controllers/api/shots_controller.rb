@@ -17,7 +17,7 @@ module Api
     end
 
     def profile
-      shot = ShareableProfile.find_by(code: params[:code])&.shot
+      shot = ShareableProfile.find_by(code: params[:code].upcase)&.shot
       render json: shot_json(shot)
     end
 
