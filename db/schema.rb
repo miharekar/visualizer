@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_17_102111) do
+ActiveRecord::Schema.define(version: 2021_10_20_142725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 2021_10_17_102111) do
     t.string "github"
     t.jsonb "chart_settings"
     t.datetime "last_read_change", precision: 6
+    t.boolean "beta"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
