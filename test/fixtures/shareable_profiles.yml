@@ -1,0 +1,7 @@
+new:
+  shot: one
+  code: ZXCV
+old:
+  shot: one
+  code: QWER
+  created_at: <%= 2.hours.ago.to_s(:db) %>
