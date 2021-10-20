@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :shots, only: [:index] do
       get :download
       collection do
+        get :profile
         post :upload
       end
     end
