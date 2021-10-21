@@ -33,7 +33,6 @@ Rails.application.routes.draw do
   resources :shots, except: [:new] do
     member do
       get :chart
-      get :profile
       get :share
       get "/compare/:comparison", to: "shots#compare"
     end

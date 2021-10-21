@@ -3,8 +3,8 @@
 class ShotsController < ApplicationController
   include Pagy::Backend
 
-  before_action :authenticate_user!, except: %i[show compare chart profile]
-  before_action :load_shot, only: %i[show compare chart profile share]
+  before_action :authenticate_user!, except: %i[show compare chart]
+  before_action :load_shot, only: %i[show compare chart share]
   before_action :load_users_shot, only: %i[edit update destroy]
 
   FILTER_PARAMS = %i[bean_brand bean_type].freeze
@@ -34,10 +34,6 @@ class ShotsController < ApplicationController
   def chart
     @no_header = true
     @chart = ShotChart.new(@shot, current_user&.chart_settings)
-  end
-
-  def profile
-    send_file @shot.tcl_profile, filename: "#{@shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
   end
 
   def share
