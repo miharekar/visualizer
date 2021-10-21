@@ -33,6 +33,7 @@ end
 #
 #  id                     :uuid             not null, primary key
 #  admin                  :boolean
+#  beta                   :boolean
 #  chart_settings         :jsonb
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null

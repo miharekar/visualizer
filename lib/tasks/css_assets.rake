@@ -21,14 +21,11 @@ namespace :css_assets do
     convert_slim_to_erb
     path = "app/assets/stylesheets/tailwind-build.css"
     File.delete(path) if File.exist?(path)
-    Rails.logger.info "Postcss building…"
+    puts "Postcss building…"
     system("yarn build")
-  end
-
-  task build_dev: :environment do
-    path = "app/assets/stylesheets/tailwind-build.css"
+    path = "app/assets/stylesheets/tailwind-build-dev.css"
     File.delete(path) if File.exist?(path)
-    Rails.logger.info "Postcss building…"
+    puts "Postcss building dev…"
     system("yarn build_dev")
   end
 end

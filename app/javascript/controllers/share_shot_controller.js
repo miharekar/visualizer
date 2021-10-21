@@ -3,29 +3,33 @@ import { Turbo } from "@hotwired/turbo-rails"
 import { enter, leave } from "el-transition"
 
 export default class extends Controller {
-  static targets = ["toggleable", "headline", "text", "button"]
+  static targets = ["toggleable", "code"]
+  static values = { url: String }
 
   initialize() {
     this.modalShown = false
-  }
-
-  confirm(event) {
-    event.preventDefault()
-    this.form = event.currentTarget.parentElement
-    const data = event.currentTarget.dataset
-    this.headlineTarget.innerText = data.title
-    this.buttonTarget.innerText = data.title
-    this.textTarget.innerText = data.text
-    this.show()
+    this.code = ""
   }
 
   show() {
     if (!this.modalShown) {
+      this.getCode()
       this.toggleableTargets.forEach((element) => {
         enter(element)
       })
     }
     this.modalShown = true
+  }
+
+  getCode() {
+    if (this.code.length == 0) {
+      fetch(this.urlValue).then((response) => {
+        response.json().then(data => {
+          this.code = data.code
+          this.codeTarget.innerText = this.code
+        })
+      })
+    }
   }
 
   hide() {
@@ -35,11 +39,6 @@ export default class extends Controller {
       })
     }
     this.modalShown = false
-  }
-
-  delete() {
-    Turbo.navigator.submitForm(this.form)
-    this.hide()
   }
 
   keydown(event) {

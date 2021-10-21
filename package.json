@@ -22,6 +22,6 @@
   ],
   "scripts": {
     "build": "postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build.css",
-    "build_dev": "TAILWIND=full postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build.css"
+    "build_dev": "TAILWIND=full postcss ./app/assets/stylesheets/tailwind.css -o ./app/assets/stylesheets/tailwind-build-dev.css"
   }
 }

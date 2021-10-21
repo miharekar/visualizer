@@ -6,7 +6,7 @@ application.register('autocomplete', Autocomplete)
 
 // Configure Stimulus development experience
 application.warnings = true
-application.debug = true
+application.debug = false
 window.Stimulus = application
 
 export { application }

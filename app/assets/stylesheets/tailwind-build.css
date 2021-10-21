@@ -2079,6 +2079,11 @@ input[type="color"]::-moz-color-swatch {
   background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 
+.bg-green-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(4, 120, 87, var(--tw-bg-opacity));
+}
+
 .bg-green-800 {
   --tw-bg-opacity: 1;
   background-color: rgba(6, 95, 70, var(--tw-bg-opacity));
@@ -2410,6 +2415,11 @@ input[type="color"]::-moz-color-swatch {
   line-height: 2.5rem;
 }
 
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
 .font-medium {
   font-weight: 500;
 }
@@ -2456,6 +2466,10 @@ input[type="color"]::-moz-color-swatch {
 
 .tracking-wider {
   letter-spacing: 0.05em;
+}
+
+.tracking-widest {
+  letter-spacing: 0.1em;
 }
 
 .text-black {
@@ -2611,6 +2625,11 @@ input[type="color"]::-moz-color-swatch {
 .dark .dark\:text-green-300 {
   --tw-text-opacity: 1;
   color: rgba(110, 231, 183, var(--tw-text-opacity));
+}
+
+.dark .dark\:text-green-400 {
+  --tw-text-opacity: 1;
+  color: rgba(52, 211, 153, var(--tw-text-opacity));
 }
 
 .dark .dark\:text-green-500 {
@@ -3003,6 +3022,10 @@ input[type="color"]::-moz-color-swatch {
 
   .sm\:max-w-xl {
     max-width: 36rem;
+  }
+
+  .sm\:max-w-2xl {
+    max-width: 42rem;
   }
 
   .sm\:translate-y-0 {

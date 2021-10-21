@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :shots, only: [:index] do
       get :download
       collection do
+        get :profile
         post :upload
       end
     end
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
     member do
       get :chart
       get :profile
+      get :share
       get "/compare/:comparison", to: "shots#compare"
     end
   end

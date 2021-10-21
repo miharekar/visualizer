@@ -13,5 +13,6 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+    Shot.from_file(User.first, "test/fixtures/files/20210921T085910.shot")
   end
 end
