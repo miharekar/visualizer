@@ -1,6 +1,7 @@
 - owner = current_user && @shot.user == current_user
 - show_timestamp = owner || !@shot.user&.hide_shot_times?
-- header_content = !owner && @shot.user.public?
+- show_header = owner || @shot.user&.public? || @shot.profile_fields.present?
+- header_content = !owner && @shot.user&.public?
 
 - content_for :meta_tags
   - description = render "meta_description", shot: @shot
@@ -14,7 +15,7 @@
 
 .bg-white.dark:bg-gray-900.shadow data-controller="modal"
   = render "shared/modal"
-  - if owner || @shot.user.public? || @shot.profile_fields.present?
+  - if show_header
     .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8.flex.items-center.justify-between
       - if header_content
         h1.flex.text-2xl.sm:text-3xl.font-bold.leading-tight.text-gray-900.dark:text-gray-100
