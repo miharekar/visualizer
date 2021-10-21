@@ -8,14 +8,13 @@ class SearchController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @shots = Shot.visible.with_avatars.by_start_time
-    @users = unique_values_for(:user)
+    @shots = Shot.visible.by_start_time
 
     FILTERS.each do |filter|
       next if params[filter].blank?
 
       @shots = if filter == :user
-                 @shots.where(user_id: params[filter])
+                 @shots.where(user_id: params[:user_id])
                else
                  @shots.where("#{filter} ILIKE ?", "%#{params[filter]}%")
                end
@@ -29,15 +28,23 @@ class SearchController < ApplicationController
 
   def autocomplete
     query = params[:q].split(/\s+/).join(".*")
-    @values = unique_values_for(params[:filter]).grep(/#{query}/i)
+    @filter = params[:filter].to_sym
+    @values = unique_values_for(@filter)
+    @values = if @filter == :user
+                @values.select { |u| u.name =~ /#{query}/i }
+              else
+                @values.grep(/#{query}/i)
+              end
     render layout: false
   end
 
   def unique_values_for(filter)
-    Rails.cache.fetch("#{Shot.visible.cache_key_with_version}/#{filter}") do
-      if filter == :user
+    if filter == :user
+      Rails.cache.fetch("#{User.visible.cache_key_with_version}/#{filter}") do
         User.visible.by_name
-      else
+      end
+    else
+      Rails.cache.fetch("#{Shot.visible.cache_key_with_version}/#{filter}") do
         Shot.visible.distinct.pluck(filter).compact.map(&:strip).uniq(&:downcase).sort_by(&:downcase)
       end
     end
