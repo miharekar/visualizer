@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ShareableProfile < ApplicationRecord
+class SharedShot < ApplicationRecord
   CHARS = ("A".."Z").to_a
 
   belongs_to :shot
@@ -13,7 +13,7 @@ class ShareableProfile < ApplicationRecord
     return if code.present? && persisted?
 
     loop do
-      break if code.present? && !ShareableProfile.exists?(code: code)
+      break if code.present? && !SharedShot.exists?(code: code)
 
       self.code = (0...4).map { CHARS.sample }.join
     end
@@ -22,7 +22,7 @@ end
 
 # == Schema Information
 #
-# Table name: shareable_profiles
+# Table name: shared_shots
 #
 #  id         :uuid             not null, primary key
 #  code       :string           not null
@@ -32,8 +32,8 @@ end
 #
 # Indexes
 #
-#  index_shareable_profiles_on_code     (code) UNIQUE
-#  index_shareable_profiles_on_shot_id  (shot_id)
+#  index_shared_shots_on_code     (code) UNIQUE
+#  index_shared_shots_on_shot_id  (shot_id)
 #
 # Foreign Keys
 #
