@@ -13,6 +13,5 @@
  *= require_tree .
  *= stub tailwind
  *= stub custom
- *= require tailwind-build
  *= require_self
  */
