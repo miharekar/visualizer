@@ -52,11 +52,22 @@ class Shot < ApplicationRecord
     timeframe[index - 1].to_f
   end
 
-  def profile_tcl
-    tcl_profile = (profile_fields || {}).except("json")
-    return if tcl_profile.blank?
+  memoize def profile_fields
+    super.presence || {}
+  end
 
-    content = tcl_profile.to_a.sort_by(&:first).map do |k, v|
+  memoize def tcl_profile_fields
+    profile_fields.except("json")
+  end
+
+  memoize def json_profile_fields
+    profile_fields["json"]
+  end
+
+  def tcl_profile
+    return if tcl_profile_fields.blank?
+
+    content = tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
       v = "#{v} from Visualizer" if k == "profile_title"
       v = "#{v}\n\nDownloaded from Visualizer" if k == "profile_notes"
       v = "{}" if v.blank?
@@ -68,8 +79,8 @@ class Shot < ApplicationRecord
     file_from_content(["#{profile_title} from Visualizer", ".tcl"], content.join("\n"))
   end
 
-  def profile_json
-    return if profile_fields.blank? || profile_fields["json"].blank?
+  def json_profile
+    return if json_profile_fields.blank?
 
     json = {}
     JSON_PROFILE_KEYS.each do |key|

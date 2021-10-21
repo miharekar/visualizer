@@ -12,8 +12,9 @@ Rails.application.routes.draw do
   namespace :api do
     resources :shots, only: [:index] do
       get :download
+      get :profile
       collection do
-        get :profile
+        get :shared
         post :upload
       end
     end
