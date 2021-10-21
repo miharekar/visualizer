@@ -4,7 +4,7 @@ class ShotsController < ApplicationController
   include Pagy::Backend
 
   before_action :authenticate_user!, except: %i[show compare chart profile]
-  before_action :load_shot, only: %i[show compare chart profile]
+  before_action :load_shot, only: %i[show compare chart profile share]
   before_action :load_users_shot, only: %i[edit update destroy]
 
   FILTER_PARAMS = %i[bean_brand bean_type].freeze
@@ -38,6 +38,11 @@ class ShotsController < ApplicationController
 
   def profile
     send_file @shot.profile_tcl, filename: "#{@shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+  end
+
+  def share
+    share = SharedShot.create!(shot: @shot)
+    render json: {code: share.code}
   end
 
   def create
