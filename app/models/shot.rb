@@ -68,7 +68,7 @@ class Shot < ApplicationRecord
     return if tcl_profile_fields.blank?
 
     content = tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
-      v = "#{v} from Visualizer" if k == "profile_title"
+      v = "Visualizer/#{v}" if k == "profile_title"
       v = "#{v}\n\nDownloaded from Visualizer" if k == "profile_notes"
       v = "{}" if v.blank?
       v = "{#{v}}" if /\w\s\w/.match?(v)
@@ -85,7 +85,7 @@ class Shot < ApplicationRecord
     json = {}
     JSON_PROFILE_KEYS.each do |key|
       v = profile_fields["json"][key]
-      v = "#{v} from Visualizer" if key == "title"
+      v = "Visualizer/#{v}" if key == "title"
       v = "#{v}\n\nDownloaded from Visualizer" if key == "notes"
       json[key] = v
     end

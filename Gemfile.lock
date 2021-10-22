@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 571779a147b7f917c7b2d0edb860ae6b4cdabdcf
+  revision: 35e79f05efad1579c409cdbf6972f4eddcaa18dc
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -107,7 +107,7 @@ GIT
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
-      zeitwerk (~> 2.5.0)
+      zeitwerk (~> 2.5)
 
 GEM
   remote: https://rubygems.org/
@@ -127,7 +127,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.517.0)
+    aws-partitions (1.518.0)
     aws-sdk-core (3.121.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -275,7 +275,7 @@ GEM
       netrc (~> 0.8)
     rexml (3.2.5)
     rollbar (3.2.0)
-    rubocop (1.22.1)
+    rubocop (1.22.2)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)

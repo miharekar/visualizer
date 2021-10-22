@@ -41,7 +41,7 @@ profile_language en
 profile_notes {Aim for a 50 second shot time to have a thick espresso in the style of the much-loved Cremina manual lever machine. By Denis from KafaTek.
 
 Downloaded from Visualizer}
-profile_title {Cremina lever machine from Visualizer}
+profile_title {Visualizer/Cremina lever machine}
 profile_to_save {Cremina lever machine}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

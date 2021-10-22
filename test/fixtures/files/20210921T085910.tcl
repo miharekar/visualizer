@@ -41,7 +41,7 @@ profile_language en
 profile_notes {Downloaded from https://decentforum.com/t/effect-of-short-blooms-on-turbo-shots/1016
 
 Downloaded from Visualizer}
-profile_title {JoeD's Easy blooming slow ramp to 7 bar from Visualizer}
+profile_title {Visualizer/JoeD's Easy blooming slow ramp to 7 bar}
 profile_to_save {Damian's LRv3}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

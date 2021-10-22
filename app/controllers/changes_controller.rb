@@ -10,7 +10,7 @@ class ChangesController < ApplicationController
   end
 
   def new
-    @change = Change.new(published_at: Date.today)
+    @change = Change.new(published_at: Time.zone.today)
   end
 
   def edit; end
