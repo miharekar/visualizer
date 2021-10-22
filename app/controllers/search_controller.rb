@@ -8,22 +8,23 @@ class SearchController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @shots = Shot.visible.by_start_time
+    if params[:commit]
+      @shots = Shot.visible.by_start_time
+      FILTERS.each do |filter|
+        next if params[filter].blank?
 
-    FILTERS.each do |filter|
-      next if params[filter].blank?
-
-      @shots = if filter == :user
-                 @shots.where(user_id: params[:user_id])
-               else
-                 @shots.where("#{filter} ILIKE ?", "%#{params[filter]}%")
-               end
+        @shots = if filter == :user
+                   @shots.where(user_id: params[:user_id])
+                 else
+                   @shots.where("#{filter} ILIKE ?", "%#{params[filter]}%")
+                 end
+      end
+      @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].present?
+      @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present?
+      @pagy, @shots = pagy(@shots)
+    else
+      @shots = []
     end
-
-    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].present?
-    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present?
-
-    @pagy, @shots = pagy(@shots)
   end
 
   def autocomplete
