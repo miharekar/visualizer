@@ -30,15 +30,18 @@ maximum_pressure 0
 maximum_pressure_range 0.6
 maximum_pressure_range_advanced 1.0
 maximum_pressure_range_default 0.9
+original_profile_title {Easy blooming - active pressure decline}
 preinfusion_flow_rate 4
 preinfusion_guarantee 0
 preinfusion_stop_pressure 4.0
 preinfusion_time 20
 pressure_end 4.0
+profile_filename easy_blooming_active_pressure_decline
 profile_language en
 profile_notes {This profile is a more forgiving evolution of Scott Rao’s original blooming profile.
 
 Downloaded from Visualizer}
 profile_title {Easy blooming - active pressure decline from Visualizer}
+profile_to_save {Easy blooming - active pressure decline}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

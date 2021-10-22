@@ -30,15 +30,18 @@ maximum_pressure 0
 maximum_pressure_range 0.6
 maximum_pressure_range_advanced 1.0
 maximum_pressure_range_default 0.9
+original_profile_title {Cremina lever machine}
 preinfusion_flow_rate 4
 preinfusion_guarantee 0
 preinfusion_stop_pressure 4
 preinfusion_time 20
 pressure_end 6.0
+profile_filename Cremina
 profile_language en
 profile_notes {Aim for a 50 second shot time to have a thick espresso in the style of the much-loved Cremina manual lever machine. By Denis from KafaTek.
 
 Downloaded from Visualizer}
 profile_title {Cremina lever machine from Visualizer}
+profile_to_save {Cremina lever machine}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

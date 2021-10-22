@@ -30,15 +30,18 @@ maximum_pressure 0
 maximum_pressure_range 0.6
 maximum_pressure_range_advanced 0.6
 maximum_pressure_range_default 0.9
+original_profile_title {JoeD's Easy blooming slow ramp to 7 bar}
 preinfusion_flow_rate 4
 preinfusion_guarantee 0
 preinfusion_stop_pressure 4.0
 preinfusion_time 20
 pressure_end 4.0
+profile_filename EasyBloom_SlowRampTo7
 profile_language en
 profile_notes {Downloaded from https://decentforum.com/t/effect-of-short-blooms-on-turbo-shots/1016
 
 Downloaded from Visualizer}
 profile_title {JoeD's Easy blooming slow ramp to 7 bar from Visualizer}
+profile_to_save {Damian's LRv3}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

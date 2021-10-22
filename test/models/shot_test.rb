@@ -27,7 +27,9 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 70, shot.espresso_enjoyment
     assert_equal "Neat.", shot.espresso_notes
     assert_equal "With BPlus", shot.bean_notes
+    # FileUtils.cp(shot.tcl_profile, "#{path}.tcl")
     assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
+    # File.write("#{path}.json", shot.json_profile)
     assert_equal File.read("#{path}.json"), shot.json_profile
   end
 
@@ -43,7 +45,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 110, shot.data["espresso_pressure"].size
     assert_equal 16, shot.extra.keys.size
-    assert_equal 43, shot.profile_fields.keys.size
+    assert_equal 46, shot.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.4", shot.grinder_setting
@@ -74,7 +76,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 110, shot.data["espresso_pressure"].size
     assert_equal 14, shot.extra.keys.size
-    assert_equal 43, shot.profile_fields.keys.size
+    assert_equal 46, shot.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.4", shot.grinder_setting
