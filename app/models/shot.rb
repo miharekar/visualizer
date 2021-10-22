@@ -11,7 +11,6 @@ class Shot < ApplicationRecord
   belongs_to :user, optional: true
 
   scope :visible, -> { includes(:user).where(users: {public: true}) }
-  scope :with_avatars, -> { includes(user: {avatar_attachment: :blob}) }
   scope :by_start_time, -> { order(start_time: :desc) }
 
   after_create :ensure_screenshot
