@@ -135,13 +135,21 @@ class ShotParser
     end
   end
 
-  def handle_steps(value); end
-
   def handle_tcl_array(data)
     return data unless data.is_a?(Array)
 
     data.map do |line|
       next line unless line.is_a?(Array)
+
+      line = line.map do |item|
+        item.is_a?(Array) ? handle_tcl_array([item]) : item
+      end
+
+      if line.first == :b
+        line.shift
+        line.first.prepend("[")
+        line.last.concat("]")
+      end
 
       if line.first == :c
         line.shift
@@ -149,9 +157,7 @@ class ShotParser
         line.last.concat("}")
       end
 
-      line.map do |item|
-        item.is_a?(Array) ? handle_tcl_array([item]) : item
-      end
+      line.join(" ")
     end.join(" ")
   end
 end

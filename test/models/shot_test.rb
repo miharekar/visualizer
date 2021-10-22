@@ -108,4 +108,12 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
     assert_equal File.read("#{path}.json"), shot.json_profile
   end
+
+  test "handles brackets in advanced steps" do
+    path = "test/fixtures/files/brackets"
+    shot = Shot.from_file(users(:miha), "#{path}.shot")
+    assert_equal "manual 82", shot.profile_title
+    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
+    assert_equal File.read("#{path}.json"), shot.json_profile
+  end
 end
