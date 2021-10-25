@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 9c4de17a75ea0d4fcea719c7764112527547e46c
+  revision: 31ad3f152954142c68c030db596c35e31ca93a76
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -236,7 +236,7 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     orm_adapter (0.5.0)
-    pagy (5.0.1)
+    pagy (5.1.1)
     parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)

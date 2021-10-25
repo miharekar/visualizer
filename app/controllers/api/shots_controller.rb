@@ -7,23 +7,28 @@ module Api
     def index
       limit = params[:limit].presence || 10
       shots = current_user.shots.by_start_time.first(limit.to_i).pluck(:id, :start_time)
-
       render json: shots.map { |id, time| {clock: time.to_i, id: id} }
     end
 
     def download
-      shot = Shot.find_by(id: params[:shot_id])
-      render json: shot_json(shot)
+      with_shot do |shot|
+        render json: shot_json(shot)
+      end
+    end
+
+    def profile
+      with_shot do |shot|
+        send_file shot.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+      end
     end
 
     def shared
       shot = SharedShot.find_by(code: params[:code].upcase)&.shot
-      render json: shot_json(shot)
-    end
-
-    def profile
-      shot = Shot.find_by(id: params[:shot_id])
-      send_file shot.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+      if shot
+        render json: shot_json(shot)
+      else
+        render json: {error: "Shared shot not found"}, status: :not_found
+      end
     end
 
     def upload
@@ -36,6 +41,15 @@ module Api
     end
 
     private
+
+    def with_shot
+      shot = Shot.find_by(id: params[:shot_id])
+      if shot
+        yield(shot)
+      else
+        render json: {error: "Shot not found"}, status: :not_found
+      end
+    end
 
     def shot_json(shot)
       return {} unless shot
