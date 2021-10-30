@@ -44,6 +44,13 @@
                 = f.label :hide_shot_times, class: "font-medium text-gray-700 dark:text-gray-300"
                 p.text-gray-500.dark:text-gray-400
                   ' Hide date and time at which your shots were made to other people.
+            .flex.items-start.mt-1
+              .flex.items-center.h-5
+                = f.check_box :beta, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+              .ml-3.text-sm
+                = f.label :beta, class: "font-medium text-gray-700 dark:text-gray-300"
+                p.text-gray-500.dark:text-gray-400
+                  ' Enroll in the beta program which will allow you to see new features as they're developed.
           .col-span-3.hidden.sm:block
             .flex.items-center
               h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
