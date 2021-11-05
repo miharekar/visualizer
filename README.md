@@ -16,7 +16,7 @@ There is a basic API available. If you can read Rails, [this should be pretty se
 
 Endpoints available:
 
-- index on `/api/shots/`. Accepts `limit` and `offset` params. Returns authenticated user's or public (if not authenticated) shots ordered by when the shot was created.
+- index on `/api/shots/`. Accepts `items` and `page` params. Returns authenticated user's or public (if not authenticated) shots ordered by when the shot was created.
 - download on `/api/shots/[shot_id]/download`. Accepts `essentials` param. Returns all of the data of the `[shot_id]` shot. If the `essentials` param has any value, it omits data and timeframe values.
 - profile on `/api/shots/[shot_id]/download`. Returns the `tcl` profile file of the shot.
 - shared on `/api/shots/shared`. Requires `code` param. Returns the shot that is being shared via the 4-character code.
