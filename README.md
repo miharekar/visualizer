@@ -12,15 +12,9 @@ Read [all about the v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw
 
 ## API
 
-There is a basic API available. If you can read Rails, [this should be pretty self-explanatory](app/controllers/api/shots_controller.rb).
+There is a basic API available.
 
-Endpoints available:
-
-- index on `/api/shots/`. Accepts `items` and `page` params. Returns authenticated user's or public (if not authenticated) shots ordered by when the shot was created.
-- download on `/api/shots/[shot_id]/download`. Accepts `essentials` param. Returns all of the data of the `[shot_id]` shot. If the `essentials` param has any value, it omits data and timeframe values.
-- profile on `/api/shots/[shot_id]/download`. Returns the `tcl` profile file of the shot.
-- shared on `/api/shots/shared`. Requires `code` param. Returns the shot that is being shared via the 4-character code.
-- upload on `/api/shots/upload`. Requires `file` param containing `tcl` (`.shot`) or `JSON` file of the shot. Returns uploaded shot's ID if parsing is successful. Must be authenticated.
+You can read [the source code](app/controllers/api/shots_controller.rb) or  [the API documentation](https://documenter.getpostman.com/view/2402164/UVC2HUik) provided by [@eriklenaerts](https://github.com/eriklenaerts).
 
 Authenticatication is possible via [Basic access](https://en.wikipedia.org/wiki/Basic_access_authentication) with email and password.
 

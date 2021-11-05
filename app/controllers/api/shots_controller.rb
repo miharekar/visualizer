@@ -17,6 +17,8 @@ module Api
       pagy, shots = pagy(shots, items: items)
       data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
       render json: {data: data, paging: pagy_metadata(pagy)}
+    rescue Pagy::VariableError
+      render json: {error: "Could not paginate"}, status: :unprocessable_entity
     end
 
     def download
@@ -67,7 +69,7 @@ module Api
     def shot_json(shot)
       return {} unless shot
 
-      allowed_attrs = %w[profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
+      allowed_attrs = %w[id profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
       allowed_attrs += %w[start_time] unless shot.user&.hide_shot_times
       allowed_attrs += %w[timeframe data] if params[:essentials].blank?
       json = shot.attributes.slice(*allowed_attrs)
