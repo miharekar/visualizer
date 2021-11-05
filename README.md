@@ -20,7 +20,7 @@ Endpoints available:
 - download on `/api/shots/[shot_id]/download`. Accepts `essentials` param. Returns all of the data of the `[shot_id]` shot. If the `essentials` param has any value, it omits data and timeframe values.
 - profile on `/api/shots/[shot_id]/download`. Returns the `tcl` profile file of the shot.
 - shared on `/api/shots/shared`. Requires `code` param. Returns the shot that is being shared via the 4-character code.
-- upload on `/api/shots/upload`. Requires `file` param containing `tcl` (`.shot`) or `JSON` file of the shot. Returns uploaded shot's ID if successful or `422` Unprocessable Entity if not. Must be authenticated.
+- upload on `/api/shots/upload`. Requires `file` param containing `tcl` (`.shot`) or `JSON` file of the shot. Returns uploaded shot's ID if parsing is successful. Must be authenticated.
 
 Authenticatication is possible via [Basic access](https://en.wikipedia.org/wiki/Basic_access_authentication) with email and password.
 

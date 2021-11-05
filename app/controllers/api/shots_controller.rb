@@ -22,7 +22,11 @@ module Api
 
     def profile
       with_shot do |shot|
-        send_file shot.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+        if shot.tcl_profile_fields.present?
+          send_file shot.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+        else
+          render json: {error: "Shot does not have a profile"}, status: :unprocessable_entity
+        end
       end
     end
 
@@ -40,7 +44,7 @@ module Api
       if shot&.save
         render json: {id: shot.id}
       else
-        head :unprocessable_entity
+        render json: {error: "Could not parse the provided file"}, status: :unprocessable_entity
       end
     end
 
