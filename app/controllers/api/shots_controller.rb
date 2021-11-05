@@ -2,11 +2,15 @@
 
 module Api
   class ShotsController < Api::BaseController
-    skip_before_action :verify_current_user, only: %i[download shared profile]
+    skip_before_action :verify_current_user, except: %i[upload]
 
     def index
-      limit = params[:limit].presence || 10
-      shots = current_user.shots.by_start_time.first(limit.to_i).pluck(:id, :start_time)
+      limit = params[:limit].presence.to_i
+      limit = 10 if limit.zero?
+      limit = 100 if limit.to_i > 100
+
+      shots = current_user.present? ? current_user.shots : Shot.visible
+      shots = shots.offset(params[:offset]).by_start_time.take(limit.to_i).pluck(:id, :start_time)
       render json: shots.map { |id, time| {clock: time.to_i, id: id} }
     end
 
