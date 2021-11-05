@@ -27,7 +27,7 @@ module Api
     end
 
     def shared
-      shot = SharedShot.find_by(code: params[:code].upcase)&.shot
+      shot = SharedShot.find_by(code: params[:code].to_s.upcase)&.shot
       if shot
         render json: shot_json(shot)
       else
