@@ -12,7 +12,7 @@ module Api
       items = 100 if items.to_i > 100
 
       shots = current_user.present? ? current_user.shots : Shot.visible
-      shots = shots.by_start_time
+      shots = shots.by_start_time.select(:id, :start_time, :user_id)
 
       pagy, shots = pagy(shots, items: items)
       data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
