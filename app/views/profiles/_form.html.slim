@@ -51,30 +51,31 @@
                 = f.label :beta, class: "font-medium text-gray-700 dark:text-gray-300"
                 p.text-gray-500.dark:text-gray-400
                   ' Enroll in the beta program which will allow you to see new features as they're developed.
-          .col-span-3.hidden.sm:block
-            .flex.items-center
-              h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
-              = link_to "Reset to Default", profile_reset_chart_settings_path(@profile), class: "ml-4 cursor-pointer ml-3 bg-white dark:bg-gray-800 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            - ShotChart::CHART_SETTINGS.each_key do |label|
-              p.font-medium.text-sm.mt-3.text-gray-700.dark:text-gray-300
-                = label.humanize
-              .flex
-                .flex-1
-                  = f.color_field "#{label}-color", class: "mt-1 dark:bg-gray-800 w-full", value: f.object.chart_settings.dig(label, "color")
-                .flex-1.ml-6
-                  = f.select "#{label}-type", options_for_select([["Smooth", "spline"], ["Exact", "none"]], f.object.chart_settings.dig(label, "type")), {}, {class: "mt-1 w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
-                .flex-1.ml-8
-                  .flex.mt-3
-                    .flex.items-center.h-5
-                      = f.check_box "#{label}-dashed", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", checked: f.object.chart_settings.dig(label, "dashed")
-                    .ml-3.text-sm
-                      = f.label "#{label}-dashed", "Dashed", class: "text-gray-700 dark:text-gray-300"
-                .flex-1
-                  .flex.mt-3
-                    .flex.items-center.h-5
-                      = f.check_box "#{label}-hidden", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", checked: f.object.chart_settings.dig(label, "hidden")
-                    .ml-3.text-sm
-                      = f.label "#{label}-hidden", "Hidden", class: "text-gray-700 dark:text-gray-300"
+          - if @profile.premium?
+            .col-span-3.hidden.sm:block
+              .flex.items-center
+                h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
+                = link_to "Reset to Default", profile_reset_chart_settings_path(@profile), class: "ml-4 cursor-pointer ml-3 bg-white dark:bg-gray-800 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              - ShotChart::CHART_SETTINGS.each_key do |label|
+                p.font-medium.text-sm.mt-3.text-gray-700.dark:text-gray-300
+                  = label.humanize
+                .flex
+                  .flex-1
+                    = f.color_field "#{label}-color", class: "mt-1 dark:bg-gray-800 w-full", value: f.object.chart_settings.dig(label, "color")
+                  .flex-1.ml-6
+                    = f.select "#{label}-type", options_for_select([["Smooth", "spline"], ["Exact", "none"]], f.object.chart_settings.dig(label, "type")), {}, {class: "mt-1 w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+                  .flex-1.ml-8
+                    .flex.mt-3
+                      .flex.items-center.h-5
+                        = f.check_box "#{label}-dashed", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", checked: f.object.chart_settings.dig(label, "dashed")
+                      .ml-3.text-sm
+                        = f.label "#{label}-dashed", "Dashed", class: "text-gray-700 dark:text-gray-300"
+                  .flex-1
+                    .flex.mt-3
+                      .flex.items-center.h-5
+                        = f.check_box "#{label}-hidden", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", checked: f.object.chart_settings.dig(label, "hidden")
+                      .ml-3.text-sm
+                        = f.label "#{label}-hidden", "Hidden", class: "text-gray-700 dark:text-gray-300"
           - if current_user.admin?
             .col-span-3.sm:col-span-2
               h3.mb-4.font-medium.text-gray-700.dark:text-gray-300 Admin Area

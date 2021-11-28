@@ -24,6 +24,8 @@ class User < ApplicationRecord
   end
 
   def chart_settings
+    return ShotChart::CHART_SETTINGS unless premium?
+
     super.presence || ShotChart::CHART_SETTINGS
   end
 
