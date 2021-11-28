@@ -50,6 +50,14 @@ Rails.application.routes.draw do
     get :edit, on: :collection
   end
 
+  resources :premium, only: %i[index create] do
+    post :update
+    collection do
+      get :success
+      get :cancel
+    end
+  end
+
   resources :stats, only: [:index]
   resources :sponsorships, only: [:create]
   resources :changes, except: %i[index show destroy]
