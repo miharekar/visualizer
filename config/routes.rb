@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get :people, to: "people#index"
   get "people/:slug", to: "people#show", as: :users_shots
   get :changelog, to: "changes#index"
+  post :stripe, to: "stripe#create"
 
   resources :shots, except: [:new] do
     member do
