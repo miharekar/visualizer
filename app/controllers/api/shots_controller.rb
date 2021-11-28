@@ -38,11 +38,16 @@ module Api
     end
 
     def shared
-      shot = SharedShot.find_by(code: params[:code].to_s.upcase)&.shot
-      if shot
-        render json: shot_json(shot)
+      if current_user.present?
+        shares = SharedShot.where(user: current_user)
+        render json: shares.map { |s| shot_json(s.shot) }
       else
-        render json: {error: "Shared shot not found"}, status: :not_found
+        shared = SharedShot.find_by(code: params[:code].to_s.upcase)
+        if shared
+          render json: shot_json(shared.shot)
+        else
+          render json: {error: "Shared shot not found"}, status: :not_found
+        end
       end
     end
 
