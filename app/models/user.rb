@@ -9,6 +9,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
   has_many :shots, dependent: :nullify
+  has_many :shared_shots, dependent: :nullify
 
   has_one_attached :avatar
 

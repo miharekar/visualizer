@@ -37,7 +37,7 @@ class ShotsController < ApplicationController
   end
 
   def share
-    share = SharedShot.create!(shot: @shot)
+    share = SharedShot.create!(shot: @shot, user: current_user)
     render json: {code: share.code}
   end
 
