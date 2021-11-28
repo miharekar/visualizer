@@ -37,6 +37,8 @@ gem "memoist"
 gem "tickly", github: "miharekar/tickly"
 gem "ferrum"
 
+gem "stripe"
+
 gem "pry-rails"
 gem "pry-byebug"
 
