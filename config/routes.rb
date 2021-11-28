@@ -59,6 +59,5 @@ Rails.application.routes.draw do
   end
 
   resources :stats, only: [:index]
-  resources :sponsorships, only: [:create]
   resources :changes, except: %i[index show destroy]
 end
