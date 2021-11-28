@@ -6,9 +6,7 @@ class StripeController < ApplicationController
   def create
     StripeWebhookHandler.new(request).handle
     head :ok
-  rescue Stripe::SignatureVerificationError
-    render json: {error: "Invalid signature"}, status: :bad_request
-  rescue JSON::ParserError
-    render json: {error: "Invalid JSON"}, status: :bad_request
+  rescue JSON::ParserError, Stripe::SignatureVerificationError
+    head :bad_request
   end
 end

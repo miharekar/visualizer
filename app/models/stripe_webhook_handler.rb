@@ -18,10 +18,14 @@ class StripeWebhookHandler
 
   private
 
-  def customer_subscription_deleted
-    user = User.find_by(stripe_customer_id: event.data.object.customer)
-    return unless user
+  def invoice_payment_succeeded
+    return unless event.data.object.subscription && user
 
-    user.update!(premium: false)
+    subscription = Stripe::Subscription.retrieve(event.data.object.subscription)
+    user.update(premium_expires_at: Time.zone.at(subscription.current_period_end))
+  end
+
+  def user
+    @user ||= User.find_by(stripe_customer_id: event.data.object.customer)
   end
 end
