@@ -39,8 +39,7 @@ module Api
 
     def shared
       if current_user.present?
-        shares = SharedShot.where(user: current_user)
-        render json: shares.map { |s| shot_json(s.shot) }
+        render json: current_user.shared_shots.map { |s| shot_json(s.shot) }
       else
         shared = SharedShot.find_by(code: params[:code].to_s.upcase)
         if shared
