@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 2021_11_28_110221) do
     t.datetime "last_read_change", precision: 6
     t.boolean "beta"
     t.string "stripe_customer_id"
-    t.boolean "premium"
+    t.datetime "premium_expires_at", precision: 6
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true

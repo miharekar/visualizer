@@ -28,7 +28,7 @@ class User < ApplicationRecord
   end
 
   def premium?
-    super || supporter
+    premium_expires_at&.future? || supporter
   end
 end
 
@@ -46,7 +46,7 @@ end
 #  hide_shot_times        :boolean
 #  last_read_change       :datetime
 #  name                   :string
-#  premium                :boolean
+#  premium_expires_at     :datetime
 #  public                 :boolean          default(FALSE)
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
