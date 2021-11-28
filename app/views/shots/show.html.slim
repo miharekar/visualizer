@@ -23,8 +23,8 @@
             span.ml-2.mt-1
               ' Shot by
               = link_to "#{@shot.user.name}", users_shots_path(slug: @shot.user.slug), class: "underline hover:text-gray-500"
-            - if @shot.user.supporter
-              a href="https://github.com/sponsors/miharekar" title="Supporter" target="_blank"
+            - if @shot.user.premium?
+              = link_to premium_index_path do
                 svg.ml-1.mt-1.h-9.w-9.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                   path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
       - else

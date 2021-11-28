@@ -24,8 +24,8 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
         - if include_person
           .flex.items-center
             .text-sm.text-gray-500.dark:text-gray-400 = shot.user.name
-            - if shot.user.supporter
-              a href="https://github.com/sponsors/miharekar" title="Supporter" target="_blank"
+            - if shot.user.premium?
+              = link_to premium_index_path do
                 svg.ml-1.h-4.w-4.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                   path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
   td.py-4.px-1.sm:px-4

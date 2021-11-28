@@ -26,6 +26,10 @@ class User < ApplicationRecord
   def chart_settings
     super.presence || ShotChart::CHART_SETTINGS
   end
+
+  def premium?
+    super || supporter
+  end
 end
 
 # == Schema Information
