@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 2021_11_28_110221) do
     t.jsonb "chart_settings"
     t.datetime "last_read_change", precision: 6
     t.boolean "beta"
-    t.string "stripe_session_id"
+    t.string "stripe_customer_id"
     t.boolean "premium"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

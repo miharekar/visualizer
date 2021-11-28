@@ -12,8 +12,8 @@
         a.inline-flex.items-center.justify-center.px-5.py-3.border.border-transparent.text-base.font-medium.rounded-md.text-indigo-600.bg-white.hover:bg-indigo-50 href="#"
           | Learn more
 
-- if current_user.stripe_session_id.present?
-  = form_with(url: premium_update_path(current_user.stripe_session_id), data:{turbo:"false"}) do |f|
+- if current_user.premium? && current_user.stripe_customer_id.present?
+  = form_with(url: premium_update_path(current_user.stripe_customer_id), data:{turbo:"false"}) do |f|
     = f.submit "Update", class: "inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50"
 - else
   = form_with(data:{turbo:"false"}) do |f|

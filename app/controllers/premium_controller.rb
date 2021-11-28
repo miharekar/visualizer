@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class PremiumController < ApplicationController
-  def index; end
+  def index
+    return if current_user.beta?
+
+    redirect_to "https://github.com/sponsors/miharekar", allow_other_host: true
+  end
 
   def create
     session = Stripe::Checkout::Session.create(
@@ -12,7 +16,7 @@ class PremiumController < ApplicationController
         automatic_tax: {enabled: true},
         line_items: [{
           quantity: 1,
-          price: "price_1K0kEjDIrE9MNkF4rDo4PtkM"
+          price: ENV["STRIPE_PRICE"]
         }]
       }
     )
@@ -20,10 +24,9 @@ class PremiumController < ApplicationController
   end
 
   def update
-    checkout_session = Stripe::Checkout::Session.retrieve(current_user.stripe_session_id)
     session = Stripe::BillingPortal::Session.create(
       {
-        customer: checkout_session.customer,
+        customer: current_user.stripe_customer_id,
         return_url: shots_url
       }
     )
@@ -31,8 +34,9 @@ class PremiumController < ApplicationController
   end
 
   def success
+    session = Stripe::Checkout::Session.retrieve(params[:session_id])
+    current_user.update(stripe_customer_id: session.customer, premium: true)
     flash[:notice] = "Subscribing was successful"
-    current_user.update(stripe_session_id: params["session_id"], premium: true)
     redirect_to shots_path
   end
 

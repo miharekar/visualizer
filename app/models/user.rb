@@ -57,7 +57,7 @@ end
 #  timezone               :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  stripe_session_id      :string
+#  stripe_customer_id     :string
 #
 # Indexes
 #
