@@ -4,3 +4,6 @@
   - high
   - default
   - low
+:schedule:
+  SharedShotCleanupJob:
+    every: 1 hour

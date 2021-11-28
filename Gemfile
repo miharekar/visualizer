@@ -31,6 +31,7 @@ gem "rollbar"
 gem "cloudinary"
 gem "aws-sdk-s3"
 gem "sidekiq"
+gem "sidekiq-scheduler"
 gem "memoist"
 
 gem "tickly", git: "https://github.com/miharekar/tickly.git"

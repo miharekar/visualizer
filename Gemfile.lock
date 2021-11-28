@@ -166,7 +166,10 @@ GEM
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
       railties (>= 3.2)
+    e2mmap (0.1.0)
     erubi (1.10.0)
+    et-orbi (1.2.6)
+      tzinfo
     ferrum (0.11)
       addressable (~> 2.5)
       cliver (~> 0.3)
@@ -174,6 +177,9 @@ GEM
       websocket-driver (>= 0.6, < 0.8)
     ffi (1.15.4)
     formatador (0.3.0)
+    fugit (1.5.2)
+      et-orbi (~> 1.1, >= 1.1.8)
+      raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
     guard (2.18.0)
@@ -253,6 +259,7 @@ GEM
     public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -295,11 +302,20 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
+    rufus-scheduler (3.8.0)
+      fugit (~> 1.1, >= 1.1.6)
     shellany (0.0.1)
     sidekiq (6.3.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    sidekiq-scheduler (3.1.0)
+      e2mmap
+      redis (>= 3, < 5)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 3)
+      thwait
+      tilt (>= 1.4.0)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -315,6 +331,8 @@ GEM
       rails (>= 6.0.0)
     temple (0.8.2)
     thor (1.1.0)
+    thwait (0.2.0)
+      e2mmap
     tilt (2.0.10)
     turbo-rails (0.9.0)
       rails (>= 6.0.0)
@@ -375,6 +393,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   sidekiq
+  sidekiq-scheduler
   slim
   sprockets-rails
   stimulus-rails
