@@ -42,6 +42,7 @@ end
 #  hide_shot_times        :boolean
 #  last_read_change       :datetime
 #  name                   :string
+#  premium                :boolean
 #  public                 :boolean          default(FALSE)
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -52,6 +53,7 @@ end
 #  timezone               :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  stripe_session_id      :string
 #
 # Indexes
 #
