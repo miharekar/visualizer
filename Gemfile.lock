@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 2a32c4b679a7fdc370d2f635c5285e4a4f161390
+  revision: 30519c4b3f5de82ff3b201d14654f0be21bc70d0
   branch: main
   specs:
     actioncable (7.0.0.alpha2)
@@ -128,7 +128,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.534.0)
+    aws-partitions (1.536.0)
     aws-sdk-core (3.123.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -137,7 +137,7 @@ GEM
     aws-sdk-kms (1.51.0)
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.107.0)
+    aws-sdk-s3 (1.108.0)
       aws-sdk-core (~> 3, >= 3.122.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -159,7 +159,7 @@ GEM
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     crass (1.0.6)
-    dalli (3.0.4)
+    dalli (3.0.5)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.6)
@@ -243,9 +243,9 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     orm_adapter (0.5.0)
-    pagy (5.6.1)
+    pagy (5.6.3)
     parallel (1.21.0)
-    parser (3.0.3.0)
+    parser (3.0.3.1)
       ast (~> 2.4.1)
     pg (1.2.3)
     pry (0.13.1)
