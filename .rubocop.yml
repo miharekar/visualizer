@@ -20,7 +20,7 @@ Layout/LineLength:
   Enabled: false
 
 Layout/DotPosition:
-  Enabled: false # Something is broken in RuboCop
+  Enabled: true
   EnforcedStyle: trailing
 
 Style/RaiseArgs:
