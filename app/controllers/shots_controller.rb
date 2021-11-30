@@ -3,7 +3,7 @@
 class ShotsController < ApplicationController
   include Pagy::Backend
 
-  before_action :authenticate_user!, except: %i[show compare chart]
+  before_action :authenticate_user!, except: %i[show compare chart share]
   before_action :load_shot, only: %i[show compare chart share]
   before_action :load_users_shot, only: %i[edit update destroy]
 
@@ -37,7 +37,9 @@ class ShotsController < ApplicationController
   end
 
   def share
-    share = SharedShot.create!(shot: @shot, user: current_user)
+    share = SharedShot.find_or_initialize_by(shot: @shot, user: current_user)
+    share.created_at = Time.zone.now
+    share.save!
     render json: {code: share.code}
   end
 
