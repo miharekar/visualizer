@@ -2,6 +2,7 @@
 
 module Api
   class ShotsController < Api::BaseController
+    extend Memoist
     include Pagy::Backend
 
     skip_before_action :verify_current_user, except: %i[upload]
@@ -39,7 +40,8 @@ module Api
 
     def shared
       if current_user.present?
-        render json: current_user.shared_shots.map { |s| shot_json(s.shot) }
+        distinct_shots = current_user.shared_shots.distinct.pluck(:shot_id)
+        render json: Shot.where(id: distinct_shots).map { |s| shot_json(s) }
       else
         shared = SharedShot.find_by(code: params[:code].to_s.upcase)
         if shared
@@ -73,13 +75,17 @@ module Api
     def shot_json(shot)
       return {} unless shot
 
-      allowed_attrs = %w[id profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
-      allowed_attrs += %w[start_time] unless shot.user&.hide_shot_times
-      allowed_attrs += %w[timeframe data] if params[:essentials].blank?
-      json = shot.attributes.slice(*allowed_attrs)
+      json = shot.attributes.slice(*allowed_shot_attrs(shot.user_id))
       json[:image_preview] = shot.screenshot_url if shot.screenshot?
       json[:profile_url] = api_shot_profile_url(shot) if shot.tcl_profile_fields.present?
       json
+    end
+
+    memoize def allowed_shot_attrs(user_id)
+      allowed_attrs = %w[id profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes]
+      allowed_attrs += %w[start_time] unless User.find(user_id)&.hide_shot_times
+      allowed_attrs += %w[timeframe data] if params[:essentials].blank?
+      allowed_attrs
     end
   end
 end
