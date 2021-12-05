@@ -79,6 +79,8 @@ module Api
       allowed_attrs += %w[start_time] unless shot.user&.hide_shot_times
       allowed_attrs += %w[timeframe data] if with_data
       json = shot.attributes.slice(*allowed_attrs)
+      json[:duration] = shot.duration
+      json[:user_name] = shot.user&.name if shot.user&.public?
       json[:image_preview] = shot.screenshot_url if shot.screenshot?
       json[:profile_url] = api_shot_profile_url(shot) if shot.tcl_profile_fields.present?
       json
