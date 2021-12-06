@@ -68,6 +68,7 @@
       - if !header_content
         .sm:hidden
 
+- width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3"
 .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
   .flex.flex-col.md:flex-row
     div class="#{@shot.image.attached? ? "md:w-1/2" : "md:w-full"}"
@@ -75,13 +76,13 @@
       h3.mt-3.text-l.font-medium.text-gray-700.dark:text-gray-300 Compare
       .flex.flex-col.mt-3 data-controller="comparison" data-comparison-shot-id-value="#{@shot.id}"
         - if @compare_shots.present?
-          .flex-1.lg:w-2/3.xl:w-1/2.mb-1
+          .flex-1.mb-1 class=width_class
             select.sm:text-sm.w-full.border.border-gray-300.bg-white.dark:bg-gray-800.rounded-md.shadow-sm.focus:outline-none.focus:ring-green-500.focus:border-green-500 data-action="comparison#compare"
               option With one of your recent shots
               - @compare_shots.each do |id, title, time|
                 option value=id
-                  = [title, time.in_time_zone(@timezone). to_formatted_s(:long)].join(" @ ")
-        .flex-1.lg:w-2/3.xl:w-1/2
+                  = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
+        .flex-1 class=width_class
           input.standard-input type="text" data-action="comparison#url" placeholder="With any shot via its URL"
     - if @shot.image.attached?
       .md:w-1/2.mt-3.md:mt-0.md:ml-3
