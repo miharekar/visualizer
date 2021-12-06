@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "aws-sdk-s3"
+
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
@@ -19,7 +21,7 @@ class ScreenshotTakerJob < ApplicationJob
     response = client.put_object(
       acl: "public-read",
       body: File.read("tmp/screenshot-#{shot.id}.png"),
-      bucket: "visualizer-coffee",
+      bucket: "visualizer-coffee-shots",
       key: "screenshots/#{shot.id}.png"
     )
     shot.update(s3_etag: response.etag) if response&.etag

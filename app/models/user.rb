@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
 
-  has_one_attached :avatar
+  has_one_attached :avatar, service: :cloudinary
 
   scope :visible, -> { where(public: true) }
   scope :by_name, -> { order("LOWER(name)") }

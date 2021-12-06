@@ -178,6 +178,9 @@ GEM
       domain_name (~> 0.5)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
+    image_processing (1.12.1)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     importmap-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -300,6 +303,8 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
+    ruby-vips (2.1.4)
+      ffi (~> 1.12)
     rufus-scheduler (3.8.0)
       fugit (~> 1.1, >= 1.1.6)
     shellany (0.0.1)
@@ -373,6 +378,7 @@ DEPENDENCIES
   ferrum
   guard
   guard-minitest
+  image_processing
   importmap-rails
   kramdown
   kramdown-parser-gfm

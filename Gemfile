@@ -29,10 +29,11 @@ gem "mini_magick"
 gem "dalli"
 gem "rollbar"
 gem "cloudinary"
-gem "aws-sdk-s3"
+gem "aws-sdk-s3", require: false
 gem "sidekiq"
 gem "sidekiq-scheduler"
 gem "memoist"
+gem "image_processing"
 
 gem "tickly", github: "miharekar/tickly"
 gem "ferrum"
