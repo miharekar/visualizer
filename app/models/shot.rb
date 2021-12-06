@@ -10,6 +10,10 @@ class Shot < ApplicationRecord
 
   belongs_to :user, optional: true
 
+  has_one_attached :image do |attachable|
+    attachable.variant :display, resize_to_limit: [1000, 500]
+  end
+
   scope :visible, -> { joins(:user).where(users: {public: true}) }
   scope :by_start_time, -> { order(start_time: :desc) }
 

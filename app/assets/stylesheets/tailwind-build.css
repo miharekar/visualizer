@@ -3376,6 +3376,14 @@ input[type="color"]::-moz-color-swatch {
     width: auto;
   }
 
+  .md\:w-1\/2 {
+    width: 50%;
+  }
+
+  .md\:w-full {
+    width: 100%;
+  }
+
   .md\:max-w-6xl {
     max-width: 72rem;
   }
