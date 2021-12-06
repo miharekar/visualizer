@@ -111,6 +111,7 @@ class ShotsController < ApplicationController
 
   def load_shots_with_pagy
     @shots = current_user.shots.by_start_time
+    @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
     FILTER_PARAMS.each do |filter|
       next if params[filter].blank?
 

@@ -10,6 +10,7 @@ class SearchController < ApplicationController
   def index
     if params[:commit]
       @shots = Shot.visible.by_start_time
+      @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
       FILTERS.each do |filter|
         next if params[filter].blank?
 
