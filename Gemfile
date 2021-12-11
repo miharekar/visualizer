@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.2"
 
-gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 7.0.0.rc1"
 gem "sprockets-rails"
 gem "pg"
 gem "redis"
@@ -52,7 +52,7 @@ group :development do
   gem "web-console"
   gem "listen"
   gem "letter_opener"
-  gem "annotate"
+  gem "annotate", git: "https://github.com/miharekar/annotate_models.git", branch: "rails-7"
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-performance", require: false

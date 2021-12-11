@@ -20,7 +20,7 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
           = shot.profile_title
         - if show_start_time
           .text-sm.text-gray-500.dark:text-gray-400
-            = shot.start_time.in_time_zone(@timezone).to_s(:long)
+            = shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)
         - if include_person
           .flex.items-center
             .text-sm.text-gray-500.dark:text-gray-400 = shot.user.name
@@ -85,7 +85,7 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
               path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
             span.ml-2.hidden.xl:block Edit
         span.mt-2.lg:mt-0.lg:ml-2
-          = button_to shot_path(shot), method: :delete, form_class: "inline-flex items-center", class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete shot from #{shot.start_time.in_time_zone(@timezone).to_s(:long)}?"} do
+          = button_to shot_path(shot), method: :delete, form_class: "inline-flex items-center", class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do
             input type="hidden" name="page" value=params[:page]
             - if full_crud
               - ShotsController::FILTER_PARAMS.each do |filter|
