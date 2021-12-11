@@ -11,7 +11,7 @@
   @apply mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md;
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
+input[type="range"].shot-range::-webkit-slider-runnable-track {
   -webkit-appearance: none;
   background: hsl(0, 80%, 50%);
   background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(124, 70%, 50%) 100%);
@@ -19,11 +19,11 @@ input[type="range"]::-webkit-slider-runnable-track {
   @apply h-1;
 }
 
-input[type="range"]:focus {
+input[type="range"].shot-range:focus {
   outline: none;
 }
 
-input[type="range"]::-moz-range-track {
+input[type="range"].shot-range::-moz-range-track {
   -moz-appearance: none;
   background: hsl(0, 70%, 50%);
   background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(124, 70%, 50%) 100%);
@@ -31,25 +31,25 @@ input[type="range"]::-moz-range-track {
   @apply h-1;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type="range"].shot-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   bottom: 8px;
   cursor: -webkit-grab;
   @apply relative h-5 w-5 bg-white dark:bg-gray-800 border-2 border-solid border-gray-700 dark:border-gray-300 rounded-full;
 }
 
-input[type="range"]::-moz-range-thumb {
+input[type="range"].shot-range::-moz-range-thumb {
   -moz-appearance: none;
   bottom: 8px;
   cursor: -moz-grab;
   @apply relative h-5 w-5 bg-white dark:bg-gray-800 border-2 border-solid border-gray-700 dark:border-gray-300 rounded-full;
 }
 
-input[type="range"]::-webkit-slider-thumb:active {
+input[type="range"].shot-range::-webkit-slider-thumb:active {
   cursor: -webkit-grabbing;
 }
 
-input[type="range"]::-moz-range-thumb:active {
+input[type="range"].shot-range::-moz-range-thumb:active {
   cursor: -moz-grabbing;
 }
 

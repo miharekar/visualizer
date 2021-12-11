@@ -213,6 +213,43 @@ function drawTemperatureChart() {
   Highcharts.chart("temperature-chart", options)
 }
 
+function comparisonAdjust(range) {
+  let comparisonData = {}
+  let maxLength = 1
+
+  window.shotData.forEach(function (s) {
+    if (s.data[s.data.length - 1][0] > maxLength) {
+      maxLength = s.data[s.data.length - 1][0]
+    }
+    if (s.name.endsWith("Comparison")) {
+      comparisonData[s.name] = s.data
+    }
+  })
+
+  window.temperatureData.forEach(function (s) {
+    if (s.name.endsWith("Comparison")) {
+      comparisonData[s.name] = s.data
+    }
+  })
+
+  range.addEventListener("input", function () {
+    const value = this.value * maxLength / 1000
+    Highcharts.charts.forEach(function (chart) {
+      if (isObject(chart)) {
+        chart.series.forEach(function (s) {
+          if (s.name.endsWith("Comparison")) {
+            if (comparisonData[s.name]) {
+              s.setData(comparisonData[s.name].map(function (d) {
+                return [d[0] + value, d[1]]
+              }), true, false, false)
+            }
+          }
+        })
+      }
+    })
+  })
+}
+
 document.addEventListener("turbo:load", function () {
   Highcharts.charts.forEach(function (chart) {
     if (isObject(chart)) { chart.destroy() }
@@ -220,6 +257,7 @@ document.addEventListener("turbo:load", function () {
 
   const shotChart = document.getElementById("shot-chart")
   const temperatureChart = document.getElementById("temperature-chart")
+  const range = document.getElementById("compare-range")
   if (shotChart) {
     drawShotChart()
     syncMouseEvents(shotChart)
@@ -227,5 +265,8 @@ document.addEventListener("turbo:load", function () {
   if (temperatureChart) {
     drawTemperatureChart()
     syncMouseEvents(temperatureChart)
+  }
+  if (range) {
+    comparisonAdjust(range)
   }
 })

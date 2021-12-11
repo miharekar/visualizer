@@ -5,6 +5,9 @@
     .flex-1.mt-6.md:ml-3.md:mt-0
       = render "details", shot: @comparison, name: true
 
+- if current_user&.premium?
+  input#compare-range.w-full.mt-10 type="range" min="-1000" max="1000" value="0" step="1"
+
 .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
   #shot-chart
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
