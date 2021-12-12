@@ -120,10 +120,18 @@ function commonOptions() {
     title: false,
     xAxis: {
       type: "datetime",
-      dateTimeLabelFormats: { day: "", second: "%M:%S" },
       events: { setExtremes: syncExtremes },
       crosshair: true,
-      labels: { style: { color: colors.label } },
+      labels: {
+        style: { color: colors.label },
+        formatter: function () {
+          if (this.value < 0) {
+            return "-" + Highcharts.dateFormat('%M:%S', -this.value)
+          } else {
+            return Highcharts.dateFormat('%M:%S', this.value)
+          }
+        }
+      },
       gridLineColor: colors.gridLine,
       lineColor: colors.line,
       tickColor: colors.line,
@@ -136,11 +144,20 @@ function commonOptions() {
       tickColor: colors.line,
     },
     tooltip: {
-      xDateFormat: "%M:%S.%L",
       shared: true,
       borderRadius: 10,
       shadow: false,
-      borderWidth: 0
+      borderWidth: 0,
+      formatter: function (tooltip) {
+        let s
+        if (this.x < 0) {
+          s = ["-" + Highcharts.dateFormat('%M:%S.%L', -this.x) + "<br>"]
+        } else {
+          s = [Highcharts.dateFormat('%M:%S.%L', this.x) + "<br>"]
+        }
+
+        return s.concat(tooltip.bodyFormatter(this.points))
+      }
     },
     legend: {
       itemStyle: { color: colors.legend },
@@ -230,7 +247,7 @@ function comparisonAdjust(range) {
   })
   document.getElementById("compare-range-reset").addEventListener("click", function () {
     range.value = 0
-    range.dispatchEvent(new Event("input"));
+    range.dispatchEvent(new Event("input"))
   })
 }
 
