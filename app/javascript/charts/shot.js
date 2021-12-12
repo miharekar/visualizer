@@ -228,6 +228,10 @@ function comparisonAdjust(range) {
       }
     })
   })
+  document.getElementById("compare-range-reset").addEventListener("click", function () {
+    range.value = 0
+    range.dispatchEvent(new Event("input"));
+  })
 }
 
 document.addEventListener("turbo:load", function () {
