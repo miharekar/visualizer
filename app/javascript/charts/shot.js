@@ -214,35 +214,15 @@ function drawTemperatureChart() {
 }
 
 function comparisonAdjust(range) {
-  let comparisonData = {}
-  let maxLength = 1
-
-  window.shotData.forEach(function (s) {
-    if (s.data[s.data.length - 1][0] > maxLength) {
-      maxLength = s.data[s.data.length - 1][0]
-    }
-    if (s.name.endsWith("Comparison")) {
-      comparisonData[s.name] = s.data
-    }
-  })
-
-  window.temperatureData.forEach(function (s) {
-    if (s.name.endsWith("Comparison")) {
-      comparisonData[s.name] = s.data
-    }
-  })
-
   range.addEventListener("input", function () {
-    const value = this.value * maxLength / 1000
+    const value = this.value * window.multiplier
     Highcharts.charts.forEach(function (chart) {
       if (isObject(chart)) {
         chart.series.forEach(function (s) {
-          if (s.name.endsWith("Comparison")) {
-            if (comparisonData[s.name]) {
-              s.setData(comparisonData[s.name].map(function (d) {
-                return [d[0] + value, d[1]]
-              }), true, false, false)
-            }
+          if (window.comparisonData[s.name]) {
+            s.setData(window.comparisonData[s.name].map(function (d) {
+              return [d[0] + value, d[1]]
+            }), true, false, false)
           }
         })
       }

@@ -10,6 +10,18 @@ class ShotChartCompare < ShotChart
     super(shot, chart_settings)
   end
 
+  def comparison_data
+    (shot_chart + temperature_chart).filter_map do |s|
+      next unless s[:name].ends_with?("Comparison")
+
+      [s[:name], s[:data]]
+    end.to_h
+  end
+
+  def multiplier
+    shot_chart.max_by { |s| s[:data].last[0] }[:data].last[0] / 1000.0
+  end
+
   private
 
   def prepare_chart_data
