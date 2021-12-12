@@ -232,7 +232,7 @@ function drawTemperatureChart() {
 
 function comparisonAdjust(range) {
   range.addEventListener("input", function () {
-    const value = this.value * window.multiplier
+    const value = parseInt(this.value)
     Highcharts.charts.forEach(function (chart) {
       if (isObject(chart)) {
         chart.series.forEach(function (s) {

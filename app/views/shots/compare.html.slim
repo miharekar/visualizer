@@ -10,7 +10,7 @@
     .text-center.text-lg.text-gray-900.dark:text-gray-100
       ' Adjust comparison timing
     .flex
-      input#compare-range.shot-range.flex-grow.dark:bg-black.mr-2 type="range" min="-1000" max="1000" value="0" step="1"
+      input#compare-range.shot-range.flex-grow.dark:bg-black.mr-2 type="range" min="-#{@chart.normalized_timeframe.last}" max="#{@chart.normalized_timeframe.last}" value="0" step="#{@chart.timestep}"
       button#compare-range-reset.items-center.px-4.py-2.border.border-gray-300.dark:border-gray-600.rounded-md.shadow-sm.text-sm.font-medium.text-gray-700.bg-white.dark:bg-gray-800.dark:text-gray-300.hover:bg-gray-50.dark:hover:bg-gray-900 Reset
 
 .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
@@ -25,4 +25,3 @@ javascript:
   window.chartHeight = 650
   window.shotStages = []
   window.comparisonData = #{{@chart.comparison_data.to_json}}
-  window.multiplier = #{@chart.multiplier}

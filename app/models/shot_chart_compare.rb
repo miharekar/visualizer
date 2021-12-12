@@ -18,11 +18,19 @@ class ShotChartCompare < ShotChart
     end.to_h
   end
 
-  def multiplier
-    shot_chart.max_by { |s| s[:data].last[0] }[:data].last[0] / 1000.0
+  def normalized_timeframe
+    @normalized_timeframe ||= (0..longest_timeframe.size).map { |i| i * timestep }
+  end
+
+  def timestep
+    @timestep ||= ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
   end
 
   private
+
+  def longest_timeframe
+    @longest_timeframe ||= processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
+  end
 
   def prepare_chart_data
     super
@@ -43,11 +51,9 @@ class ShotChartCompare < ShotChart
   end
 
   def normalize_processed_shot_data
-    longest = processed_shot_data.max_by { |_k, v| v.size }
-    timeframe = longest.second.map(&:first)
     processed_shot_data.each do |_k, v|
       v.size.times do |i|
-        v[i][0] = timeframe[i]
+        v[i][0] = normalized_timeframe[i]
       end
     end
   end
