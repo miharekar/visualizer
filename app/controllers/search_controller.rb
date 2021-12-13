@@ -34,7 +34,7 @@ class SearchController < ApplicationController
     @values = if @filter == :user
                 @values.select { |u| u.name =~ /#{query}/i }
               else
-                @values.grep(/#{query}/i)
+                @values.grep(/#{Regexp.escape(query)}/i)
               end
     render layout: false
   end
