@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class PremiumController < ApplicationController
-  def index
-    return if current_user.beta?
-
-    redirect_to "https://github.com/sponsors/miharekar", allow_other_host: true
-  end
+  before_action :authenticate_user!
 
   def create
     price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
