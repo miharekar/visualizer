@@ -3,9 +3,9 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.2"
+ruby "3.0.3"
 
-gem "rails", "~> 7.0.0.rc1"
+gem "rails", "~> 7.0.0"
 gem "sprockets-rails"
 gem "pg"
 gem "redis"
@@ -20,8 +20,8 @@ gem "kramdown"
 gem "kramdown-parser-gfm"
 
 gem "slim"
-gem "devise", git: "https://github.com/miharekar/devise.git", branch: "rails7"
-gem "responders", git: "https://github.com/heartcombo/responders.git"
+gem "devise", github: "heartcombo/devise"
+gem "responders", github: "heartcombo/responders"
 gem "pagy"
 gem "active_link_to"
 
@@ -34,7 +34,7 @@ gem "sidekiq"
 gem "sidekiq-scheduler"
 gem "memoist"
 
-gem "tickly", git: "https://github.com/miharekar/tickly.git"
+gem "tickly", github: "miharekar/tickly"
 gem "ferrum"
 
 gem "pry-rails"
@@ -52,7 +52,7 @@ group :development do
   gem "web-console"
   gem "listen"
   gem "letter_opener"
-  gem "annotate", git: "https://github.com/miharekar/annotate_models.git", branch: "rails-7"
+  gem "annotate", github: "miharekar/annotate_models", branch: "rails-7"
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-performance", require: false
