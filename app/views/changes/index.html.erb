@@ -4,11 +4,11 @@
     <%= link_to "New", new_change_path if current_user&.admin %>
   </div>
 </div>
-<div class="py-4 bg-gray-100 sm:flex">
+<div class="py-4 bg-gray-100 dark:bg-black sm:flex">
   <div class="flex-grow hidden sm:block"></div>
   <div>
     <% @changes.each do |change| %>
-      <article class="mb-4 p-4 sm:p-6 sm:rounded-lg ring-1 ring-gray-900 ring-opacity-5 overflow-hidden bg-white max-w-3xl" id=<%= dom_id(change) %>>
+      <article class="mb-4 p-4 sm:p-6 sm:rounded-lg ring-1 ring-gray-900 ring-opacity-5 overflow-hidden bg-white dark:bg-gray-900 max-w-3xl" id=<%= dom_id(change) %>>
         <a href="<%= changelog_path(anchor: dom_id(change)) %>">
           <h2 class="text-2xl mb-3 font-bold text-gray-900 dark:text-gray-100">
             <%= change.published_at.strftime('%B %-d, %Y') %>:
