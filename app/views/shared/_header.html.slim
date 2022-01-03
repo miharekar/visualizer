@@ -35,6 +35,9 @@
                           .text-center.text-sm.text-white.dark:text-black
                             = change_count
                   = link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900"
+                  - if current_user.premium? && current_user.stripe_customer_id.present?
+                    = form_with(url: premium_update_path(current_user.stripe_customer_id), data:{turbo:"false"}) do |f|
+                      = f.submit "Manage Subscription", class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900"
                   = button_to "Sign Out", destroy_user_session_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900", method: :delete
             - else
               - if ['passwords', 'sessions', 'registrations'].exclude?(controller_name)
@@ -76,6 +79,9 @@
                   .text-center.text-sm.text-white
                     = change_count
           = active_link_to "Edit Profile", edit_profiles_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-gray-900 text-white", class_inactive: "text-gray-300 hover:bg-gray-700 hover:text-white"
+          - if current_user.premium? && current_user.stripe_customer_id.present?
+            = form_with(url: premium_update_path(current_user.stripe_customer_id), data:{turbo:"false"}) do |f|
+              = f.submit "Manage Subscription", class: "block w-full text-left cursor-pointer px-3 py-2 rounded-md text-base text-gray-300 bg-gray-800 hover:bg-gray-700 hover:text-white font-medium"
           = button_to "Sign Out", destroy_user_session_path, class: "block w-full text-left cursor-pointer px-3 py-2 rounded-md text-base text-gray-300 bg-gray-800 hover:bg-gray-700 hover:text-white font-medium", method: :delete
         - else
           - if controller_name != 'sessions'

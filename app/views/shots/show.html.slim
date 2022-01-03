@@ -12,6 +12,8 @@
   meta property="og:url" content="https://visualizer.coffee/shots/#{@shot.id}"
   meta property="og:description" content=description
 
+= render "shared/flash"
+
 .bg-white.dark:bg-gray-900.shadow data-controller="modal"
   = render "shared/modal"
   - if show_header
@@ -23,8 +25,8 @@
             span.ml-2.mt-1
               ' Shot by
               = link_to "#{@shot.user.name}", users_shots_path(slug: @shot.user.slug), class: "underline hover:text-gray-500"
-            - if @shot.user.supporter
-              a href="https://github.com/sponsors/miharekar" title="Supporter" target="_blank"
+            - if @shot.user.premium?
+              = link_to premium_index_path do
                 svg.ml-1.mt-1.h-9.w-9.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                   path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
       - else
@@ -66,21 +68,26 @@
       - if !header_content
         .sm:hidden
 
-= render "shared/flash"
-
+- width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3"
 .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
-  = render "details", shot: @shot, name: false
-  h3.mt-3.text-l.font-medium.text-gray-700.dark:text-gray-300 Compare
-  .flex.flex-col.mt-3 data-controller="comparison" data-comparison-shot-id-value="#{@shot.id}"
-    - if @compare_shots.present?
-      .flex-1.lg:w-2/3.xl:w-1/2.mb-1
-        select.sm:text-sm.w-full.border.border-gray-300.bg-white.dark:bg-gray-800.rounded-md.shadow-sm.focus:outline-none.focus:ring-green-500.focus:border-green-500 data-action="comparison#compare"
-          option With one of your recent shots
-          - @compare_shots.each do |id, title, time|
-            option value=id
-              = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
-    .flex-1.lg:w-2/3.xl:w-1/2
-      input.standard-input type="text" data-action="comparison#url" placeholder="With any shot via its URL"
+  .flex.flex-col.md:flex-row
+    div class="#{@shot.image.attached? ? "md:w-1/2" : "md:w-full"}"
+      = render "details", shot: @shot, name: false
+      h3.mt-3.text-l.font-medium.text-gray-700.dark:text-gray-300 Compare
+      .flex.flex-col.mt-3 data-controller="comparison" data-comparison-shot-id-value="#{@shot.id}"
+        - if @compare_shots.present?
+          .flex-1.mb-1 class=width_class
+            select.sm:text-sm.w-full.border.border-gray-300.bg-white.dark:bg-gray-800.rounded-md.shadow-sm.focus:outline-none.focus:ring-green-500.focus:border-green-500 data-action="comparison#compare"
+              option With one of your recent shots
+              - @compare_shots.each do |id, title, time|
+                option value=id
+                  = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
+        .flex-1 class=width_class
+          input.standard-input type="text" data-action="comparison#url" placeholder="With any shot via its URL"
+    - if @shot.image.attached?
+      .md:w-1/2.mt-3.md:mt-0.md:ml-3
+        = link_to @shot.image, target: "_blank" do
+          = image_tag @shot.image.variant(:display), class: "rounded-md"
 .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
   #shot-chart
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8

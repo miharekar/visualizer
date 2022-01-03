@@ -67,6 +67,7 @@ class ShotsController < ApplicationController
 
   def update
     @shot.update(shot_params)
+    @shot.image.attach(params[:shot][:image]) if params[:shot][:image].present? && current_user.premium?
     flash[:notice] = "Shot successfully updated."
     redirect_to action: :show
   end
@@ -106,11 +107,12 @@ class ShotsController < ApplicationController
   end
 
   def shot_params
-    params.require(:shot).permit(:profile_title, :bean_weight, *Shot::EXTRA_DATA_METHODS)
+    params.require(:shot).permit(:image, :profile_title, :bean_weight, *Shot::EXTRA_DATA_METHODS)
   end
 
   def load_shots_with_pagy
     @shots = current_user.shots.by_start_time
+    @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
     FILTER_PARAMS.each do |filter|
       next if params[filter].blank?
 

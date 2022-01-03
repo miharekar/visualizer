@@ -11,7 +11,7 @@ class User < ApplicationRecord
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
 
-  has_one_attached :avatar
+  has_one_attached :avatar, service: :cloudinary
 
   scope :visible, -> { where(public: true) }
   scope :by_name, -> { order("LOWER(name)") }
@@ -24,7 +24,13 @@ class User < ApplicationRecord
   end
 
   def chart_settings
+    return ShotChart::CHART_SETTINGS unless premium?
+
     super.presence || ShotChart::CHART_SETTINGS
+  end
+
+  def premium?
+    premium_expires_at&.future? || supporter
   end
 end
 
@@ -42,6 +48,7 @@ end
 #  hide_shot_times        :boolean
 #  last_read_change       :datetime
 #  name                   :string
+#  premium_expires_at     :datetime
 #  public                 :boolean          default(FALSE)
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
@@ -52,6 +59,7 @@ end
 #  timezone               :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  stripe_customer_id     :string
 #
 # Indexes
 #

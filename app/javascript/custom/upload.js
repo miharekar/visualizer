@@ -4,27 +4,27 @@ document.addEventListener("turbo:load", function () {
   const dropArea = document.getElementById("drop-area");
 
   if (dropArea) {
-    const loader = document.getElementById("loader");
-    const error = document.getElementById("error");
-    const form = document.getElementById("shot-upload-form");
+    const loader = document.getElementById("loader")
+    const error = document.getElementById("error")
+    const form = document.getElementById("shot-upload-form")
     const token = document.getElementsByName("csrf-token")[0].content
 
     const preventDefaults = e => {
       e.preventDefault()
       e.stopPropagation()
-    };
+    }
 
     const highlight = e => {
       dropArea.classList.add("bg-green-50", "dark:bg-green-900")
       dropArea.classList.add("border-green-300")
       dropArea.classList.remove("border-gray-300")
-    };
+    }
 
     const unhighlight = e => {
       dropArea.classList.remove("bg-green-50", "dark:bg-green-900")
       dropArea.classList.remove("border-green-300")
       dropArea.classList.add("border-gray-300")
-    };
+    }
 
     const handleDrop = e => {
       dropArea.classList.add("hidden")
@@ -56,7 +56,7 @@ document.addEventListener("turbo:load", function () {
         formData.append("files[]", file)
       })
       xhr.send(formData)
-    };
+    }
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       dropArea.addEventListener(eventName, preventDefaults, false)

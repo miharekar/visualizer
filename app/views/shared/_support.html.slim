@@ -1,4 +1,4 @@
-- if current_user && !current_user.supporter && current_user.shots.count.to_i > 100
+- if current_user && !current_user.premium? && current_user.created_at < 1.month.ago && !(params[:controller] == 'premium')
   .origin-top.bg-pink-500 data-controller="flash" data-transition-leave="transition ease-in duration-100" data-transition-leave-end="transform scale-y-0" data-transition-leave-start="transform scale-y-100"
     .max-w-7xl.mx-auto.py-3.px-3.sm:px-6.lg:px-8
       .flex.items-center.justify-between.flex-wrap
@@ -7,13 +7,12 @@
             svg.h-6.w-6.text-white fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
               path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z"
           p.ml-3.font-medium.text-white.truncate
-            span.sm:hidden You've uploaded over 100 shots! That's great!
-            span.hidden.sm:inline-block.md:hidden Please consider supporting the site.
-            span.hidden.md:inline-block.lg:hidden You've uploaded over 100 shots! Please consider supporting the site.
-            span.hidden.lg:inline-block You've uploaded over 100 shots! That's great! Please consider supporting the site.
-        .order-2.flex-shrink-0.sm:order-3.sm:ml-3
+            span.md:hidden You've been a user for over a month! That's great!
+            span.hidden.md:inline-block.lg:hidden You've been a user for over a month! Please consider subscribing.
+            span.hidden.lg:inline-block You've been a user for over a month! That's great! Please consider subscribing.
+        .order-2.flex-shrink-0.md:order-3.md:ml-3
           | &nbsp;
-        .order-3.mt-2.flex-shrink-0.w-full.sm:order-2.sm:mt-0.sm:w-auto
-          a.flex.items-center.justify-center.px-4.py-2.border.border-transparent.rounded-md.shadow-sm.text-sm.font-medium.text-pink-600.bg-white.hover:bg-pink-50 href="https://github.com/sponsors/miharekar" target="_blank"
-            .sm:hidden Please consider supporting the site.
-            .hidden.sm:inline-block Learn more
+        .order-3.mt-2.flex-shrink-0.w-full.md:order-2.md:mt-0.md:w-auto
+          = link_to premium_index_path, class: "flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-pink-600 bg-white hover:bg-pink-50" do
+            .md:hidden Please consider subscribing.
+            .hidden.md:inline-block Learn more
