@@ -3,19 +3,26 @@
 class SearchController < ApplicationController
   include Pagy::Backend
 
-  FILTERS = %i[profile_title bean_brand bean_type user bean_notes espresso_notes].freeze
+  FILTERS = {
+    profile_title: {autocomplete: true},
+    bean_brand: {autocomplete: true},
+    bean_type: {autocomplete: true},
+    user: {autocomplete: true, target: :user_id},
+    bean_notes: {},
+    espresso_notes: {}
+  }.freeze
 
   before_action :authenticate_user!
 
   def index
     if params[:commit]
-      @shots = Shot.visible.by_start_time
+      @shots = Shot.visible.by_start_time.includes(:user)
       @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
-      FILTERS.each do |filter|
+      FILTERS.each do |filter, options|
         next if params[filter].blank?
 
-        @shots = if filter == :user
-                   @shots.where(user_id: params[:user_id])
+        @shots = if options[:target]
+                   @shots.where(options[:target] => params[options[:target]])
                  else
                    @shots.where("#{filter} ILIKE ?", "%#{params[filter]}%")
                  end

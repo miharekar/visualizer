@@ -7,18 +7,18 @@
     .shadow.sm:rounded-md.sm:overflow-hidden
       .p-4.bg-white.dark:bg-gray-800.space-y-6.sm:p-4
         .grid.grid-cols-12.gap-3
-          - SearchController::FILTERS.each do |filter|
-            - if filter =~ /notes/
+          - SearchController::FILTERS.each do |filter, options|
+            - if options[:autocomplete]
+              .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-green-300 bg-opacity-25" data-controller="autocomplete"
+                = f.label filter, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
+                - if options[:target]
+                  = f.hidden_field options[:target], value: params[options[:target]], data: {autocomplete_target: "hidden"}
+                = f.search_field filter, value: params[filter], class: "standard-input", data: {autocomplete_target: "input"}
+                ul.list-group.absolute.mt-2.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.z-10.max-h-96.overflow-y-auto data-autocomplete-target="results"
+            - else
               .col-span-6
                 = f.label filter, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
                 = f.search_field filter, value: params[filter], class: "standard-input"
-            - else
-              .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-green-300 bg-opacity-25" data-controller="autocomplete"
-                = f.label filter, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-                - if filter == :user
-                  = f.hidden_field :user_id, value: params[:user_id], data: {autocomplete_target: "hidden"}
-                = f.search_field filter, value: params[filter], class: "standard-input", data: {autocomplete_target: "input"}
-                ul.list-group.absolute.mt-2.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.z-10.max-h-96.overflow-y-auto data-autocomplete-target="results"
           .col-span-6.md:col-span-5
             = f.label :min_enjoyment, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
             .flex.items-center.mt-1 data-controller="range"
