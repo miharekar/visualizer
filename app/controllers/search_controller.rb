@@ -3,7 +3,7 @@
 class SearchController < ApplicationController
   include Pagy::Backend
 
-  FILTERS = %i[profile_title bean_brand bean_type user].freeze
+  FILTERS = %i[profile_title bean_brand bean_type user bean_notes espresso_notes].freeze
 
   before_action :authenticate_user!
 
