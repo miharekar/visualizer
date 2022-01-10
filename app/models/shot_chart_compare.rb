@@ -55,11 +55,10 @@ class ShotChartCompare < ShotChart
   end
 
   def calculate_fidelity_ratio
-    grouped = processed_shot_data.group_by { |k, _| k.ends_with?("_comparison") }
-    longest_comparison = grouped[true].max_by { |_k, v| v.size }.second.map(&:first)
-    comparison_step = ((longest_comparison.last - longest_comparison.first) / longest_comparison.size)
-    longest_original = grouped[false].max_by { |_k, v| v.size }.second.map(&:first)
+    longest_original = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? 0 : v.size }.second.map(&:first)
     original_step = ((longest_original.last - longest_original.first) / longest_original.size)
+    longest_comparison = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? v.size : 0 }.second.map(&:first)
+    comparison_step = ((longest_comparison.last - longest_comparison.first) / longest_comparison.size)
     original_step / comparison_step
   end
 
