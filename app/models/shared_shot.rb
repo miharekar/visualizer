@@ -14,7 +14,7 @@ class SharedShot < ApplicationRecord
     return if code.present? && persisted?
 
     loop do
-      break if code.present? && !SharedShot.exists?(code: code)
+      break if code.present? && !SharedShot.exists?(code:)
 
       self.code = (0...4).map { CHARS.sample }.join
     end

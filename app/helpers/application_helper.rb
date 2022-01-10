@@ -6,7 +6,7 @@ module ApplicationHelper
   def markdown_text_from(input)
     tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table thead tbody th tr td video]
     attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[id style controls]
-    text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags: tags, attributes: attributes)
+    text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags:, attributes:)
     tag.div(text, class: "prose dark:prose-dark")
   end
 

@@ -15,9 +15,9 @@ module Api
       shots = current_user.present? ? current_user.shots : Shot.visible
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
 
-      pagy, shots = pagy(shots, items: items)
+      pagy, shots = pagy(shots, items:)
       data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
-      render json: {data: data, paging: pagy_metadata(pagy)}
+      render json: {data:, paging: pagy_metadata(pagy)}
     rescue Pagy::VariableError
       render json: {error: "Could not paginate"}, status: :unprocessable_entity
     end

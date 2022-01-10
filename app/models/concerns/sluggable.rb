@@ -38,6 +38,6 @@ module Sluggable
   end
 
   def slug_taken?(slug)
-    self.class.exists?(slug: slug)
+    self.class.exists?(slug:)
   end
 end

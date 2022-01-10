@@ -9,7 +9,7 @@ module Api
 
     def current_user
       @current_user ||= authenticate_with_http_basic do |email, password|
-        user = User.find_by(email: email)
+        user = User.find_by(email:)
         user if user&.valid_password?(password)
       end
     end
