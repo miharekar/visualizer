@@ -26,6 +26,10 @@ class ShotChartCompare < ShotChart
     @timestep ||= ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
   end
 
+  def fidelity_ratio
+    @fidelity_ratio ||= calculate_fidelity_ratio
+  end
+
   private
 
   def longest_timeframe
@@ -50,11 +54,31 @@ class ShotChartCompare < ShotChart
     setting.merge("opacity" => 0.6, "title" => "#{setting['title']} Comparison")
   end
 
+  def calculate_fidelity_ratio
+    grouped = processed_shot_data.group_by { |k, _| k.ends_with?("_comparison") }
+    longest_comparison = grouped[true].max_by { |_k, v| v.size }.second.map(&:first)
+    comparison_step = ((longest_comparison.last - longest_comparison.first) / longest_comparison.size)
+    longest_original = grouped[false].max_by { |_k, v| v.size }.second.map(&:first)
+    original_step = ((longest_original.last - longest_original.first) / longest_original.size)
+    original_step / comparison_step
+  end
+
   def normalize_processed_shot_data
-    processed_shot_data.each do |_k, v|
+    processed_shot_data.each do |k, v|
+      comparison = k =~ /_comparison$/
       v.size.times do |i|
-        v[i][0] = normalized_timeframe[i]
+        v[i][0] = normalized_timeframe[index_for(i, comparison)]
       end
+    end
+  end
+
+  def index_for(original, comparison)
+    if fidelity_ratio < 1 && comparison
+      original / fidelity_ratio
+    elsif fidelity_ratio > 1 && !comparison
+      original * fidelity_ratio
+    else
+      original
     end
   end
 end
