@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.3"
+ruby "3.1.0"
 
 gem "rails", "~> 7.0.0"
 gem "sprockets-rails"
@@ -55,7 +55,7 @@ group :development do
   gem "web-console"
   gem "listen"
   gem "letter_opener"
-  gem "annotate", github: "miharekar/annotate_models", branch: "rails-7"
+  gem "annotate", github: "dabit/annotate_models", branch: "rails-7"
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-performance", require: false
