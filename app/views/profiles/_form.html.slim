@@ -4,88 +4,88 @@
 .mt-5.md:mt-0.md:col-span-2 id=dom_id(@profile)
   = form_with(model: @profile, url: profile_path(@profile)) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
-      .px-4.py-5.bg-white.dark:bg-gray-800.sm:p-6
+      .px-4.py-5.bg-white.dark:bg-stone-800.sm:p-6
         .grid.grid-cols-3.gap-6
           .col-span-3.sm:col-span-2
-            label.text-sm.font-medium.text-gray-700.dark:text-gray-300
+            label.text-sm.font-medium.text-stone-700.dark:text-stone-300
               | Avatar
             .mt-2.flex.items-center data-controller="avatar"
               img.h-12.w-12.rounded-full src=avatar_url(@profile, 96)
-              = f.label :avatar, "Change", data: {avatar_target: "label"}, class: "cursor-pointer ml-3 bg-white dark:bg-gray-800 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              = f.label :avatar, "Change", data: {avatar_target: "label"}, class: "cursor-pointer ml-3 bg-white dark:bg-stone-800 py-2 px-3 border border-stone-300 dark:border-stone-600 rounded-md shadow-sm text-sm leading-4 font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
               = f.file_field :avatar, data: {action: "input->avatar#update"}, class: "hidden"
           .col-span-3.sm:col-span-2
             - has_error = f.object.errors.any?{ |e| e.attribute == :name && e.type == :blank }
             - if has_error
               - extra_classes = "ring-1 ring-red-500 border-red-500"
-            = f.label :name, class: "text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.text_field :name, class: "#{extra_classes} mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md", autocomplete: "name"
+            = f.label :name, class: "text-sm font-medium text-stone-700 dark:text-stone-300"
+            = f.text_field :name, class: "#{extra_classes} mt-1 dark:bg-stone-800 focus:ring-emerald-500 focus:border-emerald-500 w-full shadow-sm sm:text-sm border-stone-300 rounded-md", autocomplete: "name"
             - if has_error
               p.text-sm.font-medium.text-red-500 Name is required for public profiles
           .col-span-3.sm:col-span-2
-            = f.label :timezone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+            = f.label :timezone, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+            = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-stone-300 bg-white dark:bg-stone-800 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"}
           .col-span-3.sm:col-span-2
-            = f.label :skin, class: "block text-sm font-medium text-gray-700 dark:text-gray-300"
-            = f.select :skin, ["Light", "Dark"], {}, class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+            = f.label :skin, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+            = f.select :skin, ["Light", "Dark"], {}, class: "mt-1 block w-full py-2 px-3 border border-stone-300 bg-white dark:bg-stone-800 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
           .col-span-3.sm:col-span-2
             .flex.items-start
               .flex.items-center.h-5
-                = f.check_box :public, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                = f.check_box :public, class: "focus:ring-emerald-500 h-4 w-4 text-emerald-600 border-stone-300 rounded"
               .ml-3.text-sm
-                = f.label :public, class: "font-medium text-gray-700 dark:text-gray-300"
-                p.text-gray-500.dark:text-gray-400
+                = f.label :public, class: "font-medium text-stone-700 dark:text-stone-300"
+                p.text-stone-500.dark:text-stone-400
                   ' Be visible in
                   = link_to "Decent People", people_path, class: "underline"
                   ' .
             .flex.items-start.mt-1
               .flex.items-center.h-5
-                = f.check_box :hide_shot_times, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                = f.check_box :hide_shot_times, class: "focus:ring-emerald-500 h-4 w-4 text-emerald-600 border-stone-300 rounded"
               .ml-3.text-sm
-                = f.label :hide_shot_times, class: "font-medium text-gray-700 dark:text-gray-300"
-                p.text-gray-500.dark:text-gray-400
+                = f.label :hide_shot_times, class: "font-medium text-stone-700 dark:text-stone-300"
+                p.text-stone-500.dark:text-stone-400
                   ' Hide date and time at which your shots were made to other people.
             .flex.items-start.mt-1
               .flex.items-center.h-5
-                = f.check_box :beta, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                = f.check_box :beta, class: "focus:ring-emerald-500 h-4 w-4 text-emerald-600 border-stone-300 rounded"
               .ml-3.text-sm
-                = f.label :beta, class: "font-medium text-gray-700 dark:text-gray-300"
-                p.text-gray-500.dark:text-gray-400
+                = f.label :beta, class: "font-medium text-stone-700 dark:text-stone-300"
+                p.text-stone-500.dark:text-stone-400
                   ' Enroll in the beta program which will allow you to see new features as they're developed.
           - if @profile.premium?
             .col-span-3.hidden.sm:block
               .flex.items-center
-                h3.font-medium.text-gray-700.dark:text-gray-300 Chart Settings
-                = link_to "Reset to Default", profile_reset_chart_settings_path(@profile), class: "ml-4 cursor-pointer ml-3 bg-white dark:bg-gray-800 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                h3.font-medium.text-stone-700.dark:text-stone-300 Chart Settings
+                = link_to "Reset to Default", profile_reset_chart_settings_path(@profile), class: "ml-4 cursor-pointer ml-3 bg-white dark:bg-stone-800 py-2 px-3 border border-stone-300 dark:border-stone-600 rounded-md shadow-sm text-sm leading-4 font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
               - ShotChart::CHART_SETTINGS.each_key do |label|
-                p.font-medium.text-sm.mt-3.text-gray-700.dark:text-gray-300
+                p.font-medium.text-sm.mt-3.text-stone-700.dark:text-stone-300
                   = label.humanize
                 .flex
                   .flex-1
-                    = f.color_field "#{label}-color", class: "mt-1 dark:bg-gray-800 w-full", value: f.object.chart_settings.dig(label, "color")
+                    = f.color_field "#{label}-color", class: "mt-1 dark:bg-stone-800 w-full", value: f.object.chart_settings.dig(label, "color")
                   .flex-1.ml-6
-                    = f.select "#{label}-type", options_for_select([["Smooth", "spline"], ["Exact", "none"]], f.object.chart_settings.dig(label, "type")), {}, {class: "mt-1 w-full py-2 px-3 border border-gray-300 bg-white dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"}
+                    = f.select "#{label}-type", options_for_select([["Smooth", "spline"], ["Exact", "none"]], f.object.chart_settings.dig(label, "type")), {}, {class: "mt-1 w-full py-2 px-3 border border-stone-300 bg-white dark:bg-stone-800 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"}
                   .flex-1.ml-8
                     .flex.mt-3
                       .flex.items-center.h-5
-                        = f.check_box "#{label}-dashed", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", checked: f.object.chart_settings.dig(label, "dashed")
+                        = f.check_box "#{label}-dashed", class: "focus:ring-emerald-500 h-4 w-4 text-emerald-600 border-stone-300 rounded", checked: f.object.chart_settings.dig(label, "dashed")
                       .ml-3.text-sm
-                        = f.label "#{label}-dashed", "Dashed", class: "text-gray-700 dark:text-gray-300"
+                        = f.label "#{label}-dashed", "Dashed", class: "text-stone-700 dark:text-stone-300"
                   .flex-1
                     .flex.mt-3
                       .flex.items-center.h-5
-                        = f.check_box "#{label}-hidden", class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded", checked: f.object.chart_settings.dig(label, "hidden")
+                        = f.check_box "#{label}-hidden", class: "focus:ring-emerald-500 h-4 w-4 text-emerald-600 border-stone-300 rounded", checked: f.object.chart_settings.dig(label, "hidden")
                       .ml-3.text-sm
-                        = f.label "#{label}-hidden", "Hidden", class: "text-gray-700 dark:text-gray-300"
+                        = f.label "#{label}-hidden", "Hidden", class: "text-stone-700 dark:text-stone-300"
           - if current_user.admin?
             .col-span-3.sm:col-span-2
-              h3.mb-4.font-medium.text-gray-700.dark:text-gray-300 Admin Area
+              h3.mb-4.font-medium.text-stone-700.dark:text-stone-300 Admin Area
               .flex.items-start
                 .flex.items-center.h-5
-                  = f.check_box :supporter, class: "focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+                  = f.check_box :supporter, class: "focus:ring-emerald-500 h-4 w-4 text-emerald-600 border-stone-300 rounded"
                 .ml-3.text-sm
-                  = f.label :supporter, class: "font-medium text-gray-700 dark:text-gray-300"
+                  = f.label :supporter, class: "font-medium text-stone-700 dark:text-stone-300"
             .col-span-3.sm:col-span-2
-              = f.label :github, class: "text-sm font-medium text-gray-700 dark:text-gray-300"
-              = f.text_field :github, class: "mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-      .px-4.py-3.bg-gray-50.dark:bg-gray-700.text-right.sm:px-6
-        = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              = f.label :github, class: "text-sm font-medium text-stone-700 dark:text-stone-300"
+              = f.text_field :github, class: "mt-1 dark:bg-stone-800 focus:ring-emerald-500 focus:border-emerald-500 w-full shadow-sm sm:text-sm border-stone-300 rounded-md"
+      .px-4.py-3.bg-stone-50.dark:bg-stone-700.text-right.sm:px-6
+        = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"

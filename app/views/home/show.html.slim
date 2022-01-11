@@ -1,10 +1,10 @@
 = render "shared/flash"
 .mt-8.max-w-4xl.mx-auto.py-12.px-4.sm:px-6.lg:py-16.lg:px-8.lg:flex.lg:items-center.lg:justify-between
   .sm:text-center.lg:text-left
-    h1.text-4xl.tracking-tight.font-extrabold.text-gray-900.sm:text-5xl.md:text-6xl
+    h1.text-4xl.tracking-tight.font-extrabold.text-stone-900.sm:text-5xl.md:text-6xl
       span.block.xl:inline Want to visualize .shot files?
-      span.block.text-green-600.xl:inline Sign up now.
-    p.mt-3.text-base.text-gray-500.sm:mt-5.sm:text-lg.sm:max-w-xl.sm:mx-auto.md:mt-5.md:text-xl.lg:mx-0
+      span.block.text-emerald-600.xl:inline Sign up now.
+    p.mt-3.text-base.text-stone-500.sm:mt-5.sm:text-lg.sm:max-w-xl.sm:mx-auto.md:mt-5.md:text-xl.lg:mx-0
       ' Join
       strong
         ' #{@user_count}
@@ -15,12 +15,12 @@
       a.underline href ="https://decentespresso.com/" target="_blank"
         | Decent Espresso
       '  machines.
-    p.mt-3.text-base.text-gray-500.sm:mt-5.sm:text-lg.sm:max-w-xl.sm:mx-auto.md:mt-5.md:text-xl.lg:mx-0
+    p.mt-3.text-base.text-stone-500.sm:mt-5.sm:text-lg.sm:max-w-xl.sm:mx-auto.md:mt-5.md:text-xl.lg:mx-0
       ' After signing up, you'll be able to upload all your .shot files and easily analyze, compare, or share them with anyone.
     .mt-5.sm:mt-8.sm:flex.sm:justify-center.lg:justify-start
       .rounded-md.shadow
-        a.w-full.flex.items-center.justify-center.px-8.py-3.border.border-transparent.text-base.font-medium.rounded-md.text-white.bg-green-600.hover:bg-green-700.md:py-4.md:text-lg.md:px-10 href=new_user_registration_path
+        a.w-full.flex.items-center.justify-center.px-8.py-3.border.border-transparent.text-base.font-medium.rounded-md.text-white.bg-emerald-600.hover:bg-emerald-700.md:py-4.md:text-lg.md:px-10 href=new_user_registration_path
           | Sign Up
       .mt-3.sm:mt-0.sm:ml-3
-        a.w-full.flex.items-center.justify-center.px-8.py-3.border.border-transparent.text-base.font-medium.rounded-md.text-green-700.bg-green-100.hover:bg-green-200.md:py-4.md:text-lg.md:px-10 href=new_user_session_path
+        a.w-full.flex.items-center.justify-center.px-8.py-3.border.border-transparent.text-base.font-medium.rounded-md.text-emerald-700.bg-emerald-100.hover:bg-emerald-200.md:py-4.md:text-lg.md:px-10 href=new_user_session_path
           | Sign In
