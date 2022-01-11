@@ -4,14 +4,14 @@
 .mt-5.md:mt-0.md:col-span-2 id=dom_id(@shot)
   = form_with(model: @shot) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
-      .px-4.py-5.bg-white.dark:bg-gray-800.space-y-6.sm:p-6
+      .px-4.py-5.bg-white.dark:bg-stone-800.space-y-6.sm:p-6
         .grid.grid-cols-6.gap-6
           .col-span-6
             = f.label :espresso_enjoyment, class: "standard-label"
             .flex.items-center.mt-1 data-controller="range"
               - hue = (124.0 / 100 * @shot.espresso_enjoyment.to_i).round
-              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: hsl(#{hue}, 70%, 50%);", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-gray-800", data: {action: "input->range#update", range_target: "number"}
-              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 flex-grow dark:bg-gray-800", data: {action: "input->range#update", range_target: "range"}
+              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: hsl(#{hue}, 70%, 50%);", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-stone-800", data: {action: "input->range#update", range_target: "number"}
+              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update", range_target: "range"}
           .col-span-6
             = f.label :profile_title, class: "standard-label"
             = f.text_field :profile_title, class: "standard-input"
@@ -57,16 +57,16 @@
         div
           = f.label :bean_notes, class: "standard-label"
           .mt-1
-            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
-            .mt-2.text-sm.text-gray-500.dark:text-gray-400
+            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
+            .mt-2.text-sm.text-stone-500.dark:text-stone-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
               ' .
         div
           = f.label :espresso_notes, "Notes", class: "standard-label"
           .mt-1
-            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
-            .mt-2.text-sm.text-gray-500.dark:text-gray-400
+            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
+            .mt-2.text-sm.text-stone-500.dark:text-stone-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
               ' .
@@ -75,5 +75,5 @@
             = f.label :image, "Image", class: "standard-label"
             .mt-1
               = f.file_field :image
-      .px-4.py-3.bg-gray-50.dark:bg-gray-700.text-right.sm:px-6
-        = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      .px-4.py-3.bg-stone-50.dark:bg-stone-700.text-right.sm:px-6
+        = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"

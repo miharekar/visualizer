@@ -15,15 +15,15 @@ document.addEventListener("turbo:load", function () {
     }
 
     const highlight = e => {
-      dropArea.classList.add("bg-green-50", "dark:bg-green-900")
-      dropArea.classList.add("border-green-300")
-      dropArea.classList.remove("border-gray-300")
+      dropArea.classList.add("bg-emerald-50", "dark:bg-emerald-900")
+      dropArea.classList.add("border-emerald-300")
+      dropArea.classList.remove("border-stone-300")
     }
 
     const unhighlight = e => {
-      dropArea.classList.remove("bg-green-50", "dark:bg-green-900")
-      dropArea.classList.remove("border-green-300")
-      dropArea.classList.add("border-gray-300")
+      dropArea.classList.remove("bg-emerald-50", "dark:bg-emerald-900")
+      dropArea.classList.remove("border-emerald-300")
+      dropArea.classList.add("border-stone-300")
     }
 
     const handleDrop = e => {

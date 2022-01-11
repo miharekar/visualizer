@@ -40,4 +40,5 @@ yarn-debug.log*
 .env
 
 # Dev assets
-app/assets/stylesheets/tailwind-build-dev.css
+/app/assets/builds/*
+!/app/assets/builds/.keep

@@ -9,16 +9,16 @@
 - enjoyment = shot.espresso_enjoyment.to_i
 
 .flex
-  .flex-shrink-0
+  .shrink-0
     - if enjoyment > 0
       - hue = (124.0 / 100 * enjoyment).round
       .flex.items-center.justify-center.h-12.w-12.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
         .text-white.py-1.text-center
           = shot.espresso_enjoyment
   div class=("ml-4" if enjoyment > 0)
-    a.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-100 href=shot_path(shot)
+    a.text-lg.leading-6.font-medium.text-stone-900.dark:text-stone-100 href=shot_path(shot)
       = shot.profile_title
-    .mt-2.text-base.text-gray-600.dark:text-gray-400
+    .mt-2.text-base.text-stone-600.dark:text-stone-400
       - if show_name
         .flex.items-center
           div
@@ -83,9 +83,9 @@
           ' %
       - if shot.bean_notes.present?
         .mt-2
-          .font-medium.text-gray-900.dark:text-gray-100 Bean notes:
+          .font-medium.text-stone-900.dark:text-stone-100 Bean notes:
           = markdown_text_from(shot.bean_notes)
       - if shot.espresso_notes.present?
         .mt-2
-          .font-medium.text-gray-900.dark:text-gray-100 Notes:
+          .font-medium.text-stone-900.dark:text-stone-100 Notes:
           = markdown_text_from(shot.espresso_notes)

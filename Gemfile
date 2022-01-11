@@ -6,6 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.0"
 
 gem "rails", "~> 7.0.0"
+gem "tailwindcss-rails"
 gem "sprockets-rails"
 gem "pg"
 gem "redis"
@@ -59,4 +60,5 @@ group :development do
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-performance", require: false
+  gem "foreman", require: false
 end

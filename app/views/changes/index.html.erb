@@ -1,16 +1,16 @@
-<div class="bg-white dark:bg-gray-900 shadow">
+<div class="bg-white dark:bg-stone-900 shadow">
   <div class="max-w-3xl mx-auto py-6 px-4">
-    <h1 class="text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100">Changelog</h1>
+    <h1 class="text-3xl font-bold leading-tight text-stone-900 dark:text-stone-100">Changelog</h1>
     <%= link_to "New", new_change_path if current_user&.admin %>
   </div>
 </div>
-<div class="py-4 bg-gray-100 dark:bg-black sm:flex">
-  <div class="flex-grow hidden sm:block"></div>
+<div class="py-4 bg-stone-100 dark:bg-black sm:flex">
+  <div class="grow hidden sm:block"></div>
   <div>
     <% @changes.each do |change| %>
-      <article class="mb-4 p-4 sm:p-6 sm:rounded-lg ring-1 ring-gray-900 ring-opacity-5 overflow-hidden bg-white dark:bg-gray-900 max-w-3xl" id=<%= dom_id(change) %>>
+      <article class="mb-4 p-4 sm:p-6 sm:rounded-lg ring-1 ring-stone-900 ring-opacity-5 overflow-hidden bg-white dark:bg-stone-900 max-w-3xl" id=<%= dom_id(change) %>>
         <a href="<%= changelog_path(anchor: dom_id(change)) %>">
-          <h2 class="text-2xl mb-3 font-bold text-gray-900 dark:text-gray-100">
+          <h2 class="text-2xl mb-3 font-bold text-stone-900 dark:text-stone-100">
             <%= change.published_at.strftime('%B %-d, %Y') %>:
             <%= change.title %>
           </h2>
@@ -22,5 +22,5 @@
       </article>
     <% end %>
   </div>
-  <div class="flex-grow hidden sm:block"></div>
+  <div class="grow hidden sm:block"></div>
 </div>
