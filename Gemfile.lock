@@ -247,7 +247,7 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     orm_adapter (0.5.0)
-    pagy (5.7.1)
+    pagy (5.7.2)
     parallel (1.21.0)
     parser (3.1.0.0)
       ast (~> 2.4.1)

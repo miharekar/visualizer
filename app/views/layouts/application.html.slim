@@ -13,7 +13,6 @@ html
     link rel="manifest" href="/site.webmanifest"
     link rel="mask-icon" color="#000000" href="/safari-pinned-tab.svg?v=1"
     = stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload"
-    = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
   body.flex.flex-col.h-screen class=("dark" if current_user&.skin == "Dark")
     header
