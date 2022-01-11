@@ -161,6 +161,7 @@ GEM
       concurrent-ruby (~> 1.1)
       websocket-driver (>= 0.6, < 0.8)
     ffi (1.15.5)
+    foreman (0.87.2)
     formatador (0.3.0)
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
@@ -293,7 +294,7 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0)
       zeitwerk (~> 2.5)
-    rainbow (3.0.0)
+    rainbow (3.1.1)
     rake (13.0.6)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
@@ -357,6 +358,10 @@ GEM
       railties (>= 6.0.0)
     stripe (5.42.0)
     strscan (3.0.1)
+    tailwindcss-rails (2.0.4-x86_64-darwin)
+      railties (>= 6.0.0)
+    tailwindcss-rails (2.0.4-x86_64-linux)
+      railties (>= 6.0.0)
     temple (0.8.2)
     thor (1.2.1)
     thwait (0.2.0)
@@ -401,6 +406,7 @@ DEPENDENCIES
   devise!
   dotenv-rails
   ferrum
+  foreman
   guard
   guard-minitest
   image_processing
@@ -429,6 +435,7 @@ DEPENDENCIES
   sprockets-rails
   stimulus-rails
   stripe
+  tailwindcss-rails
   tickly!
   turbo-rails
   web-console

@@ -1,14 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .shot-range {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
 .standard-label {
-  @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+  @apply block text-sm font-medium text-stone-700 dark:text-stone-300;
 }
 
 .standard-input {
-  @apply mt-1 dark:bg-gray-800 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md;
+  @apply mt-1 dark:bg-stone-800 focus:ring-emerald-500 focus:border-emerald-500 block w-full shadow-sm sm:text-sm border-stone-300 rounded-md;
 }
 
 input[type="range"].shot-range::-webkit-slider-runnable-track {
@@ -35,14 +39,14 @@ input[type="range"].shot-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   bottom: 8px;
   cursor: -webkit-grab;
-  @apply relative h-5 w-5 bg-white dark:bg-gray-800 border-2 border-solid border-gray-700 dark:border-gray-300 rounded-full;
+  @apply relative h-5 w-5 bg-white dark:bg-stone-800 border-2 border-solid border-stone-700 dark:border-stone-300 rounded-full;
 }
 
 input[type="range"].shot-range::-moz-range-thumb {
   -moz-appearance: none;
   bottom: 8px;
   cursor: -moz-grab;
-  @apply relative h-5 w-5 bg-white dark:bg-gray-800 border-2 border-solid border-gray-700 dark:border-gray-300 rounded-full;
+  @apply relative h-5 w-5 bg-white dark:bg-stone-800 border-2 border-solid border-stone-700 dark:border-stone-300 rounded-full;
 }
 
 input[type="range"].shot-range::-webkit-slider-thumb:active {
