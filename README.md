@@ -25,7 +25,6 @@ All endpoints return JSON.
 - Ruby (Check [.ruby-version](.ruby-version) for specific version)
   - Bundler (`gem install bundler`)
 - Postgres (>= 12)
-- Node (Only needed for rebuilding assets)
 
 ## Configuration
 
@@ -49,14 +48,9 @@ When it comes to deploying, you will need to set some environment variables, nam
   ```shell
   $ ./bin/rails db:setup
   ```
-- Rebuild assets (optional)
-  ```shell
-  $ yarn install
-  $ ./bin/rails css_assets:build
-  ```
 - Running the server
   ```shell
-  $ ./bin/rails server
+  $ ./bin/dev
   ```
 - Running the tests
   ```shell
