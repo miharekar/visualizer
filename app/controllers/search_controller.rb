@@ -8,6 +8,8 @@ class SearchController < ApplicationController
     bean_brand: {autocomplete: true},
     bean_type: {autocomplete: true},
     user: {autocomplete: true, target: :user_id},
+    grinder_model: {autocomplete: true},
+    roast_level: {autocomplete: true},
     bean_notes: {},
     espresso_notes: {}
   }.freeze

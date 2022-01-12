@@ -16,7 +16,7 @@
                 = f.search_field filter, value: params[filter], class: "standard-input", data: {autocomplete_target: "input"}
                 ul.list-group.absolute.mt-2.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.z-10.max-h-96.overflow-y-auto data-autocomplete-target="results"
             - else
-              .col-span-6
+              .col-span-6.md:col-span-3
                 = f.label filter, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
                 = f.search_field filter, value: params[filter], class: "standard-input"
           .col-span-6.md:col-span-5
