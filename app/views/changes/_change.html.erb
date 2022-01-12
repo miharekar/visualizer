@@ -1,5 +1,5 @@
 <article class="mb-4 p-4 sm:p-6 sm:rounded-lg ring-1 ring-stone-900 ring-opacity-5 overflow-hidden bg-white dark:bg-stone-900 max-w-3xl">
-  <a href="<%= change_path(change) %>">
+  <a href="<%= change_path(change.slug.presence || change.id) %>">
     <p class="text-sm text-stone-500"><%= change.published_at.strftime('%B %-d, %Y') %></p>
     <h2 class="text-2xl mb-3 font-bold text-stone-900 dark:text-stone-100"><%= change.title %></h1>
   </a>

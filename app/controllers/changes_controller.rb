@@ -30,7 +30,7 @@ class ChangesController < ApplicationController
 
   def update
     if @change.update(change_params)
-      redirect_to  action: :index
+      redirect_to change_path(@change.slug)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -39,7 +39,7 @@ class ChangesController < ApplicationController
   private
 
   def set_change
-    @change = Change.find(params[:id])
+    @change = Change.find_by_slug_or_id(params[:id]) # rubocop:disable Rails/DynamicFindBy
   end
 
   def change_params
