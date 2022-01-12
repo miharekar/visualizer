@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PremiumController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index]
 
   def create
     price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
