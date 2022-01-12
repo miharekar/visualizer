@@ -3,7 +3,7 @@
 class ChangesController < ApplicationController
   include Pagy::Backend
 
-  before_action :check_admin!, except: %i[index]
+  before_action :check_admin!, except: %i[index show]
   before_action :set_change, only: %i[show edit update]
 
   def index
