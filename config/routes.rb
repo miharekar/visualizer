@@ -60,5 +60,5 @@ Rails.application.routes.draw do
   end
 
   resources :stats, only: [:index]
-  resources :changes, except: %i[index show destroy]
+  resources :changes, except: %i[index destroy]
 end

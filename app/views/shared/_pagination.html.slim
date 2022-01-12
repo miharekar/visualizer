@@ -1,5 +1,5 @@
 - if pagy.pages > 1
-  .bg-stone-50.dark:bg-stone-800.px-4.py-3.flex.items-center.justify-between.border-t.border-stone-200.dark:border-stone-800.sm:px-6
+  .px-4.py-3.flex.items-center.justify-between.sm:px-6 class=extra_classes
     .flex-1.flex.justify-between.md:hidden
       - if pagy.prev
         a.relative.inline-flex.items-center.px-4.py-2.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.text-sm.font-medium.rounded-md.text-stone-700.bg-white.dark:bg-stone-900.hover:text-stone-500 href=custom_pagy_url_for(pagy, pagy.prev, url)

@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 class ChangesController < ApplicationController
+  include Pagy::Backend
+
   before_action :check_admin!, except: %i[index]
-  before_action :set_change, only: %i[edit update]
+  before_action :set_change, only: %i[show edit update]
 
   def index
     current_user&.update(last_read_change: Time.zone.now)
     @changes = Change.order(published_at: :desc)
+    @pagy, @changes = pagy(@changes, items: 3)
   end
 
   def new
