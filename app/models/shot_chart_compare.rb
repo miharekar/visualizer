@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ShotChartCompare < ShotChart
+  extend Memoist
+
   attr_reader :comparison
 
   SUFFIX = "_comparison"
@@ -18,23 +20,16 @@ class ShotChartCompare < ShotChart
     end.to_h
   end
 
-  def normalized_timeframe
-    @normalized_timeframe ||= (0..longest_timeframe.size).map { |i| i * timestep }
+  memoize def timestep
+    longest_timeframe ||= processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
+    ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
   end
 
-  def timestep
-    @timestep ||= ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
-  end
-
-  def fidelity_ratio
-    @fidelity_ratio ||= calculate_fidelity_ratio
+  memoize def duration
+    processed_shot_data.map { |_, v| v.last.first }.max
   end
 
   private
-
-  def longest_timeframe
-    @longest_timeframe ||= processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
-  end
 
   def prepare_chart_data
     super
@@ -54,24 +49,16 @@ class ShotChartCompare < ShotChart
     setting.merge("opacity" => 0.6, "title" => "#{setting['title']} Comparison")
   end
 
-  def calculate_fidelity_ratio
-    longest_original = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? 0 : v.size }.second.map(&:first)
-    original_step = ((longest_original.last - longest_original.first) / longest_original.size)
-    longest_comparison = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? v.size : 0 }.second.map(&:first)
-    comparison_step = ((longest_comparison.last - longest_comparison.first) / longest_comparison.size)
-    original_step / comparison_step
-  end
-
   def normalize_processed_shot_data
     processed_shot_data.each do |k, v|
       comparison = k =~ /_comparison$/
       v.size.times do |i|
-        v[i][0] = normalized_timeframe[index_for(i, comparison)]
+        v[i][0] = position_for(i, comparison).to_i * timestep
       end
     end
   end
 
-  def index_for(original, comparison)
+  def position_for(original, comparison)
     if fidelity_ratio < 1 && comparison
       original / fidelity_ratio
     elsif fidelity_ratio > 1 && !comparison
@@ -79,5 +66,13 @@ class ShotChartCompare < ShotChart
     else
       original
     end
+  end
+
+  memoize def fidelity_ratio
+    longest_original = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? 0 : v.size }.second.map(&:first)
+    original_step = ((longest_original.last - longest_original.first) / longest_original.size)
+    longest_comparison = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? v.size : 0 }.second.map(&:first)
+    comparison_step = ((longest_comparison.last - longest_comparison.first) / longest_comparison.size)
+    original_step / comparison_step
   end
 end
