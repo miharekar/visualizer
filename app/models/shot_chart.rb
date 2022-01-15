@@ -14,7 +14,7 @@ class ShotChart
     "espresso_flow" => {"title" => "Flow", "color" => "#1fb7ea", "suffix" => " ml/s", "type" => "spline"},
     "espresso_flow_weight" => {"title" => "Weight Flow", "color" => "#8f6400", "suffix" => " g/s", "type" => "spline"},
     "espresso_flow_goal" => {"title" => "Flow Goal", "color" => "#09485d", "suffix" => " ml/s", "dashed" => true, "type" => "spline"},
-    "espresso_resistance" => {"title" => "Resistance", "color" => "#e5e500", "suffix" => " lΩ", "hidden" => false, "type" => "spline"},
+    "espresso_resistance" => {"title" => "Resistance", "color" => "#e5e500", "suffix" => " lΩ", "hidden" => true, "type" => "spline"},
     "espresso_conductance" => {"title" => "Conductance", "color" => "#f36943", "suffix" => "", "hidden" => true, "dashed" => true, "type" => "spline"},
     "espresso_conductance_derivative" => {"title" => "Conductance Derivative", "color" => "#f36943", "suffix" => "", "hidden" => true, "type" => "spline"},
     "espresso_temperature_basket" => {"title" => "Temperature Basket", "color" => "#e73249", "suffix" => " °C", "type" => "spline"},
