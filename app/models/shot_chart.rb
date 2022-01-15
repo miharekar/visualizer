@@ -6,6 +6,7 @@ class ShotChart
   DATA_LABELS_TO_IGNORE = %w[espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   MAX_RESISTANCE_VALUE = 19
   MIN_CONDUCTANCE_DIFF_VALUE = -5
+  GAUSSIAN_MULTIPLIERS = [0.048297, 0.08393, 0.124548, 0.157829, 0.170793, 0.157829, 0.124548, 0.08393, 0.048297]
   CHART_SETTINGS = {
     "espresso_pressure" => {"title" => "Pressure", "color" => "#05c793", "suffix" => " bar", "type" => "spline"},
     "espresso_pressure_goal" => {"title" => "Pressure Goal", "color" => "#03634a", "suffix" => " bar", "dashed" => true, "type" => "spline"},
@@ -110,18 +111,23 @@ class ShotChart
   def conductance_derivative_chart(conductance_data)
     derivative = []
     conductance_data.each_cons(2) do |(t1, v1), (t2, v2)|
-      next if v1.nil? || v2.nil?
-
-      v = ((v2 - v1) / ((t2 - t1) / 1000)) * 10
+      v = if v1.nil? || v2.nil?
+            nil
+          else
+            ((v2 - v1) / ((t2 - t1) / 1000)) * 10
+          end
       derivative << [t1, v]
     end
 
-    4.times { derivative << [nil, nil] }
-    multipliers = [0.048297, 0.08393, 0.124548, 0.157829, 0.170793, 0.157829, 0.124548, 0.08393, 0.048297]
     smoothed = []
+    4.times do
+      derivative << [nil, nil]
+      smoothed << [nil, nil]
+    end
+
     derivative.each_cons(9) do |data|
       values = data.map(&:last)
-      value = values.zip(multipliers).sum { |v, m| v.to_f * m }
+      value = values.zip(GAUSSIAN_MULTIPLIERS).sum { |v, m| v.to_f * m }
       value = nil if value > MAX_RESISTANCE_VALUE || value < MIN_CONDUCTANCE_DIFF_VALUE
       smoothed << [data[4].first, value]
     end
