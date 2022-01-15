@@ -113,10 +113,19 @@ class ShotChart
       next if v1.nil? || v2.nil?
 
       v = ((v2 - v1) / ((t2 - t1) / 1000)) * 10
-      v = nil if v > MAX_RESISTANCE_VALUE || v < MIN_CONDUCTANCE_DIFF_VALUE
       derivative << [t1, v]
     end
-    derivative
+
+    4.times { derivative << [nil, nil] }
+    multipliers = [0.048297, 0.08393, 0.124548, 0.157829, 0.170793, 0.157829, 0.124548, 0.08393, 0.048297]
+    smoothed = []
+    derivative.each_cons(9) do |data|
+      values = data.map(&:last)
+      value = values.zip(multipliers).sum { |v, m| v.to_f * m }
+      value = nil if value > MAX_RESISTANCE_VALUE || value < MIN_CONDUCTANCE_DIFF_VALUE
+      smoothed << [data[4].first, value]
+    end
+    smoothed
   end
 
   def stages_from_state_change(data)
