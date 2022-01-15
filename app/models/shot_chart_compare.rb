@@ -35,6 +35,8 @@ class ShotChartCompare < ShotChart
     super
     @processed_shot_data = @processed_shot_data.merge(process_data(comparison, label_suffix: SUFFIX))
     @processed_shot_data["espresso_resistance_comparison"] = resistance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"])
+    @processed_shot_data["espresso_conductance_comparison"] = conductance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"])
+    @processed_shot_data["espresso_conductance_derivative_comparison"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance_comparison"])
     normalize_processed_shot_data
   end
 
