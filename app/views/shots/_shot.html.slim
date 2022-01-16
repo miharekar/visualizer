@@ -6,6 +6,8 @@
 - bean_weight = shot.bean_weight.to_f
 - drink_weight = shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight
+- tds = shot.drink_tds.to_f
+- ey = shot.drink_ey.to_f
 
 tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_path(shot)
   td.py-4.px-1.sm:px-4
@@ -67,6 +69,17 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
         - if shot.grinder_setting.present?
           ' @
           = shot.grinder_setting
+      span.text-sm.text-stone-500.dark:text-stone-400
+        - if tds > 0
+          ' TDS
+          = tds
+          ' %
+        - if tds > 0 && ey > 0
+          '
+        - if ey > 0
+          ' EY
+          = ey
+          ' %
   td.py-4.px-1.sm:px-4
     .flex.flex-col.lg:flex-row
       .grow
