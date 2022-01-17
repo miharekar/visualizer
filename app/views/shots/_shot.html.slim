@@ -2,7 +2,7 @@
 - owner = current_user && shot.user == current_user
 - full_crud = controller.is_a?(ShotsController) && owner
 - show_start_time = owner || !shot.user&.hide_shot_times?
-- search_params = {commit: "Search", user_id: current_user.id, user: current_user.display_name}
+- search_params = {commit: "Search", user_id: current_user&.id, user: current_user&.display_name}
 - bean_weight = shot.bean_weight.to_f
 - drink_weight = shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight
