@@ -16,8 +16,7 @@
               - include_person = false unless defined?(include_person)
               - shots.each do |shot|
                 = render shot, include_person: include_person
-          - url = nil unless defined?(url)
-          = render partial: "shared/pagination", locals: {pagy: pagy, url: url, extra_classes: "bg-stone-50 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-800"}
+          = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-stone-50 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-800"}
       - elsif params[:commit]
         .text-center.text-stone-500.my-8.px-6.sm:px-8
           | No shots found

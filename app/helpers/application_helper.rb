@@ -10,15 +10,6 @@ module ApplicationHelper
     tag.div(text, class: "prose prose-stone dark:prose-invert")
   end
 
-  def custom_pagy_url_for(pagy, number, url)
-    if url.blank?
-      pagy_url_for(pagy, number)
-    else
-      join_char = url.include?("?") ? "&" : "?"
-      "#{url}#{join_char}page=#{number}"
-    end
-  end
-
   def avatar_url(user, size)
     user.avatar.attached? ? url_for(user.avatar) : "#{user.gravatar_url}?s=#{size}&d=mp"
   end

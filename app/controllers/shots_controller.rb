@@ -7,8 +7,6 @@ class ShotsController < ApplicationController
   before_action :load_shot, only: %i[show compare chart share]
   before_action :load_users_shot, only: %i[edit update destroy]
 
-  FILTER_PARAMS = %i[bean_brand bean_type].freeze
-
   def index
     load_shots_with_pagy
   end
@@ -83,7 +81,7 @@ class ShotsController < ApplicationController
         else
           load_shots_with_pagy
           if @shots.any?
-            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy, url: shots_path(extra_params)})
+            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy})
           else
             redirect_to action: :index
           end
@@ -113,19 +111,6 @@ class ShotsController < ApplicationController
   def load_shots_with_pagy
     @shots = current_user.shots.by_start_time
     @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
-    FILTER_PARAMS.each do |filter|
-      next if params[filter].blank?
-
-      @shots = @shots.where(filter => params[filter]) if params[filter]
-    end
     @pagy, @shots = pagy(@shots)
-  end
-
-  def extra_params
-    FILTER_PARAMS.filter_map do |filter|
-      next if params[filter].blank?
-
-      [filter, params[filter]]
-    end.to_h
   end
 end

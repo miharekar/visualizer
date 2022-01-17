@@ -2,7 +2,7 @@
 - owner = current_user && shot.user == current_user
 - full_crud = controller.is_a?(ShotsController) && owner
 - show_start_time = owner || !shot.user&.hide_shot_times?
-- link_params = request.parameters.slice(:bean_type, :bean_brand) if full_crud
+- search_params = {commit: "Search", user_id: current_user.id, user: current_user.display_name}
 - bean_weight = shot.bean_weight.to_f
 - drink_weight = shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight
@@ -25,7 +25,7 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
             = shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)
         - if include_person
           .flex.items-center
-            .text-sm.text-stone-500.dark:text-stone-400 = shot.user.name
+            .text-sm.text-stone-500.dark:text-stone-400 = shot.user.display_name
             - if shot.user.premium?
               = link_to premium_index_path do
                 svg.ml-1.h-4.w-4.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -34,14 +34,14 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
     .flex.flex-col
       span.text-sm.text-stone-500.dark:text-stone-400
         - if shot.bean_brand.present?
-          - if link_params
-            = link_to shot.bean_brand, shots_path(link_params.merge(bean_brand: shot.bean_brand)), class: "underline hover:text-stone-400 dark:hover:text-stone-500"
+          - if full_crud
+            = link_to shot.bean_brand, search_index_path(search_params.merge(bean_brand: shot.bean_brand)), class: "underline hover:text-stone-400 dark:hover:text-stone-500"
           - else
             = shot.bean_brand
           '
         - if shot.bean_type.present?
-          - if link_params
-            = link_to shot.bean_type, shots_path(link_params.merge(bean_type: shot.bean_type)), class: "underline hover:text-stone-400 dark:hover:text-stone-500"
+          - if full_crud
+            = link_to shot.bean_type, search_index_path(search_params.merge(bean_type: shot.bean_type)), class: "underline hover:text-stone-400 dark:hover:text-stone-500"
           - else
             = shot.bean_type
       span.text-sm.text-stone-500.dark:text-stone-400
@@ -100,9 +100,6 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
         span.mt-2.lg:mt-0.lg:ml-2
           = button_to shot_path(shot), method: :delete, form_class: "inline-flex items-center", class: "inline-flex items-center px-4 py-2 border border-stone-300 dark:border-stone-600 rounded-md shadow-sm text-sm font-medium text-stone-700 bg-white dark:bg-stone-800 dark:text-stone-300 hover:bg-red-50 dark:hover:bg-red-900", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do
             input type="hidden" name="page" value=params[:page]
-            - if full_crud
-              - ShotsController::FILTER_PARAMS.each do |filter|
-                input type="hidden" name="#{filter}" value="#{params[filter]}"
             svg.-ml-1.-mr-1.h-4.w-4.text-stone-500.dark:text-stone-300 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
               path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"
             span.ml-2.hidden.xl:block Delete
