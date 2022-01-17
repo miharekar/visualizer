@@ -18,7 +18,7 @@ class SearchController < ApplicationController
 
   def index
     if params[:commit]
-      @shots = Shot.visible.by_start_time.includes(:user)
+      @shots = Shot.visible_or_owned_by_id(current_user.id).by_start_time.includes(:user)
       @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
       FILTERS.each do |filter, options|
         next if params[filter].blank?
@@ -42,7 +42,7 @@ class SearchController < ApplicationController
     @filter = params[:filter].to_sym
     @values = unique_values_for(@filter)
     @values = if @filter == :user
-                @values.select { |u| u.name =~ /#{query}/i }
+                @values.select { |u| u.display_name =~ /#{query}/i }
               else
                 @values.grep(/#{Regexp.escape(query)}/i)
               end
@@ -51,9 +51,7 @@ class SearchController < ApplicationController
 
   def unique_values_for(filter)
     if filter == :user
-      Rails.cache.fetch("#{User.visible.cache_key_with_version}/#{filter}") do
-        User.visible.by_name
-      end
+      User.visible_or_id(current_user.id).by_name
     else
       Rails.cache.fetch("#{Shot.visible.cache_key_with_version}/#{filter}") do
         Shot.visible.distinct.pluck(filter).compact.map(&:strip).uniq(&:downcase).sort_by(&:downcase)

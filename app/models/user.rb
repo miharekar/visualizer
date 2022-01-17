@@ -14,9 +14,14 @@ class User < ApplicationRecord
   has_one_attached :avatar, service: :cloudinary
 
   scope :visible, -> { where(public: true) }
+  scope :visible_or_id, ->(id) { where(public: true).or(where(id:)) }
   scope :by_name, -> { order("LOWER(name)") }
 
   validates :name, presence: true, if: :public?
+
+  def display_name
+    name.presence || email
+  end
 
   def gravatar_url
     hash = Digest::MD5.hexdigest(email.to_s.downcase)
