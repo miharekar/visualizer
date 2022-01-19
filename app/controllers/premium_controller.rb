@@ -9,6 +9,7 @@ class PremiumController < ApplicationController
       success_url: "#{success_premium_index_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: cancel_premium_index_url,
       mode: "subscription",
+      allow_promotion_codes: true,
       customer_email: current_user.email,
       automatic_tax: {enabled: true},
       metadata: {user_id: current_user.id},
