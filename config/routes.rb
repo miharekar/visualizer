@@ -7,8 +7,14 @@ Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
   match "(*any)", to: redirect { |_, req| "https://visualizer.coffee#{req.fullpath}" }, via: :all, constraints: {host: "decent-visualizer.herokuapp.com"}
 
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => "/sidekiq"
+  end
+
+  devise_for :users
+  use_doorkeeper
+
   root to: "home#show"
-  get "/privacy", to: "home#privacy"
 
   namespace :api do
     resources :shots, only: [:index] do
@@ -21,15 +27,10 @@ Rails.application.routes.draw do
     end
   end
 
-  authenticate :user, ->(user) { user.admin? } do
-    mount Sidekiq::Web => "/sidekiq"
-  end
-
-  devise_for :users
-
   get :people, to: "people#index"
   get "people/:slug", to: "people#show", as: :users_shots
   get :changelog, to: "changes#index"
+  get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
 
   resources :shots, except: [:new] do
