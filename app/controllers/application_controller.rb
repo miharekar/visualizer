@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def after_sign_in_path_for(_resource_or_scope)
+  def signed_in_root_path(_resource_or_scope)
     shots_path
   end
 
