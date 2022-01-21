@@ -23,6 +23,7 @@ gem "kramdown-parser-gfm"
 gem "slim"
 gem "devise", github: "heartcombo/devise"
 gem "responders", github: "heartcombo/responders"
+gem "doorkeeper"
 gem "pagy"
 gem "active_link_to"
 

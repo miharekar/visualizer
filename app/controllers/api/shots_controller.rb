@@ -5,7 +5,7 @@ module Api
     extend Memoist
     include Pagy::Backend
 
-    skip_before_action :verify_current_user, except: %i[upload]
+    before_action :verify_write_access, only: %i[upload]
 
     def index
       items = params[:items].presence.to_i

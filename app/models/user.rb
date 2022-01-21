@@ -10,6 +10,9 @@ class User < ApplicationRecord
 
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
+  has_many :oauth_applications, class_name: "Doorkeeper::Application", foreign_key: :owner_id, inverse_of: :owner, dependent: :destroy
+  has_many :access_grants, class_name: "Doorkeeper::AccessGrant", foreign_key: :resource_owner_id, inverse_of: :resource_owner, dependent: :destroy
+  has_many :access_tokens, class_name: "Doorkeeper::AccessToken", foreign_key: :resource_owner_id, inverse_of: :resource_owner, dependent: :destroy
 
   has_one_attached :avatar, service: :cloudinary
 
@@ -51,6 +54,7 @@ end
 #  admin                  :boolean
 #  beta                   :boolean
 #  chart_settings         :jsonb
+#  developer              :boolean
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  github                 :string

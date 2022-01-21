@@ -14,6 +14,8 @@
                 = active_link_to "Search", search_index_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
                 - if current_user.admin?
                   = active_link_to "Stats", stats_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
+                - if current_user.developer?
+                  = active_link_to "Applications", oauth_applications_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
               = active_link_to "Decent People", people_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
         .hidden.md:block
           .ml-4.flex.items-baseline.space-x-2.md:ml-6

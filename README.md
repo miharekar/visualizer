@@ -16,9 +16,13 @@ There is a basic API available.
 
 You can read [the source code](app/controllers/api/shots_controller.rb) or  [the API documentation](https://documenter.getpostman.com/view/2402164/UVC2HUik) provided by [@eriklenaerts](https://github.com/eriklenaerts).
 
-Authenticatication is possible via [Basic access](https://en.wikipedia.org/wiki/Basic_access_authentication) with email and password.
+Authenticatication is possible via:
+- [Basic access](https://en.wikipedia.org/wiki/Basic_access_authentication) with email and password.
+- [OAuth 2.0 authorization code flow](https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/) with `read` and `write` scopes
 
 All endpoints return JSON.
+
+If you want to create OAuth applications please [contact me](mailto:miha@mr.si).
 
 ## Dependencies
 
