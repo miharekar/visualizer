@@ -14,8 +14,6 @@
                 = active_link_to "Search", search_index_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
                 - if current_user.admin?
                   = active_link_to "Stats", stats_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
-                - if current_user.developer?
-                  = active_link_to "Applications", oauth_applications_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
               = active_link_to "Decent People", people_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
         .hidden.md:block
           .ml-4.flex.items-baseline.space-x-2.md:ml-6
@@ -36,6 +34,8 @@
                         .rounded-full.h-5.w-5.bg-red-600
                           .text-center.text-sm.text-white.dark:text-black
                             = change_count
+                  - if current_user.developer?
+                    = link_to "OAuth Applications", oauth_applications_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
                   = link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
                   - if current_user.premium? && current_user.stripe_customer_id.present?
                     = form_with(url: premium_update_path(current_user.stripe_customer_id), data:{turbo:"false"}) do |f|
