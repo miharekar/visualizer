@@ -32,7 +32,7 @@ class ProfilesController < ApplicationController
 
   def profile_params
     allowed_params = %i[avatar name timezone skin public hide_shot_times beta]
-    allowed_params << %i[github supporter] if current_user.admin?
+    allowed_params << %i[github supporter developer] if current_user.admin?
     params.require(:user).permit(allowed_params).merge(chart_settings)
   end
 

@@ -53,6 +53,7 @@ end
 #  admin                  :boolean
 #  beta                   :boolean
 #  chart_settings         :jsonb
+#  developer              :boolean
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  github                 :string

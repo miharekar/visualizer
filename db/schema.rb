@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_115446) do
+ActiveRecord::Schema.define(version: 2022_01_21_084216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -93,6 +93,9 @@ ActiveRecord::Schema.define(version: 2022_01_20_115446) do
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "owner_id", null: false
+    t.string "owner_type", null: false
+    t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -159,6 +162,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_115446) do
     t.boolean "beta"
     t.string "stripe_customer_id"
     t.datetime "premium_expires_at", precision: 6
+    t.boolean "developer"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
