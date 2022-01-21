@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-  use_doorkeeper
+  use_doorkeeper do
+    controllers applications: "oauth/applications"
+  end
 
   root to: "home#show"
 
