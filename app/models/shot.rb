@@ -9,6 +9,7 @@ class Shot < ApplicationRecord
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
 
   belongs_to :user, optional: true
+  has_many :shared_shots, dependent: :destroy
 
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500]
