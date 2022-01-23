@@ -27,4 +27,16 @@
             ' People can still view any of your shots if you give them a direct link, but you are not visible in
             = link_to "Decent People", people_path, class: "underline"
             ' .
+      - if @authorized_applications.any?
+        hr.my-6
+        .px-4.sm:px-0
+          h3.text-lg.font-medium.leading-6.text-stone-900.dark:text-stone-100
+            ' You have
+            strong = pluralize(@authorized_applications.size, "application")
+            '  authorized via OAuth.
+          p.mt-1.text-sm.text-stone-600.dark:text-stone-400
+            ' You can
+            = link_to "manage #{@authorized_applications.size == 1 ? "it" : "them"} here", oauth_authorized_applications_path, class: "underline", data: {turbo: false}
+            ' .
+
     = render "form"

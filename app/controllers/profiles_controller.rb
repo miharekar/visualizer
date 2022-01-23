@@ -3,6 +3,7 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_profile
+  before_action :set_authorized_applications
 
   def edit; end
 
@@ -28,6 +29,10 @@ class ProfilesController < ApplicationController
 
   def set_profile
     @profile = params.key?(:id) && current_user.admin? ? User.find(params[:id]) : current_user
+  end
+
+  def set_authorized_applications
+    @authorized_applications = Doorkeeper.config.application_model.authorized_for(current_user)
   end
 
   def profile_params

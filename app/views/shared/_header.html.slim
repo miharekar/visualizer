@@ -35,7 +35,7 @@
                           .text-center.text-sm.text-white.dark:text-black
                             = change_count
                   - if current_user.developer?
-                    = link_to "OAuth Applications", oauth_applications_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
+                    = link_to "OAuth Applications", oauth_applications_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900", data: {turbo: false}
                   = link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
                   - if current_user.premium? && current_user.stripe_customer_id.present?
                     = form_with(url: premium_update_path(current_user.stripe_customer_id), data:{turbo:"false"}) do |f|
