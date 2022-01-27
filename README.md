@@ -12,13 +12,11 @@ Read [all about the v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw
 
 ## API
 
-There is a basic API available.
+There is an API available. If something you would like is not there, please open a new [Issue](https://github.com/miharekar/decent-visualizer/issues/) detailing your wishes.
 
-You can read [the source code](app/controllers/api/shots_controller.rb) or  [the API documentation](https://documenter.getpostman.com/view/2402164/UVC2HUik) provided by [@eriklenaerts](https://github.com/eriklenaerts).
+You can read [the source code](/app/controllers/api) or [the API documentation](https://documenter.getpostman.com/view/2402164/UVC2HUik) provided by [@eriklenaerts](https://github.com/eriklenaerts).
 
-Authenticatication is possible via:
-- [Basic access](https://en.wikipedia.org/wiki/Basic_access_authentication) with email and password.
-- [OAuth 2.0 authorization code flow](https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/) with `read` and `write` scopes
+Authenticatication is possible via [OAuth 2.0 authorization code flow](https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/) with `read` and `write` scopes.
 
 All endpoints return JSON.
 
