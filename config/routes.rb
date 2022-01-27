@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   root to: "home#show"
 
   namespace :api do
+    get :me, to: "credentials#me"
     resources :shots, only: [:index] do
       get :download
       get :profile

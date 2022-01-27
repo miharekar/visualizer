@@ -10,6 +10,10 @@ module Api
       head :unauthorized unless current_user
     end
 
+    def verify_doorkeeper_access
+      doorkeeper_authorize!
+    end
+
     def verify_write_access
       doorkeeper_token ? doorkeeper_authorize!(:write) : verify_basic_user
     end
