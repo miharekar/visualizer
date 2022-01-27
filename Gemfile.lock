@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/dabit/annotate_models.git
-  revision: f38741d005052045e4d4c2c26b009d3ade0864f3
+  revision: aa767e19fb3bea5e42304f54802f41924ac4e363
   branch: rails-7
   specs:
     annotate (3.1.1)
@@ -112,7 +112,7 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.549.0)
+    aws-partitions (1.550.0)
     aws-sdk-core (3.125.5)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -121,7 +121,7 @@ GEM
     aws-sdk-kms (1.53.0)
       aws-sdk-core (~> 3, >= 3.125.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.111.2)
+    aws-sdk-s3 (1.111.3)
       aws-sdk-core (~> 3, >= 3.125.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -164,7 +164,7 @@ GEM
       websocket-driver (>= 0.6, < 0.8)
     ffi (1.15.5)
     foreman (0.87.2)
-    formatador (1.0.0)
+    formatador (1.1.0)
     fugit (1.5.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
@@ -186,7 +186,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
-    i18n (1.8.11)
+    i18n (1.9.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.1)
       mini_magick (>= 4.9.5, < 5)
@@ -264,7 +264,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.5.2)
+    puma (5.6.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.0)
@@ -339,7 +339,7 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-scheduler (3.1.0)
+    sidekiq-scheduler (3.1.1)
       e2mmap
       redis (>= 3, < 5)
       rufus-scheduler (~> 3.2)
