@@ -117,6 +117,7 @@ function getColors() {
 function commonOptions() {
   const colors = getColors()
   return {
+    animation: false,
     title: false,
     xAxis: {
       type: "datetime",
@@ -144,6 +145,7 @@ function commonOptions() {
       tickColor: colors.line,
     },
     tooltip: {
+      animation: false,
       shared: true,
       borderRadius: 10,
       shadow: false,
