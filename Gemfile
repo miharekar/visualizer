@@ -7,7 +7,7 @@ ruby "3.1.0"
 
 gem "rails", "~> 7.0.0"
 gem "tailwindcss-rails"
-gem "sprockets-rails"
+gem "propshaft"
 gem "pg"
 gem "redis"
 gem "puma"
