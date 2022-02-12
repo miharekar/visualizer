@@ -84,10 +84,10 @@
                   = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
         .flex-1 class=width_class
           input.standard-input type="text" data-action="comparison#url" placeholder="With any shot via its URL"
-    - if @shot.image.attached?
+    - if @shot.image.attached? && @shot.image.variable?
       .md:w-1/2.mt-3.md:mt-0.md:ml-3
         = link_to @shot.image, target: "_blank" do
-          = image_tag @shot.image.variant(:display), class: "rounded-md"
+          = image_tag @shot.image.variant(:display), class: "rounded-lg"
 .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
   #shot-chart
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8

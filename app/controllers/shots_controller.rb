@@ -65,7 +65,13 @@ class ShotsController < ApplicationController
 
   def update
     @shot.update(shot_params)
-    @shot.image.attach(params[:shot][:image]) if params[:shot][:image].present? && current_user.premium?
+    if params[:shot][:image].present? && current_user.premium?
+      if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
+        @shot.image.attach(params[:shot][:image])
+      else
+        flash[:alert] = "Image must be a valid image file."
+      end
+    end
     flash[:notice] = "Shot successfully updated."
     redirect_to action: :show
   end
