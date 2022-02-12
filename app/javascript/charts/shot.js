@@ -200,16 +200,20 @@ function extractStages(field, timings) {
     return timings.map(_ => 0)
 }
 
-function drawShotChart() {
-  const colors = getColors()
-
+function reloadAnnotations(chart) {
   const timings = shotStages.map(x => x.value)
+
   const weightFlow = extractStages("Weight Flow", timings)
   const weight = extractStages("Weight", timings)
-  const annotations = timings.map((timing, index) => {
+  const isVisible = chart.series.filter(x => (x.name == "Weight Flow" && x.visible)).length > 0
+
+  // Remove all previous annotations that this method created
+  chart.annotations.filter(x => x.isInCup).forEach(x => chart.removeAnnotation(x))
+
+  timings.forEach((timing, index) => {
     const inCup = weight[index]
-    return {
-      visible: inCup > 0,
+    let annotation = {
+      visible: inCup > 0 && isVisible,
       labels: [
         {
           text: `${inCup}g in cup`,
@@ -222,15 +226,24 @@ function drawShotChart() {
         y: -50
       }
     }
+
+    let obj = chart.addAnnotation(annotation, false)
+    obj.isInCup = true
   })
+}
+
+function drawShotChart() {
+  const colors = getColors()
 
   const custom = {
     chart: {
       zoomType: "x",
       height: window.chartHeight,
-      backgroundColor: colors.background
+      backgroundColor: colors.background,
+      events: {
+        redraw: x => reloadAnnotations(x.target)
+      }
     },
-    annotations: annotations,
     series: window.shotData
   }
 
@@ -246,7 +259,9 @@ function drawShotChart() {
   let options = { ...commonOptions(), ...legendOptions, ...custom }
   options.xAxis.plotLines = window.shotStages
 
-  Highcharts.chart("shot-chart", options)
+  let chart = Highcharts.chart("shot-chart", options)
+  reloadAnnotations(chart)
+  chart.redraw()
 }
 
 function drawTemperatureChart() {
