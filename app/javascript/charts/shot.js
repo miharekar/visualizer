@@ -1,4 +1,5 @@
 import Highcharts from "highcharts"
+import "highcharts-annotations"
 
 Highcharts.wrap(Highcharts.Chart.prototype, "zoom", function (proceed) {
   proceed.apply(this, [].slice.call(arguments, 1))
@@ -187,6 +188,50 @@ function commonOptions() {
   }
 }
 
+function extractStages(field, timings) {
+    for (let i = 0; i < window.shotData.length; i++) {
+        let data = window.shotData[i];
+        if (data.name == field) {
+            return data.data.filter((x) => timings.includes(x[0])).map((x) => x[1])
+        }
+    }
+
+    // If the series is not present, assume all 0
+    return timings.map(_ => 0)
+}
+
+function reloadAnnotations(chart) {
+  const timings = shotStages.map(x => x.value)
+
+  const weightFlow = extractStages("Weight Flow", timings)
+  const weight = extractStages("Weight", timings)
+  const isVisible = chart.series.filter(x => (x.name == "Weight Flow" && x.visible)).length > 0
+
+  // Remove all previous annotations that this method created
+  chart.annotations.filter(x => x.isInCup).forEach(x => chart.removeAnnotation(x))
+
+  timings.forEach((timing, index) => {
+    const inCup = weight[index]
+    let annotation = {
+      visible: inCup > 0 && isVisible,
+      labels: [
+        {
+          text: `${inCup}g in cup`,
+          point: {"x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0}
+        }
+      ],
+      labelOptions: {
+        shape: "connector",
+        align: "right",
+        y: -50
+      }
+    }
+
+    let obj = chart.addAnnotation(annotation, false)
+    obj.isInCup = true
+  })
+}
+
 function drawShotChart() {
   const colors = getColors()
 
@@ -194,7 +239,10 @@ function drawShotChart() {
     chart: {
       zoomType: "x",
       height: window.chartHeight,
-      backgroundColor: colors.background
+      backgroundColor: colors.background,
+      events: {
+        redraw: x => reloadAnnotations(x.target)
+      }
     },
     series: window.shotData
   }
@@ -211,7 +259,9 @@ function drawShotChart() {
   let options = { ...commonOptions(), ...legendOptions, ...custom }
   options.xAxis.plotLines = window.shotStages
 
-  Highcharts.chart("shot-chart", options)
+  let chart = Highcharts.chart("shot-chart", options)
+  reloadAnnotations(chart)
+  chart.redraw()
 }
 
 function drawTemperatureChart() {
