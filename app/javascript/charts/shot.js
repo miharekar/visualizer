@@ -189,23 +189,23 @@ function commonOptions() {
 }
 
 function extractStages(field, timings) {
-    for (let i = 0; i < window.shotData.length; i++) {
-        let data = window.shotData[i];
-        if (data.name == field) {
-            return data.data.filter((x) => timings.includes(x[0])).map((x) => x[1])
-        }
+  for (let i = 0; i < window.shotData.length; i++) {
+    let data = window.shotData[i];
+    if (data.name == field) {
+      return data.data.filter((x) => timings.includes(x[0])).map((x) => x[1])
     }
+  }
 
-    // If the series is not present, assume all 0
-    return timings.map(_ => 0)
+  // If the series is not present, assume all 0
+  return timings.map(_ => 0)
 }
 
 function reloadAnnotations(chart) {
   const timings = shotStages.map(x => x.value)
-
   const weightFlow = extractStages("Weight Flow", timings)
   const weight = extractStages("Weight", timings)
-  const isVisible = chart.series.filter(x => (x.name == "Weight Flow" && x.visible)).length > 0
+  const weightFlowSeries = chart.series.filter(x => (x.name == "Weight Flow" && x.visible))
+  const isVisible = weightFlowSeries.length > 0
 
   // Remove all previous annotations that this method created
   chart.annotations.filter(x => x.isInCup).forEach(x => chart.removeAnnotation(x))
@@ -217,7 +217,9 @@ function reloadAnnotations(chart) {
       labels: [
         {
           text: `${inCup}g in cup`,
-          point: {"x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0}
+          point: { "x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0 },
+          borderColor: weightFlowSeries[0].color,
+          style: { color: weightFlowSeries[0].color }
         }
       ],
       labelOptions: {
