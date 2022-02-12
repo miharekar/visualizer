@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_21_084216) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_01_21_084216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -21,7 +20,7 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.string "record_type", null: false
     t.uuid "record_id", null: false
     t.uuid "blob_id", null: false
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -34,7 +33,7 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -47,9 +46,9 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
   create_table "changes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.text "body"
-    t.datetime "published_at", precision: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug"
     t.index ["slug"], name: "index_changes_on_slug", unique: true
   end
@@ -60,8 +59,8 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "revoked_at", precision: 6
+    t.datetime "created_at", null: false
+    t.datetime "revoked_at"
     t.string "scopes", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
@@ -74,8 +73,8 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
-    t.datetime "revoked_at", precision: 6
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
     t.string "scopes"
     t.string "previous_refresh_token", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
@@ -91,8 +90,8 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
     t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.uuid "owner_id", null: false
     t.string "owner_type", null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
@@ -102,8 +101,8 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
   create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "shot_id", null: false
     t.string "code", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["code"], name: "index_shared_shots_on_code", unique: true
     t.index ["shot_id"], name: "index_shared_shots_on_shot_id"
@@ -111,10 +110,10 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
   end
 
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "start_time"
+    t.datetime "start_time", precision: nil
     t.jsonb "data"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "profile_title"
     t.jsonb "extra"
     t.uuid "user_id"
@@ -144,10 +143,10 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "skin"
     t.string "name"
     t.boolean "public", default: false
@@ -158,10 +157,10 @@ ActiveRecord::Schema.define(version: 2022_01_21_084216) do
     t.boolean "hide_shot_times"
     t.string "github"
     t.jsonb "chart_settings"
-    t.datetime "last_read_change", precision: 6
+    t.datetime "last_read_change"
     t.boolean "beta"
     t.string "stripe_customer_id"
-    t.datetime "premium_expires_at", precision: 6
+    t.datetime "premium_expires_at"
     t.boolean "developer"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

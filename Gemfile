@@ -5,61 +5,54 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.0"
 
-gem "rails", "~> 7.0.0"
-gem "tailwindcss-rails"
-gem "propshaft"
-gem "pg"
-gem "redis"
-gem "puma"
+gem "active_link_to"
+gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false
-
+gem "cloudinary"
+gem "dalli"
+gem "devise", github: "heartcombo/devise"
+gem "doorkeeper"
+gem "ferrum"
+gem "image_processing"
 gem "importmap-rails"
-gem "turbo-rails"
-gem "stimulus-rails"
-
 gem "kramdown"
 gem "kramdown-parser-gfm"
-
-gem "slim"
-gem "devise", github: "heartcombo/devise"
-gem "responders", github: "heartcombo/responders"
-gem "doorkeeper"
-gem "pagy"
-gem "active_link_to"
-
+gem "memoist"
 gem "mini_magick"
-gem "dalli"
+gem "pagy"
+gem "pg"
+gem "propshaft"
+gem "pry-byebug"
+gem "pry-rails"
+gem "puma"
+gem "rails", "~> 7.0.0"
+gem "redis"
+gem "responders", github: "heartcombo/responders"
 gem "rollbar"
-gem "cloudinary"
-gem "aws-sdk-s3", require: false
 gem "sidekiq"
 gem "sidekiq-scheduler"
-gem "memoist"
-gem "image_processing"
-
-gem "tickly", github: "miharekar/tickly"
-gem "ferrum"
-
+gem "slim"
+gem "stimulus-rails"
 gem "stripe"
-
-gem "pry-rails"
-gem "pry-byebug"
+gem "tailwindcss-rails"
+gem "tickly", github: "miharekar/tickly"
+gem "turbo-rails"
 
 group :development, :test do
   gem "dotenv-rails"
 end
 
 group :development do
+  gem "annotate", github: "dabit/annotate_models", branch: "rails-7"
+  gem "app_profiler"
+  gem "brakeman"
+  gem "foreman", require: false
   gem "guard"
   gem "guard-minitest"
-  gem "brakeman"
-  gem "app_profiler"
-  gem "web-console"
-  gem "listen"
   gem "letter_opener"
-  gem "annotate", github: "dabit/annotate_models", branch: "rails-7"
+  gem "listen"
   gem "rubocop", require: false
-  gem "rubocop-rails", require: false
   gem "rubocop-performance", require: false
-  gem "foreman", require: false
+  gem "rubocop-rails", require: false
+  gem "web-console"
 end
