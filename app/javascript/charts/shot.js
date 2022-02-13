@@ -200,38 +200,52 @@ function extractStages(field, timings) {
   return timings.map(_ => 0)
 }
 
-function reloadAnnotations(chart) {
+function setupInCupAnnotations(chart) {
+  const weightColor = chart.series.filter(x => (x.name == "Weight Flow"))[0].color
+
   const timings = shotStages.map(x => x.value)
   const weightFlow = extractStages("Weight Flow", timings)
   const weight = extractStages("Weight", timings)
-  const weightFlowSeries = chart.series.filter(x => (x.name == "Weight Flow" && x.visible))
-  const isVisible = weightFlowSeries.length > 0
 
-  // Remove all previous annotations that this method created
-  chart.annotations.filter(x => x.isInCup).forEach(x => chart.removeAnnotation(x))
-
+  let labels = []
   timings.forEach((timing, index) => {
     const inCup = weight[index]
-    let annotation = {
-      visible: inCup > 0 && isVisible,
-      labels: [
-        {
-          text: `${inCup}g in cup`,
-          point: { "x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0 },
-          borderColor: weightFlowSeries[0].color,
-          style: { color: weightFlowSeries[0].color }
-        }
-      ],
-      labelOptions: {
-        shape: "connector",
-        align: "right",
-        y: -50
-      }
+    if (inCup > 0) {
+      labels.push({
+        text: `${inCup}g<span style="font-size: 0.7em"> in cup</span>`,
+        point: { "x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0 },
+        borderColor: weightColor,
+        y: -50,
+        allowOverlap: true,
+        style: { color: weightColor },
+      })
     }
-
-    let obj = chart.addAnnotation(annotation, false)
-    obj.isInCup = true
   })
+
+  let annotation = {
+    draggable: false,
+    labels: labels,
+    labelOptions: {
+      shape: "connector",
+    }
+  }
+
+  chart.inCupAnnotation = chart.addAnnotation(annotation)
+}
+
+function updateInCupVisibility(chart) {
+  const weightFlowSeries = chart.series.filter(x => (x.name == "Weight Flow" && x.visible))
+  const isVisible = weightFlowSeries.length > 0
+  const annotation = chart.inCupAnnotation
+
+  // Highcharts does not allow changing the visibility of a chart, so it must be removed and recreated
+  // Doing so causes a redraw within the redraw, but we only apply changes when the visibility toggles
+  if (annotation && !isVisible) {
+    chart.removeAnnotation(annotation)
+    chart.inCupAnnotation = null
+  } else if (!annotation && isVisible) {
+    setupInCupAnnotations(chart)
+  }
 }
 
 function drawShotChart() {
@@ -243,7 +257,7 @@ function drawShotChart() {
       height: window.chartHeight,
       backgroundColor: colors.background,
       events: {
-        redraw: x => reloadAnnotations(x.target)
+        redraw: x => updateInCupVisibility(x.target)
       }
     },
     series: window.shotData
@@ -262,8 +276,7 @@ function drawShotChart() {
   options.xAxis.plotLines = window.shotStages
 
   let chart = Highcharts.chart("shot-chart", options)
-  reloadAnnotations(chart)
-  chart.redraw()
+  setupInCupAnnotations(chart)
 }
 
 function drawTemperatureChart() {
