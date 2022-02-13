@@ -202,7 +202,6 @@ function extractStages(field, timings) {
 
 function setupInCupAnnotations(chart) {
   const weightColor = chart.series.filter(x => (x.name == "Weight Flow"))[0].color
-
   const timings = shotStages.map(x => x.value)
   const weightFlow = extractStages("Weight Flow", timings)
   const weight = extractStages("Weight", timings)
@@ -212,12 +211,13 @@ function setupInCupAnnotations(chart) {
     const inCup = weight[index]
     if (inCup > 0) {
       labels.push({
-        text: `${inCup}g<span style="font-size: 0.7em"> in cup</span>`,
+        text: `${inCup}g`,
         point: { "x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0 },
-        borderColor: weightColor,
-        y: -50,
+        y: -30,
+        x: -30,
         allowOverlap: true,
         style: { color: weightColor },
+        borderColor: weightColor,
       })
     }
   })
@@ -225,9 +225,7 @@ function setupInCupAnnotations(chart) {
   let annotation = {
     draggable: false,
     labels: labels,
-    labelOptions: {
-      shape: "connector",
-    }
+    labelOptions: { shape: "connector" }
   }
 
   chart.inCupAnnotation = chart.addAnnotation(annotation)
