@@ -22,7 +22,7 @@ gem "mini_magick"
 gem "pagy"
 gem "pg"
 gem "propshaft"
-gem "pry-byebug"
+gem "pry-byebug", github: "deivid-rodriguez/pry-byebug" # Uses pry 0.14
 gem "pry-rails"
 gem "puma"
 gem "rails", "~> 7.0.0"
@@ -43,7 +43,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "annotate", github: "dabit/annotate_models", branch: "rails-7"
+  gem "annotate"
   gem "app_profiler"
   gem "brakeman"
   gem "foreman", require: false
