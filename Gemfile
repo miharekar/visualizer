@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.0"
+ruby "3.1.1"
 
 gem "active_link_to"
 gem "aws-sdk-s3", require: false
@@ -21,7 +21,7 @@ gem "memoist"
 gem "mini_magick"
 gem "pagy"
 gem "pg"
-gem "propshaft"
+gem "propshaft", "0.6.1" # https://github.com/rails/propshaft/issues/74
 gem "pry-byebug", github: "deivid-rodriguez/pry-byebug" # Uses pry 0.14
 gem "pry-rails"
 gem "puma"
