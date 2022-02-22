@@ -19,7 +19,7 @@ class SearchController < ApplicationController
   def index
     if params[:commit]
       @shots = Shot.visible_or_owned_by_id(current_user.id).by_start_time.includes(:user)
-      @shots = @shots.where(created_at: 1.month.ago..) unless current_user.premium?
+      @shots = @shots.non_premium unless current_user.premium?
       FILTERS.each do |filter, options|
         next if params[filter].blank?
 

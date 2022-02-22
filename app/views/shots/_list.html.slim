@@ -17,6 +17,13 @@
               - shots.each do |shot|
                 = render shot, include_person: include_person
           = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-stone-50 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-800"}
-      - elsif params[:commit]
+      - elsif controller_name == "search"
+        - if params[:commit]
+          .text-center.text-stone-500.my-8.px-6.sm:px-8
+            | No shots found
+      - else
         .text-center.text-stone-500.my-8.px-6.sm:px-8
-          | No shots found
+          - if controller_name == "shots" && show_premium_banner?
+            | No shots uploaded in the last month. Consider #{link_to("upgrading", premium_index_path, class: "underline text-pink-600")} to see your old shots.
+          - else
+            | No shots yet

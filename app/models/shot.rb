@@ -18,6 +18,8 @@ class Shot < ApplicationRecord
   scope :visible, -> { joins(:user).where(users: {public: true}) }
   scope :visible_or_owned_by_id, ->(user_id) { joins(:user).where(users: {public: true}).or(where(user_id:)) }
   scope :by_start_time, -> { order(start_time: :desc) }
+  scope :premium, -> { where(created_at: ..1.month.ago) }
+  scope :non_premium, -> { where(created_at: 1.month.ago..) }
 
   after_create :ensure_screenshot
 

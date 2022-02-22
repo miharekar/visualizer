@@ -17,4 +17,8 @@ module ApplicationHelper
   def change_count
     @change_count ||= Change.where("published_at > ?", current_user.last_read_change).count
   end
+
+  def show_premium_banner?
+    current_user && !current_user.premium? && current_user.shots.premium.any?
+  end
 end
