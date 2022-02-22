@@ -13,7 +13,8 @@ class PremiumController < ApplicationController
       customer_email: current_user.email,
       automatic_tax: {enabled: true},
       metadata: {user_id: current_user.id},
-      line_items: [{quantity: 1, price: price_id}]
+      line_items: [{quantity: 1, price: price_id}],
+      tax_id_collection: {enabled: true}
     )
     redirect_to session.url, allow_other_host: true
   end
