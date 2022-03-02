@@ -4,6 +4,7 @@ class Shot < ApplicationRecord
   extend Memoist
   include CloudinaryHelper
 
+  SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
   JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
@@ -106,7 +107,7 @@ class Shot < ApplicationRecord
 
   def screenshot_url
     if s3_etag.present?
-      "#{ENV['BUCKET_URL']}/screenshots/#{id}.png"
+      "#{SCREENSHOTS_URL}/screenshots/#{id}.png"
     elsif cloudinary_id.present?
       cl_image_path(cloudinary_id)
     end

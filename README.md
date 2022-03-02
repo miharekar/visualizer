@@ -38,7 +38,6 @@ When it comes to deploying, you will need to set some environment variables, nam
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
 - AWS_REGION
-- BUCKET_URL
 
 ## Setup
 
