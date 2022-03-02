@@ -26,7 +26,7 @@ class SearchController < ApplicationController
         @shots = if options[:target]
                    @shots.where(options[:target] => params[options[:target]])
                  else
-                   @shots.where("#{filter} ILIKE ?", "%#{params[filter]}%")
+                   @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
                  end
       end
       @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].present?
