@@ -2,7 +2,6 @@
 
 class Shot < ApplicationRecord
   extend Memoist
-  include CloudinaryHelper
 
   SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
   JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
@@ -102,15 +101,11 @@ class Shot < ApplicationRecord
   end
 
   def screenshot?
-    s3_etag.present? || cloudinary_id.present?
+    s3_etag.present?
   end
 
   def screenshot_url
-    if s3_etag.present?
-      "#{SCREENSHOTS_URL}/screenshots/#{id}.png"
-    elsif cloudinary_id.present?
-      cl_image_path(cloudinary_id)
-    end
+    "#{SCREENSHOTS_URL}/screenshots/#{id}.png" if screenshot?
   end
 
   def ensure_screenshot
@@ -157,7 +152,6 @@ end
 #  timeframe          :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  cloudinary_id      :string
 #  user_id            :uuid
 #
 # Indexes
