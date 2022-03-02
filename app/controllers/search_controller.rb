@@ -39,12 +39,13 @@ class SearchController < ApplicationController
 
   def autocomplete
     query = params[:q].split(/\s+/).join(".*")
+    rquery = /#{Regexp.escape(query)}/i
     @filter = params[:filter].to_sym
     @values = unique_values_for(@filter)
     @values = if @filter == :user
-                @values.select { |u| u.display_name =~ /#{query}/i }
+                @values.select { |u| u.display_name =~ rquery }
               else
-                @values.grep(/#{Regexp.escape(query)}/i)
+                @values.grep(rquery)
               end
     render layout: false
   end
