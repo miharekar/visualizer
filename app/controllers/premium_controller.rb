@@ -14,7 +14,8 @@ class PremiumController < ApplicationController
       automatic_tax: {enabled: true},
       metadata: {user_id: current_user.id},
       line_items: [{quantity: 1, price: price_id}],
-      tax_id_collection: {enabled: true}
+      tax_id_collection: {enabled: true},
+      subscription_data: {trial_period_days: 7}
     )
     redirect_to session.url, allow_other_host: true
   end
