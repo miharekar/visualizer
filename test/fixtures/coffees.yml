@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+bani:
+  roaster: Bani Beans
+  name: Hamasho
+  country: Ethiopia
+  region: Bensa
+  variety: Heirloom
+  process: Washed
+  producer: Daye Bensa
+  altitude: 1600m
+
+barn:
+  roaster: The Barn
+  name: Bumba Hill
+  country: Burundi
+  region: Kayanza
+  variety: Bourbon
+  process: Washed
+  producer: Long Miles Project
+  altitude: 1700m
