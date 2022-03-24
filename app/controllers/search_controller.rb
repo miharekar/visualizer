@@ -24,6 +24,7 @@ class SearchController < ApplicationController
         next if params[filter].blank?
 
         @shots = if options[:target]
+                   find_user_by_name if filter == :user && params[options[:target]].blank?
                    @shots.where(options[:target] => params[options[:target]])
                  else
                    @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
@@ -38,15 +39,8 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    query = params[:q].split(/\s+/).join(".*")
-    rquery = /#{Regexp.escape(query)}/i
     @filter = params[:filter].to_sym
-    @values = unique_values_for(@filter)
-    @values = if @filter == :user
-                @values.select { |u| u.display_name =~ rquery }
-              else
-                @values.grep(rquery)
-              end
+    @values = values_for_query(@filter, params[:q])
     render layout: false
   end
 
@@ -57,6 +51,27 @@ class SearchController < ApplicationController
       Rails.cache.fetch("#{Shot.visible.cache_key_with_version}/#{filter}") do
         Shot.visible.distinct.pluck(filter).compact.map(&:strip).uniq(&:downcase).sort_by(&:downcase)
       end
+    end
+  end
+
+  private
+
+  def find_user_by_name
+    user = values_for_query(:user, params[:user]).first
+    return if user.nil?
+
+    params[:user_id] = user.id
+    params[:user] = user.display_name
+  end
+
+  def values_for_query(filter, query)
+    query_parts = query.split(/\s+/).map { |q| Regexp.escape(q) }
+    rquery = /#{query_parts.join(".*")}/i
+    values = unique_values_for(filter)
+    if filter == :user
+      values.select { |u| u.display_name =~ rquery }
+    else
+      values.grep(rquery)
     end
   end
 end
