@@ -151,6 +151,7 @@ end
 #  s3_etag            :string
 #  sha                :string
 #  start_time         :datetime
+#  tasting            :jsonb
 #  timeframe          :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

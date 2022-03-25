@@ -1,5 +1,6 @@
 import Highcharts from "highcharts"
 import "highcharts-annotations"
+import "highcharts-more"
 
 Highcharts.wrap(Highcharts.Chart.prototype, "zoom", function (proceed) {
   proceed.apply(this, [].slice.call(arguments, 1))
@@ -296,6 +297,32 @@ function drawTemperatureChart() {
   Highcharts.chart("temperature-chart", options)
 }
 
+function drawTastingChart() {
+  Highcharts.chart("tasting-chart", {
+    chart: {
+      polar: true,
+      type: 'line'
+    },
+    animation: false,
+    title: false,
+    xAxis: {
+      categories: window.tastingKeys,
+      tickmarkPlacement: 'on',
+      lineWidth: 0
+    },
+    yAxis: {
+      gridLineInterpolation: 'polygon',
+      lineWidth: 0,
+      min: 0
+    },
+    series: [{
+      name: "Tasting",
+      data: window.tastingValues,
+      pointPlacement: 'on'
+    }]
+  });
+}
+
 function comparisonAdjust(range) {
   range.addEventListener("input", function () {
     const value = parseInt(this.value)
@@ -324,6 +351,7 @@ document.addEventListener("turbo:load", function () {
 
   const shotChart = document.getElementById("shot-chart")
   const temperatureChart = document.getElementById("temperature-chart")
+  const tastingChart = document.getElementById("tasting-chart")
   const range = document.getElementById("compare-range")
   if (shotChart) {
     drawShotChart()
@@ -332,6 +360,9 @@ document.addEventListener("turbo:load", function () {
   if (temperatureChart) {
     drawTemperatureChart()
     syncMouseEvents(temperatureChart)
+  }
+  if (tastingChart) {
+    drawTastingChart()
   }
   if (range) {
     comparisonAdjust(range)

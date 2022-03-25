@@ -92,9 +92,13 @@
   #shot-chart
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
   #temperature-chart
+.max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
+  #tasting-chart
 
 javascript:
   window.shotData = #{{@chart.shot_chart.to_json}}
   window.temperatureData = #{{@chart.temperature_chart.to_json}}
+  window.tastingKeys = #{{@shot.tasting.keys}}
+  window.tastingValues = #{{@shot.tasting.values}}
   window.chartHeight = 650
   window.shotStages = #{{@chart.stages.to_json}}
