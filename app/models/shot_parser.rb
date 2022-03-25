@@ -9,7 +9,7 @@ class ShotParser
     "_goal" => "goal"
   }.freeze
 
-  attr_reader :start_time, :data, :extra, :timeframe, :profile_title, :profile_fields, :sha
+  attr_reader :sha, *Shot::SHOT_METHODS
 
   def initialize(file)
     @file = file

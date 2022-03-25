@@ -6,6 +6,7 @@ class Shot < ApplicationRecord
   SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
   JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
+  SHOT_METHODS = %w[profile_title start_time timeframe data extra profile_fields].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
 
   belongs_to :user, optional: true
@@ -33,19 +34,11 @@ class Shot < ApplicationRecord
 
     parsed_shot = ShotParser.new(File.read(file))
     shot = find_or_initialize_by(user:, sha: parsed_shot.sha)
-    %i[profile_title start_time timeframe data extra profile_fields].each do |m|
-      shot.public_send("#{m}=", parsed_shot.public_send(m))
-    end
-    shot.extract_fields_from_extra
+    SHOT_METHODS.each { |m| shot.public_send("#{m}=", parsed_shot.public_send(m)) }
+    EXTRA_DATA_METHODS.each { |m| shot.public_send("#{m}=", shot.extra[m].presence) }
+    shot.bean_weight = shot.extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
+    shot.barista = shot.extra["my_name"].presence
     shot
-  end
-
-  def extract_fields_from_extra
-    EXTRA_DATA_METHODS.each do |attr|
-      public_send("#{attr}=", extra[attr].presence)
-    end
-    self.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
-    self.barista = extra["my_name"].presence
   end
 
   def fahrenheit?
@@ -54,11 +47,6 @@ class Shot < ApplicationRecord
 
   memoize def extra
     super.presence || {}
-  end
-
-  memoize def duration
-    index = [data["espresso_flow"].size, timeframe.size].min
-    timeframe[index - 1].to_f
   end
 
   memoize def profile_fields
@@ -73,6 +61,11 @@ class Shot < ApplicationRecord
     profile_fields["json"]
   end
 
+  memoize def duration
+    index = [data["espresso_flow"].size, timeframe.size].min
+    timeframe[index - 1].to_f
+  end
+
   def tcl_profile
     return if tcl_profile_fields.blank?
 
@@ -85,7 +78,10 @@ class Shot < ApplicationRecord
       "#{k} #{v}"
     end
 
-    file_from_content(["#{profile_title} from Visualizer", ".tcl"], content.join("\n"))
+    file = Tempfile.new(["#{profile_title} from Visualizer", ".tcl"])
+    file.write(content.join("\n"))
+    file.close
+    file.path
   end
 
   def json_profile
@@ -111,18 +107,7 @@ class Shot < ApplicationRecord
   end
 
   def ensure_screenshot
-    return if screenshot?
-
-    ScreenshotTakerJob.perform_later(self)
-  end
-
-  private
-
-  def file_from_content(filename, content)
-    file = Tempfile.new(filename)
-    file.write(content)
-    file.close
-    file.path
+    ScreenshotTakerJob.perform_later(self) unless screenshot?
   end
 end
 
