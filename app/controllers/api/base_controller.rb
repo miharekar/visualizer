@@ -34,7 +34,7 @@ module Api
         user if user&.valid_password?(password)
       end
     rescue ActiveRecord::StatementInvalid => e
-      Rollbar.error(e, email:)
+      Rollbar.error(e, auth: request.authorization)
       raise e
     end
   end
