@@ -33,6 +33,9 @@ module Api
         user = User.find_by(email:)
         user if user&.valid_password?(password)
       end
+    rescue ActiveRecord::StatementInvalid => e
+      Rollbar.error(e, email:)
+      raise e
     end
   end
 end
