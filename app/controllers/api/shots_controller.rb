@@ -12,7 +12,12 @@ module Api
       items = 10 if items.zero?
       items = 100 if items.to_i > 100
 
-      shots = current_user.present? ? current_user.shots : Shot.visible
+      if current_user.present?
+        shots = current_user.shots
+        shots = shots.non_premium unless current_user.premium?
+      else
+        shots = Shot.visible
+      end
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
 
       pagy, shots = pagy(shots, items:)
