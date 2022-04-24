@@ -54,10 +54,10 @@ Rails.application.configure do
   # Use a different cache store in production.
   config.cache_store =
     :mem_cache_store,
-    (ENV["MEMCACHIER_SERVERS"] || "").split(","),
+    (ENV.fetch("MEMCACHIER_SERVERS", nil) || "").split(","),
     {
-      username: ENV["MEMCACHIER_USERNAME"],
-      password: ENV["MEMCACHIER_PASSWORD"],
+      username: ENV.fetch("MEMCACHIER_USERNAME", nil),
+      password: ENV.fetch("MEMCACHIER_PASSWORD", nil),
       failover: true,
       socket_timeout: 1.5,
       socket_failure_delay: 0.2,
@@ -79,8 +79,8 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-    user_name: ENV["SENDGRID_USERNAME"],
-    password: ENV["SENDGRID_PASSWORD"],
+    user_name: ENV.fetch("SENDGRID_USERNAME", nil),
+    password: ENV.fetch("SENDGRID_PASSWORD", nil),
     domain: "em1457.mr.si",
     address: "smtp.sendgrid.net",
     port: 587,

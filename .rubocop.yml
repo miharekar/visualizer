@@ -29,6 +29,17 @@ Style/NumericLiterals:
 Style/Send:
   Enabled: true
 
+Style/Documentation:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
 Metrics/ClassLength:
   Enabled: false
 
@@ -47,13 +58,8 @@ Metrics/PerceivedComplexity:
 Metrics/AbcSize:
   Enabled: false
 
-Style/Documentation:
+Rails/I18nLocaleTexts:
   Enabled: false
 
-Style/AndOr:
-  Enabled: true
-  EnforcedStyle: always
-
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
+Rails/BulkChangeTable:
+  Enabled: false

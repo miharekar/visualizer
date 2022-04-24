@@ -12,7 +12,7 @@ module Api
         avatar_url: current_user.avatar.attached? ? url_for(current_user.avatar) : current_user.gravatar_url
       }
 
-      render json: json
+      render json:
     end
   end
 end
