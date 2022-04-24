@@ -117,6 +117,7 @@ class ShotsController < ApplicationController
   def load_shots_with_pagy
     @shots = current_user.shots.by_start_time
     @shots = @shots.non_premium unless current_user.premium?
+    @shots_count = @shots.count
     @pagy, @shots = pagy(@shots)
   end
 end

@@ -27,3 +27,7 @@
             | No shots uploaded in the last month. Consider #{link_to("upgrading", premium_index_path, class: "underline text-pink-600")} to see your old shots.
           - else
             | No shots yet
+- if defined?(@shots_count)
+  turbo-stream action="replace" target="shots-count"
+    template
+      span#shots-count= pluralize(@shots_count, "Shot")
