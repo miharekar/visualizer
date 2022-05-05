@@ -118,6 +118,7 @@ function getColors() {
 function commonOptions() {
   const colors = getColors()
   return {
+    accessibility: { enabled: false },
     animation: false,
     title: false,
     xAxis: {

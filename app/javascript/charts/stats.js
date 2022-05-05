@@ -2,6 +2,7 @@ import Highcharts from "highcharts"
 
 document.addEventListener("turbo:load", function () {
   const options = {
+    accessibility: { enabled: false },
     chart: {
       zoomType: "x",
       height: 500
