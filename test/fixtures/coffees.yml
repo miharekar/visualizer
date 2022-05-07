@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-bani:
-  roaster: Bani Beans
+hamasho:
+  roaster: bani
   name: Hamasho
   country: Ethiopia
   region: Bensa
@@ -10,8 +10,8 @@ bani:
   producer: Daye Bensa
   altitude: 1600m
 
-barn:
-  roaster: The Barn
+bumba:
+  roaster: barn
   name: Bumba Hill
   country: Burundi
   region: Kayanza

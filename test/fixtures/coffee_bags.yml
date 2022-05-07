@@ -1,12 +1,12 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  coffee: bani
+  coffee: hamasho
   roast_date: 2022-01-01
   level: light
 
 two:
-  coffee: barn
+  coffee: bumba
   roast_date: 2022-03-01
   level: filter
   harvest: July 2021

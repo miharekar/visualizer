@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+bani:
+  name: Bani Beans
+  website: https://www.banibeans.si/
+  country: Slovenia
+
+barn:
+  name: The Barn
+  website: https://thebarn.de/
+  country: Germany
