@@ -30,4 +30,8 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  helpers:
+    label:
+      shot:
+        drink_tds: Drink TDS (Total Dissolved Solids)
+        drink_ey: Drink EY (Extraction Yield)
