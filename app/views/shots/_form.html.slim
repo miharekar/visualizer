@@ -54,7 +54,7 @@
           .col-span-6.sm:col-span-3
             = f.label :drink_ey, class: "standard-label"
             = f.text_field :drink_ey, class: "standard-input", data: {ey_calculator_target: "ey"}
-            span class="text-xs text-stone-500 cursor-pointer hover:text-emerald-600 hover:dark:text-emerald-700" data-action="click->ey-calculator#calculate"
+            span class="cursor-pointer text-xs text-stone-500 dark:text-stone-400 hover:text-stone-400 dark:hover:text-stone-500" data-action="click->ey-calculator#calculate"
               ' Calculate from TDS
         div
           = f.label :bean_notes, class: "standard-label"
