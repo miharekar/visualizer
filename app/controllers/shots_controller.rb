@@ -26,7 +26,7 @@ class ShotsController < ApplicationController
     @chart = ShotChartCompare.new(@shot, @comparison, current_user&.chart_settings)
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
-    @shot ? redirect_to(@shot) : redirect_to(:root)
+    redirect_to(@shot || :root)
   end
 
   def chart
