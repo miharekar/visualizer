@@ -26,15 +26,6 @@ GIT
       railties (>= 5.2)
 
 GIT
-  remote: https://github.com/iainbeeston/importmap-rails.git
-  revision: 29ea3b57ef65202d600d22916c8b1e53f742a25d
-  branch: es-module-shims-1-5-5
-  specs:
-    importmap-rails (1.0.3)
-      actionpack (>= 6.0.0)
-      railties (>= 6.0.0)
-
-GIT
   remote: https://github.com/miharekar/tickly.git
   revision: 277b63c371e5a7f9d2a2a1410087ff6f21906cae
   specs:
@@ -123,12 +114,12 @@ GEM
       stackprof (~> 0.2)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.587.0)
-    aws-sdk-core (3.131.0)
+    aws-partitions (1.589.0)
+    aws-sdk-core (3.131.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
-      jmespath (~> 1.0)
+      jmespath (~> 1, >= 1.6.1)
     aws-sdk-kms (1.57.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
@@ -201,6 +192,9 @@ GEM
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
+    importmap-rails (1.1.0)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     jmespath (1.6.1)
     kramdown (2.4.0)
       rexml
@@ -359,7 +353,7 @@ GEM
     stackprof (0.2.19)
     stimulus-rails (1.0.4)
       railties (>= 6.0.0)
-    stripe (6.0.0)
+    stripe (6.1.0)
     strscan (3.0.3)
     tailwindcss-rails (2.0.8-arm64-darwin)
       railties (>= 6.0.0)
@@ -371,8 +365,9 @@ GEM
     thor (1.2.1)
     tilt (2.0.10)
     timeout (0.2.0)
-    turbo-rails (1.0.1)
+    turbo-rails (1.1.1)
       actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
       railties (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -414,7 +409,7 @@ DEPENDENCIES
   guard
   guard-minitest
   image_processing
-  importmap-rails!
+  importmap-rails
   kramdown
   kramdown-parser-gfm
   letter_opener
