@@ -91,7 +91,7 @@ function syncExtremes(e) {
 }
 
 function getColors() {
-  if (window.dark) {
+  if (document.body.classList.contains("dark")) {
     return {
       background: "#000000",
       label: "#999999",

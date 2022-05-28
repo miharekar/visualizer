@@ -1,4 +1,3 @@
-
 function setTimezoneCookie() {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
   document.cookie = "browser.timezone=" + (timezone || "") + "; path=/"
