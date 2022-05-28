@@ -14,7 +14,7 @@ html
     link rel="mask-icon" color="#000000" href="/safari-pinned-tab.svg?v=1"
     = stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload"
     = javascript_importmap_tags
-  body.flex.flex-col.h-screen class=("dark" if current_user&.skin == "Dark")
+  body.flex.flex-col.h-screen class=@skin
     header
       = render "shared/header"
     main.grow.dark:bg-black.dark:text-white
