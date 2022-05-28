@@ -25,6 +25,9 @@
             = f.label :timezone, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
             = f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 block w-full py-2 px-3 border border-stone-300 bg-white dark:bg-stone-800 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"}
           .col-span-3.sm:col-span-2
+            = f.label :temperature_unit, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+            = f.select :temperature_unit, ["Celsius", "Fahrenheit"], {}, class: "mt-1 block w-full py-2 px-3 border border-stone-300 bg-white dark:bg-stone-800 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+          .col-span-3.sm:col-span-2
             = f.label :skin, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
             = f.select :skin, ["Light", "Dark", "System"], {}, class: "mt-1 block w-full py-2 px-3 border border-stone-300 bg-white dark:bg-stone-800 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
           .col-span-3.sm:col-span-2
