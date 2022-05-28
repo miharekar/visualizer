@@ -69,6 +69,7 @@ end
 #  skin                   :string
 #  slug                   :string
 #  supporter              :boolean
+#  temperature_unit       :string
 #  timezone               :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
