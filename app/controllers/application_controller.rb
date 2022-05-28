@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
     @skin = if current_user.skin == "System"
               cookies["browser.colorscheme"].presence
             else
-              current_user.skin.downcase
+              current_user.skin&.downcase
             end
   end
 
