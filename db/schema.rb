@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_28_153353) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -134,6 +134,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_153353) do
     t.text "bean_notes"
     t.string "s3_etag"
     t.jsonb "profile_fields"
+    t.string "barista"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["user_id"], name: "index_shots_on_user_id"
   end

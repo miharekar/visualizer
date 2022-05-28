@@ -44,6 +44,7 @@ class Shot < ApplicationRecord
       public_send("#{attr}=", extra[attr].presence)
     end
     self.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
+    self.barista = extra["my_name"].presence
   end
 
   def fahrenheit?
@@ -129,6 +130,7 @@ end
 # Table name: shots
 #
 #  id                 :uuid             not null, primary key
+#  barista            :string
 #  bean_brand         :string
 #  bean_notes         :text
 #  bean_type          :string
