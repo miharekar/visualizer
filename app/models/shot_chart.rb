@@ -23,11 +23,11 @@ class ShotChart
     "espresso_temperature_goal" => {"title" => "Temperature Goal", "color" => "#960d2d", "suffix" => " °C", "dashed" => true, "type" => "spline"}
   }.freeze
 
-  attr_reader :shot, :chart_settings, :processed_shot_data
+  attr_reader :shot, :chart_settings, :to_fahrenheit, :processed_shot_data
 
-  def initialize(shot, chart_settings)
+  def initialize(shot, user = nil)
     @shot = shot
-    @chart_settings = chart_settings.presence || {}
+    prepare_chart_settings(user)
     prepare_chart_data
     @temperature_data, @main_data = processed_shot_data.sort.partition { |key, _v| key.include?("temperature") }
   end
@@ -46,6 +46,14 @@ class ShotChart
   end
 
   private
+
+  def prepare_chart_settings(user)
+    @chart_settings = user&.chart_settings.presence || {}
+    return unless user&.temperature_unit == "Fahrenheit"
+
+    @to_fahrenheit = true
+    @chart_settings.select { |label, _| label.include?("temperature") }.each { |_label, settings| settings["suffix"] = " °F" }
+  end
 
   def prepare_chart_data
     @processed_shot_data = process_data(shot)
@@ -151,16 +159,23 @@ class ShotChart
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f
     timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
+    in_fahrenheit = shot.fahrenheit?
     shot.data.filter_map do |label, data|
       next if DATA_LABELS_TO_IGNORE.include?(label)
 
       times10 = label == "espresso_water_dispensed"
-      fahrenheit = shot.fahrenheit? && label.include?("temperature")
+      temperature_label = label.include?("temperature")
       data = data.map.with_index do |v, i|
         t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
         v = v.to_f
         v *= 10 if times10
-        v = (v - 32) * 5 / 9 if fahrenheit
+        if temperature_label
+          if to_fahrenheit && !in_fahrenheit
+            v = (v * 9 / 5) + 32
+          elsif !to_fahrenheit && in_fahrenheit
+            v = (v - 32) * 5 / 9
+          end
+        end
         v = nil if v.negative?
         [t.to_f * 1000, v]
       end
