@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
     t.index ["slug"], name: "index_changes_on_slug", unique: true
   end
 
-  create_table "coffee_roasts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "coffee_bags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "coffee_id", null: false
     t.date "roast_date"
     t.string "level"
@@ -61,11 +61,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
     t.string "quality"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["coffee_id"], name: "index_coffee_roasts_on_coffee_id"
+    t.index ["coffee_id"], name: "index_coffee_bags_on_coffee_id"
   end
 
   create_table "coffees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "roaster"
     t.string "name"
     t.string "country"
     t.string "region"
@@ -75,6 +74,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
     t.string "altitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "roaster_id"
+    t.index ["roaster_id"], name: "index_coffees_on_roaster_id"
   end
 
   create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -122,6 +123,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "roasters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "website"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "shot_id", null: false
     t.string "code", null: false
@@ -159,8 +168,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
     t.string "s3_etag"
     t.jsonb "profile_fields"
     t.string "barista"
-    t.uuid "coffee_roast_id"
-    t.index ["coffee_roast_id"], name: "index_shots_on_coffee_roast_id"
+    t.uuid "coffee_bags_id"
+    t.index ["coffee_bags_id"], name: "index_shots_on_coffee_bags_id"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["user_id"], name: "index_shots_on_user_id"
   end
@@ -196,13 +205,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_28_164833) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "coffee_roasts", "coffees"
+  add_foreign_key "coffee_bags", "coffees"
+  add_foreign_key "coffees", "roasters"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "shared_shots", "shots"
   add_foreign_key "shared_shots", "users"
-  add_foreign_key "shots", "coffee_roasts"
+  add_foreign_key "shots", "coffee_bags", column: "coffee_bags_id"
   add_foreign_key "shots", "users"
 end

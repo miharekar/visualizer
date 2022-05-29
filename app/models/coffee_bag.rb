@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class CoffeeRoast < ApplicationRecord
+class CoffeeBag < ApplicationRecord
   belongs_to :coffee
   has_many :shots, dependent: :nullify
 end
 
 # == Schema Information
 #
-# Table name: coffee_roasts
+# Table name: coffee_bags
 #
 #  id         :uuid             not null, primary key
 #  harvest    :string
@@ -20,7 +20,7 @@ end
 #
 # Indexes
 #
-#  index_coffee_roasts_on_coffee_id  (coffee_id)
+#  index_coffee_bags_on_coffee_id  (coffee_id)
 #
 # Foreign Keys
 #

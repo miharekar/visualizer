@@ -9,7 +9,7 @@ class Shot < ApplicationRecord
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
 
   belongs_to :user, optional: true
-  belongs_to :coffee_roast, optional: true
+  belongs_to :coffee_bag, optional: true
   has_many :shared_shots, dependent: :destroy
 
   has_one_attached :image do |attachable|
@@ -155,17 +155,17 @@ end
 #  timeframe          :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  coffee_roast_id    :uuid
+#  coffee_bags_id     :uuid
 #  user_id            :uuid
 #
 # Indexes
 #
-#  index_shots_on_coffee_roast_id  (coffee_roast_id)
-#  index_shots_on_sha              (sha)
-#  index_shots_on_user_id          (user_id)
+#  index_shots_on_coffee_bags_id  (coffee_bags_id)
+#  index_shots_on_sha             (sha)
+#  index_shots_on_user_id         (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (coffee_roast_id => coffee_roasts.id)
+#  fk_rails_...  (coffee_bags_id => coffee_bags.id)
 #  fk_rails_...  (user_id => users.id)
 #

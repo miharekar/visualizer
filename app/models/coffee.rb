@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Coffee < ApplicationRecord
-  has_many :coffee_roasts, dependent: :destroy
+  has_many :coffee_bags, dependent: :destroy
 end
 
 # == Schema Information
