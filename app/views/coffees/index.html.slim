@@ -1,0 +1,30 @@
+.shadow.bg-stone-100.dark:bg-stone-800
+  div.bg-white.dark:bg-stone-900.shadow
+    .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
+      h1.text-3xl.font-bold.leading-tight.text-stone-900.dark:text-stone-100 All Coffees
+= render "shared/flash"
+.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+  .md:grid.md:grid-cols-3.md:gap-6
+    .md:col-span-1
+      .px-4.sm:px-0
+        h3.text-lg.font-medium.leading-6.text-stone-900.dark:text-stone-100
+          ' Work in progress.
+        p.mt-1.text-sm.text-stone-600.dark:text-stone-400
+          ' This is a list of all the coffees in the database. For more information about a coffee, click on its name.
+.max-w-7xl.mx-auto.pb-6.sm:px-6.lg:px-8
+  #coffee-list.flex.flex-col
+    .overflow-x-auto.sm:-mx-6.lg:-mx-8
+      .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
+        .shadow.overflow-hidden.border-b.border-stone-200.dark:border-stone-800.sm:rounded-lg data-controller="modal"
+          = render "shared/modal"
+          table.min-w-full.divide-y.divide-stone-200.dark:divide-stone-800 data-controller="coffee"
+            thead.bg-stone-50.dark:bg-stone-800
+              tr
+                th.px-6.py-3.text-left.text-xs.font-medium.text-stone-500.uppercase.tracking-wider scope="col"
+                  | Coffee
+                th.px-6.py-3.text-left.text-xs.font-medium.text-stone-500.uppercase.tracking-wider scope="col"
+                  | Roaster
+                th.relative.px-6.py-3 scope="col"
+            tbody.bg-white.dark:bg-stone-900.divide-y.divide-stone-200.dark:divide-stone-800
+              = render @coffees
+          = render partial: "shared/pagination", locals: {pagy: @pagy, extra_classes: "bg-stone-50 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-800"}

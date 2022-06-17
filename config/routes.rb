@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :coffees
   resources :search, only: [:index] do
     collection do
       get :autocomplete
