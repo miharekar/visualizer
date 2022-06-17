@@ -8,7 +8,7 @@ class ShotTest < ActiveSupport::TestCase
     shot = Shot.from_file(users(:miha), "#{path}.shot")
     assert_equal users(:miha), shot.user
     assert_equal "JoeD's Easy blooming slow ramp to 7 bar", shot.profile_title
-    assert_equal "2021-09-21 06:59:10", shot.start_time.to_formatted_s(:db)
+    assert_equal "2021-09-21 06:59:10", shot.start_time.to_fs(:db)
     assert_equal 100, shot.timeframe.size
     assert_equal "0.044", shot.timeframe.first
     assert_equal "24.793", shot.timeframe.last
@@ -40,7 +40,7 @@ class ShotTest < ActiveSupport::TestCase
     shot = Shot.from_file(users(:miha), "#{path}.json")
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
-    assert_equal "2021-10-19 08:07:44", shot.start_time.to_formatted_s(:db)
+    assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
     assert_equal 109, shot.timeframe.size
     assert_equal "0.044", shot.timeframe.first
     assert_equal "26.999", shot.timeframe.last
@@ -73,7 +73,7 @@ class ShotTest < ActiveSupport::TestCase
 
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
-    assert_equal "2021-10-19 08:07:44", shot.start_time.to_formatted_s(:db)
+    assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
     assert_equal 109, shot.timeframe.size
     assert_equal "0.044", shot.timeframe.first
     assert_equal "26.999", shot.timeframe.last

@@ -12,7 +12,7 @@ module Oauth
       @application = Doorkeeper::Application.new(application_params)
       @application.owner = current_user
       if @application.save
-        flash[:notice] = I18n.t(:notice, scope: %i[doorkeeper flash applications create])
+        flash[:notice] = I18n.t("doorkeeper.flash.applications.create.notice")
         redirect_to oauth_application_url(@application)
       else
         render :new
