@@ -3,20 +3,39 @@
 class PremiumController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
+  def index
+    render "woc" if Time.zone.today < Date.parse("2022-06-26")
+  end
+
   def create
-    price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
-    session = Stripe::Checkout::Session.create(
-      success_url: "#{success_premium_index_url}?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: cancel_premium_index_url,
-      mode: "subscription",
-      allow_promotion_codes: true,
-      customer_email: current_user.email,
-      automatic_tax: {enabled: true},
-      metadata: {user_id: current_user.id},
-      line_items: [{quantity: 1, price: price_id}],
-      tax_id_collection: {enabled: true},
-      subscription_data: {trial_period_days: 7}
-    )
+    if Time.zone.today < Date.parse("2022-06-26")
+      price_id = Stripe::Price.list(active: true, recurring: {interval: "year"}).first.id
+      session = Stripe::Checkout::Session.create(
+        success_url: "#{success_premium_index_url}?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: cancel_premium_index_url,
+        mode: "subscription",
+        discounts: [{coupon: "mch3EsRo"}],
+        customer_email: current_user.email,
+        automatic_tax: {enabled: true},
+        metadata: {user_id: current_user.id},
+        line_items: [{quantity: 1, price: price_id}],
+        tax_id_collection: {enabled: true}
+      )
+    else
+      price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
+      session = Stripe::Checkout::Session.create(
+        success_url: "#{success_premium_index_url}?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: cancel_premium_index_url,
+        mode: "subscription",
+        allow_promotion_codes: true,
+        customer_email: current_user.email,
+        automatic_tax: {enabled: true},
+        metadata: {user_id: current_user.id},
+        line_items: [{quantity: 1, price: price_id}],
+        tax_id_collection: {enabled: true},
+        subscription_data: {trial_period_days: 7}
+      )
+    end
     redirect_to session.url, allow_other_host: true
   end
 
