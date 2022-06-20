@@ -1,11 +1,10 @@
+= render "shared/premium_banner"
 .shadow.bg-stone-100.dark:bg-stone-800
   div.bg-white.dark:bg-stone-900.shadow
     .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
       h1.text-3xl.font-bold.leading-tight.text-stone-900.dark:text-stone-100
         ' Your
         span#shots-count= pluralize(@shots_count, "Shot")
-= render "shared/premium_banner"
-= render "shared/flash"
 #error.hidden
   = render "shared/banner", name: "alert", message: "Something went wrong"
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
