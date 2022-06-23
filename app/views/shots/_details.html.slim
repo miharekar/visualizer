@@ -81,6 +81,10 @@
           ' EY
           = ey
           ' %
+      - if shot.barista.present?
+        .mt-2
+          span.font-medium.text-stone-900.dark:text-stone-100 Barista:&nbsp;
+          span = shot.barista
       - if shot.bean_notes.present?
         .mt-2
           .font-medium.text-stone-900.dark:text-stone-100 Bean notes:
