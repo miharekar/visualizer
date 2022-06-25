@@ -17,6 +17,22 @@
   #shot-uploaded-chart
   #shot-brewed-chart
   #shot-user-chart
+  .text-xl Top profiles All time
+  ol
+    - @top_profiles_all_time.map do |profile, percentage|
+      li
+        = profile
+        ':
+        = percentage
+        '%
+  .text-xl Top profiles This month
+  ol
+    - @top_profiles_last_month.map do |profile, percentage|
+      li
+        = profile
+        ':
+        = percentage
+        '%
 
 javascript:
   window.uploadedChartData = #{{@uploaded_chart.to_json}}

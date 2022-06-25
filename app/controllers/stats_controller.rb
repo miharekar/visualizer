@@ -28,5 +28,16 @@ class StatsController < ApplicationController
       name: "Total users",
       data: user_data.to_a
     }]
+
+    @top_profiles_all_time = top_profiles(from: "1.1.2000".to_date)
+    @top_profiles_last_month = top_profiles(from: 1.month.ago)
+  end
+
+  private
+
+  def top_profiles(from:)
+    profiles = Shot.where(created_at: from..).pluck(:profile_title)
+    total = profiles.size.to_f
+    profiles.map { |p| p.to_s.sub("Visualizer/", "") }.tally.sort_by { |_p, c| c }.last(20).reverse.to_h.transform_values { |c| (c / total * 100).round(2) }
   end
 end
