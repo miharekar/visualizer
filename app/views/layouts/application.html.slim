@@ -19,8 +19,6 @@ html
       = render "shared/header"
     main.grow.dark:bg-black.dark:text-white
       = render "shared/flash"
-      - if controller_name != "premium" && Time.zone.today < Date.parse("2022-06-26")
-        = render "shared/woc_banner"
       = yield
     footer
       = render "shared/footer"
