@@ -1,4 +1,4 @@
-:concurrency: 1
+:concurrency: 2
 :queues:
   - critical
   - high
