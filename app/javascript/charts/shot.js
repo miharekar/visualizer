@@ -129,9 +129,9 @@ function commonOptions() {
         style: { color: colors.label },
         formatter: function () {
           if (this.value < 0) {
-            return "-" + Highcharts.dateFormat('%M:%S', -this.value)
+            return "-" + Highcharts.dateFormat("%M:%S", -this.value)
           } else {
-            return Highcharts.dateFormat('%M:%S', this.value)
+            return Highcharts.dateFormat("%M:%S", this.value)
           }
         }
       },
@@ -155,9 +155,9 @@ function commonOptions() {
       formatter: function (tooltip) {
         let s
         if (this.x < 0) {
-          s = ["-" + Highcharts.dateFormat('%M:%S.%L', -this.x) + "<br>"]
+          s = ["-" + Highcharts.dateFormat("%M:%S.%L", -this.x) + "<br>"]
         } else {
-          s = [Highcharts.dateFormat('%M:%S.%L', this.x) + "<br>"]
+          s = [Highcharts.dateFormat("%M:%S.%L", this.x) + "<br>"]
         }
 
         return s.concat(tooltip.bodyFormatter(this.points))
