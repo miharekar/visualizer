@@ -7,3 +7,5 @@
 :schedule:
   SharedShotCleanupJob:
     every: 1 hour
+  ScreenshotTakerJob:
+    every: 5 minutes

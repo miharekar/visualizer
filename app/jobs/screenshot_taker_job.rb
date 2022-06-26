@@ -5,29 +5,26 @@ require "aws-sdk-s3"
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
-  rescue_from(ActiveJob::DeserializationError) do
-    true
-  end
+  def perform(from: 1.hour.ago)
+    return if Rails.env.development?
 
-  def perform(shot)
-    return if shot.screenshot? || Rails.env.development?
+    browser = Ferrum::Browser.new(window_size: [800, 500])
+    client = Aws::S3::Client.new
+    Shot.where(created_at: from..).where(s3_etag: nil).find_each do |shot|
+      next if shot.screenshot?
 
-    Timeout.timeout(2.minutes) do
-      browser = Ferrum::Browser.new(window_size: [800, 500])
       browser.go_to("https://visualizer.coffee/shots/#{shot.id}/chart")
       browser.screenshot(path: "tmp/screenshot-#{shot.id}.png")
-      browser.quit
+      response = client.put_object(
+        acl: "public-read",
+        body: File.read("tmp/screenshot-#{shot.id}.png"),
+        bucket: "visualizer-coffee-shots",
+        key: "screenshots/#{shot.id}.png"
+      )
+      shot.update(s3_etag: response.etag) if response&.etag
     end
-
-    client = Aws::S3::Client.new
-    response = client.put_object(
-      acl: "public-read",
-      body: File.read("tmp/screenshot-#{shot.id}.png"),
-      bucket: "visualizer-coffee-shots",
-      key: "screenshots/#{shot.id}.png"
-    )
-    shot.update(s3_etag: response.etag) if response&.etag
-  rescue Ferrum::TimeoutError, Ferrum::ProcessTimeoutError, Timeout::Error
+    browser.quit
+  rescue Ferrum::TimeoutError, Ferrum::ProcessTimeoutError
     Rails.logger.info("Something went wrong with Ferrum")
   end
 end
