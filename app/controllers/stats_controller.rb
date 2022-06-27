@@ -47,9 +47,8 @@ class StatsController < ApplicationController
   end
 
   def top_skins
-    start_date = "27.06.2022".to_date
-    relevant = Shot.where(created_at: start_date..).pluck(:extra, :user_id)
-    users_with_skins = relevant.map { |e, u| [u, e["skin"]] }.uniq
+    relevant = Shot.where(created_at: "27.06.2022"..).pluck(:extra, :user_id)
+    users_with_skins = relevant.map { |e, u| [u, e["skin"]] }.uniq.select { |_, s| s.present? }
     total_users = users_with_skins.uniq { |us| us[0] }.size.to_f
     users_with_skins.map { |us| us[1] }.tally.sort_by { |_s, c| c }.reverse.to_h.transform_values { |c| (c / total_users * 100).round(2) }
   end
