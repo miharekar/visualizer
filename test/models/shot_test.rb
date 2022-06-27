@@ -14,7 +14,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "24.793", shot.timeframe.last
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 101, shot.data["espresso_pressure"].size
-    assert_equal 15, shot.extra.keys.size
+    assert_equal 16, shot.extra.keys.size
     assert_equal "38.8", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.1", shot.grinder_setting
@@ -29,6 +29,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "With BPlus", shot.bean_notes
     assert_equal "Miha Rekar", shot.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
+    assert_equal "MimojaCafe", shot.extra["skin"]
     # FileUtils.cp(shot.tcl_profile, "#{path}.tcl")
     assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
     # File.write("#{path}.json", shot.json_profile)
@@ -46,7 +47,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "26.999", shot.timeframe.last
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 110, shot.data["espresso_pressure"].size
-    assert_equal 17, shot.extra.keys.size
+    assert_equal 18, shot.extra.keys.size
     assert_equal 46, shot.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
@@ -62,6 +63,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "With BPlus", shot.bean_notes
     assert_equal "Miha Rekar", shot.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
+    assert_equal "MimojaCafe", shot.extra["skin"]
     assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
     assert_equal File.read("#{path}.json_profile"), shot.json_profile
 
@@ -79,7 +81,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "26.999", shot.timeframe.last
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 110, shot.data["espresso_pressure"].size
-    assert_equal 15, shot.extra.keys.size
+    assert_equal 16, shot.extra.keys.size
     assert_equal 46, shot.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
@@ -95,6 +97,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "With BPlus", shot.bean_notes
     assert_equal "Miha Rekar", shot.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
+    assert_equal "MimojaCafe", shot.extra["skin"]
     assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
     assert_equal File.read("#{path}.json_profile"), shot.json_profile
   end
