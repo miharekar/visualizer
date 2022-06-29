@@ -38,6 +38,9 @@ gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 
+gem "rack-mini-profiler"
+gem "stackprof"
+
 group :development, :test do
   gem "dotenv-rails"
 end

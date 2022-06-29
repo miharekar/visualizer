@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  before_action :profiling
   before_action :set_timezone
   before_action :set_skin
 
   private
+
+  def profiling
+    Rack::MiniProfiler.authorize_request if current_user&.admin?
+  end
 
   def signed_in_root_path(_resource_or_scope)
     shots_path
