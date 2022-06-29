@@ -150,8 +150,11 @@ end
 #
 # Indexes
 #
-#  index_shots_on_sha      (sha)
-#  index_shots_on_user_id  (user_id)
+#  index_shots_on_created_at              (created_at)
+#  index_shots_on_sha                     (sha)
+#  index_shots_on_user_id                 (user_id)
+#  index_shots_on_user_id_and_created_at  (user_id,created_at)
+#  index_shots_on_user_id_and_start_time  (user_id,start_time)
 #
 # Foreign Keys
 #
