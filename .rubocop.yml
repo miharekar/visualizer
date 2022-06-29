@@ -26,6 +26,9 @@ Style/RaiseArgs:
 Style/NumericLiterals:
   Enabled: false
 
+Style/NumericPredicate:
+  Enabled: false
+
 Style/Send:
   Enabled: true
 
