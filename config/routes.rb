@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => "/sidekiq"
+    mount PgHero::Engine => "pghero"
   end
 
   devise_for :users

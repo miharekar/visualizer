@@ -193,6 +193,7 @@ GEM
     irb (1.4.1)
       reline (>= 0.3.0)
     jmespath (1.6.1)
+    json (2.6.2)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -253,6 +254,8 @@ GEM
     parser (3.1.2.0)
       ast (~> 2.4.1)
     pg (1.4.1)
+    pghero (2.8.3)
+      activerecord (>= 5)
     propshaft (0.6.4)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -315,7 +318,8 @@ GEM
       netrc (~> 0.8)
     rexml (3.2.5)
     rollbar (3.3.1)
-    rubocop (1.31.0)
+    rubocop (1.31.1)
+      json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -420,6 +424,7 @@ DEPENDENCIES
   mini_magick
   pagy
   pg
+  pghero
   propshaft
   puma
   rack-attack
