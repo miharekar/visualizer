@@ -10,8 +10,6 @@ services:
         # Append -bullseye or -buster to pin to an OS version.
         # Use -bullseye variants on local arm64/Apple Silicon.
         VARIANT: "3.1-bullseye"
-        # Optional Node.js version to install
-        NODE_VERSION: "lts/*"
 
     volumes:
       - ..:/workspace:cached
@@ -37,7 +35,6 @@ services:
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./create-db-user.sql:/docker-entrypoint-initdb.d/create-db-user.sql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
