@@ -9,7 +9,7 @@
 - tds = shot.drink_tds.to_f
 - ey = shot.drink_ey.to_f
 
-tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_path(shot)
+tr.cursor-pointer.hover:bg-stone-50.dark:hover:bg-stone-800 id=dom_id(shot) data-action="click->shot#view" data-url=shot_path(shot)
   td.py-4.px-1.sm:px-4
     .flex.items-center
       - if shot.espresso_enjoyment.to_i > 0
@@ -18,8 +18,11 @@ tr.cursor-pointer id=dom_id(shot) data-action="click->shot#view" data-url=shot_p
           .text-white.py-1.text-center
             = shot.espresso_enjoyment
       .sm
-        .text-sm.text-stone-900.dark:text-stone-100
-          = shot.profile_title
+        .text-sm.text-stone-500.dark:text-stone-400
+          - if full_crud
+            = link_to shot.profile_title, search_index_path(search_params.merge(profile_title: shot.profile_title)), class: "underline hover:text-stone-400 dark:hover:text-stone-500"
+          - else
+            = shot.profile_title
         - if show_start_time
           .text-sm.text-stone-500.dark:text-stone-400
             = shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)
