@@ -49,10 +49,8 @@ class ShotChart
 
   def prepare_chart_settings(user)
     @chart_settings = user&.chart_settings.presence || {}
-    return unless user&.temperature_unit == "Fahrenheit"
-
-    @to_fahrenheit = true
-    @chart_settings.select { |label, _| label.include?("temperature") }.each { |_label, settings| settings["suffix"] = " °F" }
+    @to_fahrenheit = user&.temperature_unit == "Fahrenheit"
+    @chart_settings.select { |label, _| label.include?("temperature") }.each { |_label, settings| settings["suffix"] = @to_fahrenheit ? " °F" : " °C" }
   end
 
   def prepare_chart_data
