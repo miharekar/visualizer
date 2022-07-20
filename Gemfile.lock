@@ -324,7 +324,6 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
-    rollbar (3.3.1)
     rubocop (1.31.2)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -349,6 +348,17 @@ GEM
       ffi (~> 1.12)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
+    sentry-rails (5.3.1)
+      railties (>= 5.0)
+      sentry-ruby-core (~> 5.3.1)
+    sentry-ruby (5.3.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      sentry-ruby-core (= 5.3.1)
+    sentry-ruby-core (5.3.1)
+      concurrent-ruby
+    sentry-sidekiq (5.3.1)
+      sentry-ruby-core (~> 5.3.1)
+      sidekiq (>= 3.0)
     shellany (0.0.1)
     sidekiq (6.5.1)
       connection_pool (>= 2.2.2)
@@ -443,10 +453,12 @@ DEPENDENCIES
   rails (~> 7.0.0)
   redis
   responders!
-  rollbar
   rubocop
   rubocop-performance
   rubocop-rails
+  sentry-rails
+  sentry-ruby
+  sentry-sidekiq
   sidekiq
   sidekiq-scheduler
   slim

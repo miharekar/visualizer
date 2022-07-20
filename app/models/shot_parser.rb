@@ -35,7 +35,7 @@ class ShotParser
   rescue SystemStackError, StandardError => e
     raise e if Rails.env.development?
 
-    Rollbar.error(e, file: @file)
+    Sentry.capture_exception(e, extra: {file: @file})
   end
 
   def json_parse
