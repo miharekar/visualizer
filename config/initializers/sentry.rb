@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_support/parameter_filter"
+
 Sentry.init do |config|
   config.dsn = ENV.fetch("SENTRY_DSN", nil)
   config.send_default_pii = true
