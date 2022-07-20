@@ -32,7 +32,7 @@ class SearchController < ApplicationController
       end
       @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
       @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
-      @pagy, @shots = pagy(@shots)
+      @pagy, @shots = pagy_countless(@shots)
     else
       @shots = []
     end

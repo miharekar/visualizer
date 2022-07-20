@@ -20,7 +20,7 @@ class PeopleController < ApplicationController
 
     if @user.public
       @shots = @user.shots.by_start_time
-      @pagy, @shots = pagy(@shots)
+      @pagy, @shots = pagy_countless(@shots)
     else
       redirect_to :root
     end
