@@ -44,6 +44,10 @@ class User < ApplicationRecord
   def premium?
     premium_expires_at&.future? || supporter
   end
+
+  def wants_fahrenheit?
+    temperature_unit == "Fahrenheit"
+  end
 end
 
 # == Schema Information

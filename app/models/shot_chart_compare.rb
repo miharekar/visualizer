@@ -7,9 +7,9 @@ class ShotChartCompare < ShotChart
 
   SUFFIX = "_comparison"
 
-  def initialize(shot, comparison, chart_settings)
+  def initialize(shot, comparison, user)
     @comparison = comparison
-    super(shot, chart_settings)
+    super(shot, user)
   end
 
   def comparison_data
@@ -44,10 +44,9 @@ class ShotChartCompare < ShotChart
     return super unless label.end_with?(SUFFIX)
 
     og_label = label.sub(SUFFIX, "")
-    setting = chart_settings[og_label].presence || CHART_SETTINGS[og_label]
+    setting = setting_for(og_label)
     return unless setting
 
-    setting = CHART_SETTINGS[og_label].merge(setting)
     setting.merge("opacity" => 0.6, "title" => "#{setting['title']} Comparison")
   end
 

@@ -23,11 +23,12 @@ class ShotChart
     "espresso_temperature_goal" => {"title" => "Temperature Goal", "color" => "#960d2d", "suffix" => " °C", "dashed" => true, "type" => "spline"}
   }.freeze
 
-  attr_reader :shot, :chart_settings, :to_fahrenheit, :processed_shot_data
+  attr_reader :shot, :to_fahrenheit, :user, :processed_shot_data
 
   def initialize(shot, user = nil)
     @shot = shot
-    prepare_chart_settings(user)
+    @user = user
+    @to_fahrenheit = user&.wants_fahrenheit?
     prepare_chart_data
     @temperature_data, @main_data = processed_shot_data.sort.partition { |key, _v| key.include?("temperature") }
   end
@@ -46,12 +47,6 @@ class ShotChart
   end
 
   private
-
-  def prepare_chart_settings(user)
-    @chart_settings = user&.chart_settings.presence || {}
-    @to_fahrenheit = user&.temperature_unit == "Fahrenheit"
-    @chart_settings.select { |label, _| label.include?("temperature") }.each { |_label, settings| settings["suffix"] = @to_fahrenheit ? " °F" : " °C" }
-  end
 
   def prepare_chart_data
     @processed_shot_data = process_data(shot)
@@ -82,10 +77,13 @@ class ShotChart
   end
 
   def setting_for(label)
-    setting = chart_settings[label].presence
-    return CHART_SETTINGS[label] unless setting
-
-    CHART_SETTINGS[label].merge(setting)
+    setting = CHART_SETTINGS[label]
+    if setting.present? && user&.chart_settings.present?
+      user_setting = user.chart_settings[label].presence || {}
+      user_setting["suffix"] = " °F" if user_setting.present? && user_setting["title"].include?("Temperature") && user.wants_fahrenheit?
+      setting = setting.merge(user_setting)
+    end
+    setting
   end
 
   def resistance_chart(pressure_data, flow_data)
