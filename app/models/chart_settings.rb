@@ -14,9 +14,9 @@ class ChartSettings
     "espresso_resistance" => {"title" => "Resistance", "color" => "#e5e500", "suffix" => " lΩ", "hidden" => true, "type" => "spline"},
     "espresso_conductance" => {"title" => "Conductance", "color" => "#f36943", "suffix" => "", "hidden" => true, "dashed" => true, "type" => "spline"},
     "espresso_conductance_derivative" => {"title" => "Conductance Derivative", "color" => "#f36943", "suffix" => "", "hidden" => true, "type" => "spline"},
-    "espresso_temperature_basket" => {"title" => "Temperature Basket", "color" => "#e73249", "suffix" => " °C", "type" => "spline"},
-    "espresso_temperature_mix" => {"title" => "Temperature Mix", "color" => "#ce123e", "suffix" => " °C", "type" => "spline"},
-    "espresso_temperature_goal" => {"title" => "Temperature Goal", "color" => "#960d2d", "suffix" => " °C", "dashed" => true, "type" => "spline"}
+    "espresso_temperature_basket" => {"title" => "Temperature Basket", "color" => "#EE7733", "suffix" => " °C", "type" => "spline"},
+    "espresso_temperature_mix" => {"title" => "Temperature Mix", "color" => "#CC3311", "suffix" => " °C", "type" => "spline"},
+    "espresso_temperature_goal" => {"title" => "Temperature Goal", "color" => "#EE3377", "suffix" => " °C", "dashed" => true, "type" => "spline"}
   }.freeze
 
   attr_reader :user_settings, :wants_fahrenheit
