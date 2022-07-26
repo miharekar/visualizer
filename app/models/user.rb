@@ -32,13 +32,7 @@ class User < ApplicationRecord
   end
 
   def chart_settings
-    return ShotChart::CHART_SETTINGS unless premium?
-
-    settings = super.presence || {}
-    ShotChart::CHART_SETTINGS.each do |label, data|
-      settings[label] = data.merge(settings[label] || {})
-    end
-    settings
+    super if premium?
   end
 
   def premium?

@@ -44,7 +44,7 @@ class ProfilesController < ApplicationController
   def chart_settings
     return unless @profile.premium?
 
-    settings = ShotChart::CHART_SETTINGS.keys.index_with do |label|
+    settings = ChartSettings::DEFAULT.keys.index_with do |label|
       {
         "color" => params["user"]["#{label}-color"],
         "type" => params["user"]["#{label}-type"],

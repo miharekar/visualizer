@@ -7,28 +7,14 @@ class ShotChart
   MAX_RESISTANCE_VALUE = 19
   MIN_CONDUCTANCE_DIFF_VALUE = -5
   GAUSSIAN_MULTIPLIERS = [0.048297, 0.08393, 0.124548, 0.157829, 0.170793, 0.157829, 0.124548, 0.08393, 0.048297].freeze
-  CHART_SETTINGS = {
-    "espresso_pressure" => {"title" => "Pressure", "color" => "#05c793", "suffix" => " bar", "type" => "spline"},
-    "espresso_pressure_goal" => {"title" => "Pressure Goal", "color" => "#03634a", "suffix" => " bar", "dashed" => true, "type" => "spline"},
-    "espresso_water_dispensed" => {"title" => "Water Dispensed", "color" => "#1fb7ea", "suffix" => " ml", "hidden" => true, "type" => "spline"},
-    "espresso_weight" => {"title" => "Weight", "color" => "#8f6400", "suffix" => " g", "hidden" => true, "type" => "spline"},
-    "espresso_flow" => {"title" => "Flow", "color" => "#1fb7ea", "suffix" => " ml/s", "type" => "spline"},
-    "espresso_flow_weight" => {"title" => "Weight Flow", "color" => "#8f6400", "suffix" => " g/s", "type" => "spline"},
-    "espresso_flow_goal" => {"title" => "Flow Goal", "color" => "#09485d", "suffix" => " ml/s", "dashed" => true, "type" => "spline"},
-    "espresso_resistance" => {"title" => "Resistance", "color" => "#e5e500", "suffix" => " lΩ", "hidden" => true, "type" => "spline"},
-    "espresso_conductance" => {"title" => "Conductance", "color" => "#f36943", "suffix" => "", "hidden" => true, "dashed" => true, "type" => "spline"},
-    "espresso_conductance_derivative" => {"title" => "Conductance Derivative", "color" => "#f36943", "suffix" => "", "hidden" => true, "type" => "spline"},
-    "espresso_temperature_basket" => {"title" => "Temperature Basket", "color" => "#e73249", "suffix" => " °C", "type" => "spline"},
-    "espresso_temperature_mix" => {"title" => "Temperature Mix", "color" => "#ce123e", "suffix" => " °C", "type" => "spline"},
-    "espresso_temperature_goal" => {"title" => "Temperature Goal", "color" => "#960d2d", "suffix" => " °C", "dashed" => true, "type" => "spline"}
-  }.freeze
 
-  attr_reader :shot, :to_fahrenheit, :user, :processed_shot_data
+  attr_reader :shot, :user, :to_fahrenheit, :chart_settings, :processed_shot_data
 
   def initialize(shot, user = nil)
     @shot = shot
     @user = user
     @to_fahrenheit = user&.wants_fahrenheit?
+    @chart_settings = ChartSettings.new(user)
     prepare_chart_data
     @temperature_data, @main_data = processed_shot_data.sort.partition { |key, _v| key.include?("temperature") }
   end
@@ -57,7 +43,7 @@ class ShotChart
 
   def for_highcharts(data)
     data.filter_map do |label, d|
-      setting = setting_for(label)
+      setting = chart_settings.for_label(label)
       next if setting.blank?
 
       {
@@ -74,16 +60,6 @@ class ShotChart
         type: setting["type"] == "spline" ? "spline" : "line"
       }
     end
-  end
-
-  def setting_for(label)
-    setting = CHART_SETTINGS[label]
-    if setting.present? && user&.chart_settings.present?
-      user_setting = user.chart_settings[label].presence || {}
-      user_setting["suffix"] = " °F" if user_setting.present? && user_setting["title"].include?("Temperature") && user.wants_fahrenheit?
-      setting = setting.merge(user_setting)
-    end
-    setting
   end
 
   def resistance_chart(pressure_data, flow_data)

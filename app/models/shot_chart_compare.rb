@@ -40,16 +40,6 @@ class ShotChartCompare < ShotChart
     normalize_processed_shot_data
   end
 
-  def setting_for(label)
-    return super unless label.end_with?(SUFFIX)
-
-    og_label = label.sub(SUFFIX, "")
-    setting = setting_for(og_label)
-    return unless setting
-
-    setting.merge("opacity" => 0.6, "title" => "#{setting['title']} Comparison")
-  end
-
   def normalize_processed_shot_data
     processed_shot_data.each do |k, v|
       comparison = k =~ /_comparison$/
