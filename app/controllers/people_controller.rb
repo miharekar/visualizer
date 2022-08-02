@@ -4,9 +4,9 @@ class PeopleController < ApplicationController
   include Pagy::Backend
 
   def index
-    @users = current_user&.admin? ? User.all : User.visible.with_attached_avatar
-    @users = @users.by_name
-    @counts = Shot.visible.group(:user_id).count
+    @decent = params[:decent].present?
+    @users = User.visible.with_attached_avatar.by_name.select { |u| @decent ? !u.premium? : u.premium? }
+    @counts = Shot.where(user: @users).group(:user_id).count
   end
 
   def show
