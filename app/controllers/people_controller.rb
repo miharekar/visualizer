@@ -6,6 +6,7 @@ class PeopleController < ApplicationController
   def index
     @decent = params[:decent].present?
     @users = User.visible.by_name.select { |u| @decent ? !u.premium? : u.premium? }
+    @pagy, @users = pagy_array(@users, items: 24)
   end
 
   def show

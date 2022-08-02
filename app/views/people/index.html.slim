@@ -15,3 +15,4 @@
       - @users.each do |user|
         - cache(user) do
           = render partial: "people/user", locals: { user: user }
+    = render partial: "shared/pagination", locals: {pagy: @pagy, extra_classes: "mt-6"}
