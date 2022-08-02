@@ -14,6 +14,10 @@ module Api
       doorkeeper_authorize!
     end
 
+    def verify_upload_access
+      doorkeeper_token ? doorkeeper_authorize!(:upload, :write) : verify_basic_user
+    end
+
     def verify_write_access
       doorkeeper_token ? doorkeeper_authorize!(:write) : verify_basic_user
     end

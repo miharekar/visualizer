@@ -5,7 +5,8 @@ module Api
     extend Memoist
     include Pagy::Backend
 
-    before_action :verify_write_access, only: %i[upload]
+    before_action :verify_upload_access, only: %i[upload]
+    before_action :verify_write_access, only: %i[destroy]
 
     def index
       items = params[:items].presence.to_i
@@ -63,6 +64,16 @@ module Api
         render json: {id: shot.id}
       else
         render json: {error: "Could not parse the provided file"}, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      shot = current_user.shots.find_by(id: params[:id])
+      if shot
+        shot.destroy!
+        render json: {success: true}
+      else
+        render json: {error: "Shot not found"}, status: :not_found
       end
     end
 
