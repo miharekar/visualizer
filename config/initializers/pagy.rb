@@ -82,8 +82,8 @@ require "pagy/extras/countless"
 
 # Overflow extra: Allow for easy handling of overflowing pages
 # See https://ddnexus.github.io/pagy/extras/overflow
-require "pagy/extras/overflow"
-Pagy::DEFAULT[:overflow] = :last_page
+# require "pagy/extras/overflow"
+# Pagy::DEFAULT[:overflow] = :last_page
 
 # Metadata extra: Provides the pagination metadata to Javascript frameworks like Vue.js, react.js, etc.
 # See https://ddnexus.github.io/pagy/extras/metadata
