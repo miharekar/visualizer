@@ -5,8 +5,7 @@ class PeopleController < ApplicationController
 
   def index
     @decent = params[:decent].present?
-    @users = User.visible.with_attached_avatar.by_name.select { |u| @decent ? !u.premium? : u.premium? }
-    @counts = Shot.where(user: @users).group(:user_id).count
+    @users = User.visible.by_name.select { |u| @decent ? !u.premium? : u.premium? }
   end
 
   def show

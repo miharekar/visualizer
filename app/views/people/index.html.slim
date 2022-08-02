@@ -13,4 +13,5 @@
   - if @users.any?
     ul.grid.grid-cols-1.gap-6.sm:grid-cols-2.lg:grid-cols-3.xl:grid-cols-4
       - @users.each do |user|
-        = render partial: "people/user", locals: { user: user, count: @counts[user.id] }
+        - cache(user) do
+          = render partial: "people/user", locals: { user: user }
