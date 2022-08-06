@@ -42,6 +42,14 @@ class User < ApplicationRecord
   def wants_fahrenheit?
     temperature_unit == "Fahrenheit"
   end
+
+  private
+
+  def generate_slug
+    return unless public?
+
+    super
+  end
 end
 
 # == Schema Information

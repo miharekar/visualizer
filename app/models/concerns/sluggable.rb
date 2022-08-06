@@ -26,7 +26,7 @@ module Sluggable
   private
 
   def generate_slug
-    return if !public? || slug.present?
+    return if slug.present?
 
     self.slug = unique_slug
   end
