@@ -22,7 +22,7 @@
             img.h-10.w-10.rounded-full src=avatar_url(@shot.user, 80)
             span.ml-2.mt-1
               ' Shot by
-              = link_to "#{@shot.user.name}", users_shots_path(slug: @shot.user.slug), class: "underline hover:text-stone-500"
+              = link_to "#{@shot.user.name}", person_path(@shot.user.slug), class: "underline hover:text-stone-500"
             - if @shot.user.premium?
               = link_to premium_index_path do
                 svg.ml-1.mt-1.h-9.w-9.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"

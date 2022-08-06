@@ -31,11 +31,14 @@ Rails.application.routes.draw do
     end
   end
 
-  get :people, to: "people#index"
-  get "people/:slug", to: "people#show", as: :users_shots
   get :changelog, to: "changes#index"
   get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
+
+  resources :people, only: %i[index show] do
+    post :search, on: :collection
+    get :search, on: :collection
+  end
 
   resources :shots, except: [:new] do
     member do
