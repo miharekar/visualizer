@@ -9,9 +9,9 @@ gem "active_link_to"
 gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false
 gem "cloudinary"
-gem "dalli"
 gem "devise", github: "heartcombo/devise"
 gem "doorkeeper"
+gem "hiredis"
 gem "image_processing"
 gem "importmap-rails"
 gem "kramdown"

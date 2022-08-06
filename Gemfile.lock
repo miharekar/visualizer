@@ -102,7 +102,7 @@ GEM
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.658.0)
-    aws-sdk-core (3.166.0)
+    aws-sdk-core (3.167.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
@@ -130,7 +130,6 @@ GEM
     concurrent-ruby (1.1.10)
     connection_pool (2.3.0)
     crass (1.0.6)
-    dalli (3.2.3)
     debug (1.6.3)
       irb (>= 1.3.6)
       reline (>= 0.3.1)
@@ -166,6 +165,7 @@ GEM
     grpc (1.50.0-x86_64-linux)
       google-protobuf (~> 3.21)
       googleapis-common-protos-types (~> 1.0)
+    hiredis (0.6.3)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -395,12 +395,12 @@ DEPENDENCIES
   bootsnap
   brakeman
   cloudinary
-  dalli
   debug
   devise!
   doorkeeper
   dotenv-rails
   foreman
+  hiredis
   image_processing
   importmap-rails
   kramdown
