@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
 class PeopleController < ApplicationController
+  SEARCH_LIMIT = 12
   include Pagy::Backend
 
   def index
     @users = User.visible.by_name
-    @pagy, @users = pagy_array(@users, items: 24)
+    @pagy, @users = pagy_array(@users, items: SEARCH_LIMIT)
   end
 
   def search
     @users = User.visible.by_name.where("name ILIKE ?", "%#{params[:name]}%")
-    @pagy, @users = pagy_array(@users, items: 24, params: {name: params[:name]})
+    @pagy, @users = pagy_array(@users, items: SEARCH_LIMIT, params: {name: params[:name]})
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.replace(:users, partial: "people/users", locals: {users: @users, pagy: @pagy}) }
       format.html { render :index }
