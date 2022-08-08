@@ -29,17 +29,6 @@ If you want to create OAuth applications please [contact me](mailto:miha@mr.si).
 - Postgres (>= 12)
 - Redis (>= 6)
 
-## Configuration
-
-For local development, there is nothing to configure.
-
-When it comes to deploying, you will need to set some environment variables, namely:
-
-- CLOUDINARY_URL
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
-- AWS_REGION
-
 ## Setup
 
 - Install Ruby gems
