@@ -3,8 +3,8 @@
 class ShotsController < ApplicationController
   include Pagy::Backend
 
-  before_action :authenticate_user!, except: %i[show compare chart share]
-  before_action :load_shot, only: %i[show compare chart share]
+  before_action :authenticate_user!, except: %i[show compare share]
+  before_action :load_shot, only: %i[show compare share]
   before_action :load_users_shot, only: %i[edit update destroy]
 
   def index
@@ -12,6 +12,7 @@ class ShotsController < ApplicationController
   end
 
   def show
+    @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, current_user)
     return if current_user.nil?
 
@@ -26,11 +27,6 @@ class ShotsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
-  end
-
-  def chart
-    @no_header = true
-    @chart = ShotChart.new(@shot)
   end
 
   def share

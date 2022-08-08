@@ -128,7 +128,6 @@ GEM
       msgpack (~> 1.2)
     brakeman (5.2.3)
     builder (3.2.4)
-    cliver (0.3.2)
     cloudinary (1.23.0)
       aws_cf_signer
       rest-client (>= 2.0.0)
@@ -152,11 +151,6 @@ GEM
     erubi (1.11.0)
     et-orbi (1.2.7)
       tzinfo
-    ferrum (0.11)
-      addressable (~> 2.5)
-      cliver (~> 0.3)
-      concurrent-ruby (~> 1.1)
-      websocket-driver (>= 0.6, < 0.8)
     ffi (1.15.5)
     foreman (0.87.2)
     formatador (1.1.0)
@@ -334,7 +328,7 @@ GEM
       rubocop-ast (>= 1.19.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.19.1)
+    rubocop-ast (1.20.1)
       parser (>= 3.1.1.0)
     rubocop-performance (1.14.3)
       rubocop (>= 1.7.0, < 2.0)
@@ -427,7 +421,6 @@ DEPENDENCIES
   devise!
   doorkeeper
   dotenv-rails
-  ferrum
   foreman
   guard
   guard-minitest

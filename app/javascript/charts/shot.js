@@ -253,7 +253,7 @@ function drawShotChart() {
   const custom = {
     chart: {
       zoomType: "x",
-      height: window.chartHeight,
+      height: 650,
       backgroundColor: colors.background,
       events: {
         redraw: x => updateInCupVisibility(x.target)
@@ -262,16 +262,7 @@ function drawShotChart() {
     series: window.shotData
   }
 
-  let legendOptions = {}
-  if (window.hideLegend) {
-    legendOptions = {
-      legend: {
-        enabled: false
-      }
-    }
-  }
-
-  let options = { ...commonOptions(), ...legendOptions, ...custom }
+  let options = { ...commonOptions(), ...custom }
   options.xAxis.plotLines = window.shotStages
 
   let chart = Highcharts.chart("shot-chart", options)

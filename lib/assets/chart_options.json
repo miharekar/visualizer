@@ -1,0 +1,31 @@
+{
+  "title": false,
+  "xAxis": {
+    "labels": {
+      "enabled": false
+    },
+    "gridLineColor": "#e6e6e6",
+    "lineColor": "#ccd6eb",
+    "tickLength": 0
+  },
+  "yAxis": {
+    "title": false,
+    "labels": {
+      "enabled": false
+    },
+    "gridLineColor": "#e6e6e6",
+    "lineColor": "#ccd6eb",
+    "tickColor": "#ccd6eb"
+  },
+  "legend": {
+    "enabled": false
+  },
+  "credits": {
+    "enabled": false
+  },
+  "chart": {
+    "height": 500,
+    "width": 800,
+    "backgroundColor": "#ffffff"
+  }
+}

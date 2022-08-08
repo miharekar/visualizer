@@ -5,26 +5,32 @@ require "aws-sdk-s3"
 class ScreenshotTakerJob < ApplicationJob
   queue_as :default
 
-  def perform(from: 1.hour.ago)
-    return if Rails.env.development?
+  rescue_from(ActiveJob::DeserializationError) do
+    true
+  end
 
-    browser = Ferrum::Browser.new(window_size: [800, 500])
+  def perform(shot)
+    return if shot.screenshot? || Rails.env.development?
+
+    chart = ShotChart.new(shot)
+    options = JSON.parse(File.read("lib/assets/chart_options.json"))
+    options["xAxis"]["plotLines"] = chart.stages
+    options["series"] = chart.shot_chart
+
+    uri = URI.parse("http://export.highcharts.com/")
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri, {"Content-Type": "application/json"})
+    request.body = {options:, type: "image/png"}.to_json
+    response = http.request(request)
+    File.write("tmp/screenshot-#{shot.id}.png", response.body, mode: "wb")
+
     client = Aws::S3::Client.new
-    Shot.where(created_at: from..).where(s3_etag: nil).find_each do |shot|
-      next if shot.screenshot?
-
-      browser.go_to("https://visualizer.coffee/shots/#{shot.id}/chart")
-      browser.screenshot(path: "tmp/screenshot-#{shot.id}.png")
-      response = client.put_object(
-        acl: "public-read",
-        body: File.read("tmp/screenshot-#{shot.id}.png"),
-        bucket: "visualizer-coffee-shots",
-        key: "screenshots/#{shot.id}.png"
-      )
-      shot.update(s3_etag: response.etag) if response&.etag
-    end
-    browser.quit
-  rescue Ferrum::TimeoutError, Ferrum::ProcessTimeoutError
-    Rails.logger.info("Something went wrong with Ferrum")
+    s3_response = client.put_object(
+      acl: "public-read",
+      body: File.read("tmp/screenshot-#{shot.id}.png"),
+      bucket: "visualizer-coffee-shots",
+      key: "screenshots/#{shot.id}.png"
+    )
+    shot.update(s3_etag: s3_response.etag) if s3_response&.etag
   end
 end

@@ -21,6 +21,8 @@ class Shot < ApplicationRecord
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
 
+  after_create :ensure_screenshot
+
   after_destroy_commit -> { broadcast_remove_to user }
 
   validates :start_time, :data, :sha, presence: true
@@ -105,6 +107,12 @@ class Shot < ApplicationRecord
 
   def screenshot_url
     "#{SCREENSHOTS_URL}/screenshots/#{id}.png" if screenshot?
+  end
+
+  def ensure_screenshot
+    return if screenshot?
+
+    ScreenshotTakerJob.perform_later(self)
   end
 
   private
