@@ -1,4 +1,4 @@
-- owner = current_user && @shot.user == current_user
+- owner = current_user && @shot.user_id == current_user.id
 - show_header = owner || @shot.user&.public? || @shot.tcl_profile_fields.present?
 - header_content = !owner && @shot.user&.public?
 
