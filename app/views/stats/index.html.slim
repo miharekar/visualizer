@@ -17,30 +17,6 @@
   #shot-uploaded-chart
   #shot-brewed-chart
   #shot-user-chart
-  h3.text-xl.mt-4 Top profiles All time
-  ol
-    - @top_profiles_all_time.map do |profile, percentage|
-      li
-        = profile
-        ':
-        = percentage
-        '%
-  h3.text-xl.mt-4 Top profiles This month
-  ol
-    - @top_profiles_last_month.map do |profile, percentage|
-      li
-        = profile
-        ':
-        = percentage
-        '%
-  h3.text-xl.mt-4 Skins used by users
-  ol
-    - @top_skins.map do |skin, percentage|
-      li
-        = skin
-        ':
-        = percentage
-        '%
 
 javascript:
   window.uploadedChartData = #{{@uploaded_chart.to_json}}
