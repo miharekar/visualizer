@@ -15,8 +15,8 @@ class Shot < ApplicationRecord
     attachable.variant :display, resize_to_limit: [1000, 500]
   end
 
-  scope :visible, -> { joins(:user).where(users: {public: true}) }
-  scope :visible_or_owned_by_id, ->(user_id) { where(user_id: User.where(public: true).select(:id)).or(where(user_id:)) }
+  scope :visible, -> { where(user_id: User.where(public: true).select(:id)) }
+  scope :visible_or_owned_by_id, ->(user_id) { visible.or(where(user_id:)) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
