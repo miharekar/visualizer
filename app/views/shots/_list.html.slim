@@ -7,11 +7,11 @@
           table.min-w-full.divide-y.divide-stone-200.dark:divide-stone-800 data-controller="shot"
             thead.bg-stone-50.dark:bg-stone-700
               tr
-                th.px-6.py-3.text-left.text-xs.font-medium.text-stone-500.uppercase.tracking-wider scope="col"
+                th.px-6.py-3.text-left.text-xs.font-medium.text-stone-500.uppercase.tracking-wider
                   | Shot
-                th.px-6.py-3.text-left.text-xs.font-medium.text-stone-500.uppercase.tracking-wider scope="col"
+                th.px-6.py-3.text-left.text-xs.font-medium.text-stone-500.uppercase.tracking-wider
                   | Info
-                th.relative.px-6.py-3 scope="col"
+                th.px-6.py-3
             tbody.bg-white.dark:bg-stone-900.divide-y.divide-stone-200.dark:divide-stone-800
               - include_person = false unless defined?(include_person)
               - shots.each do |shot|

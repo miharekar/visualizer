@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   resources :people, only: %i[index show] do
     post :search, on: :collection
     get :search, on: :collection
+    get :feed, on: :member
   end
 
   resources :shots, except: [:new] do

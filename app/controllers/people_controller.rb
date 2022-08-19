@@ -34,4 +34,15 @@ class PeopleController < ApplicationController
       redirect_to :root
     end
   end
+
+  def feed
+    @user = User.find_by(slug: params[:id])
+    @user = User.find_by(id: params[:id]) if @user.nil?
+
+    if @user&.public
+      @shots = @user.shots.by_start_time.limit(30)
+    else
+      head :not_found
+    end
+  end
 end
