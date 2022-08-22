@@ -4,7 +4,7 @@ class ShotsController < ApplicationController
   include Pagy::Backend
 
   before_action :authenticate_user!, except: %i[show compare share]
-  before_action :load_shot, only: %i[show compare share]
+  before_action :load_shot, only: %i[show compare share remove_image]
   before_action :load_users_shot, only: %i[edit update destroy]
 
   def index
@@ -93,6 +93,11 @@ class ShotsController < ApplicationController
         redirect_to action: :index
       end
     end
+  end
+
+  def remove_image
+    @shot.image.purge
+    render turbo_stream: turbo_stream.remove("shot-image")
   end
 
   private

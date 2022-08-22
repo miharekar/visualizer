@@ -85,7 +85,7 @@
     - if @shot.image.attached? && @shot.image.variable?
       .md:w-1/2.mt-3.md:mt-0.md:ml-3
         = link_to @shot.image, target: "_blank" do
-          = image_tag @shot.image.variant(:display), class: "rounded-lg"
+          = image_tag @shot.image.variant(:display), class: "rounded-lg mx-auto"
 .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
   #shot-chart
 .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
