@@ -3,6 +3,8 @@
 class PremiumController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
+  def index; end
+
   def create
     price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
     session = Stripe::Checkout::Session.create(
