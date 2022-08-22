@@ -48,7 +48,7 @@ class SearchController < ApplicationController
     if filter == :user
       User.visible_or_id(current_user.id).by_name
     else
-      Rails.cache.fetch("unique_values_for_#{filter}", expires_in: 1.hour) do
+      Rails.cache.fetch("unique_values_for_#{filter}", expires_in: 1.day) do
         Shot.visible.distinct.pluck(filter).select(&:present?).map(&:strip).uniq(&:downcase).sort_by(&:downcase)
       end
     end
