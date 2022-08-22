@@ -48,9 +48,7 @@ class SearchController < ApplicationController
     if filter == :user
       User.visible_or_id(current_user.id).by_name
     else
-      Rails.cache.fetch("unique_values_for_#{filter}", expires_in: 1.day) do
-        Shot.visible.distinct.pluck(filter).select(&:present?).map(&:strip).uniq(&:downcase).sort_by(&:downcase)
-      end
+      Rails.cache.read("unique_values_for_#{filter}")
     end
   end
 
@@ -68,6 +66,8 @@ class SearchController < ApplicationController
     query_parts = query.split(/\s+/).map { |q| Regexp.escape(q) }
     rquery = /#{query_parts.join(".*")}/i
     values = unique_values_for(filter)
+    return [] if values.blank?
+
     if filter == :user
       values.select { |u| u.display_name =~ rquery }
     else

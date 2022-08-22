@@ -7,3 +7,5 @@
 :schedule:
   SharedShotCleanupJob:
     every: 1 hour
+  FillAutocompleteValuesJob:
+    every: 1 hour
