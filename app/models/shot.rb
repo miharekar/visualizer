@@ -144,6 +144,7 @@ end
 #  extra              :jsonb
 #  grinder_model      :string
 #  grinder_setting    :string
+#  private_notes      :text
 #  profile_fields     :jsonb
 #  profile_title      :string
 #  roast_date         :string

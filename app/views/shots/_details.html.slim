@@ -93,3 +93,7 @@
         .mt-2
           .font-medium.text-stone-900.dark:text-stone-100 Notes:
           = markdown_text_from(shot.espresso_notes)
+      - if owner && shot.private_notes.present?
+        .mt-2
+          .font-medium.text-stone-900.dark:text-stone-100 Private notes:
+          = markdown_text_from(shot.private_notes)
