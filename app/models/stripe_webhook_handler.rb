@@ -7,7 +7,7 @@ class StripeWebhookHandler
     @event = Stripe::Webhook.construct_event(
       request.body.read,
       request.env["HTTP_STRIPE_SIGNATURE"],
-      Rails.application.credentials.stripe.webhook_secret
+      Rails.application.credentials.stripe&.webhook_secret
     )
   end
 

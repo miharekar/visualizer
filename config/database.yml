@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: decent_visualizer_production
-  username: decent_visualizer
-  password: <%= ENV["DECENT_VISUALIZER_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
