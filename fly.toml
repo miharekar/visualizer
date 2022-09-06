@@ -10,6 +10,10 @@ processes = []
     BUNDLER_VERSION = "2.3.21"
     RUBY_VERSION = "3.1.2"
 
+[processes]
+  web = "bin/rails fly:server"
+  worker = "bundle exec sidekiq"
+
 [deploy]
   release_command = "bin/rails fly:release"
 
@@ -22,11 +26,12 @@ processes = []
   auto_rollback = true
 
 [[services]]
+  processes = ["web"] # this service only applies to the web process
   http_checks = []
   internal_port = 8080
-  processes = ["app"]
   protocol = "tcp"
   script_checks = []
+
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
