@@ -57,6 +57,8 @@ RUN --mount=type=cache,id=prod-apt-cache,sharing=locked,target=/var/cache/apt \
 COPY --from=gems /app /app
 
 ENV SECRET_KEY_BASE 1
+ENV AWS_ACCESS_KEY_ID=1
+ENV AWS_SECRET_ACCESS_KEY=1
 
 COPY . .
 

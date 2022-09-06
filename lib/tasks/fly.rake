@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # commands used to deploy a Rails application
 namespace :fly do
   # BUILD step:
@@ -17,7 +19,7 @@ namespace :fly do
   #  - full access to secrets, databases
   #  - failures here result in VM being stated, shutdown, and rolled back
   #    to last successful deploy (if any).
-  task server: "assets:precompile" do
+  task server: :environment do
     sh "bin/rails server"
   end
 end
