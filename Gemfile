@@ -52,7 +52,6 @@ end
 
 group :development do
   gem "annotate"
-  gem "app_profiler"
   gem "benchmark-ips"
   gem "brakeman"
   gem "foreman", require: false
