@@ -223,13 +223,25 @@ function setupInCupAnnotations(chart) {
     }
   })
 
-  let annotation = {
+  chart.inCupAnnotation = chart.addAnnotation({
     draggable: false,
     labels: labels,
     labelOptions: { shape: "connector" }
-  }
+  })
 
-  chart.inCupAnnotation = chart.addAnnotation(annotation)
+  chart.renderer.text('<button id="remove-annotations" class="highcharts-no-tooltip cursor-pointer inline-flex px-2 py-1 border border-stone-300 dark:border-stone-600 rounded shadow-sm text-xs font-medium text-stone-700 bg-white dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-900">Hide annotations</span>', 50, 35, true).attr({ zIndex: 3 }).add()
+  chart.annotationVisible = true
+  document.getElementById("remove-annotations").addEventListener("click", function () {
+    if (chart.annotationVisible) {
+      chart.annotations[0].graphic.hide()
+      chart.annotationVisible = false
+      this.innerHTML = "Show annotations"
+    } else {
+      chart.annotations[0].graphic.show()
+      chart.annotationVisible = true
+      this.innerHTML = "Hide annotations"
+    }
+  })
 }
 
 function updateInCupVisibility(chart) {
