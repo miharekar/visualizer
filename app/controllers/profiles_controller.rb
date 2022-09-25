@@ -5,7 +5,8 @@ class ProfilesController < ApplicationController
   before_action :set_profile
   before_action :set_authorized_applications
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @profile.update(profile_params)

@@ -24,11 +24,11 @@ class SearchController < ApplicationController
         next if params[filter].blank?
 
         @shots = if options[:target]
-                   find_user_by_name if filter == :user && params[options[:target]].blank?
-                   @shots.where(options[:target] => params[options[:target]])
-                 else
-                   @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
-                 end
+          find_user_by_name if filter == :user && params[options[:target]].blank?
+          @shots.where(options[:target] => params[options[:target]])
+        else
+          @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
+        end
       end
       @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
       @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100

@@ -28,14 +28,14 @@ gem "pg_query"
 gem "propshaft"
 gem "puma"
 gem "rack-attack"
-gem "rails", "~> 7.0.0"
+gem "rails"
 gem "redis"
 gem "responders", github: "heartcombo/responders"
 gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
 gem "sidekiq"
-gem "sidekiq-scheduler"
+gem "sidekiq-scheduler", github: "sidekiq-scheduler/sidekiq-scheduler"
 gem "slim"
 gem "stimulus-rails"
 gem "stripe"
@@ -59,6 +59,7 @@ group :development do
   gem "guard-minitest"
   gem "letter_opener"
   gem "listen"
+  gem "standard", require: false
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false

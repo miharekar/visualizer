@@ -46,6 +46,6 @@ class ChartSettings
     og_setting = for_label(og_label)
     return unless og_setting
 
-    og_setting.merge("opacity" => 0.6, "title" => "#{og_setting['title']} Comparison")
+    og_setting.merge("opacity" => 0.6, "title" => "#{og_setting["title"]} Comparison")
   end
 end

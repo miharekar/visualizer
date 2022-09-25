@@ -42,7 +42,7 @@ class ShotsController < ApplicationController
       Shot.from_file(current_user, file)&.save
     end
 
-    flash[:notice] = "#{'Shot'.pluralize(files.count)} successfully uploaded."
+    flash[:notice] = "#{"Shot".pluralize(files.count)} successfully uploaded."
     if params.key?(:drag)
       head :ok
     else

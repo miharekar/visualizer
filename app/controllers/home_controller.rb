@@ -8,5 +8,6 @@ class HomeController < ApplicationController
     @user_count = User.fast_count
   end
 
-  def privacy; end
+  def privacy
+  end
 end

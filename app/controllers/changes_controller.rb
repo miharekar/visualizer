@@ -16,9 +16,11 @@ class ChangesController < ApplicationController
     @change = Change.new(published_at: Time.zone.today)
   end
 
-  def edit; end
+  def edit
+  end
 
-  def show; end
+  def show
+  end
 
   def create
     @change = Change.new(change_params)

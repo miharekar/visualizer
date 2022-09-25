@@ -1,62 +1,20 @@
 require:
+  - standard
   - rubocop-performance
   - rubocop-rails
 
+inherit_gem:
+  standard: config/base.yml
+
 AllCops:
   NewCops: enable
-
-Layout/SpaceInsideHashLiteralBraces:
-  Enabled: true
-  EnforcedStyle: no_space
-
-Layout/MultilineMethodCallIndentation:
-  Enabled: true
-  EnforcedStyle: indented
-
-Layout/LineLength:
-  Enabled: false
+  TargetRubyVersion: 3.1
 
 Layout/DotPosition:
-  Enabled: true
   EnforcedStyle: trailing
-
-Style/RaiseArgs:
-  Enabled: false
-
-Style/NumericLiterals:
-  Enabled: false
 
 Style/Send:
   Enabled: true
-
-Style/Documentation:
-  Enabled: false
-
-Style/AndOr:
-  Enabled: true
-  EnforcedStyle: always
-
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
-
-Metrics/AbcSize:
-  Enabled: false
 
 Rails/I18nLocaleTexts:
   Enabled: false

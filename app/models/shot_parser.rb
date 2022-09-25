@@ -111,9 +111,9 @@ class ShotParser
   end
 
   def extract_profile(data)
-    stop = "#{data.last.join(' ')}\n}"
+    stop = "#{data.last.join(" ")}\n}"
     @profile_fields["json"] = JSON.parse(@file[/profile (\{(.*)#{stop})/m, 1])
-  rescue StandardError
+  rescue
     nil
   end
 

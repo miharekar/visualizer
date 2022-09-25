@@ -11,9 +11,11 @@ class SluggableDummy
     false
   end
 
-  def self.before_validation(_); end
+  def self.before_validation(_)
+  end
 
-  def self.validates(*_args); end
+  def self.validates(*_args)
+  end
 
   include Sluggable
   slug_from :title

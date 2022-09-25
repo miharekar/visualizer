@@ -24,10 +24,10 @@ class ApplicationController < ActionController::Base
     return unless current_user
 
     @skin = if current_user.skin == "System"
-              cookies["browser.colorscheme"].presence
-            else
-              current_user.skin&.downcase
-            end
+      cookies["browser.colorscheme"].presence
+    else
+      current_user.skin&.downcase
+    end
   end
 
   def check_admin!
