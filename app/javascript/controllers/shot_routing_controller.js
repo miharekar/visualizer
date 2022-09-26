@@ -6,13 +6,19 @@ const uuidV4Regex = /shots\/([A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-
 export default class extends Controller {
   static values = { shotId: String }
 
+  jump(event) {
+    const select = event.currentTarget
+    const shotId = select.value
+    Turbo.visit("/shots/" + shotId)
+  }
+
   compare(event) {
     const select = event.currentTarget
     const compare = select.value
     Turbo.visit("/shots/" + this.shotIdValue + "/compare/" + compare)
   }
 
-  url(event) {
+  urlCompare(event) {
     const input = event.currentTarget
     const url = input.value
     const uuidMatch = url.match(uuidV4Regex)
