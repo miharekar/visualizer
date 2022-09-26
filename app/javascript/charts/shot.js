@@ -233,10 +233,12 @@ function setupInCupAnnotations(chart) {
   chart.annotationVisible = true
   document.getElementById("remove-annotations").addEventListener("click", function () {
     if (chart.annotationVisible) {
+      destroyShotStages()
       chart.annotations[0].graphic.hide()
       chart.annotationVisible = false
       this.innerHTML = "Show annotations"
     } else {
+      drawShotStages()
       chart.annotations[0].graphic.show()
       chart.annotationVisible = true
       this.innerHTML = "Hide annotations"
@@ -254,7 +256,7 @@ function updateInCupVisibility(chart) {
   if (annotation && !isVisible) {
     chart.removeAnnotation(annotation)
     chart.inCupAnnotation = null
-  } else if (!annotation && isVisible) {
+  } else if (window.shotStages?.length > 0 && !annotation && isVisible) {
     setupInCupAnnotations(chart)
   }
 }
@@ -275,10 +277,31 @@ function drawShotChart() {
   }
 
   let options = { ...commonOptions(), ...custom }
-  options.xAxis.plotLines = window.shotStages
 
   let chart = Highcharts.chart("shot-chart", options)
-  setupInCupAnnotations(chart)
+  if (window.shotStages?.length > 0) {
+    setupInCupAnnotations(chart)
+  }
+}
+
+function destroyShotStages() {
+  Highcharts.charts.forEach(function (chart) {
+    if (isObject(chart)) {
+      while (chart.xAxis[0].plotLinesAndBands.length > 0) {
+        chart.xAxis[0].plotLinesAndBands.forEach(function (plotLine) {
+          chart.xAxis[0].removePlotLine(plotLine.id)
+        })
+      }
+    }
+  })
+}
+
+function drawShotStages() {
+  Highcharts.charts.forEach(function (chart) {
+    if (isObject(chart)) {
+      window.shotStages.forEach((x) => chart.xAxis[0].addPlotLine(x))
+    }
+  })
 }
 
 function drawTemperatureChart() {
@@ -294,7 +317,6 @@ function drawTemperatureChart() {
   }
 
   let options = { ...commonOptions(), ...custom }
-  options.xAxis.plotLines = window.shotStages
 
   Highcharts.chart("temperature-chart", options)
 }
@@ -326,17 +348,24 @@ document.addEventListener("turbo:load", function () {
   })
 
   const shotChart = document.getElementById("shot-chart")
-  const temperatureChart = document.getElementById("temperature-chart")
-  const range = document.getElementById("compare-range")
   if (shotChart) {
     drawShotChart()
     syncMouseEvents(shotChart)
   }
+
+  const temperatureChart = document.getElementById("temperature-chart")
   if (temperatureChart) {
     drawTemperatureChart()
     syncMouseEvents(temperatureChart)
   }
+
+  const range = document.getElementById("compare-range")
   if (range) {
     comparisonAdjust(range)
+  }
+
+  if (window.shotStages?.length > 0) {
+    window.shotStages = window.shotStages.map((x) => { return { ...x, id: x } })
+    drawShotStages()
   }
 })
