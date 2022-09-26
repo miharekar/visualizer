@@ -30,6 +30,7 @@
         - if @shot.tcl_profile_fields.present?
           .flex
             = render "share", shot: @shot
+            = render "related_shots", related_shots: @related_shots if @related_shots.present?
       - else
         .flex.flex-col.sm:flex-row.items-center.min-w-full
           .flex
@@ -56,6 +57,9 @@
                     path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"
             - if @shot.tcl_profile_fields.present?
               = render "share", shot: @shot
+          - if owner && @related_shots.present?
+            .grow
+            = render "related_shots", related_shots: @related_shots
 
 - width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3"
 .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8

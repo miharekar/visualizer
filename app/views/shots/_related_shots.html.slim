@@ -1,0 +1,7 @@
+.flex.mt-3.sm:mt-0
+  .flex-1 data-controller="shot-routing"
+    select.standard-input data-action="shot-routing#jump" class="!mt-0"
+      option Jump to another shot
+      - related_shots.each do |id, title, time|
+        option value=id
+          = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")

@@ -14,9 +14,11 @@ class ShotsController < ApplicationController
   def show
     @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, current_user)
+    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
+
     return if current_user.nil?
 
-    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(20).pluck(:id, :profile_title, :start_time)
+    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
   end
