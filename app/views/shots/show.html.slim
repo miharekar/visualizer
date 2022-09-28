@@ -30,7 +30,10 @@
         - if @shot.tcl_profile_fields.present?
           .flex
             = render "share", shot: @shot
-            = render "related_shots", related_shots: @related_shots if @related_shots.present?
+            = render "related_shots", related_shots: @related_shots, shot: @shot if @related_shots.present?
+        - else
+          = render "related_shots", related_shots: @related_shots, shot: @shot if @related_shots.present?
+
       - else
         .flex.flex-col.sm:flex-row.items-center.min-w-full
           .flex
@@ -59,7 +62,7 @@
               = render "share", shot: @shot
           - if owner && @related_shots.present?
             .grow
-            = render "related_shots", related_shots: @related_shots
+            = render "related_shots", related_shots: @related_shots, shot: @shot
 
 - width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3"
 .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8

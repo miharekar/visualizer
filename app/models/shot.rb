@@ -41,7 +41,7 @@ class Shot < ApplicationRecord
 
   def related_shots(limit: 5)
     query = self.class.where(user:).where.not(id:).limit(limit)
-    query.where(start_time: start_time..).order(:start_time) + query.where(start_time: ..start_time).order(start_time: :desc)
+    query.where(start_time: start_time..).order(:start_time) + [self] + query.where(start_time: ..start_time).order(start_time: :desc)
   end
 
   def extract_fields_from_extra
