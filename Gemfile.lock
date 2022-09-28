@@ -111,8 +111,8 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.636.0)
-    aws-sdk-core (3.154.0)
+    aws-partitions (1.638.0)
+    aws-sdk-core (3.156.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -170,14 +170,14 @@ GEM
     google-protobuf (3.21.6-x86_64-linux)
     googleapis-common-protos-types (1.4.0)
       google-protobuf (~> 3.14)
-    grpc (1.48.0)
-      google-protobuf (~> 3.19)
+    grpc (1.49.1)
+      google-protobuf (~> 3.21)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.48.0-x86_64-darwin)
-      google-protobuf (~> 3.19)
+    grpc (1.49.1-x86_64-darwin)
+      google-protobuf (~> 3.21)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.48.0-x86_64-linux)
-      google-protobuf (~> 3.19)
+    grpc (1.49.1-x86_64-linux)
+      google-protobuf (~> 3.21)
       googleapis-common-protos-types (~> 1.0)
     guard (2.18.0)
       formatador (>= 0.2.4)
@@ -246,10 +246,8 @@ GEM
       timeout
     net-protocol (0.1.3)
       timeout
-    net-smtp (0.3.1)
-      digest
+    net-smtp (0.3.2)
       net-protocol
-      timeout
     netrc (0.11.0)
     newrelic-infinite_tracing (8.10.1)
       grpc (~> 1.34)
@@ -333,7 +331,7 @@ GEM
       redis-client (>= 0.9.0)
     redis-client (0.9.0)
       connection_pool
-    regexp_parser (2.5.0)
+    regexp_parser (2.6.0)
     reline (0.3.1)
       io-console (~> 0.5)
     rest-client (2.1.0)
@@ -489,4 +487,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.21
+   2.3.7
