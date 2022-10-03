@@ -32,7 +32,6 @@ gem "rails"
 gem "redis"
 gem "responders", github: "heartcombo/responders"
 gem "sentry-rails"
-gem "sentry-ruby"
 gem "sentry-sidekiq"
 gem "sidekiq"
 gem "sidekiq-scheduler", github: "sidekiq-scheduler/sidekiq-scheduler"
@@ -55,10 +54,7 @@ group :development do
   gem "benchmark-ips"
   gem "brakeman"
   gem "foreman", require: false
-  gem "guard"
-  gem "guard-minitest"
   gem "letter_opener"
-  gem "listen"
   gem "standard", require: false
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
