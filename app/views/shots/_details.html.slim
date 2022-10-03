@@ -31,69 +31,70 @@
       - if show_start_time
         div
           = shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)
-      div
-        - if shot.bean_brand.present?
-          = shot.bean_brand
-          '
-        - if shot.bean_type.present?
-          = shot.bean_type
-          '
-        - if shot.roast_level.present?
-          | (
-          = shot.roast_level
-          ' )
-        - if shot.roast_date.present?
-          ' on
-          = shot.roast_date
-      div
-        - if bean_weight > 0
-          = shot.bean_weight
-          | g
-        - if bean_weight > 0 && drink_weight > 0
-          | :
-        - if drink_weight > 0
-          = shot.drink_weight
-          | g
-          '
-        - if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite?
-          | (1:
-          = ratio.round(1)
-          |)
-        - if bean_weight > 0 || drink_weight > 0
-          '  in
-        = shot.duration.round(1)
-        | s
-      div
-        - if shot.grinder_model.present?
-          = shot.grinder_model
-          '
-        - if shot.grinder_setting.present?
-          ' @
-          = shot.grinder_setting
-      div
-        - if tds > 0
-          ' TDS
-          = tds
-          ' %
-        - if tds > 0 && ey > 0
-          '
-        - if ey > 0
-          ' EY
-          = ey
-          ' %
-      - if shot.barista.present?
-        .mt-2
-          span.font-medium.text-stone-900.dark:text-stone-100 Barista:&nbsp;
-          span = shot.barista
-      - if shot.bean_notes.present?
-        .mt-2
-          .font-medium.text-stone-900.dark:text-stone-100 Bean notes:
-          = markdown_text_from(shot.bean_notes)
-      - if shot.espresso_notes.present?
-        .mt-2
-          .font-medium.text-stone-900.dark:text-stone-100 Notes:
-          = markdown_text_from(shot.espresso_notes)
-      - if owner && shot.private_notes.present?
-        .mt-2
-          .font-medium.text-stone-900.dark:text-stone-100 Private notes:
-          = markdown_text_from(shot.private_notes)
+.mt-2.text-base.text-stone-600.dark:text-stone-400
+  div
+    - if shot.bean_brand.present?
+      = shot.bean_brand
+      '
+    - if shot.bean_type.present?
+      = shot.bean_type
+      '
+    - if shot.roast_level.present?
+      | (
+      = shot.roast_level
+      ' )
+    - if shot.roast_date.present?
+      ' on
+      = shot.roast_date
+  div
+    - if bean_weight > 0
+      = shot.bean_weight
+      | g
+    - if bean_weight > 0 && drink_weight > 0
+      | :
+    - if drink_weight > 0
+      = shot.drink_weight
+      | g
+      '
+    - if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite?
+      | (1:
+      = ratio.round(1)
+      |)
+    - if bean_weight > 0 || drink_weight > 0
+      '  in
+    = shot.duration.round(1)
+    | s
+  div
+    - if shot.grinder_model.present?
+      = shot.grinder_model
+      '
+    - if shot.grinder_setting.present?
+      ' @
+      = shot.grinder_setting
+  div
+    - if tds > 0
+      ' TDS
+      = tds
+      ' %
+    - if tds > 0 && ey > 0
+      '
+    - if ey > 0
+      ' EY
+      = ey
+      ' %
+  - if shot.barista.present?
+    .mt-2
+      span.font-medium.text-stone-900.dark:text-stone-100 Barista:&nbsp;
+      span = shot.barista
+  - if shot.bean_notes.present?
+    .mt-2
+      .font-medium.text-stone-900.dark:text-stone-100 Bean notes:
+      = markdown_text_from(shot.bean_notes)
+  - if shot.espresso_notes.present?
+    .mt-2
+      .font-medium.text-stone-900.dark:text-stone-100 Notes:
+      = markdown_text_from(shot.espresso_notes)
+  - if owner && shot.private_notes.present?
+    .mt-2
+      .font-medium.text-stone-900.dark:text-stone-100 Private notes:
+      = markdown_text_from(shot.private_notes)
