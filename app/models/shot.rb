@@ -62,12 +62,6 @@ class Shot < ApplicationRecord
     super.presence || {}
   end
 
-  memoize def duration
-    return super if super.present?
-    index = [data["espresso_flow"].size, timeframe.size].min
-    timeframe[index - 1].to_f
-  end
-
   memoize def profile_fields
     super.presence || {}
   end

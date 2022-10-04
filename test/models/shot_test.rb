@@ -12,6 +12,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 100, shot.timeframe.size
     assert_equal "0.044", shot.timeframe.first
     assert_equal "24.793", shot.timeframe.last
+    assert_equal 24.793, shot.duration
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 101, shot.data["espresso_pressure"].size
     assert_equal 16, shot.extra.keys.size
@@ -45,6 +46,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 109, shot.timeframe.size
     assert_equal "0.044", shot.timeframe.first
     assert_equal "26.999", shot.timeframe.last
+    assert_equal 26.999, shot.duration
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 110, shot.data["espresso_pressure"].size
     assert_equal 18, shot.extra.keys.size
@@ -79,6 +81,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 109, shot.timeframe.size
     assert_equal "0.044", shot.timeframe.first
     assert_equal "26.999", shot.timeframe.last
+    assert_equal 26.999, shot.duration
     assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
     assert_equal 110, shot.data["espresso_pressure"].size
     assert_equal 16, shot.extra.keys.size
