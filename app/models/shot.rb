@@ -50,6 +50,8 @@ class Shot < ApplicationRecord
     end
     self.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
     self.barista = extra["my_name"].presence
+    index = [data["espresso_flow"].size, timeframe.size].min
+    self.duration = timeframe[index - 1].to_f
   end
 
   def fahrenheit?
@@ -61,6 +63,7 @@ class Shot < ApplicationRecord
   end
 
   memoize def duration
+    return super if super.present?
     index = [data["espresso_flow"].size, timeframe.size].min
     timeframe[index - 1].to_f
   end
@@ -144,6 +147,7 @@ end
 #  drink_ey           :string
 #  drink_tds          :string
 #  drink_weight       :string
+#  duration           :float
 #  espresso_enjoyment :integer
 #  espresso_notes     :text
 #  extra              :jsonb
