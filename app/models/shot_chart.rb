@@ -127,7 +127,10 @@ class ShotChart
   end
 
   def process_data(shot, label_suffix: nil)
-    shot.information ||= ShotInformation.from_shot(shot) # TODO: DELETE THIS
+    if shot.information.nil? # TODO: DELETE THIS
+      ShotInformation.from_shot(shot)
+      shot.reload
+    end
     timeframe = shot.information.timeframe
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f

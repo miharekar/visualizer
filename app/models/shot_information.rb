@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShotInformation < ApplicationRecord
   JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
 
@@ -6,15 +8,15 @@ class ShotInformation < ApplicationRecord
   belongs_to :shot
 
   def self.from_shot(shot)
+    return if exists?(shot_id: shot.id)
+
+    columns = ["data", "extra", "profile_fields", "timeframe"]
+    nullified = columns.index_with { |c| nil }
     ActiveRecord::Base.transaction do
-      columns = column_names - %w[id shot_id]
-      shot = Shot.where(id: shot.id).select(["id"] + columns).first
-      information = ShotInformation.new(shot_id: shot["id"])
-      columns.each do |column|
-        information[column] = shot[column]
-      end
-      information.save!
-      information
+      information = {shot_id: shot["id"]}
+      columns.each { |column| information[column] = shot[column] }
+      ShotInformation.insert!(information) # rubocop:disable Rails/SkipsModelValidations
+      Shot.find(shot["id"]).update_columns(nullified) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
