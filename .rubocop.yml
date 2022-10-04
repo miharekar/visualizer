@@ -13,6 +13,9 @@ AllCops:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
+Layout/EmptyLineAfterGuardClause:
+  Enabled: true
+
 Style/Send:
   Enabled: true
 

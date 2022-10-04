@@ -36,7 +36,12 @@ class Shot < ApplicationRecord
       shot.public_send("#{m}=", parsed_shot.public_send(m))
     end
     shot.extract_fields_from_extra
+    shot.duration = shot.calculate_duration
     shot
+  rescue => e
+    raise e if Rails.env.development?
+
+    Sentry.capture_exception(e, extra: {file:, user:})
   end
 
   def related_shots(limit: 5)
@@ -50,12 +55,15 @@ class Shot < ApplicationRecord
     end
     self.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
     self.barista = extra["my_name"].presence
-    index = [data["espresso_flow"].size, timeframe.size].min
-    self.duration = timeframe[index - 1].to_f
   end
 
   def fahrenheit?
     extra["enable_fahrenheit"].to_i == 1
+  end
+
+  def calculate_duration
+    index = [data["espresso_flow"].size, timeframe.size].min
+    timeframe[index - 1].to_f
   end
 
   memoize def extra
