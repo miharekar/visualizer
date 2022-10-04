@@ -27,6 +27,12 @@ Style/HashSyntax:
 Style/FrozenStringLiteralComment:
   Enabled: true
 
+Style/SymbolArray:
+  Enabled: true
+
+Style/WordArray:
+  Enabled: true
+
 Rails/I18nLocaleTexts:
   Enabled: false
 
