@@ -12,9 +12,12 @@
               - hue = (124.0 / 100 * @shot.espresso_enjoyment.to_i).round
               = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: hsl(#{hue}, 70%, 50%);", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-stone-800", data: {action: "input->range#update", range_target: "number"}
               = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update", range_target: "range"}
-          .col-span-6
+          .col-span-6.sm:col-span-3
             = f.label :profile_title, class: "standard-label"
             = f.text_field :profile_title, class: "standard-input"
+          .col-span-6.sm:col-span-3
+            = f.label :barista, class: "standard-label"
+            = f.text_field :barista, class: "standard-input"
           .col-span-6.sm:col-span-3
             = f.label :bean_weight, class: "standard-label"
             = f.text_field :bean_weight, class: "standard-input", data: {ey_calculator_target: "beanWeight"}

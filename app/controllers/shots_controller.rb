@@ -17,6 +17,7 @@ class ShotsController < ApplicationController
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
 
     return if current_user.nil?
+
     @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
   rescue ActiveRecord::RecordNotFound
     redirect_to :root
@@ -112,7 +113,7 @@ class ShotsController < ApplicationController
   end
 
   def shot_params
-    params.require(:shot).permit(:image, :profile_title, :bean_weight, :private_notes, *Shot::EXTRA_DATA_METHODS)
+    params.require(:shot).permit(:image, :profile_title, :barista, :bean_weight, :private_notes, *Shot::EXTRA_DATA_METHODS)
   end
 
   def load_shots_with_pagy
