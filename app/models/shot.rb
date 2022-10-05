@@ -30,7 +30,8 @@ class Shot < ApplicationRecord
   def self.from_file(user, file)
     return if file.blank?
 
-    parsed_shot = ShotParser.new(File.read(file))
+    file_content = File.read(file)
+    parsed_shot = ShotParser.new(file_content)
     shot = find_or_initialize_by(user:, sha: parsed_shot.sha)
     %i[profile_title start_time timeframe data extra profile_fields].each do |m|
       shot.public_send("#{m}=", parsed_shot.public_send(m))
@@ -41,7 +42,9 @@ class Shot < ApplicationRecord
   rescue => e
     raise e if Rails.env.development?
 
-    Sentry.capture_exception(e, extra: {file:, user:})
+    Sentry.capture_exception(e, extra: {file_content:, user_id: user.id})
+    shot.sha = nil # Ensure the shot will fail validation
+    shot
   end
 
   def related_shots(limit: 5)
