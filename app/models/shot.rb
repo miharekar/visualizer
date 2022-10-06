@@ -65,7 +65,7 @@ class Shot < ApplicationRecord
   end
 
   def calculate_duration
-    index = [data["espresso_flow"].size, timeframe.size].min
+    index = [Array(data["espresso_flow"]).size, timeframe.size].min
     timeframe[index - 1].to_f
   end
 
