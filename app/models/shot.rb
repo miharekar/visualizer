@@ -42,7 +42,13 @@ class Shot < ApplicationRecord
   rescue => e
     raise e if Rails.env.development?
 
-    Sentry.capture_exception(e, extra: {file_content:, user_id: user.id})
+    s3_response = Aws::S3::Client.new.put_object(
+      acl: "private",
+      body: file_content,
+      bucket: "visualizer-coffee",
+      key: "debug/#{Time.zone.now.iso8601}.json"
+    )
+    Sentry.capture_exception(e, extra: {etag: s3_response&.etag, user_id: user.id})
     shot.sha = nil # Ensure the shot will fail validation
     shot
   end
