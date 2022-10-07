@@ -39,7 +39,7 @@ class Shot < ApplicationRecord
     if shot.valid?
       shot.extract_fields_from_extra
       shot.duration = shot.calculate_duration
-    else
+    elsif Rails.env.production?
       s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file_content, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
       Sentry.capture_message("Something is wrong with this file", level: "debug", extra: {etag: s3_response.etag}, user: {id: user.id, email: user.email})
     end

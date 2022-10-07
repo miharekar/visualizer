@@ -128,4 +128,10 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
     assert_equal File.read("#{path}.json"), shot.json_profile
   end
+
+  test "handles invalid profile string" do
+    path = "test/fixtures/files/invalid_profile"
+    shot = Shot.from_file(users(:miha), "#{path}.json")
+    assert_not shot.valid?
+  end
 end
