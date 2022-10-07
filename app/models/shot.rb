@@ -36,20 +36,13 @@ class Shot < ApplicationRecord
     %i[profile_title start_time timeframe data extra profile_fields].each do |m|
       shot.public_send("#{m}=", parsed_shot.public_send(m))
     end
-    shot.extract_fields_from_extra
-    shot.duration = shot.calculate_duration
-    shot
-  rescue => e
-    raise e if Rails.env.development?
-
-    s3_response = Aws::S3::Client.new.put_object(
-      acl: "private",
-      body: file_content,
-      bucket: "visualizer-coffee",
-      key: "debug/#{Time.zone.now.iso8601}.json"
-    )
-    Sentry.capture_exception(e, extra: {etag: s3_response&.etag, user_id: user.id})
-    shot.sha = nil # Ensure the shot will fail validation
+    if shot.valid?
+      shot.extract_fields_from_extra
+      shot.duration = shot.calculate_duration
+    else
+      s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file_content, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
+      Sentry.capture_message("Something is wrong with this file", level: "debug", extra: {etag: s3_response.etag}, user: {id: user.id, email: user.email})
+    end
     shot
   end
 
