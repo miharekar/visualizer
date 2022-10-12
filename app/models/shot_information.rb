@@ -10,13 +10,10 @@ class ShotInformation < ApplicationRecord
   def self.from_shot(shot)
     return if exists?(shot_id: shot.id)
 
-    columns = ["data", "extra", "profile_fields", "timeframe"]
-    nullified = columns.index_with { |c| nil }
     ActiveRecord::Base.transaction do
       information = {shot_id: shot["id"]}
-      columns.each { |column| information[column] = shot[column] }
+      Shot::INFORMATION_KEYS.each { |column| information[column] = shot[column] }
       ShotInformation.insert!(information) # rubocop:disable Rails/SkipsModelValidations
-      Shot.find(shot["id"]).update_columns(nullified) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 

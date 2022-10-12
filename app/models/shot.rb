@@ -4,6 +4,7 @@ class Shot < ApplicationRecord
   SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
+  INFORMATION_KEYS = %w[data extra profile_fields timeframe].freeze
 
   belongs_to :user, optional: true, touch: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy
@@ -25,6 +26,18 @@ class Shot < ApplicationRecord
 
   validates :start_time, :information, :sha, presence: true
 
+  INFORMATION_KEYS.each do |m|
+    define_method(m) do
+      if Rails.env.development?
+        raise "Shot##{m} called directly, use ShotInformation##{m} instead"
+      else
+        Sentry.capture_message("Shot##{m} called on shot directly", level: "debug", extra: {id:, user_id:})
+      end
+
+      information&.public_send(m)
+    end
+  end
+
   def self.from_file(user, file)
     return if file.blank?
 
@@ -34,7 +47,8 @@ class Shot < ApplicationRecord
     shot.profile_title = parsed_shot.profile_title
     shot.start_time = parsed_shot.start_time
     shot.information ||= shot.build_information
-    %i[timeframe data extra profile_fields].each do |m|
+    INFORMATION_KEYS.each do |m|
+      shot.public_send("#{m}=", parsed_shot.public_send(m))
       shot.information.public_send("#{m}=", parsed_shot.public_send(m))
     end
     if shot.valid?
@@ -85,21 +99,25 @@ end
 #  bean_notes         :text
 #  bean_type          :string
 #  bean_weight        :string
+#  data               :jsonb
 #  drink_ey           :string
 #  drink_tds          :string
 #  drink_weight       :string
 #  duration           :float
 #  espresso_enjoyment :integer
 #  espresso_notes     :text
+#  extra              :jsonb
 #  grinder_model      :string
 #  grinder_setting    :string
 #  private_notes      :text
+#  profile_fields     :jsonb
 #  profile_title      :string
 #  roast_date         :string
 #  roast_level        :string
 #  s3_etag            :string
 #  sha                :string
 #  start_time         :datetime
+#  timeframe          :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :uuid

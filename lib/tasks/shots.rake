@@ -5,15 +5,12 @@ namespace :shots do
     missing = Shot.pluck(:id) - ShotInformation.pluck(:shot_id)
     puts "Filling data for #{missing.count} shots"
     i = 0
-    columns = %w[data extra profile_fields timeframe]
-    nullified = columns.index_with { |c| nil }
-    attrs = ["id"] + columns
-    info_attrs = ["shot_id"] + columns
+    attrs = ["id"] + Shot::INFORMATION_KEYS
+    info_attrs = ["shot_id"] + Shot::INFORMATION_KEYS
     missing.in_groups_of(100, false) do |group|
       ActiveRecord::Base.transaction do
         informations = Shot.where(id: group).pluck(*attrs).map { |s| info_attrs.zip(s).to_h }
         ShotInformation.insert_all!(informations) # rubocop:disable Rails/SkipsModelValidations
-        Shot.where(id: group).update_all(nullified) # rubocop:disable Rails/SkipsModelValidations
       end
 
       i += group.size
