@@ -44,7 +44,7 @@ class ShotParser
     extract_clock(parsed["timestamp"])
     extract_espresso_elapsed(parsed["elapsed"])
     @profile_fields["json"] = parsed["profile"]
-    @profile_title = parsed["profile"]["title"]
+    @profile_title = parsed.dig("profile", "title")
 
     %w[pressure flow resistance].each do |key|
       @data["espresso_#{key}"] = parsed.dig(key, key)
