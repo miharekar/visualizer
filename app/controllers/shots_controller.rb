@@ -74,6 +74,7 @@ class ShotsController < ApplicationController
   end
 
   def destroy
+    ShotInformation.where(shot: @shot).delete_all
     @shot.destroy!
 
     respond_to do |format|
