@@ -9,13 +9,13 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal users(:miha), shot.user
     assert_equal "JoeD's Easy blooming slow ramp to 7 bar", shot.profile_title
     assert_equal "2021-09-21 06:59:10", shot.start_time.to_fs(:db)
-    assert_equal 100, shot.timeframe.size
-    assert_equal "0.044", shot.timeframe.first
-    assert_equal "24.793", shot.timeframe.last
+    assert_equal 100, shot.information.timeframe.size
+    assert_equal "0.044", shot.information.timeframe.first
+    assert_equal "24.793", shot.information.timeframe.last
     assert_equal 24.793, shot.duration
-    assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
-    assert_equal 101, shot.data["espresso_pressure"].size
-    assert_equal 16, shot.extra.keys.size
+    assert_equal Shot::DATA_LABELS.sort, shot.information.data.keys.sort
+    assert_equal 101, shot.information.data["espresso_pressure"].size
+    assert_equal 16, shot.information.extra.keys.size
     assert_equal "38.8", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.1", shot.grinder_setting
@@ -28,13 +28,13 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 70, shot.espresso_enjoyment
     assert_equal "Neat.", shot.espresso_notes
     assert_equal "With BPlus", shot.bean_notes
-    assert_equal "Miha Rekar", shot.extra["my_name"]
+    assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
-    assert_equal "MimojaCafe", shot.extra["skin"]
-    # FileUtils.cp(shot.tcl_profile, "#{path}.tcl")
-    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
-    # File.write("#{path}.json", shot.json_profile)
-    assert_equal File.read("#{path}.json"), shot.json_profile
+    assert_equal "MimojaCafe", shot.information.extra["skin"]
+    # FileUtils.cp(shot.information.tcl_profile, "#{path}.tcl")
+    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    # File.write("#{path}.json", shot.information.json_profile)
+    assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
@@ -43,14 +43,14 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
-    assert_equal 109, shot.timeframe.size
-    assert_equal "0.044", shot.timeframe.first
-    assert_equal "26.999", shot.timeframe.last
+    assert_equal 109, shot.information.timeframe.size
+    assert_equal "0.044", shot.information.timeframe.first
+    assert_equal "26.999", shot.information.timeframe.last
     assert_equal 26.999, shot.duration
-    assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
-    assert_equal 110, shot.data["espresso_pressure"].size
-    assert_equal 18, shot.extra.keys.size
-    assert_equal 46, shot.profile_fields.keys.size
+    assert_equal Shot::DATA_LABELS.sort, shot.information.data.keys.sort
+    assert_equal 110, shot.information.data["espresso_pressure"].size
+    assert_equal 18, shot.information.extra.keys.size
+    assert_equal 46, shot.information.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.4", shot.grinder_setting
@@ -63,11 +63,11 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 0, shot.espresso_enjoyment
     assert_nil shot.espresso_notes
     assert_equal "With BPlus", shot.bean_notes
-    assert_equal "Miha Rekar", shot.extra["my_name"]
+    assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
-    assert_equal "MimojaCafe", shot.extra["skin"]
-    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
-    assert_equal File.read("#{path}.json_profile"), shot.json_profile
+    assert_equal "MimojaCafe", shot.information.extra["skin"]
+    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.json_profile"), shot.information.json_profile
 
     shot.save!
     old_id = shot.id
@@ -78,14 +78,14 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
-    assert_equal 109, shot.timeframe.size
-    assert_equal "0.044", shot.timeframe.first
-    assert_equal "26.999", shot.timeframe.last
+    assert_equal 109, shot.information.timeframe.size
+    assert_equal "0.044", shot.information.timeframe.first
+    assert_equal "26.999", shot.information.timeframe.last
     assert_equal 26.999, shot.duration
-    assert_equal Shot::DATA_LABELS.sort, shot.data.keys.sort
-    assert_equal 110, shot.data["espresso_pressure"].size
-    assert_equal 16, shot.extra.keys.size
-    assert_equal 46, shot.profile_fields.keys.size
+    assert_equal Shot::DATA_LABELS.sort, shot.information.data.keys.sort
+    assert_equal 110, shot.information.data["espresso_pressure"].size
+    assert_equal 16, shot.information.extra.keys.size
+    assert_equal 46, shot.information.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.4", shot.grinder_setting
@@ -98,35 +98,35 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 80, shot.espresso_enjoyment
     assert_nil shot.espresso_notes
     assert_equal "With BPlus", shot.bean_notes
-    assert_equal "Miha Rekar", shot.extra["my_name"]
+    assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
-    assert_equal "MimojaCafe", shot.extra["skin"]
-    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
-    assert_equal File.read("#{path}.json_profile"), shot.json_profile
+    assert_equal "MimojaCafe", shot.information.extra["skin"]
+    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.json_profile"), shot.information.json_profile
   end
 
   test "extracts the non-zero bean weight" do
     path = "test/fixtures/files/dsx_weight"
     shot = Shot.from_file(users(:miha), "#{path}.shot")
     assert_equal 18.0, shot.bean_weight.to_f
-    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
-    assert_equal File.read("#{path}.json"), shot.json_profile
+    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
   test "handles invalid machine string" do
     path = "test/fixtures/files/invalid_machine"
     shot = Shot.from_file(users(:miha), "#{path}.shot")
     assert_equal "Cremina lever machine", shot.profile_title
-    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
-    assert_equal File.read("#{path}.json"), shot.json_profile
+    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
   test "handles brackets in advanced steps" do
     path = "test/fixtures/files/brackets"
     shot = Shot.from_file(users(:miha), "#{path}.shot")
     assert_equal "manual 82", shot.profile_title
-    assert_equal File.read("#{path}.tcl"), File.read(shot.tcl_profile)
-    assert_equal File.read("#{path}.json"), shot.json_profile
+    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
   test "handles invalid profile string" do

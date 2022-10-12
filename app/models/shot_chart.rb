@@ -28,7 +28,7 @@ class ShotChart
   end
 
   memoize def stages
-    indices = shot.data.key?("espresso_state_change") ? stages_from_state_change(shot.data["espresso_state_change"]) : detect_stages_from_data(shot.data)
+    indices = shot.information.data.key?("espresso_state_change") ? stages_from_state_change(shot.information.data["espresso_state_change"]) : detect_stages_from_data(shot.information.data)
     processed_shot_data.first.second.values_at(*indices).map { |d| {value: d.first} }
   end
 
@@ -127,12 +127,16 @@ class ShotChart
   end
 
   def process_data(shot, label_suffix: nil)
-    timeframe = shot.timeframe
+    if shot.information.nil? # TODO: DELETE THIS
+      ShotInformation.from_shot(shot)
+      shot.reload
+    end
+    timeframe = shot.information.timeframe
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f
     timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
-    in_fahrenheit = shot.fahrenheit?
-    shot.data.filter_map do |label, data|
+    in_fahrenheit = shot.information.fahrenheit?
+    shot.information.data.filter_map do |label, data|
       next if DATA_LABELS_TO_IGNORE.include?(label)
 
       times10 = label == "espresso_water_dispensed"

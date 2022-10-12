@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_04_084040) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_04_091352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -109,6 +109,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_084040) do
     t.index ["user_id"], name: "index_shared_shots_on_user_id"
   end
 
+  create_table "shot_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "shot_id", null: false
+    t.jsonb "data"
+    t.jsonb "extra"
+    t.jsonb "profile_fields"
+    t.jsonb "timeframe"
+    t.index ["shot_id"], name: "index_shot_informations_on_shot_id"
+  end
+
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "start_time", precision: nil
     t.jsonb "data"
@@ -180,5 +189,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_084040) do
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "shared_shots", "shots"
   add_foreign_key "shared_shots", "users"
+  add_foreign_key "shot_informations", "shots"
   add_foreign_key "shots", "users"
 end
