@@ -7,16 +7,6 @@ class ShotInformation < ApplicationRecord
 
   belongs_to :shot
 
-  def self.from_shot(shot)
-    return if exists?(shot_id: shot.id)
-
-    ActiveRecord::Base.transaction do
-      information = {shot_id: shot["id"]}
-      Shot::INFORMATION_KEYS.each { |column| information[column] = shot[column] }
-      ShotInformation.insert!(information) # rubocop:disable Rails/SkipsModelValidations
-    end
-  end
-
   def fahrenheit?
     extra["enable_fahrenheit"].to_i == 1
   end
