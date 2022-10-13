@@ -83,10 +83,6 @@ module Api
     def with_shot
       shot = Shot.find_by(id: params[:shot_id])
       if shot
-        if shot.information.nil? # TODO: DELETE THIS
-          ShotInformation.from_shot(shot)
-          shot.reload
-        end
         yield(shot)
       else
         render json: {error: "Shot not found"}, status: :not_found
