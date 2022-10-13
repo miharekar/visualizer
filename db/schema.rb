@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_04_091352) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -120,11 +120,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_091352) do
 
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "start_time", precision: nil
-    t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_title"
-    t.jsonb "extra"
     t.uuid "user_id"
     t.string "drink_tds"
     t.string "drink_ey"
@@ -138,11 +136,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_091352) do
     t.string "roast_date"
     t.text "espresso_notes"
     t.string "sha"
-    t.jsonb "timeframe"
     t.string "roast_level"
     t.text "bean_notes"
     t.string "s3_etag"
-    t.jsonb "profile_fields"
     t.string "barista"
     t.text "private_notes"
     t.float "duration"

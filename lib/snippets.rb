@@ -1,16 +1,5 @@
 # frozen_string_literal: true
 
-def clear_duplicates
-  duplicates = ShotInformation.select("shot_id, count(shot_id)").group(:shot_id).having("count(shot_id) > 1").pluck("shot_id")
-  puts "Found #{duplicates} duplicates"
-  ShotInformation.where(shot_id: duplicates).delete_all
-  Shot.where(id: duplicates).each do |shot|
-    ShotInformation.from_shot(shot)
-  end
-  puts "Cleared #{duplicates.count} duplicates"
-end
-clear_duplicates
-
 def top_profiles(from:)
   profiles = Shot.where(created_at: from..).pluck(:profile_title)
   total = profiles.size.to_f
