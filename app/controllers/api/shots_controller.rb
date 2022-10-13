@@ -70,7 +70,6 @@ module Api
     def destroy
       shot = current_user.shots.find_by(id: params[:id])
       if shot
-        ShotInformation.where(shot:).delete_all
         shot.destroy!
         render json: {success: true}
       else
