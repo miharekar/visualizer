@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PeopleController < ApplicationController
-  SEARCH_LIMIT = 12
+  SEARCH_LIMIT = 15
   include Pagy::Backend
 
   def index
