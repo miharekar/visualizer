@@ -101,7 +101,7 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.645.0)
+    aws-partitions (1.646.0)
     aws-sdk-core (3.160.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -442,4 +442,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.21
+   2.3.23
