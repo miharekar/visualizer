@@ -90,8 +90,16 @@ function syncExtremes(e) {
   }
 }
 
+function isDark() {
+  if (document.body.classList.contains("system")) {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+  } else {
+    return document.body.classList.contains("dark")
+  }
+}
+
 function getColors() {
-  if (document.body.classList.contains("dark")) {
+  if (isDark()) {
     return {
       background: "#000000",
       label: "#999999",
@@ -367,5 +375,17 @@ document.addEventListener("turbo:load", function () {
   if (window.shotStages?.length > 0) {
     window.shotStages = window.shotStages.map((x) => { return { ...x, id: x } })
     drawShotStages()
+  }
+})
+
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+  if (document.body.classList.contains("system")) {
+    if (document.getElementById("shot-chart")) {
+      drawShotChart()
+    }
+
+    if (document.getElementById("temperature-chart")) {
+      drawTemperatureChart()
+    }
   }
 })

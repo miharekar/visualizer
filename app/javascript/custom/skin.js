@@ -1,8 +1,12 @@
 function setDarkMode() {
   if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    document.cookie = "browser.colorscheme=dark; path=/"
+    if (document.body.classList.contains("system")) {
+      document.body.classList.add("dark")
+    }
   } else {
-    document.cookie = "browser.colorscheme=light; path=/"
+    if (document.body.classList.contains("system")) {
+      document.body.classList.remove("dark")
+    }
   }
 }
 
