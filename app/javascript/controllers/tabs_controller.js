@@ -4,12 +4,16 @@ export default class extends Controller {
   static targets = ["tab", "panel", "icon"]
 
   connect() {
-    this.showTab()
+    this.activeTabClasses = (this.data.get("activeTab")).split(" ")
+    this.inactiveTabClasses = (this.data.get("inactiveTab")).split(" ")
+    this.activeIconClasses = (this.data.get("activeIcon")).split(" ")
+    this.inactiveIconClasses = (this.data.get("inactiveIcon")).split(" ")
   }
 
   change(event) {
     event.preventDefault()
     this.index = this.tabTargets.indexOf(event.currentTarget)
+    document.cookie = "shots.selected_tab=" + (this.panelTargets[this.index].id || "") + "; path=/"
   }
 
   showTab() {
@@ -19,16 +23,16 @@ export default class extends Controller {
 
       if (index === this.index) {
         panel.classList.remove("hidden")
-        tab.classList.add("active", "border-emerald-500", "text-emerald-600")
-        tab.classList.remove("inactive", "border-transparent", "text-gray-500", "hover:text-gray-700", "hover:border-gray-300")
-        icon.classList.add("text-emerald-500")
-        icon.classList.remove("text-gray-400", "group-hover:text-gray-500")
+        tab.classList.add(...this.activeTabClasses)
+        tab.classList.remove(...this.inactiveTabClasses)
+        icon.classList.add(...this.activeIconClasses)
+        icon.classList.remove(...this.inactiveIconClasses)
       } else {
         panel.classList.add("hidden")
-        tab.classList.add("inactive", "border-transparent", "text-gray-500", "hover:text-gray-700", "hover:border-gray-300")
-        tab.classList.remove("active", "border-emerald-500", "text-emerald-600")
-        icon.classList.add("text-gray-400", "group-hover:text-gray-500")
-        icon.classList.remove("text-emerald-500")
+        tab.classList.add(...this.inactiveTabClasses)
+        tab.classList.remove(...this.activeTabClasses)
+        icon.classList.add(...this.inactiveIconClasses)
+        icon.classList.remove(...this.activeIconClasses)
       }
     })
   }

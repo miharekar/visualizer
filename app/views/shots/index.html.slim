@@ -7,7 +7,7 @@
         span#shots-count= pluralize(@shots_count, "Shot")
 #error.hidden
   = render "shared/banner", name: "alert", message: "Something went wrong"
-.max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
+.max-w-7xl.mx-auto.pb-6.sm:px-6.lg:px-8
   = render "tabs"
 .max-w-7xl.mx-auto.pb-6.sm:px-6.lg:px-8
   = turbo_stream_from current_user, :shots
