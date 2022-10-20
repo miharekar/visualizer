@@ -1,8 +1,8 @@
 import { Application } from "@hotwired/stimulus"
-import { Autocomplete } from 'stimulus-autocomplete'
+import { Autocomplete } from "stimulus-autocomplete"
 
 const application = Application.start()
-application.register('autocomplete', Autocomplete)
+application.register("autocomplete", Autocomplete)
 
 // Configure Stimulus development experience
 application.warnings = true

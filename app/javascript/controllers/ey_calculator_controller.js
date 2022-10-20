@@ -12,6 +12,6 @@ export default class extends Controller {
   }
 
   getFloatFromString(string) {
-    return parseFloat(string.replace(',', '.').replace(' ', ''))
+    return parseFloat(string.replace(",", ".").replace(" ", ""))
   }
 }
