@@ -17,11 +17,11 @@ class ShotsController < ApplicationController
   end
 
   def recents
-    @recents = current_user.shots.by_start_time.where("espresso_enjoyment > 0").where(created_at: 6.months.ago..)
-    @recents = @recents.non_premium unless current_user.premium?
-
-    @recents = @recents.group_by { |shot| [shot.bean_type, shot.bean_brand] }.map do |bean_group, shots|
-      [bean_group, shots.group_by { |shot| [shot.profile_title, shot.grinder_model] }]
+    @recents = current_user.shots.by_start_time.
+      where(start_time: 2.weeks.ago..).
+      group_by { |s| [s.bean_brand, s.bean_type] }.
+      map do |bean_group, shots|
+      [bean_group, shots.group_by { |s| [s.profile_title, s.grinder_model] }]
     end
   end
 

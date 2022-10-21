@@ -1,15 +1,40 @@
 <%= turbo_frame_tag :recents do %>
-  <% @recents.each do |bean_group, data| %>
-    <%= bean_group %>
-    <br>
-    <% data.each do |profile_group, shots| %>
-      <%= profile_group %>
-      <% shots.each do |shot| %>
-        <%= shot.grinder_setting %>
-      <% end %>
-      <br>
-    <% end %>
-    <br>
-    <br>
-  <% end %>
+  <% search_params = {commit: "Search", user_id: current_user.id, user: current_user.display_name} %>
+  <div>
+    <div>
+      <h3 class="text-lg font-medium leading-6 text-stone-900">Recent grinder settings by coffee and profile</h3>
+    </div>
+    <div class="mt-5 border-t border-stone-200">
+      <dl class="sm:divide-y sm:divide-stone-200">
+        <% @recents.each do |bean_group, data| %>
+          <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-stone-900">
+              <span class="font-medium"><%= bean_group.first %></span>
+              <br>
+              <span><%= bean_group.second %></span>
+            </dt>
+            <dd class="mt-1 text-sm text-stone-900 sm:col-span-2 sm:mt-0">
+              <ul role="list" class="divide-y divide-stone-200 rounded-md border border-stone-200">
+                <% data.each do |profile_group, shots| %>
+                  <% shot = shots.first %>
+                  <li class="flex items-center justify-between py-3 pl-3 pr-4">
+                    <div class="flex w-0 flex-1 items-center">
+                      <span class="ml-2 w-0 flex-1 truncate">
+                        <span class="font-medium"><%= shot.grinder_setting %></span>
+                        with
+                        <%= profile_group.join(" on ") %>
+                      </span>
+                    </div>
+                    <div class="ml-4 flex-shrink-0">
+                      <%= link_to "View", search_index_path(search_params.merge(%i[bean_brand bean_type profile_title grinder_model].map{|m| [m, shot.public_send(m)]}.to_h)), class: "font-medium text-emerald-600 hover:text-emerald-500" %>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    </div>
+  </div>
 <% end %>
