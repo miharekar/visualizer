@@ -33,12 +33,16 @@
   </div>
   <div id="tab-enjoyment" class="<%= selected == "tab-enjoyment" ? "" : "hidden" %> overflow-hidden sm:rounded-b-lg" data-tabs-target="panel">
     <div class="px-4 py-5 sm:p-6">
-      Historical Enjoyment Chart
+      <%= turbo_frame_tag :enjoyments, src: enjoyments_shots_path, loading: :lazy do %>
+        Loading...
+      <% end %>
     </div>
   </div>
   <div id="tab-coffees" class="<%= selected == "tab-coffees" ? "" : "hidden" %> overflow-hidden sm:rounded-b-lg" data-tabs-target="panel">
     <div class="px-4 py-5 sm:p-6">
-      Last coffee/profile combo settings
+      <%= turbo_frame_tag :recents, src: recents_shots_path, loading: :lazy do %>
+        Loading...
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,0 +1,15 @@
+<%= turbo_frame_tag :recents do %>
+  <% @recents.each do |bean_group, data| %>
+    <%= bean_group %>
+    <br>
+    <% data.each do |profile_group, shots| %>
+      <%= profile_group %>
+      <% shots.each do |shot| %>
+        <%= shot.grinder_setting %>
+      <% end %>
+      <br>
+    <% end %>
+    <br>
+    <br>
+  <% end %>
+<% end %>

@@ -11,6 +11,20 @@ class ShotsController < ApplicationController
     load_shots_with_pagy
   end
 
+  def enjoyments
+    @enjoyments = current_user.shots.by_start_time.where("espresso_enjoyment > 0")
+    @enjoyments = @enjoyments.non_premium unless current_user.premium?
+  end
+
+  def recents
+    @recents = current_user.shots.by_start_time.where("espresso_enjoyment > 0").where(created_at: 6.months.ago..)
+    @recents = @recents.non_premium unless current_user.premium?
+
+    @recents = @recents.group_by { |shot| [shot.bean_type, shot.bean_brand] }.map do |bean_group, shots|
+      [bean_group, shots.group_by { |shot| [shot.profile_title, shot.grinder_model] }]
+    end
+  end
+
   def show
     @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, current_user)
