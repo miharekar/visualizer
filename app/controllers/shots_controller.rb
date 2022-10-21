@@ -21,7 +21,7 @@ class ShotsController < ApplicationController
       where(start_time: 2.weeks.ago..).
       group_by { |s| [s.bean_brand, s.bean_type] }.
       map do |bean_group, shots|
-      [bean_group, shots.group_by { |s| [s.profile_title, s.grinder_model] }]
+      [bean_group, shots.group_by { |s| [s.grinder_model, s.profile_title] }]
     end
   end
 
