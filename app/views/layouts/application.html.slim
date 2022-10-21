@@ -1,5 +1,5 @@
 doctype html
-html
+html class=current_user&.skin&.downcase
   head
     meta content="width=device-width, initial-scale=1" name="viewport"
     title Decent Espresso Shot Visualizer
@@ -13,8 +13,9 @@ html
     link rel="manifest" href="/site.webmanifest"
     link rel="mask-icon" color="#000000" href="/safari-pinned-tab.svg?v=1"
     = stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload"
+    = javascript_include_tag "custom/skin"
     = javascript_importmap_tags
-  body.flex.flex-col.h-screen class=current_user&.skin&.downcase
+  body.flex.flex-col.h-screen
     header
       = render "shared/header"
     main.grow.dark:bg-black.dark:text-white

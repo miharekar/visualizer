@@ -91,10 +91,10 @@ function syncExtremes(e) {
 }
 
 function isDark() {
-  if (document.body.classList.contains("system")) {
+  if (document.documentElement.classList.contains("system")) {
     return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
   } else {
-    return document.body.classList.contains("dark")
+    return document.documentElement.classList.contains("dark")
   }
 }
 
@@ -379,7 +379,7 @@ document.addEventListener("turbo:load", function () {
 })
 
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
-  if (document.body.classList.contains("system")) {
+  if (document.documentElement.classList.contains("system")) {
     if (document.getElementById("shot-chart")) {
       drawShotChart()
     }
