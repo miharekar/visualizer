@@ -21,8 +21,9 @@ class ShotsController < ApplicationController
   end
 
   def enjoyments
-    enjoyments = current_user.shots.by_start_time.where("espresso_enjoyment > 0").where(created_at: 6.months.ago..)
-    enjoyments = @enjoyments.non_premium unless current_user.premium?
+    enjoyments = current_user.shots.by_start_time.
+      where("espresso_enjoyment > 0").
+      where(created_at: 6.months.ago..)
     @enjoyments_data = EnjoymentChart.new(enjoyments).chart
   end
 
