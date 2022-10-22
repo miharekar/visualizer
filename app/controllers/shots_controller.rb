@@ -38,6 +38,14 @@ class ShotsController < ApplicationController
     render json: {code: share.code}
   end
 
+  def edit
+    shots = current_user.shots
+    %i[grinder_model bean_brand bean_type].each do |method|
+      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).select(&:present?) }
+      instance_variable_set("@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
+    end
+  end
+
   def create
     files = Array(params[:files])
     files.each do |file|
@@ -52,21 +60,13 @@ class ShotsController < ApplicationController
     end
   end
 
-  def edit
-    shots = current_user.shots
-    %i[grinder_model bean_brand bean_type].each do |method|
-      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).select(&:present?) }
-      instance_variable_set("@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
-    end
-  end
-
   def update
     @shot.update(shot_params)
     if params[:shot][:image].present? && current_user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
         @shot.image.attach(params[:shot][:image])
       else
-        flash[:alert] = "Image must be a valid image file."
+        flash.now[:alert] = "Image must be a valid image file."
       end
     end
     flash[:notice] = "Shot successfully updated."

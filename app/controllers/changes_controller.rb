@@ -12,14 +12,14 @@ class ChangesController < ApplicationController
     @pagy, @changes = pagy(@changes, items: 3)
   end
 
+  def show
+  end
+
   def new
     @change = Change.new(published_at: Time.zone.today)
   end
 
   def edit
-  end
-
-  def show
   end
 
   def create
