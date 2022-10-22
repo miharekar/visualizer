@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   before_action :profiling
   before_action :set_timezone
+  before_action :set_skin
 
   private
 
@@ -17,6 +18,13 @@ class ApplicationController < ActionController::Base
   def set_timezone
     zone = current_user&.timezone.presence || cookies["browser.timezone"] || "UTC"
     @timezone = ActiveSupport::TimeZone.new(zone)
+  end
+
+  def set_skin
+    return unless current_user
+
+    @skin = current_user.skin&.downcase
+    @skin = [@skin, cookies["browser.colorscheme"].presence].compact.join(" ") if @skin == "system"
   end
 
   def check_admin!
