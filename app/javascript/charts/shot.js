@@ -191,9 +191,7 @@ function commonOptions() {
         }
       }
     },
-    credits: {
-      enabled: false
-    }
+    credits: { enabled: false }
   }
 }
 

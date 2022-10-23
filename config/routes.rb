@@ -47,6 +47,10 @@ Rails.application.routes.draw do
       get :share
       get "/compare/:comparison", to: "shots#compare"
     end
+    collection do
+      get :enjoyments
+      get :recents
+    end
   end
 
   resources :search, only: [:index] do
