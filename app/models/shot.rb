@@ -21,8 +21,6 @@ class Shot < ApplicationRecord
 
   after_create :ensure_screenshot
 
-  after_destroy_commit -> { broadcast_remove_to user, :shots }
-
   validates :start_time, :information, :sha, presence: true
 
   def self.from_file(user, file)
