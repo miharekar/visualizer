@@ -65,6 +65,7 @@ function commonOptions() {
             }
           }
         },
+        findNearestPointBy: "xy",
         states: { hover: { enabled: false } },
         animation: false,
         marker: {
