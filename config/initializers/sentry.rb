@@ -11,6 +11,4 @@ Sentry.init do |config|
   config.before_send = lambda do |event, _hint|
     filter.filter(event.to_hash)
   end
-
-  config.traces_sample_rate = 0.2
 end
