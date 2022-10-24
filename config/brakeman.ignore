@@ -1,7 +1,29 @@
 {
   "ignored_warnings": [
-
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "24903913370e8d5b067562d61add6bdd44b51686de430b706132a1f7c09e485d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/search_controller.rb",
+      "line": 30,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Shot.visible_or_owned_by_id(current_user.id).by_start_time.includes(:user).non_premium.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SearchController",
+        "method": "index"
+      },
+      "user_input": "filter",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    }
   ],
-  "updated": "2021-09-04 08:47:43 +0200",
-  "brakeman_version": "5.1.1"
+  "updated": "2022-10-24 12:35:01 +0200",
+  "brakeman_version": "5.3.1"
 }

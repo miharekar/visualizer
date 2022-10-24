@@ -10,6 +10,12 @@ module ApplicationHelper
     tag.div(text, class: "prose prose-stone dark:prose-invert")
   end
 
+  def faq_markdown_text_from(input, link_class: "")
+    text = Kramdown::Document.new(input, input: "GFM").to_html
+    text = text.gsub(/a href="([^"]+)"/, %(a class="#{link_class}" href="\\1" target="_blank"))
+    text.html_safe # rubocop:disable Rails/OutputSafety
+  end
+
   def avatar_url(user, size)
     user.avatar.attached? ? url_for(user.avatar) : "#{user.gravatar_url}?s=#{size}&d=mp"
   end
