@@ -11,8 +11,7 @@
 .flex
   .shrink-0
     - if has_enjoyment
-      - hue = (124.0 / 100 * shot.espresso_enjoyment).round
-      .flex.items-center.justify-center.h-12.w-12.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
+      .flex.items-center.justify-center.h-12.w-12.rounded-full style="background-color: #{enjoyment_hex(shot.espresso_enjoyment)};"
         .text-white.py-1.text-center
           = shot.espresso_enjoyment
   div class=("ml-4" if has_enjoyment)

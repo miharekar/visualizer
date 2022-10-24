@@ -23,8 +23,7 @@
             = f.label :min_enjoyment, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
             .flex.items-center.mt-1 data-controller="range"
               - min = params[:min_enjoyment].presence || 0
-              - hue = (124.0 / 100 * min.to_i).round
-              .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
+              .h-8.w-8.rounded-full style="background-color: #{enjoyment_hex(min)};" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="text"
                   = min
               = f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update"}
@@ -32,8 +31,7 @@
             = f.label :max_enjoyment, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
             .flex.items-center.mt-1 data-controller="range"
               - max = params[:max_enjoyment].presence || 100
-              - hue = (124.0 / 100 * max.to_i).round
-              .h-8.w-8.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);" data-range-target="color"
+              .h-8.w-8.rounded-full style="background-color: #{enjoyment_hex(max)};" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="text"
                   = max
               = f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update"}

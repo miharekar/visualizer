@@ -9,8 +9,7 @@
           .col-span-6
             = f.label :espresso_enjoyment, class: "standard-label"
             .flex.items-center.mt-1 data-controller="range"
-              - hue = (124.0 / 100 * @shot.espresso_enjoyment).round
-              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: hsl(#{hue}, 70%, 50%);", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-stone-800", data: {action: "input->range#update", range_target: "number"}
+              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-stone-800", data: {action: "input->range#update", range_target: "number"}
               = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update", range_target: "range"}
           .col-span-6.sm:col-span-3
             = f.label :profile_title, class: "standard-label"
