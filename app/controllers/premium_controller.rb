@@ -16,25 +16,25 @@ class PremiumController < ApplicationController
       "Get a checkmark next to your name"
     ].shuffle + ["Support development of new features"]
     @qas = [
-      ["What's the biggest difference between free and premium?", "With premium you can see all the shots you ever uploaded. On the free plan you only see and search amongst the ones that were made in the last month."]
+      ["What's the biggest difference between free and premium?", "With premium, you can see all the shots you ever uploaded. On the free plan, you only see and search amongst the ones that were made in the last month."]
     ] + [
-      ["How much does it cost?", "It costs €5/month or €50/year."],
-      ["Do you ever erase shot history for non-premium users?", "No, never. You simply lose visibility of the old shots, they're still there"],
+      ["How much does it cost?", "It costs €5 per month or €50 per year."],
+      ["Do you ever erase shot history for non-premium users?", "No, never. You simply lose visibility of the old shots, they're still there."],
       ["If I decide to upgrade, will I be able to see all my past shots?", "Yes, absolutely. You'll be able to see all your shots, even the ones you uploaded before subscribing."],
       ["Can I cancel at any time?", "Yes, you can cancel at any time. You will lose access to premium features when your subscription expires."],
-      ["What payment methods do you accept?", "We accept credit/debit cards via [Stripe](https://stripe.com/)."],
+      ["What payment methods do you accept?", "I accept credit/debit cards via [Stripe](https://stripe.com/)."],
       ["Can I use it for free?", "Yes, you can absolutely use it for free. The free plan is never going away."],
       ["Do you have a free trial?", "Yes, you can try it for free for 7 days. If you decide to cancel at any time in those 7 days, you won't be charged anything."],
-      ["Do you have a refund policy?", "We don't have a specific refund policy. If you want a refund, please [contact me](mailto:miha@visualizer.coffee) and I'll be happy to help you out."],
-      ["Do you offer any discounts?", "We [offered discounts before](/changes/world-of-coffee) and might do it again in the future. No plans though. And you do get a 2 months worth of discount when you pick the annual plan."],
-      ["Do you have a privacy policy?", "Yes, we have a privacy policy. You can read it [here](/privacy)."],
+      ["Do you have a refund policy?", "I don't have a specific refund policy. If you want a refund, please [contact me](mailto:miha@visualizer.coffee), and I'll be happy to help you out."],
+      ["Do you offer any discounts?", "I [offered discounts before](/changes/world-of-coffee) and might do it again in the future. No plans though. And you do get 2 months worth of discount when you pick the annual plan."],
+      ["Do you have a privacy policy?", "Yes, I have a privacy policy. You can read it [here](/privacy)."],
       ["Can I pay with Bitcoin/Ethereum/Dogecoin/…?", "No."],
       ["Can I use it on multiple devices?", "Yes, you can use it on all your devices. You don't need to pay separately for each device."],
-      ["How did you decide on the price?", "Feel free to read the [post detailing the reasons](https://visualizer.coffee/changes/visualizer-v3)."],
-      ["What's that about contributing 1% of the subscription to removing CO₂ from the atmosphere?", "I'm a big fan of what Stripe is doing so I wanted to contribute to their [Climate program](https://stripe.com/climate)."],
+      ["How did you decide on the price?", "It's a long story. Feel free to read the [post detailing the reasons](https://visualizer.coffee/changes/visualizer-v3)."],
+      ["What's that about contributing 1% of the subscription to removing CO₂ from the atmosphere?", "I'm a big fan of what Stripe is doing, so I wanted to contribute to their [Climate program](https://stripe.com/climate)."],
       ["How do you make holy water?", "You boil the hell out of it."]
     ].shuffle + [
-      ["What if I have more questions?", "Feel free to [contact me](mailto:miha@visualizer.coffee) and I'll be happy to help you out."]
+      ["What if I have more questions?", "Please [contact me](mailto:miha@visualizer.coffee), and I'll be happy to help you out."]
     ]
   end
 
