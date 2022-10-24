@@ -6,15 +6,16 @@
 - ratio = drink_weight / bean_weight
 - tds = shot.drink_tds.to_f
 - ey = shot.drink_ey.to_f
+- has_enjoyment = shot.espresso_enjoyment.to_i > 0
 
 .flex
   .shrink-0
-    - if shot.espresso_enjoyment > 0
+    - if has_enjoyment
       - hue = (124.0 / 100 * shot.espresso_enjoyment).round
       .flex.items-center.justify-center.h-12.w-12.rounded-full style="background-color: hsl(#{hue}, 70%, 50%);"
         .text-white.py-1.text-center
           = shot.espresso_enjoyment
-  div class=("ml-4" if shot.espresso_enjoyment > 0)
+  div class=("ml-4" if has_enjoyment)
     a.text-lg.leading-6.font-medium.text-stone-900.dark:text-stone-100 href=shot_path(shot)
       = shot.profile_title
     .mt-2.text-base.text-stone-600.dark:text-stone-400
