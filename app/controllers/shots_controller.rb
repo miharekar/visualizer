@@ -100,7 +100,7 @@ class ShotsController < ApplicationController
         else
           load_shots_with_pagy
           if @shots.any?
-            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy})
+            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy, include_person: false})
           else
             redirect_to action: :index
           end
