@@ -14,4 +14,4 @@
 
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
   = turbo_stream_from @user, :shots
-  = render "shots/list", shots: @shots, pagy: @pagy
+  = render "shots/list", shots: @shots, pagy: @pagy, include_person: false

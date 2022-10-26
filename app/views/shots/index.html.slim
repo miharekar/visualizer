@@ -13,5 +13,5 @@
     = render "tabs"
   - else
     = render "upload"
-  = render "list", shots: @shots, pagy: @pagy
+  = render "list", shots: @shots, pagy: @pagy, include_person: false
   = turbo_stream_from current_user, :shots

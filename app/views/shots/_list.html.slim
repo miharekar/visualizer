@@ -13,7 +13,6 @@
                   | Info
                 th.px-6.py-3
             tbody.bg-white.dark:bg-stone-900.divide-y.divide-stone-200.dark:divide-stone-800
-              - include_person = false unless defined?(include_person)
               - shots.each do |shot|
                 = render shot, include_person: include_person
           = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-stone-50 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-800"}
