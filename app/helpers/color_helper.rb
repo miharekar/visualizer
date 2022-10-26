@@ -2,7 +2,7 @@
 
 module ColorHelper
   def enjoyment_hex(value)
-    hsl_to_hex(124.0 / 100 * value.to_i, 70, 50)
+    hsl_to_hex(1.2 * value.to_i, 70, 50)
   end
 
   private
