@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/MSP-Greg/puma.git
+  revision: ddbaceb5fb3f6f6c83e84d1c96d5e75b63db8254
+  branch: 00-issue-2999
+  specs:
+    puma (6.0.0)
+      nio4r (~> 2.0)
+
+GIT
   remote: https://github.com/heartcombo/devise.git
   revision: 6d32d2447cc0f3739d9732246b5a5bde98d9e032
   specs:
@@ -101,17 +109,17 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.649.0)
-    aws-sdk-core (3.164.0)
+    aws-partitions (1.651.0)
+    aws-sdk-core (3.165.1)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.525.0)
-      aws-sigv4 (~> 1.1)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.58.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-kms (1.59.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.116.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-s3 (1.117.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.2)
@@ -244,8 +252,6 @@ GEM
       rack
       railties (>= 7.0.0)
     public_suffix (5.0.0)
-    puma (6.0.0)
-      nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.4)
@@ -311,7 +317,7 @@ GEM
     rubocop-performance (1.14.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.17.0)
+    rubocop-rails (2.17.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
@@ -415,7 +421,7 @@ DEPENDENCIES
   pg_query
   pghero
   propshaft
-  puma
+  puma!
   rack-attack
   rack-mini-profiler
   rails
@@ -442,4 +448,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.23
+   2.3.24
