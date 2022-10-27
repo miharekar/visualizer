@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/MSP-Greg/puma.git
-  revision: ddbaceb5fb3f6f6c83e84d1c96d5e75b63db8254
+  revision: 36c3cb2ab2deff6ed60fb73d6bfc17bcfb078c29
   branch: 00-issue-2999
   specs:
     puma (6.0.0)
@@ -110,7 +110,7 @@ GEM
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.651.0)
-    aws-sdk-core (3.165.1)
+    aws-sdk-core (3.166.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
@@ -118,7 +118,7 @@ GEM
     aws-sdk-kms (1.59.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.117.0)
+    aws-sdk-s3 (1.117.1)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -160,9 +160,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    google-protobuf (3.21.8)
-    google-protobuf (3.21.8-x86_64-darwin)
-    google-protobuf (3.21.8-x86_64-linux)
+    google-protobuf (3.21.9)
+    google-protobuf (3.21.9-x86_64-darwin)
+    google-protobuf (3.21.9-x86_64-linux)
     googleapis-common-protos-types (1.4.0)
       google-protobuf (~> 3.14)
     grpc (1.50.0)
@@ -222,10 +222,10 @@ GEM
     net-smtp (0.3.2)
       net-protocol
     netrc (0.11.0)
-    newrelic-infinite_tracing (8.11.0)
+    newrelic-infinite_tracing (8.12.0)
       grpc (~> 1.34)
-      newrelic_rpm (= 8.11.0)
-    newrelic_rpm (8.11.0)
+      newrelic_rpm (= 8.12.0)
+    newrelic_rpm (8.12.0)
     nio4r (2.5.8)
     nokogiri (1.13.9-aarch64-linux)
       racc (~> 1.4)
@@ -317,7 +317,7 @@ GEM
     rubocop-performance (1.14.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.17.1)
+    rubocop-rails (2.17.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
