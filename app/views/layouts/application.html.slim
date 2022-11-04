@@ -2,7 +2,7 @@ doctype html
 html
   head
     meta content="width=device-width, initial-scale=1" name="viewport"
-    title Decent Espresso Shot Visualizer
+    title = content_for?(:html_title) ? yield(:html_title) : "Visualizer"
     = yield :meta_tags
     = csrf_meta_tags
     = csp_meta_tag

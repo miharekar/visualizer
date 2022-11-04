@@ -1,4 +1,5 @@
-- content_for :meta_tags
+- content_for(:html_title) { "Visualizer | #{@user.name}" }
+- content_for(:meta_tags)
   = auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss)
 
 .bg-white.dark:bg-stone-900.shadow

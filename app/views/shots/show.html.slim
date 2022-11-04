@@ -1,8 +1,9 @@
+- content_for(:html_title) { "Visualizer | #{@shot.profile_title}" }
 - owner = current_user && @shot.user_id == current_user.id
 - show_header = owner || @shot.user&.public? || @shot.information.tcl_profile_fields.present?
 - show_owner_info = !owner && @shot.user&.public?
 
-- content_for :meta_tags
+- content_for(:meta_tags)
   - description = render "meta_description", shot: @shot
   meta name="description" content=description
   meta name="twitter:card" content="summary_large_image"
