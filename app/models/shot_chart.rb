@@ -36,6 +36,8 @@ class ShotChart
 
   def prepare_chart_data
     @processed_shot_data = process_data(shot)
+    return if @processed_shot_data["espresso_pressure"].blank?
+
     @processed_shot_data["espresso_resistance"] = resistance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"])
     @processed_shot_data["espresso_conductance"] = conductance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"])
     @processed_shot_data["espresso_conductance_derivative"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance"])

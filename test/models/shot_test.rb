@@ -134,4 +134,24 @@ class ShotTest < ActiveSupport::TestCase
     shot = Shot.from_file(users(:miha), "#{path}.json")
     assert_not shot.valid?
   end
+
+  test "smart espresso profiler file" do
+    path = "test/fixtures/files/sharebrew_tsp.csv"
+    shot = Shot.from_file(users(:miha), path)
+    assert_equal 450, shot.information.timeframe.size
+    assert_equal "0.051", shot.information.timeframe.first
+    assert_equal "48.403", shot.information.timeframe.last
+    assert_equal 48.403, shot.duration
+    assert_equal 9, shot.information.extra.keys.size
+    assert_equal "TSP18 Z", shot.profile_title
+    assert_equal "Espresso Machine Brand: Flair PRO\nBrew ratio: 1.0\nExtraction time: 48.403\nAvarage flow rate: 0.6406627688366423\nUnit system: metric\nAttribution: Smart Espresso Profiler\nSoftware: Smart Espresso Profiler App\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+    assert_equal "Herd", shot.bean_brand
+    assert_equal "Kenya", shot.bean_type
+    assert_equal "Medium", shot.roast_level
+    assert_equal "2021-12-17", shot.roast_date
+    assert_equal "Comandante Trailmaster", shot.grinder_model
+    assert_equal "3 clicks", shot.grinder_setting
+    assert_equal "15.2", shot.bean_weight
+    assert_equal "31.01", shot.drink_weight
+  end
 end

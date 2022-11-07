@@ -21,6 +21,8 @@ module Parsers
     def self.parse(file)
       parser = if file.start_with?("{")
         DecentJson.new(file)
+      elsif file.start_with?("information_type")
+        SepCsv.new(file)
       else
         DecentTcl.new(file)
       end

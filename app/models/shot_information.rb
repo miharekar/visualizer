@@ -12,7 +12,11 @@ class ShotInformation < ApplicationRecord
   end
 
   def calculate_duration
-    index = [data["espresso_flow"].size, timeframe.size].min
+    index = if data["espresso_flow"]
+      [data["espresso_flow"].size, timeframe.size].min
+    else
+      timeframe.size
+    end
     timeframe[index - 1].to_f
   end
 
