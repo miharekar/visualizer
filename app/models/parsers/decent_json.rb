@@ -5,18 +5,18 @@ module Parsers
     JSON_MAPPING = {"_weight" => "by_weight", "_weight_raw" => "by_weight_raw", "_goal" => "goal"}.freeze
 
     def parse
-      parsed = JSON.parse(file)
+      json = JSON.parse(file)
 
-      @start_time = Time.at(parsed["timestamp"].to_i).utc
-      @timeframe = parsed["elapsed"]
-      @profile_fields["json"] = parsed["profile"]
-      @profile_title = parsed.dig("profile", "title")
+      @start_time = Time.at(json["timestamp"].to_i).utc
+      @timeframe = json["elapsed"]
+      @profile_fields["json"] = json["profile"]
+      @profile_title = json.dig("profile", "title")
 
       %w[pressure flow resistance].each do |key|
-        @data["espresso_#{key}"] = parsed.dig(key, key)
+        @data["espresso_#{key}"] = json.dig(key, key)
 
         JSON_MAPPING.each do |suffix, subkey|
-          value = parsed.dig(key, subkey)
+          value = json.dig(key, subkey)
           next if value.blank?
 
           @data["espresso_#{key}#{suffix}"] = value
@@ -24,16 +24,16 @@ module Parsers
       end
 
       %w[basket mix goal].each do |key|
-        @data["espresso_temperature_#{key}"] = parsed.dig("temperature", key)
+        @data["espresso_temperature_#{key}"] = json.dig("temperature", key)
       end
 
       %w[weight water_dispensed].each do |key|
-        @data["espresso_#{key}"] = parsed.dig("totals", key)
+        @data["espresso_#{key}"] = json.dig("totals", key)
       end
 
-      @data["espresso_state_change"] = parsed["state_change"]
+      @data["espresso_state_change"] = json["state_change"]
 
-      settings = parsed.dig("app", "data", "settings")
+      settings = json.dig("app", "data", "settings")
       EXTRA_DATA_CAPTURE.each do |key|
         @extra[key] = settings[key]
       end
