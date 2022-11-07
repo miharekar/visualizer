@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module Parsers
-  class DecentTcl < Default
+  class DecentTcl < Main
     def initialize(file)
       super
       @start_chars_to_ignore = %i[c b]
     end
 
     def parse
-      parsed = Tickly::Parser.new.parse(@file)
+      parsed = Tickly::Parser.new.parse(file)
       parsed.each do |name, data|
         extract_data_from(name, data)
         next unless name == "settings"
@@ -20,9 +20,8 @@ module Parsers
         end
       end
       @profile_title = @profile_fields["profile_title"]
-      self
     rescue Tickly::Parser::Error => e
-      invalid_machine = @file.split("machine {")
+      invalid_machine = file.split("machine {")
       raise e unless invalid_machine.size > 1
 
       @file = invalid_machine.first
@@ -67,7 +66,7 @@ module Parsers
 
     def extract_profile(data)
       stop = "#{data.last.join(" ")}\n}"
-      @profile_fields["json"] = JSON.parse(@file[/profile (\{(.*)#{stop})/m, 1])
+      @profile_fields["json"] = JSON.parse(file[/profile (\{(.*)#{stop})/m, 1])
     rescue
       nil
     end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Parsers
-  class DecentJson < Default
+  class DecentJson < Main
     JSON_MAPPING = {"_weight" => "by_weight", "_weight_raw" => "by_weight_raw", "_goal" => "goal"}.freeze
 
     def parse
-      parsed = JSON.parse(@file)
+      parsed = JSON.parse(file)
 
       @start_time = Time.at(parsed["timestamp"].to_i).utc
       @timeframe = parsed["elapsed"]
@@ -41,9 +41,7 @@ module Parsers
       PROFILE_FIELDS.each do |key|
         @profile_fields[key] = settings[key]
       end
-      self
     rescue JSON::ParserError, TypeError
-      false
     end
   end
 end

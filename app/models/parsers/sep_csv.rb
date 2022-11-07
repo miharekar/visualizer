@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Parsers
-  class SepCsv < Default
+  class SepCsv < Main
     def initialize
     end
 

@@ -29,7 +29,7 @@ class Shot < ApplicationRecord
     return if file.blank?
 
     file_content = File.read(file)
-    parsed_shot = ShotParser.new(file_content)
+    parsed_shot = Parsers::Main.parse(file_content)
     shot = find_or_initialize_by(user:, sha: parsed_shot.sha)
     shot.profile_title = parsed_shot.profile_title
     shot.start_time = parsed_shot.start_time
