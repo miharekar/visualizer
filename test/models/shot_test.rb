@@ -135,6 +135,14 @@ class ShotTest < ActiveSupport::TestCase
     assert_not shot.valid?
   end
 
+  test "handles invalid settings" do
+    path = "test/fixtures/files/invalid_settings"
+    shot = Shot.from_file(users(:miha), "#{path}.json")
+    assert shot.valid?
+    assert_equal "HELLCAFE Synesso mvp", shot.profile_title
+    assert_equal 145, shot.information.timeframe.size
+  end
+
   test "smart espresso profiler file" do
     path = "test/fixtures/files/sharebrew_tsp.csv"
     shot = Shot.from_file(users(:miha), path)

@@ -65,7 +65,7 @@ class ShotsController < ApplicationController
   def create
     files = Array(params[:files])
     files.each do |file|
-      Shot.from_file(current_user, file)&.save
+      Shot.from_file(current_user, file).save!
     end
 
     flash[:notice] = "#{"Shot".pluralize(files.count)} successfully uploaded."
