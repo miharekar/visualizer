@@ -162,4 +162,10 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "15.2", shot.bean_weight
     assert_equal "31.01", shot.drink_weight
   end
+
+  test "handles invalid file" do
+    path = "test/fixtures/files/invalid_file.something"
+    shot = Shot.from_file(users(:miha), path)
+    assert_not shot.valid?
+  end
 end

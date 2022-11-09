@@ -41,14 +41,12 @@ module Parsers
       PROFILE_FIELDS.each do |key|
         @profile_fields[key] = settings[key]
       end
-    rescue JSON::ParserError => e
+    rescue JSON::ParserError
       matches = file.match(/,(\n\W+"\n.*?": "\w+",)/m)
       if matches&.captures&.any?
         @file = file.sub(matches.captures.first, "")
         retry
       end
-    rescue TypeError
-      puts matches[1] if matches
     end
   end
 end
