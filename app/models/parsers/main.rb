@@ -18,13 +18,19 @@ module Parsers
       Digest::SHA256.base64digest(data.sort.to_json) if data.present?
     end
 
+    def parse
+      nil
+    end
+
     def self.parse(file)
       parser = if file.start_with?("{")
         DecentJson.new(file)
+      elsif file.start_with?("clock")
+        DecentTcl.new(file)
       elsif file.start_with?("information_type")
         SepCsv.new(file)
       else
-        DecentTcl.new(file)
+        new(file)
       end
       parser.parse
       parser
@@ -32,6 +38,7 @@ module Parsers
       raise e unless Rails.env.production?
 
       Sentry.capture_exception(e, extra: {file: @file})
+      parser
     end
   end
 end
