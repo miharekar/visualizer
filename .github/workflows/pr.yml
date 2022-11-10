@@ -6,6 +6,6 @@ on:
 
 jobs:
   call-ruby-tests:
-    name: Call Ruby Tests
+    name: Ruby Tests
     uses: ./.github/workflows/ruby-tests.yml
     secrets: inherit
