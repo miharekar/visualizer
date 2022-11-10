@@ -19,7 +19,7 @@ namespace :fly do
   #  - full access to secrets, databases
   #  - failures here result in VM being stated, shutdown, and rolled back
   #    to last successful deploy (if any).
-  task server: :swapfile do
+  task :server do
     sh "bin/rails server"
   end
 
