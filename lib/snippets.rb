@@ -10,7 +10,14 @@ def top_skins
   relevant = Shot.where(created_at: "27.06.2022"..).pluck(:extra, :user_id)
   users_with_skins = relevant.map { |e, u| [u, e["skin"]] }.uniq.select { |_, s| s.present? }
   total_users = users_with_skins.uniq { |us| us[0] }.size.to_f
-  users_with_skins.map { |us| us[1] }.tally.sort_by { |_s, c| c }.reverse.to_h.transform_values { |c| (c / total_users * 100).round(2) }
+  users_with_skins.pluck(1).tally.sort_by { |_s, c| c }.reverse.to_h.transform_values { |c| (c / total_users * 100).round(2) }
+end
+
+def shots_brewed_by_time_of_day
+  @brewed_chart = [{
+    name: "Shots brewed by time of day",
+    data: Shot.select(:start_time).map { |s| (s.start_time.hour * 60) + s.start_time.min }.tally.map { |minute, count| [Time.at(minute * 60).to_i * 1000, count] }.sort
+  }]
 end
 
 top_profiles(from: "1.1.2000".to_date)
