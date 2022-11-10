@@ -59,7 +59,7 @@ class ShotChart
           valueSuffix: setting["suffix"]
         },
         opacity: setting["opacity"] || 1,
-        type: setting["type"] == "spline" ? "spline" : "line"
+        type: (setting["type"] == "spline") ? "spline" : "line"
       }
     end
   end
@@ -71,7 +71,7 @@ class ShotChart
         v = nil
       else
         r = v.to_f / (f**2)
-        v = r > MAX_RESISTANCE_VALUE ? nil : r
+        v = (r > MAX_RESISTANCE_VALUE) ? nil : r
       end
       [t, v]
     end
@@ -84,7 +84,7 @@ class ShotChart
         v = nil
       else
         c = (f**2) / v.to_f
-        v = c > MAX_RESISTANCE_VALUE ? nil : c
+        v = (c > MAX_RESISTANCE_VALUE) ? nil : c
       end
       [t, v]
     end
@@ -140,7 +140,7 @@ class ShotChart
       times10 = label == "espresso_water_dispensed"
       temperature_label = label.include?("temperature")
       data = data.map.with_index do |v, i|
-        t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
+        t = (i < timeframe_count) ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
         v = v.to_f
         v *= 10 if times10
         if temperature_label

@@ -29,7 +29,7 @@ class ProfilesController < ApplicationController
   private
 
   def set_profile
-    @profile = params.key?(:id) && current_user.admin? ? User.find(params[:id]) : current_user
+    @profile = (params.key?(:id) && current_user.admin?) ? User.find(params[:id]) : current_user
   end
 
   def set_authorized_applications
