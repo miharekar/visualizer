@@ -13,7 +13,7 @@ class ShotsController < ApplicationController
 
   def recents
     @recents = current_user.shots.by_start_time.
-      where(start_time: 2.weeks.ago..).
+      where(start_time: 3.weeks.ago..).
       group_by { |s| [s.bean_brand, s.bean_type] }.
       map do |bean_group, shots|
       [bean_group, shots.group_by { |s| [s.grinder_model, s.profile_title] }]
