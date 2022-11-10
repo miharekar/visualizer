@@ -154,7 +154,6 @@ GEM
     google-protobuf (3.21.9)
     google-protobuf (3.21.9-x86_64-darwin)
     google-protobuf (3.21.9-x86_64-linux)
-    hiredis (0.6.3)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -385,7 +384,6 @@ DEPENDENCIES
   doorkeeper
   dotenv-rails
   foreman
-  hiredis
   image_processing
   importmap-rails
   kramdown

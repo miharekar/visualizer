@@ -11,7 +11,6 @@ gem "bootsnap", require: false
 gem "cloudinary"
 gem "devise", github: "heartcombo/devise"
 gem "doorkeeper"
-gem "hiredis"
 gem "image_processing"
 gem "importmap-rails"
 gem "kramdown"
