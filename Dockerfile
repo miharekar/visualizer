@@ -41,7 +41,7 @@ WORKDIR /app
 RUN mkdir -p tmp/pids
 
 RUN gem update --system --no-document && \
-    gem install -N bundler -v ${BUNDLER_VERSION}
+  gem install -N bundler -v ${BUNDLER_VERSION}
 
 #######################################################################
 
@@ -53,10 +53,10 @@ ARG BUILD_PACKAGES="git build-essential libpq-dev wget vim curl gzip xz-utils li
 ENV BUILD_PACKAGES ${BUILD_PACKAGES}
 
 RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
-    --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
-    apt-get update -qq && \
-    apt-get install --no-install-recommends -y ${BUILD_PACKAGES} \
-    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+  --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
+  apt-get update -qq && \
+  apt-get install --no-install-recommends -y ${BUILD_PACKAGES} \
+  && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 #######################################################################
 
@@ -73,15 +73,15 @@ RUN bundle install &&  rm -rf vendor/bundle/ruby/*/cache
 
 FROM base
 
-ARG DEPLOY_PACKAGES="postgresql-client file vim curl gzip libsqlite3-0"
+ARG DEPLOY_PACKAGES="postgresql-client libvips42 file vim curl gzip libsqlite3-0"
 ENV DEPLOY_PACKAGES=${DEPLOY_PACKAGES}
 
 RUN --mount=type=cache,id=prod-apt-cache,sharing=locked,target=/var/cache/apt \
-    --mount=type=cache,id=prod-apt-lib,sharing=locked,target=/var/lib/apt \
-    apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-    ${DEPLOY_PACKAGES} \
-    && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+  --mount=type=cache,id=prod-apt-lib,sharing=locked,target=/var/lib/apt \
+  apt-get update -qq && \
+  apt-get install --no-install-recommends -y \
+  ${DEPLOY_PACKAGES} \
+  && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # copy installed gems
 COPY --from=gems /app /app
@@ -95,8 +95,8 @@ COPY . .
 
 # Adjust binstubs to run on Linux and set current working directory
 RUN chmod +x /app/bin/* && \
-    sed -i 's/ruby.exe/ruby/' /app/bin/* && \
-    sed -i '/^#!/aDir.chdir File.expand_path("..", __dir__)' /app/bin/*
+  sed -i 's/ruby.exe/ruby/' /app/bin/* && \
+  sed -i '/^#!/aDir.chdir File.expand_path("..", __dir__)' /app/bin/*
 
 # The following enable assets to precompile on the build server.  Adjust
 # as necessary.  If no combination works for you, see:
