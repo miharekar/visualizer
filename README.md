@@ -1,6 +1,6 @@
 # [Decent Visualizer](https://visualizer.coffee/)
 
-![Ruby Tests](https://github.com/miharekar/decent-visualizer/actions/workflows/ruby-tests.yml/badge.svg)
+![Ruby Tests](https://github.com/miharekar/decent-visualizer/actions/workflows/main.yml/badge.svg)
 
 A visualizer for `.shot` files created by the [Decent Espresso Machine](https://decentespresso.com/).
 
