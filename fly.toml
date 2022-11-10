@@ -1,4 +1,4 @@
-# fly.toml file generated for visualizer on 2022-09-06T17:43:59+02:00
+# fly.toml file generated for visualizer on 2022-11-10T09:39:46+01:00
 
 app = "visualizer"
 kill_signal = "SIGINT"
@@ -7,8 +7,8 @@ processes = []
 
 [build]
   [build.args]
-    BUNDLER_VERSION = "2.3.21"
-    RUBY_VERSION = "3.1.2"
+    BUILD_COMMAND = "bin/rails fly:build"
+    SERVER_COMMAND = "bin/rails fly:server"
 
 [processes]
   web = "bin/rails fly:server"
@@ -19,7 +19,6 @@ processes = []
 
 [env]
   PORT = "8080"
-  SERVER_COMMAND = "bin/rails fly:server"
 
 [experimental]
   allowed_public_ports = []
@@ -31,7 +30,6 @@ processes = []
   internal_port = 8080
   protocol = "tcp"
   script_checks = []
-
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
