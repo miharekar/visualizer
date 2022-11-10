@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :profiling
   before_action :set_timezone
   before_action :set_skin
+  before_action :set_sentry_context
 
   private
 
@@ -21,10 +22,12 @@ class ApplicationController < ActionController::Base
   end
 
   def set_skin
-    return unless current_user
-
-    @skin = current_user.skin&.downcase
+    @skin = current_user&.skin&.downcase || "system"
     @skin = [@skin, cookies["browser.colorscheme"].presence].compact.join(" ") if @skin == "system"
+  end
+
+  def set_sentry_context
+    Sentry.set_user(email: current_user&.email, id: current_user&.id)
   end
 
   def check_admin!
