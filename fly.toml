@@ -9,6 +9,7 @@ processes = []
   [build.args]
     BUILD_COMMAND = "bin/rails fly:build"
     SERVER_COMMAND = "bin/rails fly:server"
+    PROD_PACKAGES = "libvips"
 
 [processes]
   web = "bin/rails fly:server"
