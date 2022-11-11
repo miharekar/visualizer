@@ -73,7 +73,7 @@ RUN bundle install &&  rm -rf vendor/bundle/ruby/*/cache
 
 FROM base
 
-ARG DEPLOY_PACKAGES="postgresql-client libvips42 file vim curl gzip libsqlite3-0"
+ARG DEPLOY_PACKAGES="postgresql-client libvips42 file vim curl gzip libsqlite3-0 ruby-foreman redis-server"
 ENV DEPLOY_PACKAGES=${DEPLOY_PACKAGES}
 
 RUN --mount=type=cache,id=prod-apt-cache,sharing=locked,target=/var/cache/apt \
@@ -82,6 +82,13 @@ RUN --mount=type=cache,id=prod-apt-cache,sharing=locked,target=/var/cache/apt \
   apt-get install --no-install-recommends -y \
   ${DEPLOY_PACKAGES} \
   && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# configure redis
+RUN sed -i 's/^daemonize yes/daemonize no/' /etc/redis/redis.conf &&\
+  sed -i 's/^bind/# bind/' /etc/redis/redis.conf &&\
+  sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf &&\
+  sed -i 's/^dir \/var\/lib\/redis/dir \/redis/' /etc/redis/redis.conf &&\
+  sed -i 's/^logfile/# logfile/' /etc/redis/redis.conf
 
 # copy installed gems
 COPY --from=gems /app /app

@@ -10,10 +10,6 @@ processes = []
     BUILD_COMMAND = "bin/rails fly:build"
     SERVER_COMMAND = "bin/rails fly:server"
 
-[processes]
-  web = "bin/rails fly:server"
-  worker = "bundle exec sidekiq"
-
 [deploy]
   release_command = "bin/rails fly:release"
 
@@ -24,10 +20,14 @@ processes = []
   allowed_public_ports = []
   auto_rollback = true
 
+[mounts]
+  source="redis"
+  destination="/redis"
+
 [[services]]
-  processes = ["web"] # this service only applies to the web process
   http_checks = []
   internal_port = 8080
+  processes = ["app"]
   protocol = "tcp"
   script_checks = []
   [services.concurrency]

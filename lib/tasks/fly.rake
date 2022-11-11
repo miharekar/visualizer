@@ -20,7 +20,9 @@ namespace :fly do
   #  - failures here result in VM being stated, shutdown, and rolled back
   #    to last successful deploy (if any).
   task server: :swapfile do
-    sh "bin/rails server"
+    Bundler.with_original_env do
+      sh "foreman start --procfile=Procfile.fly"
+    end
   end
 
   # optional SWAPFILE task:
