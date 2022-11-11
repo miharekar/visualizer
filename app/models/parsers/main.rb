@@ -27,7 +27,7 @@ module Parsers
     def self.parser_for(file)
       if file.start_with?("{")
         DecentJson.new(file)
-      elsif file.start_with?("clock")
+      elsif file.start_with?("clock", "sequence_id")
         DecentTcl.new(file)
       elsif file.start_with?("information_type")
         SepCsv.new(file)

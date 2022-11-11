@@ -168,4 +168,12 @@ class ShotTest < ActiveSupport::TestCase
     shot = Shot.from_file(users(:miha), path)
     assert_not shot.valid?
   end
+
+  test "handles pyde1 fake tcl file" do
+    path = "test/fixtures/files/pyde.faketcl"
+    shot = Shot.from_file(users(:miha), path)
+    assert shot.valid?
+    assert_equal "Extractamundo Dos!", shot.profile_title
+    assert_equal 98, shot.information.timeframe.size
+  end
 end
