@@ -87,8 +87,16 @@ RUN --mount=type=cache,id=prod-apt-cache,sharing=locked,target=/var/cache/apt \
 RUN sed -i 's/^daemonize yes/daemonize no/' /etc/redis/redis.conf &&\
   sed -i 's/^bind/# bind/' /etc/redis/redis.conf &&\
   sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf &&\
-  sed -i 's/^dir \/var\/lib\/redis/dir \/redis/' /etc/redis/redis.conf &&\
+  sed -i 's/^dir \/var\/lib\/redis/dir \/redis\/main/' /etc/redis/redis.conf &&\
   sed -i 's/^logfile/# logfile/' /etc/redis/redis.conf
+
+RUN cp /etc/redis/redis.conf /etc/redis/redis_cache.conf
+
+RUN sed -i 's/^port 6379/port 6380/' /etc/redis/redis_cache.conf &&\
+  sed -i 's/^# maxmemory <bytes>/maxmemory 100mb/' /etc/redis/redis_cache.conf &&\
+  sed -i 's/^# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/' /etc/redis/redis_cache.conf &&\
+  sed -i 's/^pidfile \/var\/run\/redis\/redis-server.pid/pidfile \/var\/run\/redis\/redis-cache.pid/' /etc/redis/redis_cache.conf &&\
+  sed -i 's/^dir \/redis\/main/dir \/redis\/cache/' /etc/redis/redis_cache.conf
 
 # copy installed gems
 COPY --from=gems /app /app
