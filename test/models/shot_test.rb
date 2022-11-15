@@ -176,4 +176,12 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Extractamundo Dos!", shot.profile_title
     assert_equal 98, shot.information.timeframe.size
   end
+
+  test "handles empty instructions inside advanced_shot" do
+    path = "test/fixtures/files/empty_flow.shot"
+    shot = Shot.from_file(users(:miha), path)
+    assert shot.valid?
+    assert_equal "6BarFlat", shot.profile_title
+    assert_equal 80, shot.information.timeframe.size
+  end
 end

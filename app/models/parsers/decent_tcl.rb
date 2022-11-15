@@ -89,6 +89,7 @@ module Parsers
 
         if line.first == :c
           line.shift
+          line = [+""] if line.empty?
           line.first.prepend("{")
           line.last.concat("}")
         end
