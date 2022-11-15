@@ -3,9 +3,13 @@
 require "test_helper"
 
 class ShotTest < ActiveSupport::TestCase
+  def new_shot(path)
+    Shot.from_file(users(:miha), path)
+  end
+
   test "extracts fields from .shot file" do
     path = "test/fixtures/files/20210921T085910"
-    shot = Shot.from_file(users(:miha), "#{path}.shot")
+    shot = new_shot("#{path}.shot")
     assert_equal users(:miha), shot.user
     assert_equal "JoeD's Easy blooming slow ramp to 7 bar", shot.profile_title
     assert_equal "2021-09-21 06:59:10", shot.start_time.to_fs(:db)
@@ -39,7 +43,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
     path = "test/fixtures/files/20211019T100744"
-    shot = Shot.from_file(users(:miha), "#{path}.json")
+    shot = new_shot("#{path}.json")
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
@@ -71,7 +75,7 @@ class ShotTest < ActiveSupport::TestCase
 
     shot.save!
     old_id = shot.id
-    shot = Shot.from_file(users(:miha), "#{path}.shot")
+    shot = new_shot("#{path}.shot")
     shot.save!
     assert_equal old_id, shot.id
 
@@ -107,7 +111,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "extracts the non-zero bean weight" do
     path = "test/fixtures/files/dsx_weight"
-    shot = Shot.from_file(users(:miha), "#{path}.shot")
+    shot = new_shot("#{path}.shot")
     assert_equal 18.0, shot.bean_weight.to_f
     assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
     assert_equal File.read("#{path}.json"), shot.information.json_profile
@@ -115,7 +119,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "handles invalid machine string" do
     path = "test/fixtures/files/invalid_machine"
-    shot = Shot.from_file(users(:miha), "#{path}.shot")
+    shot = new_shot("#{path}.shot")
     assert_equal "Cremina lever machine", shot.profile_title
     assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
     assert_equal File.read("#{path}.json"), shot.information.json_profile
@@ -123,29 +127,26 @@ class ShotTest < ActiveSupport::TestCase
 
   test "handles brackets in advanced steps" do
     path = "test/fixtures/files/brackets"
-    shot = Shot.from_file(users(:miha), "#{path}.shot")
+    shot = new_shot("#{path}.shot")
     assert_equal "manual 82", shot.profile_title
     assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
   test "handles invalid profile string" do
-    path = "test/fixtures/files/invalid_profile"
-    shot = Shot.from_file(users(:miha), "#{path}.json")
+    shot = new_shot("test/fixtures/files/invalid_profile.json")
     assert_not shot.valid?
   end
 
   test "handles invalid settings" do
-    path = "test/fixtures/files/invalid_settings"
-    shot = Shot.from_file(users(:miha), "#{path}.json")
+    shot = new_shot("test/fixtures/files/invalid_settings.json")
     assert shot.valid?
     assert_equal "HELLCAFE Synesso mvp", shot.profile_title
     assert_equal 145, shot.information.timeframe.size
   end
 
   test "smart espresso profiler file" do
-    path = "test/fixtures/files/sharebrew_tsp.csv"
-    shot = Shot.from_file(users(:miha), path)
+    shot = new_shot("test/fixtures/files/sharebrew_tsp.csv")
     assert_equal 450, shot.information.timeframe.size
     assert_equal "0.051", shot.information.timeframe.first
     assert_equal "48.403", shot.information.timeframe.last
@@ -164,22 +165,19 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "handles invalid file" do
-    path = "test/fixtures/files/invalid_file.something"
-    shot = Shot.from_file(users(:miha), path)
+    shot = new_shot("test/fixtures/files/invalid_file.something")
     assert_not shot.valid?
   end
 
   test "handles pyde1 fake tcl file" do
-    path = "test/fixtures/files/pyde.faketcl"
-    shot = Shot.from_file(users(:miha), path)
+    shot = new_shot("test/fixtures/files/pyde.faketcl")
     assert shot.valid?
     assert_equal "Extractamundo Dos!", shot.profile_title
     assert_equal 98, shot.information.timeframe.size
   end
 
   test "handles empty instructions inside advanced_shot" do
-    path = "test/fixtures/files/empty_flow.shot"
-    shot = Shot.from_file(users(:miha), path)
+    shot = new_shot("test/fixtures/files/empty_flow.shot")
     assert shot.valid?
     assert_equal "6BarFlat", shot.profile_title
     assert_equal 80, shot.information.timeframe.size
