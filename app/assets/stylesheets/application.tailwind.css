@@ -18,7 +18,7 @@
 input[type="range"].shot-range::-webkit-slider-runnable-track {
   -webkit-appearance: none;
   background: hsl(0, 80%, 50%);
-  background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(124, 70%, 50%) 100%);
+  background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(120, 70%, 50%) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3bade3 ', endColorstr='#ff357f ', GradientType=1 );
   @apply h-1;
 }
@@ -30,7 +30,7 @@ input[type="range"].shot-range:focus {
 input[type="range"].shot-range::-moz-range-track {
   -moz-appearance: none;
   background: hsl(0, 70%, 50%);
-  background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(124, 70%, 50%) 100%);
+  background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(120, 70%, 50%) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3bade3 ', endColorstr='#ff357f ', GradientType=1 );
   @apply h-1;
 }
