@@ -40,18 +40,27 @@ class PremiumController < ApplicationController
 
   def create
     price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
-    session = Stripe::Checkout::Session.create(
+    session_params = {
       success_url: "#{success_premium_index_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: cancel_premium_index_url,
       mode: "subscription",
       allow_promotion_codes: true,
-      customer_email: current_user.email,
       automatic_tax: {enabled: true},
       metadata: {user_id: current_user.id},
-      line_items: [{quantity: 1, price: price_id}],
-      tax_id_collection: {enabled: true},
-      subscription_data: {trial_period_days: 7}
-    )
+      line_items: [{quantity: 1, price: price_id}]
+    }
+
+    if current_user.stripe_customer_id.present?
+      session_params[:customer] = current_user.stripe_customer_id
+    else
+      session_params = session_params.merge(
+        customer_email: current_user.email,
+        tax_id_collection: {enabled: true},
+        subscription_data: {trial_period_days: 7}
+      )
+    end
+
+    session = Stripe::Checkout::Session.create(session_params)
     redirect_to session.url, allow_other_host: true
   end
 
