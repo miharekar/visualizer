@@ -101,8 +101,8 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.662.0)
-    aws-sdk-core (3.167.0)
+    aws-partitions (1.663.0)
+    aws-sdk-core (3.168.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
@@ -120,9 +120,9 @@ GEM
     bcrypt (3.1.18)
     benchmark-ips (2.10.0)
     bindex (0.8.1)
-    bootsnap (1.13.0)
+    bootsnap (1.14.0)
       msgpack (~> 1.2)
-    brakeman (5.3.1)
+    brakeman (5.4.0)
     builder (3.2.4)
     cloudinary (1.23.0)
       aws_cf_signer
@@ -217,7 +217,7 @@ GEM
     parallel (1.22.1)
     parser (3.1.2.1)
       ast (~> 2.4.1)
-    pg (1.4.4)
+    pg (1.4.5)
     pg_query (2.2.0)
       google-protobuf (>= 3.19.2)
     pghero (3.0.1)
@@ -233,8 +233,6 @@ GEM
     raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.4)
-    rack-attack (6.6.1)
-      rack (>= 1.0, < 3)
     rack-mini-profiler (3.0.0)
       rack (>= 1.2.0)
     rack-test (2.0.2)
@@ -269,7 +267,7 @@ GEM
     rake (13.0.6)
     redis (5.0.5)
       redis-client (>= 0.9.0)
-    redis-client (0.11.1)
+    redis-client (0.11.2)
       connection_pool
     regexp_parser (2.6.1)
     reline (0.3.1)
@@ -397,7 +395,6 @@ DEPENDENCIES
   pghero
   propshaft
   puma (< 6)
-  rack-attack
   rack-mini-profiler
   rails
   redis
