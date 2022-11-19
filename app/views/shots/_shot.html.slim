@@ -71,7 +71,7 @@ tr.cursor-pointer.hover:bg-stone-50.dark:hover:bg-stone-800 id=dom_id(shot) data
         - if shot.grinder_model.present?
           = shot.grinder_model
           '
-        - if shot.grinder_setting.present?
+        - if shot.grinder_setting.present? && shot.grinder_setting != "0"
           ' @
           = shot.grinder_setting
       span.text-sm.text-stone-500.dark:text-stone-400
