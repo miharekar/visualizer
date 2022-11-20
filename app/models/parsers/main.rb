@@ -32,7 +32,7 @@ module Parsers
       elsif file.start_with?("information_type")
         SepCsv.new(file)
       else
-        raise UnknownFile
+        new(file)
       end
     end
 

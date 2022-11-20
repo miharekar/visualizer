@@ -65,11 +65,16 @@ class ShotsController < ApplicationController
 
   def create
     files = Array(params[:files])
-    files.each do |file|
-      Shot.from_file(current_user, file).save!
+    success = files.map do |file|
+      Shot.from_file(current_user, file).save
     end
 
-    flash[:notice] = "#{"Shot".pluralize(files.count)} successfully uploaded."
+    if success.any?(false)
+      flash[:alert] = "Something went wrong while importing your shots."
+    else
+      flash[:notice] = "#{"Shot".pluralize(files.count)} successfully uploaded."
+    end
+
     if params.key?(:drag)
       head :ok
     else
