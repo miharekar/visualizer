@@ -17,10 +17,7 @@ tr.cursor-pointer.hover:bg-stone-50.dark:hover:bg-stone-800 id=dom_id(shot) data
             = shot.espresso_enjoyment
       .sm
         .text-sm.text-stone-500.dark:text-stone-400
-          - if full_crud
-            = link_to shot.profile_title, search_index_path(search_params.merge(profile_title: shot.profile_title)), class: "underline hover:text-stone-400 dark:hover:text-stone-500"
-          - else
-            = shot.profile_title
+          = shot.profile_title
         - if show_start_time
           .text-sm.text-stone-500.dark:text-stone-400
             = shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)
