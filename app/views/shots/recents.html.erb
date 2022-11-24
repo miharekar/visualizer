@@ -21,13 +21,15 @@
                     <li class="flex items-center justify-between py-3 pl-3 pr-4">
                       <div class="flex w-0 flex-1 items-center">
                         <span class="ml-2 w-0 flex-1 truncate">
-                          <span class="font-medium"><%= shot.grinder_setting %></span>
-                          on
-                          <%= profile_group.join(" with ") %>
+                          <% if shot.grinder_setting.present? %>
+                            <span class="font-medium"><%= shot.grinder_setting %></span>
+                            on
+                          <% end %>
+                          <%= profile_group.map(&:presence).compact.join(" with ") %>
                         </span>
                       </div>
                       <div class="ml-4 flex-shrink-0">
-                        <%= link_to "View", search_index_path(search_params.merge(%i[bean_brand bean_type profile_title grinder_model].map{|m| [m, shot.public_send(m)]}.to_h)), class: "font-medium text-emerald-600 dark:text-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400" %>
+                        <%= link_to "View", search_index_path(search_params.merge(%i[bean_brand bean_type profile_title grinder_model].map{|m| [m, shot.public_send(m)]}.to_h)), class: "font-medium text-emerald-600 hover:text-emerald-500" %>
                       </div>
                     </li>
                   <% end %>
