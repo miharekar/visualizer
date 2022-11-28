@@ -25,7 +25,7 @@ gem "rails"
 gem "redis"
 gem "responders", github: "heartcombo/responders"
 gem "sidekiq"
-gem "sidekiq-scheduler"
+gem "sidekiq-scheduler", github: "sidekiq-scheduler/sidekiq-scheduler" # https://github.com/sidekiq-scheduler/sidekiq-scheduler/issues/409
 gem "slim"
 gem "stimulus-rails"
 gem "stripe"

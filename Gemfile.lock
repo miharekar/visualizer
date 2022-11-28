@@ -23,6 +23,15 @@ GIT
   specs:
     tickly (2.1.7)
 
+GIT
+  remote: https://github.com/sidekiq-scheduler/sidekiq-scheduler.git
+  revision: 76573dbc46c73afa213331049cfc5657582dc376
+  specs:
+    sidekiq-scheduler (4.0.3)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 4, < 8)
+      tilt (>= 1.4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -303,15 +312,11 @@ GEM
     sentry-sidekiq (5.6.0)
       sentry-ruby (~> 5.6.0)
       sidekiq (>= 3.0)
-    sidekiq (6.5.5)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.5.0)
-    sidekiq-scheduler (4.0.3)
-      redis (>= 4.2.0)
-      rufus-scheduler (~> 3.2)
-      sidekiq (>= 4, < 7)
-      tilt (>= 1.4.0)
+    sidekiq (7.0.1)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.9.0)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -398,7 +403,7 @@ DEPENDENCIES
   sentry-rails
   sentry-sidekiq
   sidekiq
-  sidekiq-scheduler
+  sidekiq-scheduler!
   slim
   stackprof
   standard

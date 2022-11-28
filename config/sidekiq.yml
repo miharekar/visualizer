@@ -1,7 +1,6 @@
-:concurrency: 2
+:concurrency: 5
 :queues:
   - critical
-  - high
   - default
   - low
 :schedule:
