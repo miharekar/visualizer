@@ -110,8 +110,8 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.666.0)
-    aws-sdk-core (3.168.1)
+    aws-partitions (1.667.0)
+    aws-sdk-core (3.168.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
@@ -140,9 +140,11 @@ GEM
     connection_pool (2.3.0)
     crass (1.0.6)
     debug (1.6.3)
+      irb (>= 1.3.6)
+      reline (>= 0.3.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.6.1)
+    doorkeeper (5.6.2)
       railties (>= 5)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
@@ -172,6 +174,9 @@ GEM
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    io-console (0.5.11)
+    irb (1.5.1)
+      reline (>= 0.3.0)
     jmespath (1.6.2)
     json (2.6.2)
     kramdown (2.4.0)
@@ -274,6 +279,8 @@ GEM
     redis-client (0.11.2)
       connection_pool
     regexp_parser (2.6.1)
+    reline (0.3.1)
+      io-console (~> 0.5)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -320,11 +327,11 @@ GEM
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
-    stackprof (0.2.22)
+    stackprof (0.2.23)
     standard (1.18.1)
       rubocop (= 1.39.0)
       rubocop-performance (= 1.15.1)
-    stimulus-rails (1.1.1)
+    stimulus-rails (1.2.0)
       railties (>= 6.0.0)
     stripe (8.0.0)
     tailwindcss-rails (2.0.21-aarch64-linux)
@@ -415,7 +422,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.1.3p185
+   ruby 3.1.2p20
 
 BUNDLED WITH
    2.3.26
