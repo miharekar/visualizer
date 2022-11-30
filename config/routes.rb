@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get :heartbeat, to: "heartbeat#show"
   get :changelog, to: "changes#index"
   get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
