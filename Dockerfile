@@ -73,7 +73,13 @@ RUN bundle install &&  rm -rf vendor/bundle/ruby/*/cache
 
 FROM base
 
-ARG DEPLOY_PACKAGES="postgresql-client libvips42 file vim curl gzip libsqlite3-0 ruby-foreman redis-server"
+# install redis 7
+RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(. /etc/os-release && echo $VERSION_CODENAME) main" > /etc/apt/sources.list.d/redis.list && \
+  apt-get update -qq && \
+  apt-get install --no-install-recommends -y redis-server
+
+ARG DEPLOY_PACKAGES="postgresql-client libvips42 file vim curl gzip libsqlite3-0 ruby-foreman"
 ENV DEPLOY_PACKAGES=${DEPLOY_PACKAGES}
 
 RUN --mount=type=cache,id=prod-apt-cache,sharing=locked,target=/var/cache/apt \
@@ -90,12 +96,12 @@ RUN sed -i 's/^daemonize yes/daemonize no/' /etc/redis/redis.conf &&\
   sed -i 's/^dir \/var\/lib\/redis/dir \/redis\/main/' /etc/redis/redis.conf &&\
   sed -i 's/^logfile/# logfile/' /etc/redis/redis.conf
 
-RUN cp /etc/redis/redis.conf /etc/redis/redis_cache.conf
-
-RUN sed -i 's/^port 6379/port 6380/' /etc/redis/redis_cache.conf &&\
+# set up cache redis
+RUN cp /etc/redis/redis.conf /etc/redis/redis_cache.conf &&\
+  sed -i 's/^port 6379/port 6380/' /etc/redis/redis_cache.conf &&\
   sed -i 's/^# maxmemory <bytes>/maxmemory 100mb/' /etc/redis/redis_cache.conf &&\
   sed -i 's/^# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/' /etc/redis/redis_cache.conf &&\
-  sed -i 's/^pidfile \/var\/run\/redis\/redis-server.pid/pidfile \/var\/run\/redis\/redis-cache.pid/' /etc/redis/redis_cache.conf &&\
+  sed -i 's/^pidfile \/run\/redis\/redis-server.pid/pidfile \/run\/redis\/redis-cache.pid/' /etc/redis/redis_cache.conf &&\
   sed -i 's/^dir \/redis\/main/dir \/redis\/cache/' /etc/redis/redis_cache.conf
 
 # copy installed gems
