@@ -81,7 +81,7 @@ class PremiumController < ApplicationController
     subscription = Stripe::Subscription.retrieve(session.subscription)
     current_user.update(
       stripe_customer_id: session.customer,
-      premium_expires_at: Time.zone.at(subscription.current_period_end)
+      premium_expires_at: Time.zone.at(subscription.current_period_end) + 1.day
     )
     flash[:notice] = "Subscribing was successful"
     redirect_to shots_path
