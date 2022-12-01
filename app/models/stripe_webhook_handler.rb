@@ -22,7 +22,7 @@ class StripeWebhookHandler
     return unless event.data.object.subscription && user
 
     subscription = Stripe::Subscription.retrieve(event.data.object.subscription)
-    user.update(premium_expires_at: Time.zone.at(subscription.current_period_end)) + 1.day
+    user.update(premium_expires_at: Time.zone.at(subscription.current_period_end) + 1.day)
   end
 
   def user
