@@ -135,7 +135,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "handles invalid profile string" do
     shot = new_shot("test/fixtures/files/invalid_profile.json")
-    assert_not shot.valid?
+    assert shot.valid?
   end
 
   test "handles invalid settings" do
@@ -143,6 +143,13 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.valid?
     assert_equal "HELLCAFE Synesso mvp", shot.profile_title
     assert_equal 145, shot.information.timeframe.size
+  end
+
+  test "handles very invalid settings" do
+    shot = new_shot("test/fixtures/files/very_invalid_settings.json")
+    assert shot.valid?
+    assert_equal "Visualizer/Filter 2.0.2 15 in 18 1:4-5", shot.profile_title
+    assert_equal 679, shot.information.timeframe.size
   end
 
   test "smart espresso profiler file" do
