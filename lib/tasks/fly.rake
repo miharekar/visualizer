@@ -37,5 +37,6 @@ namespace :fly do
     sh "mkswap /swapfile"
     sh "echo 10 > /proc/sys/vm/swappiness"
     sh "swapon /swapfile"
+    sh "echo 1 > /proc/sys/vm/overcommit_memory"
   end
 end
