@@ -12,6 +12,7 @@ processes = []
 
 [deploy]
   release_command = "bin/rails fly:release"
+  strategy = "rolling"
 
 [env]
   PORT = "8080"
