@@ -3,10 +3,11 @@
   - critical
   - default
   - low
-:schedule:
-  SharedShotCleanupJob:
-    every: 1 hour
-  FillAutocompleteValuesJob:
-    every: 1 hour
-  DuplicateStripeSubscriptionsJob:
-    every: 1 day
+:scheduler:
+  :schedule:
+    SharedShotCleanupJob:
+      every: 1 hour
+    FillAutocompleteValuesJob:
+      every: 1 hour
+    DuplicateStripeSubscriptionsJob:
+      every: 1 day

@@ -23,15 +23,6 @@ GIT
   specs:
     tickly (2.1.7)
 
-GIT
-  remote: https://github.com/sidekiq-scheduler/sidekiq-scheduler.git
-  revision: 76573dbc46c73afa213331049cfc5657582dc376
-  specs:
-    sidekiq-scheduler (4.0.3)
-      rufus-scheduler (~> 3.2)
-      sidekiq (>= 4, < 8)
-      tilt (>= 1.4.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -110,7 +101,7 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.680.0)
+    aws-partitions (1.683.0)
     aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -140,7 +131,7 @@ GEM
     connection_pool (2.3.0)
     crass (1.0.6)
     date (3.3.3)
-    debug (1.7.0)
+    debug (1.7.1)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
     domain_name (0.5.20190701)
@@ -151,7 +142,7 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
-    erubi (1.11.0)
+    erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
     ffi (1.15.5)
@@ -176,7 +167,7 @@ GEM
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.6.0)
-    irb (1.6.1)
+    irb (1.6.2)
       reline (>= 0.3.0)
     jmespath (1.6.2)
     json (2.6.3)
@@ -207,7 +198,7 @@ GEM
     mini_mime (1.1.2)
     minitest (5.16.3)
     msgpack (1.6.0)
-    net-imap (0.3.2)
+    net-imap (0.3.4)
       date
       net-protocol
     net-pop (0.1.2)
@@ -227,8 +218,7 @@ GEM
     nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (5.10.1)
-      activesupport
+    pagy (6.0.0)
     parallel (1.22.1)
     parser (3.1.3.0)
       ast (~> 2.4.1)
@@ -243,10 +233,10 @@ GEM
       rack
       railties (>= 7.0.0)
     public_suffix (5.0.1)
-    puma (5.6.5)
+    puma (6.0.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
-    racc (1.6.1)
+    racc (1.6.2)
     rack (2.2.4)
     rack-mini-profiler (3.0.0)
       rack (>= 1.2.0)
@@ -293,7 +283,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
-    rubocop (1.39.0)
+    rubocop (1.40.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
@@ -330,13 +320,17 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.11.0)
+    sidekiq-scheduler (5.0.0.beta1)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 4, < 8)
+      tilt (>= 1.4.0)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
     stackprof (0.2.23)
-    standard (1.19.1)
+    standard (1.20.0)
       language_server-protocol (~> 3.17.0.2)
-      rubocop (= 1.39.0)
+      rubocop (= 1.40.0)
       rubocop-performance (= 1.15.1)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
@@ -406,7 +400,7 @@ DEPENDENCIES
   pg_query
   pghero
   propshaft
-  puma (< 6)
+  puma
   rack-mini-profiler
   rails
   redis
@@ -417,7 +411,7 @@ DEPENDENCIES
   sentry-rails
   sentry-sidekiq
   sidekiq
-  sidekiq-scheduler!
+  sidekiq-scheduler (~> 5.0.0.beta1)
   slim
   stackprof
   standard
