@@ -58,9 +58,9 @@ module Parsers
     end
 
     def parse_data(row)
-      if row["current_total_shot_weight"].present?
-        @weight[row["elapsed"].to_f] = row["current_total_shot_weight"].to_f
-      end
+      return if row["current_total_shot_weight"].blank?
+
+      @weight[row["elapsed"].to_f] = row["current_total_shot_weight"].to_f
     end
 
     def calculate_weight_flow

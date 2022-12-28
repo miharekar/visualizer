@@ -34,23 +34,23 @@ gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 
 gem "debug"
-gem "rack-mini-profiler"
-gem "stackprof"
 gem "pghero"
 gem "pg_query"
+gem "rack-mini-profiler"
 gem "sentry-rails"
 gem "sentry-sidekiq"
+gem "stackprof"
 
 group :development do
-  gem "dotenv-rails"
   gem "annotate"
   gem "benchmark-ips"
   gem "brakeman"
+  gem "dotenv-rails"
   gem "foreman", require: false
   gem "letter_opener"
-  gem "standard", require: false
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
+  gem "standard", require: false
   gem "web-console"
 end

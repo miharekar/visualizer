@@ -8,7 +8,12 @@ inherit_gem:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
+  Exclude:
+    - db/schema.rb
+
+Bundler/OrderedGems:
+  Enabled: true
 
 Layout/DotPosition:
   EnforcedStyle: trailing
@@ -33,8 +38,65 @@ Style/SymbolArray:
 Style/WordArray:
   Enabled: true
 
+Style/IfUnlessModifier:
+  Enabled: true
+
 Rails/I18nLocaleTexts:
   Enabled: false
 
 Rails/BulkChangeTable:
   Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Performance/AncestorsInclude:
+  Enabled: true
+
+Performance/ArraySemiInfiniteRangeSlice:
+  Enabled: true
+
+Performance/CaseWhenSplat:
+  Enabled: true
+
+Performance/Casecmp:
+  Enabled: true
+
+Performance/CollectionLiteralInLoop:
+  Enabled: true
+
+Performance/DeletePrefix:
+  Enabled: true
+
+Performance/DeleteSuffix:
+  Enabled: true
+
+Performance/IoReadlines:
+  Enabled: true
+
+Performance/MapCompact:
+  Enabled: true
+
+Performance/MethodObjectAsBlock:
+  Enabled: true
+
+Performance/OpenStruct:
+  Enabled: true
+
+Performance/RedundantBlockCall:
+  Enabled: true
+
+Performance/RedundantEqualityComparisonBlock:
+  Enabled: true
+
+Performance/SelectMap:
+  Enabled: true
+
+Performance/StringInclude:
+  Enabled: true
+
+Performance/Sum:
+  Enabled: true
+
+Performance/TimesMap:
+  Enabled: true

@@ -52,7 +52,7 @@ module Parsers
       return if data.blank?
 
       method = "extract_#{name}"
-      data = @start_chars_to_ignore.include?(data.first) ? data[1..] : data
+      data = @start_chars_to_ignore.include?(data.first) ? data.drop(1) : data
       __send__(method, data) if respond_to?(method, true)
     end
 
