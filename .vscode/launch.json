@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "rdbg",
+      "name": "Attach with rdbg",
+      "request": "attach",
+      "rdbgPath": "PATH=${env:RUBY_ROOT}/bin:${PATH} ${env:GEM_HOME}/bin/rdbg"
+    }
+  ]
+}
