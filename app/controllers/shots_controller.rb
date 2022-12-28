@@ -65,14 +65,17 @@ class ShotsController < ApplicationController
 
   def create
     files = Array(params[:files])
-    success = files.map do |file|
-      Shot.from_file(current_user, file).save
-    end
+    shots = files.map { |file| Shot.from_file(current_user, file) }
 
-    if success.any?(false)
-      flash[:alert] = "Something went wrong while importing your shots."
+    if shots.all? { |s| s.errors.empty? }
+      shots.each(&:save!)
+      flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
-      flash[:notice] = "#{"Shot".pluralize(files.count)} successfully uploaded."
+      flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
+        "You uploaded a profile file, not a history file. Please upload a history .shot or .json file."
+      else
+        "You uploaded invalid #{"file".pluralize(files.count)}."
+      end
     end
 
     if params.key?(:drag)
