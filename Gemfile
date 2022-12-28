@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.3"
+ruby "3.2.0"
 
 gem "active_link_to"
 gem "aws-sdk-s3", require: false
@@ -25,7 +25,7 @@ gem "rails"
 gem "redis"
 gem "responders", github: "heartcombo/responders"
 gem "sidekiq"
-gem "sidekiq-scheduler", "~> 5.0.0.beta1"
+gem "sidekiq-scheduler", "~> 5.0.0.beta2"
 gem "slim"
 gem "stimulus-rails"
 gem "stripe"
