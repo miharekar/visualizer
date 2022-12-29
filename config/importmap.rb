@@ -10,6 +10,7 @@ pin "stimulus-autocomplete", to: "https://ga.jspm.io/npm:stimulus-autocomplete@3
 pin "el-transition", to: "https://ga.jspm.io/npm:el-transition@0.0.7/index.js", preload: true
 pin "highcharts", to: "https://code.highcharts.com/es-modules/masters/highcharts.src.js"
 pin "highcharts-annotations", to: "https://code.highcharts.com/es-modules/masters/modules/annotations.src.js"
+pin "prismjs", to: "https://ga.jspm.io/npm:prismjs@1.29.0/prism.js"
 
 pin_all_from "app/javascript/channels", under: "channels"
 pin_all_from "app/javascript/controllers", under: "controllers"
