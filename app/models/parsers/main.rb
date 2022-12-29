@@ -24,7 +24,12 @@ module Parsers
 
     def self.parser_for(file)
       if file.start_with?("{")
-        DecentJson.new(parse_json(file))
+        json = parse_json(file)
+        if json.key?("mill")
+          Beanconqueror.new(json)
+        else
+          DecentJson.new(json)
+        end
       elsif file.start_with?("clock", "sequence_id")
         DecentTcl.new(file)
       elsif file.start_with?("information_type")

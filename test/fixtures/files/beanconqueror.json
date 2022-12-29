@@ -1,0 +1,4248 @@
+{
+  "bean": {
+    "name": "Holm",
+    "buyDate": "",
+    "roastingDate": "2022-12-08T06:24:32.574Z",
+    "note": "My notes",
+    "roaster": "onoma",
+    "roast": "AMERICAN_ROAST",
+    "roast_range": 0,
+    "roast_custom": "",
+    "beanMix": "BLEND",
+    "aromatics": "Schokolade, Haselnuss, Rund",
+    "weight": 250,
+    "cost": 10,
+    "decaffeinated": true,
+    "cupping_points": 99,
+    "bean_roasting_type": "FILTER",
+    "bean_information": [
+      {
+        "country": "Country 1",
+        "region": "Region 1",
+        "farm": "Farmer 1",
+        "farmer": "Farmer 1",
+        "elevation": "Elevation 1",
+        "variety": "Variety  1",
+        "processing": "Processing 1",
+        "harvest_time": "Harvest 1",
+        "percentage": 50,
+        "certification": "Certificate 1",
+        "purchasing_price": 23,
+        "fob_price": 92.3
+      },
+      {
+        "country": "Country 2",
+        "region": "Region 2",
+        "farm": "Farm 2",
+        "farmer": "Farmer 2",
+        "elevation": "Elevation 2",
+        "variety": "Variety 2",
+        "processing": "Processing 2",
+        "harvest_time": "Harvested 2",
+        "percentage": 50,
+        "certification": "Certification 2",
+        "purchasing_price": 21,
+        "fob_price": 28.2
+      }
+    ],
+    "url": "https://beanconqueror.com",
+    "ean_article_number": "812723",
+    "rating": 0
+  },
+  "brew": {
+    "grind_size": "4",
+    "grind_weight": 75,
+    "mill_speed": 0,
+    "mill_timer": 0,
+    "pressure_profile": "",
+    "brew_temperature_time": 0,
+    "brew_temperature": 92,
+    "brew_time": 340.469,
+    "brew_quantity": 1200,
+    "brew_quantity_type": "GR",
+    "note": "",
+    "rating": 0,
+    "coffee_type": "",
+    "coffee_concentration": "",
+    "coffee_first_drip_time": 0,
+    "coffee_blooming_time": 60,
+    "tds": 0,
+    "brew_beverage_quantity": 0,
+    "brew_beverage_quantity_type": "GR",
+    "brew_time_milliseconds": 0,
+    "brew_temperature_time_milliseconds": 0,
+    "coffee_first_drip_time_milliseconds": 0,
+    "coffee_blooming_time_milliseconds": 232,
+    "bean_weight_in": 0,
+    "vessel_name": "",
+    "vessel_weight": 0,
+    "config": {
+      "uuid": "d8647dd2-36cf-4998-8cb7-f5772f91b726",
+      "unix_timestamp": 1672238504
+    }
+  },
+  "mill": {
+    "name": "Kinu M47"
+  },
+  "preparation": {
+    "name": "Chemex",
+    "type": "CHEMEX",
+    "style_type": "POUR OVER"
+  },
+  "water": {
+    "name": "",
+    "general_hardness": 0,
+    "total_alkalinity": 0,
+    "calcium": 0,
+    "magnesium": 0,
+    "sodium": 0,
+    "tds": 0,
+    "general_hardness_type": "UNKNOWN",
+    "total_alkalinity_type": "UNKNOWN",
+    "calcium_type": "UNKNOWN",
+    "magnesium_type": "UNKNOWN",
+    "sodium_type": "UNKNOWN",
+    "tds_type": "PPM"
+  },
+  "brewFlow": {
+    "weight": [
+      {
+        "timestamp": "17:18:21.961",
+        "brew_time": "0.0",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0,
+        "old_smoothed_weight": 0
+      },
+      {
+        "timestamp": "17:18:22.068",
+        "brew_time": "0.1",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0
+      },
+      {
+        "timestamp": "17:18:22.083",
+        "brew_time": "0.2",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.122",
+        "brew_time": "0.3",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.238",
+        "brew_time": "0.4",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.273",
+        "brew_time": "0.5",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.315",
+        "brew_time": "0.6",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.518",
+        "brew_time": "0.7",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.605",
+        "brew_time": "0.8",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.709",
+        "brew_time": "0.9",
+        "actual_weight": 0.1,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.838",
+        "brew_time": "0.10",
+        "actual_weight": 0,
+        "old_weight": 0.1,
+        "actual_smoothed_weight": 0.1,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:22.938",
+        "brew_time": "0.11",
+        "actual_weight": -2.2,
+        "old_weight": 0,
+        "actual_smoothed_weight": -0.6,
+        "old_smoothed_weight": 0.1
+      },
+      {
+        "timestamp": "17:18:23.039",
+        "brew_time": "0.12",
+        "actual_weight": -3.3,
+        "old_weight": -2.2,
+        "actual_smoothed_weight": -1.4,
+        "old_smoothed_weight": -0.6
+      },
+      {
+        "timestamp": "17:18:23.130",
+        "brew_time": "1.1",
+        "actual_weight": -2.7,
+        "old_weight": -3.3,
+        "actual_smoothed_weight": -1.8,
+        "old_smoothed_weight": -1.4
+      },
+      {
+        "timestamp": "17:18:23.243",
+        "brew_time": "1.2",
+        "actual_weight": -3,
+        "old_weight": -2.7,
+        "actual_smoothed_weight": -2.2,
+        "old_smoothed_weight": -1.8
+      },
+      {
+        "timestamp": "17:18:23.460",
+        "brew_time": "1.3",
+        "actual_weight": -10.4,
+        "old_weight": -3,
+        "actual_smoothed_weight": -4.6,
+        "old_smoothed_weight": -2.2
+      },
+      {
+        "timestamp": "17:18:23.575",
+        "brew_time": "1.4",
+        "actual_weight": -13.6,
+        "old_weight": -10.4,
+        "actual_smoothed_weight": -7.3,
+        "old_smoothed_weight": -4.6
+      },
+      {
+        "timestamp": "17:18:23.673",
+        "brew_time": "1.5",
+        "actual_weight": -14.8,
+        "old_weight": -13.6,
+        "actual_smoothed_weight": -9.6,
+        "old_smoothed_weight": -7.3
+      },
+      {
+        "timestamp": "17:18:23.796",
+        "brew_time": "1.6",
+        "actual_weight": -16.3,
+        "old_weight": -14.8,
+        "actual_smoothed_weight": -11.6,
+        "old_smoothed_weight": -9.6
+      },
+      {
+        "timestamp": "17:18:23.898",
+        "brew_time": "1.7",
+        "actual_weight": -17.4,
+        "old_weight": -16.3,
+        "actual_smoothed_weight": -13.3,
+        "old_smoothed_weight": -11.6
+      },
+      {
+        "timestamp": "17:18:23.989",
+        "brew_time": "1.8",
+        "actual_weight": -17.9,
+        "old_weight": -17.4,
+        "actual_smoothed_weight": -14.7,
+        "old_smoothed_weight": -13.3
+      },
+      {
+        "timestamp": "17:18:24.109",
+        "brew_time": "2.1",
+        "actual_weight": -17.6,
+        "old_weight": -17.9,
+        "actual_smoothed_weight": -15.6,
+        "old_smoothed_weight": -14.7
+      },
+      {
+        "timestamp": "17:18:24.217",
+        "brew_time": "2.2",
+        "actual_weight": -18,
+        "old_weight": -17.6,
+        "actual_smoothed_weight": -16.3,
+        "old_smoothed_weight": -15.6
+      },
+      {
+        "timestamp": "17:18:24.329",
+        "brew_time": "2.3",
+        "actual_weight": -18.6,
+        "old_weight": -18,
+        "actual_smoothed_weight": -17,
+        "old_smoothed_weight": -16.3
+      },
+      {
+        "timestamp": "17:18:24.433",
+        "brew_time": "2.4",
+        "actual_weight": -21.8,
+        "old_weight": -18.6,
+        "actual_smoothed_weight": -18.4,
+        "old_smoothed_weight": -17
+      },
+      {
+        "timestamp": "17:18:24.649",
+        "brew_time": "2.5",
+        "actual_weight": -22.4,
+        "old_weight": -21.8,
+        "actual_smoothed_weight": -19.6,
+        "old_smoothed_weight": -18.4
+      },
+      {
+        "timestamp": "17:18:24.765",
+        "brew_time": "2.6",
+        "actual_weight": -23,
+        "old_weight": -22.4,
+        "actual_smoothed_weight": -20.6,
+        "old_smoothed_weight": -19.6
+      },
+      {
+        "timestamp": "17:18:24.899",
+        "brew_time": "2.7",
+        "actual_weight": -22.9,
+        "old_weight": -23,
+        "actual_smoothed_weight": -21.3,
+        "old_smoothed_weight": -20.6
+      },
+      {
+        "timestamp": "17:18:24.981",
+        "brew_time": "2.8",
+        "actual_weight": -23.2,
+        "old_weight": -22.9,
+        "actual_smoothed_weight": -21.9,
+        "old_smoothed_weight": -21.3
+      },
+      {
+        "timestamp": "17:18:25.092",
+        "brew_time": "3.1",
+        "actual_weight": -23.8,
+        "old_weight": -23.2,
+        "actual_smoothed_weight": -22.4,
+        "old_smoothed_weight": -21.9
+      },
+      {
+        "timestamp": "17:18:25.182",
+        "brew_time": "3.2",
+        "actual_weight": -24.2,
+        "old_weight": -23.8,
+        "actual_smoothed_weight": -23,
+        "old_smoothed_weight": -22.4
+      },
+      {
+        "timestamp": "17:18:25.276",
+        "brew_time": "3.3",
+        "actual_weight": -25,
+        "old_weight": -24.2,
+        "actual_smoothed_weight": -23.6,
+        "old_smoothed_weight": -23
+      },
+      {
+        "timestamp": "17:18:25.396",
+        "brew_time": "3.4",
+        "actual_weight": -24.7,
+        "old_weight": -25,
+        "actual_smoothed_weight": -23.9,
+        "old_smoothed_weight": -23.6
+      },
+      {
+        "timestamp": "17:18:25.491",
+        "brew_time": "3.5",
+        "actual_weight": -23.4,
+        "old_weight": -24.7,
+        "actual_smoothed_weight": -23.8,
+        "old_smoothed_weight": -23.9
+      },
+      {
+        "timestamp": "17:18:25.699",
+        "brew_time": "3.6",
+        "actual_weight": -20.6,
+        "old_weight": -23.4,
+        "actual_smoothed_weight": -22.8,
+        "old_smoothed_weight": -23.8
+      },
+      {
+        "timestamp": "17:18:25.817",
+        "brew_time": "3.7",
+        "actual_weight": -21.2,
+        "old_weight": -20.6,
+        "actual_smoothed_weight": -22.3,
+        "old_smoothed_weight": -22.8
+      },
+      {
+        "timestamp": "17:18:25.915",
+        "brew_time": "3.8",
+        "actual_weight": -20.9,
+        "old_weight": -21.2,
+        "actual_smoothed_weight": -21.9,
+        "old_smoothed_weight": -22.3
+      },
+      {
+        "timestamp": "17:18:26.017",
+        "brew_time": "3.9",
+        "actual_weight": -23.7,
+        "old_weight": -20.9,
+        "actual_smoothed_weight": -22.4,
+        "old_smoothed_weight": -21.9
+      },
+      {
+        "timestamp": "17:18:26.121",
+        "brew_time": "4.1",
+        "actual_weight": -20.4,
+        "old_weight": -23.7,
+        "actual_smoothed_weight": -21.8,
+        "old_smoothed_weight": -22.4
+      },
+      {
+        "timestamp": "17:18:26.223",
+        "brew_time": "4.2",
+        "actual_weight": -19.3,
+        "old_weight": -20.4,
+        "actual_smoothed_weight": -21.1,
+        "old_smoothed_weight": -21.8
+      },
+      {
+        "timestamp": "17:18:26.344",
+        "brew_time": "4.3",
+        "actual_weight": -21.4,
+        "old_weight": -19.3,
+        "actual_smoothed_weight": -21.2,
+        "old_smoothed_weight": -21.1
+      },
+      {
+        "timestamp": "17:18:26.465",
+        "brew_time": "4.4",
+        "actual_weight": -20.9,
+        "old_weight": -21.4,
+        "actual_smoothed_weight": -21.1,
+        "old_smoothed_weight": -21.2
+      },
+      {
+        "timestamp": "17:18:26.557",
+        "brew_time": "4.5",
+        "actual_weight": -21.6,
+        "old_weight": -20.9,
+        "actual_smoothed_weight": -21.3,
+        "old_smoothed_weight": -21.1
+      },
+      {
+        "timestamp": "17:18:26.766",
+        "brew_time": "4.6",
+        "actual_weight": -21.6,
+        "old_weight": -21.6,
+        "actual_smoothed_weight": -21.4,
+        "old_smoothed_weight": -21.3
+      },
+      {
+        "timestamp": "17:18:26.876",
+        "brew_time": "4.7",
+        "actual_weight": -24.1,
+        "old_weight": -21.6,
+        "actual_smoothed_weight": -22.2,
+        "old_smoothed_weight": -21.4
+      },
+      {
+        "timestamp": "17:18:26.994",
+        "brew_time": "4.8",
+        "actual_weight": -21.2,
+        "old_weight": -24.1,
+        "actual_smoothed_weight": -21.9,
+        "old_smoothed_weight": -22.2
+      },
+      {
+        "timestamp": "17:18:27.097",
+        "brew_time": "5.1",
+        "actual_weight": -15.8,
+        "old_weight": -21.2,
+        "actual_smoothed_weight": -20.1,
+        "old_smoothed_weight": -21.9
+      },
+      {
+        "timestamp": "17:18:27.189",
+        "brew_time": "5.2",
+        "actual_weight": -19,
+        "old_weight": -15.8,
+        "actual_smoothed_weight": -19.7,
+        "old_smoothed_weight": -20.1
+      },
+      {
+        "timestamp": "17:18:27.321",
+        "brew_time": "5.3",
+        "actual_weight": -14.3,
+        "old_weight": -19,
+        "actual_smoothed_weight": -18.1,
+        "old_smoothed_weight": -19.7
+      },
+      {
+        "timestamp": "17:18:27.422",
+        "brew_time": "5.4",
+        "actual_weight": -6.5,
+        "old_weight": -14.3,
+        "actual_smoothed_weight": -14.6,
+        "old_smoothed_weight": -18.1
+      },
+      {
+        "timestamp": "17:18:27.529",
+        "brew_time": "5.5",
+        "actual_weight": -0.5,
+        "old_weight": -6.5,
+        "actual_smoothed_weight": -10.4,
+        "old_smoothed_weight": -14.6
+      },
+      {
+        "timestamp": "17:18:27.623",
+        "brew_time": "5.6",
+        "actual_weight": 3.7,
+        "old_weight": -0.5,
+        "actual_smoothed_weight": -6.1,
+        "old_smoothed_weight": -10.4
+      },
+      {
+        "timestamp": "17:18:27.724",
+        "brew_time": "5.7",
+        "actual_weight": -6.9,
+        "old_weight": 3.7,
+        "actual_smoothed_weight": -6.4,
+        "old_smoothed_weight": -6.1
+      },
+      {
+        "timestamp": "17:18:27.831",
+        "brew_time": "5.8",
+        "actual_weight": -13.1,
+        "old_weight": -6.9,
+        "actual_smoothed_weight": -8.4,
+        "old_smoothed_weight": -6.4
+      },
+      {
+        "timestamp": "17:18:27.950",
+        "brew_time": "5.9",
+        "actual_weight": -2.6,
+        "old_weight": -13.1,
+        "actual_smoothed_weight": -6.6,
+        "old_smoothed_weight": -8.4
+      },
+      {
+        "timestamp": "17:18:28.056",
+        "brew_time": "5.10",
+        "actual_weight": -0.7,
+        "old_weight": -2.6,
+        "actual_smoothed_weight": -4.9,
+        "old_smoothed_weight": -6.6
+      },
+      {
+        "timestamp": "17:18:28.159",
+        "brew_time": "6.1",
+        "actual_weight": 2.1,
+        "old_weight": -0.7,
+        "actual_smoothed_weight": -2.8,
+        "old_smoothed_weight": -4.9
+      },
+      {
+        "timestamp": "17:18:28.265",
+        "brew_time": "6.2",
+        "actual_weight": 0.3,
+        "old_weight": 2.1,
+        "actual_smoothed_weight": -1.9,
+        "old_smoothed_weight": -2.8
+      },
+      {
+        "timestamp": "17:18:28.379",
+        "brew_time": "6.3",
+        "actual_weight": -4,
+        "old_weight": 0.3,
+        "actual_smoothed_weight": -2.5,
+        "old_smoothed_weight": -1.9
+      },
+      {
+        "timestamp": "17:18:28.481",
+        "brew_time": "6.4",
+        "actual_weight": -5.6,
+        "old_weight": -4,
+        "actual_smoothed_weight": -3.4,
+        "old_smoothed_weight": -2.5
+      },
+      {
+        "timestamp": "17:18:28.587",
+        "brew_time": "6.5",
+        "actual_weight": -5.6,
+        "old_weight": -5.6,
+        "actual_smoothed_weight": -4.1,
+        "old_smoothed_weight": -3.4
+      },
+      {
+        "timestamp": "17:18:28.667",
+        "brew_time": "6.6",
+        "actual_weight": -7.1,
+        "old_weight": -5.6,
+        "actual_smoothed_weight": -5,
+        "old_smoothed_weight": -4.1
+      },
+      {
+        "timestamp": "17:18:28.893",
+        "brew_time": "6.7",
+        "actual_weight": -7.9,
+        "old_weight": -7.1,
+        "actual_smoothed_weight": -5.9,
+        "old_smoothed_weight": -5
+      },
+      {
+        "timestamp": "17:18:28.997",
+        "brew_time": "6.8",
+        "actual_weight": -3.6,
+        "old_weight": -7.9,
+        "actual_smoothed_weight": -5.2,
+        "old_smoothed_weight": -5.9
+      },
+      {
+        "timestamp": "17:18:29.113",
+        "brew_time": "7.1",
+        "actual_weight": -0.7,
+        "old_weight": -3.6,
+        "actual_smoothed_weight": -3.8,
+        "old_smoothed_weight": -5.2
+      },
+      {
+        "timestamp": "17:18:29.235",
+        "brew_time": "7.2",
+        "actual_weight": -2.6,
+        "old_weight": -0.7,
+        "actual_smoothed_weight": -3.5,
+        "old_smoothed_weight": -3.8
+      },
+      {
+        "timestamp": "17:18:29.311",
+        "brew_time": "7.3",
+        "actual_weight": -5.2,
+        "old_weight": -2.6,
+        "actual_smoothed_weight": -4,
+        "old_smoothed_weight": -3.5
+      },
+      {
+        "timestamp": "17:18:29.424",
+        "brew_time": "7.4",
+        "actual_weight": -5.8,
+        "old_weight": -5.2,
+        "actual_smoothed_weight": -4.5,
+        "old_smoothed_weight": -4
+      },
+      {
+        "timestamp": "17:18:29.525",
+        "brew_time": "7.5",
+        "actual_weight": -3.5,
+        "old_weight": -5.8,
+        "actual_smoothed_weight": -4.2,
+        "old_smoothed_weight": -4.5
+      },
+      {
+        "timestamp": "17:18:29.636",
+        "brew_time": "7.6",
+        "actual_weight": -1.6,
+        "old_weight": -3.5,
+        "actual_smoothed_weight": -3.4,
+        "old_smoothed_weight": -4.2
+      },
+      {
+        "timestamp": "17:18:29.758",
+        "brew_time": "7.7",
+        "actual_weight": -3.5,
+        "old_weight": -1.6,
+        "actual_smoothed_weight": -3.5,
+        "old_smoothed_weight": -3.4
+      },
+      {
+        "timestamp": "17:18:29.958",
+        "brew_time": "7.8",
+        "actual_weight": -5.1,
+        "old_weight": -3.5,
+        "actual_smoothed_weight": -4,
+        "old_smoothed_weight": -3.5
+      },
+      {
+        "timestamp": "17:18:30.062",
+        "brew_time": "7.9",
+        "actual_weight": -6.7,
+        "old_weight": -5.1,
+        "actual_smoothed_weight": -4.8,
+        "old_smoothed_weight": -4
+      },
+      {
+        "timestamp": "17:18:30.176",
+        "brew_time": "8.1",
+        "actual_weight": -4.8,
+        "old_weight": -6.7,
+        "actual_smoothed_weight": -4.8,
+        "old_smoothed_weight": -4.8
+      },
+      {
+        "timestamp": "17:18:30.279",
+        "brew_time": "8.2",
+        "actual_weight": -1,
+        "old_weight": -4.8,
+        "actual_smoothed_weight": -3.6,
+        "old_smoothed_weight": -4.8
+      },
+      {
+        "timestamp": "17:18:30.380",
+        "brew_time": "8.3",
+        "actual_weight": 2.5,
+        "old_weight": -1,
+        "actual_smoothed_weight": -1.8,
+        "old_smoothed_weight": -3.6
+      },
+      {
+        "timestamp": "17:18:30.531",
+        "brew_time": "8.4",
+        "actual_weight": 11,
+        "old_weight": 2.5,
+        "actual_smoothed_weight": 2.1,
+        "old_smoothed_weight": -1.8
+      },
+      {
+        "timestamp": "17:18:30.640",
+        "brew_time": "8.5",
+        "actual_weight": 11.8,
+        "old_weight": 11,
+        "actual_smoothed_weight": 5,
+        "old_smoothed_weight": 2.1
+      },
+      {
+        "timestamp": "17:18:30.857",
+        "brew_time": "8.6",
+        "actual_weight": 10.6,
+        "old_weight": 11.8,
+        "actual_smoothed_weight": 6.7,
+        "old_smoothed_weight": 5
+      },
+      {
+        "timestamp": "17:18:30.954",
+        "brew_time": "8.7",
+        "actual_weight": 12.6,
+        "old_weight": 10.6,
+        "actual_smoothed_weight": 8.5,
+        "old_smoothed_weight": 6.7
+      },
+      {
+        "timestamp": "17:18:31.060",
+        "brew_time": "8.8",
+        "actual_weight": 13.7,
+        "old_weight": 12.6,
+        "actual_smoothed_weight": 10,
+        "old_smoothed_weight": 8.5
+      },
+      {
+        "timestamp": "17:18:31.160",
+        "brew_time": "9.1",
+        "actual_weight": 15.6,
+        "old_weight": 13.7,
+        "actual_smoothed_weight": 11.7,
+        "old_smoothed_weight": 10
+      },
+      {
+        "timestamp": "17:18:31.266",
+        "brew_time": "9.2",
+        "actual_weight": 29.2,
+        "old_weight": 15.6,
+        "actual_smoothed_weight": 17,
+        "old_smoothed_weight": 11.7
+      },
+      {
+        "timestamp": "17:18:31.382",
+        "brew_time": "9.3",
+        "actual_weight": 29.4,
+        "old_weight": 29.2,
+        "actual_smoothed_weight": 20.7,
+        "old_smoothed_weight": 17
+      },
+      {
+        "timestamp": "17:18:31.537",
+        "brew_time": "9.4",
+        "actual_weight": 14.1,
+        "old_weight": 29.4,
+        "actual_smoothed_weight": 18.7,
+        "old_smoothed_weight": 20.7
+      },
+      {
+        "timestamp": "17:18:31.607",
+        "brew_time": "9.5",
+        "actual_weight": 12.9,
+        "old_weight": 14.1,
+        "actual_smoothed_weight": 17,
+        "old_smoothed_weight": 18.7
+      },
+      {
+        "timestamp": "17:18:31.719",
+        "brew_time": "9.6",
+        "actual_weight": 13.1,
+        "old_weight": 12.9,
+        "actual_smoothed_weight": 15.8,
+        "old_smoothed_weight": 17
+      },
+      {
+        "timestamp": "17:18:31.945",
+        "brew_time": "9.7",
+        "actual_weight": 13.8,
+        "old_weight": 13.1,
+        "actual_smoothed_weight": 15.2,
+        "old_smoothed_weight": 15.8
+      },
+      {
+        "timestamp": "17:18:32.042",
+        "brew_time": "9.8",
+        "actual_weight": 14.1,
+        "old_weight": 13.8,
+        "actual_smoothed_weight": 14.9,
+        "old_smoothed_weight": 15.2
+      },
+      {
+        "timestamp": "17:18:32.149",
+        "brew_time": "10.1",
+        "actual_weight": 14.4,
+        "old_weight": 14.1,
+        "actual_smoothed_weight": 14.7,
+        "old_smoothed_weight": 14.9
+      },
+      {
+        "timestamp": "17:18:32.274",
+        "brew_time": "10.2",
+        "actual_weight": 14.8,
+        "old_weight": 14.4,
+        "actual_smoothed_weight": 14.7,
+        "old_smoothed_weight": 14.7
+      },
+      {
+        "timestamp": "17:18:32.374",
+        "brew_time": "10.3",
+        "actual_weight": 15.1,
+        "old_weight": 14.8,
+        "actual_smoothed_weight": 14.9,
+        "old_smoothed_weight": 14.7
+      },
+      {
+        "timestamp": "17:18:32.480",
+        "brew_time": "10.4",
+        "actual_weight": 15.5,
+        "old_weight": 15.1,
+        "actual_smoothed_weight": 15,
+        "old_smoothed_weight": 14.9
+      },
+      {
+        "timestamp": "17:18:32.583",
+        "brew_time": "10.5",
+        "actual_weight": 15.8,
+        "old_weight": 15.5,
+        "actual_smoothed_weight": 15.3,
+        "old_smoothed_weight": 15
+      },
+      {
+        "timestamp": "17:18:32.675",
+        "brew_time": "10.6",
+        "actual_weight": 16,
+        "old_weight": 15.8,
+        "actual_smoothed_weight": 15.5,
+        "old_smoothed_weight": 15.3
+      },
+      {
+        "timestamp": "17:18:32.784",
+        "brew_time": "10.7",
+        "actual_weight": 16.4,
+        "old_weight": 16,
+        "actual_smoothed_weight": 15.8,
+        "old_smoothed_weight": 15.5
+      },
+      {
+        "timestamp": "17:18:32.881",
+        "brew_time": "10.8",
+        "actual_weight": 16.7,
+        "old_weight": 16.4,
+        "actual_smoothed_weight": 16.1,
+        "old_smoothed_weight": 15.8
+      },
+      {
+        "timestamp": "17:18:33.098",
+        "brew_time": "10.9",
+        "actual_weight": 17.6,
+        "old_weight": 16.7,
+        "actual_smoothed_weight": 16.5,
+        "old_smoothed_weight": 16.1
+      },
+      {
+        "timestamp": "17:18:33.197",
+        "brew_time": "11.1",
+        "actual_weight": 17.9,
+        "old_weight": 17.6,
+        "actual_smoothed_weight": 16.9,
+        "old_smoothed_weight": 16.5
+      },
+      {
+        "timestamp": "17:18:33.356",
+        "brew_time": "11.2",
+        "actual_weight": 18.3,
+        "old_weight": 17.9,
+        "actual_smoothed_weight": 17.3,
+        "old_smoothed_weight": 16.9
+      },
+      {
+        "timestamp": "17:18:33.475",
+        "brew_time": "11.3",
+        "actual_weight": 18.8,
+        "old_weight": 18.3,
+        "actual_smoothed_weight": 17.8,
+        "old_smoothed_weight": 17.3
+      },
+      {
+        "timestamp": "17:18:33.563",
+        "brew_time": "11.4",
+        "actual_weight": 19.2,
+        "old_weight": 18.8,
+        "actual_smoothed_weight": 18.2,
+        "old_smoothed_weight": 17.8
+      },
+      {
+        "timestamp": "17:18:33.673",
+        "brew_time": "11.5",
+        "actual_weight": 19.6,
+        "old_weight": 19.2,
+        "actual_smoothed_weight": 18.6,
+        "old_smoothed_weight": 18.2
+      },
+      {
+        "timestamp": "17:18:33.797",
+        "brew_time": "11.6",
+        "actual_weight": 20.1,
+        "old_weight": 19.6,
+        "actual_smoothed_weight": 19.1,
+        "old_smoothed_weight": 18.6
+      },
+      {
+        "timestamp": "17:18:33.895",
+        "brew_time": "11.7",
+        "actual_weight": 20.6,
+        "old_weight": 20.1,
+        "actual_smoothed_weight": 19.5,
+        "old_smoothed_weight": 19.1
+      },
+      {
+        "timestamp": "17:18:34.098",
+        "brew_time": "11.8",
+        "actual_weight": 21.4,
+        "old_weight": 20.6,
+        "actual_smoothed_weight": 20.1,
+        "old_smoothed_weight": 19.5
+      },
+      {
+        "timestamp": "17:18:34.204",
+        "brew_time": "12.1",
+        "actual_weight": 21.8,
+        "old_weight": 21.4,
+        "actual_smoothed_weight": 20.6,
+        "old_smoothed_weight": 20.1
+      },
+      {
+        "timestamp": "17:18:34.340",
+        "brew_time": "12.2",
+        "actual_weight": 22.2,
+        "old_weight": 21.8,
+        "actual_smoothed_weight": 21.1,
+        "old_smoothed_weight": 20.6
+      },
+      {
+        "timestamp": "17:18:34.413",
+        "brew_time": "12.3",
+        "actual_weight": 22.6,
+        "old_weight": 22.2,
+        "actual_smoothed_weight": 21.6,
+        "old_smoothed_weight": 21.1
+      },
+      {
+        "timestamp": "17:18:34.547",
+        "brew_time": "12.4",
+        "actual_weight": 23.2,
+        "old_weight": 22.6,
+        "actual_smoothed_weight": 22.1,
+        "old_smoothed_weight": 21.6
+      },
+      {
+        "timestamp": "17:18:34.641",
+        "brew_time": "12.5",
+        "actual_weight": 23.8,
+        "old_weight": 23.2,
+        "actual_smoothed_weight": 22.6,
+        "old_smoothed_weight": 22.1
+      },
+      {
+        "timestamp": "17:18:34.741",
+        "brew_time": "12.6",
+        "actual_weight": 24.2,
+        "old_weight": 23.8,
+        "actual_smoothed_weight": 23.1,
+        "old_smoothed_weight": 22.6
+      },
+      {
+        "timestamp": "17:18:34.848",
+        "brew_time": "12.7",
+        "actual_weight": 24.7,
+        "old_weight": 24.2,
+        "actual_smoothed_weight": 23.5,
+        "old_smoothed_weight": 23.1
+      },
+      {
+        "timestamp": "17:18:34.990",
+        "brew_time": "12.8",
+        "actual_weight": 25.2,
+        "old_weight": 24.7,
+        "actual_smoothed_weight": 24,
+        "old_smoothed_weight": 23.5
+      },
+      {
+        "timestamp": "17:18:35.064",
+        "brew_time": "12.9",
+        "actual_weight": 25.5,
+        "old_weight": 25.2,
+        "actual_smoothed_weight": 24.5,
+        "old_smoothed_weight": 24
+      },
+      {
+        "timestamp": "17:18:35.284",
+        "brew_time": "13.1",
+        "actual_weight": 26.5,
+        "old_weight": 25.5,
+        "actual_smoothed_weight": 25.1,
+        "old_smoothed_weight": 24.5
+      },
+      {
+        "timestamp": "17:18:35.397",
+        "brew_time": "13.2",
+        "actual_weight": 27,
+        "old_weight": 26.5,
+        "actual_smoothed_weight": 25.7,
+        "old_smoothed_weight": 25.1
+      },
+      {
+        "timestamp": "17:18:35.549",
+        "brew_time": "13.3",
+        "actual_weight": 27.5,
+        "old_weight": 27,
+        "actual_smoothed_weight": 26.2,
+        "old_smoothed_weight": 25.7
+      },
+      {
+        "timestamp": "17:18:35.614",
+        "brew_time": "13.4",
+        "actual_weight": 28,
+        "old_weight": 27.5,
+        "actual_smoothed_weight": 26.7,
+        "old_smoothed_weight": 26.2
+      },
+      {
+        "timestamp": "17:18:35.738",
+        "brew_time": "13.5",
+        "actual_weight": 28.5,
+        "old_weight": 28,
+        "actual_smoothed_weight": 27.3,
+        "old_smoothed_weight": 26.7
+      },
+      {
+        "timestamp": "17:18:35.847",
+        "brew_time": "13.6",
+        "actual_weight": 28.9,
+        "old_weight": 28.5,
+        "actual_smoothed_weight": 27.8,
+        "old_smoothed_weight": 27.3
+      },
+      {
+        "timestamp": "17:18:35.929",
+        "brew_time": "13.7",
+        "actual_weight": 29.4,
+        "old_weight": 28.9,
+        "actual_smoothed_weight": 28.2,
+        "old_smoothed_weight": 27.8
+      },
+      {
+        "timestamp": "17:18:36.067",
+        "brew_time": "13.8",
+        "actual_weight": 29.9,
+        "old_weight": 29.4,
+        "actual_smoothed_weight": 28.7,
+        "old_smoothed_weight": 28.2
+      },
+      {
+        "timestamp": "17:18:36.283",
+        "brew_time": "14.1",
+        "actual_weight": 30.9,
+        "old_weight": 29.9,
+        "actual_smoothed_weight": 29.4,
+        "old_smoothed_weight": 28.7
+      },
+      {
+        "timestamp": "17:18:36.379",
+        "brew_time": "14.2",
+        "actual_weight": 31.4,
+        "old_weight": 30.9,
+        "actual_smoothed_weight": 30,
+        "old_smoothed_weight": 29.4
+      },
+      {
+        "timestamp": "17:18:36.497",
+        "brew_time": "14.3",
+        "actual_weight": 31.8,
+        "old_weight": 31.4,
+        "actual_smoothed_weight": 30.5,
+        "old_smoothed_weight": 30
+      },
+      {
+        "timestamp": "17:18:36.634",
+        "brew_time": "14.4",
+        "actual_weight": 32.6,
+        "old_weight": 31.8,
+        "actual_smoothed_weight": 31.2,
+        "old_smoothed_weight": 30.5
+      },
+      {
+        "timestamp": "17:18:36.763",
+        "brew_time": "14.5",
+        "actual_weight": 33,
+        "old_weight": 32.6,
+        "actual_smoothed_weight": 31.7,
+        "old_smoothed_weight": 31.2
+      },
+      {
+        "timestamp": "17:18:36.859",
+        "brew_time": "14.6",
+        "actual_weight": 33.4,
+        "old_weight": 33,
+        "actual_smoothed_weight": 32.2,
+        "old_smoothed_weight": 31.7
+      },
+      {
+        "timestamp": "17:18:36.964",
+        "brew_time": "14.7",
+        "actual_weight": 33.9,
+        "old_weight": 33.4,
+        "actual_smoothed_weight": 32.7,
+        "old_smoothed_weight": 32.2
+      },
+      {
+        "timestamp": "17:18:37.092",
+        "brew_time": "14.8",
+        "actual_weight": 34.4,
+        "old_weight": 33.9,
+        "actual_smoothed_weight": 33.2,
+        "old_smoothed_weight": 32.7
+      },
+      {
+        "timestamp": "17:18:37.181",
+        "brew_time": "15.1",
+        "actual_weight": 35,
+        "old_weight": 34.4,
+        "actual_smoothed_weight": 33.8,
+        "old_smoothed_weight": 33.2
+      },
+      {
+        "timestamp": "17:18:37.426",
+        "brew_time": "15.2",
+        "actual_weight": 36.1,
+        "old_weight": 35,
+        "actual_smoothed_weight": 34.5,
+        "old_smoothed_weight": 33.8
+      },
+      {
+        "timestamp": "17:18:37.518",
+        "brew_time": "15.3",
+        "actual_weight": 36.3,
+        "old_weight": 36.1,
+        "actual_smoothed_weight": 35,
+        "old_smoothed_weight": 34.5
+      },
+      {
+        "timestamp": "17:18:37.681",
+        "brew_time": "15.4",
+        "actual_weight": 36.6,
+        "old_weight": 36.3,
+        "actual_smoothed_weight": 35.5,
+        "old_smoothed_weight": 35
+      },
+      {
+        "timestamp": "17:18:37.786",
+        "brew_time": "15.5",
+        "actual_weight": 37.5,
+        "old_weight": 36.6,
+        "actual_smoothed_weight": 36.1,
+        "old_smoothed_weight": 35.5
+      },
+      {
+        "timestamp": "17:18:37.880",
+        "brew_time": "15.6",
+        "actual_weight": 38.1,
+        "old_weight": 37.5,
+        "actual_smoothed_weight": 36.7,
+        "old_smoothed_weight": 36.1
+      },
+      {
+        "timestamp": "17:18:37.983",
+        "brew_time": "15.7",
+        "actual_weight": 38.5,
+        "old_weight": 38.1,
+        "actual_smoothed_weight": 37.2,
+        "old_smoothed_weight": 36.7
+      },
+      {
+        "timestamp": "17:18:38.093",
+        "brew_time": "15.8",
+        "actual_weight": 38.9,
+        "old_weight": 38.5,
+        "actual_smoothed_weight": 37.7,
+        "old_smoothed_weight": 37.2
+      },
+      {
+        "timestamp": "17:18:38.390",
+        "brew_time": "16.1",
+        "actual_weight": 39.8,
+        "old_weight": 38.9,
+        "actual_smoothed_weight": 38.4,
+        "old_smoothed_weight": 37.7
+      },
+      {
+        "timestamp": "17:18:38.452",
+        "brew_time": "16.2",
+        "actual_weight": 40.3,
+        "old_weight": 39.8,
+        "actual_smoothed_weight": 39,
+        "old_smoothed_weight": 38.4
+      },
+      {
+        "timestamp": "17:18:38.578",
+        "brew_time": "16.3",
+        "actual_weight": 40.9,
+        "old_weight": 40.3,
+        "actual_smoothed_weight": 39.5,
+        "old_smoothed_weight": 39
+      },
+      {
+        "timestamp": "17:18:38.657",
+        "brew_time": "16.4",
+        "actual_weight": 41.3,
+        "old_weight": 40.9,
+        "actual_smoothed_weight": 40.1,
+        "old_smoothed_weight": 39.5
+      },
+      {
+        "timestamp": "17:18:38.780",
+        "brew_time": "16.5",
+        "actual_weight": 41.8,
+        "old_weight": 41.3,
+        "actual_smoothed_weight": 40.6,
+        "old_smoothed_weight": 40.1
+      },
+      {
+        "timestamp": "17:18:38.883",
+        "brew_time": "16.6",
+        "actual_weight": 42.2,
+        "old_weight": 41.8,
+        "actual_smoothed_weight": 41.1,
+        "old_smoothed_weight": 40.6
+      },
+      {
+        "timestamp": "17:18:38.991",
+        "brew_time": "16.7",
+        "actual_weight": 42.6,
+        "old_weight": 42.2,
+        "actual_smoothed_weight": 41.5,
+        "old_smoothed_weight": 41.1
+      },
+      {
+        "timestamp": "17:18:39.096",
+        "brew_time": "16.8",
+        "actual_weight": 43.2,
+        "old_weight": 42.6,
+        "actual_smoothed_weight": 42,
+        "old_smoothed_weight": 41.5
+      },
+      {
+        "timestamp": "17:18:39.200",
+        "brew_time": "17.1",
+        "actual_weight": 43.5,
+        "old_weight": 43.2,
+        "actual_smoothed_weight": 42.5,
+        "old_smoothed_weight": 42
+      },
+      {
+        "timestamp": "17:18:39.452",
+        "brew_time": "17.2",
+        "actual_weight": 44.3,
+        "old_weight": 43.5,
+        "actual_smoothed_weight": 43,
+        "old_smoothed_weight": 42.5
+      },
+      {
+        "timestamp": "17:18:39.516",
+        "brew_time": "17.3",
+        "actual_weight": 44.8,
+        "old_weight": 44.3,
+        "actual_smoothed_weight": 43.5,
+        "old_smoothed_weight": 43
+      },
+      {
+        "timestamp": "17:18:39.682",
+        "brew_time": "17.4",
+        "actual_weight": 45.1,
+        "old_weight": 44.8,
+        "actual_smoothed_weight": 44,
+        "old_smoothed_weight": 43.5
+      },
+      {
+        "timestamp": "17:18:39.760",
+        "brew_time": "17.5",
+        "actual_weight": 45.6,
+        "old_weight": 45.1,
+        "actual_smoothed_weight": 44.5,
+        "old_smoothed_weight": 44
+      },
+      {
+        "timestamp": "17:18:39.864",
+        "brew_time": "17.6",
+        "actual_weight": 46,
+        "old_weight": 45.6,
+        "actual_smoothed_weight": 44.9,
+        "old_smoothed_weight": 44.5
+      },
+      {
+        "timestamp": "17:18:39.966",
+        "brew_time": "17.7",
+        "actual_weight": 46.4,
+        "old_weight": 46,
+        "actual_smoothed_weight": 45.4,
+        "old_smoothed_weight": 44.9
+      },
+      {
+        "timestamp": "17:18:40.082",
+        "brew_time": "17.8",
+        "actual_weight": 46.9,
+        "old_weight": 46.4,
+        "actual_smoothed_weight": 45.8,
+        "old_smoothed_weight": 45.4
+      },
+      {
+        "timestamp": "17:18:40.198",
+        "brew_time": "18.1",
+        "actual_weight": 47.3,
+        "old_weight": 46.9,
+        "actual_smoothed_weight": 46.3,
+        "old_smoothed_weight": 45.8
+      },
+      {
+        "timestamp": "17:18:40.284",
+        "brew_time": "18.2",
+        "actual_weight": 47.5,
+        "old_weight": 47.3,
+        "actual_smoothed_weight": 46.6,
+        "old_smoothed_weight": 46.3
+      },
+      {
+        "timestamp": "17:18:40.554",
+        "brew_time": "18.3",
+        "actual_weight": 47.7,
+        "old_weight": 47.5,
+        "actual_smoothed_weight": 46.9,
+        "old_smoothed_weight": 46.6
+      },
+      {
+        "timestamp": "17:18:40.623",
+        "brew_time": "18.4",
+        "actual_weight": 47.6,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.2,
+        "old_smoothed_weight": 46.9
+      },
+      {
+        "timestamp": "17:18:40.753",
+        "brew_time": "18.5",
+        "actual_weight": 47.6,
+        "old_weight": 47.6,
+        "actual_smoothed_weight": 47.3,
+        "old_smoothed_weight": 47.2
+      },
+      {
+        "timestamp": "17:18:40.820",
+        "brew_time": "18.6",
+        "actual_weight": 47.6,
+        "old_weight": 47.6,
+        "actual_smoothed_weight": 47.4,
+        "old_smoothed_weight": 47.3
+      },
+      {
+        "timestamp": "17:18:40.924",
+        "brew_time": "18.7",
+        "actual_weight": 47.6,
+        "old_weight": 47.6,
+        "actual_smoothed_weight": 47.5,
+        "old_smoothed_weight": 47.4
+      },
+      {
+        "timestamp": "17:18:41.063",
+        "brew_time": "18.8",
+        "actual_weight": 47.7,
+        "old_weight": 47.6,
+        "actual_smoothed_weight": 47.5,
+        "old_smoothed_weight": 47.5
+      },
+      {
+        "timestamp": "17:18:41.158",
+        "brew_time": "18.9",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.6,
+        "old_smoothed_weight": 47.5
+      },
+      {
+        "timestamp": "17:18:41.267",
+        "brew_time": "19.1",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.6,
+        "old_smoothed_weight": 47.6
+      },
+      {
+        "timestamp": "17:18:41.344",
+        "brew_time": "19.2",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.6,
+        "old_smoothed_weight": 47.6
+      },
+      {
+        "timestamp": "17:18:41.459",
+        "brew_time": "19.3",
+        "actual_weight": 47.8,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.6
+      },
+      {
+        "timestamp": "17:18:41.562",
+        "brew_time": "19.4",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:41.658",
+        "brew_time": "19.5",
+        "actual_weight": 47.7,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:41.762",
+        "brew_time": "19.6",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:41.864",
+        "brew_time": "19.7",
+        "actual_weight": 47.8,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:41.961",
+        "brew_time": "19.8",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.067",
+        "brew_time": "19.9",
+        "actual_weight": 47.7,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.155",
+        "brew_time": "19.10",
+        "actual_weight": 47.8,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.321",
+        "brew_time": "20.1",
+        "actual_weight": 47.6,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.375",
+        "brew_time": "20.2",
+        "actual_weight": 47.6,
+        "old_weight": 47.6,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.481",
+        "brew_time": "20.3",
+        "actual_weight": 47.8,
+        "old_weight": 47.6,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.577",
+        "brew_time": "20.4",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.682",
+        "brew_time": "20.5",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.812",
+        "brew_time": "20.6",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:42.901",
+        "brew_time": "20.7",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.8,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:43.011",
+        "brew_time": "20.8",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.8,
+        "old_smoothed_weight": 47.8
+      },
+      {
+        "timestamp": "17:18:43.111",
+        "brew_time": "20.9",
+        "actual_weight": 47.8,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.8,
+        "old_smoothed_weight": 47.8
+      },
+      {
+        "timestamp": "17:18:43.207",
+        "brew_time": "20.10",
+        "actual_weight": 47.7,
+        "old_weight": 47.8,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.8
+      },
+      {
+        "timestamp": "17:18:43.333",
+        "brew_time": "21.1",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:43.577",
+        "brew_time": "21.2",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:43.672",
+        "brew_time": "21.3",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:43.787",
+        "brew_time": "21.4",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:43.876",
+        "brew_time": "21.5",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:43.972",
+        "brew_time": "21.6",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.070",
+        "brew_time": "21.7",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.172",
+        "brew_time": "21.8",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.267",
+        "brew_time": "22.1",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.382",
+        "brew_time": "22.2",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.476",
+        "brew_time": "22.3",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.702",
+        "brew_time": "22.4",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.802",
+        "brew_time": "22.5",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:44.883",
+        "brew_time": "22.6",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.003",
+        "brew_time": "22.7",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.161",
+        "brew_time": "22.8",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.264",
+        "brew_time": "23.1",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.346",
+        "brew_time": "23.2",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.470",
+        "brew_time": "23.3",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.558",
+        "brew_time": "23.4",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.798",
+        "brew_time": "23.5",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:45.962",
+        "brew_time": "23.6",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.082",
+        "brew_time": "23.7",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.194",
+        "brew_time": "23.8",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.262",
+        "brew_time": "24.1",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.399",
+        "brew_time": "24.2",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.538",
+        "brew_time": "24.3",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.625",
+        "brew_time": "24.4",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.852",
+        "brew_time": "24.5",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:46.924",
+        "brew_time": "24.6",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:47.018",
+        "brew_time": "24.7",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:47.130",
+        "brew_time": "24.8",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:47.224",
+        "brew_time": "24.9",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      },
+      {
+        "timestamp": "17:18:47.319",
+        "brew_time": "25.1",
+        "actual_weight": 47.7,
+        "old_weight": 47.7,
+        "actual_smoothed_weight": 47.7,
+        "old_smoothed_weight": 47.7
+      }
+    ],
+    "waterFlow": [
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "0",
+        "timestamp": "17:18:23.040",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "1",
+        "timestamp": "17:18:23.989",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "2",
+        "timestamp": "17:18:24.981",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "3",
+        "timestamp": "17:18:26.017",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "4",
+        "timestamp": "17:18:26.994",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "5",
+        "timestamp": "17:18:28.056",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "6",
+        "timestamp": "17:18:28.997",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "7",
+        "timestamp": "17:18:30.062",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "8",
+        "timestamp": "17:18:31.060",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "9",
+        "timestamp": "17:18:32.042",
+        "value": 0
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "10",
+        "timestamp": "17:18:33.098",
+        "value": 3.2222222222222205
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "11",
+        "timestamp": "17:18:34.098",
+        "value": 4.875000000000003
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "12",
+        "timestamp": "17:18:35.064",
+        "value": 5.111111111111109
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "13",
+        "timestamp": "17:18:36.068",
+        "value": 5.249999999999999
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "14",
+        "timestamp": "17:18:37.092",
+        "value": 5.625
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "15",
+        "timestamp": "17:18:38.093",
+        "value": 5.750000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "16",
+        "timestamp": "17:18:39.096",
+        "value": 5.125000000000002
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "17",
+        "timestamp": "17:18:40.082",
+        "value": 4.7499999999999964
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "18",
+        "timestamp": "17:18:41.158",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "19",
+        "timestamp": "17:18:42.156",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "20",
+        "timestamp": "17:18:43.207",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "21",
+        "timestamp": "17:18:44.172",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "22",
+        "timestamp": "17:18:45.161",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "23",
+        "timestamp": "17:18:46.194",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      },
+      {
+        "brew_time": "24",
+        "timestamp": "17:18:47.224",
+        "value": 0
+      }
+    ],
+    "realtimeFlow": [
+      {
+        "brew_time": "0.0",
+        "timestamp": "17:18:21.962",
+        "smoothed_weight": 0.010000000000000002,
+        "flow_value": 0.10000000000000002
+      },
+      {
+        "brew_time": "0.1",
+        "timestamp": "17:18:22.068",
+        "smoothed_weight": 0.019000000000000003,
+        "flow_value": 0.09000000000000001
+      },
+      {
+        "brew_time": "0.2",
+        "timestamp": "17:18:22.083",
+        "smoothed_weight": 0.027100000000000006,
+        "flow_value": 0.08100000000000003
+      },
+      {
+        "brew_time": "0.3",
+        "timestamp": "17:18:22.122",
+        "smoothed_weight": 0.034390000000000004,
+        "flow_value": 0.07289999999999998
+      },
+      {
+        "brew_time": "0.4",
+        "timestamp": "17:18:22.238",
+        "smoothed_weight": 0.040951,
+        "flow_value": 0.06560999999999997
+      },
+      {
+        "brew_time": "0.5",
+        "timestamp": "17:18:22.273",
+        "smoothed_weight": 0.046855900000000006,
+        "flow_value": 0.059049000000000046
+      },
+      {
+        "brew_time": "0.6",
+        "timestamp": "17:18:22.315",
+        "smoothed_weight": 0.05217031000000001,
+        "flow_value": 0.053144100000000055
+      },
+      {
+        "brew_time": "0.7",
+        "timestamp": "17:18:22.518",
+        "smoothed_weight": 0.056953279000000016,
+        "flow_value": 0.04782969000000005
+      },
+      {
+        "brew_time": "0.8",
+        "timestamp": "17:18:22.605",
+        "smoothed_weight": 0.06125795110000002,
+        "flow_value": 0.04304672100000004
+      },
+      {
+        "brew_time": "0.9",
+        "timestamp": "17:18:22.709",
+        "smoothed_weight": 0.06513215599000002,
+        "flow_value": 0.038742048900000034
+      },
+      {
+        "brew_time": "0.10",
+        "timestamp": "17:18:22.838",
+        "smoothed_weight": 0.058618940391000025,
+        "flow_value": -0.06513215598999998
+      },
+      {
+        "brew_time": "0.11",
+        "timestamp": "17:18:22.938",
+        "smoothed_weight": -0.1672429536481,
+        "flow_value": -2.258618940391
+      },
+      {
+        "brew_time": "0.12",
+        "timestamp": "17:18:23.048",
+        "smoothed_weight": -0.48051865828329,
+        "flow_value": -3.1327570463519
+      },
+      {
+        "brew_time": "1.1",
+        "timestamp": "17:18:23.130",
+        "smoothed_weight": -0.702466792454961,
+        "flow_value": -2.21948134171671
+      },
+      {
+        "brew_time": "1.2",
+        "timestamp": "17:18:23.243",
+        "smoothed_weight": -0.932220113209465,
+        "flow_value": -2.2975332075450394
+      },
+      {
+        "brew_time": "1.3",
+        "timestamp": "17:18:23.460",
+        "smoothed_weight": -1.8789981018885187,
+        "flow_value": -9.467779886790538
+      },
+      {
+        "brew_time": "1.4",
+        "timestamp": "17:18:23.575",
+        "smoothed_weight": -3.0510982916996667,
+        "flow_value": -11.721001898111481
+      },
+      {
+        "brew_time": "1.5",
+        "timestamp": "17:18:23.673",
+        "smoothed_weight": -4.2259884625297,
+        "flow_value": -11.748901708300332
+      },
+      {
+        "brew_time": "1.6",
+        "timestamp": "17:18:23.796",
+        "smoothed_weight": -5.43338961627673,
+        "flow_value": -12.074011537470302
+      },
+      {
+        "brew_time": "1.7",
+        "timestamp": "17:18:23.898",
+        "smoothed_weight": -6.630050654649057,
+        "flow_value": -11.966610383723273
+      },
+      {
+        "brew_time": "1.8",
+        "timestamp": "17:18:23.998",
+        "smoothed_weight": -7.757045589184152,
+        "flow_value": -11.269949345350945
+      },
+      {
+        "brew_time": "2.1",
+        "timestamp": "17:18:24.109",
+        "smoothed_weight": -8.741341030265737,
+        "flow_value": -9.84295441081585
+      },
+      {
+        "brew_time": "2.2",
+        "timestamp": "17:18:24.217",
+        "smoothed_weight": -9.667206927239164,
+        "flow_value": -9.25865896973427
+      },
+      {
+        "brew_time": "2.3",
+        "timestamp": "17:18:24.329",
+        "smoothed_weight": -10.560486234515249,
+        "flow_value": -8.932793072760852
+      },
+      {
+        "brew_time": "2.4",
+        "timestamp": "17:18:24.433",
+        "smoothed_weight": -11.684437611063725,
+        "flow_value": -11.239513765484759
+      },
+      {
+        "brew_time": "2.5",
+        "timestamp": "17:18:24.649",
+        "smoothed_weight": -12.755993849957353,
+        "flow_value": -10.715562388936277
+      },
+      {
+        "brew_time": "2.6",
+        "timestamp": "17:18:24.765",
+        "smoothed_weight": -13.780394464961619,
+        "flow_value": -10.244006150042662
+      },
+      {
+        "brew_time": "2.7",
+        "timestamp": "17:18:24.899",
+        "smoothed_weight": -14.692355018465456,
+        "flow_value": -9.119605535038371
+      },
+      {
+        "brew_time": "2.8",
+        "timestamp": "17:18:25.001",
+        "smoothed_weight": -15.54311951661891,
+        "flow_value": -8.507644981534543
+      },
+      {
+        "brew_time": "3.1",
+        "timestamp": "17:18:25.092",
+        "smoothed_weight": -16.36880756495702,
+        "flow_value": -8.2568804833811
+      },
+      {
+        "brew_time": "3.2",
+        "timestamp": "17:18:25.182",
+        "smoothed_weight": -17.15192680846132,
+        "flow_value": -7.831192435042986
+      },
+      {
+        "brew_time": "3.3",
+        "timestamp": "17:18:25.276",
+        "smoothed_weight": -17.93673412761519,
+        "flow_value": -7.8480731915387025
+      },
+      {
+        "brew_time": "3.4",
+        "timestamp": "17:18:25.396",
+        "smoothed_weight": -18.61306071485367,
+        "flow_value": -6.763265872384814
+      },
+      {
+        "brew_time": "3.5",
+        "timestamp": "17:18:25.491",
+        "smoothed_weight": -19.091754643368304,
+        "flow_value": -4.786939285146339
+      },
+      {
+        "brew_time": "3.6",
+        "timestamp": "17:18:25.699",
+        "smoothed_weight": -19.242579179031473,
+        "flow_value": -1.50824535663169
+      },
+      {
+        "brew_time": "3.7",
+        "timestamp": "17:18:25.817",
+        "smoothed_weight": -19.438321261128326,
+        "flow_value": -1.9574208209685295
+      },
+      {
+        "brew_time": "3.8",
+        "timestamp": "17:18:25.915",
+        "smoothed_weight": -19.584489135015495,
+        "flow_value": -1.46167873887169
+      },
+      {
+        "brew_time": "3.9",
+        "timestamp": "17:18:26.037",
+        "smoothed_weight": -19.996040221513947,
+        "flow_value": -4.115510864984522
+      },
+      {
+        "brew_time": "4.1",
+        "timestamp": "17:18:26.122",
+        "smoothed_weight": -20.03643619936255,
+        "flow_value": -0.4039597784860405
+      },
+      {
+        "brew_time": "4.2",
+        "timestamp": "17:18:26.224",
+        "smoothed_weight": -19.962792579426296,
+        "flow_value": 0.7364361993625579
+      },
+      {
+        "brew_time": "4.3",
+        "timestamp": "17:18:26.344",
+        "smoothed_weight": -20.106513321483668,
+        "flow_value": -1.4372074205737206
+      },
+      {
+        "brew_time": "4.4",
+        "timestamp": "17:18:26.465",
+        "smoothed_weight": -20.1858619893353,
+        "flow_value": -0.7934866785163308
+      },
+      {
+        "brew_time": "4.5",
+        "timestamp": "17:18:26.558",
+        "smoothed_weight": -20.32727579040177,
+        "flow_value": -1.4141380106647006
+      },
+      {
+        "brew_time": "4.6",
+        "timestamp": "17:18:26.766",
+        "smoothed_weight": -20.454548211361594,
+        "flow_value": -1.2727242095982305
+      },
+      {
+        "brew_time": "4.7",
+        "timestamp": "17:18:26.876",
+        "smoothed_weight": -20.819093390225436,
+        "flow_value": -3.6454517886384252
+      },
+      {
+        "brew_time": "4.8",
+        "timestamp": "17:18:27.012",
+        "smoothed_weight": -20.857184051202893,
+        "flow_value": -0.3809066097745628
+      },
+      {
+        "brew_time": "5.1",
+        "timestamp": "17:18:27.097",
+        "smoothed_weight": -20.351465646082602,
+        "flow_value": 5.05718405120291
+      },
+      {
+        "brew_time": "5.2",
+        "timestamp": "17:18:27.189",
+        "smoothed_weight": -20.216319081474342,
+        "flow_value": 1.3514656460825947
+      },
+      {
+        "brew_time": "5.3",
+        "timestamp": "17:18:27.322",
+        "smoothed_weight": -19.624687173326908,
+        "flow_value": 5.916319081474342
+      },
+      {
+        "brew_time": "5.4",
+        "timestamp": "17:18:27.423",
+        "smoothed_weight": -18.312218455994216,
+        "flow_value": 13.124687173326919
+      },
+      {
+        "brew_time": "5.5",
+        "timestamp": "17:18:27.529",
+        "smoothed_weight": -16.530996610394794,
+        "flow_value": 17.81221845599422
+      },
+      {
+        "brew_time": "5.6",
+        "timestamp": "17:18:27.623",
+        "smoothed_weight": -14.507896949355317,
+        "flow_value": 20.230996610394776
+      },
+      {
+        "brew_time": "5.7",
+        "timestamp": "17:18:27.724",
+        "smoothed_weight": -13.747107254419785,
+        "flow_value": 7.607896949355322
+      },
+      {
+        "brew_time": "5.8",
+        "timestamp": "17:18:27.831",
+        "smoothed_weight": -13.682396528977806,
+        "flow_value": 0.6471072544197831
+      },
+      {
+        "brew_time": "5.9",
+        "timestamp": "17:18:27.950",
+        "smoothed_weight": -12.574156876080025,
+        "flow_value": 11.082396528977814
+      },
+      {
+        "brew_time": "5.10",
+        "timestamp": "17:18:28.073",
+        "smoothed_weight": -11.386741188472023,
+        "flow_value": 11.874156876080022
+      },
+      {
+        "brew_time": "6.1",
+        "timestamp": "17:18:28.159",
+        "smoothed_weight": -10.03806706962482,
+        "flow_value": 13.486741188472031
+      },
+      {
+        "brew_time": "6.2",
+        "timestamp": "17:18:28.265",
+        "smoothed_weight": -9.004260362662338,
+        "flow_value": 10.338067069624817
+      },
+      {
+        "brew_time": "6.3",
+        "timestamp": "17:18:28.379",
+        "smoothed_weight": -8.503834326396104,
+        "flow_value": 5.004260362662336
+      },
+      {
+        "brew_time": "6.4",
+        "timestamp": "17:18:28.481",
+        "smoothed_weight": -8.213450893756495,
+        "flow_value": 2.9038343263960975
+      },
+      {
+        "brew_time": "6.5",
+        "timestamp": "17:18:28.587",
+        "smoothed_weight": -7.952105804380845,
+        "flow_value": 2.613450893756495
+      },
+      {
+        "brew_time": "6.6",
+        "timestamp": "17:18:28.667",
+        "smoothed_weight": -7.866895223942761,
+        "flow_value": 0.8521058043808427
+      },
+      {
+        "brew_time": "6.7",
+        "timestamp": "17:18:28.893",
+        "smoothed_weight": -7.8702057015484845,
+        "flow_value": -0.03310477605723783
+      },
+      {
+        "brew_time": "6.8",
+        "timestamp": "17:18:29.012",
+        "smoothed_weight": -7.443185131393636,
+        "flow_value": 4.270205701548484
+      },
+      {
+        "brew_time": "7.1",
+        "timestamp": "17:18:29.113",
+        "smoothed_weight": -6.768866618254273,
+        "flow_value": 6.743185131393634
+      },
+      {
+        "brew_time": "7.2",
+        "timestamp": "17:18:29.235",
+        "smoothed_weight": -6.3519799564288455,
+        "flow_value": 4.168866618254272
+      },
+      {
+        "brew_time": "7.3",
+        "timestamp": "17:18:29.311",
+        "smoothed_weight": -6.236781960785962,
+        "flow_value": 1.151979956428839
+      },
+      {
+        "brew_time": "7.4",
+        "timestamp": "17:18:29.424",
+        "smoothed_weight": -6.193103764707366,
+        "flow_value": 0.4367819607859591
+      },
+      {
+        "brew_time": "7.5",
+        "timestamp": "17:18:29.525",
+        "smoothed_weight": -5.9237933882366285,
+        "flow_value": 2.693103764707372
+      },
+      {
+        "brew_time": "7.6",
+        "timestamp": "17:18:29.636",
+        "smoothed_weight": -5.491414049412966,
+        "flow_value": 4.323793388236625
+      },
+      {
+        "brew_time": "7.7",
+        "timestamp": "17:18:29.758",
+        "smoothed_weight": -5.2922726444716695,
+        "flow_value": 1.991414049412965
+      },
+      {
+        "brew_time": "7.8",
+        "timestamp": "17:18:29.958",
+        "smoothed_weight": -5.273045380024502,
+        "flow_value": 0.19227264447167158
+      },
+      {
+        "brew_time": "7.9",
+        "timestamp": "17:18:30.076",
+        "smoothed_weight": -5.4157408420220525,
+        "flow_value": -1.4269546199755023
+      },
+      {
+        "brew_time": "8.1",
+        "timestamp": "17:18:30.176",
+        "smoothed_weight": -5.354166757819847,
+        "flow_value": 0.6157408420220545
+      },
+      {
+        "brew_time": "8.2",
+        "timestamp": "17:18:30.279",
+        "smoothed_weight": -4.918750082037862,
+        "flow_value": 4.354166757819851
+      },
+      {
+        "brew_time": "8.3",
+        "timestamp": "17:18:30.380",
+        "smoothed_weight": -4.176875073834076,
+        "flow_value": 7.418750082037864
+      },
+      {
+        "brew_time": "8.4",
+        "timestamp": "17:18:30.531",
+        "smoothed_weight": -2.659187566450668,
+        "flow_value": 15.176875073834077
+      },
+      {
+        "brew_time": "8.5",
+        "timestamp": "17:18:30.640",
+        "smoothed_weight": -1.213268809805601,
+        "flow_value": 14.45918756645067
+      },
+      {
+        "brew_time": "8.6",
+        "timestamp": "17:18:30.857",
+        "smoothed_weight": -0.03194192882504088,
+        "flow_value": 11.813268809805601
+      },
+      {
+        "brew_time": "8.7",
+        "timestamp": "17:18:30.954",
+        "smoothed_weight": 1.2312522640574632,
+        "flow_value": 12.631941928825041
+      },
+      {
+        "brew_time": "8.8",
+        "timestamp": "17:18:31.074",
+        "smoothed_weight": 2.478127037651717,
+        "flow_value": 12.468747735942538
+      },
+      {
+        "brew_time": "9.1",
+        "timestamp": "17:18:31.160",
+        "smoothed_weight": 3.7903143338865455,
+        "flow_value": 13.121872962348284
+      },
+      {
+        "brew_time": "9.2",
+        "timestamp": "17:18:31.266",
+        "smoothed_weight": 6.331282900497891,
+        "flow_value": 25.409685666113457
+      },
+      {
+        "brew_time": "9.3",
+        "timestamp": "17:18:31.382",
+        "smoothed_weight": 8.638154610448103,
+        "flow_value": 23.068717099502116
+      },
+      {
+        "brew_time": "9.4",
+        "timestamp": "17:18:31.537",
+        "smoothed_weight": 9.184339149403293,
+        "flow_value": 5.4618453895519
+      },
+      {
+        "brew_time": "9.5",
+        "timestamp": "17:18:31.607",
+        "smoothed_weight": 9.555905234462966,
+        "flow_value": 3.715660850596727
+      },
+      {
+        "brew_time": "9.6",
+        "timestamp": "17:18:31.719",
+        "smoothed_weight": 9.91031471101667,
+        "flow_value": 3.544094765537036
+      },
+      {
+        "brew_time": "9.7",
+        "timestamp": "17:18:31.945",
+        "smoothed_weight": 10.299283239915002,
+        "flow_value": 3.8896852889833333
+      },
+      {
+        "brew_time": "9.8",
+        "timestamp": "17:18:32.052",
+        "smoothed_weight": 10.679354915923502,
+        "flow_value": 3.800716760084999
+      },
+      {
+        "brew_time": "10.1",
+        "timestamp": "17:18:32.149",
+        "smoothed_weight": 11.051419424331153,
+        "flow_value": 3.7206450840765015
+      },
+      {
+        "brew_time": "10.2",
+        "timestamp": "17:18:32.274",
+        "smoothed_weight": 11.426277481898039,
+        "flow_value": 3.7485805756688606
+      },
+      {
+        "brew_time": "10.3",
+        "timestamp": "17:18:32.374",
+        "smoothed_weight": 11.793649733708234,
+        "flow_value": 3.673722518101954
+      },
+      {
+        "brew_time": "10.4",
+        "timestamp": "17:18:32.480",
+        "smoothed_weight": 12.164284760337411,
+        "flow_value": 3.7063502662917713
+      },
+      {
+        "brew_time": "10.5",
+        "timestamp": "17:18:32.583",
+        "smoothed_weight": 12.52785628430367,
+        "flow_value": 3.6357152396625914
+      },
+      {
+        "brew_time": "10.6",
+        "timestamp": "17:18:32.675",
+        "smoothed_weight": 12.875070655873303,
+        "flow_value": 3.4721437156963297
+      },
+      {
+        "brew_time": "10.7",
+        "timestamp": "17:18:32.784",
+        "smoothed_weight": 13.227563590285973,
+        "flow_value": 3.524929344126697
+      },
+      {
+        "brew_time": "10.8",
+        "timestamp": "17:18:32.881",
+        "smoothed_weight": 13.574807231257376,
+        "flow_value": 3.472436409714028
+      },
+      {
+        "brew_time": "10.9",
+        "timestamp": "17:18:33.117",
+        "smoothed_weight": 13.977326508131638,
+        "flow_value": 4.02519276874262
+      },
+      {
+        "brew_time": "11.1",
+        "timestamp": "17:18:33.197",
+        "smoothed_weight": 14.369593857318474,
+        "flow_value": 3.9226734918683626
+      },
+      {
+        "brew_time": "11.2",
+        "timestamp": "17:18:33.356",
+        "smoothed_weight": 14.762634471586628,
+        "flow_value": 3.9304061426815373
+      },
+      {
+        "brew_time": "11.3",
+        "timestamp": "17:18:33.475",
+        "smoothed_weight": 15.166371024427965,
+        "flow_value": 4.037365528413375
+      },
+      {
+        "brew_time": "11.4",
+        "timestamp": "17:18:33.563",
+        "smoothed_weight": 15.569733921985168,
+        "flow_value": 4.033628975572032
+      },
+      {
+        "brew_time": "11.5",
+        "timestamp": "17:18:33.673",
+        "smoothed_weight": 15.972760529786653,
+        "flow_value": 4.030266078014844
+      },
+      {
+        "brew_time": "11.6",
+        "timestamp": "17:18:33.797",
+        "smoothed_weight": 16.38548447680799,
+        "flow_value": 4.1272394702133575
+      },
+      {
+        "brew_time": "11.7",
+        "timestamp": "17:18:33.895",
+        "smoothed_weight": 16.80693602912719,
+        "flow_value": 4.214515523192013
+      },
+      {
+        "brew_time": "11.8",
+        "timestamp": "17:18:34.116",
+        "smoothed_weight": 17.266242426214472,
+        "flow_value": 4.593063970872819
+      },
+      {
+        "brew_time": "12.1",
+        "timestamp": "17:18:34.204",
+        "smoothed_weight": 17.719618183593024,
+        "flow_value": 4.533757573785522
+      },
+      {
+        "brew_time": "12.2",
+        "timestamp": "17:18:34.340",
+        "smoothed_weight": 18.16765636523372,
+        "flow_value": 4.480381816406975
+      },
+      {
+        "brew_time": "12.3",
+        "timestamp": "17:18:34.413",
+        "smoothed_weight": 18.610890728710352,
+        "flow_value": 4.432343634766305
+      },
+      {
+        "brew_time": "12.4",
+        "timestamp": "17:18:34.547",
+        "smoothed_weight": 19.069801655839317,
+        "flow_value": 4.589109271289651
+      },
+      {
+        "brew_time": "12.5",
+        "timestamp": "17:18:34.641",
+        "smoothed_weight": 19.542821490255385,
+        "flow_value": 4.7301983441606765
+      },
+      {
+        "brew_time": "12.6",
+        "timestamp": "17:18:34.741",
+        "smoothed_weight": 20.00853934122985,
+        "flow_value": 4.657178509744639
+      },
+      {
+        "brew_time": "12.7",
+        "timestamp": "17:18:34.848",
+        "smoothed_weight": 20.477685407106865,
+        "flow_value": 4.691460658770161
+      },
+      {
+        "brew_time": "12.8",
+        "timestamp": "17:18:34.991",
+        "smoothed_weight": 20.94991686639618,
+        "flow_value": 4.722314592893149
+      },
+      {
+        "brew_time": "12.9",
+        "timestamp": "17:18:35.077",
+        "smoothed_weight": 21.404925179756564,
+        "flow_value": 4.550083133603842
+      },
+      {
+        "brew_time": "13.1",
+        "timestamp": "17:18:35.284",
+        "smoothed_weight": 21.914432661780907,
+        "flow_value": 5.095074820243433
+      },
+      {
+        "brew_time": "13.2",
+        "timestamp": "17:18:35.397",
+        "smoothed_weight": 22.422989395602816,
+        "flow_value": 5.085567338219086
+      },
+      {
+        "brew_time": "13.3",
+        "timestamp": "17:18:35.549",
+        "smoothed_weight": 22.930690456042534,
+        "flow_value": 5.077010604397181
+      },
+      {
+        "brew_time": "13.4",
+        "timestamp": "17:18:35.614",
+        "smoothed_weight": 23.437621410438283,
+        "flow_value": 5.069309543957488
+      },
+      {
+        "brew_time": "13.5",
+        "timestamp": "17:18:35.738",
+        "smoothed_weight": 23.943859269394455,
+        "flow_value": 5.062378589561725
+      },
+      {
+        "brew_time": "13.6",
+        "timestamp": "17:18:35.847",
+        "smoothed_weight": 24.43947334245501,
+        "flow_value": 4.956140730605547
+      },
+      {
+        "brew_time": "13.7",
+        "timestamp": "17:18:35.929",
+        "smoothed_weight": 24.93552600820951,
+        "flow_value": 4.96052665754501
+      },
+      {
+        "brew_time": "13.8",
+        "timestamp": "17:18:36.093",
+        "smoothed_weight": 25.43197340738856,
+        "flow_value": 4.964473991790506
+      },
+      {
+        "brew_time": "14.1",
+        "timestamp": "17:18:36.283",
+        "smoothed_weight": 25.978776066649704,
+        "flow_value": 5.46802659261143
+      },
+      {
+        "brew_time": "14.2",
+        "timestamp": "17:18:36.379",
+        "smoothed_weight": 26.520898459984735,
+        "flow_value": 5.421223933350312
+      },
+      {
+        "brew_time": "14.3",
+        "timestamp": "17:18:36.498",
+        "smoothed_weight": 27.048808613986264,
+        "flow_value": 5.279101540015283
+      },
+      {
+        "brew_time": "14.4",
+        "timestamp": "17:18:36.634",
+        "smoothed_weight": 27.60392775258764,
+        "flow_value": 5.55119138601377
+      },
+      {
+        "brew_time": "14.5",
+        "timestamp": "17:18:36.763",
+        "smoothed_weight": 28.143534977328876,
+        "flow_value": 5.396072247412356
+      },
+      {
+        "brew_time": "14.6",
+        "timestamp": "17:18:36.859",
+        "smoothed_weight": 28.669181479595988,
+        "flow_value": 5.256465022671115
+      },
+      {
+        "brew_time": "14.7",
+        "timestamp": "17:18:36.964",
+        "smoothed_weight": 29.19226333163639,
+        "flow_value": 5.230818520404021
+      },
+      {
+        "brew_time": "14.8",
+        "timestamp": "17:18:37.103",
+        "smoothed_weight": 29.713036998472752,
+        "flow_value": 5.207736668363623
+      },
+      {
+        "brew_time": "15.1",
+        "timestamp": "17:18:37.181",
+        "smoothed_weight": 30.241733298625476,
+        "flow_value": 5.286963001527241
+      },
+      {
+        "brew_time": "15.2",
+        "timestamp": "17:18:37.426",
+        "smoothed_weight": 30.82755996876293,
+        "flow_value": 5.858266701374539
+      },
+      {
+        "brew_time": "15.3",
+        "timestamp": "17:18:37.518",
+        "smoothed_weight": 31.374803971886635,
+        "flow_value": 5.472440031237049
+      },
+      {
+        "brew_time": "15.4",
+        "timestamp": "17:18:37.681",
+        "smoothed_weight": 31.89732357469797,
+        "flow_value": 5.225196028113359
+      },
+      {
+        "brew_time": "15.5",
+        "timestamp": "17:18:37.787",
+        "smoothed_weight": 32.45759121722817,
+        "flow_value": 5.602676425301993
+      },
+      {
+        "brew_time": "15.6",
+        "timestamp": "17:18:37.880",
+        "smoothed_weight": 33.02183209550535,
+        "flow_value": 5.642408782771824
+      },
+      {
+        "brew_time": "15.7",
+        "timestamp": "17:18:37.983",
+        "smoothed_weight": 33.56964888595482,
+        "flow_value": 5.4781679044946685
+      },
+      {
+        "brew_time": "15.8",
+        "timestamp": "17:18:38.104",
+        "smoothed_weight": 34.102683997359335,
+        "flow_value": 5.330351114045158
+      },
+      {
+        "brew_time": "16.1",
+        "timestamp": "17:18:38.390",
+        "smoothed_weight": 34.6724155976234,
+        "flow_value": 5.697316002640633
+      },
+      {
+        "brew_time": "16.2",
+        "timestamp": "17:18:38.452",
+        "smoothed_weight": 35.23517403786106,
+        "flow_value": 5.627584402376584
+      },
+      {
+        "brew_time": "16.3",
+        "timestamp": "17:18:38.578",
+        "smoothed_weight": 35.80165663407495,
+        "flow_value": 5.6648259621389485
+      },
+      {
+        "brew_time": "16.4",
+        "timestamp": "17:18:38.657",
+        "smoothed_weight": 36.35149097066746,
+        "flow_value": 5.498343365925109
+      },
+      {
+        "brew_time": "16.5",
+        "timestamp": "17:18:38.780",
+        "smoothed_weight": 36.89634187360072,
+        "flow_value": 5.4485090293325555
+      },
+      {
+        "brew_time": "16.6",
+        "timestamp": "17:18:38.883",
+        "smoothed_weight": 37.42670768624065,
+        "flow_value": 5.303658126399284
+      },
+      {
+        "brew_time": "16.7",
+        "timestamp": "17:18:38.991",
+        "smoothed_weight": 37.94403691761658,
+        "flow_value": 5.173292313759319
+      },
+      {
+        "brew_time": "16.8",
+        "timestamp": "17:18:39.106",
+        "smoothed_weight": 38.46963322585492,
+        "flow_value": 5.255963082383417
+      },
+      {
+        "brew_time": "17.1",
+        "timestamp": "17:18:39.200",
+        "smoothed_weight": 38.972669903269434,
+        "flow_value": 5.030366774145136
+      },
+      {
+        "brew_time": "17.2",
+        "timestamp": "17:18:39.452",
+        "smoothed_weight": 39.50540291294249,
+        "flow_value": 5.327330096730591
+      },
+      {
+        "brew_time": "17.3",
+        "timestamp": "17:18:39.516",
+        "smoothed_weight": 40.034862621648244,
+        "flow_value": 5.294597087057511
+      },
+      {
+        "brew_time": "17.4",
+        "timestamp": "17:18:39.682",
+        "smoothed_weight": 40.54137635948342,
+        "flow_value": 5.065137378351778
+      },
+      {
+        "brew_time": "17.5",
+        "timestamp": "17:18:39.760",
+        "smoothed_weight": 41.04723872353508,
+        "flow_value": 5.058623640516586
+      },
+      {
+        "brew_time": "17.6",
+        "timestamp": "17:18:39.864",
+        "smoothed_weight": 41.54251485118157,
+        "flow_value": 4.952761276464912
+      },
+      {
+        "brew_time": "17.7",
+        "timestamp": "17:18:39.966",
+        "smoothed_weight": 42.02826336606341,
+        "flow_value": 4.857485148818412
+      },
+      {
+        "brew_time": "17.8",
+        "timestamp": "17:18:40.092",
+        "smoothed_weight": 42.51543702945707,
+        "flow_value": 4.87173663393655
+      },
+      {
+        "brew_time": "18.1",
+        "timestamp": "17:18:40.198",
+        "smoothed_weight": 42.99389332651136,
+        "flow_value": 4.784562970542936
+      },
+      {
+        "brew_time": "18.2",
+        "timestamp": "17:18:40.284",
+        "smoothed_weight": 43.44450399386022,
+        "flow_value": 4.506106673488617
+      },
+      {
+        "brew_time": "18.3",
+        "timestamp": "17:18:40.554",
+        "smoothed_weight": 43.87005359447421,
+        "flow_value": 4.255496006139836
+      },
+      {
+        "brew_time": "18.4",
+        "timestamp": "17:18:40.623",
+        "smoothed_weight": 44.243048235026784,
+        "flow_value": 3.729946405525766
+      },
+      {
+        "brew_time": "18.5",
+        "timestamp": "17:18:40.753",
+        "smoothed_weight": 44.5787434115241,
+        "flow_value": 3.356951764973175
+      },
+      {
+        "brew_time": "18.6",
+        "timestamp": "17:18:40.820",
+        "smoothed_weight": 44.88086907037169,
+        "flow_value": 3.0212565884758646
+      },
+      {
+        "brew_time": "18.7",
+        "timestamp": "17:18:40.924",
+        "smoothed_weight": 45.15278216333452,
+        "flow_value": 2.719130929628335
+      },
+      {
+        "brew_time": "18.8",
+        "timestamp": "17:18:41.063",
+        "smoothed_weight": 45.407503947001075,
+        "flow_value": 2.5472178366655385
+      },
+      {
+        "brew_time": "18.9",
+        "timestamp": "17:18:41.166",
+        "smoothed_weight": 45.63675355230097,
+        "flow_value": 2.2924960529989846
+      },
+      {
+        "brew_time": "19.1",
+        "timestamp": "17:18:41.267",
+        "smoothed_weight": 45.84307819707088,
+        "flow_value": 2.063246447699072
+      },
+      {
+        "brew_time": "19.2",
+        "timestamp": "17:18:41.344",
+        "smoothed_weight": 46.0287703773638,
+        "flow_value": 1.856921802929179
+      },
+      {
+        "brew_time": "19.3",
+        "timestamp": "17:18:41.459",
+        "smoothed_weight": 46.20589333962742,
+        "flow_value": 1.7712296226362412
+      },
+      {
+        "brew_time": "19.4",
+        "timestamp": "17:18:41.562",
+        "smoothed_weight": 46.36530400566468,
+        "flow_value": 1.5941066603726028
+      },
+      {
+        "brew_time": "19.5",
+        "timestamp": "17:18:41.658",
+        "smoothed_weight": 46.49877360509822,
+        "flow_value": 1.3346959943353909
+      },
+      {
+        "brew_time": "19.6",
+        "timestamp": "17:18:41.762",
+        "smoothed_weight": 46.618896244588406,
+        "flow_value": 1.2012263949018376
+      },
+      {
+        "brew_time": "19.7",
+        "timestamp": "17:18:41.864",
+        "smoothed_weight": 46.73700662012957,
+        "flow_value": 1.181103755411641
+      },
+      {
+        "brew_time": "19.8",
+        "timestamp": "17:18:41.961",
+        "smoothed_weight": 46.843305958116616,
+        "flow_value": 1.0629933798704627
+      },
+      {
+        "brew_time": "19.9",
+        "timestamp": "17:18:42.067",
+        "smoothed_weight": 46.92897536230496,
+        "flow_value": 0.8566940418834434
+      },
+      {
+        "brew_time": "19.10",
+        "timestamp": "17:18:42.166",
+        "smoothed_weight": 47.016077826074465,
+        "flow_value": 0.8710246376950437
+      },
+      {
+        "brew_time": "20.1",
+        "timestamp": "17:18:42.321",
+        "smoothed_weight": 47.07447004346702,
+        "flow_value": 0.5839221739255152
+      },
+      {
+        "brew_time": "20.2",
+        "timestamp": "17:18:42.375",
+        "smoothed_weight": 47.12702303912032,
+        "flow_value": 0.5255299565330063
+      },
+      {
+        "brew_time": "20.3",
+        "timestamp": "17:18:42.481",
+        "smoothed_weight": 47.19432073520829,
+        "flow_value": 0.6729769608796943
+      },
+      {
+        "brew_time": "20.4",
+        "timestamp": "17:18:42.577",
+        "smoothed_weight": 47.25488866168746,
+        "flow_value": 0.605679264791732
+      },
+      {
+        "brew_time": "20.5",
+        "timestamp": "17:18:42.682",
+        "smoothed_weight": 47.309399795518715,
+        "flow_value": 0.5451113383125517
+      },
+      {
+        "brew_time": "20.6",
+        "timestamp": "17:18:42.812",
+        "smoothed_weight": 47.358459815966846,
+        "flow_value": 0.4906002044813107
+      },
+      {
+        "brew_time": "20.7",
+        "timestamp": "17:18:42.901",
+        "smoothed_weight": 47.402613834370165,
+        "flow_value": 0.44154018403318673
+      },
+      {
+        "brew_time": "20.8",
+        "timestamp": "17:18:43.011",
+        "smoothed_weight": 47.44235245093315,
+        "flow_value": 0.39738616562985385
+      },
+      {
+        "brew_time": "20.9",
+        "timestamp": "17:18:43.111",
+        "smoothed_weight": 47.47811720583984,
+        "flow_value": 0.35764754906686846
+      },
+      {
+        "brew_time": "20.10",
+        "timestamp": "17:18:43.222",
+        "smoothed_weight": 47.50030548525586,
+        "flow_value": 0.22188279416020862
+      },
+      {
+        "brew_time": "21.1",
+        "timestamp": "17:18:43.333",
+        "smoothed_weight": 47.520274936730274,
+        "flow_value": 0.19969451474416644
+      },
+      {
+        "brew_time": "21.2",
+        "timestamp": "17:18:43.577",
+        "smoothed_weight": 47.53824744305725,
+        "flow_value": 0.1797250632697711
+      },
+      {
+        "brew_time": "21.3",
+        "timestamp": "17:18:43.672",
+        "smoothed_weight": 47.55442269875153,
+        "flow_value": 0.1617525569427869
+      },
+      {
+        "brew_time": "21.4",
+        "timestamp": "17:18:43.787",
+        "smoothed_weight": 47.56898042887638,
+        "flow_value": 0.145577301248494
+      },
+      {
+        "brew_time": "21.5",
+        "timestamp": "17:18:43.876",
+        "smoothed_weight": 47.58208238598875,
+        "flow_value": 0.13101957112368723
+      },
+      {
+        "brew_time": "21.6",
+        "timestamp": "17:18:43.973",
+        "smoothed_weight": 47.593874147389876,
+        "flow_value": 0.11791761401127587
+      },
+      {
+        "brew_time": "21.7",
+        "timestamp": "17:18:44.070",
+        "smoothed_weight": 47.60448673265089,
+        "flow_value": 0.10612585261014829
+      },
+      {
+        "brew_time": "21.8",
+        "timestamp": "17:18:44.185",
+        "smoothed_weight": 47.614038059385805,
+        "flow_value": 0.09551326734914767
+      },
+      {
+        "brew_time": "22.1",
+        "timestamp": "17:18:44.267",
+        "smoothed_weight": 47.62263425344723,
+        "flow_value": 0.08596194061425422
+      },
+      {
+        "brew_time": "22.2",
+        "timestamp": "17:18:44.382",
+        "smoothed_weight": 47.630370828102514,
+        "flow_value": 0.0773657465528288
+      },
+      {
+        "brew_time": "22.3",
+        "timestamp": "17:18:44.476",
+        "smoothed_weight": 47.63733374529227,
+        "flow_value": 0.0696291718975317
+      },
+      {
+        "brew_time": "22.4",
+        "timestamp": "17:18:44.702",
+        "smoothed_weight": 47.643600370763046,
+        "flow_value": 0.06266625470779275
+      },
+      {
+        "brew_time": "22.5",
+        "timestamp": "17:18:44.802",
+        "smoothed_weight": 47.64924033368675,
+        "flow_value": 0.056399629237020577
+      },
+      {
+        "brew_time": "22.6",
+        "timestamp": "17:18:44.883",
+        "smoothed_weight": 47.65431630031808,
+        "flow_value": 0.05075966631331141
+      },
+      {
+        "brew_time": "22.7",
+        "timestamp": "17:18:45.003",
+        "smoothed_weight": 47.65888467028628,
+        "flow_value": 0.04568369968197317
+      },
+      {
+        "brew_time": "22.8",
+        "timestamp": "17:18:45.179",
+        "smoothed_weight": 47.662996203257656,
+        "flow_value": 0.04111532971379006
+      },
+      {
+        "brew_time": "23.1",
+        "timestamp": "17:18:45.264",
+        "smoothed_weight": 47.66669658293189,
+        "flow_value": 0.03700379674235421
+      },
+      {
+        "brew_time": "23.2",
+        "timestamp": "17:18:45.346",
+        "smoothed_weight": 47.670026924638705,
+        "flow_value": 0.033303417068140106
+      },
+      {
+        "brew_time": "23.3",
+        "timestamp": "17:18:45.470",
+        "smoothed_weight": 47.67302423217484,
+        "flow_value": 0.029973075361340307
+      },
+      {
+        "brew_time": "23.4",
+        "timestamp": "17:18:45.558",
+        "smoothed_weight": 47.67572180895736,
+        "flow_value": 0.026975767825234698
+      },
+      {
+        "brew_time": "23.5",
+        "timestamp": "17:18:45.798",
+        "smoothed_weight": 47.67814962806163,
+        "flow_value": 0.024278191042697017
+      },
+      {
+        "brew_time": "23.6",
+        "timestamp": "17:18:45.962",
+        "smoothed_weight": 47.68033466525547,
+        "flow_value": 0.021850371938398894
+      },
+      {
+        "brew_time": "23.7",
+        "timestamp": "17:18:46.082",
+        "smoothed_weight": 47.68230119872993,
+        "flow_value": 0.019665334744587426
+      },
+      {
+        "brew_time": "23.8",
+        "timestamp": "17:18:46.208",
+        "smoothed_weight": 47.684071078856945,
+        "flow_value": 0.017698801270142894
+      },
+      {
+        "brew_time": "24.1",
+        "timestamp": "17:18:46.262",
+        "smoothed_weight": 47.685663970971255,
+        "flow_value": 0.015928921143100183
+      },
+      {
+        "brew_time": "24.2",
+        "timestamp": "17:18:46.399",
+        "smoothed_weight": 47.687097573874134,
+        "flow_value": 0.01433602902878306
+      },
+      {
+        "brew_time": "24.3",
+        "timestamp": "17:18:46.538",
+        "smoothed_weight": 47.688387816486724,
+        "flow_value": 0.012902426125904753
+      },
+      {
+        "brew_time": "24.4",
+        "timestamp": "17:18:46.626",
+        "smoothed_weight": 47.68954903483806,
+        "flow_value": 0.011612183513349805
+      },
+      {
+        "brew_time": "24.5",
+        "timestamp": "17:18:46.852",
+        "smoothed_weight": 47.69059413135426,
+        "flow_value": 0.01045096516200772
+      },
+      {
+        "brew_time": "24.6",
+        "timestamp": "17:18:46.924",
+        "smoothed_weight": 47.69153471821884,
+        "flow_value": 0.009405868645799842
+      },
+      {
+        "brew_time": "24.7",
+        "timestamp": "17:18:47.018",
+        "smoothed_weight": 47.69238124639696,
+        "flow_value": 0.008465281781226963
+      },
+      {
+        "brew_time": "24.8",
+        "timestamp": "17:18:47.130",
+        "smoothed_weight": 47.693143121757274,
+        "flow_value": 0.007618753603111372
+      },
+      {
+        "brew_time": "24.9",
+        "timestamp": "17:18:47.235",
+        "smoothed_weight": 47.693828809581554,
+        "flow_value": 0.006856878242800235
+      },
+      {
+        "brew_time": "25.1",
+        "timestamp": "17:18:47.319",
+        "smoothed_weight": 47.6944459286234,
+        "flow_value": 0.006171190418484684
+      }
+    ],
+    "pressureFlow": []
+  }
+}
