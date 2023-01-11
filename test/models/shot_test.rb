@@ -212,4 +212,27 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.espresso_notes.include?("#### Water")
     assert shot.espresso_notes.include?('"tds_type": "PPM"')
   end
+
+  test "extracts real beanconqueror file" do
+    shot = new_shot("test/fixtures/files/beanconqueror_real.json")
+    assert shot.valid?
+    assert_equal "onoma", shot.bean_brand
+    assert_equal "Holm", shot.bean_type
+    assert_equal "250", shot.bean_weight
+    assert_equal "AMERICAN_ROAST", shot.roast_level
+    assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
+    assert shot.bean_notes.start_with?("```javascript")
+    assert shot.bean_notes.include?('"aromatics": "Schokolade, Haselnuss, Rund"')
+    assert_equal "Kinu M47", shot.grinder_model
+    assert_equal "4", shot.grinder_setting
+    assert_equal "1200", shot.drink_weight
+    assert shot.espresso_notes.include?("#### Brew")
+    assert shot.espresso_notes.include?("\n\n```javascript")
+    assert shot.espresso_notes.include?('"brew_beverage_quantity_type": "GR"')
+    assert_not shot.espresso_notes.include?("config")
+    assert shot.espresso_notes.include?("#### Preparation")
+    assert shot.espresso_notes.include?('"type": "CHEMEX"')
+    assert shot.espresso_notes.include?("#### Water")
+    assert shot.espresso_notes.include?('"tds_type": "PPM"')
+  end
 end
