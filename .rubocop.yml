@@ -11,6 +11,7 @@ AllCops:
   TargetRubyVersion: 3.2
   Exclude:
     - db/schema.rb
+    - bin/*
 
 Bundler/OrderedGems:
   Enabled: true

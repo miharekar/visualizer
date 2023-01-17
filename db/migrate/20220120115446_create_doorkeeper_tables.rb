@@ -3,30 +3,30 @@
 class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
   def change
     create_table :oauth_applications, id: :uuid do |t|
-      t.string  :name,    null: false
-      t.string  :uid,     null: false
-      t.string  :secret,  null: false
+      t.string :name, null: false
+      t.string :uid, null: false
+      t.string :secret, null: false
 
       # Remove `null: false` if you are planning to use grant flows
       # that doesn't require redirect URI to be used during authorization
       # like Client Credentials flow or Resource Owner Password.
-      t.text    :redirect_uri, null: false
-      t.string  :scopes,       null: false, default: ""
+      t.text :redirect_uri, null: false
+      t.string :scopes, null: false, default: ""
       t.boolean :confidential, null: false, default: true
-      t.timestamps             null: false
+      t.timestamps null: false
     end
 
     add_index :oauth_applications, :uid, unique: true
 
     create_table :oauth_access_grants, id: :uuid do |t|
-      t.references :resource_owner,  null: false, type: :uuid
-      t.references :application,     null: false, type: :uuid
-      t.string   :token,             null: false
-      t.integer  :expires_in,        null: false
-      t.text     :redirect_uri,      null: false
-      t.datetime :created_at,        null: false
+      t.references :resource_owner, null: false, type: :uuid
+      t.references :application, null: false, type: :uuid
+      t.string :token, null: false
+      t.integer :expires_in, null: false
+      t.text :redirect_uri, null: false
+      t.datetime :created_at, null: false
       t.datetime :revoked_at
-      t.string   :scopes, null: false, default: ""
+      t.string :scopes, null: false, default: ""
     end
 
     add_index :oauth_access_grants, :token, unique: true
@@ -41,7 +41,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
 
       # Remove `null: false` if you are planning to use Password
       # Credentials Grant flow that doesn't require an application.
-      t.references :application,    null: false, type: :uuid
+      t.references :application, null: false, type: :uuid
 
       # If you use a custom token generator you may need to change this column
       # from string to text, so that it accepts tokens larger than 255
@@ -51,11 +51,11 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
       # t.text :token, null: false
       t.string :token, null: false
 
-      t.string   :refresh_token
-      t.integer  :expires_in
+      t.string :refresh_token
+      t.integer :expires_in
       t.datetime :revoked_at
       t.datetime :created_at, null: false
-      t.string   :scopes
+      t.string :scopes
 
       # The authorization server MAY issue a new refresh token, in which case
       # *the client MUST discard the old refresh token* and replace it with the
@@ -70,7 +70,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
       #
       # Comment out this line if you want refresh tokens to be instantly
       # revoked after use.
-      t.string   :previous_refresh_token, null: false, default: ""
+      t.string :previous_refresh_token, null: false, default: ""
     end
 
     add_index :oauth_access_tokens, :token, unique: true
