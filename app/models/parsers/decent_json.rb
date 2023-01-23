@@ -10,7 +10,7 @@ module Parsers
       @profile_fields["json"] = file["profile"]
       @profile_title = file.dig("profile", "title")
 
-      %w[pressure flow resistance].each do |key|
+      %w[pressure flow].each do |key|
         @data["espresso_#{key}"] = file.dig(key, key)
 
         JSON_MAPPING.each do |suffix, subkey|
