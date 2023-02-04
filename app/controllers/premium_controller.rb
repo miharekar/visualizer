@@ -68,7 +68,7 @@ class PremiumController < ApplicationController
     end
   end
 
-  def update
+  def manage
     session = Stripe::BillingPortal::Session.create(
       customer: current_user.stripe_customer_id,
       return_url: shots_url

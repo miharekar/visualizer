@@ -65,8 +65,8 @@ Rails.application.routes.draw do
   end
 
   resources :premium, only: %i[index create] do
-    post :update
     collection do
+      get :manage
       get :success
       get :cancel
     end
