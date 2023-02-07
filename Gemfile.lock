@@ -301,14 +301,6 @@ GEM
       ffi (~> 1.12)
     rufus-scheduler (3.8.2)
       fugit (~> 1.1, >= 1.1.6)
-    sentry-rails (5.8.0)
-      railties (>= 5.0)
-      sentry-ruby (~> 5.8.0)
-    sentry-ruby (5.8.0)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.8.0)
-      sentry-ruby (~> 5.8.0)
-      sidekiq (>= 3.0)
     sidekiq (7.0.3)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
@@ -403,8 +395,6 @@ DEPENDENCIES
   rubocop
   rubocop-performance
   rubocop-rails
-  sentry-rails
-  sentry-sidekiq
   sidekiq
   sidekiq-scheduler (~> 5.0.0.beta2)
   slim

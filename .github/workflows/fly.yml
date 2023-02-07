@@ -2,9 +2,6 @@ name: Fly Deploy
 on: workflow_call
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 jobs:
   deploy:
     name: Deploy app
@@ -13,12 +10,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - uses: getsentry/action-release@v1
-        with:
-          environment: production
-          ignore_missing: true
-          ignore_empty: true
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 

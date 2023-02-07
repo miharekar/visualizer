@@ -38,8 +38,6 @@ gem "pghero"
 gem "pg_query"
 gem "rack-mini-profiler"
 gem "rorvswild"
-gem "sentry-rails"
-gem "sentry-sidekiq"
 gem "stackprof"
 
 group :development do
