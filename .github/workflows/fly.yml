@@ -22,4 +22,4 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: flyctl deploy --remote-only -e SOURCE_VERSION=${{ github.sha }}
+      - run: flyctl deploy --remote-only -e GIT_SHA="${{ github.sha }}" -e GIT_MESSAGE="${{ github.event.head_commit.message }}"

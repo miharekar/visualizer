@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
-RorVsWild.start(api_key: Rails.application.credentials[:rorvswild]) if Rails.application.credentials[:rorvswild].present?
+if Rails.application.credentials[:rorvswild].present?
+  RorVsWild.start(
+    api_key: Rails.application.credentials[:rorvswild],
+    deployment: {
+      revision: ENV["GIT_SHA"],
+      description: ENV["GIT_MESSAGE"]
+    }
+  )
+end
 
 module RorVsWild
   class SimpleMessage < StandardError
