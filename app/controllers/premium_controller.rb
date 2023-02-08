@@ -69,11 +69,15 @@ class PremiumController < ApplicationController
   end
 
   def manage
-    session = Stripe::BillingPortal::Session.create(
-      customer: current_user.stripe_customer_id,
-      return_url: shots_url
-    )
-    redirect_to session.url, allow_other_host: true
+    if current_user.stripe_customer_id.blank?
+      redirect_to shots_path, flash: {alert: "You don't have a Stripe customer ID. Please subscribe first."}
+    else
+      session = Stripe::BillingPortal::Session.create(
+        customer: current_user.stripe_customer_id,
+        return_url: shots_url
+      )
+      redirect_to session.url, allow_other_host: true
+    end
   end
 
   def success
