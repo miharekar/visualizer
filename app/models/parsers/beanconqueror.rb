@@ -9,10 +9,11 @@ module Parsers
       extract_brew(file["brew"])
       extract_preparation(file["preparation"])
       extract_water(file["water"])
-
-      @data["espresso_weight"] = extract_weight(file["brewFlow"]["weight"])
-      start = Time.parse(file["brewFlow"]["weight"].first["timestamp"]).to_f
-      @timeframe = file["brewFlow"]["weight"].map { |w| (Time.parse(w["timestamp"]).to_f - start).round(4).to_s }
+      extract_timeframe(file["brewFlow"]["weight"])
+      extract_weight(file["brewFlow"]["weight"])
+      extract_flow_weight(file["brewFlow"]["realtimeFlow"])
+      extract_flow(file["brewFlow"]["waterFlow"])
+      extract_pressure(file["brewFlow"]["pressureFlow"])
     end
 
     private
@@ -44,8 +45,25 @@ module Parsers
       @extra["espresso_notes"] += "#### Water:\n\n```javascript\n#{JSON.pretty_generate(water)}\n```\n\n"
     end
 
+    def extract_timeframe(weight)
+      start = Time.parse(file["brewFlow"]["weight"].first["timestamp"]).to_f
+      @timeframe = file["brewFlow"]["weight"].map { |w| (Time.parse(w["timestamp"]).to_f - start).round(4).to_s }
+    end
+
     def extract_weight(weight)
-      weight.map { |w| w["actual_weight"].to_f }
+      @data["espresso_weight"] = weight.map { |w| w["actual_weight"].to_f }
+    end
+
+    def extract_flow_weight(flow_weight)
+      @data["espresso_flow_weight"] = flow_weight.map { |fw| fw["flow_value"].to_f }
+    end
+
+    def extract_flow(flow)
+      @data["espresso_flow"] = flow.map { |f| f["value"].to_f }
+    end
+
+    def extract_pressure(pressure)
+      @data["espresso_pressure"] = pressure.map { |p| p["actual_pressure"].to_f }
     end
   end
 end
