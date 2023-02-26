@@ -234,5 +234,12 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.espresso_notes.include?('"type": "CHEMEX"')
     assert shot.espresso_notes.include?("#### Water")
     assert shot.espresso_notes.include?('"tds_type": "PPM"')
+    assert_equal 332, shot.information.timeframe.size
+    assert_equal "0.0", shot.information.timeframe.first
+    assert_equal "34.829", shot.information.timeframe.last
+    assert_equal 34.829, shot.duration
+    assert_equal ["espresso_weight"], shot.information.data.keys.sort
+    assert_equal 332, shot.information.data["espresso_weight"].size
+    assert_equal 10, shot.information.extra.keys.size
   end
 end

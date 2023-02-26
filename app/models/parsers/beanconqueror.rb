@@ -10,8 +10,9 @@ module Parsers
       extract_preparation(file["preparation"])
       extract_water(file["water"])
 
-      @data["test"] = "test"
-      @timeframe = file["brewFlow"]["weight"].pluck("brew_time")
+      @data["espresso_weight"] = extract_weight(file["brewFlow"]["weight"])
+      start = Time.parse(file["brewFlow"]["weight"].first["timestamp"]).to_f
+      @timeframe = file["brewFlow"]["weight"].map { |w| (Time.parse(w["timestamp"]).to_f - start).round(4).to_s }
     end
 
     private
@@ -41,6 +42,10 @@ module Parsers
 
     def extract_water(water)
       @extra["espresso_notes"] += "#### Water:\n\n```javascript\n#{JSON.pretty_generate(water)}\n```\n\n"
+    end
+
+    def extract_weight(weight)
+      weight.map { |w| w["actual_weight"].to_f }
     end
   end
 end
