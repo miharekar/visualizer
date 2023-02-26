@@ -2,6 +2,9 @@
 
 module Parsers
   class Beanconqueror < Main
+    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure"}.freeze
+    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure"}.freeze
+
     def parse
       @start_time = Time.at(file.dig("brew", "config", "unix_timestamp").to_i).utc
       extract_bean(file["bean"])
@@ -9,11 +12,7 @@ module Parsers
       extract_brew(file["brew"])
       extract_preparation(file["preparation"])
       extract_water(file["water"])
-      extract_timeframe(file["brewFlow"]["weight"])
-      extract_weight(file["brewFlow"]["weight"])
-      extract_flow_weight(file["brewFlow"]["realtimeFlow"])
-      extract_flow(file["brewFlow"]["waterFlow"])
-      extract_pressure(file["brewFlow"]["pressureFlow"])
+      extract_data(file["brewFlow"])
     end
 
     private
@@ -45,25 +44,29 @@ module Parsers
       @extra["espresso_notes"] += "#### Water:\n\n```javascript\n#{JSON.pretty_generate(water)}\n```\n\n"
     end
 
-    def extract_timeframe(weight)
-      start = Time.parse(file["brewFlow"]["weight"].first["timestamp"]).to_f
-      @timeframe = file["brewFlow"]["weight"].map { |w| (Time.parse(w["timestamp"]).to_f - start).round(4).to_s }
-    end
+    def extract_data(brew_flow)
+      @timeframe = []
+      @data = DATA_LABELS_MAP.values.index_with { |label| [] }
 
-    def extract_weight(weight)
-      @data["espresso_weight"] = weight.map { |w| w["actual_weight"].to_f }
-    end
+      brew_flow.each do |label, data|
+        data.each do |d|
+          d["unix_timestamp"] = Time.parse(d["timestamp"]).to_f
+        end
+      end
 
-    def extract_flow_weight(flow_weight)
-      @data["espresso_flow_weight"] = flow_weight.map { |fw| fw["flow_value"].to_f }
-    end
+      longest = brew_flow.keys.max { |l| brew_flow[l].size }
 
-    def extract_flow(flow)
-      @data["espresso_flow"] = flow.map { |f| f["value"].to_f }
-    end
-
-    def extract_pressure(pressure)
-      @data["espresso_pressure"] = pressure.map { |p| p["actual_pressure"].to_f }
+      start = brew_flow[longest].first["unix_timestamp"].to_f
+      relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 }
+      brew_flow[longest].each do |d|
+        timestamp = d["unix_timestamp"]
+        @timeframe << (timestamp.to_f - start).round(4).to_s
+        relevant_keys.each do |key|
+          label = DATA_LABELS_MAP[key]
+          closest = brew_flow[key].min_by { |b| (timestamp - b["unix_timestamp"]).abs }
+          data[label] << closest[DATA_VALUES_MAP[key]]
+        end
+      end
     end
   end
 end
