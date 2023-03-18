@@ -36,6 +36,7 @@ Rails.application.configure do
   end
 
   config.hosts << /.+\.ngrok\.io/
+  config.hosts << /.+\.test/
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
