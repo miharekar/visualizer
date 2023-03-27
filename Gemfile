@@ -33,7 +33,6 @@ gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 
-gem "debug"
 gem "pghero"
 gem "pg_query"
 gem "rack-mini-profiler"
@@ -44,6 +43,7 @@ group :development do
   gem "annotate"
   gem "benchmark-ips"
   gem "brakeman"
+  gem "debug"
   gem "dotenv-rails"
   gem "foreman", require: false
   gem "guard"
