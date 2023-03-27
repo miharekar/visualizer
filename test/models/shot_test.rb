@@ -154,11 +154,12 @@ class ShotTest < ActiveSupport::TestCase
 
   test "smart espresso profiler file" do
     shot = new_shot("test/fixtures/files/sharebrew_tsp.csv")
-    assert_equal 450, shot.information.timeframe.size
-    assert_equal "0.051", shot.information.timeframe.first
-    assert_equal "48.403", shot.information.timeframe.last
+    assert_equal 451, shot.information.timeframe.size
+    assert_equal 0.051, shot.information.timeframe.first
+    assert_equal 48.403, shot.information.timeframe.last
     assert_equal 48.403, shot.duration
     assert_equal 9, shot.information.extra.keys.size
+    assert_equal %w[espresso_flow_weight espresso_weight], shot.information.data.keys.sort
     assert_equal "TSP18 Z", shot.profile_title
     assert_equal "Espresso Machine Brand: Flair PRO\nBrew ratio: 1.0\nExtraction time: 48.403\nAvarage flow rate: 0.6406627688366423\nUnit system: metric\nAttribution: Smart Espresso Profiler\nSoftware: Smart Espresso Profiler App\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
     assert_equal "Herd", shot.bean_brand
@@ -272,5 +273,27 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 1748, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
     assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
+  end
+
+  test "extracts pressure from CoffeeFlow app" do
+    shot = new_shot("test/fixtures/files/profitec_victoria_arduino.csv")
+    assert_equal 1074, shot.information.timeframe.size
+    assert_equal 0.336, shot.information.timeframe.first
+    assert_equal 58.536, shot.information.timeframe.last
+    assert_equal 58.536, shot.duration
+    assert_equal %w[espresso_flow_weight espresso_pressure espresso_weight], shot.information.data.keys.sort
+    assert_equal 4.660000000000004, shot.information.data["espresso_weight"][400]
+    assert_equal 8.727121090778084, shot.information.data["espresso_pressure"][400]
+    assert_equal 0.73, shot.information.data["espresso_flow_weight"][400]
+    assert_equal 9, shot.information.extra.keys.size
+    assert_equal "Profitec/Victoria Arduino dual spring setup", shot.profile_title
+    assert_equal "Espresso Machine Brand: Profitec\nEspresso Machine Model: Pro800\nBrew ratio: 1.0\nExtraction time: 58.536\nAvarage flow rate: 0.6551523848571821\nUnit system: metric\nAttribution: Coffee Flow\nSoftware: Coffee Flow\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+    assert_equal "Kavekalmar", shot.bean_brand
+    assert_equal "Brasil Cerrado Mineiro", shot.bean_type
+    assert_equal "dark", shot.roast_level
+    assert_equal "2020-11-18", shot.roast_date
+    assert_equal "Eureka Atom Specialty", shot.grinder_model
+    assert_equal "18.6", shot.bean_weight
+    assert_equal "38.35", shot.drink_weight
   end
 end

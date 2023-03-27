@@ -4,6 +4,7 @@ require "csv"
 
 module Parsers
   class SepCsv < Main
+    DATA_LABELS_MAP = {weight: "espresso_weight", pressure: "espresso_pressure", flow_weight: "espresso_flow_weight"}.freeze
     MAPPING = {
       "Roastery" => "bean_brand",
       "Beans" => "bean_type",
@@ -20,7 +21,7 @@ module Parsers
 
     def initialize(file)
       super
-      @weight = {}
+      @datapoints = {weight: {}, pressure: {}}
     end
 
     def parse
@@ -32,9 +33,7 @@ module Parsers
           parse_data(row)
         end
       end
-      calculate_weight_flow
-      @timeframe = @weight.keys.map(&:to_s)
-      @data["espresso_weight"] = @weight.values.map(&:to_s)
+      prepare_data
     end
 
     private
@@ -44,7 +43,7 @@ module Parsers
 
       if MAPPING[row["metatype"]]
         value = [@extra[MAPPING[row["metatype"]]], row["metadata"]].compact.join(" ")
-        @extra[MAPPING[row["metatype"]]] = value
+        @extra[MAPPING[row["metatype"]]] = value.strip
       elsif row["metatype"] == "Name"
         @profile_title = row["metadata"]
       elsif row["metatype"] == "Date"
@@ -58,16 +57,41 @@ module Parsers
     end
 
     def parse_data(row)
-      return if row["current_total_shot_weight"].blank?
+      if row["comment"] == "sample: weight" && row["current_total_shot_weight"].present?
+        @datapoints[:weight][row["elapsed"].to_f] = row["current_total_shot_weight"].to_f
+      elsif row["comment"] == "sample: pressure" && row["pressure"].present?
+        @datapoints[:pressure][row["elapsed"].to_f] = row["pressure"].to_f
+      end
+    end
 
-      @weight[row["elapsed"].to_f] = row["current_total_shot_weight"].to_f
+    def prepare_data
+      calculate_weight_flow
+      @timeframe = []
+      @datapoints = @datapoints.compact_blank
+      @data = @datapoints.keys.map { |k| [DATA_LABELS_MAP[k], []] }.to_h
+      most_data = @datapoints.max_by { |_k, v| v.size }.first
+      time_step = (@datapoints[most_data].keys.last - @datapoints[most_data].keys.first) / @datapoints[most_data].keys.size
+      first_timestamp = @datapoints.min_by { |_k, v| v.keys.first }[1].keys.first
+      last_timestamp = @datapoints.max_by { |_k, v| v.keys.first }[1].keys.last
+
+      first_timestamp.step(last_timestamp, time_step).each do |time|
+        @timeframe << time
+        @datapoints.each do |key, points|
+          label = DATA_LABELS_MAP[key]
+          closest = points.min_by { |k, v| (time - k).abs }
+          value = closest[1]
+          data[label] << (value.positive? ? value : 0)
+        end
+      end
     end
 
     def calculate_weight_flow
-      @data["espresso_flow_weight"] = []
-      @weight.each do |time, weight|
-        previous = @weight.find { |t, w| t >= time - 1.0 }
-        @data["espresso_flow_weight"] << [weight - previous[1], 0].max.round(2)
+      return if @datapoints[:weight].blank?
+
+      @datapoints[:flow_weight] = {}
+      @datapoints[:weight].each do |time, weight|
+        previous = @datapoints[:weight].find { |t, w| t >= time - 1.0 }
+        @datapoints[:flow_weight][time] = [weight - previous[1], 0].max.round(2)
       end
     end
   end

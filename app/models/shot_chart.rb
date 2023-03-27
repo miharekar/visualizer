@@ -38,9 +38,9 @@ class ShotChart
     @processed_shot_data = process_data(shot)
     return if @processed_shot_data["espresso_pressure"].blank?
 
-    @processed_shot_data["espresso_resistance"] = resistance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"])
-    @processed_shot_data["espresso_conductance"] = conductance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"])
-    @processed_shot_data["espresso_conductance_derivative"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance"])
+    @processed_shot_data["espresso_resistance"] = resistance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"]) if @processed_shot_data["espresso_pressure"].present? && @processed_shot_data["espresso_flow"].present?
+    @processed_shot_data["espresso_conductance"] = conductance_chart(@processed_shot_data["espresso_pressure"], @processed_shot_data["espresso_flow"]) if @processed_shot_data["espresso_pressure"].present? && @processed_shot_data["espresso_flow"].present?
+    @processed_shot_data["espresso_conductance_derivative"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance"]) if @processed_shot_data["espresso_conductance"].present?
   end
 
   def for_highcharts(data)
