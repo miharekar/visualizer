@@ -36,9 +36,9 @@ class ShotChartCompare < ShotChart
     @processed_shot_data = @processed_shot_data.merge(process_data(comparison, label_suffix: SUFFIX))
 
     if @processed_shot_data["espresso_pressure_comparison"].present?
-      @processed_shot_data["espresso_resistance_comparison"] = resistance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"])
-      @processed_shot_data["espresso_conductance_comparison"] = conductance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"])
-      @processed_shot_data["espresso_conductance_derivative_comparison"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance_comparison"])
+      @processed_shot_data["espresso_resistance_comparison"] = resistance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"]) if @processed_shot_data["espresso_pressure_comparison"].present? && @processed_shot_data["espresso_flow_comparison"].present?
+      @processed_shot_data["espresso_conductance_comparison"] = conductance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"]) if @processed_shot_data["espresso_pressure_comparison"].present? && @processed_shot_data["espresso_flow_comparison"].present?
+      @processed_shot_data["espresso_conductance_derivative_comparison"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance_comparison"]) if @processed_shot_data["espresso_conductance_comparison"].present?
     end
 
     normalize_processed_shot_data
