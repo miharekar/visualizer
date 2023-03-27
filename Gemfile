@@ -46,6 +46,8 @@ group :development do
   gem "brakeman"
   gem "dotenv-rails"
   gem "foreman", require: false
+  gem "guard"
+  gem "guard-minitest"
   gem "letter_opener"
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
