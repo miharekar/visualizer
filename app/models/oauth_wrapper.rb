@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Oauth < SimpleDelegator
+class OauthWrapper < SimpleDelegator
   extend Memoist
 
   memoize def identifiers
