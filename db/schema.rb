@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_10_134633) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -52,6 +52,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.index ["slug"], name: "index_changes_on_slug", unique: true
+  end
+
+  create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.jsonb "blob"
+    t.datetime "expires_at"
+    t.string "provider"
+    t.string "uid"
+    t.string "token"
+    t.string "refresh_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
+    t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
   create_table "oauth_access_grants", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -180,6 +194,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "identities", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"

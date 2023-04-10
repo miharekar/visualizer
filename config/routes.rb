@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     mount PgHero::Engine => "pghero"
   end
 
-  devise_for :users
+  devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
+
   use_doorkeeper do
     controllers applications: "oauth/applications"
   end

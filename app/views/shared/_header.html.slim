@@ -39,6 +39,8 @@ nav.bg-stone-800.whitespace-nowrap data-controller="menu"
                   = link_to "Manage Subscription", manage_premium_index_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
                 - if !current_user.premium?
                   = link_to "Upgrade to Premium", premium_index_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
+                - if current_user.premium? && !current_user.identities.exists?(provider: "airtable")
+                  = button_to "Connect Airtable", user_airtable_omniauth_authorize_path, class: "block px-4 py-2 w-full text-left text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900", data: {turbo: false}
                 - if current_user.developer?
                   = link_to "OAuth Applications", oauth_applications_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900", data: {turbo: false}
                 = link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-stone-700 dark:text-stone-300 bg-white dark:bg-black hover:bg-stone-100 dark:hover:bg-stone-900"
