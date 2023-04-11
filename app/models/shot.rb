@@ -109,7 +109,8 @@ class Shot < ApplicationRecord
       "Private notes" => private_notes
     }
 
-    fields["Espresso enjoyment"] = (espresso_enjoyment / 10.0).round if espresso_enjoyment.present? && espresso_enjoyment.positive?
+    enjoyment = (espresso_enjoyment / 10.0).round if espresso_enjoyment.present?
+    fields["Espresso enjoyment"] = enjoyment if enjoyment&.positive?
     fields["Image"] = [{url: image.url(disposition: "attachment"), filename: image.filename.to_s}] if image.attached?
     {fields:}
   end

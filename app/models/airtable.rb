@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class Airtable
+  class DataError < StandardError
+    attr_reader :data, :response
+
+    def initialize(message, data: nil, response: nil)
+      super(message)
+      @data = data
+      @response = response
+    end
+  end
+
   API_URL = "https://api.airtable.com/v0"
   BASE_NAME = "Visualizer"
   TABLE_NAME = "Shots"
@@ -15,7 +25,7 @@ class Airtable
     set_table
   end
 
-  def sync(limit = 10)
+  def sync(limit)
     shot_data = user.shots.order(created_at: :desc).limit(limit).map { |shot| shot.for_airtable }
     shot_data.each_slice(10).map do |batch|
       data = {performUpsert: {fieldsToMergeOn: ["ID"]}, records: batch}
@@ -55,7 +65,11 @@ class Airtable
     headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}
     Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       response = http.public_send(method, uri, data.to_json, headers)
-      JSON.parse(response.body)
+      if response.is_a?(Net::HTTPSuccess)
+        JSON.parse(response.body)
+      else
+        raise DataError, response.body, data:, response:
+      end
     end
   end
 end
