@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class PeopleController < ApplicationController
-  SEARCH_LIMIT = 15
   include Pagy::Backend
+
+  SEARCH_LIMIT = 15
 
   def index
     @users = User.visible.by_name

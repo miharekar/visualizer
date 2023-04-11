@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ShotInformation < ApplicationRecord
-  JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
-
   extend Memoist
+
+  JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
 
   belongs_to :shot
 

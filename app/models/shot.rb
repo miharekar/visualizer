@@ -29,14 +29,8 @@ class Shot < ApplicationRecord
     return if file.blank?
 
     file_content = File.read(file)
-    parsed_shot = Parsers::Main.parse(file_content)
-    shot = find_or_initialize_by(user:, sha: parsed_shot.sha)
-    shot.profile_title = parsed_shot.profile_title
-    shot.start_time = parsed_shot.start_time
-    shot.information ||= shot.build_information
-    %w[data extra profile_fields timeframe].each do |m|
-      shot.information.public_send("#{m}=", parsed_shot.public_send(m))
-    end
+    parser = Parsers::Main.parse(file_content)
+    shot = parser.build_shot(user)
     if shot.valid?
       shot.extract_fields_from_extra
       shot.duration = shot.information.calculate_duration

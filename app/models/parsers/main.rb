@@ -7,21 +7,6 @@ module Parsers
 
     attr_reader :file, :start_time, :data, :extra, :timeframe, :profile_title, :profile_fields, :json
 
-    def initialize(file)
-      @file = file
-      @data = {}
-      @extra = {}
-      @profile_fields = {}
-    end
-
-    def sha
-      Digest::SHA256.base64digest(data.sort.to_json) if data.present?
-    end
-
-    def parse
-      nil
-    end
-
     def self.parser_for(file)
       if file.start_with?("{")
         json = parse_json(file)
@@ -53,6 +38,33 @@ module Parsers
         file = file.sub(matches.captures.first, "")
         retry
       end
+    end
+
+    def initialize(file)
+      @file = file
+      @data = {}
+      @extra = {}
+      @profile_fields = {}
+    end
+
+    def sha
+      Digest::SHA256.base64digest(data.sort.to_json) if data.present?
+    end
+
+    def parse
+      nil
+    end
+
+    def build_shot(user)
+      shot = Shot.find_or_initialize_by(user:, sha:)
+      shot.profile_title = profile_title
+      shot.start_time = start_time
+      shot.information ||= shot.build_information
+      shot.information.data = data
+      shot.information.extra = extra
+      shot.information.timeframe = timeframe
+      shot.information.profile_fields = profile_fields
+      shot
     end
   end
 end
