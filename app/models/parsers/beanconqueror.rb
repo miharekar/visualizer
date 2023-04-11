@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Parsers
-  class Beanconqueror < Main
+  class Beanconqueror < Base
     DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure"}.freeze
     DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure"}.freeze
 

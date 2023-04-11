@@ -28,19 +28,7 @@ class Shot < ApplicationRecord
   def self.from_file(user, file)
     return if file.blank?
 
-    file_content = File.read(file)
-    parser = Parsers::Main.parse(file_content)
-    shot = parser.build_shot(user)
-    if shot.valid?
-      shot.extract_fields_from_extra
-      shot.duration = shot.information.calculate_duration
-    elsif file_content.start_with?("advanced_shot")
-      shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
-    elsif Rails.env.production?
-      s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file_content, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
-      RorVsWild.send_message("Something is wrong with this file", etag: s3_response.etag, user_id: user.id, user_email: user.email)
-    end
-    shot
+    Parsers::Base.parse(File.read(file)).build_shot(user)
   end
 
   def related_shots(limit: 5)

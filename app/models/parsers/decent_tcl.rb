@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Parsers
-  class DecentTcl < Main
+  class DecentTcl < Base
     def initialize(file)
       super
       @start_chars_to_ignore = %i[c b]

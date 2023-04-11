@@ -3,7 +3,7 @@
 require "csv"
 
 module Parsers
-  class SepCsv < Main
+  class SepCsv < Base
     DATA_LABELS_MAP = {weight: "espresso_weight", pressure: "espresso_pressure", flow_weight: "espresso_flow_weight"}.freeze
     MAPPING = {
       "Roastery" => "bean_brand",
