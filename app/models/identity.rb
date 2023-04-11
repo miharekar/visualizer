@@ -5,6 +5,19 @@ class Identity < ApplicationRecord
 
   validates :uid, :provider, presence: true
   validates :uid, uniqueness: {scope: :provider} # rubocop:disable Rails/UniqueValidationWithoutIndex
+
+  def ensure_valid_token!
+    return if expires_at.nil? || expires_at.future?
+
+    devise_config = Devise.omniauth_configs[provider.to_sym]
+    strategy = devise_config.strategy_class.new(nil, *devise_config.args)
+    new_token = OAuth2::AccessToken.new(strategy.client, token, {expires_at: expires_at.to_i, refresh_token:})
+    new_token = new_token.refresh!
+    self.token = new_token.token
+    self.refresh_token = new_token.refresh_token
+    self.expires_at = Time.zone.at(new_token.expires_at)
+    save!
+  end
 end
 
 # == Schema Information

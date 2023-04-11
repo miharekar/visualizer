@@ -1,6 +1,6 @@
-class Airtable
-  include Rails.application.routes.url_helpers
+# frozen_string_literal: true
 
+class Airtable
   API_URL = "https://api.airtable.com/v0"
   BASE_NAME = "Visualizer"
   TABLE_NAME = "Shots"
@@ -10,22 +10,15 @@ class Airtable
   def initialize(user)
     @user = user
     @identity = user.identities.find_by(provider: "airtable")
-  end
-
-  def prepare
+    identity.ensure_valid_token!
     set_base
     set_table
   end
 
   def sync(limit = 10)
-    prepare if @base.nil? || @table.nil?
-    shot_data = user.shots.order(created_at: :desc).limit(limit).map { |shot| {fields: {ID: shot.id, URL: shot_url(shot)}} }
-    shot_data.in_groups_of(10, false) do |batch|
-      data = {performUpsert: {
-        fieldsToMergeOn: [
-          "ID"
-        ]
-      }, records: batch}
+    shot_data = user.shots.order(created_at: :desc).limit(limit).map { |shot| shot.for_airtable }
+    shot_data.each_slice(10).map do |batch|
+      data = {performUpsert: {fieldsToMergeOn: ["ID"]}, records: batch}
       data_request("/#{@base["id"]}/#{@table["id"]}", data, method: :patch)
     end
   end
@@ -47,7 +40,7 @@ class Airtable
     @table = tables.find { |t| t["name"] == TABLE_NAME }
     return if @table
 
-    @table = data_request("/meta/bases/#{@base["id"]}/tables", {name: TABLE_NAME, description: "Shots from Visualizer", fields: [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}]})
+    @table = data_request("/meta/bases/#{@base["id"]}/tables", {name: TABLE_NAME, description: "Shots from Visualizer", fields: Shot.airtable_fields})
   end
 
   def get_request(path)
