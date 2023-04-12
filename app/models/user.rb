@@ -44,6 +44,10 @@ class User < ApplicationRecord
     temperature_unit == "Fahrenheit"
   end
 
+  def metadata_fields
+    super.presence || []
+  end
+
   private
 
   def generate_slug
@@ -67,6 +71,7 @@ end
 #  github                 :string
 #  hide_shot_times        :boolean
 #  last_read_change       :datetime
+#  metadata_fields        :jsonb
 #  name                   :string
 #  premium_expires_at     :datetime
 #  public                 :boolean          default(FALSE)
