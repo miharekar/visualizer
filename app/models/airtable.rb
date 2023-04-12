@@ -25,8 +25,9 @@ class Airtable
     set_table
   end
 
-  def sync(limit)
-    shot_data = user.shots.order(created_at: :desc).limit(limit).map { |shot| shot.for_airtable }
+  def upload(shots = nil)
+    shots = Shot.all if shots.nil?
+    shot_data = shots.where(user:).map { |shot| shot.for_airtable }
     shot_data.each_slice(10).map do |batch|
       data = {performUpsert: {fieldsToMergeOn: ["ID"]}, records: batch}
       data_request("/#{@base["id"]}/#{@table["id"]}", data, method: :patch)
@@ -68,7 +69,7 @@ class Airtable
       if response.is_a?(Net::HTTPSuccess)
         JSON.parse(response.body)
       else
-        raise DataError, response.body, data:, response:
+        raise DataError.new(response.body, data:, response:)
       end
     end
   end
