@@ -34,6 +34,30 @@ class Airtable
     end
   end
 
+  def download(hours: 24)
+    records = []
+    query = {
+      sort: [{field: "Start time", direction: "desc"}],
+      filterByFormula: "DATETIME_DIFF(NOW(), LAST_MODIFIED_TIME(), 'hours') < #{hours}"
+    }
+    loop do
+      url = "/#{@base["id"]}/#{@table["id"]}?#{query.to_query}"
+      data = get_request(url)
+      records += data["records"]
+      query[:offset] = data["offset"]
+      break if query[:offset].blank?
+    end
+    records.each do |record|
+      fields = record["fields"]
+      shot = Shot.find_by(id: fields["ID"], user:)
+      next unless shot
+
+      mapping = Shot::AIRTABLE_FIELDS.index_by { |f| f.to_s.humanize }
+      attributes = fields.slice(*mapping.keys).transform_keys { |k| mapping[k] }
+      shot.update(attributes)
+    end
+  end
+
   private
 
   def set_base

@@ -6,6 +6,7 @@ class Shot < ApplicationRecord
   SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
+  AIRTABLE_FIELDS = %w[profile_title espresso_enjoyment start_time duration barista bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes].freeze
 
   belongs_to :user, optional: true, touch: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy
@@ -37,7 +38,7 @@ class Shot < ApplicationRecord
     [
       {name: "ID", type: "singleLineText"},
       {name: "URL", type: "url"},
-      {name: "Espresso enjoyment", type: "rating", options: {max: 10, icon: "star", color: "yellowBright"}},
+      {name: "Espresso enjoyment", type: "number", options: {precision: 0}},
       {name: "Profile title", type: "singleLineText"},
       {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}},
       {name: "Duration", type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
@@ -50,10 +51,10 @@ class Shot < ApplicationRecord
       {name: "Bean type", type: "singleLineText"},
       {name: "Roast date", type: "singleLineText"},
       {name: "Roast level", type: "singleLineText"},
-      {name: "Drink TDS", type: "singleLineText"},
-      {name: "Drink EY", type: "singleLineText"},
+      {name: "Drink tds", type: "singleLineText"},
+      {name: "Drink ey", type: "singleLineText"},
       {name: "Bean notes", type: "richText"},
-      {name: "Notes", type: "richText"},
+      {name: "Espresso notes", type: "richText"},
       {name: "Private notes", type: "richText"},
       {name: "Image", type: "multipleAttachments"}
     ]
@@ -87,30 +88,8 @@ class Shot < ApplicationRecord
   end
 
   def for_airtable
-    fields = {
-      "ID" => id,
-      "URL" => shot_url(self),
-      "Profile title" => profile_title,
-      "Start time" => start_time,
-      "Duration" => duration.round,
-      "Barista" => barista,
-      "Bean weight" => bean_weight,
-      "Drink weight" => drink_weight,
-      "Grinder model" => grinder_model,
-      "Grinder setting" => grinder_setting,
-      "Bean brand" => bean_brand,
-      "Bean type" => bean_type,
-      "Roast date" => roast_date,
-      "Roast level" => roast_level,
-      "Drink TDS" => drink_tds,
-      "Drink EY" => drink_ey,
-      "Bean notes" => bean_notes,
-      "Notes" => espresso_notes,
-      "Private notes" => private_notes
-    }
-
-    enjoyment = (espresso_enjoyment / 10.0).round if espresso_enjoyment.present?
-    fields["Espresso enjoyment"] = enjoyment if enjoyment&.positive?
+    fields = {"ID" => id, "URL" => shot_url(self)}
+    AIRTABLE_FIELDS.each { |attr| fields[attr.humanize] = public_send(attr) }
     fields["Image"] = [{url: image.url(disposition: "attachment"), filename: image.filename.to_s}] if image.attached?
     {fields:}
   end
