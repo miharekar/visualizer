@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_10_134633) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_12_150105) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -157,6 +157,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_10_134633) do
     t.string "barista"
     t.text "private_notes"
     t.float "duration"
+    t.jsonb "metadata"
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["user_id", "created_at"], name: "index_shots_on_user_id_and_created_at"

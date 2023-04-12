@@ -58,6 +58,23 @@
             = f.text_field :drink_ey, class: "standard-input", data: {ey_calculator_target: "ey"}
             span class="cursor-pointer text-xs text-stone-500 dark:text-stone-400 hover:text-stone-400 dark:hover:text-stone-500" data-action="click->ey-calculator#calculate"
               ' Calculate from TDS
+        - if current_user.premium?
+          - if current_user.metadata_fields.any?
+
+            - current_user.metadata_fields.each do |field|
+              .col-span-6.sm:col-span-3
+                = f.label "metadata[#{field}]", field, class: "standard-label"
+                = f.text_field "metadata[#{field}]", value: @shot.metadata[field], class: "standard-input"
+          - else
+            p.text-stone-700.dark:text-stone-300.text-center
+              ' You don't have any custom metadata fields yet.
+              = link_to "Add some", edit_profile_path(current_user), class: "font-bold underline hover:no-underline"
+              ' !
+        - else
+          p.text-pink-600
+            ' Add private notes, custom metadata fields, and images to your shots by
+            = link_to "upgrading to Premium", premium_index_path, class: "font-bold underline hover:no-underline"
+            ' .
         div
           = f.label :bean_notes, class: "standard-label"
           .mt-1

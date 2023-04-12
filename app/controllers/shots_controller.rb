@@ -86,7 +86,9 @@ class ShotsController < ApplicationController
   end
 
   def update
-    @shot.update(shot_params)
+    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Shot::EXTRA_DATA_METHODS]
+    allowed << {metadata: current_user.metadata_fields} if current_user.premium?
+    @shot.update(params.require(:shot).permit(allowed))
     if params[:shot][:image].present? && current_user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
         @shot.image.attach(params[:shot][:image])
@@ -135,10 +137,6 @@ class ShotsController < ApplicationController
 
   def load_users_shot
     @shot = current_user.shots.find(params[:id])
-  end
-
-  def shot_params
-    params.require(:shot).permit(:image, :profile_title, :barista, :bean_weight, :private_notes, *Shot::EXTRA_DATA_METHODS)
   end
 
   def load_shots_with_pagy

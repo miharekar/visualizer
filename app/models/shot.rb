@@ -113,6 +113,7 @@ end
 #  espresso_notes     :text
 #  grinder_model      :string
 #  grinder_setting    :string
+#  metadata           :jsonb
 #  private_notes      :text
 #  profile_title      :string
 #  roast_date         :string
