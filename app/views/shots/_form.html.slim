@@ -67,12 +67,12 @@
                 = f.text_field "metadata[#{field}]", value: @shot.metadata[field], class: "standard-input"
           - else
             p.text-stone-700.dark:text-stone-300.text-center
-              ' You don't have any custom metadata fields yet.
+              ' You don't have any custom fields yet.
               = link_to "Add some", edit_profile_path(current_user), class: "font-bold underline hover:no-underline"
               ' !
         - else
           p.text-pink-600
-            ' Add private notes, custom metadata fields, and images to your shots by
+            ' Add private notes, custom fields, and images to your shots by
             = link_to "upgrading to Premium", premium_index_path, class: "font-bold underline hover:no-underline"
             ' .
         div
