@@ -9,7 +9,7 @@
             <span class="text-gray-900">or</span>
             <span class="text-pink-600">€50/year</span>
           </h1>
-          <p class="mt-5 text-xl text-gray-500">Includes everything from the free plan plus so much more</p>
+          <p class="mt-5 text-xl text-gray-500">Unlock the full potential of Visualizer with these features</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
           <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-700 sm:mt-10 sm:w-auto xl:mt-0" %>
@@ -17,8 +17,8 @@
       </div>
       <div class="border-t border-gray-200 pt-16 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900">Everything a Decent owner wants and more</p>
-          <p class="mt-4 text-lg text-gray-500">7-day free trial. Cancel anytime.</p>
+          <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900">Experience the ultimate Visualizer experience</p>
+          <p class="mt-4 text-lg text-gray-500">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
@@ -48,7 +48,7 @@
   </div>
   <div class="bg-pink-900">
     <div class="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-white">Frequently asked questions</h2>
+      <h2 class="text-3xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
       <div class="mt-6 border-t border-pink-400 border-opacity-25 pt-10">
         <dl class="space-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-12 md:space-y-0">
           <% @qas.each do |q, a| %>
