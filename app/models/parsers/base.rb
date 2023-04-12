@@ -60,7 +60,7 @@ module Parsers
 
       if shot.valid?
         shot.extract_fields_from_extra
-        shot.duration = shot.information.calculate_duration
+        shot.duration = calculate_duration
       elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
       elsif Rails.env.production?
@@ -72,6 +72,17 @@ module Parsers
 
     def parse
       nil
+    end
+
+    private
+
+    def calculate_duration
+      index = if data["espresso_flow"]
+        [data["espresso_flow"].size, timeframe.size].min
+      else
+        timeframe.size
+      end
+      timeframe[index - 1].to_f
     end
   end
 end
