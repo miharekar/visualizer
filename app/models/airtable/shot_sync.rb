@@ -1,0 +1,65 @@
+# frozen_string_literal: true
+
+module Airtable
+  class ShotSync
+    include Rails.application.routes.url_helpers
+
+    STANDARD_FIELDS = %w[
+      espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
+      bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
+    ].index_by { |f| f.to_s.humanize }
+    FIELD_OPTIONS = {
+      "espresso_enjoyment" => {type: "number", options: {precision: 0}},
+      "duration" => {type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
+      "bean_notes" => {type: "richText"},
+      "espresso_notes" => {type: "richText"},
+      "private_notes" => {type: "richText"}
+    }
+
+    attr_reader :user, :metadata_fields
+
+    def initialize(user)
+      @user = user
+      @metadata_fields = user.metadata_fields
+    end
+
+    def table
+      @table ||= Table.new(user, "Shots", table_fields)
+    end
+
+    def upload(shots = nil)
+      shots = Shot.all if shots.nil?
+      records = shots.where(user:).map { |shot| prepare_record(shot) }
+      table.update_records(records)
+    end
+
+    def download(minutes: 60)
+      records = table.get_records(minutes:).index_by { |r| r["fields"]["ID"] }
+      shots = user.shots.where(id: records.keys)
+      shots.each do |shot|
+        fields = records[shot.id]["fields"]
+        attributes = fields.slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
+        attributes[:metadata] = metadata_fields.index_with { |f| fields[f] }
+        shot.update(attributes.merge(skip_airtable_sync: true))
+      end
+    end
+
+    private
+
+    def table_fields
+      static = [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}, {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}, {name: "Image", type: "multipleAttachments"}]
+      standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
+      metadata = metadata_fields.map { |field| {name: field, type: "singleLineText"} }
+
+      static + standard + metadata
+    end
+
+    def prepare_record(shot)
+      fields = {"ID" => shot.id, "URL" => shot_url(shot), "Start time" => shot.start_time}
+      STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
+      metadata_fields.each { |field| fields[field] = shot.metadata[field] }
+      fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
+      {fields:}
+    end
+  end
+end

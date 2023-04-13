@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 class Shot < ApplicationRecord
-  include Rails.application.routes.url_helpers
-
   SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
   DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_state_change].freeze
   EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
-  AIRTABLE_FIELDS = %w[profile_title espresso_enjoyment start_time duration barista bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes].freeze
 
   belongs_to :user, optional: true, touch: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy
@@ -21,6 +18,8 @@ class Shot < ApplicationRecord
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
+
+  attr_accessor :skip_airtable_sync
 
   after_create :ensure_screenshot
   after_save_commit :sync_to_airtable
@@ -62,17 +61,9 @@ class Shot < ApplicationRecord
   end
 
   def sync_to_airtable
-    return if !user.premium? || user.identities.by_provider(:airtable).empty?
+    return if skip_airtable_sync || !user.premium? || user.identities.by_provider(:airtable).empty?
 
-    Airtable.new(user).upload(Shot.where(id:))
-  end
-
-  def for_airtable
-    fields = {"ID" => id, "URL" => shot_url(self)}
-    AIRTABLE_FIELDS.each { |attr| fields[attr.humanize] = public_send(attr) }
-    user.metadata_fields.each { |field| fields[field] = metadata[field] }
-    fields["Image"] = [{url: image.url(disposition: "attachment"), filename: image.filename.to_s}] if image.attached?
-    {fields:}
+    Airtable::ShotSync.new(user).upload(Shot.where(id:))
   end
 end
 
