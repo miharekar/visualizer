@@ -23,6 +23,7 @@ class Airtable
     identity.ensure_valid_token!
     set_base
     set_table
+    set_fields
   end
 
   def upload(shots = nil)
@@ -54,7 +55,8 @@ class Airtable
 
       mapping = Shot::AIRTABLE_FIELDS.index_by { |f| f.to_s.humanize }
       attributes = fields.slice(*mapping.keys).transform_keys { |k| mapping[k] }
-      shot.update(attributes)
+      attributes[:metadata] = user.metadata_fields.index_with { |f| fields[f] }
+      shot.update_columns(attributes) # rubocop:disable Rails/SkipsModelValidations
     end
   end
 
@@ -75,10 +77,18 @@ class Airtable
     @table = tables.find { |t| t["name"] == TABLE_NAME }
     return if @table
 
-    @table = data_request("/meta/bases/#{@base["id"]}/tables", {name: TABLE_NAME, description: "Shots from Visualizer", fields: Shot.airtable_fields})
+    @table = data_request("/meta/bases/#{@base["id"]}/tables", {name: TABLE_NAME, description: "Shots from Visualizer", fields: shot_fields})
+  end
+
+  def set_fields
+    existing_fields = @table["fields"].pluck("name")
+    shot_fields.select { |f| existing_fields.exclude?(f[:name]) }.each do |field|
+      data_request("/meta/bases/#{@base["id"]}/tables/#{@table["id"]}/fields", field)
+    end
   end
 
   def get_request(path)
+    puts "Sending GET request to #{path}"
     uri = URI.parse(API_URL + path)
     headers = {"Authorization" => "Bearer #{identity.token}"}
     response = Net::HTTP.get(uri, headers)
@@ -86,6 +96,7 @@ class Airtable
   end
 
   def data_request(path, data, method: :post)
+    puts "Sending #{method} request to #{path} with data #{data}"
     uri = URI.parse(API_URL + path)
     headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}
     Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
@@ -96,5 +107,31 @@ class Airtable
         raise DataError.new(response.body, data:, response:)
       end
     end
+  end
+
+  def shot_fields
+    [
+      {name: "ID", type: "singleLineText"},
+      {name: "URL", type: "url"},
+      {name: "Espresso enjoyment", type: "number", options: {precision: 0}},
+      {name: "Profile title", type: "singleLineText"},
+      {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}},
+      {name: "Duration", type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
+      {name: "Barista", type: "singleLineText"},
+      {name: "Bean weight", type: "singleLineText"},
+      {name: "Drink weight", type: "singleLineText"},
+      {name: "Grinder model", type: "singleLineText"},
+      {name: "Grinder setting", type: "singleLineText"},
+      {name: "Bean brand", type: "singleLineText"},
+      {name: "Bean type", type: "singleLineText"},
+      {name: "Roast date", type: "singleLineText"},
+      {name: "Roast level", type: "singleLineText"},
+      {name: "Drink tds", type: "singleLineText"},
+      {name: "Drink ey", type: "singleLineText"},
+      {name: "Bean notes", type: "richText"},
+      {name: "Espresso notes", type: "richText"},
+      {name: "Private notes", type: "richText"},
+      {name: "Image", type: "multipleAttachments"}
+    ] + user.metadata_fields.map { |name| {name:, type: "singleLineText"} }
   end
 end

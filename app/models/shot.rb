@@ -23,7 +23,7 @@ class Shot < ApplicationRecord
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
 
   after_create :ensure_screenshot
-
+  after_save_commit :sync_to_airtable
   after_destroy_commit -> { broadcast_remove_to user, :shots }
 
   validates :start_time, :information, :sha, presence: true
@@ -32,32 +32,6 @@ class Shot < ApplicationRecord
     return if file.blank?
 
     Parsers::Base.parse(File.read(file)).build_shot(user)
-  end
-
-  def self.airtable_fields
-    [
-      {name: "ID", type: "singleLineText"},
-      {name: "URL", type: "url"},
-      {name: "Espresso enjoyment", type: "number", options: {precision: 0}},
-      {name: "Profile title", type: "singleLineText"},
-      {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}},
-      {name: "Duration", type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
-      {name: "Barista", type: "singleLineText"},
-      {name: "Bean weight", type: "singleLineText"},
-      {name: "Drink weight", type: "singleLineText"},
-      {name: "Grinder model", type: "singleLineText"},
-      {name: "Grinder setting", type: "singleLineText"},
-      {name: "Bean brand", type: "singleLineText"},
-      {name: "Bean type", type: "singleLineText"},
-      {name: "Roast date", type: "singleLineText"},
-      {name: "Roast level", type: "singleLineText"},
-      {name: "Drink tds", type: "singleLineText"},
-      {name: "Drink ey", type: "singleLineText"},
-      {name: "Bean notes", type: "richText"},
-      {name: "Espresso notes", type: "richText"},
-      {name: "Private notes", type: "richText"},
-      {name: "Image", type: "multipleAttachments"}
-    ]
   end
 
   def related_shots(limit: 5)
@@ -87,9 +61,16 @@ class Shot < ApplicationRecord
     ScreenshotTakerJob.perform_later(self)
   end
 
+  def sync_to_airtable
+    return if !user.premium? || user.identities.by_provider(:airtable).empty?
+
+    Airtable.new(user).upload(Shot.where(id:))
+  end
+
   def for_airtable
     fields = {"ID" => id, "URL" => shot_url(self)}
     AIRTABLE_FIELDS.each { |attr| fields[attr.humanize] = public_send(attr) }
+    user.metadata_fields.each { |field| fields[field] = metadata[field] }
     fields["Image"] = [{url: image.url(disposition: "attachment"), filename: image.filename.to_s}] if image.attached?
     {fields:}
   end

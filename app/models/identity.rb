@@ -6,6 +6,8 @@ class Identity < ApplicationRecord
   validates :uid, :provider, presence: true
   validates :uid, uniqueness: {scope: :provider} # rubocop:disable Rails/UniqueValidationWithoutIndex
 
+  scope :by_provider, ->(provider) { where(provider:) }
+
   def ensure_valid_token!
     return if expires_at.nil? || expires_at.future?
 

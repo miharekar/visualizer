@@ -45,6 +45,7 @@ class User < ApplicationRecord
   end
 
   def metadata_fields
+    return ["Portafilter"]
     super.presence || []
   end
 
