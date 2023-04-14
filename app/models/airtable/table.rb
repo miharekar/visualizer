@@ -20,13 +20,11 @@ module Airtable
     end
 
     def update_records(records, merge_on: ["ID"])
-      returned_records = []
       records.each_slice(10).map do |batch|
         data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
         response = data_request("/#{@base["id"]}/#{@table["id"]}", data, method: :patch)
-        returned_records += response["records"]
+        yield response if block_given?
       end
-      returned_records
     end
 
     def get_records(minutes: 60)
@@ -74,7 +72,6 @@ module Airtable
     end
 
     def get_request(path)
-      Rails.logger.debug { "Sending GET request to #{path}" }
       uri = URI.parse(API_URL + path)
       headers = {"Authorization" => "Bearer #{identity.token}"}
       response = Net::HTTP.get(uri, headers)
@@ -82,7 +79,6 @@ module Airtable
     end
 
     def data_request(path, data, method: :post)
-      Rails.logger.debug { "Sending #{method} request to #{path} with data #{data}" }
       uri = URI.parse(API_URL + path)
       data = data.to_json if data.present?
       headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}

@@ -33,6 +33,10 @@ class Shot < ApplicationRecord
     Parsers::Base.parse(File.read(file)).build_shot(user)
   end
 
+  def metadata
+    super.presence || {}
+  end
+
   def related_shots(limit: 5)
     query = self.class.where(user:).where.not(id:).limit(limit)
     query.where(start_time: start_time..).order(:start_time) + [self] + query.where(start_time: ..start_time).order(start_time: :desc)
@@ -63,12 +67,14 @@ class Shot < ApplicationRecord
   def sync_to_airtable
     return if skip_airtable_sync || !user.premium? || user.identities.by_provider(:airtable).empty?
 
-    Airtable::ShotSync.new(user).upload(self)
+    AirtableShotUploadJob.perform_later(self)
   end
 
   def broadcast_and_cleanup_airtable
-    broadcast_remove_to user, :shots
-    Airtable::ShotSync.new(user).delete(airtable_id) if airtable_id.present?
+    broadcast_remove_to(user, :shots)
+    return if airtable_id.blank? || !user.premium? || user.identities.by_provider(:airtable).empty?
+
+    AirtableShotDeleteJob.perform_later(user, airtable_id)
   end
 end
 

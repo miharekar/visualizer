@@ -36,13 +36,14 @@ module Airtable
     end
 
     def upload_multiple(shots)
-      records = shots.where(user:).map { |shot| prepare_record(shot) }
-      records = table.update_records(records).index_by { |r| r["fields"]["ID"] }
-      shots.each do |shot|
-        record = records[shot.id]
-        next unless record
+      records = shots.where(user:).with_attached_image.map { |shot| prepare_record(shot) }
+      table.update_records(records) do |response|
+        response["records"].each do |record|
+          shot = shots.find_by(id: record["fields"]["ID"])
+          next unless shot
 
-        shot.update(airtable_id: record["id"], skip_airtable_sync: true)
+          shot.update(airtable_id: record["id"], skip_airtable_sync: true)
+        end
       end
     end
 
