@@ -27,21 +27,40 @@ module Airtable
       @table ||= Table.new(user, "Shots", table_fields)
     end
 
-    def upload(shots = nil)
-      shots = Shot.all if shots.nil?
+    def upload(shot)
+      if shot.airtable_id
+        table.update_record(shot.airtable_id, prepare_record(shot))
+      else
+        upload_multiple(Shot.where(id: shot.id))
+      end
+    end
+
+    def upload_multiple(shots)
       records = shots.where(user:).map { |shot| prepare_record(shot) }
-      table.update_records(records)
+      records = table.update_records(records).index_by { |r| r["fields"]["ID"] }
+      shots.each do |shot|
+        record = records[shot.id]
+        next unless record
+
+        shot.update(airtable_id: record["id"], skip_airtable_sync: true)
+      end
     end
 
     def download(minutes: 60)
-      records = table.get_records(minutes:).index_by { |r| r["fields"]["ID"] }
-      shots = user.shots.where(id: records.keys)
-      shots.each do |shot|
-        fields = records[shot.id]["fields"]
-        attributes = fields.slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
-        attributes[:metadata] = metadata_fields.index_with { |f| fields[f] }
+      records = table.get_records(minutes:)
+      shots = user.shots.where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
+      records.each do |record|
+        shot = shots[record["id"]]
+        next unless shot
+
+        attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
+        attributes[:metadata] = metadata_fields.index_with { |f| record["fields"][f] }
         shot.update(attributes.merge(skip_airtable_sync: true))
       end
+    end
+
+    def delete(airtable_id)
+      table.delete_record(airtable_id)
     end
 
     private

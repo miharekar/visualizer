@@ -23,7 +23,7 @@ class Shot < ApplicationRecord
 
   after_create :ensure_screenshot
   after_save_commit :sync_to_airtable
-  after_destroy_commit -> { broadcast_remove_to user, :shots }
+  after_destroy_commit :broadcast_and_cleanup_airtable
 
   validates :start_time, :information, :sha, presence: true
 
@@ -63,7 +63,12 @@ class Shot < ApplicationRecord
   def sync_to_airtable
     return if skip_airtable_sync || !user.premium? || user.identities.by_provider(:airtable).empty?
 
-    Airtable::ShotSync.new(user).upload(Shot.where(id:))
+    Airtable::ShotSync.new(user).upload(self)
+  end
+
+  def broadcast_and_cleanup_airtable
+    broadcast_remove_to user, :shots
+    Airtable::ShotSync.new(user).delete(airtable_id) if airtable_id.present?
   end
 end
 
@@ -95,10 +100,12 @@ end
 #  start_time         :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  airtable_id        :string
 #  user_id            :uuid
 #
 # Indexes
 #
+#  index_shots_on_airtable_id             (airtable_id)
 #  index_shots_on_created_at              (created_at)
 #  index_shots_on_sha                     (sha)
 #  index_shots_on_user_id_and_created_at  (user_id,created_at)

@@ -15,11 +15,18 @@ module Airtable
       set_fields(fields)
     end
 
+    def update_record(record_id, fields)
+      data_request("/#{@base["id"]}/#{@table["id"]}/#{record_id}", fields, method: :patch)
+    end
+
     def update_records(records, merge_on: ["ID"])
+      returned_records = []
       records.each_slice(10).map do |batch|
         data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
-        data_request("/#{@base["id"]}/#{@table["id"]}", data, method: :patch)
-      end.flatten
+        response = data_request("/#{@base["id"]}/#{@table["id"]}", data, method: :patch)
+        returned_records += response["records"]
+      end
+      returned_records
     end
 
     def get_records(minutes: 60)
@@ -33,6 +40,10 @@ module Airtable
         break if query[:offset].blank?
       end
       records
+    end
+
+    def delete_record(record_id)
+      data_request("/#{@base["id"]}/#{@table["id"]}/#{record_id}", nil, method: :delete)
     end
 
     private
@@ -63,7 +74,7 @@ module Airtable
     end
 
     def get_request(path)
-      puts "Sending GET request to #{path}"
+      Rails.logger.debug { "Sending GET request to #{path}" }
       uri = URI.parse(API_URL + path)
       headers = {"Authorization" => "Bearer #{identity.token}"}
       response = Net::HTTP.get(uri, headers)
@@ -71,11 +82,13 @@ module Airtable
     end
 
     def data_request(path, data, method: :post)
-      puts "Sending #{method} request to #{path} with data #{data}"
+      Rails.logger.debug { "Sending #{method} request to #{path} with data #{data}" }
       uri = URI.parse(API_URL + path)
+      data = data.to_json if data.present?
       headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-        response = http.public_send(method, uri, data.to_json, headers)
+        attrs = [uri, data, headers].compact
+        response = http.public_send(method, *attrs)
         if response.is_a?(Net::HTTPSuccess)
           JSON.parse(response.body)
         else
