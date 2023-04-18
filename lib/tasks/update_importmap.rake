@@ -5,18 +5,17 @@ namespace :importmap do
     file = Rails.root.join("config/importmap.rb")
     content = File.read(file)
     content.split("\n").each do |line|
-      next unless line.include?("jspm")
+      next unless line.include?("# source:")
 
-      matches = line.match(/npm:(?<package>[^@]+)@(?<version>[^\/]+)\//)
-      uri = URI("https://registry.npmjs.org/#{matches[:package]}/latest")
+      uri = URI(line[/# source: (\S+)/, 1])
       res = Net::HTTP.get_response(uri)
       if res.is_a?(Net::HTTPSuccess)
-        data = JSON.parse(res.body)
-        version = data["version"]
-        next if version == matches[:version]
+        pinned_url = res.body[/Normal: (\S+)$/, 1]
+        current = line[/to: "(\S+)"/, 1]
+        next if pinned_url == current
 
-        puts "Updating #{matches[:package]} from #{matches[:version]} to #{version}"
-        content.sub!(/npm:#{matches[:package]}@#{matches[:version]}\//, "npm:#{matches[:package]}@#{version}/")
+        puts "Updating #{current} to #{pinned_url}"
+        content.sub!("to: \"#{current}\"", "to: \"#{pinned_url}\"")
       else
         puts "Error: #{res.body}"
       end
