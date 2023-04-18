@@ -73,4 +73,4 @@ Rails.application.configure do
 
   config.active_job.queue_adapter = :sidekiq
 end
-Rails.application.routes.default_url_options[:host] = "localhost"
+Rails.application.routes.default_url_options = {host: "visualizer.test", protocol: "https"}

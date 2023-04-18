@@ -2,6 +2,8 @@
 
 module Airtable
   class Table
+    include Rails.application.routes.url_helpers
+
     API_URL = "https://api.airtable.com/v0"
     BASE_NAME = "Visualizer"
 
@@ -13,6 +15,7 @@ module Airtable
       set_base
       set_table(table_name, fields)
       set_fields(fields)
+      set_webhook
     end
 
     def update_record(record_id, fields)
@@ -69,6 +72,17 @@ module Airtable
       fields.select { |f| existing.exclude?(f[:name]) }.each do |field|
         data_request("/meta/bases/#{@base["id"]}/tables/#{@table["id"]}/fields", field)
       end
+    end
+
+    def set_webhook
+      webhooks = get_request("/bases/#{@base["id"]}/webhooks")["webhooks"].select { |w| Time.zone.parse(w["expirationTime"]).future? }
+      return if webhooks.any?
+
+      data = {
+        notificationUrl: airtable_url,
+        specification: {options: {filters: {dataTypes: ["tableData"], recordChangeScope: @table["id"]}}}
+      }
+      data_request("/bases/#{@base["id"]}/webhooks", data)
     end
 
     def get_request(path)
