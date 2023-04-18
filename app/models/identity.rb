@@ -2,6 +2,7 @@
 
 class Identity < ApplicationRecord
   belongs_to :user
+  has_one :airtable_info, dependent: :destroy
 
   validates :uid, :provider, presence: true
   validates :uid, uniqueness: {scope: :provider} # rubocop:disable Rails/UniqueValidationWithoutIndex

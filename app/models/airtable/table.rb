@@ -5,27 +5,23 @@ module Airtable
     include Rails.application.routes.url_helpers
 
     API_URL = "https://api.airtable.com/v0"
-    BASE_NAME = "Visualizer"
-
-    attr_reader :identity
 
     def initialize(user, table_name, fields)
       @identity = user.identities.find_by(provider: "airtable")
-      identity.ensure_valid_token!
-      set_base
-      set_table(table_name, fields)
-      set_fields(fields)
-      set_webhook
+      @table_name = table_name
+      @fields = fields
+      @identity.ensure_valid_token!
+      @airtable_info = @identity.airtable_info || create_airtable_info
     end
 
     def update_record(record_id, fields)
-      data_request("/#{@base["id"]}/#{@table["id"]}/#{record_id}", fields, method: :patch)
+      api_request("/#{@airtable_info.base_id}/#{@airtable_info.table_id}/#{record_id}", fields, method: :patch)
     end
 
     def update_records(records, merge_on: ["ID"])
       records.each_slice(10).map do |batch|
         data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
-        response = data_request("/#{@base["id"]}/#{@table["id"]}", data, method: :patch)
+        response = api_request("/#{@airtable_info.base_id}/#{@airtable_info.table_id}", data, method: :patch)
         yield response if block_given?
       end
     end
@@ -34,8 +30,8 @@ module Airtable
       records = []
       query = {filterByFormula: "DATETIME_DIFF(NOW(), LAST_MODIFIED_TIME(), 'minutes') < #{minutes}"}
       loop do
-        url = "/#{@base["id"]}/#{@table["id"]}?#{query.to_query}"
-        data = get_request(url)
+        url = "/#{@airtable_info.base_id}/#{@airtable_info.table_id}?#{query.to_query}"
+        data = api_request(url, method: :get)
         records += data["records"]
         query[:offset] = data["offset"]
         break if query[:offset].blank?
@@ -44,58 +40,55 @@ module Airtable
     end
 
     def delete_record(record_id)
-      data_request("/#{@base["id"]}/#{@table["id"]}/#{record_id}", nil, method: :delete)
+      api_request("/#{@airtable_info.base_id}/#{@airtable_info.table_id}/#{record_id}", method: :delete)
     end
 
     private
 
+    def create_airtable_info
+      base = set_base
+      table = set_table(base)
+      webhook = set_webhook(base, table)
+      @identity.create_airtable_info(base_id: base["id"], table_id: table["id"], table_fields: table["fields"].pluck("name"), webhook_id: webhook["id"])
+    end
+
     def set_base
-      bases = get_request("/meta/bases")["bases"]
+      bases = api_request("/meta/bases", method: :get)["bases"]
       if bases.any?
-        @base = bases.find { |b| b["name"] == BASE_NAME } || bases.first
+        @base = bases.find { |b| b["name"] == "Visualizer" } || bases.first
       else
         # TODO: Let user know we need access to a base
-        identity.destroy
+        @identity.destroy
       end
     end
 
-    def set_table(name, fields)
-      tables = get_request("/meta/bases/#{@base["id"]}/tables")["tables"]
-      @table = tables.find { |t| t["name"] == name }
-      return if @table
-
-      @table = data_request("/meta/bases/#{@base["id"]}/tables", {name:, fields:, description: "Shots from Visualizer"})
+    def set_table(base)
+      tables = api_request("/meta/bases/#{base["id"]}/tables", method: :get)["tables"]
+      tables.find { |t| t["name"] == @table_name } || api_request("/meta/bases/#{@airtable_info.base_id}/tables", {name: @table_name, fields: @fields, description: "Shots from Visualizer"})
     end
 
-    def set_fields(fields)
-      existing = @table["fields"].pluck("name")
-      fields.select { |f| existing.exclude?(f[:name]) }.each do |field|
-        data_request("/meta/bases/#{@base["id"]}/tables/#{@table["id"]}/fields", field)
-      end
-    end
-
-    def set_webhook
-      webhooks = get_request("/bases/#{@base["id"]}/webhooks")["webhooks"].select { |w| Time.zone.parse(w["expirationTime"]).future? }
-      return if webhooks.any?
+    def set_webhook(base, table)
+      webhooks = api_request("/bases/#{base["id"]}/webhooks", method: :get)["webhooks"].select { |w| Time.zone.parse(w["expirationTime"]).future? }
+      return webhooks.first if webhooks.any?
 
       data = {
         notificationUrl: airtable_url,
-        specification: {options: {filters: {dataTypes: ["tableData"], recordChangeScope: @table["id"]}}}
+        specification: {options: {filters: {dataTypes: ["tableData"], recordChangeScope: table["id"]}}}
       }
-      data_request("/bases/#{@base["id"]}/webhooks", data)
+      api_request("/bases/#{base["id"]}/webhooks", data)
     end
 
-    def get_request(path)
-      uri = URI.parse(API_URL + path)
-      headers = {"Authorization" => "Bearer #{identity.token}"}
-      response = Net::HTTP.get(uri, headers)
-      JSON.parse(response)
+    def create_missing_fields
+      @fields.select { |f| @airtable_info.table_fields.exclude?(f[:name]) }.each do |field|
+        api_request("/meta/bases/#{@airtable_info.base_id}/tables/#{@airtable_info.table_id}/fields", field)
+      end
+      @airtable_info.update(table_fields: @fields.pluck(:name))
     end
 
-    def data_request(path, data, method: :post)
+    def api_request(path, data = nil, method: :post)
       uri = URI.parse(API_URL + path)
       data = data.to_json if data.present?
-      headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}
+      headers = {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"}
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         attrs = [uri, data, headers].compact
         response = http.public_send(method, *attrs)
