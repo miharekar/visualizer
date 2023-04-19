@@ -4,6 +4,7 @@ module Airtable
   class ShotSync
     include Rails.application.routes.url_helpers
 
+    TABLE_NAME = "Shots"
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
@@ -16,15 +17,14 @@ module Airtable
       "private_notes" => {type: "richText"}
     }
 
-    attr_reader :user, :metadata_fields
+    attr_reader :user
 
     def initialize(user)
       @user = user
-      @metadata_fields = user.metadata_fields
     end
 
     def table
-      @table ||= Table.new(user, "Shots", table_fields)
+      @table ||= Table.new(user, TABLE_NAME, table_fields)
     end
 
     def upload(shot)
@@ -47,7 +47,7 @@ module Airtable
       end
     end
 
-    def download(minutes: 60)
+    def download(minutes: 60, timestamps: {})
       records = table.get_records(minutes:)
       shots = user.shots.where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
       records.each do |record|
@@ -55,7 +55,8 @@ module Airtable
         next unless shot
 
         attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
-        attributes[:metadata] = metadata_fields.index_with { |f| record["fields"][f] }
+        attributes[:metadata] = user.metadata_fields.index_with { |f| record["fields"][f] }
+        attributes[:updated_at] = timestamps[record["id"]].presence || Time.zone.now
         shot.update(attributes.merge(skip_airtable_sync: true))
       end
     end
@@ -69,7 +70,7 @@ module Airtable
     def table_fields
       static = [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}, {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}, {name: "Image", type: "multipleAttachments"}]
       standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
-      metadata = metadata_fields.map { |field| {name: field, type: "singleLineText"} }
+      metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
       static + standard + metadata
     end
@@ -77,7 +78,7 @@ module Airtable
     def prepare_record(shot)
       fields = {"ID" => shot.id, "URL" => shot_url(shot), "Start time" => shot.start_time}
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
-      metadata_fields.each { |field| fields[field] = shot.metadata[field] }
+      user.metadata_fields.each { |field| fields[field] = shot.metadata[field] }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
       {fields:}
     end

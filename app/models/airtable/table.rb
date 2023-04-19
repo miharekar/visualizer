@@ -39,6 +39,10 @@ module Airtable
       records
     end
 
+    def webhook_payloads
+      api_request("/bases/#{@airtable_info.base_id}/webhooks/#{@airtable_info.webhook_id}/payloads", method: :get)["payloads"]
+    end
+
     def delete_record(record_id)
       api_request("/#{@airtable_info.base_id}/#{@airtable_info.table_id}/#{record_id}", method: :delete)
     end
@@ -64,7 +68,7 @@ module Airtable
 
     def set_table(base)
       tables = api_request("/meta/bases/#{base["id"]}/tables", method: :get)["tables"]
-      tables.find { |t| t["name"] == @table_name } || api_request("/meta/bases/#{@airtable_info.base_id}/tables", {name: @table_name, fields: @fields, description: "Shots from Visualizer"})
+      tables.find { |t| t["name"] == @table_name } || api_request("/meta/bases/#{base["id"]}/tables", {name: @table_name, fields: @fields, description: "Shots from Visualizer"})
     end
 
     def set_webhook(base, table)
