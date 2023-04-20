@@ -20,6 +20,13 @@ class Identity < ApplicationRecord
     self.refresh_token = new_token.refresh_token
     self.expires_at = Time.zone.at(new_token.expires_at)
     save!
+  rescue OAuth2::Error => e
+    if JSON.parse(e.body)["error"] == "invalid_grant"
+      destroy!
+      RorVsWild.report_exception(e, user_id:)
+    end
+
+    raise
   end
 end
 
