@@ -67,7 +67,7 @@ class ShotChart
   def resistance_chart(pressure_data, flow_data)
     pressure_data.map.with_index do |(t, v), i|
       f = flow_data[i]&.second.to_f
-      if f.zero?
+      if f&.zero?
         v = nil
       else
         r = v.to_f / (f**2)
@@ -80,7 +80,7 @@ class ShotChart
   def conductance_chart(pressure_data, flow_data)
     pressure_data.map.with_index do |(t, v), i|
       f = flow_data[i]&.second.to_f
-      if v.zero?
+      if v&.zero?
         v = nil
       else
         c = (f**2) / v.to_f
