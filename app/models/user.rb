@@ -46,7 +46,7 @@ class User < ApplicationRecord
 
   def metadata_fields
     # TODO: Implement this, this is for testing only
-    return ["Portafilter", "Coffee", "Grinder", "Notes"]
+    return ["Portafilter basket", "Bean variety"]
     super.presence || []
   end
 

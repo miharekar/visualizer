@@ -45,6 +45,10 @@ module Airtable
       api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/payloads", method: :get)["payloads"]
     end
 
+    def webhook_refresh
+      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/refresh", {})
+    end
+
     def delete_record(record_id)
       api_request("/#{airtable_info.base_id}/#{airtable_info.table_id}/#{record_id}", method: :delete)
     end
@@ -93,7 +97,7 @@ module Airtable
 
     def api_request(path, data = nil, method: :post)
       uri = URI.parse(API_URL + path)
-      data = data.to_json if data.present?
+      data = data.to_json unless data.nil?
       headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         attrs = [uri, data, headers].compact

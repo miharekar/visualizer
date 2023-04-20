@@ -41,19 +41,25 @@ gem "rack-mini-profiler"
 gem "rorvswild"
 gem "stackprof"
 
+group :development, :test do
+  gem "debug"
+  gem "dotenv-rails"
+end
+
 group :development do
   gem "annotate"
   gem "benchmark-ips"
   gem "brakeman"
-  gem "debug"
-  gem "dotenv-rails"
-  gem "foreman", require: false
-  gem "guard"
-  gem "guard-minitest"
   gem "letter_opener"
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
   gem "standard", require: false
   gem "web-console"
+end
+
+group :test do
+  gem "guard"
+  gem "guard-minitest"
+  gem "webmock"
 end
