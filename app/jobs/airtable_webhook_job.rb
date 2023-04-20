@@ -11,11 +11,15 @@ class AirtableWebhookJob < ApplicationJob
     record_timestamps = {}
     payloads.each do |payload|
       time = Time.iso8601(payload["timestamp"])
-      payload.dig("changedTablesById", airtable_info.table_id, "changedRecordsById").keys.each do |record_id|
+      changed_records = payload.dig("changedTablesById", airtable_info.table_id, "changedRecordsById")
+      next if changed_records.blank?
+
+      changed_records.keys.each do |record_id|
         record_timestamps[record_id] ||= []
         record_timestamps[record_id] << time
       end
     end
+    return if record_timestamps.empty?
 
     relevant_timestamps = []
     user.shots.where(airtable_id: record_timestamps.keys).find_each do |shot|

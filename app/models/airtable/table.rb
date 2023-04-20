@@ -2,8 +2,6 @@
 
 module Airtable
   class Table
-    include Rails.application.routes.url_helpers
-
     API_URL = "https://api.airtable.com/v0"
 
     attr_reader :identity, :airtable_info
@@ -82,7 +80,7 @@ module Airtable
       return webhooks.first if webhooks.any?
 
       data = {
-        notificationUrl: airtable_url,
+        notificationUrl: Rails.application.routes.url_helpers.airtable_url,
         specification: {options: {filters: {dataTypes: ["tableData"], changeTypes: ["update"], recordChangeScope: table["id"]}}}
       }
       api_request("/bases/#{base["id"]}/webhooks", data)
