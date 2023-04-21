@@ -62,7 +62,11 @@ Rails.application.routes.draw do
 
   resources :profiles, only: %i[edit update] do
     get :reset_chart_settings
-    get :edit, on: :collection
+    collection do
+      get :edit
+      post :add_metadata_field
+      delete :remove_metadata_field
+    end
   end
 
   resources :premium, only: %i[index create] do
