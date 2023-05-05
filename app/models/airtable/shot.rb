@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 module Airtable
-  class ShotSync
+  class Shot < BaseModel
     include Rails.application.routes.url_helpers
 
-    TABLE_NAME = "Shots"
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
@@ -17,21 +16,11 @@ module Airtable
       "private_notes" => {type: "richText"}
     }
 
-    attr_reader :user
-
-    def initialize(user)
-      @user = user
-    end
-
-    def table
-      @table ||= Table.new(user, TABLE_NAME, table_fields)
-    end
-
     def upload(shot)
       if shot.airtable_id
         table.update_record(shot.airtable_id, prepare_record(shot))
       else
-        upload_multiple(Shot.where(id: shot.id))
+        upload_multiple(::Shot.where(id: shot.id))
       end
     end
 
@@ -68,7 +57,7 @@ module Airtable
 
     private
 
-    def table_fields
+    def prepare_table_fields
       static = [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}, {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}, {name: "Image", type: "multipleAttachments"}]
       standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
       metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }

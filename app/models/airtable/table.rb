@@ -4,12 +4,11 @@ module Airtable
   class Table
     API_URL = "https://api.airtable.com/v0"
 
-    attr_reader :identity, :airtable_info
+    attr_reader :model, :identity, :airtable_info
 
-    def initialize(user, table_name, fields)
-      @identity = user.identities.find_by(provider: "airtable")
-      @table_name = table_name
-      @fields = fields
+    def initialize(model)
+      @model = model
+      @identity = model.user.identities.find_by(provider: "airtable")
       identity.ensure_valid_token!
       @airtable_info = identity.airtable_info || create_airtable_info
       create_missing_fields
@@ -73,7 +72,7 @@ module Airtable
 
     def set_table(base)
       tables = api_request("/meta/bases/#{base["id"]}/tables", method: :get)["tables"]
-      tables.find { |t| t["name"] == @table_name } || api_request("/meta/bases/#{base["id"]}/tables", {name: @table_name, fields: @fields, description: "Shots from Visualizer"})
+      tables.find { |t| t["name"] == model.table_name } || api_request("/meta/bases/#{base["id"]}/tables", {name: model.table_name, fields: model.table_fields, description: "Shots from Visualizer"})
     end
 
     def set_webhook(base, table)
@@ -88,10 +87,10 @@ module Airtable
     end
 
     def create_missing_fields
-      @fields.select { |f| airtable_info.table_fields.exclude?(f[:name]) }.each do |field|
+      model.table_fields.select { |f| airtable_info.table_fields.exclude?(f[:name]) }.each do |field|
         api_request("/meta/bases/#{airtable_info.base_id}/tables/#{airtable_info.table_id}/fields", field)
       end
-      airtable_info.update(table_fields: @fields.pluck(:name))
+      airtable_info.update(table_fields: model.table_fields.pluck(:name))
     end
 
     def api_request(path, data = nil, method: :post)

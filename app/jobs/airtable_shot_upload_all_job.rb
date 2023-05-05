@@ -5,6 +5,6 @@ class AirtableShotUploadAllJob < ApplicationJob
 
   def perform(user, shots: nil)
     shots ||= user.shots.where(airtable_id: nil)
-    Airtable::ShotSync.new(user).upload_multiple(shots)
+    Airtable::Shot.new(user).upload_multiple(shots)
   end
 end
