@@ -12,6 +12,7 @@ module Airtable
       @fields = fields
       identity.ensure_valid_token!
       @airtable_info = identity.airtable_info || create_airtable_info
+      create_missing_fields
     end
 
     def update_record(record_id, fields)

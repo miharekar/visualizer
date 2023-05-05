@@ -5,7 +5,7 @@ class AirtableWebhookJob < ApplicationJob
 
   def perform(airtable_info)
     user = airtable_info.identity.user
-    table = Airtable::Table.new(user, Airtable::ShotSync::TABLE_NAME, airtable_info.table_fields)
+    table = Airtable::ShotSync.new(user).table
     payloads = table.webhook_payloads.reject { |p| p.dig("actionMetadata", "source") == "publicApi" }
 
     record_timestamps = {}
