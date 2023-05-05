@@ -58,7 +58,7 @@ module Airtable
         attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
         attributes[:metadata] = user.metadata_fields.index_with { |f| record["fields"][f] }
         attributes[:updated_at] = timestamps[record["id"]].presence || request_time
-        shot.update(attributes.merge(skip_airtable_sync: true))
+        shot.update!(attributes.merge(skip_airtable_sync: true))
       end
     end
 

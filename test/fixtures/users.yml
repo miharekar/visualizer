@@ -3,7 +3,9 @@ miha:
   email: miha@mr.si
   admin: true
   public: true
+  supporter: true
   metadata_fields: ["Portafilter basket", "Bean variety"]
+
 john:
   name: John Decent
   email: john@decentespresso.com
