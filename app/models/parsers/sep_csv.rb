@@ -4,7 +4,12 @@ require "csv"
 
 module Parsers
   class SepCsv < Base
-    DATA_LABELS_MAP = {weight: "espresso_weight", pressure: "espresso_pressure", flow_weight: "espresso_flow_weight"}.freeze
+    DATA_LABELS_MAP = {
+      weight: "espresso_weight",
+      pressure: "espresso_pressure",
+      flow_weight: "espresso_flow_weight",
+      temperature_mix: "espresso_temperature_mix"
+    }.freeze
     MAPPING = {
       "Roastery" => "bean_brand",
       "Beans" => "bean_type",
@@ -21,7 +26,7 @@ module Parsers
 
     def initialize(file)
       super
-      @datapoints = {weight: {}, pressure: {}}
+      @datapoints = {weight: {}, pressure: {}, temperature_mix: {}}
     end
 
     def parse
@@ -61,6 +66,8 @@ module Parsers
         @datapoints[:weight][row["elapsed"].to_f] = row["current_total_shot_weight"].to_f
       elsif row["comment"] == "sample: pressure" && row["pressure"].present?
         @datapoints[:pressure][row["elapsed"].to_f] = row["pressure"].to_f
+      elsif row["comment"] == "sample: temperature" && row["water_temperature_in"].present?
+        @datapoints[:temperature_mix][row["elapsed"].to_f] = row["water_temperature_in"].to_f
       end
     end
 

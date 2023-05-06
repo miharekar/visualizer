@@ -296,4 +296,24 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "18.6", shot.bean_weight
     assert_equal "38.35", shot.drink_weight
   end
+
+  test "extracts temperature from Pressensor" do
+    shot = new_shot("test/fixtures/files/pressensor.csv")
+    assert_equal 684, shot.information.timeframe.size
+    assert_equal 0.033, shot.information.timeframe.first
+    assert_equal 32.187511396011395, shot.information.timeframe.last
+    assert_equal 32.187511396011395, shot.duration
+    assert_equal %w[espresso_flow_weight espresso_pressure espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
+    assert_equal 27.29, shot.information.data["espresso_weight"][400]
+    assert_equal 1.488175344887875, shot.information.data["espresso_pressure"][400]
+    assert_equal 0.66, shot.information.data["espresso_flow_weight"][400]
+    assert_equal 6, shot.information.extra.keys.size
+    assert_equal "My espresso #438", shot.profile_title
+    assert_equal "Basket Diameter: 58.8\nBasket Capacity: 15.8\nBrew ratio: 1.0\nExtraction time: 33.085\nAvarage flow rate: 1.1446274746864138\nUnit system: metric\nAttribution: Coffee Flow\nSoftware: Coffee Flow\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+    assert_equal "Kávékalmár", shot.bean_brand
+    assert_equal "Ethiopia Banti Nenka", shot.bean_type
+    assert_equal "Medium", shot.roast_level
+    assert_equal "16.2", shot.bean_weight
+    assert_equal "37.87", shot.drink_weight
+  end
 end
