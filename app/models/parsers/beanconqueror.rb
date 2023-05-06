@@ -2,8 +2,8 @@
 
 module Parsers
   class Beanconqueror < Base
-    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure"}.freeze
-    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure"}.freeze
+    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure", "temperatureFlow" => "espresso_temperature_mix"}.freeze
+    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure", "temperatureFlow" => "actual_temperature"}.freeze
 
     def parse
       @start_time = Time.at(file.dig("brew", "config", "unix_timestamp").to_i).utc
@@ -58,6 +58,7 @@ module Parsers
 
       start = brew_flow[longest].first["unix_timestamp"].to_f
       relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 }
+      @data = @data.slice(*DATA_LABELS_MAP.values_at(*relevant_keys))
       brew_flow[longest].each do |d|
         timestamp = d["unix_timestamp"]
         @timeframe << (timestamp.to_f - start).round(4).to_s

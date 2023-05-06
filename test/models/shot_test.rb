@@ -269,7 +269,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "0.0", shot.information.timeframe.first
     assert_equal "174.243", shot.information.timeframe.last
     assert_equal 174.243, shot.duration
-    assert_equal %w[espresso_flow espresso_flow_weight espresso_pressure espresso_weight], shot.information.data.keys.sort
+    assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
     assert_equal 1748, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
     assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
@@ -277,6 +277,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "extracts pressure from CoffeeFlow app" do
     shot = new_shot("test/fixtures/files/profitec_victoria_arduino.csv")
+    assert shot.valid?
     assert_equal 1074, shot.information.timeframe.size
     assert_equal 0.336, shot.information.timeframe.first
     assert_equal 58.536, shot.information.timeframe.last
@@ -299,6 +300,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "extracts temperature from Pressensor" do
     shot = new_shot("test/fixtures/files/pressensor.csv")
+    assert shot.valid?
     assert_equal 684, shot.information.timeframe.size
     assert_equal 0.033, shot.information.timeframe.first
     assert_equal 32.187511396011395, shot.information.timeframe.last
@@ -315,5 +317,17 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Medium", shot.roast_level
     assert_equal "16.2", shot.bean_weight
     assert_equal "37.87", shot.drink_weight
+  end
+
+  test "extracts temperature from Beanconqueror" do
+    shot = new_shot("test/fixtures/files/beanconqueror_temperature.json")
+    assert shot.valid?
+    assert_equal 16, shot.information.timeframe.size
+    assert_equal "0.0", shot.information.timeframe.first
+    assert_equal "17.148", shot.information.timeframe.last
+    assert_equal 17.148, shot.duration
+    assert_equal %w[espresso_flow espresso_flow_weight espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
+    assert_equal 16, shot.information.data["espresso_weight"].size
+    assert_equal 10, shot.information.extra.keys.size
   end
 end
