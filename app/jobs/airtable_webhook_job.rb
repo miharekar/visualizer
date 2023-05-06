@@ -5,8 +5,8 @@ class AirtableWebhookJob < ApplicationJob
 
   def perform(airtable_info)
     user = airtable_info.identity.user
-    table = Airtable::Shot.new(user).table
-    payloads = table.webhook_payloads.reject { |p| p.dig("actionMetadata", "source") == "publicApi" }
+    shots = Airtable::Shots.new(user)
+    payloads = shots.webhook_payloads.reject { |p| p.dig("actionMetadata", "source") == "publicApi" }
 
     record_timestamps = {}
     payloads.each do |payload|
@@ -29,6 +29,6 @@ class AirtableWebhookJob < ApplicationJob
 
     minutes = ((Time.zone.now - relevant_timestamps.min) / 60).ceil
     timestamps = record_timestamps.transform_values { |v| v.max }
-    Airtable::Shot.new(user).download(minutes:, timestamps:)
+    shots.download(minutes:, timestamps:)
   end
 end

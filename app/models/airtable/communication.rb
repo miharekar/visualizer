@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 module Airtable
-  class Table
+  module Communication
     API_URL = "https://api.airtable.com/v0"
 
-    attr_reader :model, :identity, :airtable_info
+    attr_reader :identity, :airtable_info
 
-    def initialize(model)
-      @model = model
-      @identity = model.user.identities.find_by(provider: "airtable")
+    def prepare_table
+      @identity = user.identities.find_by(provider: "airtable")
       identity.ensure_valid_token!
       @airtable_info = identity.airtable_info || create_airtable_info
       create_missing_fields
@@ -72,13 +71,10 @@ module Airtable
 
     def set_table(base)
       tables = api_request("/meta/bases/#{base["id"]}/tables", method: :get)["tables"]
-      tables.find { |t| t["name"] == model.table_name } || api_request("/meta/bases/#{base["id"]}/tables", {name: model.table_name, fields: model.table_fields, description: "Shots from Visualizer"})
+      tables.find { |t| t["name"] == @table_name } || api_request("/meta/bases/#{base["id"]}/tables", {name: @table_name, fields: @table_fields, description: "Shots from Visualizer"})
     end
 
     def set_webhook(base, table)
-      webhooks = api_request("/bases/#{base["id"]}/webhooks", method: :get)["webhooks"].select { |w| Time.zone.parse(w["expirationTime"]).future? }
-      return webhooks.first if webhooks.any?
-
       data = {
         notificationUrl: Rails.application.routes.url_helpers.airtable_url,
         specification: {options: {filters: {dataTypes: ["tableData"], changeTypes: ["update"], recordChangeScope: table["id"]}}}
@@ -87,10 +83,10 @@ module Airtable
     end
 
     def create_missing_fields
-      model.table_fields.select { |f| airtable_info.table_fields.exclude?(f[:name]) }.each do |field|
+      @table_fields.select { |f| airtable_info.table_fields.exclude?(f[:name]) }.each do |field|
         api_request("/meta/bases/#{airtable_info.base_id}/tables/#{airtable_info.table_id}/fields", field)
       end
-      airtable_info.update(table_fields: model.table_fields.pluck(:name))
+      airtable_info.update(table_fields: @table_fields.pluck(:name))
     end
 
     def api_request(path, data = nil, method: :post)

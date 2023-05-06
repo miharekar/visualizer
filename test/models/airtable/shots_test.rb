@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class Airtable::ShotTest < ActiveSupport::TestCase
+class Airtable::ShotsTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   test "it can delete a record" do
@@ -12,7 +12,7 @@ class Airtable::ShotTest < ActiveSupport::TestCase
     stub = stub_request(:delete, "https://api.airtable.com/v0/#{identity.airtable_info.base_id}/#{identity.airtable_info.table_id}/#{airtable_id}").
       with(headers: {"Authorization" => "Bearer #{identity.token}"}).
       to_return(status: 200, body: {deleted: true, id: airtable_id}.to_json, headers: {})
-    delete = Airtable::Shot.new(user).delete(airtable_id)
+    delete = Airtable::Shots.new(user).delete(airtable_id)
     assert_requested(stub)
     assert_equal true, delete["deleted"]
     assert_equal airtable_id, delete["id"]
@@ -33,7 +33,7 @@ class Airtable::ShotTest < ActiveSupport::TestCase
     assert_nil shot.espresso_enjoyment
     assert_equal({}, shot.metadata)
 
-    records = Airtable::Shot.new(user).download
+    records = Airtable::Shots.new(user).download
     assert_equal 4, records.count
     assert_equal 1, user.shots.count
 
@@ -64,7 +64,7 @@ class Airtable::ShotTest < ActiveSupport::TestCase
     shot_id = "e5b3a587-809a-444a-bb27-e2f5bdbeacbe"
     user = users(:miha)
     identity = user.identities.first
-    sync = Airtable::Shot.new(user)
+    sync = Airtable::Shots.new(user)
     shot = user.shots.create!(id: shot_id, espresso_enjoyment: 80, start_time: "2023-05-05T15:50:44.093Z", information: ShotInformation.new, sha: "123")
     assert_enqueued_with(job: AirtableShotUploadJob, args: [shot], queue: "default")
 

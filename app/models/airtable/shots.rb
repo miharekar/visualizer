@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Airtable
-  class Shot < BaseModel
+  class Shots < Base
     include Rails.application.routes.url_helpers
 
     STANDARD_FIELDS = %w[
@@ -18,7 +18,7 @@ module Airtable
 
     def upload(shot)
       if shot.airtable_id
-        table.update_record(shot.airtable_id, prepare_record(shot))
+        update_record(shot.airtable_id, prepare_record(shot))
       else
         upload_multiple(::Shot.where(id: shot.id))
       end
@@ -26,7 +26,7 @@ module Airtable
 
     def upload_multiple(shots)
       records = shots.where(user:).with_attached_image.map { |shot| prepare_record(shot) }
-      table.update_records(records) do |response|
+      update_records(records) do |response|
         response["records"].each do |record|
           shot = shots.find_by(id: record["fields"]["ID"])
           next unless shot
@@ -38,7 +38,7 @@ module Airtable
 
     def download(minutes: 60, timestamps: {})
       request_time = Time.zone.now
-      records = table.get_records(minutes:)
+      records = get_records(minutes:)
       shots = user.shots.where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
       records.each do |record|
         shot = shots[record["id"]]
@@ -52,7 +52,7 @@ module Airtable
     end
 
     def delete(airtable_id)
-      table.delete_record(airtable_id)
+      delete_record(airtable_id)
     end
 
     private

@@ -4,6 +4,6 @@ class AirtableShotDeleteJob < ApplicationJob
   queue_as :default
 
   def perform(user, airtable_id)
-    Airtable::Shot.new(user).delete(airtable_id)
+    Airtable::Shots.new(user).delete(airtable_id)
   end
 end

@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
 module Airtable
-  class BaseModel
-    attr_reader :user, :table_name, :table_fields
+  class Base
+    include Communication
+
+    attr_reader :user
 
     def initialize(user)
       @user = user
-      @table_name = self.class.name.demodulize.pluralize
+      @table_name = self.class.name.demodulize
       @table_fields = prepare_table_fields
-    end
-
-    def table
-      @table ||= Table.new(self)
+      prepare_table
     end
 
     private
