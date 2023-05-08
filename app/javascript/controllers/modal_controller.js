@@ -7,16 +7,19 @@ export default class extends Controller {
 
   initialize() {
     this.modalShown = false
+    this.preventDefault = true
   }
 
   confirm(event) {
-    event.preventDefault()
-    this.form = event.currentTarget.parentElement
-    const data = event.currentTarget.dataset
-    this.headlineTarget.innerText = data.title
-    this.buttonTarget.innerText = data.title
-    this.textTarget.innerText = data.text
-    this.show()
+    if (this.preventDefault) {
+      event.preventDefault()
+      this.currentTarget = event.currentTarget
+      const data = event.currentTarget.dataset
+      this.headlineTarget.innerText = data.title
+      this.buttonTarget.innerText = data.title
+      this.textTarget.innerText = data.text
+      this.show()
+    }
   }
 
   show() {
@@ -38,7 +41,8 @@ export default class extends Controller {
   }
 
   delete() {
-    Turbo.navigator.submitForm(this.form)
+    this.preventDefault = false
+    this.currentTarget.click()
     this.hide()
   }
 

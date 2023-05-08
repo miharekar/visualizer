@@ -1,0 +1,16 @@
+HTTP/1.1 200 OK
+Date: Fri, 05 May 2023 15:11:54 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 2225
+Connection: keep-alive
+Server: Tengine
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+access-control-allow-origin: *
+access-control-allow-methods: DELETE,GET,OPTIONS,PATCH,POST,PUT
+access-control-allow-headers: authorization,content-length,content-type,user-agent,x-airtable-application-id,x-airtable-user-agent,x-api-version,x-requested-with
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Vary: Accept-Encoding
+airtable-uncompressed-content-length: 2225
+
+{"records":[{"id":"recRmi19iFdkVRstO","createdTime":"2023-05-05T14:46:10.000Z","fields":{"Duration":26.818,"Drink weight":"0","Bean brand":"STOW","Espresso enjoyment":80,"URL":"https://visualizer.test/shots/a7a76b3f-0962-475e-b084-4c5f64b6f455","Bean type":"Assemblages","Profile title":"TurboBloom M","Grinder setting":"1.5","Start time":"2023-05-04T06:31:31.000Z","Bean weight":"17.0","Barista":"Miha Rekar","Roast date":"05.04.2023","Drink ey":"0","ID":"a7a76b3f-0962-475e-b084-4c5f64b6f455","Grinder model":"EK43 with SSP HU","Drink tds":"0"}},{"id":"recZAtjNpdDYFjQNi","createdTime":"2023-05-05T14:46:10.000Z","fields":{"Duration":23.308,"Drink weight":"44.7","Bean brand":"STOW","Espresso enjoyment":0,"URL":"https://visualizer.test/shots/71293fee-e158-400f-b01b-75e8b3684e61","Bean type":"Assemblages","Profile title":"TurboBloom M","Grinder setting":"1.5","Start time":"2023-05-03T06:40:10.000Z","Bean weight":"17.0","Barista":"Miha Rekar","Roast date":"05.04.2023","Drink ey":"0","ID":"71293fee-e158-400f-b01b-75e8b3684e61","Grinder model":"EK43 with SSP HU","Drink tds":"0"}},{"id":"rec1","createdTime":"2023-05-05T14:46:10.000Z","fields":{"Duration":28.033,"Drink weight":"44.8","Bean brand":"Beansmith's","Espresso enjoyment":80,"URL":"https://visualizer.test/shots/4ebdbd53-fd8c-4e65-8fdb-ea0031b51fa9","Bean type":"Genji Challa","Profile title":"TurboBloom M","Grinder setting":"2.0","Start time":"2023-05-05T06:03:09.000Z","Bean weight":"17.0","Barista":"Miha Rekar","Roast date":"20.03.2023","Drink ey":"0","ID":"4ebdbd53-fd8c-4e65-8fdb-ea0031b51fa9","Grinder model":"EK43 with SSP HU","Drink tds":"0","Bean variety":"Catuai","Portafilter basket":"Decent"}},{"id":"recr1yx9B9DJUPOm2","createdTime":"2023-05-05T14:46:10.000Z","fields":{"Duration":27.763,"Drink weight":"44.6","Bean brand":"STOW","Espresso enjoyment":0,"URL":"https://visualizer.test/shots/73857a78-d8c7-4a29-bd04-d6afd445bb2e","Bean type":"Assemblages","Profile title":"TurboBloom M","Grinder setting":"1.5","Start time":"2023-04-26T05:40:00.000Z","Bean weight":"17.0","Barista":"Miha Rekar","Roast date":"05.04.2023","Drink ey":"0","ID":"73857a78-d8c7-4a29-bd04-d6afd445bb2e","Grinder model":"EK43 with SSP HU","Drink tds":"0"}}]}

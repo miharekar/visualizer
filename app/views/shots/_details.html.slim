@@ -81,6 +81,12 @@
       ' EY
       = ey
       ' %
+  - if shot.metadata.present?
+    .mt-2
+      - shot.metadata.each do |key, value|
+        div
+          span.font-medium.text-stone-900.dark:text-stone-100 #{key}:&nbsp;
+          span = value
   - if shot.barista.present?
     .mt-2
       span.font-medium.text-stone-900.dark:text-stone-100 Barista:&nbsp;

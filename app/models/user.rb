@@ -5,14 +5,15 @@ class User < ApplicationRecord
   slug_from :name
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+  # :confirmable, :lockable, :timeoutable, :trackable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable
 
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
+  has_many :identities, dependent: :destroy
   has_many :oauth_applications, class_name: "Doorkeeper::Application", foreign_key: :owner_id, inverse_of: :owner, dependent: :destroy
-  has_many :access_grants, class_name: "Doorkeeper::AccessGrant", foreign_key: :resource_owner_id, dependent: :destroy
-  has_many :access_tokens, class_name: "Doorkeeper::AccessToken", foreign_key: :resource_owner_id, dependent: :destroy
+  has_many :access_grants, class_name: "Doorkeeper::AccessGrant", foreign_key: :resource_owner_id, dependent: :destroy # rubocop:disable Rails/InverseOf
+  has_many :access_tokens, class_name: "Doorkeeper::AccessToken", foreign_key: :resource_owner_id, dependent: :destroy # rubocop:disable Rails/InverseOf
 
   has_one_attached :avatar, service: :cloudinary
 
@@ -43,6 +44,10 @@ class User < ApplicationRecord
     temperature_unit == "Fahrenheit"
   end
 
+  def metadata_fields
+    super.presence || []
+  end
+
   private
 
   def generate_slug
@@ -66,6 +71,7 @@ end
 #  github                 :string
 #  hide_shot_times        :boolean
 #  last_read_change       :datetime
+#  metadata_fields        :jsonb
 #  name                   :string
 #  premium_expires_at     :datetime
 #  public                 :boolean          default(FALSE)

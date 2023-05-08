@@ -5,16 +5,18 @@ class PremiumController < ApplicationController
 
   def index
     @features = [
-      "View all shots you ever uploaded",
-      "Search across all public shots ever uploaded",
-      "Easily check grinder settings of recent coffee/profile combinations",
-      "Have a beautiful chart of your espresso enjoyment over time",
-      "Customize charts",
-      "Adjust the timing of comparison shot",
-      "Attach images to your shots",
-      "Add private notes to your shots",
-      "Get a checkmark next to your name"
-    ].shuffle + ["Support development of new features"]
+      "Create custom fields for tailored shot data",
+      "Effortlessly sync with Airtable",
+      "Access your complete shot history",
+      "Explore the vast archive of public shots",
+      "Quickly review grinder settings of recent coffee/profile combinations",
+      "Visualize your espresso journey over time with an enjoyment chart",
+      "Personalize chart colors",
+      "Fine-tune the timing of comparison shot",
+      "Attach images to shots for visual documentation and analysis",
+      "Keep private notes on shots for future reference",
+      "Show off your Premium status with a checkmark next to your name"
+    ].shuffle + ["Directly support the development of exciting new features"]
     @qas = [
       ["What's the biggest difference between free and premium?", "With premium, you can see all the shots you ever uploaded. On the free plan, you only see and search amongst the ones that were made in the last month."]
     ] + [

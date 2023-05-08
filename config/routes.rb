@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     mount PgHero::Engine => "pghero"
   end
 
-  devise_for :users
+  devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
+
   use_doorkeeper do
     controllers applications: "oauth/applications"
   end
@@ -61,7 +62,11 @@ Rails.application.routes.draw do
 
   resources :profiles, only: %i[edit update] do
     get :reset_chart_settings
-    get :edit, on: :collection
+    collection do
+      get :edit
+      post :add_metadata_field
+      delete :remove_metadata_field
+    end
   end
 
   resources :premium, only: %i[index create] do
@@ -74,6 +79,7 @@ Rails.application.routes.draw do
 
   resources :stats, only: [:index]
   resources :changes, except: %i[index destroy]
+  post :airtable, to: "airtable#notification"
 
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all

@@ -133,7 +133,7 @@ class ShotChart
     timeframe_count = timeframe.count
     timeframe_last = timeframe.last.to_f
     timeframe_diff = (timeframe_last + timeframe.first.to_f) / timeframe.count.to_f
-    in_fahrenheit = shot.information.fahrenheit?
+    in_fahrenheit = shot.information.extra["enable_fahrenheit"].to_i == 1
     shot.information.data.filter_map do |label, data|
       next if DATA_LABELS_TO_IGNORE.include?(label)
 

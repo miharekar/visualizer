@@ -35,7 +35,7 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  config.hosts << /.+\.ngrok\.io/
+  config.hosts << /.+\.ngrok-free\.app/
   config.hosts << /.+\.test/
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
@@ -73,3 +73,5 @@ Rails.application.configure do
 
   config.active_job.queue_adapter = :sidekiq
 end
+Rails.application.routes.default_url_options = {host: "visualizer.test", protocol: "https"}
+# Rails.application.routes.default_url_options = {host: "1365-194-249-200-10.ngrok-free.app", protocol: "https"}

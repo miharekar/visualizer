@@ -19,9 +19,11 @@ class Shot < ApplicationRecord
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
 
-  after_create :ensure_screenshot
+  attr_accessor :skip_airtable_sync
 
-  after_destroy_commit -> { broadcast_remove_to user, :shots }
+  after_create :ensure_screenshot
+  after_save_commit :sync_to_airtable
+  after_destroy_commit :broadcast_and_cleanup_airtable
 
   validates :start_time, :information, :sha, presence: true
 
@@ -29,6 +31,10 @@ class Shot < ApplicationRecord
     return if file.blank?
 
     Parsers::Base.parse(File.read(file)).build_shot(user)
+  end
+
+  def metadata
+    super.presence || {}
   end
 
   def related_shots(limit: 5)
@@ -57,6 +63,19 @@ class Shot < ApplicationRecord
 
     ScreenshotTakerJob.perform_later(self)
   end
+
+  def sync_to_airtable
+    return if skip_airtable_sync || !user.premium? || user.identities.by_provider(:airtable).empty?
+
+    AirtableShotUploadJob.perform_later(self)
+  end
+
+  def broadcast_and_cleanup_airtable
+    broadcast_remove_to(user, :shots)
+    return if airtable_id.blank? || !user.premium? || user.identities.by_provider(:airtable).empty?
+
+    AirtableShotDeleteJob.perform_later(user, airtable_id)
+  end
 end
 
 # == Schema Information
@@ -77,6 +96,7 @@ end
 #  espresso_notes     :text
 #  grinder_model      :string
 #  grinder_setting    :string
+#  metadata           :jsonb
 #  private_notes      :text
 #  profile_title      :string
 #  roast_date         :string
@@ -86,10 +106,12 @@ end
 #  start_time         :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  airtable_id        :string
 #  user_id            :uuid
 #
 # Indexes
 #
+#  index_shots_on_airtable_id             (airtable_id)
 #  index_shots_on_created_at              (created_at)
 #  index_shots_on_sha                     (sha)
 #  index_shots_on_user_id_and_created_at  (user_id,created_at)

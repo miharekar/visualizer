@@ -1,0 +1,16 @@
+HTTP/1.1 200 OK
+Date: Fri, 05 May 2023 15:40:36 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 606
+Connection: keep-alive
+Server: Tengine
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+access-control-allow-origin: *
+access-control-allow-methods: DELETE,GET,OPTIONS,PATCH,POST,PUT
+access-control-allow-headers: authorization,content-length,content-type,user-agent,x-airtable-application-id,x-airtable-user-agent,x-api-version,x-requested-with
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Vary: Accept-Encoding
+airtable-uncompressed-content-length: 606
+
+{"records":[{"id":"receheiFe9F63F8EG","createdTime":"2023-05-05T15:40:36.000Z","fields":{"ID":"e5b3a587-809a-444a-bb27-e2f5bdbeacbe","URL":"https://visualizer.test/shots/e5b3a587-809a-444a-bb26-e2f5bdbeacbe","Start time":"2023-04-27T02:48:15.000Z","Espresso enjoyment":0,"Profile title":"TurboBloom M","Duration":20.07,"Barista":"Miha Rekar","Bean weight":"17.0","Drink weight":"0","Grinder model":"EK43 with SSP HU","Grinder setting":"1.5","Bean brand":"STOW","Bean type":"Assemblages","Roast date":"05.04.2023","Drink tds":"0","Drink ey":"0"}}],"updatedRecords":[],"createdRecords":["receheiFe9F63F8EG"]}

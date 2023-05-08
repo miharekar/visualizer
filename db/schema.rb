@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_145433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -44,6 +44,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "airtable_infos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "identity_id", null: false
+    t.string "base_id"
+    t.string "table_id"
+    t.jsonb "table_fields"
+    t.string "webhook_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["identity_id"], name: "index_airtable_infos_on_identity_id"
+  end
+
   create_table "changes", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -52,6 +63,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.index ["slug"], name: "index_changes_on_slug", unique: true
+  end
+
+  create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.jsonb "blob"
+    t.datetime "expires_at"
+    t.string "provider"
+    t.string "uid"
+    t.string "token"
+    t.string "refresh_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
+    t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
   create_table "oauth_access_grants", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -143,6 +168,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
     t.string "barista"
     t.text "private_notes"
     t.float "duration"
+    t.jsonb "metadata"
+    t.string "airtable_id"
+    t.index ["airtable_id"], name: "index_shots_on_airtable_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["user_id", "created_at"], name: "index_shots_on_user_id_and_created_at"
@@ -173,6 +201,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
     t.datetime "premium_expires_at"
     t.boolean "developer"
     t.string "temperature_unit"
+    t.jsonb "metadata_fields"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
@@ -180,6 +209,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_13_073055) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "airtable_infos", "identities"
+  add_foreign_key "identities", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
