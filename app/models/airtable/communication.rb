@@ -6,13 +6,6 @@ module Airtable
 
     attr_reader :identity, :airtable_info
 
-    def prepare_table
-      @identity = user.identities.find_by(provider: "airtable")
-      identity.ensure_valid_token!
-      @airtable_info = identity.airtable_info || create_airtable_info
-      create_missing_fields
-    end
-
     def update_record(record_id, fields)
       api_request("/#{airtable_info.base_id}/#{airtable_info.table_id}/#{record_id}", fields, method: :patch)
     end
@@ -52,6 +45,13 @@ module Airtable
 
     private
 
+    def prepare_table
+      @identity = user.identities.find_by(provider: "airtable")
+      identity.ensure_valid_token!
+      @airtable_info = identity.airtable_info || create_airtable_info
+      create_missing_fields
+    end
+
     def create_airtable_info
       base = set_base
       table = set_table(base)
@@ -75,11 +75,19 @@ module Airtable
     end
 
     def set_webhook(base, table)
+      delete_existing_webhooks(base)
       data = {
         notificationUrl: Rails.application.routes.url_helpers.airtable_url,
         specification: {options: {filters: {dataTypes: ["tableData"], changeTypes: ["update"], recordChangeScope: table["id"]}}}
       }
       api_request("/bases/#{base["id"]}/webhooks", data)
+    end
+
+    def delete_existing_webhooks(base)
+      webhooks = api_request("/bases/#{base["id"]}/webhooks", method: :get)["webhooks"]
+      webhooks.each do |webhook|
+        api_request("/bases/#{base["id"]}/webhooks/#{webhook["id"]}", method: :delete)
+      end
     end
 
     def create_missing_fields
