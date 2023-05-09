@@ -72,7 +72,7 @@ class ShotsController < ApplicationController
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
-        "You uploaded a profile file, not a history file. Please upload a history .shot or .json file."
+        "You uploaded a profile file, not a history file. Please upload a history file."
       else
         "You uploaded invalid #{"file".pluralize(files.count)}."
       end
