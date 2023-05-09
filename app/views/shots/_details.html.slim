@@ -84,6 +84,7 @@
   - if shot.metadata.present?
     .mt-2
       - shot.metadata.each do |key, value|
+        - next if value.blank?
         div
           span.font-medium.text-stone-900.dark:text-stone-100 #{key}:&nbsp;
           span = value
