@@ -72,6 +72,8 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.active_job.queue_adapter = :sidekiq
+
+  config.force_ssl = true
 end
 Rails.application.routes.default_url_options = {host: "visualizer.test", protocol: "https"}
 # Rails.application.routes.default_url_options = {host: "1365-194-249-200-10.ngrok-free.app", protocol: "https"}
