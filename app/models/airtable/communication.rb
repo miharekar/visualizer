@@ -56,7 +56,10 @@ module Airtable
       base = set_base
       table = set_table(base)
       webhook = set_webhook(base, table)
-      identity.create_airtable_info(base_id: base["id"], table_id: table["id"], table_fields: table["fields"].pluck("name"), webhook_id: webhook["id"])
+      ActiveRecord::Base.transaction do
+        AirtableInfo.where(identity:).destroy_all
+        identity.create_airtable_info(base_id: base["id"], table_id: table["id"], table_fields: table["fields"].pluck("name"), webhook_id: webhook["id"])
+      end
     end
 
     def set_base
