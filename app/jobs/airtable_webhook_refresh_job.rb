@@ -16,7 +16,7 @@ class AirtableWebhookRefreshJob < ApplicationJob
     Airtable::Shots.new(user).webhook_refresh
   rescue Airtable::DataError => e
     json = JSON.parse(e.message)
-    if json["error"]["type"] == "NOT_FOUND"
+    if %w[NOT_FOUND INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND].include?(json["error"]["type"])
       airtable_info.destroy
     else
       RorVsWild.record_error(e, user_id: user.id)
