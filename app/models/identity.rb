@@ -23,7 +23,7 @@ class Identity < ApplicationRecord
   rescue OAuth2::Error => e
     if JSON.parse(e.body)["error"] == "invalid_grant"
       destroy!
-      RorVsWild.report_exception(e, user_id:)
+      RorVsWild.record_error(e, user_id:)
     end
 
     raise

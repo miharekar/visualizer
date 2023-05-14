@@ -19,7 +19,7 @@ class AirtableWebhookRefreshJob < ApplicationJob
     if json["error"]["type"] == "NOT_FOUND"
       airtable_info.destroy
     else
-      RorVsWild.report_exception(e, user_id: user.id)
+      RorVsWild.record_error(e, user_id: user.id)
     end
   end
 end
