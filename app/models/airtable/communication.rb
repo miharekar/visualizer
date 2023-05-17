@@ -47,6 +47,8 @@ module Airtable
 
     def prepare_table
       @identity = user.identities.find_by(provider: "airtable")
+      raise DataError.new("No Airtable identity found for User##{user.id}") unless identity
+
       identity.ensure_valid_token!
       @airtable_info = identity.airtable_info || create_airtable_info
       create_missing_fields
