@@ -27,4 +27,19 @@ module ApplicationHelper
   def show_premium_banner?
     current_user && !current_user.premium? && current_user.shots.premium.any?
   end
+
+  def public_image_url(image)
+    if image.respond_to?(:variation)
+      if image.processed?
+        blob = image.image.blob
+      else
+        ProcessImageJob.perform_later(image.blob, image.variation.transformations)
+        blob = image.blob
+      end
+    else
+      blob = image.blob
+    end
+
+    blob.url(expires_in: 1.week, disposition: :inline)
+  end
 end

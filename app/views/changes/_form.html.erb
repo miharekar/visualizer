@@ -17,6 +17,24 @@
               <%= form.text_area :body, rows: 30, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800" %>
             </div>
           </div>
+          <div class="col-span-6" data-controller="character-counter">
+            <%= form.label :excerpt, class: "standard-label" %>
+            <div class="mt-1">
+              <%= form.text_area :excerpt, rows: 5, maxlength: 250, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800", data: {character_counter_target: "input", action: "character-counter#updateCounter"} %>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">
+              <span data-character-counter-target="counter">0</span>/250 characters.
+            </p>
+          </div>
+          <div>
+            <%= form.label :image, "Image", class: "standard-label" %>
+            <% if @change.image.attached? && @change.image.variable? %>
+              <%= image_tag @change.image.variant(:social), class: "rounded-lg mt-1" %>
+            <% end %>
+            <div class="mt-1">
+              <%= form.file_field :image %>
+            </div>
+          </div>
         </div>
       </div>
       <div class=" px-4 py-3 bg-stone-50 dark:bg-stone-700 text-right sm:px-6">

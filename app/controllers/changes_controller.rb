@@ -47,6 +47,6 @@ class ChangesController < ApplicationController
   end
 
   def change_params
-    params.require(:change).permit(:title, :body, :published_at)
+    params.require(:change).permit(:title, :body, :published_at, :image, :excerpt)
   end
 end

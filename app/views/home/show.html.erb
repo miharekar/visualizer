@@ -184,7 +184,7 @@
         <%= link_to @last_change.title, change_path(@last_change.slug.presence || @last_change.id), class: "text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-300 sm:text-4xl hover:text-stone-500 dark:hover:text-stone-400", target: "_blank" %>
       </h2>
       <p class="mt-4 text-lg leading-8 text-stone-600 dark:text-stone-300">
-        <%= strip_tags(markdown_text_from(@last_change.body)).truncate(200) %>
+        <%= @last_change.excerpt %>
       </p>
       <div class="mt-4 flex flex-col justify-between gap-6 sm:mt-8 sm:flex-row-reverse sm:gap-8 lg:mt-4 lg:flex-col">
         <div class="flex">
@@ -207,7 +207,7 @@
                 <% end %>
               </h2>
               <p class="mt-4 text-sm leading-6 text-stone-600 dark:text-stone-300">
-                <%= strip_tags(markdown_text_from(change.body)).truncate(200) %>
+                <%= change.body.excerpt %>
               </p>
             </div>
           </article>
