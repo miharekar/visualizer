@@ -9,8 +9,3 @@ jobs:
     name: Ruby Tests
     uses: ./.github/workflows/ruby-tests.yml
     secrets: inherit
-  call-fly:
-    name: Fly
-    needs: call-ruby-tests
-    uses: ./.github/workflows/fly.yml
-    secrets: inherit
