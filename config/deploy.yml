@@ -1,30 +1,27 @@
 # Name of your application. Used to uniquely configure containers.
-service: my-app
+service: visualizer
 
 # Name of the container image.
-image: user/my-app
+image: mrfoto/visualizer
 
 # Deploy to these servers.
 servers:
-  - 192.168.0.1
+  - 88.99.170.153
 
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
-  username: my-user
+  username: mrfoto
 
   # Always use an access token rather than real password when possible.
   password:
     - MRSK_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .env).
-# env:
-#   clear:
-#     DB_HOST: 192.168.0.2
-#   secret:
-#     - RAILS_MASTER_KEY
-
+env:
+  secret:
+    - RAILS_MASTER_KEY
 # Use a different ssh user than root
 # ssh:
 #   user: app
