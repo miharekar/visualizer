@@ -27,7 +27,8 @@ env:
 #   user: app
 
 # Configure builder setup.
-# builder:
+builder:
+  multiarch: false
 #   args:
 #     RUBY_VERSION: 3.2.0
 #   secrets:
