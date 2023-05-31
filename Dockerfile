@@ -7,82 +7,72 @@ FROM ruby:$RUBY_VERSION-slim as base
 # Rails app lives here
 WORKDIR /rails
 
-ENV RUNTIME_DEPS="curl gnupg2 libvips libvips-dev tzdata librsvg2-dev postgresql-client" \
-  BUILD_DEPS="build-essential libpq-dev git less pkg-config python-is-python3 vim rsync"
+# Set production environment
+ENV RAILS_ENV="production" \
+  BUNDLE_WITHOUT="development:test" \
+  BUNDLE_DEPLOYMENT="1"
+
+# Update gems and bundler
+RUN gem update --system --no-document && \
+  gem install -N bundler
+
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
-# Common dependencies
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-  --mount=type=cache,target=/var/lib/apt,sharing=locked \
-  --mount=type=tmpfs,target=/var/log \
-  rm -f /etc/apt/apt.conf.d/docker-clean; \
-  echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache; \
-  apt-get update -qq \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends $BUILD_DEPS $RUNTIME_DEPS
-
-# COPY Aptfile /tmp/Aptfile
-# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-#   --mount=type=cache,target=/var/lib/apt,sharing=locked \
-#   --mount=type=tmpfs,target=/var/log \
-#   apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade && \
-#   DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-#     $(grep -Ev '^\s*#' /tmp/Aptfile | xargs)
-
-# Set production environment
-ENV RAILS_ENV="production" \
-  BUNDLE_DEPLOYMENT="1" \
-  BUNDLE_PATH="/usr/local/bundle" \
-  BUNDLE_JOBS="4" \
-  BUNDLE_NO_CACHE="true" \
-  BUNDLE_WITHOUT="development,test" \
-  GEM_HOME="/usr/local/bundle"
+# Install packages needed to build gems
+RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
+  --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
+  apt-get update -qq && \
+  apt-get install --no-install-recommends -y build-essential git libpq-dev libvips
 
 # Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN --mount=type=cache,target=~/.bundle/cache \
-  bundle config --local deployment 'true' \
-  && bundle config --local path "${BUNDLE_PATH}" \
-  && bundle install \
-  && rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git \
-  && bundle exec bootsnap precompile --gemfile
+COPY --link Gemfile Gemfile.lock ./
+RUN --mount=type=cache,id=bld-gem-cache,sharing=locked,target=/srv/vendor \
+  bundle config set app_config .bundle && \
+  bundle config set path /srv/vendor && \
+  bundle install && \
+  bundle exec bootsnap precompile --gemfile && \
+  bundle clean && \
+  mkdir -p vendor && \
+  bundle config set path vendor && \
+  cp -ar /srv/vendor .
 
 # Copy application code
-COPY . .
+COPY --link . .
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-ARG DATABASE_URL="postgres://postgres:postgres@db:5432/postgres"
+# Adjust binfiles to be executable on Linux
+RUN chmod +x bin/*
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-# Mount node_modules and tmp/cache as cache volume:
-RUN --mount=type=cache,target=/rails/tmp/cache/assets \
-  --mount=type=cache,target=/rails/tmp/assets_between_runs \
-  mkdir -p /rails/log && \
-  mkdir -p /rails/tmp/assets_between_runs/assets /rails/public/assets && rsync -a /rails/tmp/assets_between_runs/assets/. /rails/public/assets/. && \
-  SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile && \
-  rsync -a /rails/public/assets/. /rails/tmp/assets_between_runs/assets/.
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+
 
 # Final stage for app image
-FROM base as app
+FROM base
 
 # Install packages needed for deployment
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-  --mount=type=cache,target=/var/lib/apt,sharing=locked \
-  --mount=type=tmpfs,target=/var/log \
+RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
+  --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y $RUNTIME_DEPS cron
+  apt-get install --no-install-recommends -y imagemagick libjemalloc2 libvips postgresql-client
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
-RUN useradd rails --home /rails --shell /bin/bash && \
-  chown -R rails:rails db log tmp
+RUN useradd rails --create-home --shell /bin/bash && \
+  chown -R rails:rails db log storage tmp
 USER rails:rails
+
+# Deployment options
+ENV LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libjemalloc.so.2" \
+  MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true" \
+  RUBY_YJIT_ENABLE="1"
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]

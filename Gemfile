@@ -50,6 +50,7 @@ group :development do
   gem "annotate"
   gem "benchmark-ips"
   gem "brakeman"
+  gem "dockerfile-rails"
   gem "letter_opener"
   gem "rubocop", require: false
   gem "rubocop-performance", require: false

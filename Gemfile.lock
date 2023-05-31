@@ -163,6 +163,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dockerfile-rails (1.4.1)
+      rails
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.6.6)
@@ -486,6 +488,7 @@ DEPENDENCIES
   cloudinary
   debug
   devise
+  dockerfile-rails
   doorkeeper
   guard
   guard-minitest
