@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/fly-apps/dockerfile-rails.git
+  revision: 52505b71a2ca24d77db76874075b5982a9c0cb08
+  specs:
+    dockerfile-rails (1.4.1)
+      rails
+
+GIT
   remote: https://github.com/miharekar/omniauth-airtable.git
   revision: c51d9652ee2ab6e1e9808bf172c22d14174915a6
   specs:
@@ -163,8 +170,6 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    dockerfile-rails (1.4.1)
-      rails
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.6.6)
@@ -488,7 +493,7 @@ DEPENDENCIES
   cloudinary
   debug
   devise
-  dockerfile-rails
+  dockerfile-rails!
   doorkeeper
   guard
   guard-minitest

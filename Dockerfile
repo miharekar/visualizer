@@ -2,7 +2,7 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.2.2
-FROM ruby:$RUBY_VERSION-slim as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 # Rails app lives here
 WORKDIR /rails
@@ -44,9 +44,6 @@ COPY --link . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Adjust binfiles to be executable on Linux
-RUN chmod +x bin/*
-
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
@@ -58,7 +55,7 @@ FROM base
 RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
   --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y imagemagick libjemalloc2 libvips postgresql-client curl
+  apt-get install --no-install-recommends -y curl imagemagick libjemalloc2 libvips postgresql-client
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle

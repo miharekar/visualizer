@@ -5,4 +5,5 @@ options:
   cache: true
   jemalloc: true
   parallel: true
+  redis: true
   yjit: true
