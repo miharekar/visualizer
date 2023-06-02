@@ -10,7 +10,7 @@ class AirtableShotUploadJob < ApplicationJob
     if json["error"]["type"] == "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND"
       shot.user.identities.by_provider(:airtable).first.destroy
     else
-      RorVsWild.record_error(e, user_id: user.id)
+      RorVsWild.record_error(e, shot_id: shot.id, user_id: shot.user_id)
     end
   end
 end
