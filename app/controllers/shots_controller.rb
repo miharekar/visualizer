@@ -12,19 +12,19 @@ class ShotsController < ApplicationController
   end
 
   def recents
-    @recents = current_user.shots.by_start_time.
-      where(start_time: 3.weeks.ago..).
-      group_by { |s| [s.bean_brand, s.bean_type] }.
-      first(5).
-      map do |bean_group, shots|
+    @recents = current_user.shots.by_start_time
+      .where(start_time: 3.weeks.ago..)
+      .group_by { |s| [s.bean_brand, s.bean_type] }
+      .first(5)
+      .map do |bean_group, shots|
       [bean_group, shots.group_by { |s| [s.grinder_model, s.profile_title] }]
     end
   end
 
   def enjoyments
-    enjoyments = current_user.shots.by_start_time.
-      where("espresso_enjoyment > 0").
-      where(created_at: 6.months.ago..)
+    enjoyments = current_user.shots.by_start_time
+      .where("espresso_enjoyment > 0")
+      .where(created_at: 6.months.ago..)
     @enjoyments_data = EnjoymentChart.new(enjoyments).chart
   end
 

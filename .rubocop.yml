@@ -5,6 +5,9 @@ require:
 
 inherit_gem:
   standard: config/base.yml
+  standard-performance: config/base.yml
+  standard-custom: config/base.yml
+  standard-rails: config/base.yml
 
 AllCops:
   NewCops: enable
@@ -15,9 +18,6 @@ AllCops:
 
 Bundler/OrderedGems:
   Enabled: true
-
-Layout/DotPosition:
-  EnforcedStyle: trailing
 
 Layout/EmptyLineAfterGuardClause:
   Enabled: true
@@ -44,15 +44,6 @@ Style/WordArray:
 
 Style/IfUnlessModifier:
   Enabled: true
-
-Rails/I18nLocaleTexts:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/CreateTableWithTimestamps:
-  Enabled: false
 
 Performance/AncestorsInclude:
   Enabled: true

@@ -17,7 +17,7 @@ class SluggableDummy
   def self.validates(*_args)
   end
 
-  include Sluggable # rubocop:disable Style/ClassStructure
+  include Sluggable # rubocop:disable Layout/ClassStructure
   slug_from :title
 
   attr_reader :options

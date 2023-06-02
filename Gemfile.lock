@@ -395,6 +395,9 @@ GEM
     standard-performance (1.0.1)
       lint_roller (~> 1.0)
       rubocop-performance (~> 1.16.0)
+    standard-rails (0.1.0)
+      lint_roller (~> 1.0)
+      rubocop-rails (~> 2.19.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     stripe (8.5.0)
@@ -485,6 +488,7 @@ DEPENDENCIES
   slim
   stackprof
   standard
+  standard-rails
   stimulus-rails
   stripe
   tailwindcss-rails
