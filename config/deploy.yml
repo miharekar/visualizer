@@ -8,15 +8,11 @@ image: mrfoto/visualizer
 servers:
   web:
     hosts:
-      - 88.99.170.153
-    options:
-      add-host: host.docker.internal:host-gateway
+      - 78.47.79.8
   job:
     hosts:
-      - 88.99.170.153
+      - 78.47.79.8
     cmd: bin/sidekiq
-    options:
-      add-host: host.docker.internal:host-gateway
 
 registry:
   username: mrfoto
@@ -25,32 +21,68 @@ registry:
 
 env:
   clear:
-    DATABASE_URL: "postgres://postgres@host.docker.internal:5432/visualizer"
-    REDIS_URL: "redis://host.docker.internal:6379/0"
-    CACHE_REDIS_URL: "redis://host.docker.internal:6380/0"
+    REDIS_URL: "redis://5.75.162.200:6379/0"
+    CACHE_REDIS_URL: "redis://5.75.162.200:6380/0"
   secret:
     - RAILS_MASTER_KEY
+    - DATABASE_URL
 
 builder:
   multiarch: false
 
 accessories:
   db:
-    image: "postgres:15"
-    hosts:
-      - 88.99.170.153
-    port: "172.17.0.1:5432:5432"
+    image: postgres:15
+    host: 5.75.162.200
+    port: 5432
     env:
       clear:
-        POSTGRES_HOST_AUTH_METHOD: trust
         POSTGRES_DB: visualizer
-  redis:
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=3GB"
+      - "-c"
+      - "work_mem=2621kB"
+      - "-c"
+      - "maintenance_work_mem=256MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "checkpoint_completion_target=0.9"
+      - "-c"
+      - "wal_buffers=16MB"
+      - "-c"
+      - "default_statistics_target=100"
+      - "-c"
+      - "effective_io_concurrency=200"
+      - "-c"
+      - "min_wal_size=1GB"
+      - "-c"
+      - "max_wal_size=4GB"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.track=all"
+    volumes:
+      - /data/postgres:/var/lib/postgresql/data
+
+  main-redis:
     image: redis:7.0
-    hosts:
-      - 88.99.170.153
-    port: "172.17.0.1:6379:6379"
+    host: 5.75.162.200
+    port: 6379
+    volumes:
+      - /data/redis/main:/data
   cache-redis:
     image: redis:7.0
-    hosts:
-      - 88.99.170.153
-    port: "172.17.0.1:6380:6380"
+    host: 5.75.162.200
+    port: 6380
+    volumes:
+      - /data/redis/cache:/data
