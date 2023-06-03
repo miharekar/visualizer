@@ -25,6 +25,7 @@ gem "pg"
 gem "propshaft"
 gem "puma"
 gem "rails", github: "rails/rails"
+gem "rack", "< 3" # doesn't work well with rack-mini-profiler
 gem "redis"
 gem "responders"
 gem "sidekiq"
