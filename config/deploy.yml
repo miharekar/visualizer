@@ -33,8 +33,9 @@ builder:
 accessories:
   db:
     image: postgres:15
-    host: 5.75.162.200
-    port: 5432
+    hosts:
+      - 5.75.162.200
+    port: 5432:5432
     env:
       clear:
         POSTGRES_DB: visualizer
@@ -74,15 +75,17 @@ accessories:
     volumes:
       - /data/postgres:/var/lib/postgresql/data
 
-  main-redis:
+  redis-main:
     image: redis:7.0
-    host: 5.75.162.200
-    port: 6379
+    hosts:
+      - 5.75.162.200
+    port: 6379:6379
     volumes:
       - /data/redis/main:/data
-  cache-redis:
+  redis-cache:
     image: redis:7.0
-    host: 5.75.162.200
-    port: 6380
+    hosts:
+      - 5.75.162.200
+    port: 6380:6379
     volumes:
       - /data/redis/cache:/data
