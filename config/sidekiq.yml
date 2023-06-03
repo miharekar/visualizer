@@ -12,4 +12,4 @@
     DuplicateStripeSubscriptionsJob:
       every: 1 day
     AirtableWebhookRefreshJob:
-      every: 1 day
+      every: 6 day
