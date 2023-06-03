@@ -4,7 +4,7 @@ require "sidekiq/web"
 require "sidekiq-scheduler/web"
 
 Rails.application.routes.draw do
-  match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
+  # match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => "/sidekiq"
