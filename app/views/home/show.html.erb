@@ -169,50 +169,54 @@
     </div>
   </div>
 </div>
-<div class="py-12 sm:py-16">
-  <div class="mx-auto max-w-7xl px-6 lg:px-8 pb-16">
-    <div class="mx-auto max-w-2xl text-center">
-      <h2 class="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-300 sm:text-4xl">From the blog</h2>
+<% if @last_change.present? %>
+  <div class="py-12 sm:py-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8 pb-16">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-300 sm:text-4xl">From the blog</h2>
+      </div>
     </div>
-  </div>
-  <div class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-12 px-6 sm:gap-y-16 lg:grid-cols-2 lg:px-8">
-    <article class="mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-lg">
-      <time datetime="<%= @last_change.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-stone-600 dark:text-stone-300">
-        <%= @last_change.published_at.strftime("%b %d, %Y") %>
-      </time>
-      <h2 id="featured-post" class="mt-4 ">
-        <%= link_to @last_change.title, change_path(@last_change.slug.presence || @last_change.id), class: "text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-300 sm:text-4xl hover:text-stone-500 dark:hover:text-stone-400", target: "_blank" %>
-      </h2>
-      <p class="mt-4 text-lg leading-8 text-stone-600 dark:text-stone-300">
-        <%= @last_change.excerpt %>
-      </p>
-      <div class="mt-4 flex flex-col justify-between gap-6 sm:mt-8 sm:flex-row-reverse sm:gap-8 lg:mt-4 lg:flex-col">
-        <div class="flex">
-          <%= link_to "Continue reading →", change_path(@last_change.slug.presence || @last_change.id), class: "text-sm font-semibold leading-6 text-emerald-600 dark:text-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400", target: "_blank" %>
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-12 px-6 sm:gap-y-16 lg:grid-cols-2 lg:px-8">
+      <article class="mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-lg">
+        <time datetime="<%= @last_change.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-stone-600 dark:text-stone-300">
+          <%= @last_change.published_at.strftime("%b %d, %Y") %>
+        </time>
+        <h2 id="featured-post" class="mt-4 ">
+          <%= link_to @last_change.title, change_path(@last_change.slug.presence || @last_change.id), class: "text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-300 sm:text-4xl hover:text-stone-500 dark:hover:text-stone-400", target: "_blank" %>
+        </h2>
+        <p class="mt-4 text-lg leading-8 text-stone-600 dark:text-stone-300">
+          <%= @last_change.excerpt %>
+        </p>
+        <div class="mt-4 flex flex-col justify-between gap-6 sm:mt-8 sm:flex-row-reverse sm:gap-8 lg:mt-4 lg:flex-col">
+          <div class="flex">
+            <%= link_to "Continue reading →", change_path(@last_change.slug.presence || @last_change.id), class: "text-sm font-semibold leading-6 text-emerald-600 dark:text-emerald-500 hover:text-emerald-500 dark:hover:text-emerald-400", target: "_blank" %>
+          </div>
         </div>
-      </div>
-    </article>
-    <div class="mx-auto w-full max-w-2xl border-t border-stone-900/10 pt-12 sm:pt-16 lg:mx-0 lg:max-w-none lg:border-t-0 lg:pt-0">
-      <div class="-my-12 divide-y divide-stone-900/10">
-        <% @changes.each do |change| %>
-          <article class="py-12">
-            <div class="group relative max-w-xl">
-              <time datetime="<%= change.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-stone-600 dark:text-stone-300">
-                <%= change.published_at.strftime("%b %d, %Y") %>
-              </time>
-              <h2 class="mt-2 text-lg font-semibold text-stone-900 text dark:text-stone-300 group-hover:text-stone-400">
-                <%= link_to change_path(change.slug.presence || change.id), target: "_blank" do %>
-                  <span class="absolute inset-0"></span>
-                  <%= change.title %>
-                <% end %>
-              </h2>
-              <p class="mt-4 text-sm leading-6 text-stone-600 dark:text-stone-300">
-                <%= change.excerpt %>
-              </p>
-            </div>
-          </article>
-        <% end %>
-      </div>
+      </article>
+      <% if @changes.present? %>
+        <div class="mx-auto w-full max-w-2xl border-t border-stone-900/10 pt-12 sm:pt-16 lg:mx-0 lg:max-w-none lg:border-t-0 lg:pt-0">
+          <div class="-my-12 divide-y divide-stone-900/10">
+            <% @changes.each do |change| %>
+              <article class="py-12">
+                <div class="group relative max-w-xl">
+                  <time datetime="<%= change.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-stone-600 dark:text-stone-300">
+                    <%= change.published_at.strftime("%b %d, %Y") %>
+                  </time>
+                  <h2 class="mt-2 text-lg font-semibold text-stone-900 text dark:text-stone-300 group-hover:text-stone-400">
+                    <%= link_to change_path(change.slug.presence || change.id), target: "_blank" do %>
+                      <span class="absolute inset-0"></span>
+                      <%= change.title %>
+                    <% end %>
+                  </h2>
+                  <p class="mt-4 text-sm leading-6 text-stone-600 dark:text-stone-300">
+                    <%= change.excerpt %>
+                  </p>
+                </div>
+              </article>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
-</div>
+<% end %>
