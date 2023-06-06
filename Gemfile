@@ -43,7 +43,6 @@ gem "stackprof"
 
 group :development, :test do
   gem "debug"
-  gem "dotenv-rails"
 end
 
 group :development do
