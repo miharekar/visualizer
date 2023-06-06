@@ -83,7 +83,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
 
   test "it raises error when no identity is present" do
     user = users(:john)
-    error = assert_raise(Airtable::DataError) { Airtable::Shots.new(user) }
-    assert_equal "No Airtable identity found for User##{user.id}", error.message
+    error = assert_raise(StandardError) { Airtable::Shots.new(user) }
+    assert_equal "Airtable identity not found for User##{user.id}", error.message
   end
 end
