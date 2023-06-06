@@ -9,8 +9,12 @@ class Identity < ApplicationRecord
 
   scope :by_provider, ->(provider) { where(provider:) }
 
-  def ensure_valid_token!
-    return if expires_at.nil? || expires_at.future?
+  def valid_token?
+    expires_at.nil? || expires_at.future?
+  end
+
+  def refresh_token!
+    return if valid_token?
 
     devise_config = Devise.omniauth_configs[provider.to_sym]
     strategy = devise_config.strategy_class.new(nil, *devise_config.args)
@@ -22,8 +26,8 @@ class Identity < ApplicationRecord
     save!
   rescue OAuth2::Error => e
     if JSON.parse(e.body)["error"] == "invalid_grant"
-      destroy!
       RorVsWild.record_error(e, user_id:)
+      destroy!
     end
 
     raise

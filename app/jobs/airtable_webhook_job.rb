@@ -2,6 +2,7 @@
 
 class AirtableWebhookJob < ApplicationJob
   queue_as :default
+  retry_on Airtable::TokenError, wait: :exponentially_longer, attempts: 5
 
   def perform(airtable_info)
     user = airtable_info.identity.user

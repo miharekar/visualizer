@@ -56,6 +56,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
 
     stub = stub_request(:patch, "https://api.airtable.com/v0/#{identity.airtable_info.base_id}/#{identity.airtable_info.table_id}/#{shot.airtable_id}")
       .with(headers: {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"})
+      .to_return(status: 200, body: {id: shot.airtable_id}.to_json, headers: {})
     perform_enqueued_jobs
     assert_requested(stub)
   end
@@ -65,7 +66,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
     user = users(:miha)
     identity = user.identities.first
     sync = Airtable::Shots.new(user)
-    shot = user.shots.create!(id: shot_id, espresso_enjoyment: 80, start_time: "2023-05-05T15:50:44.093Z", information: ShotInformation.new, sha: "123")
+    shot = user.shots.create!(id: shot_id, espresso_enjoyment: 80, start_time: "2023-05-05T15:50:44.093Z", information: ShotInformation.new(timeframe: ["1"], data: {weight: []}), sha: "123")
     assert_enqueued_with(job: AirtableShotUploadJob, args: [shot], queue: "default")
 
     stub = stub_request(:patch, "https://api.airtable.com/v0/#{identity.airtable_info.base_id}/#{identity.airtable_info.table_id}")

@@ -2,6 +2,6 @@ miha:
   user: miha
   provider: airtable
   uid: long_string
-  token: long_string
-  refresh_token: long_string
+  token: access_token
+  refresh_token: refresh_token
   expires_at: 2030-01-01 00:00:00

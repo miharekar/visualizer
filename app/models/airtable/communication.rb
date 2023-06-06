@@ -4,7 +4,7 @@ module Airtable
   module Communication
     API_URL = "https://api.airtable.com/v0"
 
-    attr_reader :identity, :airtable_info
+    attr_reader :airtable_info
 
     def update_record(record_id, fields)
       api_request("/#{airtable_info.base_id}/#{airtable_info.table_id}/#{record_id}", fields, method: :patch)
@@ -46,10 +46,6 @@ module Airtable
     private
 
     def prepare_table
-      @identity = user.identities.find_by(provider: "airtable")
-      raise DataError.new("No Airtable identity found for User##{user.id}") unless identity
-
-      identity.ensure_valid_token!
       @airtable_info = identity.airtable_info || create_airtable_info
       create_missing_fields
     end

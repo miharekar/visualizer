@@ -10,7 +10,7 @@ class ScreenshotTakerJob < ApplicationJob
   end
 
   def perform(shot)
-    return if shot.screenshot? || Rails.env.development?
+    return if shot.screenshot? || Rails.env.development? || Rails.env.test?
 
     chart = ShotChart.new(shot)
     options = JSON.parse(File.read("lib/assets/chart_options.json"))
