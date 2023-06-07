@@ -284,6 +284,23 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
   end
 
+  test "extracts long beanconqueror file with missing values" do
+    shot = new_shot("test/fixtures/files/beanconqueror_missing_values.json")
+    assert shot.valid?
+    assert_equal "Leaderboard 03", shot.bean_type
+    assert_equal "60", shot.bean_weight
+    assert shot.espresso_notes.include?("#### Water")
+    assert shot.espresso_notes.include?('"name": "Aquacode (85ppm)",')
+    assert_equal 1366, shot.information.timeframe.size
+    assert_equal "0.0", shot.information.timeframe.first
+    assert_equal "147.542", shot.information.timeframe.last
+    assert_equal 147.542, shot.duration
+    assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
+    assert_equal 1366, shot.information.data["espresso_weight"].size
+    assert_equal 10, shot.information.extra.keys.size
+    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
+  end
+
   test "extracts pressure from CoffeeFlow app" do
     shot = new_shot("test/fixtures/files/profitec_victoria_arduino.csv")
     assert shot.valid?

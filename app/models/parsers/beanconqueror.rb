@@ -66,7 +66,7 @@ module Parsers
           label = DATA_LABELS_MAP[key]
           closest = brew_flow[key].min_by { |b| (timestamp - b["unix_timestamp"]).abs }
           value = closest[DATA_VALUES_MAP[key]]
-          data[label] << (value.positive? ? value : 0)
+          data[label] << (value&.positive? ? value : 0)
         end
       end
     end

@@ -10,12 +10,12 @@ module Parsers
     def self.parser_for(file)
       if file.start_with?("{")
         json = parse_json(file)
-        if json.key?("mill")
+        if json.key?("mill") || json.key?("brewFlow")
           Beanconqueror.new(json)
         else
           DecentJson.new(json)
         end
-      elsif file.start_with?("clock", "sequence_id")
+      elsif file.start_with?("clock", "sequence_id", "filename")
         DecentTcl.new(file)
       elsif file.start_with?("information_type")
         SepCsv.new(file)
