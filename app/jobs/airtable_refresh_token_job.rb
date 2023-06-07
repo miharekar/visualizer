@@ -3,7 +3,7 @@
 class AirtableRefreshTokenJob < ApplicationJob
   queue_as :default
 
-  def perform(identity)
-    identity.refresh_token!
+  def perform(identity, force: false)
+    identity.refresh_token!(force:)
   end
 end

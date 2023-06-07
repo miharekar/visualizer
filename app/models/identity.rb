@@ -13,8 +13,8 @@ class Identity < ApplicationRecord
     expires_at.nil? || expires_at.future?
   end
 
-  def refresh_token!
-    return if valid_token?
+  def refresh_token!(force: false)
+    return if valid_token? && !force
 
     devise_config = Devise.omniauth_configs[provider.to_sym]
     strategy = devise_config.strategy_class.new(nil, *devise_config.args)
@@ -23,6 +23,8 @@ class Identity < ApplicationRecord
     self.token = new_token.token
     self.refresh_token = new_token.refresh_token
     self.expires_at = Time.zone.at(new_token.expires_at)
+    refresh_token_job_klass = "#{provider}_refresh_token_job".classify.constantize
+    refresh_token_job_klass.set(wait_until: expires_at - 1.minute).perform_later(self, force: true)
     save!
   rescue OAuth2::Error => e
     if JSON.parse(e.body)["error"] == "invalid_grant"
