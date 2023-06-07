@@ -136,6 +136,15 @@ class ShotTest < ActiveSupport::TestCase
   test "handles invalid profile string" do
     shot = new_shot("test/fixtures/files/invalid_profile.json")
     assert shot.valid?
+    assert_equal "phaad/Extractamundo Dos!", shot.profile_title
+    assert_equal 101, shot.information.timeframe.size
+  end
+
+  test "handles even more invalid profile string" do
+    shot = new_shot("test/fixtures/files/invalid_profile_2.json")
+    assert shot.valid?
+    assert_equal "fill brew release", shot.profile_title
+    assert_equal 237, shot.information.timeframe.size
   end
 
   test "handles invalid settings" do
