@@ -520,8 +520,6 @@ DEPENDENCIES
   responders
   rorvswild
   rubocop
-  rubocop-performance
-  rubocop-rails
   sidekiq
   sidekiq-scheduler
   slim
