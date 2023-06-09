@@ -22,7 +22,7 @@ module Airtable
       return if identity.valid_token?
 
       AirtableRefreshTokenJob.perform_later(identity)
-      raise TokenError.new("Airtable identity for User##{user.id} has invalid token")
+      raise TokenError
     end
 
     def prepare_table_fields
