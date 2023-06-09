@@ -32,7 +32,7 @@ module Parsers
 
     def self.parse_json(file)
       JSON.parse(file)
-    rescue JSON::ParserError => e
+    rescue JSON::ParserError
       matches = file.match(/",(\n\s+"[^\n"]*\n+[^"]+": ?"\w+",)/m)
       if matches&.captures&.any?
         file = file.sub(matches.captures.first, "")
