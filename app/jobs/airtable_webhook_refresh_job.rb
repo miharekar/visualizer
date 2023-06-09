@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-class AirtableWebhookRefreshJob < ApplicationJob
-  queue_as :default
-  retry_on Airtable::TokenError, attempts: 2
-
+class AirtableWebhookRefreshJob < AirtableJob
   def perform(*args)
     AirtableInfo.find_each do |airtable_info|
       refresh_webhook(airtable_info)

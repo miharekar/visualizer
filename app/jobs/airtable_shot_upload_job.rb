@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-class AirtableShotUploadJob < ApplicationJob
-  queue_as :default
-  retry_on Airtable::TokenError, attempts: 2
-
+class AirtableShotUploadJob < AirtableJob
   def perform(shot)
     Airtable::Shots.new(shot.user).upload(shot)
   rescue Airtable::DataError => e

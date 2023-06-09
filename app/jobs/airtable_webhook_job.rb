@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-class AirtableWebhookJob < ApplicationJob
+class AirtableWebhookJob < AirtableJob
   class LastTransactionMismatchError < StandardError; end
-
-  queue_as :default
-
-  retry_on LastTransactionMismatchError, wait: :exponentially_longer
 
   def perform(airtable_info)
     @airtable_info = airtable_info
