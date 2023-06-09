@@ -18,10 +18,10 @@ module Airtable
 
     def set_identity
       @identity = user.identities.find_by(provider: "airtable")
-      raise StandardError.new("Airtable identity not found for User##{user.id}") unless identity
+      raise "Airtable identity not found for User##{user.id}" unless identity
       return if identity.valid_token?
 
-      AirtableRefreshTokenJob.perform_later(identity)
+      RefreshTokenJob.perform_later(identity)
       raise TokenError
     end
 

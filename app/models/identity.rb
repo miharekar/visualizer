@@ -13,19 +13,15 @@ class Identity < ApplicationRecord
     expires_at.nil? || expires_at.future?
   end
 
-  def refresh_token!(force: false)
-    return if valid_token? && !force
+  def refresh_token!
+    return if valid_token?
+    raise "Already refreshing token" if refreshing_token?
 
-    devise_config = Devise.omniauth_configs[provider.to_sym]
-    strategy = devise_config.strategy_class.new(nil, *devise_config.args)
+    Sidekiq.redis { |r| r.set(refresh_token_key, Time.zone.now.to_s, ex: 300) }
     new_token = OAuth2::AccessToken.new(strategy.client, token, {expires_at: expires_at.to_i, refresh_token:})
     new_token = new_token.refresh!
-    self.token = new_token.token
-    self.refresh_token = new_token.refresh_token
-    self.expires_at = Time.zone.at(new_token.expires_at)
-    refresh_token_job_klass = "#{provider}_refresh_token_job".classify.constantize
-    refresh_token_job_klass.set(wait_until: expires_at - 1.minute).perform_later(self, force: true)
-    save!
+    update!(token: new_token.token, refresh_token: new_token.refresh_token, expires_at: Time.zone.at(new_token.expires_at))
+    Sidekiq.redis { |r| r.del(refresh_token_key) }
   rescue OAuth2::Error => e
     if JSON.parse(e.body)["error"] == "invalid_grant"
       RorVsWild.record_error(e, user_id:)
@@ -33,6 +29,21 @@ class Identity < ApplicationRecord
     end
 
     raise
+  end
+
+  def refreshing_token?
+    Sidekiq.redis { |r| r.get(refresh_token_key) }
+  end
+
+  private
+
+  def refresh_token_key
+    "#{provider}:refreshing_token:#{id}"
+  end
+
+  def strategy
+    devise_config = Devise.omniauth_configs[provider.to_sym]
+    devise_config.strategy_class.new(nil, *devise_config.args)
   end
 end
 
