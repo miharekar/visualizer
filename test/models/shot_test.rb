@@ -350,8 +350,8 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.valid?
     assert_equal 182, shot.information.timeframe.size
     assert_equal 0.028, shot.information.timeframe.first
-    assert_equal 18.638, shot.information.timeframe.last
-    assert_equal 18.638, shot.duration
+    assert_equal 18.638, shot.information.timeframe.last.round(3)
+    assert_equal 18.638, shot.duration.round(3)
     assert_equal %w[espresso_flow_weight espresso_pressure espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
     assert_equal 36.06, shot.information.data["espresso_weight"][150]
     assert_equal 1.7715647462422965, shot.information.data["espresso_pressure"][150]
