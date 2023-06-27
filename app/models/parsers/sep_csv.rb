@@ -79,7 +79,7 @@ module Parsers
       most_data = @datapoints.max_by { |_k, v| v.size }.first
       time_step = (@datapoints[most_data].keys.last - @datapoints[most_data].keys.first) / @datapoints[most_data].keys.size
       first_timestamp = @datapoints.min_by { |_k, v| v.keys.first }[1].keys.first
-      last_timestamp = @datapoints.max_by { |_k, v| v.keys.first }[1].keys.last
+      last_timestamp = @datapoints.max_by { |_k, v| v.keys.last }[1].keys.last
 
       first_timestamp.step(last_timestamp, time_step).each do |time|
         @timeframe << time

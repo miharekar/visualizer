@@ -327,10 +327,10 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts temperature from Pressensor" do
     shot = new_shot("test/fixtures/files/pressensor.csv")
     assert shot.valid?
-    assert_equal 684, shot.information.timeframe.size
+    assert_equal 703, shot.information.timeframe.size
     assert_equal 0.033, shot.information.timeframe.first
-    assert_equal 32.187511396011395, shot.information.timeframe.last
-    assert_equal 32.187511396011395, shot.duration
+    assert_equal 33.082, shot.information.timeframe.last
+    assert_equal 33.082, shot.duration
     assert_equal %w[espresso_flow_weight espresso_pressure espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
     assert_equal 27.29, shot.information.data["espresso_weight"][400]
     assert_equal 1.488175344887875, shot.information.data["espresso_pressure"][400]
@@ -343,6 +343,27 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Medium", shot.roast_level
     assert_equal "16.2", shot.bean_weight
     assert_equal "37.87", shot.drink_weight
+  end
+
+  test "extracts correct length from Pressensor" do
+    shot = new_shot("test/fixtures/files/pressensor_short.csv")
+    assert shot.valid?
+    assert_equal 182, shot.information.timeframe.size
+    assert_equal 0.028, shot.information.timeframe.first
+    assert_equal 18.638, shot.information.timeframe.last
+    assert_equal 18.638, shot.duration
+    assert_equal %w[espresso_flow_weight espresso_pressure espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
+    assert_equal 36.06, shot.information.data["espresso_weight"][150]
+    assert_equal 1.7715647462422965, shot.information.data["espresso_pressure"][150]
+    assert_equal 0.04, shot.information.data["espresso_flow_weight"][150]
+    assert_equal 10, shot.information.extra.keys.size
+    assert_equal "First Pull", shot.profile_title
+    assert_equal "Espresso Machine Brand: Flair 58\nEspresso Machine Model: f58\nBasket Diameter: 58.0\nBrew ratio: 1.0\nExtraction time: 18.674\nAvarage flow rate: 1.931562600406983\nUnit system: metric\nAttribution: Pressensor CF\nSoftware: Pressensor CF\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+    assert_equal "Ninetens", shot.bean_brand
+    assert_equal "Kintamani Cascara Washed", shot.bean_type
+    assert_equal "Medium", shot.roast_level
+    assert_equal "16.0", shot.bean_weight
+    assert_equal "36.07", shot.drink_weight
   end
 
   test "extracts temperature from Beanconqueror" do
