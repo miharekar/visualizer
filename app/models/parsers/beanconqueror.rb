@@ -7,6 +7,7 @@ module Parsers
 
     def parse
       @start_time = Time.at(file.dig("brew", "config", "unix_timestamp").to_i).utc
+      @profile_title = "Exported from Beanconqueror"
       extract_bean(file["bean"])
       extract_mill(file["mill"])
       extract_brew(file["brew"])
@@ -20,7 +21,6 @@ module Parsers
     def extract_bean(bean)
       @extra["bean_brand"] = bean.delete("roaster")
       @extra["bean_type"] = bean.delete("name")
-      @extra["bean_weight"] = bean.delete("weight")
       @extra["roast_level"] = bean.delete("roast")
       @extra["roast_date"] = bean.delete("roastingDate")
       @extra["bean_notes"] = "```javascript\n#{JSON.pretty_generate(bean)}\n```"
@@ -29,6 +29,7 @@ module Parsers
     def extract_brew(brew)
       @extra["grinder_setting"] = brew.delete("grind_size")
       @extra["drink_weight"] = brew.delete("brew_beverage_quantity")
+      @extra["bean_weight"] = brew.delete("grind_weight")
       @extra["espresso_notes"] = "#### Brew:\n\n#{brew.delete("note")}\n\n```javascript\n#{JSON.pretty_generate(brew.except("config"))}\n```\n\n"
     end
 

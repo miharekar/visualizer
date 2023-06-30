@@ -205,7 +205,7 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.valid?
     assert_equal "onoma", shot.bean_brand
     assert_equal "Holm", shot.bean_type
-    assert_equal "250", shot.bean_weight
+    assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
     assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
     assert shot.bean_notes.start_with?("```javascript")
@@ -228,7 +228,7 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.valid?
     assert_equal "onoma", shot.bean_brand
     assert_equal "Holm", shot.bean_type
-    assert_equal "250", shot.bean_weight
+    assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
     assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
     assert shot.bean_notes.start_with?("```javascript")
@@ -258,7 +258,7 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.valid?
     assert_equal "onoma", shot.bean_brand
     assert_equal "Holm", shot.bean_type
-    assert_equal "250", shot.bean_weight
+    assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
     assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
     assert shot.bean_notes.start_with?("```javascript")
@@ -288,7 +288,7 @@ class ShotTest < ActiveSupport::TestCase
     shot = new_shot("test/fixtures/files/beanconqueror_missing_values.json")
     assert shot.valid?
     assert_equal "Leaderboard 03", shot.bean_type
-    assert_equal "60", shot.bean_weight
+    assert_equal "15", shot.bean_weight
     assert shot.espresso_notes.include?("#### Water")
     assert shot.espresso_notes.include?('"name": "Aquacode (85ppm)",')
     assert_equal 1366, shot.information.timeframe.size
@@ -304,15 +304,15 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts correct weight from beanconqueror file" do
     shot = new_shot("test/fixtures/files/beanconqueror_beverage_weight.json")
     assert shot.valid?
-    assert_equal "Nicaragua", shot.bean_type
-    assert_equal "250", shot.bean_weight
-    assert_equal "39.4", shot.drink_weight
-    assert_equal 196, shot.information.timeframe.size
+    assert_equal "Brasil Jabuticaba", shot.bean_type
+    assert_equal "16.2", shot.bean_weight
+    assert_equal "249", shot.drink_weight
+    assert_equal 1117, shot.information.timeframe.size
     assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "19.94", shot.information.timeframe.last
-    assert_equal 19.94, shot.duration
+    assert_equal "163.197", shot.information.timeframe.last
+    assert_equal 163.197, shot.duration
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
-    assert_equal 196, shot.information.data["espresso_weight"].size
+    assert_equal 1117, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
     assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
   end
