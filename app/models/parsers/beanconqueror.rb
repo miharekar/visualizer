@@ -28,7 +28,7 @@ module Parsers
 
     def extract_brew(brew)
       @extra["grinder_setting"] = brew.delete("grind_size")
-      @extra["drink_weight"] = brew.delete("brew_quantity")
+      @extra["drink_weight"] = brew.delete("brew_beverage_quantity")
       @extra["espresso_notes"] = "#### Brew:\n\n#{brew.delete("note")}\n\n```javascript\n#{JSON.pretty_generate(brew.except("config"))}\n```\n\n"
     end
 
