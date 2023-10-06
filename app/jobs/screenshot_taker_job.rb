@@ -13,7 +13,7 @@ class ScreenshotTakerJob < ApplicationJob
     return if shot.screenshot? || Rails.env.development? || Rails.env.test?
 
     chart = ShotChart.new(shot)
-    options = FastJsonparser.parse(File.read("lib/assets/chart_options.json"), symbolize_keys: false)
+    options = Oj.load(File.read("lib/assets/chart_options.json"))
     options["xAxis"]["plotLines"] = chart.stages
     options["series"] = chart.shot_chart
 

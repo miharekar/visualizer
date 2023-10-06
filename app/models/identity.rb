@@ -23,7 +23,7 @@ class Identity < ApplicationRecord
     update!(token: new_token.token, refresh_token: new_token.refresh_token, expires_at: Time.zone.at(new_token.expires_at))
     Sidekiq.redis { |r| r.del(refresh_token_key) }
   rescue OAuth2::Error => e
-    if FastJsonparser.parse(e.body, symbolize_keys: false)["error"] == "invalid_grant"
+    if Oj.load(e.body)["error"] == "invalid_grant"
       RorVsWild.record_error(e, user_id:)
       destroy!
     end

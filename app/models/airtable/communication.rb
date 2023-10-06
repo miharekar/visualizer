@@ -106,7 +106,7 @@ module Airtable
         attrs = [uri, data, headers].compact
         response = http.public_send(method, *attrs)
         if response.is_a?(Net::HTTPSuccess)
-          FastJsonparser.parse(response.body, symbolize_keys: false)
+          Oj.load(response.body)
         else
           raise DataError.new(response.body, data:, response:)
         end

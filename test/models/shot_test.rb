@@ -298,7 +298,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
     assert_equal 1366, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
-    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 rescue puts "error: #{v}" }
   end
 
   test "extracts correct weight from beanconqueror file" do
@@ -370,7 +370,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 18.638, shot.duration.round(3)
     assert_equal %w[espresso_flow_weight espresso_pressure espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
     assert_equal 36.06, shot.information.data["espresso_weight"][150]
-    assert_equal 1.7715647462422965, shot.information.data["espresso_pressure"][150]
+    assert_equal 1.771564746242297, shot.information.data["espresso_pressure"][150]
     assert_equal 0.04, shot.information.data["espresso_flow_weight"][150]
     assert_equal 10, shot.information.extra.keys.size
     assert_equal "First Pull", shot.profile_title

@@ -66,7 +66,7 @@ module Parsers
 
     def extract_profile(data)
       stop = "#{data.last.join(" ")}\n}"
-      @profile_fields["json"] = FastJsonparser.parse(file[/profile (\{(.*)#{stop})/m, 1], symbolize_keys: false)
+      @profile_fields["json"] = Oj.load(file[/profile (\{(.*)#{stop})/m, 1])
     rescue
       nil
     end
