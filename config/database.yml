@@ -26,20 +26,24 @@ default: &default
   # max_connections = 4 * 5 + 4 * 4 + 1 * 5 + 1 * 4 = 45
 
 development:
-  <<: *default
-  <% if ENV["DATABASE_PASSWORD"].present? %>
-  database: visualizer
-  username: visualizer
-  password: <%= ENV["DATABASE_PASSWORD"] %>
-  host: localhost
-  port: 15432
-  <% else %>
-  database: visualizer_development
-  <% end %>
+  primary:
+    <<: *default
+    database: visualizer_development
+  production:
+    <<: *default
+    database: <%= Rails.application.credentials.postgres&.database %>
+    username: <%= Rails.application.credentials.postgres&.username %>
+    password: <%= Rails.application.credentials.postgres&.password %>
+    host: localhost
+    port: 15432
 
 test:
-  <<: *default
-  database: visualizer_test
+  primary:
+    <<: *default
+    database: visualizer_test
+  production:
+    <<: *default
+    database: visualizer_test
 
 production:
   <<: *default
