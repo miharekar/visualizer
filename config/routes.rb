@@ -36,9 +36,7 @@ Rails.application.routes.draw do
   get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
 
-  resources :people, only: %i[index show] do
-    post :search, on: :collection
-    get :search, on: :collection
+  resources :people, only: %i[show] do
     get :feed, on: :member
   end
 

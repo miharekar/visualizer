@@ -1,10 +1,10 @@
-- content_for(:html_title) { "Visualizer | Search" }
+- content_for(:html_title) { "Visualizer | Community" }
 - if @premium_count.to_i > 1
   = render "shared/premium_banner", count: @premium_count
 .bg-white.dark:bg-stone-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.text-3xl.font-bold.leading-tight.text-stone-900.dark:text-stone-100
-      ' Search
+      ' Community
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
   = form_with(url: {action: :index}, method: :get) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden

@@ -14,11 +14,9 @@ class SearchController < ApplicationController
     espresso_notes: {}
   }.freeze
 
-  before_action :authenticate_user!
-
   def index
     if params[:commit]
-      @shots = Shot.visible_or_owned_by_id(current_user.id).by_start_time.includes(:user)
+      @shots = Shot.visible_or_owned_by_id(current_user&.id).by_start_time.includes(:user)
       FILTERS.each do |filter, options|
         next if params[filter].blank?
 
@@ -32,10 +30,13 @@ class SearchController < ApplicationController
       @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
       @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
 
-      unless current_user.premium?
+      unless current_user&.premium?
         @premium_count = @shots.count - @shots.non_premium.count
         @shots = @shots.non_premium
       end
+      @pagy, @shots = pagy_countless(@shots)
+    elsif current_user.blank?
+      @shots = Shot.visible.by_start_time.includes(:user).non_premium
       @pagy, @shots = pagy_countless(@shots)
     else
       @shots = []
@@ -50,7 +51,7 @@ class SearchController < ApplicationController
 
   def unique_values_for(filter)
     if filter == :user
-      User.visible_or_id(current_user.id).by_name
+      User.visible_or_id(current_user&.id).by_name
     else
       Rails.cache.read("unique_values_for_#{filter}")
     end
