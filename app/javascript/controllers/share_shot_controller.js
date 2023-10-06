@@ -24,7 +24,7 @@ export default class extends Controller {
   getCode() {
     if (this.code.length == 0) {
       fetch(this.urlValue).then((response) => {
-        response.json().then(data => {
+        response.json().then((data) => {
           this.code = data.code
           this.codeTarget.innerText = this.code
         })

@@ -4,10 +4,10 @@ export default class extends Controller {
   static targets = ["tab", "panel", "icon"]
 
   connect() {
-    this.activeTabClasses = (this.data.get("activeTab")).split(" ")
-    this.inactiveTabClasses = (this.data.get("inactiveTab")).split(" ")
-    this.activeIconClasses = (this.data.get("activeIcon")).split(" ")
-    this.inactiveIconClasses = (this.data.get("inactiveIcon")).split(" ")
+    this.activeTabClasses = this.data.get("activeTab").split(" ")
+    this.inactiveTabClasses = this.data.get("inactiveTab").split(" ")
+    this.activeIconClasses = this.data.get("activeIcon").split(" ")
+    this.inactiveIconClasses = this.data.get("inactiveIcon").split(" ")
   }
 
   change(event) {
@@ -42,7 +42,7 @@ export default class extends Controller {
   }
 
   set index(value) {
-    this.data.set("index", (value >= 0 ? value : 0))
+    this.data.set("index", value >= 0 ? value : 0)
     this.showTab()
   }
 }

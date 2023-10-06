@@ -1,7 +1,7 @@
 import { Turbo } from "@hotwired/turbo-rails"
 
 document.addEventListener("turbo:load", function () {
-  const dropArea = document.getElementById("drop-area");
+  const dropArea = document.getElementById("drop-area")
 
   if (dropArea) {
     const loader = document.getElementById("loader")
@@ -9,24 +9,24 @@ document.addEventListener("turbo:load", function () {
     const form = document.getElementById("shot-upload-form")
     const token = document.getElementsByName("csrf-token")[0].content
 
-    const preventDefaults = e => {
+    const preventDefaults = (e) => {
       e.preventDefault()
       e.stopPropagation()
     }
 
-    const highlight = e => {
+    const highlight = (e) => {
       dropArea.classList.add("bg-emerald-50", "dark:bg-emerald-900")
       dropArea.classList.add("border-emerald-300")
       dropArea.classList.remove("border-stone-300")
     }
 
-    const unhighlight = e => {
+    const unhighlight = (e) => {
       dropArea.classList.remove("bg-emerald-50", "dark:bg-emerald-900")
       dropArea.classList.remove("border-emerald-300")
       dropArea.classList.add("border-stone-300")
     }
 
-    const handleDrop = e => {
+    const handleDrop = (e) => {
       dropArea.classList.add("hidden")
       loader.classList.remove("hidden")
 
@@ -50,25 +50,25 @@ document.addEventListener("turbo:load", function () {
             }
           }
         },
-        false
-      );
-      [...e.dataTransfer.files].forEach(file => {
+        false,
+      )
+      ;[...e.dataTransfer.files].forEach((file) => {
         formData.append("files[]", file)
       })
       xhr.send(formData)
     }
 
-    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
       dropArea.addEventListener(eventName, preventDefaults, false)
-    });
+    })
 
-    ["dragenter", "dragover"].forEach(eventName => {
+    ;["dragenter", "dragover"].forEach((eventName) => {
       dropArea.addEventListener(eventName, highlight, false)
-    });
+    })
 
-    ["dragleave", "drop"].forEach(eventName => {
+    ;["dragleave", "drop"].forEach((eventName) => {
       dropArea.addEventListener(eventName, unhighlight, false)
-    });
+    })
 
     const files = document.getElementById("files")
     if (files) {

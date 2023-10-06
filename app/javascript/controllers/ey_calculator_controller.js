@@ -7,7 +7,7 @@ export default class extends Controller {
     const drinkWeight = this.getFloatFromString(this.drinkWeightTarget.value)
     const beanWeight = this.getFloatFromString(this.beanWeightTarget.value)
     const tds = this.getFloatFromString(this.tdsTarget.value)
-    const ey = drinkWeight * tds / beanWeight
+    const ey = (drinkWeight * tds) / beanWeight
     this.eyTarget.value = ey.toFixed(2)
   }
 

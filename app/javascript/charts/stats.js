@@ -5,17 +5,17 @@ document.addEventListener("turbo:load", function () {
     accessibility: { enabled: false },
     chart: {
       zoomType: "x",
-      height: 500
+      height: 500,
     },
     xAxis: {
       type: "datetime",
     },
     title: false,
     yAxis: {
-      title: false
+      title: false,
     },
     credits: {
-      enabled: false
+      enabled: false,
     },
   }
   if (document.getElementById("shot-uploaded-chart")) {

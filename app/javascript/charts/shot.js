@@ -107,7 +107,7 @@ function getColors() {
       line: "#332914",
       legend: "#cccccc",
       legendHover: "#ffffff",
-      legendHidden: "#333333"
+      legendHidden: "#333333",
     }
   } else {
     return {
@@ -117,7 +117,7 @@ function getColors() {
       line: "#ccd6eb",
       legend: "#333333",
       legendHover: "#000000",
-      legendHidden: "#cccccc"
+      legendHidden: "#cccccc",
     }
   }
 }
@@ -140,18 +140,18 @@ function commonOptions() {
           } else {
             return Highcharts.dateFormat("%M:%S", this.value)
           }
-        }
+        },
       },
       gridLineColor: colors.gridLine,
       lineColor: colors.line,
-      tickColor: colors.line
+      tickColor: colors.line,
     },
     yAxis: {
       title: false,
       labels: { style: { color: colors.label } },
       gridLineColor: colors.gridLine,
       lineColor: colors.line,
-      tickColor: colors.line
+      tickColor: colors.line,
     },
     tooltip: {
       animation: false,
@@ -168,12 +168,12 @@ function commonOptions() {
         }
 
         return s.concat(tooltip.bodyFormatter(this.points))
-      }
+      },
     },
     legend: {
       itemStyle: { color: colors.legend },
       itemHoverStyle: { color: colors.legendHover },
-      itemHiddenStyle: { color: colors.legendHidden }
+      itemHiddenStyle: { color: colors.legendHidden },
     },
     plotOptions: {
       series: {
@@ -181,16 +181,16 @@ function commonOptions() {
         marker: {
           enabled: false,
           states: {
-            hover: { enabled: false }
-          }
+            hover: { enabled: false },
+          },
         },
         states: {
           hover: { enabled: false },
-          inactive: { enabled: false }
-        }
-      }
+          inactive: { enabled: false },
+        },
+      },
     },
-    credits: { enabled: false }
+    credits: { enabled: false },
   }
 }
 
@@ -223,7 +223,7 @@ function setupInCupAnnotations(chart) {
         x: -30,
         allowOverlap: true,
         style: { color: weightColor },
-        borderColor: weightColor
+        borderColor: weightColor,
       })
     }
   })
@@ -231,7 +231,7 @@ function setupInCupAnnotations(chart) {
   chart.inCupAnnotation = chart.addAnnotation({
     draggable: false,
     labels: labels,
-    labelOptions: { shape: "connector" }
+    labelOptions: { shape: "connector" },
   })
 
   chart.renderer.text('<button id="remove-annotations" class="highcharts-no-tooltip cursor-pointer inline-flex px-2 py-1 border border-stone-300 dark:border-stone-600 rounded shadow-sm text-xs font-medium text-stone-700 bg-white dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-900">Hide annotations</span>', 50, 35, true).attr({ zIndex: 3 }).add()
@@ -275,10 +275,10 @@ function drawShotChart() {
       height: 650,
       backgroundColor: colors.background,
       events: {
-        redraw: (x) => updateInCupVisibility(x.target)
-      }
+        redraw: (x) => updateInCupVisibility(x.target),
+      },
     },
-    series: window.shotData
+    series: window.shotData,
   }
 
   let options = { ...commonOptions(), ...custom }
@@ -316,9 +316,9 @@ function drawTemperatureChart() {
     chart: {
       zoomType: "x",
       height: 400,
-      backgroundColor: colors.background
+      backgroundColor: colors.background,
     },
-    series: window.temperatureData
+    series: window.temperatureData,
   }
 
   let options = { ...commonOptions(), ...custom }
@@ -339,7 +339,7 @@ function comparisonAdjust(range) {
               }),
               true,
               false,
-              false
+              false,
             )
           }
         })

@@ -13,13 +13,12 @@ function getColors() {
   if (isDark()) {
     return {
       background: "#000000",
-      gridLine: "#191919"
+      gridLine: "#191919",
     }
-  }
-  else {
+  } else {
     return {
       background: "#ffffff",
-      gridLine: "#e6e6e6"
+      gridLine: "#e6e6e6",
     }
   }
 }
@@ -34,7 +33,7 @@ function commonOptions() {
     chart: {
       zoomType: "x",
       height: 300,
-      backgroundColor: colors.background
+      backgroundColor: colors.background,
     },
     xAxis: {
       type: "datetime",
@@ -46,14 +45,14 @@ function commonOptions() {
     yAxis: {
       title: false,
       max: 100,
-      gridLineColor: colors.gridLine
+      gridLineColor: colors.gridLine,
     },
     credits: { enabled: false },
     tooltip: {
       animation: false,
       formatter: function () {
         return this.point.title
-      }
+      },
     },
     plotOptions: {
       series: {
@@ -62,18 +61,18 @@ function commonOptions() {
           events: {
             click: function () {
               Turbo.visit(this.url)
-            }
-          }
+            },
+          },
         },
         findNearestPointBy: "xy",
         states: { hover: { enabled: false } },
         animation: false,
         marker: {
           enabled: true,
-          radius: 5
+          radius: 5,
         },
-        lineWidth: 0
-      }
+        lineWidth: 0,
+      },
     },
   }
 }
@@ -82,11 +81,13 @@ function drawEnjoymentsChart() {
   if (document.getElementById("enjoyments-chart")) {
     const chartOptions = {
       ...commonOptions(),
-      series: [{
-        name: "Enjoyments throughout time",
-        data: window.enjoymentsData,
-        lineWidth: 0
-      }]
+      series: [
+        {
+          name: "Enjoyments throughout time",
+          data: window.enjoymentsData,
+          lineWidth: 0,
+        },
+      ],
     }
     Highcharts.chart("enjoyments-chart", chartOptions)
   }

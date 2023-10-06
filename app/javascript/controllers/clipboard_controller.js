@@ -14,7 +14,9 @@ export default class extends Controller {
     this.copyTarget.classList.add("hidden")
     this.checkTarget.classList.remove("hidden")
     this.containerTarget.classList.add("bg-emerald-200", "hover:bg-emerald-200", "dark:bg-emerald-700", "dark:hover:bg-emerald-700")
-    setTimeout(() => { this.resetState() }, 2000)
+    setTimeout(() => {
+      this.resetState()
+    }, 2000)
   }
 
   resetState() {
@@ -22,7 +24,9 @@ export default class extends Controller {
     this.containerTarget.classList.remove("bg-emerald-200", "hover:bg-emerald-200", "dark:bg-emerald-700", "dark:hover:bg-emerald-700")
     this.copyTarget.classList.remove("hidden")
     this.checkTarget.classList.add("hidden")
-    setTimeout(() => { this.removeTransition() }, 1000)
+    setTimeout(() => {
+      this.removeTransition()
+    }, 1000)
   }
 
   removeTransition() {
