@@ -16,7 +16,7 @@ nav.bg-stone-800.whitespace-nowrap data-controller="menu"
                 = active_link_to "Stats", stats_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
             - else
               = active_link_to "Changelog", changelog_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
-            = active_link_to "Decent People", people_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
+            = active_link_to "Community", people_path, class: "px-3 py-2 rounded-md text-sm font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
       .hidden.md:block
         .ml-4.flex.items-baseline.space-x-2.md:ml-6
           - if user_signed_in?
@@ -76,7 +76,7 @@ nav.bg-stone-800.whitespace-nowrap data-controller="menu"
         = active_link_to "Search", search_index_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
       - else
         = active_link_to "Changelog", changelog_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
-      = active_link_to "Decent People", people_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
+      = active_link_to "Community", people_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white"
     .border-t.border-stone-700.px-2.pt-2.pb-3.space-y-1.sm:px-3
       - if user_signed_in?
         = active_link_to changelog_path, class: "block px-3 py-2 rounded-md text-base font-medium", active: :exclusive, class_active: "bg-stone-900 text-white", class_inactive: "text-stone-300 hover:bg-stone-700 hover:text-white" do

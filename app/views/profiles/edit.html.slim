@@ -14,7 +14,7 @@
             ' .
           p.mt-1.text-sm.text-stone-600.dark:text-stone-400
             ' Anyone can see you and all of your shots in
-            = link_to "Decent People", people_path, class: "underline"
+            = link_to "Community", people_path, class: "underline"
             ' .
         - else
           h3.text-lg.font-medium.leading-6.text-stone-900.dark:text-stone-100
@@ -23,7 +23,7 @@
             ' .
           p.mt-1.text-sm.text-stone-600.dark:text-stone-400
             ' People can still view any of your shots if you give them a direct link, but you are not visible in
-            = link_to "Decent People", people_path, class: "underline"
+            = link_to "Community", people_path, class: "underline"
             ' .
       - if @authorized_applications.any?
         hr.my-6

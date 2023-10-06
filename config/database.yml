@@ -34,12 +34,12 @@ development:
   host: localhost
   port: 15432
   <% else %>
-  database: decent_visualizer_development
+  database: visualizer_development
   <% end %>
 
 test:
   <<: *default
-  database: decent_visualizer_test
+  database: visualizer_test
 
 production:
   <<: *default
