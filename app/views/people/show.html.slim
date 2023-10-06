@@ -1,7 +1,8 @@
 - content_for(:html_title) { "Visualizer | #{@user.name}" }
 - content_for(:meta_tags)
   = auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss)
-
+- if @premium_count.to_i > 1
+  = render "shared/premium_banner", count: @premium_count
 .bg-white.dark:bg-stone-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
     h1.flex.items-center.text-3xl.font-bold.leading-tight.text-stone-900.dark:text-stone-100
