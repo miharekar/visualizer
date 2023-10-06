@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html class="h-full">
+  <head>
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" name="viewport" />
+    <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color" />
+    <meta content="#000000" media="(prefers-color-scheme: dark)" name="theme-color" />
+    <title><%= content_for?(:html_title) ? yield(:html_title) : "Visualizer" %></title>
+    <%= yield :meta_tags %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link href="/apple-touch-icon.png?v=4" rel="apple-touch-icon" sizes="180x180" />
+    <link href="/favicon-32x32.png?v=4" rel="icon" sizes="32x32" type="image/png" />
+    <link href="/favicon-16x16.png?v=4" rel="icon" sizes="16x16" type="image/png" />
+    <link href="/site.webmanifest?v=4" rel="manifest" />
+    <link color="#000000" href="/safari-pinned-tab.svg?v=4" rel="mask-icon" />
+    <link href="/favicon.ico?v=4" rel="shortcut icon" />
+    <%= stylesheet_link_tag "tailwind", "prism", "inter-font", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="flex flex-col h-full overflow-y-scroll  <%= @skin %>">
+    <header><%= render "shared/header" %></header>
+    <main class="grow dark:bg-black dark:text-white">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+    <footer><%= render "shared/footer" %></footer>
+  </body>
+</html>

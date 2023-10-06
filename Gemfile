@@ -44,6 +44,10 @@ gem "pg_query"
 gem "rack-mini-profiler"
 gem "stackprof"
 
+group :production do
+  gem "rorvswild"
+end
+
 group :development, :test do
   gem "debug"
 end
