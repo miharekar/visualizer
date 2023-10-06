@@ -4,7 +4,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:title" content="<%= @change.title %>">
   <% if @change.image.attached? %>
-    <meta property="og:image" content="<%= public_image_url(@change.image.variant(:social)) %>">
+    <meta property="og:image" content="<%= public_image_url(@change.image.variant(:social)).html_safe %>">
     <meta property="og:url" content="https://visualizer.coffee/changes/<%= @change.slug %>">
     <meta property="og:description" content="<%= @change.excerpt %>">
   <% end %>

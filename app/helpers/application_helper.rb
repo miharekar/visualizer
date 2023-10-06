@@ -30,9 +30,8 @@ module ApplicationHelper
 
   def public_image_url(image)
     if image.respond_to?(:variation)
-      if image.processed?
-        blob = image.image.blob
-      else
+      blob = image.image&.blob
+      if blob.blank?
         ProcessImageJob.perform_later(image.blob, image.variation.transformations)
         blob = image.blob
       end
