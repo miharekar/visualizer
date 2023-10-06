@@ -1,6 +1,6 @@
-<% data_tabs_active_tab="border-emerald-600 text-emerald-600" %>
+<% data_tabs_active_tab="border-green-600 text-green-600" %>
 <% data_tabs_inactive_tab="border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300 dark:hover:text-stone-400 dark:hover:border-stone-700" %>
-<% data_tabs_active_icon="text-emerald-600" %>
+<% data_tabs_active_icon="text-green-600" %>
 <% data_tabs_inactive_icon="text-stone-500 group-hover:text-stone-700 dark:group-hover:text-stone-400" %>
 <% selected = cookies["shots.selected_tab"].presence || "tab-upload" %>
 <div data-controller="tabs" data-tabs-active-tab="<%= data_tabs_active_tab %>" data-tabs-inactive-tab="<%= data_tabs_inactive_tab %>" data-tabs-active-icon="<%= data_tabs_active_icon %>" data-tabs-inactive-icon="<%= data_tabs_inactive_icon %>">
@@ -39,7 +39,7 @@
   <div id="tab-recents" class="<%= selected == "tab-recents" ? "" : "hidden" %> overflow-hidden sm:rounded-b-lg" data-tabs-target="panel">
     <div class="px-4 py-5 sm:p-6">
       <%= turbo_frame_tag :recents, src: recents_shots_path, loading: :lazy do %>
-        <div class="flex text-emerald-600">
+        <div class="flex text-green-600">
           <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -52,7 +52,7 @@
   <div id="tab-enjoyment" class="<%= selected == "tab-enjoyment" ? "" : "hidden" %> overflow-hidden sm:rounded-b-lg" data-tabs-target="panel">
     <div class="px-4 py-5 sm:p-6">
       <%= turbo_frame_tag :enjoyments, src: enjoyments_shots_path, loading: :lazy do %>
-        <div class="flex text-emerald-600">
+        <div class="flex text-green-600">
           <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

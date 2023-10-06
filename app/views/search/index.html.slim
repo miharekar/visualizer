@@ -12,7 +12,7 @@
         .grid.grid-cols-12.gap-3
           - SearchController::FILTERS.each do |filter, options|
             - if options[:autocomplete]
-              .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-emerald-300 bg-opacity-25" data-controller="autocomplete"
+              .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-green-300 bg-opacity-25" data-controller="autocomplete"
                 = f.label filter, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
                 - if options[:target]
                   = f.hidden_field options[:target], value: params[options[:target]], data: {autocomplete_target: "hidden"}
@@ -41,6 +41,6 @@
           .col-span-6.md:hidden
           .col-span-6.md:col-span-2
             label.block &nbsp;
-            = f.submit "Search", class: "cursor-pointer py-2 px-4 border border-transparent block w-full shadow-sm md:text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+            = f.submit "Search", class: "cursor-pointer py-2 px-4 border border-transparent block w-full shadow-sm md:text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
   .mt-5
     = render "shots/list", shots: @shots, pagy: @pagy, include_person: true

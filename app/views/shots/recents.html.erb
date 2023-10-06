@@ -29,7 +29,7 @@
                         </span>
                       </div>
                       <div class="ml-4 flex-shrink-0">
-                        <%= link_to "View", search_index_path(search_params.merge(%i[bean_brand bean_type profile_title grinder_model].map{|m| [m, shot.public_send(m)]}.to_h)), class: "font-medium text-emerald-600 hover:text-emerald-500", data: {turbo_frame:"_top"} %>
+                        <%= link_to "View", search_index_path(search_params.merge(%i[bean_brand bean_type profile_title grinder_model].map{|m| [m, shot.public_send(m)]}.to_h)), class: "font-medium text-green-600 hover:text-green-500", data: {turbo_frame:"_top"} %>
                       </div>
                     </li>
                   <% end %>
