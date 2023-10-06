@@ -4,5 +4,6 @@
   "singleQuote": false,
   "editor.formatOnSave": true,
   "semi": false,
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "printWidth": 9999
 }

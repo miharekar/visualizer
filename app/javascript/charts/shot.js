@@ -109,8 +109,7 @@ function getColors() {
       legendHover: "#ffffff",
       legendHidden: "#333333"
     }
-  }
-  else {
+  } else {
     return {
       background: "#ffffff",
       label: "#666666",
@@ -145,14 +144,14 @@ function commonOptions() {
       },
       gridLineColor: colors.gridLine,
       lineColor: colors.line,
-      tickColor: colors.line,
+      tickColor: colors.line
     },
     yAxis: {
       title: false,
       labels: { style: { color: colors.label } },
       gridLineColor: colors.gridLine,
       lineColor: colors.line,
-      tickColor: colors.line,
+      tickColor: colors.line
     },
     tooltip: {
       animation: false,
@@ -197,19 +196,19 @@ function commonOptions() {
 
 function extractStages(field, timings) {
   for (let i = 0; i < window.shotData.length; i++) {
-    let data = window.shotData[i];
-    if (data.name == field) {
-      return data.data.filter((x) => timings.includes(x[0])).map((x) => x[1])
+    let fieldData = window.shotData[i]
+    if (fieldData.name == field) {
+      return timings.map((time) => new Map(fieldData.data).get(time))
     }
   }
 
   // If the series is not present, assume all 0
-  return timings.map(_ => 0)
+  return timings.map((_) => 0)
 }
 
 function setupInCupAnnotations(chart) {
-  const weightColor = chart.series.filter(x => (x.name == "Weight Flow"))[0].color
-  const timings = shotStages.map(x => x.value)
+  const weightColor = chart.series.filter((x) => x.name == "Weight Flow")[0].color
+  const timings = shotStages.map((x) => x.value)
   const weightFlow = extractStages("Weight Flow", timings)
   const weight = extractStages("Weight", timings)
 
@@ -219,12 +218,12 @@ function setupInCupAnnotations(chart) {
     if (inCup > 0) {
       labels.push({
         text: `${inCup}g`,
-        point: { "x": timing, "y": weightFlow[index], "xAxis": 0, "yAxis": 0 },
+        point: { x: timing, y: weightFlow[index], xAxis: 0, yAxis: 0 },
         y: -30,
         x: -30,
         allowOverlap: true,
         style: { color: weightColor },
-        borderColor: weightColor,
+        borderColor: weightColor
       })
     }
   })
@@ -253,7 +252,7 @@ function setupInCupAnnotations(chart) {
 }
 
 function updateInCupVisibility(chart) {
-  const weightFlowSeries = chart.series.filter(x => (x.name == "Weight Flow" && x.visible))
+  const weightFlowSeries = chart.series.filter((x) => x.name == "Weight Flow" && x.visible)
   const isVisible = weightFlowSeries.length > 0
   const annotation = chart.inCupAnnotation
 
@@ -276,7 +275,7 @@ function drawShotChart() {
       height: 650,
       backgroundColor: colors.background,
       events: {
-        redraw: x => updateInCupVisibility(x.target)
+        redraw: (x) => updateInCupVisibility(x.target)
       }
     },
     series: window.shotData
@@ -334,9 +333,14 @@ function comparisonAdjust(range) {
       if (isObject(chart)) {
         chart.series.forEach(function (s) {
           if (window.comparisonData[s.name]) {
-            s.setData(window.comparisonData[s.name].map(function (d) {
-              return [d[0] + value, d[1]]
-            }), true, false, false)
+            s.setData(
+              window.comparisonData[s.name].map(function (d) {
+                return [d[0] + value, d[1]]
+              }),
+              true,
+              false,
+              false
+            )
           }
         })
       }
@@ -350,7 +354,9 @@ function comparisonAdjust(range) {
 
 document.addEventListener("turbo:load", function () {
   Highcharts.charts.forEach(function (chart) {
-    if (isObject(chart)) { chart.destroy() }
+    if (isObject(chart)) {
+      chart.destroy()
+    }
   })
 
   const shotChart = document.getElementById("shot-chart")
@@ -371,7 +377,9 @@ document.addEventListener("turbo:load", function () {
   }
 
   if (window.shotStages?.length > 0) {
-    window.shotStages = window.shotStages.map((x) => { return { ...x, id: x } })
+    window.shotStages = window.shotStages.map((x) => {
+      return { ...x, id: x }
+    })
     drawShotStages()
   }
 })
