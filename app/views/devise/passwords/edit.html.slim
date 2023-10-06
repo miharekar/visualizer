@@ -19,9 +19,9 @@
       = f.hidden_field :reset_password_token
       .rounded-md.shadow-sm.-space-y-px
         div
-          = f.password_field :password, placeholder: "Password#{extra_password_placeholder} (min #{@minimum_password_length} characters)", autocomplete: "new-password", class: "#{extra_password_classes} appearance-none rounded-none relative block w-full px-3 py-2 border border-stone-300 placeholder-stone-500 text-stone-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+          = f.password_field :password, placeholder: "Password#{extra_password_placeholder} (min #{@minimum_password_length} characters)", autocomplete: "new-password", class: "#{extra_password_classes} appearance-none rounded-none relative block w-full px-3 py-2 text-zinc-700 dark:text-zinc-300 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
         div
-          = f.password_field :password_confirmation, placeholder: "Password confirmation", autocomplete: "new-password", class: "#{extra_password_classes} appearance-none rounded-none relative block w-full px-3 py-2 border border-stone-300 placeholder-stone-500 text-stone-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+          = f.password_field :password_confirmation, placeholder: "Password confirmation", autocomplete: "new-password", class: "#{extra_password_classes} appearance-none rounded-none relative block w-full px-3 py-2 text-zinc-700 dark:text-zinc-300 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
       div
         button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-green-600.hover:bg-green-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-green-500 type="submit"
           span.absolute.left-0.inset-y-0.flex.items-center.pl-3

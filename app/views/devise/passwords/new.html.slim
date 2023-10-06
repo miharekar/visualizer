@@ -17,7 +17,7 @@
     = form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post, class: "mt-8 space-y-6"}) do |f|
       .rounded-md.shadow-sm.-space-y-px
         div
-          = f.email_field :email, autofocus: true, placeholder: "Email address#{extra_email_placeholder}", autocomplete: "email", class: "#{extra_email_classes} appearance-none rounded relative block w-full px-3 py-2 border border-stone-300 placeholder-stone-500 text-stone-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+          = f.email_field :email, autofocus: true, placeholder: "Email address#{extra_email_placeholder}", autocomplete: "email", class: "#{extra_email_classes} appearance-none rounded relative block w-full px-3 py-2 text-zinc-700 dark:text-zinc-300 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
       div
         button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-green-600.hover:bg-green-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-green-500 type="submit"
           span.absolute.left-0.inset-y-0.flex.items-center.pl-3
