@@ -113,7 +113,8 @@ class ShotChart
       value = nil if value > MAX_RESISTANCE_VALUE || value < MIN_CONDUCTANCE_DIFF_VALUE
       smoothed << [data[4].first, value]
     end
-    smoothed
+
+    smoothed.reject { |k, _| k.nil? }
   end
 
   def stages_from_state_change(data)
