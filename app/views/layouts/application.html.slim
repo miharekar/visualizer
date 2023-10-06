@@ -8,12 +8,12 @@ html
     = yield :meta_tags
     = csrf_meta_tags
     = csp_meta_tag
-    link rel="icon" type="image/png" href="/favicon.ico?v=1"
-    link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1"
-    link rel="icon" href="/favicon-32x32.png?v=1" sizes="32x32" type="image/png"
-    link rel="icon" href="/favicon-16x16.png?v=1" sizes="16x16" type="image/png"
-    link rel="manifest" href="/manifest.json"
-    link rel="mask-icon" color="#000000" href="/safari-pinned-tab.svg?v=1"
+    link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4"
+    link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4"
+    link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4"
+    link rel="manifest" href="/site.webmanifest?v=4"
+    link rel="mask-icon" href="/safari-pinned-tab.svg?v=4" color="#000000"
+    link rel="shortcut icon" href="/favicon.ico?v=4"
     = stylesheet_link_tag "tailwind", "prism", "inter-font", "data-turbo-track": "reload"
     = javascript_importmap_tags
   body.flex.flex-col.h-screen class=@skin
