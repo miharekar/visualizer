@@ -19,7 +19,6 @@ class SearchController < ApplicationController
   def index
     if params[:commit]
       @shots = Shot.visible_or_owned_by_id(current_user.id).by_start_time.includes(:user)
-      @shots = @shots.non_premium unless current_user.premium?
       FILTERS.each do |filter, options|
         next if params[filter].blank?
 
@@ -32,6 +31,11 @@ class SearchController < ApplicationController
       end
       @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
       @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+
+      unless current_user.premium?
+        @premium_count = @shots.count - @shots.non_premium.count
+        @shots = @shots.non_premium
+      end
       @pagy, @shots = pagy_countless(@shots)
     else
       @shots = []

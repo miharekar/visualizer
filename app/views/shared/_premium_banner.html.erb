@@ -1,0 +1,31 @@
+<div class="origin-top bg-pink-600" data-controller="flash" data-transition-leave="transition ease-in duration-100" data-transition-leave-end="transform scale-y-0" data-transition-leave-start="transform scale-y-100">
+  <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between flex-wrap">
+      <div class="w-0 flex-1 flex items-center">
+        <span class="flex p-2 rounded-lg bg-pink-800">
+          <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </span>
+        <p class="ml-3 font-medium text-white truncate">
+          <% if defined?(count) %>
+            <span class="md:hidden"><%= count %> old shots are hidden.</span>
+            <span class="hidden md:inline-block lg:hidden"><%= count %> old shots are hidden. Subscribe to see them. 7-day free trial.</span>
+            <span class="hidden lg:inline-block"><%= count %> shots that were uploaded over a month ago are hidden. Subscribe to see them. 7-day free trial.</span>
+          <% else %>
+            <span class="md:hidden">Old shots are hidden.</span>
+            <span class="hidden md:inline-block lg:hidden">Old shots are hidden. Subscribe to see them. 7-day free trial.</span>
+            <span class="hidden lg:inline-block">Shots that were uploaded over a month ago are hidden. Subscribe to see them. 7-day free trial.</span>
+          <% end %>
+        </p>
+      </div>
+      <div class="order-2 shrink-0 md:order-3 md:ml-3">&nbsp;</div>
+      <div class="order-3 mt-2 shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
+        <%= link_to premium_index_path, class: "flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-pink-600 bg-white hover:bg-pink-50" do %>
+          <span class="md:hidden">Subscribe to see them</span>
+          <span class="hidden md:inline-block">Learn more</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
