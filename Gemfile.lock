@@ -90,7 +90,7 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.795.0)
+    aws-partitions (1.796.0)
     aws-sdk-core (3.180.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -284,7 +284,7 @@ GEM
     raabro (1.4.0)
     racc (1.7.1)
     rack (2.2.8)
-    rack-mini-profiler (3.1.0)
+    rack-mini-profiler (3.1.1)
       rack (>= 1.2.0)
     rack-protection (3.0.6)
       rack
@@ -325,7 +325,7 @@ GEM
       ffi (~> 1.0)
     redis (5.0.6)
       redis-client (>= 0.9.0)
-    redis-client (0.14.1)
+    redis-client (0.15.0)
       connection_pool
     regexp_parser (2.8.1)
     reline (0.3.7)
