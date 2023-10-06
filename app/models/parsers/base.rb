@@ -31,8 +31,8 @@ module Parsers
     end
 
     def self.parse_json(file)
-      JSON.parse(file)
-    rescue JSON::ParserError
+      FastJsonparser.parse(file, symbolize_keys: false)
+    rescue FastJsonparser::ParseError
       matches = file.match(/",(\n\s+"[^\n"]*\n+[^"]+": ?"\w+",)/m)
       if matches&.captures&.any?
         file = file.sub(matches.captures.first, "")
