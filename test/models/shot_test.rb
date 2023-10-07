@@ -4,7 +4,7 @@ require "test_helper"
 
 class ShotTest < ActiveSupport::TestCase
   def new_shot(path)
-    Shot.from_file(users(:miha), path)
+    Shot.from_file(users(:miha), File.read(path))
   end
 
   test "extracts fields from .shot file" do

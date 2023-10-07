@@ -57,7 +57,7 @@ module Api
     end
 
     def upload
-      shot = Shot.from_file(current_user, params[:file])
+      shot = Shot.from_file(current_user, params[:file].read)
       if shot&.save
         render json: {id: shot.id}
       else

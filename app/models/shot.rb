@@ -27,10 +27,10 @@ class Shot < ApplicationRecord
 
   validates :start_time, :information, :sha, presence: true
 
-  def self.from_file(user, file)
-    return if file.blank?
+  def self.from_file(user, file_content)
+    return if file_content.blank?
 
-    Parsers::Base.parse(File.read(file)).build_shot(user)
+    Parsers::Base.parse(file_content).build_shot(user)
   end
 
   def metadata

@@ -65,7 +65,7 @@ class ShotsController < ApplicationController
 
   def create
     files = Array(params[:files])
-    shots = files.map { |file| Shot.from_file(current_user, file) }
+    shots = files.map { |file| Shot.from_file(current_user, file.read) }
 
     if shots.all? { |s| s.errors.empty? }
       shots.each(&:save!)
