@@ -6,57 +6,29 @@ class StatsController < ApplicationController
   def index
     @shot_count = Shot.count
     @user_count = User.count
-    @uploaded_chart = [
-      {name: "Uploaded .shot files per day", data: daily_uploads},
-      {name: "Uploaded .shot files per week", data: weekly_uploads}
+    @shot_charts = [
+      {name: "Uploaded files per day", data: get_stats(Shot, "day")},
+      {name: "Uploaded files per week", data: get_stats(Shot, "week")},
+      {name: "Uploaded files per month", data: get_stats(Shot, "month")}
     ]
-    @user_chart = [
-      {name: "Daily User joins", data: daily_joins},
-      {name: "Weekly User joins", data: weekly_joins},
+    @user_charts = [
+      {name: "Daily User joins", data: get_stats(User, "day")},
+      {name: "Weekly User joins", data: get_stats(User, "week")},
+      {name: "Monthly User joins", data: get_stats(User, "month")},
       {name: "Total users", data: total_users}
     ]
   end
 
   private
 
-  def daily_uploads
-    Shot
-      .with(days: Shot.select("DATE_TRUNC('day', created_at) as day"))
-      .from("days")
-      .group(:day)
+  def get_stats(klass, duration)
+    klass
+      .with(duration => klass.select("DATE_TRUNC('#{duration}', created_at) as #{duration}"))
+      .from(duration)
+      .group(duration)
+      .order(duration)
       .count
-      .map { |day, count| [day.to_i * 1000, count] }
-      .sort_by(&:first)
-  end
-
-  def weekly_uploads
-    Shot
-      .with(weeks: Shot.select("DATE_TRUNC('week', created_at) as week"))
-      .from("weeks")
-      .group(:week)
-      .count
-      .map { |week, count| [week.to_i * 1000, count] }
-      .sort_by(&:first)
-  end
-
-  def daily_joins
-    User
-      .with(days: User.select("DATE_TRUNC('day', created_at) as day"))
-      .from("days")
-      .group(:day)
-      .count
-      .map { |day, count| [day.to_i * 1000, count] }
-      .sort_by(&:first)
-  end
-
-  def weekly_joins
-    User
-      .with(weeks: User.select("DATE_TRUNC('week', created_at) as week"))
-      .from("weeks")
-      .group(:week)
-      .count
-      .map { |week, count| [week.to_i * 1000, count] }
-      .sort_by(&:first)
+      .map { |time, count| [time.to_i * 1000, count] }
   end
 
   def total_users
