@@ -23,11 +23,6 @@ document.addEventListener("turbo:load", function () {
     Highcharts.chart("shot-uploaded-chart", chartOptions)
   }
 
-  if (document.getElementById("shot-brewed-chart")) {
-    const chartOptions = { ...options, series: window.brewedChartData }
-    Highcharts.chart("shot-brewed-chart", chartOptions)
-  }
-
   if (document.getElementById("shot-user-chart")) {
     const chartOptions = { ...options, series: window.userChartData }
     Highcharts.chart("shot-user-chart", chartOptions)
