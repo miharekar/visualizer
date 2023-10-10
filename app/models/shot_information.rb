@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-class ProductionRecord < ApplicationRecord
-  self.abstract_class = true
+# class ProductionRecord < ApplicationRecord
+#   self.abstract_class = true
 
-  connects_to database: {writing: :production, reading: :production}
-end
+#   connects_to database: {writing: :production, reading: :production}
+# end
 
-class ShotInformation < ProductionRecord
+# class ShotInformation < ProductionRecord
+class ShotInformation < ApplicationRecord
   include ShotProfile
 
   belongs_to :shot
