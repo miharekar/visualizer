@@ -1,7 +1,7 @@
 <div class="mt-5 md:mt-0 md:col-span-2">
   <%= form_with(model: change) do |form| %>
     <div class="shadow sm:overflow-hidden" id=dom_id(change)>
-      <div class="px-4 py-5 space-y-6 bg-white dark:bg-zinc-800 sm:p-6">
+      <div class="px-4 py-5 space-y-6 bg-white dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6">
           <div class="col-span-3">
             <%= form.label :title, class: "standard-label" %>
@@ -14,15 +14,15 @@
           <div class="col-span-6">
             <%= form.label :body, class: "standard-label" %>
             <div class="mt-1">
-              <%= form.text_area :body, rows: 30, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-zinc-300 dark:bg-zinc-800" %>
+              <%= form.text_area :body, rows: 30, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 dark:bg-neutral-800" %>
             </div>
           </div>
           <div class="col-span-6" data-controller="character-counter">
             <%= form.label :excerpt, class: "standard-label" %>
             <div class="mt-1">
-              <%= form.text_area :excerpt, rows: 5, maxlength: 250, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-zinc-300 dark:bg-zinc-800", data: {character_counter_target: "input", action: "character-counter#updateCounter"} %>
+              <%= form.text_area :excerpt, rows: 5, maxlength: 250, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 dark:bg-neutral-800", data: {character_counter_target: "input", action: "character-counter#updateCounter"} %>
             </div>
-            <p class="mt-1 text-xs text-zinc-500">
+            <p class="mt-1 text-xs text-neutral-500">
               <span data-character-counter-target="counter">0</span>/250 characters.
             </p>
           </div>
@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="px-4 py-3 text-right bg-zinc-50 dark:bg-zinc-700 sm:px-6">
+      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
         <%= form.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
       </div>
     </div>

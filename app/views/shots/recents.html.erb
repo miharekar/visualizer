@@ -3,19 +3,19 @@
     <% search_params = {commit: "Search", user_id: current_user.id, user: current_user.display_name} %>
     <div>
       <div>
-        <h3 class="text-lg font-medium leading-6 text-stone-900 dark:text-stone-300">Recent grinder settings by coffee and profile</h3>
+        <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-300">Recent grinder settings by coffee and profile</h3>
       </div>
-      <div class="mt-5 border-t border-stone-200 dark:border-stone-800">
-        <dl class="sm:divide-y sm:divide-stone-200 dark:sm:divide-stone-800">
+      <div class="mt-5 border-t border-neutral-200 dark:border-neutral-800">
+        <dl class="sm:divide-y sm:divide-neutral-200 dark:sm:divide-neutral-800">
           <% @recents.each do |bean_group, data| %>
             <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-              <dt class="text-stone-800 dark:text-stone-400">
+              <dt class="text-neutral-800 dark:text-neutral-400">
                 <span class="font-medium"><%= bean_group.first %></span>
                 <br>
                 <span><%= bean_group.second %></span>
               </dt>
-              <dd class="mt-1 text-sm text-stone-800 dark:text-stone-400 sm:col-span-2 sm:mt-0">
-                <ul role="list" class="divide-y divide-stone-200 dark:divide-stone-800 rounded-md border border-stone-200 dark:border-stone-800">
+              <dd class="mt-1 text-sm text-neutral-800 dark:text-neutral-400 sm:col-span-2 sm:mt-0">
+                <ul role="list" class="divide-y divide-neutral-200 dark:divide-neutral-800 rounded-md border border-neutral-200 dark:border-neutral-800">
                   <% data.each do |profile_group, shots| %>
                     <% shot = shots.first %>
                     <li class="flex items-center justify-between py-3 pl-3 pr-4">
@@ -41,6 +41,6 @@
       </div>
     </div>
   <% else %>
-    <h3 class="text-lg font-medium leading-6 text-stone-900 dark:text-stone-300">No recent shots</h3>
+    <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-300">No recent shots</h3>
   <% end %>
 <% end %>

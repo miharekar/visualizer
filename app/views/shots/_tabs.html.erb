@@ -1,10 +1,10 @@
 <% data_tabs_active_tab="border-green-600 text-green-600" %>
-<% data_tabs_inactive_tab="border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300 dark:hover:text-stone-400 dark:hover:border-stone-700" %>
+<% data_tabs_inactive_tab="border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300 dark:hover:text-neutral-400 dark:hover:border-neutral-700" %>
 <% data_tabs_active_icon="text-green-600" %>
-<% data_tabs_inactive_icon="text-stone-500 group-hover:text-stone-700 dark:group-hover:text-stone-400" %>
+<% data_tabs_inactive_icon="text-neutral-500 group-hover:text-neutral-700 dark:group-hover:text-neutral-400" %>
 <% selected = cookies["shots.selected_tab"].presence || "tab-upload" %>
 <div data-controller="tabs" data-tabs-active-tab="<%= data_tabs_active_tab %>" data-tabs-inactive-tab="<%= data_tabs_inactive_tab %>" data-tabs-active-icon="<%= data_tabs_active_icon %>" data-tabs-inactive-icon="<%= data_tabs_inactive_icon %>">
-  <div class="border-b border-stone-200 dark:border-stone-700">
+  <div class="border-b border-neutral-200 dark:border-neutral-700">
     <nav class="-mb-px flex justify-center sm:justify-start space-x-8">
       <a href="#" class="<%= selected == "tab-upload" ? data_tabs_active_tab : data_tabs_inactive_tab %> group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tabs-target="tab" data-action="click->tabs#change">
         <svg class="<%= selected == "tab-upload" ? data_tabs_active_icon : data_tabs_inactive_icon %> h-5 w-5 sm:-ml-0.5 sm:mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" data-tabs-target="icon">

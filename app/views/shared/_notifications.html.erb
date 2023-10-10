@@ -1,5 +1,8 @@
 <div data-controller="notifications-container" class="z-40 pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 sm:top-16">
   <div id="notifications-container" class="flex w-full flex-col items-center space-y-4 sm:items-end">
+    <%= render Notification.new(type: :alert, heading: "test") %>
+    <%= render Notification.new(type: "aa", heading: "green") %>
+    <%= render Notification.new(type: :premium, heading: "pinky pink") %>
     <% flash.each do |type, message| %>
       <%= render Notification.new(type: type, heading: message) %>
     <% end %>

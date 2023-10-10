@@ -3,9 +3,9 @@
   = auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss)
 - if @premium_count.to_i > 1
   = render "shared/premium_banner", count: @premium_count
-.bg-white.dark:bg-stone-900.shadow
+.bg-white.dark:bg-neutral-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
-    h1.flex.items-center.text-3xl.font-bold.leading-tight.text-stone-900.dark:text-stone-100
+    h1.flex.items-center.text-3xl.font-bold.leading-tight.text-neutral-900.dark:text-neutral-100
       img.h-10.w-10.rounded-full src=avatar_url(@user, 80)
       span.ml-2.mt-1
         ' Shots by #{@user.name}

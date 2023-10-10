@@ -4,13 +4,13 @@
 .mt-5.md:mt-0.md:col-span-2 id=dom_id(@shot)
   = form_with(model: @shot) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
-      .px-4.py-5.bg-white.dark:bg-stone-800.space-y-6.sm:p-6
+      .px-4.py-5.bg-white.dark:bg-neutral-800.space-y-6.sm:p-6
         .grid.grid-cols-6.gap-6 data-controller="ey-calculator"
           .col-span-6
             = f.label :espresso_enjoyment, class: "standard-label"
             .flex.items-center.mt-1 data-controller="range"
-              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-stone-800", data: {action: "input->range#update", range_target: "number"}
-              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update", range_target: "range"}
+              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-neutral-800", data: {action: "input->range#update", range_target: "number"}
+              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-neutral-800", data: {action: "input->range#update", range_target: "range"}
           .col-span-6.sm:col-span-3
             = f.label :profile_title, class: "standard-label"
             = f.text_field :profile_title, class: "standard-input"
@@ -56,7 +56,7 @@
           .col-span-6.sm:col-span-3
             = f.label :drink_ey, class: "standard-label"
             = f.text_field :drink_ey, class: "standard-input", data: {ey_calculator_target: "ey"}
-            span class="cursor-pointer text-xs text-stone-500 dark:text-stone-400 hover:text-stone-400 dark:hover:text-stone-500" data-action="click->ey-calculator#calculate"
+            span class="cursor-pointer text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-400 dark:hover:text-neutral-500" data-action="click->ey-calculator#calculate"
               ' Calculate from TDS
         - if current_user.premium?
           - if current_user.metadata_fields.any?
@@ -66,7 +66,7 @@
                   = mf.label field, class: "standard-label"
                   = mf.text_field field, value: @shot.metadata[field], class: "standard-input"
           - else
-            p.text-stone-700.dark:text-stone-300.text-center
+            p.text-neutral-700.dark:text-neutral-300.text-center
               ' You don't have any custom fields yet.
               = link_to "Add some", edit_profile_path(current_user), class: "font-bold underline hover:no-underline"
               ' !
@@ -78,16 +78,16 @@
         div
           = f.label :bean_notes, class: "standard-label"
           .mt-1
-            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
-            .mt-2.text-sm.text-stone-500.dark:text-stone-400
+            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+            .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
               ' .
         div
           = f.label :espresso_notes, "Notes", class: "standard-label"
           .mt-1
-            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
-            .mt-2.text-sm.text-stone-500.dark:text-stone-400
+            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+            .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
               ' .
@@ -95,8 +95,8 @@
           div
             = f.label :private_notes, "Private notes", class: "standard-label"
             .mt-1
-              = f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
-              .mt-2.text-sm.text-stone-500.dark:text-stone-400
+              = f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+              .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
                 ' Only visible to you. Supports
                 a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
                 ' .
@@ -111,5 +111,5 @@
                   = link_to "Remove Image", [:remove_image, @shot], data: { turbo_method: :delete }, class: "underline text-sm"
             .mt-1
               = f.file_field :image
-      .px-4.py-3.bg-stone-50.dark:bg-stone-700.text-right.sm:px-6
+      .px-4.py-3.bg-neutral-50.dark:bg-neutral-700.text-right.sm:px-6
         = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

@@ -18,13 +18,13 @@ document.addEventListener("turbo:load", function () {
     const highlight = (e) => {
       dropArea.classList.add("bg-green-50", "dark:bg-green-900");
       dropArea.classList.add("border-green-300");
-      dropArea.classList.remove("border-zinc-300");
+      dropArea.classList.remove("border-neutral-300");
     };
 
     const unhighlight = (e) => {
       dropArea.classList.remove("bg-green-50", "dark:bg-green-900");
       dropArea.classList.remove("border-green-300");
-      dropArea.classList.add("border-zinc-300");
+      dropArea.classList.add("border-neutral-300");
     };
 
     const handleDrop = (e) => {

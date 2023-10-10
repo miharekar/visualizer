@@ -2,7 +2,7 @@
   <% if @enjoyments_data.present? %>
     <div>
       <div>
-        <h3 class="text-lg font-medium leading-6 text-stone-900 dark:text-stone-300">Last 6 months of enjoyments</h3>
+        <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-300">Last 6 months of enjoyments</h3>
       </div>
       <div class="mt-5" id="enjoyments-chart"></div>
     </div>
@@ -10,6 +10,6 @@
       window.enjoymentsData = <%= @enjoyments_data.to_json.html_safe %>
     </script>
   <% else %>
-    <h3 class="text-lg font-medium leading-6 text-stone-900 dark:text-stone-300">No shots with enjoyment yet</h3>
+    <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-300">No shots with enjoyment yet</h3>
   <% end %>
 <% end %>

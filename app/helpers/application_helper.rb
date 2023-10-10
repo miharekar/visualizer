@@ -7,7 +7,7 @@ module ApplicationHelper
     tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table thead tbody th tr td video]
     attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[id style controls]
     text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags:, attributes:)
-    tag.div(text, class: "prose prose-stone dark:prose-invert")
+    tag.div(text, class: "prose prose-neutral dark:prose-invert")
   end
 
   def faq_markdown_text_from(input, link_class: "")

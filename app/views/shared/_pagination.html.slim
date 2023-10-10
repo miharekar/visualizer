@@ -2,7 +2,7 @@
   .px-4.py-3.flex.items-center.justify-between.sm:px-6 class=extra_classes
     .flex-1.flex.justify-between.md:hidden
       - if pagy.prev
-        a.relative.inline-flex.items-center.px-4.py-2.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.text-sm.font-medium.rounded-md.text-stone-700.bg-white.dark:bg-stone-900.hover:text-stone-500 href=pagy_url_for(pagy, pagy.prev)
+        a.relative.inline-flex.items-center.px-4.py-2.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.text-sm.font-medium.rounded-md.text-neutral-700.bg-white.dark:bg-neutral-900.hover:text-neutral-500 href=pagy_url_for(pagy, pagy.prev)
           | Previous
       - else
         span
@@ -12,7 +12,7 @@
         '  /
         = pagy.pages
       - if pagy.next
-        a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.text-sm.font-medium.rounded-md.text-stone-700.bg-white.dark:bg-stone-900.hover:text-stone-500 href=pagy_url_for(pagy, pagy.next)
+        a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.text-sm.font-medium.rounded-md.text-neutral-700.bg-white.dark:bg-neutral-900.hover:text-neutral-500 href=pagy_url_for(pagy, pagy.next)
           | Next
       - else
         span
@@ -20,32 +20,32 @@
       div
       nav.relative.z-0.inline-flex.-space-x-px
         - if pagy.prev
-          a.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-500.hover:bg-stone-50.dark:hover:bg-stone-800 href=pagy_url_for(pagy, pagy.prev)
+          a.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-500.hover:bg-neutral-50.dark:hover:bg-neutral-800 href=pagy_url_for(pagy, pagy.prev)
             /! Heroicon name: chevron-left
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"
         - else
-          .opacity-25.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-500
+          .opacity-25.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-500
             /! Heroicon name: chevron-left
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"
         - pagy.series.each do |item|
           - if item.is_a?(Integer)
-            a.relative.inline-flex.items-center.px-4.py-2.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-700.hover:bg-stone-50.dark:hover:bg-stone-800 href=pagy_url_for(pagy, item)
+            a.relative.inline-flex.items-center.px-4.py-2.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-700.hover:bg-neutral-50.dark:hover:bg-neutral-800 href=pagy_url_for(pagy, item)
               = item
           - elsif item.is_a?(String)
-            span.opacity-25.relative.inline-flex.items-center.px-4.py-2.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-700
+            span.opacity-25.relative.inline-flex.items-center.px-4.py-2.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-700
               = item
           - elsif item == :gap
-            span.relative.inline-flex.items-center.px-4.py-2.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-700
+            span.relative.inline-flex.items-center.px-4.py-2.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-700
               ' …
         - if pagy.next
-          a.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-500.hover:bg-stone-50.dark:hover:bg-stone-800 href=pagy_url_for(pagy, pagy.next)
+          a.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-500.hover:bg-neutral-50.dark:hover:bg-neutral-800 href=pagy_url_for(pagy, pagy.next)
             /! Heroicon name: chevron-right
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"
         - else
-          .opacity-25.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-stone-300.dark:border-stone-700.dark:text-stone-200.bg-white.dark:bg-stone-900.text-sm.font-medium.text-stone-500
+          .opacity-25.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-neutral-300.dark:border-neutral-700.dark:text-neutral-200.bg-white.dark:bg-neutral-900.text-sm.font-medium.text-neutral-500
             /! Heroicon name: chevron-right
             svg.h-5.w-5 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"

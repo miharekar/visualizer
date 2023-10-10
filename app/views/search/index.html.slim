@@ -1,43 +1,43 @@
 - content_for(:html_title) { "Visualizer | Community" }
 - if @premium_count.to_i > 1
   = render "shared/premium_banner", count: @premium_count
-.bg-white.dark:bg-stone-900.shadow
+.bg-white.dark:bg-neutral-900.shadow
   .max-w-7xl.mx-auto.py-6.px-4.sm:px-6.lg:px-8
-    h1.text-3xl.font-bold.leading-tight.text-stone-900.dark:text-stone-100
+    h1.text-3xl.font-bold.leading-tight.text-neutral-900.dark:text-neutral-100
       ' Community
 .max-w-7xl.mx-auto.py-6.sm:px-6.lg:px-8
   = form_with(url: {action: :index}, method: :get) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
-      .p-4.bg-white.dark:bg-stone-800.space-y-6.sm:p-4
+      .p-4.bg-white.dark:bg-neutral-800.space-y-6.sm:p-4
         .grid.grid-cols-12.gap-3
           - SearchController::FILTERS.each do |filter, options|
             - if options[:autocomplete]
               .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-green-300 bg-opacity-25" data-controller="autocomplete"
-                = f.label filter, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+                = f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                 - if options[:target]
                   = f.hidden_field options[:target], value: params[options[:target]], data: {autocomplete_target: "hidden"}
                 = f.search_field filter, value: params[filter], class: "standard-input", data: {autocomplete_target: "input"}
                 ul.list-group.absolute.mt-2.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.z-10.max-h-96.overflow-y-auto data-autocomplete-target="results"
             - else
               .col-span-6.md:col-span-3
-                = f.label filter, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+                = f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                 = f.search_field filter, value: params[filter], class: "standard-input"
           .col-span-6.md:col-span-5
-            = f.label :min_enjoyment, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+            = f.label :min_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
             .flex.items-center.mt-1 data-controller="range"
               - min = params[:min_enjoyment].presence || 0
               .h-8.w-8.rounded-full style="background-color: #{enjoyment_hex(min)};" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="text"
                   = min
-              = f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update"}
+              = f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: {action: "input->range#update"}
           .col-span-6.md:col-span-5
-            = f.label :max_enjoyment, class: "block text-sm font-medium text-stone-700 dark:text-stone-300"
+            = f.label :max_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
             .flex.items-center.mt-1 data-controller="range"
               - max = params[:max_enjoyment].presence || 100
               .h-8.w-8.rounded-full style="background-color: #{enjoyment_hex(max)};" data-range-target="color"
                 .text-white.py-1.text-center data-range-target="text"
                   = max
-              = f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update"}
+              = f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: {action: "input->range#update"}
           .col-span-6.md:hidden
           .col-span-6.md:col-span-2
             label.block &nbsp;

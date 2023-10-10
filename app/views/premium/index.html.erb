@@ -4,41 +4,41 @@
       <div class="pb-16 xl:flex xl:items-center xl:justify-between">
         <div>
           <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
-            <span class="text-zinc-900">Get Premium for</span>
+            <span class="text-neutral-900">Get Premium for</span>
             <span class="text-pink-600">€5/month</span>
-            <span class="text-zinc-900">or</span>
+            <span class="text-neutral-900">or</span>
             <span class="text-pink-600">€50/year</span>
           </h1>
-          <p class="mt-5 text-xl text-zinc-500">Unlock the full potential of Visualizer with these features</p>
+          <p class="mt-5 text-xl text-neutral-500">Unlock the full potential of Visualizer with these features</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
           <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-700 sm:mt-10 sm:w-auto xl:mt-0" %>
         <% end %>
       </div>
-      <div class="border-t border-zinc-200 pt-16 xl:grid xl:grid-cols-3 xl:gap-x-8">
+      <div class="border-t border-neutral-200 pt-16 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-zinc-900">Experience the ultimate Visualizer experience</p>
-          <p class="mt-4 text-lg text-zinc-500">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
+          <p class="mt-2 text-3xl font-bold tracking-tight text-neutral-900">Experience the ultimate Visualizer experience</p>
+          <p class="mt-4 text-lg text-neutral-500">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
-          <ul role="list" class="divide-y divide-zinc-200">
+          <ul role="list" class="divide-y divide-neutral-200">
             <% first_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:py-0 md:pb-4" : ""%>">
                 <svg class="h-6 w-6 flex-shrink-0 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span class="ml-3 text-base text-zinc-500"><%= feature %></span>
+                <span class="ml-3 text-base text-neutral-500"><%= feature %></span>
               </li>
             <% end %>
           </ul>
-          <ul role="list" class="divide-y divide-zinc-200 border-t border-zinc-200 md:border-t-0">
+          <ul role="list" class="divide-y divide-neutral-200 border-t border-neutral-200 md:border-t-0">
             <% second_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:border-t-0 md:py-0 md:pb-4" : ""%>">
                 <svg class="h-6 w-6 flex-shrink-0 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span class="ml-3 text-base text-zinc-500"><%= feature %></span>
+                <span class="ml-3 text-base text-neutral-500"><%= feature %></span>
               </li>
             <% end %>
           </ul>
