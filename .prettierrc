@@ -3,7 +3,5 @@
   "useTabs": false,
   "singleQuote": false,
   "editor.formatOnSave": true,
-  "semi": false,
-  "trailingComma": "all",
-  "printWidth": 9999
+  "printWidth": 120
 }

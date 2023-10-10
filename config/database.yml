@@ -28,14 +28,20 @@ default: &default
 development:
   primary:
     <<: *default
-    database: visualizer_development
+    database: decent_visualizer_development
   production:
     <<: *default
-    database: <%= Rails.application.credentials.postgres&.database %>
-    username: <%= Rails.application.credentials.postgres&.username %>
-    password: <%= Rails.application.credentials.postgres&.password %>
-    host: localhost
-    port: 15432
+    database: decent_visualizer_development
+  # primary:
+  #   <<: *default
+  #   database: visualizer_development
+  # production:
+  #   <<: *default
+  #   database: <%= Rails.application.credentials.postgres&.database %>
+  #   username: <%= Rails.application.credentials.postgres&.username %>
+  #   password: <%= Rails.application.credentials.postgres&.password %>
+  #   host: localhost
+  #   port: 15432
 
 test:
   primary:

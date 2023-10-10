@@ -1,7 +1,7 @@
-<div class=" mt-5 md:mt-0 md:col-span-2">
+<div class="mt-5 md:mt-0 md:col-span-2">
   <%= form_with(model: change) do |form| %>
     <div class="shadow sm:overflow-hidden" id=dom_id(change)>
-      <div class="px-4 py-5 bg-white dark:bg-zinc-800 space-y-6 sm:p-6">
+      <div class="px-4 py-5 space-y-6 bg-white dark:bg-zinc-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6">
           <div class="col-span-3">
             <%= form.label :title, class: "standard-label" %>
@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class=" px-4 py-3 bg-zinc-50 dark:bg-zinc-700 text-right sm:px-6">
+      <div class="px-4 py-3 text-right bg-zinc-50 dark:bg-zinc-700 sm:px-6">
         <%= form.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
       </div>
     </div>
