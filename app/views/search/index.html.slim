@@ -12,7 +12,7 @@
         .grid.grid-cols-12.gap-3
           - SearchController::FILTERS.each do |filter, options|
             - if options[:autocomplete]
-              .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-green-300 bg-opacity-25" data-controller="autocomplete"
+              .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-terracotta-300 bg-opacity-25" data-controller="autocomplete"
                 = f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                 - if options[:target]
                   = f.hidden_field options[:target], value: params[options[:target]], data: {autocomplete_target: "hidden"}
@@ -38,9 +38,8 @@
                 .text-white.py-1.text-center data-range-target="text"
                   = max
               = f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: {action: "input->range#update"}
-          .col-span-6.md:hidden
-          .col-span-6.md:col-span-2
+          .col-span-12.md:col-span-2
             label.block &nbsp;
-            = f.submit "Search", class: "cursor-pointer py-2 px-4 border border-transparent block w-full shadow-sm md:text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            = f.submit "Search", class: "w-full submit-button py-2 px-4"
   .mt-5
     = render "shots/list", shots: @shots, pagy: @pagy, include_person: true

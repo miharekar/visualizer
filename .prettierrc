@@ -3,5 +3,6 @@
   "useTabs": false,
   "singleQuote": false,
   "editor.formatOnSave": true,
-  "printWidth": 120
+  "printWidth": 120,
+  "semi": false
 }
