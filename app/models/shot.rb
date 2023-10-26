@@ -23,7 +23,7 @@ class Shot < ApplicationRecord
 
   after_create :ensure_screenshot
   after_save_commit :sync_to_airtable
-  after_destroy_commit :broadcast_and_cleanup_airtable
+  after_destroy_commit :cleanup_airtable
 
   validates :start_time, :information, :sha, presence: true
 
@@ -70,8 +70,7 @@ class Shot < ApplicationRecord
     AirtableShotUploadJob.perform_later(self)
   end
 
-  def broadcast_and_cleanup_airtable
-    broadcast_remove_to(user, :shots)
+  def cleanup_airtable
     return if airtable_id.blank? || !user.premium? || user.identities.by_provider(:airtable).empty?
 
     AirtableShotDeleteJob.perform_later(user, airtable_id)
