@@ -1,0 +1,46 @@
+<div id="shot-list" class=" mt-8 space-y-16 sm:space-y-24">
+  <% shots_by_coffee.each do |(roaster, coffee), shots| %>
+    <div>
+      <div class="bg-neutral-50 px-4 py-6 sm:rounded-lg sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
+        <dl class="flex-auto space-y-4 divide-y divide-neutral-200 text-sm text-neutral-600 md:grid md:grid-cols-3 md:gap-x-6 md:space-y-0 md:divide-y-0 lg:w-1/2 lg:flex-none lg:gap-x-8">
+          <div class="flex justify-between md:block">
+            <dt class="font-medium text-neutral-900">Roaster</dt>
+            <dd class="md:mt-1"><%= roaster %></dd>
+          </div>
+          <div class="flex justify-between pt-4 md:block md:pt-0">
+            <dt class="font-medium text-neutral-900">Coffee</dt>
+            <dd class="md:mt-1">
+              <time datetime="2021-01-22"><%= coffee %></time>
+            </dd>
+          </div>
+          <div class="flex justify-between pt-4 font-medium text-neutral-900 md:block md:pt-0">
+            <dt>Last setting</dt>
+            <dd class="md:mt-1">
+              <%= [shots.first.grinder_setting, shots.first.grinder_model].compact.join(" on ") %>
+            </dd>
+          </div>
+        </dl>
+        <div class="mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
+          <a href="#" class="flex w-full items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-terracotta-500 focus:ring-offset-2 md:w-auto">
+            View Order
+          </a>
+          <a href="#" class="flex w-full items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-terracotta-500 focus:ring-offset-2 md:w-auto">
+            View Invoice
+          </a>
+        </div>
+      </div>
+      <div class="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
+        <div class="-my-6 divide-y divide-neutral-200 sm:-my-10">
+          <% shots.each do |shot| %><%= render "new_shot", shot: shot %><% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<% if defined?(@shots_count) %>
+  <turbo-stream action="replace" target="shots-count">
+    <template>
+      <span id="shots-count"><%= pluralize(@shots_count, "Shot") %></span>
+    </template>
+  </turbo-stream>
+<% end %>

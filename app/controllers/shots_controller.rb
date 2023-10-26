@@ -9,6 +9,9 @@ class ShotsController < ApplicationController
 
   def index
     load_shots_with_pagy
+    @shots_by_coffee = current_user.shots.by_start_time
+      .group_by { |s| [s.bean_brand, s.bean_type] }
+      .first(5)
   end
 
   def recents
