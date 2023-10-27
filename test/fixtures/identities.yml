@@ -1,5 +1,5 @@
-miha:
-  user: miha
+mr_airtable:
+  user: mr_airtable
   provider: airtable
   uid: long_string
   token: access_token

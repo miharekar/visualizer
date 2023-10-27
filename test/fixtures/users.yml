@@ -4,6 +4,13 @@ miha:
   admin: true
   public: true
   supporter: true
+
+mr_airtable:
+  name: Airtable Man
+  email: man@airtable.com
+  admin: false
+  public: true
+  premium_expires_at: 2030-01-01 00:00:00
   metadata_fields: ["Portafilter basket", "Bean variety"]
 
 john:

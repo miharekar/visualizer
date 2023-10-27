@@ -1,5 +1,5 @@
-miha:
-  identity: miha
+mr_airtable:
+  identity: mr_airtable
   base_id: app1234567890
   table_id: tbl1234567890
   webhook_id: ach1234567890

@@ -6,8 +6,8 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   test "it can delete a record" do
-    user = users(:miha)
-    identity = user.identities.first
+    user = users(:mr_airtable)
+    identity = identities(:mr_airtable)
     airtable_id = "rec123"
     stub = stub_request(:delete, "https://api.airtable.com/v0/#{identity.airtable_info.base_id}/#{identity.airtable_info.table_id}/#{airtable_id}")
       .with(headers: {"Authorization" => "Bearer #{identity.token}"})
@@ -19,9 +19,9 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
   end
 
   test "it can download new data for existing records from airtable" do
-    user = users(:miha)
-    identity = user.identities.first
-    shot = user.shots.first
+    user = users(:mr_airtable)
+    identity = identities(:mr_airtable)
+    shot = shots(:one)
     stub_request(:get, "https://api.airtable.com/v0/#{identity.airtable_info.base_id}/#{identity.airtable_info.table_id}?filterByFormula=DATETIME_DIFF%28NOW%28%29%2C+LAST_MODIFIED_TIME%28%29%2C+%27minutes%27%29+%3C+60")
       .to_return(File.new("test/fixtures/airtable/download.txt"))
 
@@ -48,9 +48,8 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
   end
 
   test "it uploads changes to airtable after shot save" do
-    user = users(:miha)
-    identity = user.identities.first
-    shot = user.shots.first
+    identity = identities(:mr_airtable)
+    shot = shots(:one)
     shot.update(espresso_enjoyment: 80)
     assert_enqueued_with(job: AirtableShotUploadJob, args: [shot], queue: "default")
 
@@ -63,8 +62,8 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
 
   test "it uploads a new record to airtable" do
     shot_id = "e5b3a587-809a-444a-bb27-e2f5bdbeacbe"
-    user = users(:miha)
-    identity = user.identities.first
+    user = users(:mr_airtable)
+    identity = identities(:mr_airtable)
     sync = Airtable::Shots.new(user)
     shot = user.shots.create!(id: shot_id, espresso_enjoyment: 80, start_time: "2023-05-05T15:50:44.093Z", information: ShotInformation.new(timeframe: ["1"], data: {weight: []}), sha: "123")
     assert_enqueued_with(job: AirtableShotUploadJob, args: [shot], queue: "default")
