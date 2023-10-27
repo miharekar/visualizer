@@ -284,8 +284,8 @@ class ShotTest < ActiveSupport::TestCase
     assert shot.espresso_notes.include?('"tds_type": "PPM"')
     assert_equal 1748, shot.information.timeframe.size
     assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "174.243", shot.information.timeframe.last
-    assert_equal 174.243, shot.duration
+    assert_equal "174.244", shot.information.timeframe.last
+    assert_equal 174.244, shot.duration
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
     assert_equal 1748, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
@@ -319,8 +319,8 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "249", shot.drink_weight
     assert_equal 1117, shot.information.timeframe.size
     assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "163.197", shot.information.timeframe.last
-    assert_equal 163.197, shot.duration
+    assert_equal "163.198", shot.information.timeframe.last
+    assert_equal 163.198, shot.duration
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
     assert_equal 1117, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
@@ -381,6 +381,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal %w[espresso_flow_weight espresso_pressure espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
     assert_equal 36.06, shot.information.data["espresso_weight"][150]
     assert_equal 1.771564746242297, shot.information.data["espresso_pressure"][150]
+    assert_equal 1.45, shot.information.data["espresso_flow_weight"][50]
     assert_equal 0.04, shot.information.data["espresso_flow_weight"][150]
     assert_equal 10, shot.information.extra.keys.size
     assert_equal "First Pull", shot.profile_title
@@ -395,12 +396,12 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts temperature from Beanconqueror" do
     shot = new_shot("test/fixtures/files/beanconqueror_temperature.json")
     assert shot.valid?
-    assert_equal 16, shot.information.timeframe.size
+    assert_equal 147, shot.information.timeframe.size
     assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "17.148", shot.information.timeframe.last
-    assert_equal 17.148, shot.duration
+    assert_equal "17.198", shot.information.timeframe.last
+    assert_equal 17.198, shot.duration
     assert_equal %w[espresso_flow espresso_flow_weight espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
-    assert_equal 16, shot.information.data["espresso_weight"].size
+    assert_equal 147, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
   end
 end

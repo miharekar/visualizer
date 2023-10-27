@@ -47,28 +47,21 @@ module Parsers
 
     def extract_data(brew_flow)
       @timeframe = []
-      @data = DATA_LABELS_MAP.values.index_with { |label| [] }
-
+      relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 }
+      @data = DATA_LABELS_MAP.values_at(*relevant_keys).index_with { |label| [] }
       brew_flow.each do |label, data|
         data.each do |d|
-          d["unix_timestamp"] = Time.parse(d["timestamp"]).to_f
+          d["unix_timestamp"] = Time.strptime(d["timestamp"], "%H:%M:%S.%L").to_f
         end
       end
-
-      longest = brew_flow.keys.max { |l| brew_flow[l].size }
-
+      longest = brew_flow.keys.max_by { |l| brew_flow[l].size }
       start = brew_flow[longest].first["unix_timestamp"].to_f
-      relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 }
-      @data = @data.slice(*DATA_LABELS_MAP.values_at(*relevant_keys))
       brew_flow[longest].each do |d|
-        timestamp = d["unix_timestamp"]
-        @timeframe << (timestamp.to_f - start).round(4).to_s
+        @timeframe << (d["unix_timestamp"] - start).round(4).to_s
         relevant_keys.each do |key|
-          label = DATA_LABELS_MAP[key]
-          closest = closest_bsearch(brew_flow[key], timestamp, key: "unix_timestamp")
-
+          closest = closest_bsearch(brew_flow[key], d["unix_timestamp"], key: "unix_timestamp")
           value = closest[DATA_VALUES_MAP[key]]
-          data[label] << (value&.positive? ? value : 0)
+          @data[DATA_LABELS_MAP[key]] << (value&.positive? ? value : 0)
         end
       end
     end
