@@ -208,6 +208,7 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts beanconqueror file" do
     shot = new_shot("test/fixtures/files/beanconqueror.json")
     assert shot.valid?
+    assert_equal "Chemex", shot.profile_title
     assert_equal "onoma", shot.bean_brand
     assert_equal "Holm", shot.bean_type
     assert_equal "75", shot.bean_weight
@@ -231,6 +232,7 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts real beanconqueror file" do
     shot = new_shot("test/fixtures/files/beanconqueror_real.json")
     assert shot.valid?
+    assert_equal "Chemex", shot.profile_title
     assert_equal "onoma", shot.bean_brand
     assert_equal "Holm", shot.bean_type
     assert_equal "75", shot.bean_weight
@@ -261,6 +263,7 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts long beanconqueror file with negative values" do
     shot = new_shot("test/fixtures/files/beanconqueror_negative.json")
     assert shot.valid?
+    assert_equal "Chemex", shot.profile_title
     assert_equal "onoma", shot.bean_brand
     assert_equal "Holm", shot.bean_type
     assert_equal "75", shot.bean_weight
@@ -292,6 +295,7 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts long beanconqueror file with missing values" do
     shot = new_shot("test/fixtures/files/beanconqueror_missing_values.json")
     assert shot.valid?
+    assert_equal "Hario V60", shot.profile_title
     assert_equal "Leaderboard 03", shot.bean_type
     assert_equal "15", shot.bean_weight
     assert shot.espresso_notes.include?("#### Water")
@@ -309,6 +313,7 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts correct weight from beanconqueror file" do
     shot = new_shot("test/fixtures/files/beanconqueror_beverage_weight.json")
     assert shot.valid?
+    assert_equal "Ice V60", shot.profile_title
     assert_equal "Brasil Jabuticaba", shot.bean_type
     assert_equal "16.2", shot.bean_weight
     assert_equal "249", shot.drink_weight

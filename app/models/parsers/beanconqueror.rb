@@ -7,7 +7,7 @@ module Parsers
 
     def parse
       @start_time = Time.at(file.dig("brew", "config", "unix_timestamp").to_i).utc
-      @profile_title = "Exported from Beanconqueror"
+      @profile_title = file.dig("preparation", "name").presence || "Beanconqueror"
       extract_bean(file["bean"])
       extract_mill(file["mill"])
       extract_brew(file["brew"])
