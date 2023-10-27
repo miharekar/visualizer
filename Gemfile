@@ -46,6 +46,7 @@ gem "stackprof"
 
 group :development, :test do
   gem "debug"
+  gem "singed"
 end
 
 group :development do
@@ -64,5 +65,6 @@ end
 group :test do
   gem "guard"
   gem "guard-minitest"
+  gem "minitest-test_profile"
   gem "webmock"
 end

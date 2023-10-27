@@ -10,6 +10,9 @@ WebMock.disable_net_connect!(allow_localhost: true)
 require "redlock/testing"
 Redlock::Client.testing_mode = :bypass
 
+require "minitest/test_profile"
+Minitest::TestProfile.use!
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers

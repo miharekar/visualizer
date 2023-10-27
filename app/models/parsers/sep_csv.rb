@@ -80,13 +80,12 @@ module Parsers
       time_step = (@datapoints[most_data].keys.last - @datapoints[most_data].keys.first) / @datapoints[most_data].keys.size
       first_timestamp = @datapoints.min_by { |_k, v| v.keys.first }[1].keys.first
       last_timestamp = @datapoints.max_by { |_k, v| v.keys.last }[1].keys.last
-
+      sorted_points = @datapoints.transform_values { |v| v.sort_by { |k, _v| k }.to_a }
       first_timestamp.step(last_timestamp, time_step).each do |time|
         @timeframe << time
-        @datapoints.each do |key, points|
+        sorted_points.each do |key, points|
           label = DATA_LABELS_MAP[key]
-          closest = points.min_by { |k, v| (time - k).abs }
-          value = closest[1]
+          value = closest_bsearch(points, time)[1]
           data[label] << (value.positive? ? value : 0)
         end
       end

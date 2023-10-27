@@ -65,7 +65,8 @@ module Parsers
         @timeframe << (timestamp.to_f - start).round(4).to_s
         relevant_keys.each do |key|
           label = DATA_LABELS_MAP[key]
-          closest = brew_flow[key].min_by { |b| (timestamp - b["unix_timestamp"]).abs }
+          closest = closest_bsearch(brew_flow[key], timestamp, key: "unix_timestamp")
+
           value = closest[DATA_VALUES_MAP[key]]
           data[label] << (value&.positive? ? value : 0)
         end
