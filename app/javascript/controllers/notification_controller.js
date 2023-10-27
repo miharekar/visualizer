@@ -1,18 +1,23 @@
-import { Controller } from "@hotwired/stimulus";
-import { enter, leave } from "el-transition";
+import { Controller } from "@hotwired/stimulus"
+import { enter, leave } from "el-transition"
 
 export default class extends Controller {
-  static targets = ["notification"];
-  static minY = 64;
+  static targets = ["notification"]
 
   connect() {
-    enter(this.element);
+    enter(this.element)
+    this.timeout = setTimeout(() => this.hideNotification(), 10000)
   }
 
   close(event) {
-    event.preventDefault();
+    event.preventDefault()
+    this.hideNotification()
+  }
+
+  hideNotification() {
+    clearTimeout(this.timeout)
     leave(this.element).then(() => {
-      this.element.remove();
-    });
+      this.element.remove()
+    })
   }
 }
