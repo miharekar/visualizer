@@ -4,10 +4,14 @@
       <div class="flex-shrink-0">
         <%= notification.icon.html_safe %>
       </div>
-      <div class="ml-3 w-0 flex-1 pt-0.5">
-        <p class="text-sm font-medium text-neutral-900 dark:text-neutral-200"><%= notification.heading %></p>
+      <div class="ml-3 w-0 flex-1">
+        <p class="font-medium text-neutral-900 dark:text-neutral-200">
+          <%= notification.heading %>
+        </p>
         <% if notification.text %>
-          <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400"><%= notification.text %></p>
+          <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+            <%= notification.text %>
+          </p>
         <% end %>
       </div>
       <div class="ml-4 flex flex-shrink-0">

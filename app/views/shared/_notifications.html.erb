@@ -1,7 +1,7 @@
 <div data-controller="notifications-container" class="z-40 pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 sm:top-16">
   <div id="notifications-container" class="flex w-full flex-col items-center space-y-4 sm:items-end">
     <% flash.each do |type, message| %>
-      <%= render Notification.new(type: type, heading: message) %>
+      <%= render "notifications/notification", notification: Notification.new(type: type, heading: message) %>
     <% end %>
     <% flash.clear %>
   </div>
