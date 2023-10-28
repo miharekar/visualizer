@@ -13,6 +13,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        serif: ["Ragazzi", ...defaultTheme.fontFamily.serif],
       },
       colors: {
         celeste: {

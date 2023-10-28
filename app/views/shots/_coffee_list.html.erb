@@ -40,7 +40,7 @@
 <% if defined?(@shots_count) %>
   <turbo-stream action="replace" target="shots-count">
     <template>
-      <span id="shots-count"><%= pluralize(@shots_count, "Shot") %></span>
+      <span id="shots-count"><%= pluralize(@shots_count, "shot") %></span>
     </template>
   </turbo-stream>
 <% end %>
