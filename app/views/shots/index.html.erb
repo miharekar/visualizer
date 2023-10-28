@@ -1,16 +1,13 @@
-<% content_for(:html_title) { "Visualizer | Your Shots" } %>
-<div class="shadow bg-neutral-100 dark:bg-neutral-800">
-  <div class="bg-white dark:bg-neutral-900 shadow">
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold leading-tight text-neutral-900 dark:text-neutral-100">
-        Your <span id="shots-count"><%= pluralize(@shots_count, "Shot") %></span>
-      </h1>
-    </div>
-  </div>
-</div>
+<% content_for(:html_title) { "Visualizer | Your shots" } %>
 <% if show_premium_banner? %>
   <%= render "shared/premium_banner" %>
 <% end %>
-<div class="max-w-7xl mx-auto pb-6 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto pt-12 pb-6 sm:px-6 lg:px-8">
+  <div class="pb-4 px-4 sm:pb-8">
+    <h1 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+      Your <span id="shots-count"><%= pluralize(@shots_count, "shot") %></span>
+    </h1>
+  </div>
+  <%= render "upload" %>
   <%= render "coffee_list", shots_by_coffee: @shots_by_coffee %>
 </div>
