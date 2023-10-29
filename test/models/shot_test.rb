@@ -7,6 +7,11 @@ class ShotTest < ActiveSupport::TestCase
     Shot.from_file(users(:miha), File.read(path))
   end
 
+  test "returns invalid Shot with empty file" do
+    shot = Shot.from_file(users(:miha), "")
+    assert_not shot.valid?
+  end
+
   test "extracts fields from .shot file" do
     path = "test/fixtures/files/20210921T085910"
     shot = new_shot("#{path}.shot")

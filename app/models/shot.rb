@@ -28,7 +28,7 @@ class Shot < ApplicationRecord
   validates :start_time, :information, :sha, presence: true
 
   def self.from_file(user, file_content)
-    return if file_content.blank?
+    return Shot.new if file_content.blank?
 
     Parsers::Base.parse(file_content).build_shot(user)
   end
