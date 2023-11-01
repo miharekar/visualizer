@@ -1,6 +1,6 @@
-<div id="shot-list" class="space-y-16 sm:space-y-24">
+<div id="shot-list" class="space-y-8">
   <% shots_by_coffee.each.with_index do |((roaster, coffee), shots), i| %>
-    <div>
+    <div data-controller="shot-toggle" data-shot-toggle-initial-status-value="<%= i == 0 %>">
       <div class="bg-neutral-50 px-4 py-6 sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
         <dl class="flex-auto space-y-4 divide-y divide-neutral-200 text-sm text-neutral-600 md:grid md:grid-cols-2 md:gap-x-6 md:space-y-0 md:divide-y-0 lg:w-1/2 lg:flex-none lg:gap-x-8">
           <div class="flex justify-between md:block">
@@ -12,29 +12,13 @@
             <div class="md:mt-1"><%= shots.first.grinder_model %></div>
           </div>
         </dl>
-        <div class="mt-6 flex justify-center sm:space-x-4 sm:space-y-0 md:mt-0">
-          <!-- Enabled: "bg-oxford-blue-600", Not Enabled: "bg-neutral-200" -->
-          <button data-controller="toggle" data-action="toggle#toggle" data-toggle-initial-status-value="<%= i == 0 %>" type="button" class="bg-neutral-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-oxford-blue-600 focus:ring-offset-2">
-            <span data-toggle-target="switch" class="translate-x-0 pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
-              <!-- Enabled: "opacity-0 duration-100 ease-out", Not Enabled: "opacity-100 duration-200 ease-in" -->
-              <span data-toggle-target="offIcon" class="opacity-100 duration-200 ease-in absolute inset-0 flex h-full w-full items-center justify-center transition-opacity">
-                <svg class="h-3 w-3 text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M3.28 2.22a.75.75 0 00-1.06 1.06l14.5 14.5a.75.75 0 101.06-1.06l-1.745-1.745a10.029 10.029 0 003.3-4.38 1.651 1.651 0 000-1.185A10.004 10.004 0 009.999 3a9.956 9.956 0 00-4.744 1.194L3.28 2.22zM7.752 6.69l1.092 1.092a2.5 2.5 0 013.374 3.373l1.091 1.092a4 4 0 00-5.557-5.557z" clip-rule="evenodd" />
-                  <path d="M10.748 13.93l2.523 2.523a9.987 9.987 0 01-3.27.547c-4.258 0-7.894-2.66-9.337-6.41a1.651 1.651 0 010-1.186A10.007 10.007 0 012.839 6.02L6.07 9.252a4 4 0 004.678 4.678z" />
-                </svg>
-              </span>
-              <!-- Enabled: "opacity-100 duration-200 ease-in", Not Enabled: "opacity-0 duration-100 ease-out" -->
-              <span data-toggle-target="onIcon" class="opacity-0 duration-100 ease-out absolute inset-0 flex h-full w-full items-center justify-center transition-opacity">
-                <svg class="h-3 w-3 text-oxford-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                  <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-                </svg>
-              </span>
-            </span>
+        <div class="mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
+          <button data-shot-toggle-target="switch" data-action="shot-toggle#toggle" class="flex w-full items-center justify-center rounded border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 md:w-auto">
+            <%= i == 0 ? "Contract" : "Expand" %>
           </button>
         </div>
       </div>
-      <div class="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
+      <div class="mt-6 flow-root px-4 sm:mt-10 sm:px-0<%= i == 0 ? "" : " hidden" %>" data-shot-toggle-target="shots">
         <div class="-my-6 divide-y divide-neutral-200 sm:-my-10">
           <% shots.each do |shot| %><%= render "new_shot", shot: shot %><% end %>
         </div>
