@@ -1,30 +1,10 @@
 <div id="shot-list" class="space-y-8">
-  <% shots_by_coffee.each.with_index do |((roaster, coffee), shots), i| %>
-    <div data-controller="shot-toggle" data-shot-toggle-initial-status-value="<%= i == 0 %>">
-      <div class="bg-neutral-50 px-4 py-6 sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
-        <dl class="flex-auto space-y-4 divide-y divide-neutral-200 text-sm text-neutral-600 md:grid md:grid-cols-2 md:gap-x-6 md:space-y-0 md:divide-y-0 lg:w-1/2 lg:flex-none lg:gap-x-8">
-          <div class="flex justify-between md:block">
-            <div class="font-medium text-neutral-900"><%= roaster %></div>
-            <div class="md:mt-1"><%= coffee %></div>
-          </div>
-          <div class="flex justify-between pt-4 md:block md:pt-0">
-            <div class="font-medium text-neutral-900"><%= shots.first.grinder_setting %></div>
-            <div class="md:mt-1"><%= shots.first.grinder_model %></div>
-          </div>
-        </dl>
-        <div class="mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
-          <button data-shot-toggle-target="switch" data-action="shot-toggle#toggle" class="flex w-full items-center justify-center rounded border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 md:w-auto">
-            <%= i == 0 ? "Contract" : "Expand" %>
-          </button>
-        </div>
-      </div>
-      <div class="mt-6 flow-root px-4 sm:mt-10 sm:px-0<%= i == 0 ? "" : " hidden" %>" data-shot-toggle-target="shots">
-        <div class="-my-6 divide-y divide-neutral-200 sm:-my-10">
-          <% shots.each do |shot| %><%= render "new_shot", shot: shot %><% end %>
-        </div>
-      </div>
+  <div class="mt-6 flow-root px-4 sm:mt-10 sm:px-0">
+    <div class="-my-6 divide-y divide-neutral-200 sm:-my-10">
+      <% shots.each do |shot| %><%= render shot %><% end %>
     </div>
-  <% end %>
+  </div>
+</div>
 </div>
 <% if defined?(@shots_count) %>
   <turbo-stream action="replace" target="shots-count">

@@ -74,13 +74,13 @@
       .flex.flex-col.mt-3 data-controller="shot-routing" data-shot-routing-shot-id-value="#{@shot.id}"
         - if @compare_shots.present?
           .flex-1.mb-1 class=width_class
-            select.standard-input data-action="shot-routing#compare" class="!mt-0"
+            select.mt-1.standard-input data-action="shot-routing#compare" class="!mt-0"
               option With one of your recent shots
               - @compare_shots.each do |id, title, time|
                 option value=id
                   = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
         .flex-1 class=width_class
-          input.standard-input type="text" data-action="shot-routing#urlCompare" placeholder="With any shot via its URL"
+          input.mt-1.standard-input type="text" data-action="shot-routing#urlCompare" placeholder="With any shot via its URL"
     - if @shot.image.attached? && @shot.image.variable?
       .md:w-1/2.mt-3.md:mt-0.md:ml-3
         = link_to @shot.image, target: "_blank" do

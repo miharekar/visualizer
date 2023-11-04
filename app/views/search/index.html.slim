@@ -13,15 +13,15 @@
           - SearchController::FILTERS.each do |filter, options|
             - if options[:autocomplete]
               .col-span-6.md:col-span-3 data-autocomplete-url-value="#{autocomplete_search_index_path(filter: filter)}" data-autocomplete-selected-class="bg-terracotta-300 bg-opacity-25" data-controller="autocomplete"
-                = f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                = f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                 - if options[:target]
                   = f.hidden_field options[:target], value: params[options[:target]], data: {autocomplete_target: "hidden"}
-                = f.search_field filter, value: params[filter], class: "standard-input", data: {autocomplete_target: "input"}
+                = f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: {autocomplete_target: "input"}
                 ul.list-group.absolute.mt-2.rounded-md.shadow-lg.bg-white.ring-1.ring-black.ring-opacity-5.z-10.max-h-96.overflow-y-auto data-autocomplete-target="results"
             - else
               .col-span-6.md:col-span-3
                 = f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-                = f.search_field filter, value: params[filter], class: "standard-input"
+                = f.search_field filter, value: params[filter], class: "mt-1 standard-input"
           .col-span-6.md:col-span-5
             = f.label :min_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300"
             .flex.items-center.mt-1 data-controller="range"

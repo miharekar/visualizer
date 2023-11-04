@@ -13,49 +13,49 @@
               = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-neutral-800", data: {action: "input->range#update", range_target: "range"}
           .col-span-6.sm:col-span-3
             = f.label :profile_title, class: "standard-label"
-            = f.text_field :profile_title, class: "standard-input"
+            = f.text_field :profile_title, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :barista, class: "standard-label"
-            = f.text_field :barista, class: "standard-input"
+            = f.text_field :barista, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :bean_weight, class: "standard-label"
-            = f.text_field :bean_weight, class: "standard-input", data: {ey_calculator_target: "beanWeight"}
+            = f.text_field :bean_weight, class: "mt-1 standard-input", data: {ey_calculator_target: "beanWeight"}
           .col-span-6.sm:col-span-3
             = f.label :drink_weight, class: "standard-label"
-            = f.text_field :drink_weight, class: "standard-input", data: {ey_calculator_target: "drinkWeight"}
+            = f.text_field :drink_weight, class: "mt-1 standard-input", data: {ey_calculator_target: "drinkWeight"}
           .col-span-6.sm:col-span-3
             = f.label :grinder_model, class: "standard-label"
-            = f.text_field :grinder_model, list:"grinder-model-list", class: "standard-input"
+            = f.text_field :grinder_model, list:"grinder-model-list", class: "mt-1 standard-input"
             datalist#grinder-model-list
               - @grinder_models.each do |grinder_model|
                 option = grinder_model
           .col-span-6.sm:col-span-3
             = f.label :grinder_setting, class: "standard-label"
-            = f.text_field :grinder_setting, class: "standard-input"
+            = f.text_field :grinder_setting, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :bean_brand, class: "standard-label"
-            = f.text_field :bean_brand, list:"bean-brand-list", class: "standard-input"
+            = f.text_field :bean_brand, list:"bean-brand-list", class: "mt-1 standard-input"
             datalist#bean-brand-list
               - @bean_brands.each do |bean_brand|
                 option = bean_brand
           .col-span-6.sm:col-span-3
             = f.label :bean_type, class: "standard-label"
-            = f.text_field :bean_type, list:"bean-type-list", class: "standard-input"
+            = f.text_field :bean_type, list:"bean-type-list", class: "mt-1 standard-input"
             datalist#bean-type-list
               - @bean_types.each do |bean_type|
                 option = bean_type
           .col-span-6.sm:col-span-3
             = f.label :roast_date, class: "standard-label"
-            = f.text_field :roast_date, class: "standard-input"
+            = f.text_field :roast_date, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :roast_level, class: "standard-label"
-            = f.text_field :roast_level, class: "standard-input"
+            = f.text_field :roast_level, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :drink_tds, class: "standard-label"
-            = f.text_field :drink_tds, class: "standard-input", data: {ey_calculator_target: "tds"}
+            = f.text_field :drink_tds, class: "mt-1 standard-input", data: {ey_calculator_target: "tds"}
           .col-span-6.sm:col-span-3
             = f.label :drink_ey, class: "standard-label"
-            = f.text_field :drink_ey, class: "standard-input", data: {ey_calculator_target: "ey"}
+            = f.text_field :drink_ey, class: "mt-1 standard-input", data: {ey_calculator_target: "ey"}
             span class="cursor-pointer text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-400 dark:hover:text-neutral-500" data-action="click->ey-calculator#calculate"
               ' Calculate from TDS
         - if current_user.premium?
@@ -64,7 +64,7 @@
               - current_user.metadata_fields.each do |field|
                 .col-span-6.sm:col-span-3
                   = mf.label field, class: "standard-label"
-                  = mf.text_field field, value: @shot.metadata[field], class: "standard-input"
+                  = mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input"
           - else
             p.text-neutral-700.dark:text-neutral-300.text-center
               ' You don't have any custom fields yet.
@@ -78,7 +78,7 @@
         div
           = f.label :bean_notes, class: "standard-label"
           .mt-1
-            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-terracotta-500 focus:border-terracotta-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
             .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
@@ -86,7 +86,7 @@
         div
           = f.label :espresso_notes, "Notes", class: "standard-label"
           .mt-1
-            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-terracotta-500 focus:border-terracotta-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
             .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
@@ -95,7 +95,7 @@
           div
             = f.label :private_notes, "Private notes", class: "standard-label"
             .mt-1
-              = f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-terracotta-500 focus:border-terracotta-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+              = f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
               .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
                 ' Only visible to you. Supports
                 a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown

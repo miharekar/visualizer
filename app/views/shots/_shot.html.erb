@@ -1,3 +1,4 @@
+<% include_person = defined?(include_person) ? include_person : false %>
 <% owner = current_user && shot.user == current_user %>
 <% full_crud = controller.is_a?(ShotsController) && owner %>
 <% show_start_time = owner || !shot.user&.hide_shot_times? %>
