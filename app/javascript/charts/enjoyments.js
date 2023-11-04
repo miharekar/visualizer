@@ -12,7 +12,7 @@ function isDark() {
 function getColors() {
   if (isDark()) {
     return {
-      background: "#000000",
+      background: "#171717",
       gridLine: "#191919",
     }
   } else {
