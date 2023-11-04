@@ -9,18 +9,18 @@
     = form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "mt-8 space-y-6"}) do |f|
       .rounded-md.shadow-sm.-space-y-px
         div
-          = f.email_field :email, autofocus: true, placeholder: "Email address", autocomplete: "email", class: "appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+          = f.email_field :email, autofocus: true, placeholder: "Email address", autocomplete: "email", class: "appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-t-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm"
         div
-          = f.password_field :password, placeholder: "Password", autocomplete: "current-password", class: "appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+          = f.password_field :password, placeholder: "Password", autocomplete: "current-password", class: "appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-b-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm"
           = f.hidden_field :remember_me, value: 1
       .flex.items-center.justify-between
         div
         .text-sm
-          = link_to "Forgot your password?", new_password_path(resource_name), class: "font-medium text-green-600 hover:text-green-500"
+          = link_to "Forgot your password?", new_password_path(resource_name), class: "font-medium text-oxford-blue-600 hover:text-oxford-blue-500"
       div
-        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-green-600.hover:bg-green-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-green-500 type="submit"
+        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-terracotta-600.hover:bg-terracotta-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-terracotta-500 type="submit"
           span.absolute.left-0.inset-y-0.flex.items-center.pl-3
             /! Heroicon name: lock-closed
-            svg.h-5.w-5.text-green-500.group-hover:text-green-400 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+            svg.h-5.w-5.text-terracotta-500.group-hover:text-terracotta-400 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
               path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"
           | Sign in
