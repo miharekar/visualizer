@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 class OauthWrapper < SimpleDelegator
-  extend Memoist
+  prepend MemoWise
 
-  memoize def identifiers
+  memo_wise def identifiers
     {provider:, uid:}
   end
 
-  memoize def identifiers_with_blob
+  memo_wise def identifiers_with_blob
     identifiers.merge(blob: self)
   end
 
-  memoize def identifiers_with_blob_and_token
+  memo_wise def identifiers_with_blob_and_token
     identifiers_with_blob.merge(
       token:,
       refresh_token:,

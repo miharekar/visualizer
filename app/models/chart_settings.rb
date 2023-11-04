@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ChartSettings
-  extend Memoist
-
   DEFAULT = {
     "espresso_pressure" => {"title" => "Pressure", "color" => "#05c793", "suffix" => " bar", "type" => "spline"},
     "espresso_pressure_goal" => {"title" => "Pressure Goal", "color" => "#03634a", "suffix" => " bar", "dashed" => true, "type" => "spline"},

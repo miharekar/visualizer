@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ShotChart
-  extend Memoist
+  prepend MemoWise
 
   DATA_LABELS_TO_IGNORE = %w[espresso_resistance espresso_resistance_weight espresso_state_change].freeze
   MAX_RESISTANCE_VALUE = 19
@@ -27,7 +27,7 @@ class ShotChart
     for_highcharts(@temperature_data)
   end
 
-  memoize def stages
+  memo_wise def stages
     indices = shot.information.data.key?("espresso_state_change") ? stages_from_state_change(shot.information.data["espresso_state_change"]) : detect_stages_from_data(shot.information.data)
     processed_shot_data.first.second.values_at(*indices).map { |d| {value: d.first} }
   end

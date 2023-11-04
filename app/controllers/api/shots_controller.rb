@@ -2,7 +2,6 @@
 
 module Api
   class ShotsController < Api::BaseController
-    extend Memoist
     include Pagy::Backend
 
     before_action :verify_upload_access, only: %i[upload]
