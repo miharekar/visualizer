@@ -1,10 +1,16 @@
-<article class="max-w-3xl p-4 mb-4 overflow-hidden bg-white sm:p-6 ring-1 ring-neutral-900 ring-opacity-5 dark:bg-neutral-900">
+<article>
   <a href="<%= change_path(change.slug.presence || change.id) %>">
-    <p class="text-sm text-neutral-500"><%= change.published_at.strftime('%B %-d, %Y') %></p>
-    <h2 class="mb-3 text-2xl font-bold text-neutral-900 dark:text-neutral-100"><%= change.title %></h1>
+    <h2 class="mb-3 font-serif text-4xl font-bold sm:text-5xl text-neutral-900 dark:text-neutral-100">
+      <%= change.title %>
+    </h2>
   </a>
-  <div>
+  <div class="mx-auto max-w-prose">
+    <div class="flex justify-between mb-1 text-xs">
+      <span class="text-neutral-400">
+        <%= change.published_at.strftime('%B %-d, %Y') %>
+      </span>
+      <%= link_to "Edit", edit_change_path(change) if current_user&.admin %>
+    </div>
     <%= markdown_text_from(change.body) %>
-    <%= link_to "Edit", edit_change_path(change) if current_user&.admin %>
   </div>
 </article>

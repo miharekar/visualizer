@@ -1,15 +1,12 @@
 <% content_for(:html_title) { "Visualizer | Changelog" } %>
-<div class="bg-white border-b dark:bg-black border-neutral-200 dark:border-neutral-800">
-  <div class="px-4 py-6 mx-auto max-w-prose md:px-0">
-    <h1 class="text-3xl font-bold leading-tight text-neutral-900 dark:text-neutral-100">Changelog</h1>
-    <%= link_to "New", new_change_path if current_user&.admin %>
-  </div>
-</div>
-<div class="py-4 bg-neutral-100 dark:bg-black sm:flex">
-  <div class="hidden grow sm:block"></div>
-  <div>
+<div class="max-w-3xl px-4 pt-12 pb-6 mx-auto sm:px-6">
+  <% if current_user&.admin %>
+    <div class="text-xs text-right">
+      <%= link_to "New", new_change_path, class: "text-right" %>
+    </div>
+  <% end %>
+  <div class="space-y-20 sm:space-y-32">
     <%= render @changes %>
-    <%= render partial: "shared/pagination", locals: {pagy: @pagy, extra_classes: nil} %>
   </div>
-  <div class="hidden grow sm:block"></div>
+  <%= render partial: "shared/pagination", locals: {pagy: @pagy, extra_classes: nil} %>
 </div>
