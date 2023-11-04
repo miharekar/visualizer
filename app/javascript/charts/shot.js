@@ -236,7 +236,7 @@ function setupInCupAnnotations(chart) {
 
   chart.renderer
     .text(
-      '<button id="remove-annotations" class="highcharts-no-tooltip cursor-pointer inline-flex px-2 py-1 border border-neutral-300 dark:border-neutral-600 rounded shadow-sm text-xs font-medium text-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900">Hide annotations</span>',
+      '<button id="remove-annotations" class="inline-flex px-2 py-1 text-xs font-medium bg-white border rounded cursor-pointer highcharts-no-tooltip border-neutral-300 dark:border-neutral-600 shadow-sm text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900">Hide annotations</span>',
       50,
       35,
       true

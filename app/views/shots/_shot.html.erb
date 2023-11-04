@@ -9,11 +9,11 @@
 <% tds = shot.drink_tds.to_f %>
 <% ey = shot.drink_ey.to_f %>
 <tr class="cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800" id="<%= dom_id(shot) %>" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
-  <td class="py-4 px-1 sm:px-4">
+  <td class="px-1 py-4 sm:px-4">
     <div class="flex items-center">
       <% if shot.espresso_enjoyment.to_i > 0 %>
-        <div class="shrink-0 h-8 w-8 rounded-full mr-2 sm:mr-4" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
-          <div class="text-white py-1 text-center">
+        <div class="w-8 h-8 mr-2 rounded-full shrink-0 sm:mr-4" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+          <div class="py-1 text-center text-white">
             <%= shot.espresso_enjoyment %>
           </div>
         </div>
@@ -47,7 +47,7 @@
       </div>
     </div>
   </td>
-  <td class="py-4 px-1 sm:px-4">
+  <td class="px-1 py-4 sm:px-4">
     <div class="flex flex-col">
       <span class="text-sm text-neutral-500 dark:text-neutral-400">
         <% if shot.bean_brand.present? %>
@@ -103,27 +103,27 @@
       </span>
     </div>
   </td>
-  <td class="py-4 px-1 sm:px-4">
+  <td class="px-1 py-4 sm:px-4">
     <div class="flex flex-col lg:flex-row">
       <div class="grow"></div>
       <span>
-        <a class="cursor-pointer inline-flex items-center px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm font-medium text-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= shot_path(shot) %>">
+        <a class="inline-flex items-center px-4 py-2 text-sm font-medium bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= shot_path(shot) %>">
           <!-- SVG for View button -->
-          <span class="ml-2 hidden xl:block">View</span>
+          <span class="hidden ml-2 xl:block">View</span>
         </a>
       </span>
       <% if full_crud %>
         <span class="mt-2 lg:mt-0 lg:ml-2">
-          <a class="cursor-pointer inline-flex items-center px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm font-medium text-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= edit_shot_path(shot) %>">
+          <a class="inline-flex items-center px-4 py-2 text-sm font-medium bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= edit_shot_path(shot) %>">
             <!-- SVG for Edit button -->
-            <span class="ml-2 hidden xl:block">Edit</span>
+            <span class="hidden ml-2 xl:block">Edit</span>
           </a>
         </span>
         <span class="mt-2 lg:mt-0 lg:ml-2">
           <%= button_to shot_path(shot), method: :delete, form_class: "inline-flex items-center", class: "inline-flex items-center px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm font-medium text-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-300 hover:bg-red-50 dark:hover:bg-red-900", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do %>
             <input type="hidden" name="page" value="<%= params[:page] %>">
             <!-- SVG for Delete button -->
-            <span class="ml-2 hidden xl:block">Delete</span>
+            <span class="hidden ml-2 xl:block">Delete</span>
           <% end %>
         </span>
       <% end %>

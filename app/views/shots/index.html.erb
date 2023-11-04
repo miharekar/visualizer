@@ -2,9 +2,9 @@
 <% if show_premium_banner? %>
   <%= render "shared/premium_banner" %>
 <% end %>
-<div class="max-w-7xl mx-auto pt-12 pb-6 sm:px-6 lg:px-8">
-  <div class="pb-4 px-4 sm:pb-8">
-    <h1 class="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+<div class="pt-12 pb-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="px-4 pb-4 sm:pb-8">
+    <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl text-neutral-900 dark:text-neutral-100">
       Your <span id="shots-count"><%= pluralize(@shots_count, "shot") %></span>
     </h1>
   </div>

@@ -5,7 +5,7 @@
 <% selected = cookies["shots.selected_tab"].presence || "tab-upload" %>
 <div data-controller="tabs" data-tabs-active-tab="<%= data_tabs_active_tab %>" data-tabs-inactive-tab="<%= data_tabs_inactive_tab %>" data-tabs-active-icon="<%= data_tabs_active_icon %>" data-tabs-inactive-icon="<%= data_tabs_inactive_icon %>">
   <div class="border-b border-neutral-200 dark:border-neutral-700">
-    <nav class="-mb-px flex justify-center sm:justify-start space-x-8">
+    <nav class="flex justify-center -mb-px sm:justify-start space-x-8">
       <a href="#" class="<%= selected == "tab-upload" ? data_tabs_active_tab : data_tabs_inactive_tab %> group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm" data-tabs-target="tab" data-action="click->tabs#change">
         <svg class="<%= selected == "tab-upload" ? data_tabs_active_icon : data_tabs_inactive_icon %> h-5 w-5 sm:-ml-0.5 sm:mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" data-tabs-target="icon">
           <path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm4.75 11.25a.75.75 0 001.5 0v-2.546l.943 1.048a.75.75 0 101.114-1.004l-2.25-2.5a.75.75 0 00-1.114 0l-2.25 2.5a.75.75 0 101.114 1.004l.943-1.048v2.546z" clip-rule="evenodd" />
@@ -40,7 +40,7 @@
     <div class="px-4 py-5 sm:p-6">
       <%= turbo_frame_tag :recents, src: recents_shots_path, loading: :lazy do %>
         <div class="flex text-terracotta-600">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 mr-3 -ml-1 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
@@ -53,7 +53,7 @@
     <div class="px-4 py-5 sm:p-6">
       <%= turbo_frame_tag :enjoyments, src: enjoyments_shots_path, loading: :lazy do %>
         <div class="flex text-terracotta-600">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 mr-3 -ml-1 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
