@@ -1,14 +1,15 @@
 <article>
   <a href="<%= change_path(change.slug.presence || change.id) %>">
-    <h2 class="mb-3 font-serif text-4xl font-bold sm:text-5xl text-neutral-900 dark:text-neutral-100">
+    <h2 class="mb-2 font-serif text-4xl font-bold sm:text-center sm:mb-6 sm:text-5xl text-neutral-900 dark:text-neutral-100">
       <%= change.title %>
     </h2>
   </a>
   <div class="mx-auto max-w-prose">
-    <div class="flex justify-between mb-1 text-xs">
-      <span class="text-neutral-400">
-        <%= change.published_at.strftime('%B %-d, %Y') %>
-      </span>
+    <div class="flex justify-between mb-2 text-xs">
+      <time datetime="<%= change.published_at.iso8601 %>" class="flex text-neutral-400">
+        <span class="h-4 w-0.5 rounded-full bg-neutral-200 dark:bg-neutral-500"></span>
+        <span class="ml-2"><%= change.published_at.strftime('%B %-d, %Y') %></span>
+      </time>
       <%= link_to "Edit", edit_change_path(change) if current_user&.admin %>
     </div>
     <%= markdown_text_from(change.body) %>
