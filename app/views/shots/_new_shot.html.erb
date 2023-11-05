@@ -52,14 +52,14 @@
       <span class="text-sm text-neutral-500 dark:text-neutral-400">
         <% if shot.bean_brand.present? %>
           <% if full_crud %>
-            <%= link_to shot.bean_brand, search_index_path(search_params.merge(bean_brand: shot.bean_brand)), class: "underline hover:text-neutral-400 dark:hover:text-neutral-500" %>
+            <%= link_to shot.bean_brand, community_index_path(search_params.merge(bean_brand: shot.bean_brand)), class: "underline hover:text-neutral-400 dark:hover:text-neutral-500" %>
           <% else %>
             <%= shot.bean_brand %>
           <% end %>
         <% end %>
         <% if shot.bean_type.present? %>
           <% if full_crud %>
-            <%= link_to shot.bean_type, search_index_path(search_params.merge(bean_type: shot.bean_type)), class: "underline hover:text-neutral-400 dark:hover:text-neutral-500" %>
+            <%= link_to shot.bean_type, community_index_path(search_params.merge(bean_type: shot.bean_type)), class: "underline hover:text-neutral-400 dark:hover:text-neutral-500" %>
           <% else %>
             <%= shot.bean_type %>
           <% end %>

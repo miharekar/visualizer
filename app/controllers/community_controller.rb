@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SearchController < ApplicationController
+class CommunityController < ApplicationController
   include Pagy::Backend
 
   FILTERS = {

@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
 
     if @user.nil?
       @user = User.find_by(id: params[:id])
-      return redirect_to search_index_path, alert: "User #{params[:id]} was not found" if @user.nil?
+      return redirect_to community_index_path, alert: "User #{params[:id]} was not found" if @user.nil?
       return redirect_to person_path(id: @user.slug), status: :moved_permanently if @user.public?
     end
 

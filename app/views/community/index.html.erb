@@ -1,0 +1,65 @@
+<% content_for(:html_title) { "Visualizer | Community" } %>
+<% if @premium_count.to_i > 1 %>
+  <%= render "shared/premium_banner", count: @premium_count %>
+<% end %>
+<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="px-4 pb-4 sm:pb-8 sm:hidden">
+    <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl text-neutral-900 dark:text-neutral-100">
+      Community
+    </h1>
+  </div>
+  <%= form_with(url: { action: :index }, method: :get) do |f| %>
+    <div class="p-4 space-y-6 bg-white dark:bg-neutral-800 sm:p-4">
+      <div class="grid grid-cols-12 gap-3">
+        <% CommunityController::FILTERS.each do |filter, options| %>
+          <% if options[:autocomplete] %>
+            <div class="col-span-12 sm:col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: filter) %>" data-autocomplete-selected-class="bg-opacity-25 bg-terracotta-300" data-controller="autocomplete">
+              <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+              <% if options[:target] %>
+                <%= f.hidden_field options[:target], value: params[options[:target]], data: { autocomplete_target: "hidden" } %>
+              <% end %>
+              <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
+              <ul class="absolute z-10 mt-2 overflow-y-auto bg-white rounded-md shadow-lg list-group ring-1 ring-black ring-opacity-5 max-h-96" data-autocomplete-target="results"></ul>
+            </div>
+          <% else %>
+            <div class="col-span-12 sm:col-span-6 md:col-span-3">
+              <%= f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+              <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input" %>
+            </div>
+          <% end %>
+        <% end %>
+        <div class="col-span-12 sm:col-span-6 md:col-span-5">
+          <%= f.label :min_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+          <div class="flex items-center mt-1" data-controller="range">
+            <% min = params[:min_enjoyment].presence || 0 %>
+            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
+              <div class="py-1 text-center text-white" data-range-target="text">
+                <%= min %>
+              </div>
+            </div>
+            <%= f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update" } %>
+          </div>
+        </div>
+        <div class="col-span-12 sm:col-span-6 md:col-span-5">
+          <%= f.label :max_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+          <div class="flex items-center mt-1" data-controller="range">
+            <% max = params[:max_enjoyment].presence || 100 %>
+            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
+              <div class="py-1 text-center text-white" data-range-target="text">
+                <%= max %>
+              </div>
+            </div>
+            <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update" } %>
+          </div>
+        </div>
+        <div class="col-span-12 md:col-span-2">
+          <label class="block">&nbsp;</label>
+          <%= f.submit "Search", class: "w-full submit-button py-2 px-4" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="mt-5">
+    <%= render "shots/list", shots: @shots, pagy: @pagy, include_person: true %>
+  </div>
+</div>

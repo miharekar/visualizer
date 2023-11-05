@@ -52,11 +52,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :search, only: [:index] do
+  resources :community, only: [:index] do
     collection do
       get :autocomplete
     end
   end
+  get "/search", to: redirect("/community")
 
   resources :profiles, only: %i[edit update] do
     get :reset_chart_settings
