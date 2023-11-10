@@ -37,6 +37,7 @@ gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 
 gem "appsignal"
+gem "lograge"
 gem "pghero"
 gem "pg_query"
 gem "rack-mini-profiler"
