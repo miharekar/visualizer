@@ -13,4 +13,4 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: flyctl deploy --remote-only -e GIT_SHA="${{ github.sha }}" -e GIT_MESSAGE="${{ github.event.head_commit.message }}"
+      - run: flyctl deploy --remote-only -e GIT_SHA="${{ github.sha }}" -e APP_REVISION="${{ github.sha }}" -e GIT_MESSAGE="${{ github.event.head_commit.message }}"
