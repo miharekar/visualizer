@@ -1,26 +1,57 @@
 # frozen_string_literal: true
 
-namespace :importmap do
-  task update: :environment do
-    file = Rails.root.join("config/importmap.rb")
-    content = File.read(file)
-    content.split("\n").each do |line|
-      next unless line.include?("# source:")
+require "concurrent"
 
+class ImportMapUpdater
+  attr_reader :file, :content, :mutex
+
+  def initialize
+    @file = Rails.root.join("config/importmap.rb")
+    @content = File.read(file)
+    @mutex = Mutex.new
+  end
+
+  def update
+    futures.map do |future|
+      result = future.value
+      if result&.dig(:error)
+        puts "Error: #{result[:error]}"
+      elsif result
+        mutex.synchronize do
+          puts "Updating #{result[:current]} to #{result[:pinned_url]}"
+          content.sub!("to: \"#{result[:current]}\"", "to: \"#{result[:pinned_url]}\"")
+        end
+      end
+    end
+
+    File.write(file, content)
+  end
+
+  private
+
+  def futures
+    @futures ||= content.split("\n").filter_map { |line| create_future(line) }
+  end
+
+  def create_future(line)
+    return unless line.include?("# source:")
+
+    Concurrent::Future.execute do
       uri = URI(line[/# source: (\S+)/, 1])
       res = Net::HTTP.get_response(uri)
       if res.is_a?(Net::HTTPSuccess)
         pinned_url = res.body[/Normal: (\S+)$/, 1]
         current = line[/to: "(\S+)"/, 1]
-        next if pinned_url == current
-
-        puts "Updating #{current} to #{pinned_url}"
-        content.sub!("to: \"#{current}\"", "to: \"#{pinned_url}\"")
+        {current:, pinned_url:, line:} unless pinned_url == current
       else
-        puts "Error: #{res.body}"
+        {error: res.body}
       end
     end
+  end
+end
 
-    file.write(content)
+namespace :importmap do
+  task update: :environment do
+    ImportMapUpdater.new.update
   end
 end
