@@ -39,8 +39,11 @@ gem "turbo-rails"
 gem "pghero"
 gem "pg_query"
 gem "rack-mini-profiler"
-gem "rorvswild"
 gem "stackprof"
+
+group :production do
+  gem "appsignal"
+end
 
 group :development, :test do
   gem "debug"

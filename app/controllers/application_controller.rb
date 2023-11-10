@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :profiling
   before_action :set_timezone
   before_action :set_skin
-  before_action :set_context
+  before_action :tag_request
 
   private
 
@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     @skin = [@skin, cookies["browser.colorscheme"].presence].compact.join(" ") if @skin == "system"
   end
 
-  def set_context
-    RorVsWild.merge_error_context(email: current_user&.email, user_id: current_user&.id)
+  def tag_request
+    Appsignal.tag_request(email: current_user&.email, user_id: current_user&.id)
   end
 
   def check_admin!

@@ -17,7 +17,9 @@ class AirtableWebhookRefreshJob < AirtableJob
     if %w[NOT_FOUND INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND CANNOT_REFRESH_DISABLED_WEBHOOK].include?(json["error"]["type"])
       airtable_info.destroy
     else
-      RorVsWild.record_error(e, user_id: user.id)
+      Appsignal.send_error(e) do |transaction|
+        transaction.set_tags(user_id: user.id)
+      end
     end
   end
 end

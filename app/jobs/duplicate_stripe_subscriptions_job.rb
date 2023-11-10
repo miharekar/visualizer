@@ -14,7 +14,7 @@ class DuplicateStripeSubscriptionsJob < ApplicationJob
       end
     end
     active_subscriptions.select { |email, subscriptions| subscriptions.count > 1 }.each do |email, subscriptions|
-      RorVsWild.send_message("Duplicate subscription for #{email}", email:, subscriptions:)
+      Rails.logger.warn("Duplicate subscription for #{email}", {mail:, subscriptions:})
     end
   end
 end

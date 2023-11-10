@@ -13,7 +13,7 @@ class AirtableController < ApplicationController
         AirtableWebhookJob.set(wait: 1.minute).perform_later(airtable_info)
       end
     else
-      RorVsWild.send_message("Airtable webhook received for unknown webhook id: #{params["webhook"]["id"]}", params:)
+      Rails.logger.warn("Airtable webhook received for unknown webhook id: #{params["webhook"]["id"]}", {params:})
     end
     head :ok
   end
