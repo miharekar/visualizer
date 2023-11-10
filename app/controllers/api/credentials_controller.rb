@@ -2,7 +2,7 @@
 
 module Api
   class CredentialsController < Api::BaseController
-    before_action :verify_doorkeeper_access
+    before_action :verify_read_access
 
     def me
       json = {
