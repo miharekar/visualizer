@@ -1,7 +1,7 @@
 default: &defaults
   # Your push api key, it is possible to set this dynamically using ERB:
   # push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
-  push_api_key: "e4a2e7d0-4847-47c0-8f86-d042b8726e82"
+  push_api_key: <%= Rails.application.credentials.appsignal %>
 
   # Your app's name
   name: "Visualizer"

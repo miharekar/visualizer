@@ -1,14 +1,12 @@
-# [Decent Visualizer](https://visualizer.coffee/)
+# [Visualizer](https://visualizer.coffee/)
 
 ![Ruby Tests](https://github.com/miharekar/decent-visualizer/actions/workflows/main.yml/badge.svg)
 
-A visualizer for `.shot` files created by the [Decent Espresso Machine](https://decentespresso.com/).
+Visualizer your coffee shots created by [Decent Espresso Machine](https://decentespresso.com/), [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/), [Pressensor](https://pressensor.com/), [Beanconqueror](https://beanconqueror.com/), and others.
 
-Visualizer is a relatively standard [Ruby on Rails](https://rubyonrails.org/) application with a [Postgres](https://www.postgresql.org/) database.
+Read all about it on [visualizer.coffee](https://visualizer.coffee/), and feel free to [join the forum](https://decentforum.com/tag/visualizer).
 
-Read [all about the v2 version](https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84ZvC2p1), and feel free to [join Visualizer Forum](https://decentforum.com/tag/visualizer).
-
-[![](sample.png)](https://visualizer.coffee/shots/77152920-e5f5-4fd9-a54c-e84133ea1d3e)
+Application monitoring is sponsored by [AppSignal](https://appsignal.com/visualizer/admin/api_keys).
 
 ## API
 

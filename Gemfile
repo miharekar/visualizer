@@ -36,14 +36,11 @@ gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 
+gem "appsignal"
 gem "pghero"
 gem "pg_query"
 gem "rack-mini-profiler"
 gem "stackprof"
-
-group :production do
-  gem "appsignal"
-end
 
 group :development, :test do
   gem "debug"
