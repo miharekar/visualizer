@@ -36,8 +36,6 @@ class ShotsController < ApplicationController
     return if current_user.nil?
 
     @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
-  rescue ActiveRecord::RecordNotFound
-    redirect_to :root
   end
 
   def compare
@@ -133,10 +131,14 @@ class ShotsController < ApplicationController
 
   def load_shot
     @shot = Shot.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to :root, alert: "Shot not found!"
   end
 
   def load_users_shot
     @shot = current_user.shots.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to shots_path, alert: "Shot not found!"
   end
 
   def load_shots_with_pagy
