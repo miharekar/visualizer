@@ -1,54 +1,17 @@
-# fly.toml app configuration file generated for visualizer on 2023-07-17T10:05:33+02:00
+# fly.toml app configuration file generated for visualizer on 2023-11-11T20:39:43+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = "visualizer"
 primary_region = "fra"
-kill_signal = "SIGINT"
-kill_timeout = "5s"
+console_command = "/rails/bin/rails console"
 
-[experimental]
-  auto_rollback = true
+[processes]
+  app = "foreman start --procfile=Procfile.fly"
 
-[build]
-  [build.args]
-    BUILD_COMMAND = "bin/rails fly:build"
-    SERVER_COMMAND = "bin/rails fly:server"
-
-[deploy]
-  release_command = "bin/rails fly:release"
-  strategy = "rolling"
-
-[env]
-  PORT = "8080"
-
-[[mounts]]
-  source = "redis_machines"
-  destination = "/redis"
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false
   processes = ["app"]
-
-[[services]]
-  protocol = "tcp"
-  internal_port = 8080
-  processes = ["app"]
-
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-    force_https = true
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 500
-    soft_limit = 400
-
-  [[services.tcp_checks]]
-    interval = "15s"
-    timeout = "2s"
-    grace_period = "1s"
-    restart_limit = 0

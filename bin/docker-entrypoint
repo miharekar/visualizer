@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+if [ "${*}" == "foreman start --procfile=Procfile.fly" ]; then
+  ./bin/rails db:prepare
+fi
+
+exec "${@}"
