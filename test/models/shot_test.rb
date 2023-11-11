@@ -303,7 +303,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
     assert_equal 1366, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
-    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 rescue puts "error: #{v}" }
+    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
   end
 
   test "extracts correct weight from beanconqueror file" do

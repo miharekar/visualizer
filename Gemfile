@@ -53,9 +53,8 @@ group :development do
   gem "brakeman"
   gem "letter_opener"
   gem "rubocop", require: false
-  gem "rubocop-performance", require: false
-  gem "rubocop-rails", require: false
   gem "standard", require: false
+  gem "standard-performance", require: false
   gem "standard-rails", require: false
   gem "web-console"
 end

@@ -1,15 +1,17 @@
-require:
-  - standard
-  - standard-custom
-  - standard-performance
-  - rubocop-performance
-  - rubocop-rails
+---
 
 inherit_gem:
   standard: config/base.yml
   standard-performance: config/base.yml
   standard-custom: config/base.yml
   standard-rails: config/base.yml
+
+require:
+  - standard
+  - standard-custom
+  - standard-performance
+  - rubocop-performance
+  - rubocop-rails
 
 AllCops:
   NewCops: enable
@@ -21,30 +23,10 @@ AllCops:
 Bundler/OrderedGems:
   Enabled: true
 
-Layout/EmptyLineAfterGuardClause:
-  Enabled: true
-
 Layout/ClassStructure:
   Enabled: true
 
-Style/Send:
-  Enabled: true
-
-Style/HashSyntax:
-  Enabled: true
-  EnforcedStyle: ruby19_no_mixed_keys
-  EnforcedShorthandSyntax: always
-
-Style/FrozenStringLiteralComment:
-  Enabled: true
-
-Style/SymbolArray:
-  Enabled: true
-
-Style/WordArray:
-  Enabled: true
-
-Style/IfUnlessModifier:
+Layout/EmptyLineAfterGuardClause:
   Enabled: true
 
 Performance/AncestorsInclude:
@@ -96,4 +78,19 @@ Performance/Sum:
   Enabled: true
 
 Performance/TimesMap:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Style/IfUnlessModifier:
+  Enabled: true
+
+Style/Send:
+  Enabled: true
+
+Style/SymbolArray:
+  Enabled: true
+
+Style/WordArray:
   Enabled: true
