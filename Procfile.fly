@@ -1,4 +1,2 @@
 web: bin/rails server -p 8080
-redis: redis-server /etc/redis/redis.conf
-cache-redis: redis-server /etc/redis/redis_cache.conf
 sidekiq: bundle exec sidekiq -C config/sidekiq.yml
