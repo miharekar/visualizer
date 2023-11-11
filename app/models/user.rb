@@ -37,7 +37,11 @@ class User < ApplicationRecord
   end
 
   def premium?
-    premium_expires_at&.future? || supporter
+    visualizer_was_down_sadface || premium_expires_at&.future? || supporter
+  end
+
+  def visualizer_was_down_sadface
+    Time.current < Time.utc(2023, 11, 13)
   end
 
   def wants_fahrenheit?
