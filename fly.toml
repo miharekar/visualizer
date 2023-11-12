@@ -15,3 +15,8 @@ console_command = "/rails/bin/rails console"
   force_https = true
   auto_stop_machines = false
   processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 500
+    soft_limit = 400
