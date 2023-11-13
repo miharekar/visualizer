@@ -10,6 +10,6 @@
     FillAutocompleteValuesJob:
       every: 1 hour
     DuplicateStripeSubscriptionsJob:
-      every: 1 day
+      every: ['1 day', first_in: '5m']
     AirtableWebhookRefreshJob:
-      every: 6 day
+      every: ['6 day', first_in: '5m']
