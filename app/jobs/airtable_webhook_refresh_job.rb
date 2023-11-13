@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
 class AirtableWebhookRefreshJob < AirtableJob
-  def perform(*args)
-    AirtableInfo.find_each do |airtable_info|
-      refresh_webhook(airtable_info)
-    end
-  end
-
-  private
-
-  def refresh_webhook(airtable_info)
+  def perform(airtable_info)
     user = airtable_info.identity.user
     Airtable::Shots.new(user).webhook_refresh
   rescue Airtable::DataError => e

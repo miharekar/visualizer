@@ -11,5 +11,5 @@
       every: 1 hour
     DuplicateStripeSubscriptionsJob:
       every: ['1 day', first_in: '5m']
-    AirtableWebhookRefreshJob:
+    AirtableWebhookRefreshAllJob:
       every: ['6 day', first_in: '5m']
