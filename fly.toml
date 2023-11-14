@@ -10,13 +10,27 @@ console_command = "/rails/bin/rails console"
 [processes]
   app = "foreman start --procfile=Procfile.fly"
 
+[deploy]
+  strategy = "bluegreen"
+
 [http_service]
   internal_port = 3000
   force_https = true
   auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  h2_backend = true
   processes = ["app"]
 
   [http_service.concurrency]
     type = "requests"
     hard_limit = 500
     soft_limit = 400
+
+[checks]
+  [checks.up]
+    grace_period = "10s"
+    interval = "15s"
+    timeout = "2s"
+    port = 3000
+    type = "tcp"
