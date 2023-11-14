@@ -101,7 +101,7 @@ GEM
       rack
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.848.0)
+    aws-partitions (1.849.0)
     aws-sdk-core (3.186.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -147,8 +147,7 @@ GEM
       warden (~> 1.2.3)
     dockerfile-rails (1.5.12)
       rails (>= 3.0.0)
-    domain_name (0.5.20190701)
-      unf (>= 0.0.5, < 1.0.0)
+    domain_name (0.6.20231109)
     doorkeeper (5.6.6)
       railties (>= 5)
     drb (2.2.0)
@@ -224,10 +223,10 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.21.4)
+    loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    lumberjack (1.2.9)
+    lumberjack (1.2.10)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -246,7 +245,7 @@ GEM
     multi_xml (0.6.0)
     mutex_m (0.2.0)
     nenv (0.3.0)
-    net-imap (0.4.4)
+    net-imap (0.4.5)
       date
       net-protocol
     net-pop (0.1.2)
@@ -458,9 +457,6 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.9)
     unicode-display_width (2.5.0)
     version_gem (1.1.3)
     warden (1.2.9)
