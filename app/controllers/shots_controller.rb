@@ -1,42 +1,17 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
-  SHOTS_PER_PAGE = 20
+  include CursorPaginatable
+
   FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
   before_action :authenticate_user!, except: %i[show compare share]
   before_action :load_shot, only: %i[show compare share remove_image]
   before_action :load_users_shot, only: %i[edit update destroy]
+  before_action :load_users_shots, only: %i[index search]
 
-  def index
-    @shots = current_user.shots.by_start_time
-    FILTERS.select { |f| params[f].present? }.each do |filter|
-      @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
-    end
-    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
-    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
-    @shots = @shots.non_premium unless current_user.premium?
-    @shots = @shots.where(start_time: ..params[:before]) if params[:before].present?
-    @shots = @shots.limit(SHOTS_PER_PAGE + 1).load
-    @cursor = (@shots.last.start_time if @shots.size > SHOTS_PER_PAGE)
-    @shots = @shots.take(SHOTS_PER_PAGE)
-  end
-
-  def recents
-    @recents = current_user.shots.by_start_time
-      .where(start_time: 3.weeks.ago..)
-      .group_by { |s| [s.bean_brand, s.bean_type] }
-      .first(5)
-      .map do |bean_group, shots|
-      [bean_group, shots.group_by { |s| [s.grinder_model, s.profile_title] }]
-    end
-  end
-
-  def enjoyments
-    enjoyments = current_user.shots.by_start_time
-      .where("espresso_enjoyment > 0")
-      .where(created_at: 6.months.ago..)
-    @enjoyments_data = EnjoymentChart.new(enjoyments).chart
+  def search
+    render :index
   end
 
   def show
@@ -140,5 +115,17 @@ class ShotsController < ApplicationController
     @shot = current_user.shots.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to shots_path, alert: "Shot not found!"
+  end
+
+  def load_users_shots
+    @shots = current_user.shots
+    @shots = @shots.non_premium unless current_user.premium?
+    FILTERS.select { |f| params[f].present? }.each do |filter|
+      @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
+    end
+    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
+    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+
+    @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
   end
 end
