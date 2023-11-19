@@ -8,50 +8,9 @@
   </h1>
 </div>
 <div class="mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
-  <%= render "upload" %>
-  <%= form_with(url: shots_path, data: {controller: "search", search_target: "form"}) do |f| %>
-    <div class="px-4 space-y-6 bg-white dark:bg-neutral-800 sm:p-4">
-      <div class="grid grid-cols-12 gap-3">
-        <% ShotsController::FILTERS.each do |filter| %>
-          <div class="col-span-12 sm:col-span-6 md:col-span-3">
-            <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
-            <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: {action: "search#submit"} %>
-          </div>
-        <% end %>
-        <div class="col-span-12 sm:col-span-6 md:col-span-5">
-          <%= f.label :min_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
-          <div class="flex items-center mt-1" data-controller="range">
-            <% min = params[:min_enjoyment].presence || 0 %>
-            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
-              <div class="py-1 text-center text-white" data-range-target="text">
-                <%= min %>
-              </div>
-            </div>
-            <%= f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
-          </div>
-        </div>
-        <div class="col-span-12 sm:col-span-6 md:col-span-5">
-          <%= f.label :max_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
-          <div class="flex items-center mt-1" data-controller="range">
-            <% max = params[:max_enjoyment].presence || 100 %>
-            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
-              <div class="py-1 text-center text-white" data-range-target="text">
-                <%= max %>
-              </div>
-            </div>
-            <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
-          </div>
-        </div>
-        <div class="col-span-12 md:col-span-2">
-          <label class="block">&nbsp;</label>
-          <%= f.hidden_field :fresh_search, value: 1  %>
-          <%= f.submit "Search", class: "w-full submit-button py-2 px-4" %>
-        </div>
-      </div>
-    </div>
-  <% end %>
   <div class="px-4 space-y-8 sm:px-0" data-controller="modal">
     <%= render "shared/modal" %>
+    <%= render "filters" %>
     <div id="shots">
       <%= render @shots %>
     </div>

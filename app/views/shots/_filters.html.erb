@@ -1,0 +1,47 @@
+<div class="" data-controller="menu">
+  <div class="flex justify-center sm:hidden">
+    <button type="button" class="inline-flex items-center text-sm font-semibold leading-6 text-neutral-900 dark:text-neutral-100 gap-x-1" data-action="click->menu#transform" data-menu-target="button">
+      Show filters
+      <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  <div class="hidden mt-6 sm:block" data-menu-target="transformable" data-transition-enter="transition ease-out duration-200" data-transition-enter-start="opacity-0 -translate-y-1" data-transition-enter-end="opacity-100 translate-y-0" data-transition-leave="transition ease-in duration-150" data-transition-leave-start="opacity-100 translate-y-0" data-transition-leave-end="opacity-0 -translate-y-1">
+    <%= form_with(url: search_shots_path, data: {controller: "search", search_target: "form"}) do |f| %>
+      <%= f.hidden_field :fresh_search, value: 1  %>
+      <div class="grid grid-cols-12 gap-3">
+        <% ShotsController::FILTERS.each do |filter| %>
+          <div class="col-span-6 md:col-span-3">
+            <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "standard-label" %>
+            <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: {action: "search#submit"} %>
+          </div>
+        <% end %>
+        <div class="col-span-6 md:col-span-3">
+          <%= f.label :min_enjoyment, class: "standard-label" %>
+          <div class="flex items-center mt-1" data-controller="range">
+            <% min = params[:min_enjoyment].presence || 0 %>
+            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
+              <div class="py-1 text-center text-white" data-range-target="text">
+                <%= min %>
+              </div>
+            </div>
+            <%= f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
+          </div>
+        </div>
+        <div class="col-span-6 md:col-span-3">
+          <%= f.label :max_enjoyment, class: "standard-label" %>
+          <div class="flex items-center mt-1" data-controller="range">
+            <% max = params[:max_enjoyment].presence || 100 %>
+            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
+              <div class="py-1 text-center text-white" data-range-target="text">
+                <%= max %>
+              </div>
+            </div>
+            <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
