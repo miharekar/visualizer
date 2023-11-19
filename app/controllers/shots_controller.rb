@@ -1,14 +1,19 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
-  include Pagy::Backend
+  SHOTS_PER_PAGE = 20
 
   before_action :authenticate_user!, except: %i[show compare share]
   before_action :load_shot, only: %i[show compare share remove_image]
   before_action :load_users_shot, only: %i[edit update destroy]
 
   def index
-    load_shots_with_pagy
+    @shots = current_user.shots.by_start_time
+    @shots = @shots.non_premium unless current_user.premium?
+    @shots = @shots.where(start_time: ..params[:before]) if params[:before].present?
+    @shots = @shots.limit(SHOTS_PER_PAGE + 1).load
+    @cursor = (@shots.last.start_time if @shots.size > SHOTS_PER_PAGE)
+    @shots = @shots.take(SHOTS_PER_PAGE)
   end
 
   def recents
@@ -103,17 +108,7 @@ class ShotsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream do
-        if request.referer.ends_with?("shots/#{@shot.id}")
-          flash[:notice] = "Shot successfully deleted."
-          redirect_to action: :index
-        else
-          load_shots_with_pagy
-          if @shots.any?
-            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy, include_person: false})
-          else
-            redirect_to action: :index
-          end
-        end
+        render turbo_stream: turbo_stream.remove(@shot)
       end
       format.html do
         flash[:notice] = "Shot successfully deleted."
@@ -139,12 +134,5 @@ class ShotsController < ApplicationController
     @shot = current_user.shots.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to shots_path, alert: "Shot not found!"
-  end
-
-  def load_shots_with_pagy
-    @shots = current_user.shots.by_start_time
-    @shots = @shots.non_premium unless current_user.premium?
-    @shots_count = @shots.count
-    @pagy, @shots = pagy_countless(@shots)
   end
 end

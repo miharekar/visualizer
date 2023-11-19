@@ -2,11 +2,18 @@
 <% if show_premium_banner? %>
   <%= render "shared/premium_banner" %>
 <% end %>
-<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">  
-  <div class="px-4 pb-4 sm:pb-8">
-    <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl text-neutral-900 dark:text-neutral-100">
-      Your <span id="shots-count"><%= pluralize(@shots_count, "shot") %></span>
-    </h1>
+<div class="px-4 my-6 max-w-7xl sm:hidden">
+  <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+    Your Shots
+  </h1>
+</div>
+<div class="mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
+  <%= render "upload" %>
+  <div class="px-4 space-y-8 sm:px-0" data-controller="modal">
+    <%= render "shared/modal" %>
+    <div id="shots"><%= render @shots %></div>
+    <% if @cursor %>
+      <%= turbo_frame_tag "cursor", src: shots_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
+    <% end %>
   </div>
-  <%= render "coffee_list", shots: @shots %>
 </div>

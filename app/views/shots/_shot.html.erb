@@ -1,0 +1,6 @@
+<%= tag.div id: dom_id(shot) do %>
+  <%= link_to shot.profile_title, shot %>
+  <%= shot.start_time %>
+  <%= shot_iteration.index %>
+  <%= button_to "Delete", shot_path(shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
+<% end %>

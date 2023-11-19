@@ -1,0 +1,10 @@
+<%= turbo_stream.append "shots" do %>
+  <%= render @shots %>
+<% end %>
+<%= turbo_stream.replace "cursor" do %>
+  <% if @cursor %>
+    <%= turbo_frame_tag "cursor", src: shots_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
+  <% else %>
+    <%= turbo_frame_tag "cursor" %>
+  <% end %>
+<% end %>
