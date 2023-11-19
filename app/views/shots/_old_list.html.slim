@@ -1,4 +1,4 @@
-#shot-list.flex.flex-col
+.flex.flex-col
   .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
     .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
       - if shots.any?
@@ -14,7 +14,7 @@
                 th.px-6.py-3
             tbody.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-800
               - shots.each do |shot|
-                = render shot, include_person: include_person
+                = render partial: "shots/old_shot", locals: {shot: shot, include_person: include_person}
           = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-800"}
       - elsif controller_name == "search"
         - if params[:commit]
@@ -26,7 +26,3 @@
             | No shots uploaded in the last month. Consider #{link_to("upgrading", premium_index_path, class: "underline text-pink-600")} to see your old shots.
           - else
             | No shots yet
-- if defined?(@shots_count)
-  turbo-stream action="replace" target="shots-count"
-    template
-      span#shots-count= pluralize(@shots_count, "Shot")
