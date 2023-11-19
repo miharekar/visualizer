@@ -2,14 +2,14 @@
 <% if @premium_count.to_i > 1 %>
   <%= render "shared/premium_banner", count: @premium_count %>
 <% end %>
-<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-  <div class="px-4 pb-4 sm:pb-8 sm:hidden">
-    <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl text-neutral-900 dark:text-neutral-100">
-      Community
-    </h1>
-  </div>
+<div class="px-4 my-6 max-w-7xl sm:hidden">
+  <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+    Community
+  </h1>
+</div>
+<div class="mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
   <%= form_with(url: { action: :index }, method: :get) do |f| %>
-    <div class="p-4 space-y-6 bg-white dark:bg-neutral-800 sm:p-4">
+    <div class="px-4 space-y-6 bg-white dark:bg-neutral-800 sm:p-4">
       <div class="grid grid-cols-12 gap-3">
         <% CommunityController::FILTERS.each do |filter, options| %>
           <% if options[:autocomplete] %>
@@ -60,6 +60,6 @@
     </div>
   <% end %>
   <div class="mt-5">
-    <%= render "shots/list", shots: @shots, pagy: @pagy, include_person: true %>
+    <%= render "shots/old_list", shots: @shots, pagy: @pagy, include_person: true %>
   </div>
 </div>
