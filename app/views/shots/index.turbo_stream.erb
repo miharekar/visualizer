@@ -1,9 +1,15 @@
-<%= turbo_stream.append "shots" do %>
-  <%= render @shots %>
+<% if params[:fresh_search] == "1" %>
+  <%= turbo_stream.update "shots" do %>
+    <%= render @shots %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "shots" do %>
+    <%= render @shots %>
+  <% end %>
 <% end %>
 <%= turbo_stream.replace "cursor" do %>
   <% if @cursor %>
-    <%= turbo_frame_tag "cursor", src: shots_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
+    <%= turbo_frame_tag "cursor", src: shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment).merge(before: @cursor, format: :turbo_stream)), loading: :lazy %>
   <% else %>
     <%= turbo_frame_tag "cursor" %>
   <% end %>

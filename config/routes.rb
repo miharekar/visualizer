@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       get "/compare/:comparison", to: "shots#compare"
     end
     collection do
+      post :index
       get :enjoyments
       get :recents
     end

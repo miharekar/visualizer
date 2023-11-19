@@ -2,6 +2,7 @@
 
 class ShotsController < ApplicationController
   SHOTS_PER_PAGE = 20
+  FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
   before_action :authenticate_user!, except: %i[show compare share]
   before_action :load_shot, only: %i[show compare share remove_image]
@@ -9,6 +10,11 @@ class ShotsController < ApplicationController
 
   def index
     @shots = current_user.shots.by_start_time
+    FILTERS.select { |f| params[f].present? }.each do |filter|
+      @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
+    end
+    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
+    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
     @shots = @shots.non_premium unless current_user.premium?
     @shots = @shots.where(start_time: ..params[:before]) if params[:before].present?
     @shots = @shots.limit(SHOTS_PER_PAGE + 1).load
