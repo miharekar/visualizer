@@ -57,12 +57,14 @@ module Airtable
 
     private
 
-    def prepare_table_fields
-      static = [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}, {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}, {name: "Image", type: "multipleAttachments"}]
-      standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
-      metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }
+    def table_fields
+      @table_fields ||= begin
+        static = [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}, {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}, {name: "Image", type: "multipleAttachments"}]
+        standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
+        metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
-      static + standard + metadata
+        static + standard + metadata
+      end
     end
 
     def prepare_record(shot)

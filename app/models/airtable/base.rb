@@ -4,12 +4,11 @@ module Airtable
   class Base
     include Communication
 
-    attr_reader :user, :identity
+    attr_reader :user, :identity, :table_name
 
     def initialize(user)
       @user = user
       @table_name = self.class.name.demodulize
-      @table_fields = prepare_table_fields
       set_identity
       prepare_table
     end
@@ -25,7 +24,7 @@ module Airtable
       raise TokenError
     end
 
-    def prepare_table_fields
+    def table_fields
       raise NotImplementedError
     end
   end
