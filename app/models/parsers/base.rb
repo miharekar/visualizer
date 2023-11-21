@@ -59,7 +59,7 @@ module Parsers
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
       elsif Rails.env.production?
         s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
-        Rails.logger.warn("Something is wrong with this file", {etag: s3_response.etag, user_id: user.id, user_email: user.email})
+        Rails.logger.warn("Something is wrong with this file #{s3_response.etag} | User ID: #{user.id}")
       end
       shot
     end
