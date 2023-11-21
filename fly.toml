@@ -27,10 +27,9 @@ console_command = "/rails/bin/rails console"
     hard_limit = 500
     soft_limit = 400
 
-[checks]
-  [checks.up]
-    grace_period = "10s"
+  [[http_service.checks]]
+    grace_period = "5s"
     interval = "15s"
+    method = "GET"
     timeout = "2s"
-    port = 3000
-    type = "tcp"
+    path = "/up"
