@@ -38,5 +38,7 @@ class PeopleController < ApplicationController
     else
       head :not_found
     end
+
+    render formats: :rss
   end
 end
