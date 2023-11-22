@@ -18,7 +18,5 @@
     <%= render "shared/modal" %>
     <%= render @shots %>
   </div>
-  <% if @cursor %>
-    <%= turbo_frame_tag "cursor", src: shots_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
-  <% end %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(before: @cursor, format: :turbo_stream) } %>
 </div>

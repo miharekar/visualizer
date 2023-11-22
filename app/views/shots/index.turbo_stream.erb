@@ -8,9 +8,5 @@
   <% end %>
 <% end %>
 <%= turbo_stream.replace "cursor" do %>
-  <% if @cursor %>
-    <%= turbo_frame_tag "cursor", src: shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment).merge(before: @cursor, format: :turbo_stream)), loading: :lazy %>
-  <% else %>
-    <%= turbo_frame_tag "cursor" %>
-  <% end %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment).merge(before: @cursor, format: :turbo_stream)) } %>
 <% end %>

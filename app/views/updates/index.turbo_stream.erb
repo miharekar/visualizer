@@ -2,9 +2,5 @@
   <%= render @updates %>
 <% end %>
 <%= turbo_stream.replace "cursor" do %>
-  <% if @cursor %>
-    <%= turbo_frame_tag "cursor", src: updates_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
-  <% else %>
-    <%= turbo_frame_tag "cursor" %>
-  <% end %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(before: @cursor, format: :turbo_stream) } %>
 <% end %>
