@@ -8,6 +8,7 @@ class AirtableWebhookJob < AirtableJob
     @user = @airtable_info.identity.user
     @shots = Airtable::Shots.new(@user)
     @last_transaction = @airtable_info.last_transaction.to_i
+    @last_cursor = @airtable_info.last_cursor.to_i
 
     get_payloads
     return if @payloads.empty?
@@ -24,7 +25,8 @@ class AirtableWebhookJob < AirtableJob
   private
 
   def get_payloads
-    @payloads = @shots.webhook_payloads.reject do |p|
+    @webhook_payloads = @shots.webhook_payloads(cursor: @last_cursor)
+    @payloads = @webhook_payloads["payloads"].reject do |p|
       p.dig("actionMetadata", "source") == "publicApi" || p["baseTransactionNumber"] <= @last_transaction
     end
   end
@@ -60,7 +62,10 @@ class AirtableWebhookJob < AirtableJob
 
       raise LastTransactionMismatchError if @airtable_info.reload.last_transaction.to_i != @last_transaction
 
-      @airtable_info.update!(last_transaction: @payloads.map { |p| p["baseTransactionNumber"] }.max)
+      @airtable_info.update!(
+        last_transaction: @payloads.map { |p| p["baseTransactionNumber"] }.max,
+        last_cursor: @webhook_payloads["cursor"]
+      )
     end
   end
 end

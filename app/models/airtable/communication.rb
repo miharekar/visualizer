@@ -31,8 +31,8 @@ module Airtable
       records
     end
 
-    def webhook_payloads
-      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/payloads", method: :get)["payloads"]
+    def webhook_payloads(cursor: nil)
+      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/payloads?cursor=#{cursor.to_i}", method: :get)
     end
 
     def webhook_refresh

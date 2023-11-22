@@ -9,6 +9,7 @@ end
 # Table name: airtable_infos
 #
 #  id               :uuid             not null, primary key
+#  last_cursor      :integer
 #  last_transaction :integer
 #  table_fields     :jsonb
 #  created_at       :datetime         not null
