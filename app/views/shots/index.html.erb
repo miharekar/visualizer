@@ -2,14 +2,19 @@
 <% if show_premium_banner? %>
   <%= render "shared/premium_banner" %>
 <% end %>
-<div class="px-4 my-6 max-w-7xl sm:hidden">
-  <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-    Your Shots
-  </h1>
-</div>
-<div class="px-4 mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
+<div class="mx-auto mt-6 space-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="menu">
+  <div class="flex items-baseline justify-between px-4 sm:hidden">
+    <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+      Your Shots
+    </h1>
+    <button type="button" class="text-neutral-900 dark:text-neutral-100" data-action="click->menu#toggle" data-menu-target="button">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+      </svg>
+    </button>
+  </div>
   <%= render "filters" %>
-  <div id="shots" class="pt-8" data-controller="modal">
+  <div id="shots" data-controller="modal">
     <%= render "shared/modal" %>
     <%= render @shots %>
   </div>

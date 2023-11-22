@@ -2,14 +2,12 @@
 <% if @premium_count.to_i > 1 %>
   <%= render "shared/premium_banner", count: @premium_count %>
 <% end %>
-<div class="px-4 my-6 max-w-7xl sm:hidden">
-  <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-    Community
-  </h1>
-</div>
-<div class="px-4 mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
-  <%= render "filters" %>
-  <div class="pt-8">
-    <%= render "shots/old_list", shots: @shots, pagy: @pagy, include_person: true %>
+<div class="mx-auto mt-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="px-4 sm:hidden">
+    <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+      Community
+    </h1>
   </div>
+  <%= render "filters" %>
+  <%= render "shots/old_list", shots: @shots, pagy: @pagy, include_person: true %>
 </div>

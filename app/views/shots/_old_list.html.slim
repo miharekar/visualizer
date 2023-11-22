@@ -16,10 +16,13 @@
               - shots.each do |shot|
                 = render partial: "shots/old_shot", locals: {shot: shot, include_person: include_person}
           = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-800"}
-      - elsif controller_name == "search"
-        - if params[:commit]
-          .text-center.text-neutral-500.my-8.px-6.sm:px-8
+      - elsif controller_name == "community"
+        .text-center.text-neutral-500.my-8.px-6.sm:px-8
+          - if params[:commit]
             | No shots found
+          - else
+            | Search for shots by typing in the filters above and pressing the search button
+
       - else
         .text-center.text-neutral-500.my-8.px-6.sm:px-8
           - if controller_name == "shots" && show_premium_banner?
