@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 class UpdatesController < ApplicationController
-  include Pagy::Backend
+  include CursorPaginatable
 
   before_action :check_admin!, except: %i[index show]
   before_action :set_update, only: %i[show edit update]
 
   def index
     current_user&.update(last_read_change: Time.zone.now)
-    @updates = Update.order(published_at: :desc)
-    @pagy, @updates = pagy(@updates, items: 3)
+    @updates, @cursor = paginate_with_cursor(Update, items: 3, by: :published_at, before: params[:before])
   end
 
   def show
