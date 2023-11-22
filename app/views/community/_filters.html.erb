@@ -3,7 +3,7 @@
     <div class="grid grid-cols-12 gap-3">
       <% CommunityController::FILTERS.each do |filter, options| %>
         <% if options[:autocomplete] %>
-          <div class="col-span-12 sm:col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: filter) %>" data-autocomplete-selected-class="bg-opacity-25 bg-terracotta-300" data-controller="autocomplete">
+          <div class="col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: filter) %>" data-autocomplete-selected-class="bg-opacity-25 bg-terracotta-300" data-controller="autocomplete">
             <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
             <% if options[:target] %>
               <%= f.hidden_field options[:target], value: params[options[:target]], data: { autocomplete_target: "hidden" } %>
@@ -12,13 +12,13 @@
             <ul class="absolute z-10 mt-2 overflow-y-auto bg-white rounded-md shadow-lg list-group ring-1 ring-black ring-opacity-5 max-h-96" data-autocomplete-target="results"></ul>
           </div>
         <% else %>
-          <div class="col-span-12 sm:col-span-6 md:col-span-3">
+          <div class="col-span-6 md:col-span-3">
             <%= f.label filter, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
             <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input" %>
           </div>
         <% end %>
       <% end %>
-      <div class="col-span-12 sm:col-span-6 md:col-span-5">
+      <div class="col-span-6 md:col-span-5">
         <%= f.label :min_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
         <div class="flex items-center mt-1" data-controller="range">
           <% min = params[:min_enjoyment].presence || 0 %>
@@ -30,7 +30,7 @@
           <%= f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update" } %>
         </div>
       </div>
-      <div class="col-span-12 sm:col-span-6 md:col-span-5">
+      <div class="col-span-6 md:col-span-5">
         <%= f.label :max_enjoyment, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
         <div class="flex items-center mt-1" data-controller="range">
           <% max = params[:max_enjoyment].presence || 100 %>

@@ -15,7 +15,7 @@ class CommunityController < ApplicationController
   }.freeze
 
   def index
-    if params[:commit]
+    if params[:commit] || current_user.blank?
       @shots = Shot.visible_or_owned_by_id(current_user&.id).by_start_time.includes(:user)
       FILTERS.each do |filter, options|
         next if params[filter].blank?
@@ -34,9 +34,7 @@ class CommunityController < ApplicationController
         @premium_count = @shots.count - @shots.non_premium.count
         @shots = @shots.non_premium
       end
-      @pagy, @shots = pagy_countless(@shots)
-    elsif current_user.blank?
-      @shots = Shot.visible.by_start_time.includes(:user).non_premium
+
       @pagy, @shots = pagy_countless(@shots)
     else
       @shots = []
