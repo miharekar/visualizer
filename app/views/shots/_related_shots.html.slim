@@ -1,9 +1,8 @@
-.flex.mt-3.sm:mt-0
-  .flex-1 data-controller="shot-routing"
-    select.mt-1.standard-input data-action="shot-routing#jump" class="!mt-0"
-      - related_shots.each do |id, title, time|
-        - if id == shot.id
-          option value="#{shot_path(id)}" selected="selected" Jump to another shot
-        - else
-          option value=id
-            = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
+.flex-1 data-controller="shot-routing"
+  select.mt-1.standard-input data-action="shot-routing#jump" class="!mt-0"
+    - related_shots.each do |id, title, time|
+      - if id == shot.id
+        option value="#{shot_path(id)}" selected="selected" Jump to another shot
+      - else
+        option value=id
+          = [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ")
