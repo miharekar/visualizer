@@ -1,4 +1,4 @@
-<% content_for(:html_title) { "Visualizer | Your shots" } %>
+<% content_for(:html_title) { "Visualizer | Your Shots" } %>
 <% if show_premium_banner? %>
   <%= render "shared/premium_banner" %>
 <% end %>
@@ -7,15 +7,13 @@
     Your Shots
   </h1>
 </div>
-<div class="mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
-  <div class="px-4 space-y-8 sm:px-0" data-controller="modal">
+<div class="px-4 mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
+  <%= render "filters" %>
+  <div id="shots" class="pt-8" data-controller="modal">
     <%= render "shared/modal" %>
-    <%= render "filters" %>
-    <div id="shots">
-      <%= render @shots %>
-    </div>
-    <% if @cursor %>
-      <%= turbo_frame_tag "cursor", src: shots_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
-    <% end %>
+    <%= render @shots %>
   </div>
+  <% if @cursor %>
+    <%= turbo_frame_tag "cursor", src: shots_path(before: @cursor, format: :turbo_stream), loading: :lazy %>
+  <% end %>
 </div>
