@@ -1,19 +1,20 @@
-<div class="flex items-center gap-x-6 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 bg-pink-50">
-  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+<div class="flex items-center space-x-6 px-3 xs: py-2.5 sm:px-3.5 sm:before:flex-1 bg-pink-50">
+  <div class="flex items-center justify-between flex-1 gap-x-4 gap-y-2 sm:flex-auto sm:justify-center">
     <p class="text-sm leading-6 text-neutral-900">
       <% if defined?(count) %>
-        <span class="md:hidden"><strong class="font-semibold"><%= count %> old shots are hidden</strong></span>
-        <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold"><%= count %> old shots are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
-        <span class="hidden lg:inline-block"><strong class="font-semibold"><%= count %> shots that were uploaded over a month ago are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
+        <span class="sm:hidden"><strong class="font-semibold"><%= number_to_human(count) %> shots are hidden</strong></span>
+        <span class="hidden sm:inline-block md:hidden"><strong class="font-semibold">Over <%= number_to_human(count) %> shots are hidden</strong></span>
+        <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold">Over <%= number_to_human(count) %> old shots are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
+        <span class="hidden lg:inline-block"><strong class="font-semibold">Over <%= number_to_human(count) %> shots uploaded over a month ago are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
       <% else %>
         <span class="md:hidden"><strong class="font-semibold">Old shots are hidden</strong></span>
         <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold">Old shots are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
-        <span class="hidden lg:inline-block"><strong class="font-semibold">Shots that were uploaded over a month ago are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
+        <span class="hidden lg:inline-block"><strong class="font-semibold">Shots uploaded over a month ago are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
       <% end %>
     </p>
     <%= link_to premium_index_path, class: "flex-none rounded-full bg-pink-600 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-800" do %>
-      <span class="hidden md:inline-block">Learn more &rarr;</span>
+      <span>Learn more &rarr;</span>
     <% end %>
   </div>
-  <div class="flex justify-end flex-1"></div>
+  <div class="justify-end flex-1 hidden sm:flex"></div>
 </div>
