@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class Change < ApplicationRecord
+class Update < ApplicationRecord
+  self.table_name = :changes
+
   include Sluggable
   slug_from :title
 

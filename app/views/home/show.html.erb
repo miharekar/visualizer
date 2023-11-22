@@ -28,7 +28,7 @@
       </p>
     </div>
     <div class="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
-      <dl class="max-w-xl grid grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+      <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
         <div class="relative pl-16">
           <dt class="font-serif text-xl font-bold leading-7 text-neutral-900 dark:text-neutral-300">
             <div class="absolute top-0 left-0 flex items-center justify-center w-10 h-10 rounded-lg bg-terracotta-600">
@@ -92,7 +92,7 @@
 </div>
 <div class="py-12 sm:py-16">
   <div class="px-6 mx-auto max-w-7xl lg:px-8">
-    <div class="max-w-2xl mx-auto overflow-hidden grid grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+    <div class="grid max-w-2xl grid-cols-1 gap-8 mx-auto overflow-hidden lg:mx-0 lg:max-w-none lg:grid-cols-4">
       <div>
         <time datetime="2020-11" class="flex items-center font-serif font-semibold leading-6 text-terracotta-600 dark:text-terracotta-500">
           <svg viewBox="0 0 4 4" class="flex-none w-1 h-1 mr-4">
@@ -101,7 +101,7 @@
           Nov 2020
           <div class="absolute w-screen h-px -ml-2 -translate-x-full bg-neutral-900/10 dark:bg-neutral-100/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0"></div>
         </time>
-        <p class="mt-6 font-serif text-xl font-bold tracking-tight leading-8 text-neutral-900 dark:text-neutral-300">
+        <p class="mt-6 font-serif text-xl font-bold leading-8 tracking-tight text-neutral-900 dark:text-neutral-300">
           <a href="https://public.3.basecamp.com/p/3bpv4ybEVekQVXy7Ud9vW6n1" class="underline hover:no-underline" target="_blank">
             First commit
           </a>
@@ -118,7 +118,7 @@
           Jan 2021
           <div class="absolute w-screen h-px -ml-2 -translate-x-full bg-neutral-900/10 dark:bg-neutral-100/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0"></div>
         </time>
-        <p class="mt-6 font-serif text-xl font-bold tracking-tight leading-8 text-neutral-900 dark:text-neutral-300">
+        <p class="mt-6 font-serif text-xl font-bold leading-8 tracking-tight text-neutral-900 dark:text-neutral-300">
           <a href="https://public.3.basecamp.com/p/y8keyN8VrToTNwXw84ZvC2p1" class="underline hover:no-underline" target="_blank">
             Visualizer v2
           </a>
@@ -137,8 +137,8 @@
           Jan 2022
           <div class="absolute w-screen h-px -ml-2 -translate-x-full bg-neutral-900/10 dark:bg-neutral-100/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0"></div>
         </time>
-        <p class="mt-6 font-serif text-xl font-bold tracking-tight leading-8 text-neutral-900 dark:text-neutral-300">
-          <a href="https://visualizer.coffee/changes/visualizer-v3" class="underline hover:no-underline" target="_blank">
+        <p class="mt-6 font-serif text-xl font-bold leading-8 tracking-tight text-neutral-900 dark:text-neutral-300">
+          <a href="/updates/visualizer-v3" class="underline hover:no-underline" target="_blank">
             Switching to SaaS
           </a>
         </p>
@@ -155,8 +155,8 @@
           Mar 2023
           <div class="absolute w-screen h-px -ml-2 -translate-x-full bg-neutral-900/10 dark:bg-neutral-100/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0"></div>
         </time>
-        <p class="mt-6 font-serif text-xl font-bold tracking-tight leading-8 text-neutral-900 dark:text-neutral-300">
-          <a href="https://visualizer.coffee/changes/1-million" class="underline hover:no-underline" target="_blank">
+        <p class="mt-6 font-serif text-xl font-bold leading-8 tracking-tight text-neutral-900 dark:text-neutral-300">
+          <a href="/updates/1-million" class="underline hover:no-underline" target="_blank">
             1 Million Shots
           </a>
         </p>
@@ -172,42 +172,42 @@
 <div class="py-12 sm:py-16">
   <div class="px-6 pb-16 mx-auto max-w-7xl lg:px-8">
     <div class="max-w-2xl mx-auto text-center">
-      <h2 class="font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl">From the blog</h2>
+      <h2 class="font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl">Latest Updates</h2>
     </div>
   </div>
-  <div class="px-6 mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-12 sm:gap-y-16 lg:grid-cols-2 lg:px-8">
+  <div class="grid grid-cols-1 px-6 mx-auto max-w-7xl gap-x-8 gap-y-12 sm:gap-y-16 lg:grid-cols-2 lg:px-8">
     <article class="w-full max-w-2xl mx-auto lg:mx-0 lg:max-w-lg">
-      <time datetime="<%= @last_change.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-        <%= @last_change.published_at.strftime("%b %d, %Y") %>
+      <time datetime="<%= @last_update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+        <%= @last_update.published_at.strftime("%b %d, %Y") %>
       </time>
       <h2 id="featured-post" class="mt-4 ">
-        <%= link_to @last_change.title, change_path(@last_change.slug.presence || @last_change.id), class: "text-3xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl hover:text-neutral-500 dark:hover:text-neutral-400", target: "_blank" %>
+        <%= link_to @last_update.title, update_path(@last_update.slug.presence || @last_update.id), class: "text-3xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl hover:text-neutral-500 dark:hover:text-neutral-400", target: "_blank" %>
       </h2>
       <p class="mt-4 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-        <%= @last_change.excerpt %>
+        <%= @last_update.excerpt %>
       </p>
-      <div class="flex flex-col justify-between mt-4 gap-6 sm:mt-8 sm:flex-row-reverse sm:gap-8 lg:mt-4 lg:flex-col">
+      <div class="flex flex-col justify-between gap-6 mt-4 sm:mt-8 sm:flex-row-reverse sm:gap-8 lg:mt-4 lg:flex-col">
         <div class="flex">
-          <%= link_to "Continue reading →", change_path(@last_change.slug.presence || @last_change.id), class: "text-sm font-semibold leading-6 text-terracotta-600 dark:text-terracotta-500 hover:text-terracotta-500 dark:hover:text-terracotta-400", target: "_blank" %>
+          <%= link_to "Continue reading →", update_path(@last_update.slug.presence || @last_update.id), class: "text-sm font-semibold leading-6 text-terracotta-600 dark:text-terracotta-500 hover:text-terracotta-500 dark:hover:text-terracotta-400", target: "_blank" %>
         </div>
       </div>
     </article>
     <div class="w-full max-w-2xl pt-12 mx-auto border-t border-neutral-900/10 sm:pt-16 lg:mx-0 lg:max-w-none lg:border-t-0 lg:pt-0">
       <div class="-my-12 divide-y divide-neutral-900/10">
-        <% @changes.each do |change| %>
+        <% @updates.each do |update| %>
           <article class="py-12">
             <div class="relative max-w-xl group">
-              <time datetime="<%= change.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-                <%= change.published_at.strftime("%b %d, %Y") %>
+              <time datetime="<%= update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+                <%= update.published_at.strftime("%b %d, %Y") %>
               </time>
               <h2 class="mt-2 font-serif text-xl font-semibold text-neutral-900 text dark:text-neutral-300 group-hover:text-neutral-400">
-                <%= link_to change_path(change.slug.presence || change.id), target: "_blank" do %>
+                <%= link_to update_path(update.slug.presence || update.id), target: "_blank" do %>
                   <span class="absolute inset-0"></span>
-                  <%= change.title %>
+                  <%= update.title %>
                 <% end %>
               </h2>
               <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-                <%= change.excerpt %>
+                <%= update.excerpt %>
               </p>
             </div>
           </article>

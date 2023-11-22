@@ -1,0 +1,14 @@
+<% content_for(:html_title) { "Visualizer | Updates" } %>
+<div class="max-w-4xl px-4 py-6 mx-auto sm:px-6">
+  <% if current_user&.admin %>
+    <div class="text-xs text-right">
+      <%= link_to "New", new_update_path, class: "text-right" %>
+    </div>
+  <% end %>
+  <div class="space-y-20 sm:space-y-40">
+    <%= render @updates %>
+  </div>
+  <div class="mt-10">
+    <%= render partial: "shared/pagination", locals: {pagy: @pagy, extra_classes: nil} %>
+  </div>
+</div>

@@ -19,7 +19,7 @@
             <% end %>
           <% else %>
             <%= active_link_to "Community", community_index_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
-            <%= active_link_to "Changelog", changelog_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
+            <%= active_link_to "Updates", updates_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
           <% end %>
         </div>
       </div>
@@ -31,7 +31,7 @@
                 <span class="absolute -inset-1.5"></span>
                 <img class="w-8 h-8 rounded" src="<%= avatar_url(current_user, 64) %>">
               </button>
-              <% if change_count > 0 %>
+              <% if update_count > 0 %>
                 <span class="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta-600"></span>
               <% end %>
             </div>
@@ -43,12 +43,12 @@
                 </p>
               </div>
               <div class="py-1" >
-                <%= link_to changelog_path, class: "block px-4 py-2 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" do %>
+                <%= link_to updates_path, class: "block px-4 py-2 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" do %>
                   <div class="flex">
-                    <div class="text-sm grow text-neutral-700 dark:text-neutral-200">Changelog</div>
-                    <% if change_count > 0 %>
+                    <div class="text-sm grow text-neutral-700 dark:text-neutral-200">Updates</div>
+                    <% if update_count > 0 %>
                       <div class="w-5 h-5 rounded-full bg-terracotta-600">
-                        <div class="text-sm text-center text-white dark:text-black"><%= change_count %></div>
+                        <div class="text-sm text-center text-white dark:text-black"><%= update_count %></div>
                       </div>
                     <% end %>
                   </div>
@@ -96,7 +96,7 @@
           <svg class="hidden w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-menu-target="toggleable">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <% if current_user && change_count > 0 %>
+          <% if current_user && update_count > 0 %>
             <span class="absolute top-0 right-0 inline-block w-3 h-3 transform bg-terracotta-600 rounded-full -translate-x-1 translate-y-1.5" data-menu-target="toggleable"></span>
           <% end %>
         </button>
@@ -110,19 +110,19 @@
       <% end %>
       <%= active_link_to "Community", community_index_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
       <% unless user_signed_in? %>
-        <%= active_link_to "Changelog", changelog_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+        <%= active_link_to "Updates", updates_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
       <% end %>
     </div>
     <div class="pb-3 border-t border-neutral-200 dark:border-neutral-800">
       <div class="mt-3 space-y-1">
         <% if user_signed_in? %>
-          <%= active_link_to changelog_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" do %>
+          <%= active_link_to updates_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" do %>
             <div class="flex items-center">
-              <div class="grow">Changelog</div>
-              <% if change_count > 0 %>
+              <div class="grow">Updates</div>
+              <% if update_count > 0 %>
                 <div class="w-5 h-5 rounded-full bg-terracotta-600">
                   <div class="text-sm text-center text-white">
-                    <%= change_count %>
+                    <%= update_count %>
                   </div>
                 </div>
               <% end %>

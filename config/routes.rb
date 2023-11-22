@@ -32,7 +32,6 @@ Rails.application.routes.draw do
   end
 
   get :heartbeat, to: "heartbeat#show"
-  get :changelog, to: "changes#index"
   get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
 
@@ -76,7 +75,7 @@ Rails.application.routes.draw do
   end
 
   resources :stats, only: [:index]
-  resources :changes, except: %i[index destroy]
+  resources :updates, except: %i[destroy]
   post :airtable, to: "airtable#notification"
 
   match "/404", to: "errors#not_found", via: :all
