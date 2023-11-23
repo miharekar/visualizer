@@ -172,7 +172,7 @@
 <div class="py-12 sm:py-16">
   <div class="px-6 pb-16 mx-auto max-w-7xl lg:px-8">
     <div class="max-w-2xl mx-auto text-center">
-      <h2 class="font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl">Latest Updates</h2>
+      <h2 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-5xl">Latest Updates</h2>
     </div>
   </div>
   <div class="grid grid-cols-1 px-6 mx-auto max-w-7xl gap-x-8 gap-y-12 sm:gap-y-16 lg:grid-cols-2 lg:px-8">
@@ -180,7 +180,7 @@
       <time datetime="<%= @last_update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
         <%= @last_update.published_at.strftime("%b %d, %Y") %>
       </time>
-      <h2 id="featured-post" class="mt-4 ">
+      <h2 id="featured-post" class="mt-4">
         <%= link_to @last_update.title, update_path(@last_update.slug.presence || @last_update.id), class: "text-3xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl hover:text-neutral-500 dark:hover:text-neutral-400", target: "_blank" %>
       </h2>
       <p class="mt-4 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
