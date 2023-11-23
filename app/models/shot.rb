@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Shot < ApplicationRecord
-  SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
-  DATA_LABELS = %w[espresso_pressure espresso_weight espresso_flow espresso_flow_weight espresso_temperature_basket espresso_temperature_mix espresso_water_dispensed espresso_temperature_goal espresso_flow_weight_raw espresso_pressure_goal espresso_flow_goal espresso_state_change].freeze
-  EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
+  include ShotPresenter
 
   belongs_to :user, optional: true, touch: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy
@@ -11,6 +9,7 @@ class Shot < ApplicationRecord
 
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500]
+    attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
   scope :visible, -> { where(user_id: User.where(public: true).select(:id)) }
@@ -42,20 +41,8 @@ class Shot < ApplicationRecord
     query.where(start_time: start_time..).order(:start_time) + [self] + query.where(start_time: ..start_time).order(start_time: :desc)
   end
 
-  def extract_fields_from_extra
-    EXTRA_DATA_METHODS.each do |attr|
-      public_send("#{attr}=", information.extra[attr].presence)
-    end
-    self.bean_weight = information.extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
-    self.barista = information.extra["my_name"].presence
-  end
-
   def screenshot?
     s3_etag.present?
-  end
-
-  def screenshot_url
-    "#{SCREENSHOTS_URL}/screenshots/#{id}.png" if screenshot?
   end
 
   def ensure_screenshot

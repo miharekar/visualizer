@@ -22,7 +22,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "0.044", shot.information.timeframe.first
     assert_equal "24.793", shot.information.timeframe.last
     assert_equal 24.793, shot.duration
-    assert_equal Shot::DATA_LABELS.sort, shot.information.data.keys.sort
+    assert_equal Parsers::DecentTcl::DATA_LABELS.sort, shot.information.data.keys.sort
     assert_equal 101, shot.information.data["espresso_pressure"].size
     assert_equal 16, shot.information.extra.keys.size
     assert_equal "38.8", shot.drink_weight
@@ -56,7 +56,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "0.044", shot.information.timeframe.first
     assert_equal "26.999", shot.information.timeframe.last
     assert_equal 26.999, shot.duration
-    assert_equal Shot::DATA_LABELS.sort, shot.information.data.keys.sort
+    assert_equal Parsers::DecentTcl::DATA_LABELS.sort, shot.information.data.keys.sort
     assert_equal 110, shot.information.data["espresso_pressure"].size
     assert_equal 18, shot.information.extra.keys.size
     assert_equal 46, shot.information.profile_fields.keys.size
@@ -91,7 +91,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "0.044", shot.information.timeframe.first
     assert_equal "26.999", shot.information.timeframe.last
     assert_equal 26.999, shot.duration
-    assert_equal Shot::DATA_LABELS.sort, shot.information.data.keys.sort
+    assert_equal Parsers::DecentTcl::DATA_LABELS.sort, shot.information.data.keys.sort
     assert_equal 110, shot.information.data["espresso_pressure"].size
     assert_equal 16, shot.information.extra.keys.size
     assert_equal 46, shot.information.profile_fields.keys.size
