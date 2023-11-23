@@ -31,7 +31,7 @@ class CommunityController < ApplicationController
       @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
 
       unless current_user&.premium?
-        @premium_count = @shots.count - @shots.non_premium.count
+        @premium_count = @shots.premium.count
         @shots = @shots.non_premium
       end
 

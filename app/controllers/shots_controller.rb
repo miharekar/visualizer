@@ -119,7 +119,12 @@ class ShotsController < ApplicationController
 
   def load_users_shots
     @shots = current_user.shots
-    @shots = @shots.non_premium unless current_user.premium?
+
+    unless current_user.premium?
+      @premium_count = @shots.premium.count
+      @shots = @shots.non_premium
+    end
+
     FILTERS.select { |f| params[f].present? }.each do |filter|
       @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
     end

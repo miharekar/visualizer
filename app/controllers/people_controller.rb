@@ -15,7 +15,7 @@ class PeopleController < ApplicationController
     if @user.public
       @shots = @user.shots.by_start_time
       unless current_user&.premium?
-        @premium_count = @shots.count - @shots.non_premium.count
+        @premium_count = @shots.premium.count
         @shots = @shots.non_premium
       end
       @pagy, @shots = pagy_countless(@shots)
