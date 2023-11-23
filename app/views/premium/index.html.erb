@@ -1,15 +1,15 @@
-<div class="bg-white">
-  <div class="bg-gradient-to-b from-pink-50 via-white to-white">
+<div class="bg-white dark:bg-black">
+  <div class="bg-gradient-to-b from-pink-50 via-white to-white dark:from-pink-950 dark:via-black dark:to-black">
     <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
       <div class="pb-16 xl:flex xl:items-center xl:justify-between">
         <div>
           <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
-            <span class="text-neutral-900">Get Premium for</span>
-            <span class="text-pink-600">€5/month</span>
-            <span class="text-neutral-900">or</span>
-            <span class="text-pink-600">€50/year</span>
+            <span class="text-neutral-900 dark:text-white">Get Premium for</span>
+            <span class="text-pink-600 dark:text-pink-500">€5/month</span>
+            <span class="text-neutral-900 dark:text-white">or</span>
+            <span class="text-pink-600 dark:text-pink-500">€50/year</span>
           </h1>
-          <p class="mt-5 text-xl text-neutral-500">Unlock the full potential of Visualizer with these features</p>
+          <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Unlock the full potential of Visualizer with these features</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
           <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-500 sm:mt-10 sm:w-auto xl:mt-0" %>
@@ -17,8 +17,8 @@
       </div>
       <div class="pt-16 border-t border-neutral-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-neutral-900">Experience the ultimate Visualizer experience</p>
-          <p class="mt-4 text-lg text-neutral-500">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
+          <p class="mt-2 text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Experience the ultimate Visualizer experience</p>
+          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
@@ -28,7 +28,7 @@
                 <svg class="flex-shrink-0 w-6 h-6 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span class="ml-3 text-base text-neutral-500"><%= feature %></span>
+                <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
               </li>
             <% end %>
           </ul>
@@ -38,7 +38,7 @@
                 <svg class="flex-shrink-0 w-6 h-6 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span class="ml-3 text-base text-neutral-500"><%= feature %></span>
+                <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
               </li>
             <% end %>
           </ul>
@@ -53,7 +53,7 @@
         <dl class="space-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-12 md:space-y-0">
           <% @qas.each do |q, a| %>
             <div>
-              <dt class="text-lg font-medium text-white leading-6"><%= q %></dt>
+              <dt class="text-lg font-medium leading-6 text-white"><%= q %></dt>
               <dd class="mt-2 text-base text-pink-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-pink-100") %></dd>
             </div>
           <% end %>
@@ -61,13 +61,13 @@
       </div>
     </div>
   </div>
-  <div class="bg-pink-50">
+  <div class="bg-pink-50 dark:bg-pink-950">
     <div class="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-pink-700 sm:text-4xl">
+      <h2 class="text-3xl font-bold tracking-tight text-pink-700 dark:text-pink-100 sm:text-4xl">
         <span class="block">Ready to dive in?</span>
       </h2>
       <div class="flex mt-8 lg:mt-0 lg:flex-shrink-0">
-        <div class="inline-flex shadow rounded-md">
+        <div class="inline-flex rounded-md shadow">
           <%= form_with( data:{turbo:"false"}) do |f| %>
             <%= f.submit "Subscribe now", class: "cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-500" %>
           <% end %>
