@@ -15,7 +15,7 @@
   </div>
   <% if @shots.any? %>
     <%= render "filters" %>
-    <div id="shots" class="divide-y sm:space-y-4 sm:divide-none" data-controller="modal">
+    <div id="shots" class="divide-y sm:space-y-4 sm:divide-none" data-controller="modal shot">
       <%= render "shared/modal" %>
       <%= render @shots %>
     </div>

@@ -1,5 +1,5 @@
 <%= tag.div id: dom_id(shot) do %>
-  <div class="flex p-4 sm:space-x-8 md:rounded sm:shadow">
+  <div class="relative flex p-4 cursor-pointer sm:space-x-8 md:rounded sm:shadow" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
     <% if shot.image.attached? && shot.image.variable? %>
       <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
         <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
@@ -65,12 +65,9 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center sm:hidden">
-      <%= link_to "View", shot_path(shot), class: "rounded-md bg-oxford-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-oxford-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford-blue-500" %>
-    </div>
     <div class="flex-col items-center justify-center hidden sm:flex md:flex-row sm:space-y-6 md:space-y-0 md:space-x-6">
-      <%= button_to "Delete", shot_path(shot), method: :delete, class:"text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-400", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
-      <%= link_to "Edit", edit_shot_path(shot), class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-oxford-blue-900 shadow-sm ring-1 ring-inset ring-oxford-blue-300 hover:bg-oxford-blue-50" %>
+      <%= button_to "Delete", shot_path(shot), method: :delete, class:"text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-700 hover:underline", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
+      <%= link_to "Edit", edit_shot_path(shot), class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-oxford-blue-700 shadow-sm ring-1 ring-inset ring-oxford-blue-300 hover:bg-oxford-blue-50" %>
     </div>
   </div>
 <% end %>
