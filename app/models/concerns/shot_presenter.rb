@@ -16,4 +16,13 @@ module ShotPresenter
   def weight_ratio
     drink_weight_f / bean_weight_f
   end
+
+  def weight_and_ratio_info
+    weight_parts = []
+    weight_parts << "#{bean_weight} g" if bean_weight_f > 0
+    weight_parts << "#{drink_weight} g" if drink_weight_f > 0
+    weight_string = weight_parts.join(":")
+    ratio_string = "(1:#{weight_ratio.round(1)})" if bean_weight_f > 0 && drink_weight_f > 0 && weight_ratio > 0
+    [weight_string, ratio_string].compact.join(" ")
+  end
 end

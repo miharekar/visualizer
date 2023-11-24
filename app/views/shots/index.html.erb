@@ -1,6 +1,6 @@
 <% content_for(:html_title) { "Visualizer | Your Shots" } %>
-<% if show_premium_banner? %>
-  <%= render "shared/premium_banner" %>
+<% if @premium_count.to_i > 1 %>
+  <%= render "shared/premium_banner", count: @premium_count %>
 <% end %>
 <div class="mx-auto mt-6 space-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="menu">
   <div class="flex items-baseline justify-between px-4 sm:hidden">
@@ -13,10 +13,20 @@
       </svg>
     </button>
   </div>
-  <%= render "filters" %>
-  <div id="shots" data-controller="modal">
-    <%= render "shared/modal" %>
-    <%= render @shots %>
-  </div>
-  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(before: @cursor, format: :turbo_stream) } %>
+  <% if @shots.any? %>
+    <%= render "filters" %>
+    <div id="shots" class="divide-y sm:space-y-4 sm:divide-none" data-controller="modal">
+      <%= render "shared/modal" %>
+      <%= render @shots %>
+    </div>
+    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(before: @cursor, format: :turbo_stream) } %>
+  <% else %>
+    <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
+      <% if @premium_count.to_i > 1 %>
+        Consider <%= link_to("upgrading", premium_index_path, class: "underline text-pink-600") %> to see your old shots.
+      <% else %>
+        No shots yet
+      <% end %>
+    </div>
+  <% end %>
 </div>

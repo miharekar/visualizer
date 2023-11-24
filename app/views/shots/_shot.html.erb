@@ -1,7 +1,76 @@
 <%= tag.div id: dom_id(shot) do %>
-  <%= shot.espresso_enjoyment %>
-  <%= link_to shot.profile_title, shot %>
-  <%= shot.start_time %>
-  <%= shot_iteration.index %>
-  <%= button_to "Delete", shot_path(shot), method: :delete, data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
+  <div class="flex p-4 sm:space-x-8 md:rounded sm:shadow">
+    <% if shot.image.attached? && shot.image.variable? %>
+      <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
+        <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
+          <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
+        </div>
+      </div>
+    <% end %>
+    <div class="flex flex-col justify-between md:flex-row md:space-x-8 grow">
+      <div class="flex flex-col justify-between md:space-y-2">
+        <div class="flex flex-col space-y-2">
+          <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 whitespace-nowrap") %>
+          <div>
+            <% if shot.espresso_enjoyment.to_i > 0 %>
+              <span class="mr-1 inline-flex items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+                <%= shot.espresso_enjoyment %>
+              </span>
+            <% end %>
+            <span class="font-semibold">
+              <%= shot.profile_title %>
+            </span>
+          </div>
+          <div>
+            <% if shot.grinder_setting.present? && shot.grinder_setting != "0" %>
+              <span class="font-semibold"><%= shot.grinder_setting %></span>
+            <% end %>
+            <% if shot.grinder_model.present? %>
+              on <%= shot.grinder_model %>
+            <% end %>
+          </div>
+        </div>
+        <% if shot.barista.present? %>
+          <div class="md:text-sm text-neutral-600">
+            By <%= shot.barista %>
+          </div>
+        <% end %>
+      </div>
+      <div class="flex flex-col grow md:space-y-2 md:self-center text-neutral-600">
+        <div>
+          <% if shot.bean_brand.present? %>
+            <%= shot.bean_brand %>
+          <% end %>
+          <% if shot.bean_type.present? %>
+            <%= shot.bean_type %>
+          <% end %>
+        </div>
+        <div>
+          <% if shot.weight_and_ratio_info.present? %>
+            <%= shot.weight_and_ratio_info %>
+          <% end %>
+          <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+            in <%= shot.duration.round(1) %> s
+          <% end %>
+        </div>
+        <div>
+          <% if shot.drink_tds_f > 0 %>
+            <span class="font-semibold">TDS</span>: <%= shot.drink_tds_f %>%
+          <% end %>
+          <% if shot.drink_tds_f > 0 && shot.drink_ey_f > 0 %>
+          <% end %>
+          <% if shot.drink_ey_f > 0 %>
+            <span class="font-semibold">EY</span>: <%= shot.drink_ey_f %>%
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center sm:hidden">
+      <%= link_to "View", shot_path(shot), class: "rounded-md bg-oxford-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-oxford-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford-blue-500" %>
+    </div>
+    <div class="flex-col items-center justify-center hidden sm:flex md:flex-row sm:space-y-6 md:space-y-0 md:space-x-6">
+      <%= button_to "Delete", shot_path(shot), method: :delete, class:"text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-400", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
+      <%= link_to "Edit", edit_shot_path(shot), class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-oxford-blue-900 shadow-sm ring-1 ring-inset ring-oxford-blue-300 hover:bg-oxford-blue-50" %>
+    </div>
+  </div>
 <% end %>
