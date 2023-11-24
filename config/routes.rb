@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     end
     collection do
       post :search
+      get :upload
     end
   end
 
