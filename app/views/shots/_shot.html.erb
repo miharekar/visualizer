@@ -1,5 +1,5 @@
 <%= tag.div id: dom_id(shot) do %>
-  <div class="relative flex p-4 cursor-pointer sm:space-x-8 md:rounded sm:shadow" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
+  <div class="relative flex p-4 cursor-pointer sm:space-x-8 md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
     <% if shot.image.attached? && shot.image.variable? %>
       <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
         <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
@@ -10,7 +10,7 @@
     <div class="flex flex-col justify-between md:flex-row md:space-x-8 grow">
       <div class="flex flex-col justify-between md:space-y-2">
         <div class="flex flex-col space-y-2">
-          <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 whitespace-nowrap") %>
+          <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap") %>
           <div>
             <% if shot.espresso_enjoyment.to_i > 0 %>
               <span class="mr-1 inline-flex items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
@@ -23,7 +23,7 @@
           </div>
           <div>
             <% if shot.grinder_setting.present? && shot.grinder_setting != "0" %>
-              <span class="font-semibold"><%= shot.grinder_setting %></span>
+              <%= shot.grinder_setting %>
             <% end %>
             <% if shot.grinder_model.present? %>
               on <%= shot.grinder_model %>
@@ -31,12 +31,12 @@
           </div>
         </div>
         <% if shot.barista.present? %>
-          <div class="md:text-sm text-neutral-600">
+          <div class="md:text-sm text-neutral-500 dark:text-neutral-400">
             By <%= shot.barista %>
           </div>
         <% end %>
       </div>
-      <div class="flex flex-col grow md:space-y-2 md:self-center text-neutral-600">
+      <div class="flex flex-col grow md:space-y-2 md:self-center text-neutral-500 dark:text-neutral-400">
         <div>
           <% if shot.bean_brand.present? %>
             <%= shot.bean_brand %>
@@ -55,19 +55,20 @@
         </div>
         <div>
           <% if shot.drink_tds_f > 0 %>
-            <span class="font-semibold">TDS</span>: <%= shot.drink_tds_f %>%
+            <span>TDS: <%= shot.drink_tds_f %>%</span>
           <% end %>
           <% if shot.drink_tds_f > 0 && shot.drink_ey_f > 0 %>
           <% end %>
           <% if shot.drink_ey_f > 0 %>
-            <span class="font-semibold">EY</span>: <%= shot.drink_ey_f %>%
+            <span>EY: <%= shot.drink_ey_f %>%</span>
           <% end %>
         </div>
       </div>
     </div>
-    <div class="flex-col items-center justify-center hidden sm:flex md:flex-row sm:space-y-6 md:space-y-0 md:space-x-6">
-      <%= button_to "Delete", shot_path(shot), method: :delete, class:"text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-700 hover:underline", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
-      <%= link_to "Edit", edit_shot_path(shot), class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-oxford-blue-700 shadow-sm ring-1 ring-inset ring-oxford-blue-300 hover:bg-oxford-blue-50" %>
+    <div class="flex flex-col items-center justify-center md:flex-row sm:space-y-6 md:space-y-0 md:space-x-6">
+      <%= button_to "Delete", shot_path(shot), method: :delete, class: "hidden sm:flex text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-700 hover:underline dark:hover:text-oxford-blue-300", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
+      <%= link_to "Edit", edit_shot_path(shot), class: "hidden sm:flex rounded-md bg-white px-3 py-2 text-sm font-semibold text-oxford-blue-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-oxford-blue-300 hover:bg-oxford-blue-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" %>
+      <%= link_to "View", shot_path(shot), class: "sm:hidden rounded-md bg-oxford-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-oxford-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford-blue-500" %>
     </div>
   </div>
 <% end %>
