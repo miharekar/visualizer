@@ -26,7 +26,7 @@
         div
           = f.password_field :password_confirmation, placeholder: "Password confirmation", autocomplete: "new-password", class: "#{extra_password_classes} appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-b-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm"
       div
-        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-terracotta-600.hover:bg-terracotta-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-terracotta-500 type="submit"
+        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-terracotta-600.hover:bg-terracotta-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-terracotta-500 type="submit" data-turbo="false"
           span.absolute.left-0.inset-y-0.flex.items-center.pl-3
             /! Heroicon name: lock-closed
             svg.h-5.w-5.text-terracotta-500.group-hover:text-terracotta-400 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"

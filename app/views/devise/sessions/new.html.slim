@@ -18,7 +18,7 @@
         .text-sm
           = link_to "Forgot your password?", new_password_path(resource_name), class: "font-medium text-oxford-blue-600 hover:text-oxford-blue-500"
       div
-        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-terracotta-600.hover:bg-terracotta-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-terracotta-500 type="submit"
+        button.group.relative.w-full.flex.justify-center.py-2.px-4.border.border-transparent.text-sm.font-medium.rounded-md.text-white.bg-terracotta-600.hover:bg-terracotta-700.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-terracotta-500 type="submit" data-turbo="false"
           span.absolute.left-0.inset-y-0.flex.items-center.pl-3
             /! Heroicon name: lock-closed
             svg.h-5.w-5.text-terracotta-500.group-hover:text-terracotta-400 fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
