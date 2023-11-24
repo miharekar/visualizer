@@ -1,5 +1,4 @@
-- content_for(:meta_tags)
-  meta name="turbo-cache-control" content="no-cache"
+- turbo_exempts_page_from_cache
 
 .mt-5.md:mt-0.md:col-span-2 id=dom_id(@profile)
   = form_with(model: @profile, url: profile_path(@profile)) do |f|

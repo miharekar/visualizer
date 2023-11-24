@@ -35,7 +35,7 @@ gem "stimulus-rails"
 gem "stripe"
 gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"
-gem "turbo-rails"
+gem "turbo-rails", "~> 2.0.0-beta.1"
 
 gem "appsignal"
 gem "lograge"

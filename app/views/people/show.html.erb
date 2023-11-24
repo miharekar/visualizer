@@ -1,5 +1,5 @@
 <% content_for(:html_title) { "Visualizer | #{@user.name}" } %>
-<% content_for(:meta_tags) { auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss) } %>
+<% content_for(:head) { auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss) } %>
 <% if @premium_count.to_i > 1 %>
   <%= render "shared/premium_banner", count: @premium_count %>
 <% end %>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="h-full">
   <head>
+    <title><%= content_for?(:html_title) ? yield(:html_title) : "Visualizer" %></title>
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover" name="viewport">
     <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color">
     <meta content="#171717" media="(prefers-color-scheme: dark)" name="theme-color">
-    <title><%= content_for?(:html_title) ? yield(:html_title) : "Visualizer" %></title>
-    <%= yield :meta_tags %>
+    <%= yield :head %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link href="/apple-touch-icon.png?v=4" rel="apple-touch-icon" sizes="180x180">
