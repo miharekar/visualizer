@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Identity < ApplicationRecord
+  include Lockable
+
   belongs_to :user
   has_one :airtable_info, dependent: :destroy
 
@@ -15,13 +17,12 @@ class Identity < ApplicationRecord
 
   def refresh_token!
     return if valid_token?
-    raise "Already refreshing token" if refreshing_token?
 
-    Sidekiq.redis { |r| r.set(refresh_token_key, Time.zone.now.to_s, ex: 300) }
-    new_token = OAuth2::AccessToken.new(strategy.client, token, {expires_at: expires_at.to_i, refresh_token:})
-    new_token = new_token.refresh!
-    update!(token: new_token.token, refresh_token: new_token.refresh_token, expires_at: Time.zone.at(new_token.expires_at))
-    Sidekiq.redis { |r| r.del(refresh_token_key) }
+    with_lock(refresh_token_key) do
+      new_token = OAuth2::AccessToken.new(strategy.client, token, {expires_at: expires_at.to_i, refresh_token:})
+      new_token = new_token.refresh!
+      update!(token: new_token.token, refresh_token: new_token.refresh_token, expires_at: Time.zone.at(new_token.expires_at))
+    end
   rescue OAuth2::Error => e
     if Oj.load(e.body)["error"] == "invalid_grant"
       Appsignal.send_error(e) do |transaction|
@@ -31,10 +32,6 @@ class Identity < ApplicationRecord
     end
 
     raise
-  end
-
-  def refreshing_token?
-    Sidekiq.redis { |r| r.get(refresh_token_key) }
   end
 
   private
