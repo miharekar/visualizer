@@ -70,9 +70,9 @@ module Airtable
     def prepare_record(shot)
       fields = {"ID" => shot.id, "URL" => shot_url(shot), "Start time" => shot.start_time}
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
-      user.metadata_fields.each { |field| fields[field] = shot.metadata[field] }
+      user.metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
-      {fields:}
+      {fields: fields.compact}
     end
   end
 end
