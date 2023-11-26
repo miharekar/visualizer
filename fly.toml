@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for visualizer on 2023-11-11T20:39:43+01:00
+# fly.toml app configuration file generated for visualizer on 2023-11-26T17:27:15+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,13 +7,11 @@ app = "visualizer"
 primary_region = "fra"
 console_command = "/rails/bin/rails console"
 
-[processes]
-  app = "foreman start --procfile=Procfile.fly"
-
 [deploy]
   strategy = "bluegreen"
 
 [http_service]
+  processes = ["app"]
   internal_port = 3000
   force_https = true
   auto_stop_machines = false
@@ -28,9 +26,19 @@ console_command = "/rails/bin/rails console"
     soft_limit = 400
 
 [checks]
-  [checks.up]
-    grace_period = "10s"
-    interval = "15s"
-    timeout = "2s"
+  [checks.status]
     port = 3000
-    type = "tcp"
+    type = "http"
+    interval = "10s"
+    timeout = "2s"
+    grace_period = "5s"
+    method = "GET"
+    path = "/up"
+    protocol = "http"
+    tls_skip_verify = false
+    [checks.status.headers]
+      X-Forwarded-Proto = "https"
+
+[processes]
+  app = "./bin/rails server -p 3000"
+  sidekiq = "bundle exec sidekiq -C config/sidekiq.yml"

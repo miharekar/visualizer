@@ -7,5 +7,7 @@ options:
   label:
     fly_launch_runtime: rails
   parallel: true
+  postgresql: true
   procfile: Procfile.fly
+  redis: true
   yjit: true
