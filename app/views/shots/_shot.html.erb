@@ -7,60 +7,68 @@
         </div>
       </div>
     <% end %>
-    <div class="flex flex-col justify-between md:flex-row md:space-x-8 grow">
-      <div class="flex flex-col justify-between md:space-y-2">
-        <div class="flex flex-col space-y-2">
-          <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap") %>
-          <div>
-            <% if shot.espresso_enjoyment.to_i > 0 %>
-              <span class="mr-1 inline-flex items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
-                <%= shot.espresso_enjoyment %>
+    <div class="flex flex-col space-y-2 grow">
+      <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap") %>
+      <div class="flex flex-col justify-between space-y-2 md:space-y-0 md:flex-row md:space-x-8 grow">
+        <div class="flex flex-col justify-between md:space-y-2">
+          <div class="flex flex-col md:space-y-2">
+            <div>
+              <% if shot.espresso_enjoyment.to_i > 0 %>
+                <span class="mr-1 inline-flex text-sm items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+                  <%= shot.espresso_enjoyment %>
+                </span>
+              <% end %>
+              <span class="font-semibold">
+                <%= shot.profile_title %>
               </span>
-            <% end %>
-            <span class="font-semibold">
-              <%= shot.profile_title %>
-            </span>
-          </div>
-          <div>
-            <% if shot.grinder_setting.present? && shot.grinder_setting != "0" %>
-              <%= shot.grinder_setting %>
-            <% end %>
-            <% if shot.grinder_model.present? %>
-              on <%= shot.grinder_model %>
+            </div>
+            <% if (shot.grinder_setting.present? && shot.grinder_setting != "0") || shot.grinder_model.present? %>
+              <div>
+                <% if shot.grinder_setting.present? && shot.grinder_setting != "0" %>
+                  <%= shot.grinder_setting %>
+                <% end %>
+                <% if shot.grinder_model.present? %>
+                  on <%= shot.grinder_model %>
+                <% end %>
+              </div>
             <% end %>
           </div>
         </div>
-        <% if shot.barista.present? %>
-          <div class="md:text-sm text-neutral-500 dark:text-neutral-400">
-            By <%= shot.barista %>
-          </div>
-        <% end %>
-      </div>
-      <div class="flex flex-col grow md:space-y-2 md:self-center text-neutral-500 dark:text-neutral-400">
-        <div>
-          <% if shot.bean_brand.present? %>
-            <%= shot.bean_brand %>
+        <div class="flex flex-col grow md:space-y-2 text-neutral-500 dark:text-neutral-400">
+          <% if shot.bean_brand.present? || shot.bean_type.present? %>
+            <div>
+              <% if shot.bean_brand.present? %>
+                <%= shot.bean_brand %>
+              <% end %>
+              <% if shot.bean_type.present? %>
+                <%= shot.bean_type %>
+              <% end %>
+            </div>
           <% end %>
-          <% if shot.bean_type.present? %>
-            <%= shot.bean_type %>
+          <% if shot.weight_and_ratio_info.present? || shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+            <div>
+              <% if shot.weight_and_ratio_info.present? %>
+                <%= shot.weight_and_ratio_info %>
+              <% end %>
+              <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+                in <%= shot.duration.round(1) %> s
+              <% end %>
+            </div>
           <% end %>
-        </div>
-        <div>
-          <% if shot.weight_and_ratio_info.present? %>
-            <%= shot.weight_and_ratio_info %>
+          <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
+            <div>
+              <% if shot.drink_tds_f > 0 %>
+                TDS: <%= shot.drink_tds_f %>%
+              <% end %>
+              <% if shot.drink_ey_f > 0 %>
+                EY: <%= shot.drink_ey_f %>%
+              <% end %>
+            </div>
           <% end %>
-          <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-            in <%= shot.duration.round(1) %> s
-          <% end %>
-        </div>
-        <div>
-          <% if shot.drink_tds_f > 0 %>
-            <span>TDS: <%= shot.drink_tds_f %>%</span>
-          <% end %>
-          <% if shot.drink_tds_f > 0 && shot.drink_ey_f > 0 %>
-          <% end %>
-          <% if shot.drink_ey_f > 0 %>
-            <span>EY: <%= shot.drink_ey_f %>%</span>
+          <% if shot.barista.present? %>
+            <div>
+              By <%= shot.barista %>
+            </div>
           <% end %>
         </div>
       </div>
