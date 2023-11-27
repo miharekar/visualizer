@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PeopleController < ApplicationController
-  include Pagy::Backend
+  include CursorPaginatable
 
   def show
     @user = User.find_by(slug: params[:id])
@@ -13,12 +13,12 @@ class PeopleController < ApplicationController
     end
 
     if @user.public
-      @shots = @user.shots.by_start_time
+      @shots = @user.shots
       unless current_user&.premium?
         @premium_count = @shots.premium.count
         @shots = @shots.non_premium
       end
-      @pagy, @shots = pagy_countless(@shots)
+      @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
     else
       redirect_to :root
     end

@@ -1,5 +1,5 @@
 .flex.flex-col
-  .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
+  .-my-2.mb-6.overflow-x-auto.sm:-mx-6.lg:-mx-8
     .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
       - if shots.any?
         .shadow.overflow-hidden.border-b.border-neutral-200.dark:border-neutral-800.sm:rounded-lg data-controller="modal"
@@ -12,10 +12,13 @@
                 th.px-6.py-3.text-left.text-xs.font-medium.text-neutral-500.uppercase.tracking-wider
                   | Info
                 th.px-6.py-3
-            tbody.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-800
+            tbody#shots-table.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-800
               - shots.each do |shot|
                 = render partial: "shots/old_shot", locals: {shot: shot, include_person: include_person}
-          = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-800"}
+          - if @cursor
+            = render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: person_path(@user.slug, before: @cursor, format: :turbo_stream) }
+          - elsif pagy
+            = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-800"}
       - elsif controller_name == "community"
         .text-center.text-neutral-500.my-8.px-6.sm:px-8
           - if params[:commit]
