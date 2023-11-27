@@ -14,7 +14,7 @@
                 th.px-6.py-3
             tbody#shots-table.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-800
               - shots.each do |shot|
-                = render partial: "shots/old_shot", locals: {shot: shot, include_person: include_person}
+                = render partial: "shots/table_row_shot", locals: {shot: shot, include_person: include_person}
         = render partial: "shared/cursor_loader", locals: { cursor: cursor, path: cursor_path }
       - elsif controller_name == "community"
         .text-center.text-neutral-500.my-8.px-6.sm:px-8

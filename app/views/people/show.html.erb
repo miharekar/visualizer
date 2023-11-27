@@ -19,5 +19,5 @@
       <% end %>
     </h1>
   </div>
-  <%= render "shots/old_list", shots: @shots, include_person: false, cursor: @cursor, cursor_path: person_path(@user.slug, before: @cursor, format: :turbo_stream) %>
+  <%= render "shots/table_list", shots: @shots, include_person: false, cursor: @cursor, cursor_path: person_path(@user.slug, before: @cursor, format: :turbo_stream) %>
 </div>
