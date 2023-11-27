@@ -1,6 +1,10 @@
 <% content_for(:html_title) { "Visualizer | Community" } %>
 <% if @premium_count.to_i > 1 %>
-  <%= render "shared/premium_banner", count: @premium_count %>
+  <% if current_user.id == params[:user_id] %>
+    <%= render "instant_filters_promo" %>
+  <% else %>
+    <%= render "shared/premium_banner", count: @premium_count %>
+  <% end %>
 <% end %>
 <div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
   <div class="px-4 sm:hidden">
