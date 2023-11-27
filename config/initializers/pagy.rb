@@ -15,7 +15,7 @@ require "pagy/extras/array"
 
 # Countless extra: Paginate without any count, saving one query per rendering
 # See https://ddnexus.github.io/pagy/extras/countless
-require "pagy/extras/countless"
+# require "pagy/extras/countless"
 # optionally enable the minimal mode by default
 # Pagy::DEFAULT[:countless_minimal] = true
 

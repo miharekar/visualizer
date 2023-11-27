@@ -1,6 +1,5 @@
 - owner = current_user && shot.user == current_user
 - show_start_time = owner || !shot.user&.hide_shot_times?
-- search_params = {commit: "Search", user_id: shot.user.id, user: shot.user.display_name}
 - bean_weight = shot.bean_weight.to_f
 - drink_weight = shot.drink_weight.to_f
 - ratio = drink_weight / bean_weight

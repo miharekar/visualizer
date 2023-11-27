@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CommunityController < ApplicationController
-  include Pagy::Backend
+  include CursorPaginatable
 
   FILTERS = {
     profile_title: {autocomplete: true},
@@ -16,7 +16,7 @@ class CommunityController < ApplicationController
 
   def index
     if params[:commit] || current_user.blank?
-      @shots = Shot.visible_or_owned_by_id(current_user&.id).by_start_time.includes(:user)
+      @shots = Shot.visible_or_owned_by_id(current_user&.id).includes(:user)
       FILTERS.each do |filter, options|
         next if params[filter].blank?
 
@@ -35,7 +35,7 @@ class CommunityController < ApplicationController
         @shots = @shots.non_premium
       end
 
-      @pagy, @shots = pagy_countless(@shots)
+      @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
     else
       @shots = []
     end

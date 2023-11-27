@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  include Pagy::Frontend
-
   def markdown_text_from(input)
     tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table thead tbody th tr td video]
     attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[id style controls]

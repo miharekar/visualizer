@@ -15,10 +15,7 @@
             tbody#shots-table.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-800
               - shots.each do |shot|
                 = render partial: "shots/old_shot", locals: {shot: shot, include_person: include_person}
-          - if @cursor
-            = render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: person_path(@user.slug, before: @cursor, format: :turbo_stream) }
-          - elsif pagy
-            = render partial: "shared/pagination", locals: {pagy: pagy, extra_classes: "bg-neutral-50 dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-800"}
+        = render partial: "shared/cursor_loader", locals: { cursor: cursor, path: cursor_path }
       - elsif controller_name == "community"
         .text-center.text-neutral-500.my-8.px-6.sm:px-8
           - if params[:commit]
