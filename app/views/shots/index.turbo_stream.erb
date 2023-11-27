@@ -2,6 +2,7 @@
   <%= turbo_stream.update "shots" do %>
     <%= render @shots %>
   <% end %>
+  <%= turbo_stream.remove "shots_live_stream" %>
 <% else %>
   <%= turbo_stream.append "shots" do %>
     <%= render @shots %>

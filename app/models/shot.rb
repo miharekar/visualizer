@@ -26,6 +26,8 @@ class Shot < ApplicationRecord
 
   validates :start_time, :information, :sha, presence: true
 
+  broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend
+
   def self.from_file(user, file_content)
     return Shot.new if file_content.blank?
 
