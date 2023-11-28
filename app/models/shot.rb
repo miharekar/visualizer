@@ -24,7 +24,7 @@ class Shot < ApplicationRecord
   after_save_commit :sync_to_airtable
   after_destroy_commit :cleanup_airtable
 
-  validates :start_time, :information, :sha, presence: true
+  validates :start_time, :sha, presence: true
 
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend
 

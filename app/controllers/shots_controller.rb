@@ -16,7 +16,7 @@ class ShotsController < ApplicationController
 
   def show
     @shot.ensure_screenshot
-    @chart = ShotChart.new(@shot, current_user)
+    @chart = ShotChart.new(@shot, current_user) if @shot.information
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
 
     return if current_user.nil?
@@ -26,7 +26,7 @@ class ShotsController < ApplicationController
 
   def compare
     @comparison = Shot.find(params[:comparison])
-    @chart = ShotChartCompare.new(@shot, @comparison, current_user)
+    @chart = ShotChartCompare.new(@shot, @comparison, current_user) if @shot.information && @comparison.information
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)

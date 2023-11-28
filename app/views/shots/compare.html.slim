@@ -5,7 +5,7 @@
     .flex-1.mt-6.md:ml-3.md:mt-0
       = render "details", shot: @comparison, name: true
 
-- if current_user&.premium?
+- if current_user&.premium? && @chart
   .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
     .text-center.text-lg.text-neutral-900.dark:text-neutral-100
       ' Adjust comparison timing
@@ -21,13 +21,14 @@
             = ActiveSupport::Duration.build(@chart.duration / 1000).inspect
       button#compare-range-reset.items-center.px-4.py-2.border.border-neutral-300.dark:border-neutral-600.rounded-md.shadow-sm.text-sm.font-medium.text-neutral-700.bg-white.dark:bg-neutral-800.dark:text-neutral-300.hover:bg-neutral-50.dark:hover:bg-neutral-900 Reset
 
-.max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
-  #shot-chart
-.max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
-  #temperature-chart
+- if @chart
+  .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
+    #shot-chart
+  .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
+    #temperature-chart
 
-javascript:
-  window.shotData = #{{@chart.shot_chart.to_json}}
-  window.temperatureData = #{{@chart.temperature_chart.to_json}}
-  window.shotStages = []
-  window.comparisonData = #{{@chart.comparison_data.to_json}}
+  javascript:
+    window.shotData = #{{@chart.shot_chart.to_json}}
+    window.temperatureData = #{{@chart.temperature_chart.to_json}}
+    window.shotStages = []
+    window.comparisonData = #{{@chart.comparison_data.to_json}}
