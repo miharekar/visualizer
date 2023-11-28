@@ -1,18 +1,18 @@
 <div class="bg-white dark:bg-black">
-  <div class="bg-gradient-to-b from-pink-50 via-white to-white dark:from-pink-950 dark:via-black dark:to-black">
+  <div class="bg-gradient-to-b from-terracotta-50 via-white to-white dark:from-terracotta-950 dark:via-black dark:to-black">
     <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
       <div class="pb-16 xl:flex xl:items-center xl:justify-between">
         <div>
           <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
             <span class="text-neutral-900 dark:text-white">Get Premium for</span>
-            <span class="text-pink-600 dark:text-pink-500">€5/month</span>
+            <span class="text-terracotta-600 dark:text-terracotta-500">€5/month</span>
             <span class="text-neutral-900 dark:text-white">or</span>
-            <span class="text-pink-600 dark:text-pink-500">€50/year</span>
+            <span class="text-terracotta-600 dark:text-terracotta-500">€50/year</span>
           </h1>
           <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Unlock the full potential of Visualizer with these features</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
-          <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-500 sm:mt-10 sm:w-auto xl:mt-0 hover:shadow-lg hover:shadow-pink-500/50" %>
+          <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto xl:mt-0 hover:shadow-lg hover:shadow-terracotta-500/50" %>
         <% end %>
       </div>
       <div class="pt-16 border-t border-neutral-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
@@ -25,7 +25,7 @@
           <ul role="list" class="divide-y divide-neutral-200">
             <% first_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:py-0 md:pb-4" : ""%>">
-                <svg class="flex-shrink-0 w-6 h-6 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
                 <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
@@ -35,7 +35,7 @@
           <ul role="list" class="border-t divide-y divide-neutral-200 border-neutral-200 md:border-t-0">
             <% second_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:border-t-0 md:py-0 md:pb-4" : ""%>">
-                <svg class="flex-shrink-0 w-6 h-6 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
                 <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
@@ -46,30 +46,30 @@
       </div>
     </div>
   </div>
-  <div class="bg-pink-800">
+  <div class="bg-terracotta-800">
     <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
-      <div class="pt-10 mt-6 border-t border-pink-400 border-opacity-25">
+      <div class="pt-10 mt-6 border-t border-terracottaborder-oxford-blue-400">
         <dl class="space-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-12 md:space-y-0">
           <% @qas.each do |q, a| %>
             <div>
               <dt class="text-lg font-medium leading-6 text-white"><%= q %></dt>
-              <dd class="mt-2 text-base text-pink-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-pink-100") %></dd>
+              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-terracotta-100") %></dd>
             </div>
           <% end %>
         </dl>
       </div>
     </div>
   </div>
-  <div class="bg-pink-50 dark:bg-pink-950">
+  <div class="bg-terracotta-50 dark:bg-terracotta-950">
     <div class="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-pink-700 dark:text-pink-100 sm:text-4xl">
+      <h2 class="text-3xl font-bold tracking-tight text-terracotta-700 dark:text-terracotta-100 sm:text-4xl">
         <span class="block">Ready to dive in?</span>
       </h2>
       <div class="flex mt-8 lg:mt-0 lg:flex-shrink-0">
         <div class="inline-flex rounded-md shadow">
           <%= form_with( data:{turbo:"false"}) do |f| %>
-            <%= f.submit "Subscribe now", class: "cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-500 hover:shadow-lg hover:shadow-pink-500/50" %>
+            <%= f.submit "Subscribe now", class: "cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 hover:shadow-lg hover:shadow-terracotta-500/50" %>
           <% end %>
         </div>
       </div>

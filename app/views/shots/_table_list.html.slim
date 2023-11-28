@@ -26,6 +26,6 @@
       - else
         .text-center.text-neutral-500.my-8.px-6.sm:px-8
           - if controller_name == "shots" && show_premium_banner?
-            | No shots uploaded in the last month. Consider #{link_to("upgrading", premium_index_path, class: "underline text-pink-600")} to see your old shots.
+            | No shots uploaded in the last month. Consider #{link_to("upgrading", premium_index_path, class: "underline text-terracotta-600")} to see your old shots.
           - else
             | No shots yet
