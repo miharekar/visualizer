@@ -15,7 +15,7 @@ class PremiumController < ApplicationController
       "Attach images to shots for visual documentation and analysis",
       "Keep private notes on shots for future reference",
       "Show off your Premium status with a checkmark next to your name",
-      "Immediately find your past shots with Instant Filters™️"
+      "Immediately find your past shots with Instant Filters"
     ].shuffle + ["Directly support the development and maintenance of Visualizer"]
     @qas = [
       ["What's the biggest difference between free and premium?", "With premium, you can see all the shots you ever uploaded. On the free plan, you only see and search amongst the ones that were made in the last month."]

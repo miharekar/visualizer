@@ -1,9 +1,9 @@
 <div class="bg-white dark:bg-black">
-  <div class="bg-gradient-to-b from-terracotta-50 via-white to-white dark:from-terracotta-950 dark:via-black dark:to-black">
-    <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
+  <div class="bg-gradient-to-b from-terracotta-100 via-white to-white dark:from-terracotta-950 dark:via-black dark:to-black">
+    <div class="px-4 pt-16 mx-auto max-w-7xl sm:pt-24 sm:px-6 lg:px-8">
       <div class="pb-16 xl:flex xl:items-center xl:justify-between">
         <div>
-          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+          <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-6xl">
             <span class="text-neutral-900 dark:text-white">Get Premium for</span>
             <span class="text-terracotta-600 dark:text-terracotta-500">€5/month</span>
             <span class="text-neutral-900 dark:text-white">or</span>
@@ -17,7 +17,7 @@
       </div>
       <div class="pt-16 border-t border-neutral-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Experience the ultimate Visualizer experience</p>
+          <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Experience the ultimate Visualizer experience</p>
           <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
@@ -25,7 +25,7 @@
           <ul role="list" class="divide-y divide-neutral-200">
             <% first_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:py-0 md:pb-4" : ""%>">
-                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
                 <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
@@ -35,7 +35,7 @@
           <ul role="list" class="border-t divide-y divide-neutral-200 border-neutral-200 md:border-t-0">
             <% second_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:border-t-0 md:py-0 md:pb-4" : ""%>">
-                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
                 <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
@@ -46,9 +46,33 @@
       </div>
     </div>
   </div>
+  <div class="py-16 overflow-hidden bg-white sm:py-24" id="instant-filters">
+    <div class="mx-auto max-w-7xl md:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
+        <div class="px-6 lg:px-0 lg:pr-4 lg:pt-4">
+          <div class="max-w-2xl mx-auto lg:mx-0 lg:max-w-lg">
+            <span class="px-3 py-1 text-sm font-semibold leading-6 rounded-full text-terracotta-600 bg-terracotta-600/10 ring-1 ring-inset ring-terracotta-600/10">New</span>
+            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Instant Filters</p>
+            <p class="mt-6 text-lg leading-8 text-gray-600">
+              Just bought a bag of beans you loved but haven't brewed in ages?
+              Scratching your head trying to recall the ideal grind size and brewing profile you used last time?
+            </p>
+            <p class="mt-6 text-lg leading-8 text-gray-600">
+              Don't worry, <span class="font-semibold">Instant Filters</span> are here to help you out!
+              With just a couple of keystrokes, you can effortlessly bring up all the details from your previous brews, ensuring your next shot is not just a shot in the dark, but a surefire hit.
+            </p>
+            <p class="mt-6 text-lg leading-8 text-gray-600">
+              With <span class="font-semibold">Instant Filters</span>, your espresso history transforms into an easy-to-navigate, friendly companion, guiding you to consistently craft exceptional shots, just the way you like them.
+            </p>
+          </div>
+        </div>
+        <img src="https://private-user-images.githubusercontent.com/986645/285603883-520f0496-2bb9-4ab0-9dec-740af5629605.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDExNTM0MDEsIm5iZiI6MTcwMTE1MzEwMSwicGF0aCI6Ii85ODY2NDUvMjg1NjAzODgzLTUyMGYwNDk2LTJiYjktNGFiMC05ZGVjLTc0MGFmNTYyOTYwNS5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBSVdOSllBWDRDU1ZFSDUzQSUyRjIwMjMxMTI4JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDIzMTEyOFQwNjMxNDFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mMTkxYWM3MWNhZGU5NjQ2NjM1MWJlY2I5MjNkNGJjOTE3ZTEwOWJhMzA5OTU3N2VhMDU2OWU1NGJiMWQzNzNiJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.k1DFBGwPQOISAVy0oJPaPF01hMNP3bJfkrKLng9Avjw" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="764" height="800">
+      </div>
+    </div>
+  </div>
   <div class="bg-terracotta-800">
     <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
+      <h2 class="font-serif text-4xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
       <div class="pt-10 mt-6 border-t border-terracottaborder-oxford-blue-400">
         <dl class="space-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-12 md:space-y-0">
           <% @qas.each do |q, a| %>
@@ -63,8 +87,8 @@
   </div>
   <div class="bg-terracotta-50 dark:bg-terracotta-950">
     <div class="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-terracotta-700 dark:text-terracotta-100 sm:text-4xl">
-        <span class="block">Ready to dive in?</span>
+      <h2 class="text-3xl font-bold tracking-tight text-terracotta-600 dark:text-terracotta-100 sm:text-4xl">
+        <span class="block font-serif">Ready to dive in?</span>
       </h2>
       <div class="flex mt-8 lg:mt-0 lg:flex-shrink-0">
         <div class="inline-flex rounded-md shadow">
