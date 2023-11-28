@@ -12,6 +12,12 @@ class ShotTest < ActiveSupport::TestCase
     assert_not shot.valid?
   end
 
+  test "fixtures are valid" do
+    shots.each do |shot|
+      assert shot.valid?, shot.errors.full_messages
+    end
+  end
+
   test "extracts fields from .shot file" do
     path = "test/fixtures/files/20210921T085910"
     shot = new_shot("#{path}.shot")

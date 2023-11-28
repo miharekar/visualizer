@@ -149,7 +149,7 @@ GEM
     dockerfile-rails (1.5.12)
       rails (>= 3.0.0)
     domain_name (0.6.20231109)
-    doorkeeper (5.6.7)
+    doorkeeper (5.6.8)
       railties (>= 5)
     drb (2.2.0)
       ruby2_keywords
