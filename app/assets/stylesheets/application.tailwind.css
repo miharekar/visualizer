@@ -85,3 +85,20 @@ input[type="color"]::-moz-color-swatch {
 .turbo-progress-bar {
   @apply bg-terracotta-500;
 }
+
+a:hover #logo-steam path {
+  animation: moveSteam 1s linear 0s infinite;
+}
+
+#logo-steam path {
+  stroke-dashoffset: 36px;
+}
+
+@keyframes moveSteam {
+  50% {
+    stroke-dashoffset: 18px;
+  }
+  100% {
+    stroke-dashoffset: 0px;
+  }
+}
