@@ -65,7 +65,7 @@ class ShotsController < ApplicationController
     if params.key?(:drag)
       head :ok
     else
-      redirect_to action: :index
+      redirect_to action: :index, format: :html
     end
   end
 
@@ -118,7 +118,7 @@ class ShotsController < ApplicationController
   end
 
   def load_users_shots
-    @shots = current_user.shots
+    @shots = current_user.shots.with_attached_image
 
     unless current_user.premium?
       @premium_count = @shots.premium.count
