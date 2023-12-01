@@ -86,11 +86,11 @@ input[type="color"]::-moz-color-swatch {
   @apply bg-terracotta-500;
 }
 
-a:hover #logo-steam path {
+a:hover .logo-steam path {
   animation: moveSteam 1s linear 0s infinite;
 }
 
-#logo-steam path {
+.logo-steam path {
   stroke-dashoffset: 36px;
 }
 
@@ -100,5 +100,42 @@ a:hover #logo-steam path {
   }
   100% {
     stroke-dashoffset: 0px;
+  }
+}
+
+.logo-loading .bars > path:nth-child(1) {
+  animation: moveBars 0.5s ease-in-out -1.35s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(2) {
+  animation: moveBars 0.5s ease-in-out -1.2s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(3) {
+  animation: moveBars 0.5s ease-in-out -1.05s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(4) {
+  animation: moveBars 0.5s ease-in-out -0.9s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(5) {
+  animation: moveBars 0.5s ease-in-out -0.75s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(6) {
+  animation: moveBars 0.5s ease-in-out -0.6s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(7) {
+  animation: moveBars 0.5s ease-in-out -0.45s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(8) {
+  animation: moveBars 0.5s ease-in-out -0.3s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(9) {
+  animation: moveBars 0.5s ease-in-out -0.15s infinite alternate;
+}
+
+@keyframes moveBars {
+  0% {
+    stroke-dashoffset: 66px;
+  }
+  100% {
+    stroke-dashoffset: 52px;
   }
 }

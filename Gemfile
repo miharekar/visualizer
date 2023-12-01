@@ -32,6 +32,8 @@ gem "sidekiq"
 gem "sidekiq-scheduler"
 gem "slim"
 gem "stimulus-rails"
+
+gem "inline_svg"
 gem "stripe"
 gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"

@@ -70,9 +70,6 @@ document.addEventListener("turbo:load", function () {
 
     const files = document.getElementById("files")
     if (files) {
-      dropArea.classList.remove("hidden")
-      loader.classList.add("hidden")
-
       document.getElementById("files").onchange = function () {
         dropArea.classList.add("hidden")
         loader.classList.remove("hidden")
