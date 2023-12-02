@@ -76,6 +76,8 @@ Rails.application.routes.draw do
 
   resources :stats, only: [:index]
   resources :updates, except: %i[destroy]
+  get "/changes(/*path)", to: redirect { |params| "/updates/#{params[:path]}" }
+
   post :airtable, to: "airtable#notification"
 
   match "/404", to: "errors#not_found", via: :all
