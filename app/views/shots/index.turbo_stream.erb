@@ -1,6 +1,12 @@
 <% if params[:fresh_search] == "1" %>
   <%= turbo_stream.update "shots" do %>
-    <%= render @shots %>
+    <% if @shots.any? %>
+      <%= render @shots %>
+    <% else %>
+      <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
+        No shots found
+      </div>
+    <% end %>
   <% end %>
   <%= turbo_stream.remove "shots_live_stream" %>
 <% else %>
@@ -10,4 +16,7 @@
 <% end %>
 <%= turbo_stream.replace "cursor" do %>
   <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment).merge(before: @cursor, format: :turbo_stream)) } %>
+<% end %>
+<%= turbo_stream.update "shots-count" do %>
+  <%= pluralize(@shots_count, "Shot") %>
 <% end %>

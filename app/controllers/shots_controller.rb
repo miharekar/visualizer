@@ -124,6 +124,7 @@ class ShotsController < ApplicationController
       @premium_count = @shots.premium.count
       @shots = @shots.non_premium
     end
+    @shots_count = @shots.count
 
     FILTERS.select { |f| params[f].present? }.each do |filter|
       @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
