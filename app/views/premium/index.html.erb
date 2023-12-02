@@ -65,6 +65,11 @@
               With <span class="font-semibold">Instant Filters</span>, your espresso history transforms into an easy-to-navigate, friendly companion, guiding you to consistently craft exceptional shots, just the way you like them.
             </p>
           </div>
+          <div class="flex justify-center">
+            <%= form_with( data:{turbo:"false"}) do |f| %>
+              <%= f.submit "Get them now!", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
+            <% end %>
+          </div>
         </div>
         <img src="https://visualizer-coffee.s3.eu-central-1.amazonaws.com/changelog/instant_filters.gif" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="719" height="800">
       </div>
