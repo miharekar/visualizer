@@ -15,9 +15,9 @@
         .text-white.py-1.text-center
           = shot.espresso_enjoyment
   div class=("ml-4" if has_enjoyment)
-    a.text-lg.leading-6.font-medium.text-stone-900.dark:text-stone-100 href=shot_path(shot)
+    a.text-lg.leading-6.font-medium.text-neutral-900.dark:text-neutral-100 href=shot_path(shot)
       = shot.profile_title
-    .mt-2.text-base.text-stone-600.dark:text-stone-400
+    .mt-2.text-base.text-neutral-600.dark:text-neutral-400
       - if show_name
         .flex.items-center
           div
@@ -25,12 +25,12 @@
             = shot.user.name
           - if shot.user.premium?
             = link_to premium_index_path do
-              svg.ml-1.h-4.w-4.text-pink-600.hover:text-pink-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              svg.ml-1.h-4.w-4.text-terracotta-600.hover:text-terracotta-800 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                 path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
       - if show_start_time
         div
           = shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)
-.mt-2.text-base.text-stone-600.dark:text-stone-400
+.mt-2.text-base.text-neutral-600.dark:text-neutral-400
   div
     - if shot.bean_brand.present?
       = shot.bean_brand
@@ -87,21 +87,21 @@
         - value = shot.metadata[key]
         - next if value.blank?
         div
-          span.font-medium.text-stone-900.dark:text-stone-100 #{key}:&nbsp;
+          span.font-medium.text-neutral-900.dark:text-neutral-100 #{key}:&nbsp;
           span = value
   - if shot.barista.present?
     .mt-2
-      span.font-medium.text-stone-900.dark:text-stone-100 Barista:&nbsp;
+      span.font-medium.text-neutral-900.dark:text-neutral-100 Barista:&nbsp;
       span = shot.barista
   - if shot.bean_notes.present?
     .mt-2
-      .font-medium.text-stone-900.dark:text-stone-100 Bean notes:
+      .font-medium.text-neutral-900.dark:text-neutral-100 Bean notes:
       = markdown_text_from(shot.bean_notes)
   - if shot.espresso_notes.present?
     .mt-2
-      .font-medium.text-stone-900.dark:text-stone-100 Notes:
+      .font-medium.text-neutral-900.dark:text-neutral-100 Notes:
       = markdown_text_from(shot.espresso_notes)
   - if owner && shot.private_notes.present?
     .mt-2
-      .font-medium.text-stone-900.dark:text-stone-100 Private notes:
+      .font-medium.text-neutral-900.dark:text-neutral-100 Private notes:
       = markdown_text_from(shot.private_notes)

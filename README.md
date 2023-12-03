@@ -1,16 +1,26 @@
 # [Visualizer](https://visualizer.coffee/)
 
-![Ruby Tests](https://github.com/miharekar/decent-visualizer/actions/workflows/main.yml/badge.svg)
+![Ruby Tests](https://github.com/miharekar/visualizer/actions/workflows/main.yml/badge.svg)
 
-Visualizer your coffee shots created by [Decent Espresso Machine](https://decentespresso.com/), [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/), [Pressensor](https://pressensor.com/), [Beanconqueror](https://beanconqueror.com/), and others.
+Visualizer was designed to work seamlessly with [Decent espresso machines](https://decentespresso.com/). Recently, it has expanded its compatibility to support [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/[), [Pressensor](https://pressensor.com/) and [Beanconqueror](https://beanconqueror.com/). This provides a streamlined experience that caters to a diverse range of coffee enthusiasts, accommodating their preferred devices.
 
 Read all about it on [visualizer.coffee](https://visualizer.coffee/), and feel free to [join the forum](https://decentforum.com/tag/visualizer).
 
 Application monitoring is sponsored by [AppSignal](https://appsignal.com/visualizer/admin/api_keys).
 
+## Getting help
+
+If you have questions, concerns, bug reports, etc., please open a new [GitHub Issue](https://github.com/miharekar/visualizer/issues/).
+
+## Getting involved
+
+If you love coffee, want to learn Ruby, or want to help in whatever way you can, you're more than welcome to get involved!
+
+Please read the [Contribution Guidelines](CONTRIBUTING.md) first 😊
+
 ## API
 
-There is an API available. If something you would like is not there, please open a new [Issue](https://github.com/miharekar/decent-visualizer/issues/) detailing your wishes.
+There is an API available. If something you would like is not there, please open a new [Issue](https://github.com/miharekar/visualizer/issues/) detailing your wishes.
 
 You can read [the source code](/app/controllers/api) or [the API documentation](https://documenter.getpostman.com/view/2402164/UVC2HUik) provided by [@eriklenaerts](https://github.com/eriklenaerts).
 
@@ -45,13 +55,3 @@ If you want to create OAuth applications please [contact me](mailto:miha@mr.si).
   ```shell
   $ ./bin/rails test
   ```
-
-## Getting help
-
-If you have questions, concerns, bug reports, etc., please open a new [GitHub Issue](https://github.com/miharekar/decent-visualizer/issues/).
-
-## Getting involved
-
-If you're a coffee fanatic, own a Decent Espresso machine, want to learn Ruby, or want to help in whatever way you can, you're more than welcome to get involved!
-
-But please read the [Contribution Guidelines](CONTRIBUTING.md) first 😊

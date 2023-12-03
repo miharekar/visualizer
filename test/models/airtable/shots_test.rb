@@ -21,7 +21,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
   test "it can download new data for existing records from airtable" do
     user = users(:mr_airtable)
     identity = identities(:mr_airtable)
-    shot = shots(:one)
+    shot = shots(:airtable)
     stub_request(:get, "https://api.airtable.com/v0/#{identity.airtable_info.base_id}/#{identity.airtable_info.table_id}?filterByFormula=DATETIME_DIFF%28NOW%28%29%2C+LAST_MODIFIED_TIME%28%29%2C+%27minutes%27%29+%3C+60")
       .to_return(File.new("test/fixtures/airtable/download.txt"))
 
@@ -49,7 +49,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
 
   test "it uploads changes to airtable after shot save" do
     identity = identities(:mr_airtable)
-    shot = shots(:one)
+    shot = shots(:airtable)
     shot.update(espresso_enjoyment: 80)
     assert_enqueued_with(job: AirtableShotUploadJob, args: [shot], queue: "default")
 

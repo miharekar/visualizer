@@ -1,0 +1,6 @@
+<%= turbo_stream.append "updates" do %>
+  <%= render @updates %>
+<% end %>
+<%= turbo_stream.replace "cursor" do %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(before: @cursor, format: :turbo_stream) } %>
+<% end %>

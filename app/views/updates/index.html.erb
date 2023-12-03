@@ -1,0 +1,12 @@
+<% content_for(:html_title) { "Visualizer | Updates" } %>
+<div class="max-w-4xl px-4 mx-auto my-6 sm:px-6">
+  <% if current_user&.admin %>
+    <div class="text-xs text-right">
+      <%= link_to "New", new_update_path, class: "text-right" %>
+    </div>
+  <% end %>
+  <div id="updates" class="space-y-20">
+    <%= render @updates %>
+  </div>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(before: @cursor, format: :turbo_stream) } %>
+</div>

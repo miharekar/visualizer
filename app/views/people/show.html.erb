@@ -1,0 +1,23 @@
+<% content_for(:html_title) { "Visualizer | #{@user.name}" } %>
+<% content_for(:head) { auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss) } %>
+<% if @premium_count.to_i > 1 %>
+  <%= render "shared/premium_banner", count: @premium_count %>
+<% end %>
+<div class="mx-auto mt-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="px-4 sm:px-0">
+    <h1 class="flex items-baseline space-x-2">
+      <img class="w-8 h-8 rounded" src="<%= avatar_url(@user, 80) %>" alt="<%= @user.name %>">
+      <span class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+        Shots by <%= @user.name %>
+      </span>
+      <% if @user.premium? %>
+        <%= link_to premium_index_path do %>
+          <svg class="w-6 h-6 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+          </svg>
+        <% end %>
+      <% end %>
+    </h1>
+  </div>
+  <%= render "shots/table_list", shots: @shots, include_person: false, cursor: @cursor, cursor_path: person_path(@user.slug, before: @cursor, format: :turbo_stream) %>
+</div>

@@ -1,0 +1,45 @@
+<div class="mt-5 md:mt-0 md:col-span-2">
+  <%= form_with(model: update) do |form| %>
+    <div class="shadow sm:overflow-hidden" id=dom_id(update)>
+      <div class="px-4 py-5 space-y-6 bg-white dark:bg-neutral-800 sm:p-6">
+        <div class="grid grid-cols-6 gap-6">
+          <div class="col-span-3">
+            <%= form.label :title, class: "standard-label" %>
+            <%= form.text_field :title, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-3">
+            <%= form.label :published_at, class: "standard-label" %>
+            <%= form.datetime_field :published_at, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6">
+            <%= form.label :body, class: "standard-label" %>
+            <div class="mt-1">
+              <%= form.text_area :body, rows: 30, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 dark:bg-neutral-800" %>
+            </div>
+          </div>
+          <div class="col-span-6" data-controller="character-counter">
+            <%= form.label :excerpt, class: "standard-label" %>
+            <div class="mt-1">
+              <%= form.text_area :excerpt, rows: 5, maxlength: 250, class: "shadow-sm font-mono focus:ring-green-500 focus:border-green-500 mt-1 block w-full sm:text-sm border-neutral-300 dark:bg-neutral-800", data: {character_counter_target: "input", action: "character-counter#updateCounter"} %>
+            </div>
+            <p class="mt-1 text-xs text-neutral-500">
+              <span data-character-counter-target="counter">0</span>/250 characters.
+            </p>
+          </div>
+          <div>
+            <%= form.label :image, "Image", class: "standard-label" %>
+            <% if @update.image.attached? && @update.image.variable? %>
+              <%= image_tag @update.image.variant(:social), class: "mt-1" %>
+            <% end %>
+            <div class="mt-1">
+              <%= form.file_field :image %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+        <%= form.submit "Save", class: "submit-button py-2 px-4" %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ShotChartCompare < ShotChart
-  extend Memoist
+  prepend MemoWise
 
   attr_reader :comparison
 
@@ -20,12 +20,12 @@ class ShotChartCompare < ShotChart
     end.to_h
   end
 
-  memoize def timestep
+  memo_wise def timestep
     longest_timeframe ||= processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
     ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
   end
 
-  memoize def duration
+  memo_wise def duration
     processed_shot_data.map { |_, v| v.last.first }.max
   end
 
@@ -63,7 +63,7 @@ class ShotChartCompare < ShotChart
     end
   end
 
-  memoize def fidelity_ratio
+  memo_wise def fidelity_ratio
     longest_original = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? 0 : v.size }.second.map(&:first)
     original_step = ((longest_original.last - longest_original.first) / longest_original.size)
     longest_comparison = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? v.size : 0 }.second.map(&:first)

@@ -5,7 +5,8 @@ document.addEventListener("turbo:load", function () {
 
   if (dropArea) {
     const loader = document.getElementById("loader")
-    const error = document.getElementById("error")
+    const notificationsContainer = document.getElementById("notifications-container")
+    const error = document.getElementById("upload-error")
     const form = document.getElementById("shot-upload-form")
     const token = document.getElementsByName("csrf-token")[0].content
 
@@ -15,22 +16,21 @@ document.addEventListener("turbo:load", function () {
     }
 
     const highlight = (e) => {
-      dropArea.classList.add("bg-emerald-50", "dark:bg-emerald-900")
-      dropArea.classList.add("border-emerald-300")
-      dropArea.classList.remove("border-stone-300")
+      dropArea.classList.add("bg-green-50", "dark:bg-green-900")
+      dropArea.classList.add("border-green-300")
+      dropArea.classList.remove("border-neutral-300")
     }
 
     const unhighlight = (e) => {
-      dropArea.classList.remove("bg-emerald-50", "dark:bg-emerald-900")
-      dropArea.classList.remove("border-emerald-300")
-      dropArea.classList.add("border-stone-300")
+      dropArea.classList.remove("bg-green-50", "dark:bg-green-900")
+      dropArea.classList.remove("border-green-300")
+      dropArea.classList.add("border-neutral-300")
     }
 
     const handleDrop = (e) => {
       dropArea.classList.add("hidden")
       loader.classList.remove("hidden")
 
-      const file = e.dataTransfer.files[0]
       let xhr = new XMLHttpRequest()
       let formData = new FormData()
 
@@ -46,11 +46,11 @@ document.addEventListener("turbo:load", function () {
             if (xhr.status == 200) {
               Turbo.visit("/shots")
             } else {
-              error.classList.remove("hidden")
+              notificationsContainer.insertAdjacentHTML("beforeend", error.innerHTML)
             }
           }
         },
-        false,
+        false
       )
       ;[...e.dataTransfer.files].forEach((file) => {
         formData.append("files[]", file)
@@ -61,11 +61,9 @@ document.addEventListener("turbo:load", function () {
     ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
       dropArea.addEventListener(eventName, preventDefaults, false)
     })
-
     ;["dragenter", "dragover"].forEach((eventName) => {
       dropArea.addEventListener(eventName, highlight, false)
     })
-
     ;["dragleave", "drop"].forEach((eventName) => {
       dropArea.addEventListener(eventName, unhighlight, false)
     })

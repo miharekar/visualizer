@@ -1,0 +1,26 @@
+<div class="hidden w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg pointer-events-auto dark:bg-neutral-800 ring-1 ring-black ring-opacity-5 dark:ring-opacity-30" data-controller="notification" data-transition-enter="transform ease-out duration-300 transition" data-transition-enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2" data-transition-enter-end="translate-y-0 opacity-100 sm:translate-x-0" data-transition-leave="transition ease-in duration-100" data-transition-leave-start="opacity-100" data-transition-leave-end="opacity-0" data-notifications-target="notification">
+  <div class="p-4">
+    <div class="flex items-start">
+      <div class="flex-shrink-0">
+        <%= notification.icon.html_safe %>
+      </div>
+      <div class="flex-1 w-0 ml-3">
+        <p class="font-medium text-neutral-900 dark:text-neutral-200">
+          <%= notification.heading %>
+        </p>
+        <% if notification.text %>
+          <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+            <%= notification.text %>
+          </p>
+        <% end %>
+      </div>
+      <div class="flex flex-shrink-0 ml-4">
+        <button type="button" class="inline-flex bg-white rounded-md dark:bg-neutral-800 text-neutral-400 hover:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-terracotta-500 focus:ring-offset-2 dark:ring-offset-black" data-action="notification#close">
+          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -65,7 +65,6 @@ module Airtable
       if bases.any?
         @base = bases.find { |b| b["name"] == "Visualizer" } || bases.first
       else
-        # TODO: Let user know we need access to a base
         identity.destroy
       end
     end

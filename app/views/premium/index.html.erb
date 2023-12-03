@@ -1,44 +1,44 @@
-<div class="bg-white">
-  <div class="bg-gradient-to-b from-pink-50 via-white to-white">
-    <div class="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+<div class="bg-white dark:bg-black">
+  <div class="bg-gradient-to-b from-terracotta-100 via-white to-white dark:from-terracotta-950 dark:via-black dark:to-black">
+    <div class="px-4 pt-16 mx-auto max-w-7xl sm:pt-24 sm:px-6 lg:px-8">
       <div class="pb-16 xl:flex xl:items-center xl:justify-between">
         <div>
-          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
-            <span class="text-gray-900">Get Premium for</span>
-            <span class="text-pink-600">€5/month</span>
-            <span class="text-gray-900">or</span>
-            <span class="text-pink-600">€50/year</span>
+          <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-6xl">
+            <span class="text-neutral-900 dark:text-white">Get Premium for</span>
+            <span class="text-terracotta-600 dark:text-terracotta-500">€5/month</span>
+            <span class="text-neutral-900 dark:text-white">or</span>
+            <span class="text-terracotta-600 dark:text-terracotta-500">€50/year</span>
           </h1>
-          <p class="mt-5 text-xl text-gray-500">Unlock the full potential of Visualizer with these features</p>
+          <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Unlock the full potential of Visualizer with these features</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
-          <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-700 sm:mt-10 sm:w-auto xl:mt-0" %>
+          <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto xl:mt-0 hover:shadow-lg hover:shadow-terracotta-500/50" %>
         <% end %>
       </div>
-      <div class="border-t border-gray-200 pt-16 xl:grid xl:grid-cols-3 xl:gap-x-8">
+      <div class="pt-16 border-t border-neutral-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900">Experience the ultimate Visualizer experience</p>
-          <p class="mt-4 text-lg text-gray-500">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
+          <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Experience the ultimate Visualizer experience</p>
+          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
-          <ul role="list" class="divide-y divide-gray-200">
+          <ul role="list" class="divide-y divide-neutral-200">
             <% first_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:py-0 md:pb-4" : ""%>">
-                <svg class="h-6 w-6 flex-shrink-0 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span class="ml-3 text-base text-gray-500"><%= feature %></span>
+                <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
               </li>
             <% end %>
           </ul>
-          <ul role="list" class="divide-y divide-gray-200 border-t border-gray-200 md:border-t-0">
+          <ul role="list" class="border-t divide-y divide-neutral-200 border-neutral-200 md:border-t-0">
             <% second_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:border-t-0 md:py-0 md:pb-4" : ""%>">
-                <svg class="h-6 w-6 flex-shrink-0 text-pink-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <svg class="flex-shrink-0 w-6 h-6 text-terracotta-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
-                <span class="ml-3 text-base text-gray-500"><%= feature %></span>
+                <span class="ml-3 text-base text-neutral-500 dark:text-neutral-200"><%= feature %></span>
               </li>
             <% end %>
           </ul>
@@ -46,30 +46,59 @@
       </div>
     </div>
   </div>
-  <div class="bg-pink-900">
-    <div class="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
-      <div class="mt-6 border-t border-pink-400 border-opacity-25 pt-10">
+  <div class="py-16 overflow-hidden bg-white sm:py-24" id="instant-filters">
+    <div class="mx-auto max-w-7xl md:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
+        <div class="px-6 lg:px-0 lg:pr-4 lg:pt-4">
+          <div class="max-w-2xl mx-auto lg:mx-0 lg:max-w-lg">
+            <span class="px-3 py-1 text-sm font-semibold leading-6 rounded-full text-terracotta-600 bg-terracotta-600/10 ring-1 ring-inset ring-terracotta-600/10">New</span>
+            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">Instant Filters</p>
+            <p class="mt-6 text-lg leading-8 text-neutral-600">
+              Just bought a bag of beans you loved but haven't brewed in ages?
+              Scratching your head trying to recall the ideal grind size and brewing profile you used last time?
+            </p>
+            <p class="mt-6 text-lg leading-8 text-neutral-600">
+              Don't worry, <span class="font-semibold">Instant Filters</span> are here to help you out!
+              With just a couple of keystrokes, you can effortlessly bring up all the details from your previous brews, ensuring your next shot is not just a shot in the dark, but a surefire hit.
+            </p>
+            <p class="mt-6 text-lg leading-8 text-neutral-600">
+              With <span class="font-semibold">Instant Filters</span>, your espresso history transforms into an easy-to-navigate, friendly companion, guiding you to consistently craft exceptional shots, just the way you like them.
+            </p>
+          </div>
+          <div class="flex justify-center">
+            <%= form_with( data:{turbo:"false"}) do |f| %>
+              <%= f.submit "Get them now!", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
+            <% end %>
+          </div>
+        </div>
+        <img src="https://visualizer-coffee.s3.eu-central-1.amazonaws.com/changelog/instant_filters.gif" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="719" height="800">
+      </div>
+    </div>
+  </div>
+  <div class="bg-terracotta-800">
+    <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
+      <h2 class="font-serif text-4xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
+      <div class="pt-10 mt-6 border-t border-terracottaborder-oxford-blue-400">
         <dl class="space-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-12 md:space-y-0">
           <% @qas.each do |q, a| %>
             <div>
               <dt class="text-lg font-medium leading-6 text-white"><%= q %></dt>
-              <dd class="mt-2 text-base text-pink-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-pink-100") %></dd>
+              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-terracotta-100") %></dd>
             </div>
           <% end %>
         </dl>
       </div>
     </div>
   </div>
-  <div class="bg-pink-50">
-    <div class="mx-auto max-w-7xl py-12 px-4 sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
-      <h2 class="text-3xl font-bold tracking-tight text-pink-700 sm:text-4xl">
-        <span class="block">Ready to dive in?</span>
+  <div class="bg-terracotta-50 dark:bg-terracotta-950">
+    <div class="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
+      <h2 class="text-3xl font-bold tracking-tight text-terracotta-600 dark:text-terracotta-100 sm:text-4xl">
+        <span class="block font-serif">Ready to dive in?</span>
       </h2>
-      <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+      <div class="flex mt-8 lg:mt-0 lg:flex-shrink-0">
         <div class="inline-flex rounded-md shadow">
           <%= form_with( data:{turbo:"false"}) do |f| %>
-            <%= f.submit "Subscribe now", class: "cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-pink-600 py-3 px-5 text-base font-medium text-white hover:bg-pink-700" %>
+            <%= f.submit "Subscribe now", class: "cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 hover:shadow-lg hover:shadow-terracotta-500/50" %>
           <% end %>
         </div>
       </div>

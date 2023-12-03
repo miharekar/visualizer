@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import { Turbo } from "@hotwired/turbo-rails"
 import { enter, leave } from "el-transition"
 
 export default class extends Controller {
@@ -7,11 +6,11 @@ export default class extends Controller {
 
   initialize() {
     this.modalShown = false
-    this.preventDefault = true
+    this.blockClick = true
   }
 
   confirm(event) {
-    if (this.preventDefault) {
+    if (this.blockClick) {
       event.preventDefault()
       this.currentTarget = event.currentTarget
       const data = event.currentTarget.dataset
@@ -41,9 +40,10 @@ export default class extends Controller {
   }
 
   delete() {
-    this.preventDefault = false
+    this.blockClick = false
     this.currentTarget.click()
     this.hide()
+    this.blockClick = true
   }
 
   keydown(event) {

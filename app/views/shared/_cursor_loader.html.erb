@@ -1,0 +1,9 @@
+<% if cursor %>
+  <%= turbo_frame_tag "cursor", src: path, loading: :lazy do %>
+    <div class="flex justify-center my-10">
+      <%= inline_svg_tag "logo-loading.svg", class: "logo-loading w-14 h-auto stroke-neutral-600 text-neutral-600 dark:text-neutral-400 dark:stroke-neutral-400" %>
+    </div>
+  <% end %>
+<% else %>
+  <%= turbo_frame_tag "cursor" %>
+<% end %>

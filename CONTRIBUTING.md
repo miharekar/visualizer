@@ -1,7 +1,8 @@
 # Guidance on how to contribute
 
 There are two primary ways to help:
-- Using [GitHub Issues](https://github.com/miharekar/decent-visualizer/issues)
+
+- Using [GitHub Issues](https://github.com/miharekar/visualizer/issues)
 - Changing the code
 
 ## Using GitHub Issues

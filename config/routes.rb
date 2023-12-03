@@ -32,13 +32,10 @@ Rails.application.routes.draw do
   end
 
   get :heartbeat, to: "heartbeat#show"
-  get :changelog, to: "changes#index"
   get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
 
-  resources :people, only: %i[index show] do
-    post :search, on: :collection
-    get :search, on: :collection
+  resources :people, only: %i[show] do
     get :feed, on: :member
   end
 
@@ -49,16 +46,16 @@ Rails.application.routes.draw do
       get "/compare/:comparison", to: "shots#compare"
     end
     collection do
-      get :enjoyments
-      get :recents
+      post :search
     end
   end
 
-  resources :search, only: [:index] do
+  resources :community, only: [:index] do
     collection do
       get :autocomplete
     end
   end
+  get "/search", to: redirect("/community")
 
   resources :profiles, only: %i[edit update] do
     get :reset_chart_settings
@@ -78,7 +75,9 @@ Rails.application.routes.draw do
   end
 
   resources :stats, only: [:index]
-  resources :changes, except: %i[index destroy]
+  resources :updates, except: %i[destroy]
+  get "/changes(/*path)", to: redirect { |params| "/updates/#{params[:path]}" }
+
   post :airtable, to: "airtable#notification"
 
   match "/404", to: "errors#not_found", via: :all

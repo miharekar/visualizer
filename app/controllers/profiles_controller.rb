@@ -11,7 +11,7 @@ class ProfilesController < ApplicationController
   def update
     if @profile.update(profile_params)
       flash[:notice] = "Profile successfully updated."
-      redirect_to controller: "shots", action: :index
+      redirect_to controller: "shots", action: :index, format: :html
     else
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@profile, partial: "form") }
@@ -58,7 +58,7 @@ class ProfilesController < ApplicationController
   end
 
   def profile_params
-    allowed_params = %i[avatar name timezone temperature_unit skin public hide_shot_times beta]
+    allowed_params = %i[avatar name timezone temperature_unit skin public hide_shot_times]
     allowed_params << %i[github supporter developer] if current_user.admin?
     params.require(:user).permit(allowed_params).merge(chart_settings)
   end

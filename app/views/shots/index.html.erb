@@ -1,0 +1,57 @@
+<% content_for(:html_title) { "Visualizer | Your Shots" } %>
+<% turbo_refreshes_with method: :morph, scroll: :preserve %>
+<% if @premium_count.to_i > 1 %>
+  <%= render "shared/premium_banner", count: @premium_count %>
+<% end %>
+<div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel">
+  <div class="flex flex-col gap-2 px-4 sm:flex-row sm:px-0 sm:justify-between">
+    <div>
+      <h1 class="font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
+        Your <span id="shots-count"><%= pluralize(@shots_count, "Shot") %></span>
+      </h1>
+    </div>
+    <% if @shots.any? %>
+      <div class="flex justify-between">
+        <button class="flex items-center px-3 py-2 text-sm font-semibold bg-white rounded-md shadow-sm sm:ml-auto text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" data-action="panel#toggleUploadForm">
+          <svg class="-ml-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
+          </svg>
+          Upload
+        </button>
+        <div>
+          <% if current_user.premium? %>
+            <button type="button" class="flex items-center px-3 py-2 text-sm font-semibold bg-white rounded-md shadow-sm sm:hidden text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" data-action="panel#toggleInstantFilters">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-ml-1.5 mr-1.5 w-5 h-5">
+                <path d="M10 3.75a2 2 0 10-4 0 2 2 0 004 0zM17.25 4.5a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM5 3.75a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 17a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM17.25 17a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM9 10a.75.75 0 01-.75.75h-5.5a.75.75 0 010-1.5h5.5A.75.75 0 019 10zM17.25 10.75a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM14 10a2 2 0 10-4 0 2 2 0 004 0zM10 16.25a2 2 0 10-4 0 2 2 0 004 0z" />
+              </svg>
+              Instant Filters
+            </button>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @shots.any? %>
+    <%= render "upload_form", show_form: false %>
+    <%= render "filters" %>
+    <div id="shots_live_stream">
+      <%= turbo_stream_from current_user, :shots %>
+    </div>
+    <div data-controller="modal">
+      <%= render "shared/modal" %>
+      <div id="shots" class="divide-y sm:mt-10 sm:space-y-4 sm:divide-none dark:divide-neutral-800" data-controller="shot">
+        <%= render @shots %>
+      </div>
+    </div>
+    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(before: @cursor, format: :turbo_stream) } %>
+  <% else %>
+    <%= render "upload_form", show_form: true %>
+    <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
+      <% if @premium_count.to_i > 1 %>
+        Consider <%= link_to("upgrading", premium_index_path, class: "underline text-terracotta-600") %> to see your old shots.
+      <% else %>
+        No shots yet
+      <% end %>
+    </div>
+  <% end %>
+</div>

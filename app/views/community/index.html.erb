@@ -1,0 +1,17 @@
+<% content_for(:html_title) { "Visualizer | Community" } %>
+<% if @premium_count.to_i > 1 %>
+  <% if current_user.id == params[:user_id] %>
+    <%= render "instant_filters_promo" %>
+  <% else %>
+    <%= render "shared/premium_banner", count: @premium_count %>
+  <% end %>
+<% end %>
+<div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="px-4 sm:hidden">
+    <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+      Community
+    </h1>
+  </div>
+  <%= render "filters" %>
+  <%= render "shots/table_list", shots: @shots, include_person: true, cursor: @cursor, cursor_path: community_index_path(params.permit(*CommunityController::FILTERS, :min_enjoyment, :max_enjoyment).merge(commit: "Search", before: @cursor, format: :turbo_stream)) %>
+</div>

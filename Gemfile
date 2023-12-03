@@ -15,7 +15,7 @@ gem "image_processing"
 gem "importmap-rails"
 gem "kramdown"
 gem "kramdown-parser-gfm"
-gem "memoist"
+gem "memo_wise"
 gem "mini_magick"
 gem "oj"
 gem "omniauth-airtable", github: "miharekar/omniauth-airtable"
@@ -32,10 +32,12 @@ gem "sidekiq"
 gem "sidekiq-scheduler"
 gem "slim"
 gem "stimulus-rails"
+
+gem "inline_svg"
 gem "stripe"
 gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"
-gem "turbo-rails"
+gem "turbo-rails", "~> 2.0.0-beta.1"
 
 gem "appsignal"
 gem "lograge"
@@ -46,6 +48,7 @@ gem "stackprof"
 
 group :development, :test do
   gem "debug"
+  gem "singed"
 end
 
 group :development do
@@ -64,5 +67,6 @@ end
 group :test do
   gem "guard"
   gem "guard-minitest"
+  gem "minitest-test_profile"
   gem "webmock"
 end

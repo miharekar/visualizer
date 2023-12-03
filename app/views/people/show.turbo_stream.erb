@@ -1,0 +1,8 @@
+<%= turbo_stream.append "shots-table" do %>
+  <% @shots.each do |shot| %>
+    <%= render partial: "shots/table_row_shot", locals: {shot: shot, include_person: false} %>
+  <% end %>
+<% end %>
+<%= turbo_stream.replace "cursor" do %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: person_path(@user.slug, before: @cursor, format: :turbo_stream) } %>
+<% end %>

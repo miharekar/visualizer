@@ -75,19 +75,20 @@ module Parsers
       calculate_weight_flow
       @timeframe = []
       @datapoints = @datapoints.compact_blank
-      @data = @datapoints.keys.map { |k| [DATA_LABELS_MAP[k], []] }.to_h
+      relevant_keys = @datapoints.keys
+      labels_map = DATA_LABELS_MAP.values_at(*relevant_keys)
+      @data = labels_map.index_with { |label| [] }
       most_data = @datapoints.max_by { |_k, v| v.size }.first
       time_step = (@datapoints[most_data].keys.last - @datapoints[most_data].keys.first) / @datapoints[most_data].keys.size
       first_timestamp = @datapoints.min_by { |_k, v| v.keys.first }[1].keys.first
       last_timestamp = @datapoints.max_by { |_k, v| v.keys.last }[1].keys.last
-
+      sorted_points = @datapoints.transform_values { |v| v.sort_by { |k, _v| k }.to_a }
       first_timestamp.step(last_timestamp, time_step).each do |time|
         @timeframe << time
-        @datapoints.each do |key, points|
+        sorted_points.each do |key, points|
           label = DATA_LABELS_MAP[key]
-          closest = points.min_by { |k, v| (time - k).abs }
-          value = closest[1]
-          data[label] << (value.positive? ? value : 0)
+          value = closest_bsearch(points, time)[1]
+          @data[label] << (value.positive? ? value : 0)
         end
       end
     end
@@ -96,9 +97,11 @@ module Parsers
       return if @datapoints[:weight].blank?
 
       @datapoints[:flow_weight] = {}
+      previous = []
       @datapoints[:weight].each do |time, weight|
-        previous = @datapoints[:weight].find { |t, w| t >= time - 1.0 }
-        @datapoints[:flow_weight][time] = [weight - previous[1], 0].max.round(2)
+        previous = previous.drop_while { |t, _| t < time - 1.0 }
+        @datapoints[:flow_weight][time] = [weight - previous.first[1], 0].max.round(2) if previous.any?
+        previous << [time, weight]
       end
     end
   end

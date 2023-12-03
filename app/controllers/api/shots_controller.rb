@@ -2,7 +2,6 @@
 
 module Api
   class ShotsController < Api::BaseController
-    extend Memoist
     include Pagy::Backend
 
     before_action :verify_upload_access, only: %i[upload]
@@ -32,10 +31,10 @@ module Api
 
     def profile
       with_shot do |shot|
-        if params[:format] == "json" && shot.information.json_profile_fields.present?
-          render json: shot.information.json_profile
-        elsif shot.information.tcl_profile_fields.present?
-          send_file shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+        if params[:format] == "json" && shot.information&.json_profile_fields.present?
+          render json: shot.information&.json_profile
+        elsif shot.information&.tcl_profile_fields.present?
+          send_file shot.information&.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
         else
           render json: {error: "Shot does not have a profile"}, status: :unprocessable_entity
         end
@@ -93,13 +92,13 @@ module Api
       allowed_attrs += %w[start_time] unless shot.user&.hide_shot_times
       json = shot.attributes.slice(*allowed_attrs)
       if with_data
-        json[:timeframe] = shot.information.timeframe
-        json[:data] = shot.information.data
+        json[:timeframe] = shot.information&.timeframe
+        json[:data] = shot.information&.data
       end
       json[:duration] = shot.duration
       json[:user_name] = shot.user.display_name if shot.user&.public?
       json[:image_preview] = shot.screenshot_url if shot.screenshot?
-      json[:profile_url] = api_shot_profile_url(shot) if shot.information.tcl_profile_fields.present?
+      json[:profile_url] = api_shot_profile_url(shot) if shot.information&.tcl_profile_fields.present?
       json
     end
   end

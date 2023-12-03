@@ -1,62 +1,61 @@
-- content_for(:meta_tags)
-  meta name="turbo-cache-control" content="no-cache"
+- turbo_exempts_page_from_cache
 
 .mt-5.md:mt-0.md:col-span-2 id=dom_id(@shot)
   = form_with(model: @shot) do |f|
     .shadow.sm:rounded-md.sm:overflow-hidden
-      .px-4.py-5.bg-white.dark:bg-stone-800.space-y-6.sm:p-6
+      .px-4.py-5.bg-white.dark:bg-neutral-800.space-y-6.sm:p-6
         .grid.grid-cols-6.gap-6 data-controller="ey-calculator"
           .col-span-6
             = f.label :espresso_enjoyment, class: "standard-label"
             .flex.items-center.mt-1 data-controller="range"
-              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-stone-800", data: {action: "input->range#update", range_target: "number"}
-              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-stone-800", data: {action: "input->range#update", range_target: "range"}
+              = f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-neutral-800", data: {action: "input->range#update", range_target: "number"}
+              = f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-neutral-800", data: {action: "input->range#update", range_target: "range"}
           .col-span-6.sm:col-span-3
             = f.label :profile_title, class: "standard-label"
-            = f.text_field :profile_title, class: "standard-input"
+            = f.text_field :profile_title, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :barista, class: "standard-label"
-            = f.text_field :barista, class: "standard-input"
+            = f.text_field :barista, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :bean_weight, class: "standard-label"
-            = f.text_field :bean_weight, class: "standard-input", data: {ey_calculator_target: "beanWeight"}
+            = f.text_field :bean_weight, class: "mt-1 standard-input", data: {ey_calculator_target: "beanWeight"}
           .col-span-6.sm:col-span-3
             = f.label :drink_weight, class: "standard-label"
-            = f.text_field :drink_weight, class: "standard-input", data: {ey_calculator_target: "drinkWeight"}
+            = f.text_field :drink_weight, class: "mt-1 standard-input", data: {ey_calculator_target: "drinkWeight"}
           .col-span-6.sm:col-span-3
             = f.label :grinder_model, class: "standard-label"
-            = f.text_field :grinder_model, list:"grinder-model-list", class: "standard-input"
+            = f.text_field :grinder_model, list:"grinder-model-list", class: "mt-1 standard-input"
             datalist#grinder-model-list
               - @grinder_models.each do |grinder_model|
                 option = grinder_model
           .col-span-6.sm:col-span-3
             = f.label :grinder_setting, class: "standard-label"
-            = f.text_field :grinder_setting, class: "standard-input"
+            = f.text_field :grinder_setting, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :bean_brand, class: "standard-label"
-            = f.text_field :bean_brand, list:"bean-brand-list", class: "standard-input"
+            = f.text_field :bean_brand, list:"bean-brand-list", class: "mt-1 standard-input"
             datalist#bean-brand-list
               - @bean_brands.each do |bean_brand|
                 option = bean_brand
           .col-span-6.sm:col-span-3
             = f.label :bean_type, class: "standard-label"
-            = f.text_field :bean_type, list:"bean-type-list", class: "standard-input"
+            = f.text_field :bean_type, list:"bean-type-list", class: "mt-1 standard-input"
             datalist#bean-type-list
               - @bean_types.each do |bean_type|
                 option = bean_type
           .col-span-6.sm:col-span-3
             = f.label :roast_date, class: "standard-label"
-            = f.text_field :roast_date, class: "standard-input"
+            = f.text_field :roast_date, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :roast_level, class: "standard-label"
-            = f.text_field :roast_level, class: "standard-input"
+            = f.text_field :roast_level, class: "mt-1 standard-input"
           .col-span-6.sm:col-span-3
             = f.label :drink_tds, class: "standard-label"
-            = f.text_field :drink_tds, class: "standard-input", data: {ey_calculator_target: "tds"}
+            = f.text_field :drink_tds, class: "mt-1 standard-input", data: {ey_calculator_target: "tds"}
           .col-span-6.sm:col-span-3
             = f.label :drink_ey, class: "standard-label"
-            = f.text_field :drink_ey, class: "standard-input", data: {ey_calculator_target: "ey"}
-            span class="cursor-pointer text-xs text-stone-500 dark:text-stone-400 hover:text-stone-400 dark:hover:text-stone-500" data-action="click->ey-calculator#calculate"
+            = f.text_field :drink_ey, class: "mt-1 standard-input", data: {ey_calculator_target: "ey"}
+            span class="text-xs cursor-pointer text-neutral-500 dark:text-neutral-400 hover:text-neutral-400 dark:hover:text-neutral-500" data-action="click->ey-calculator#calculate"
               ' Calculate from TDS
         - if current_user.premium?
           - if current_user.metadata_fields.any?
@@ -64,30 +63,30 @@
               - current_user.metadata_fields.each do |field|
                 .col-span-6.sm:col-span-3
                   = mf.label field, class: "standard-label"
-                  = mf.text_field field, value: @shot.metadata[field], class: "standard-input"
+                  = mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input"
           - else
-            p.text-stone-700.dark:text-stone-300.text-center
+            p.text-neutral-700.dark:text-neutral-300.text-center
               ' You don't have any custom fields yet.
               = link_to "Add some", edit_profile_path(current_user), class: "font-bold underline hover:no-underline"
               ' !
         - else
-          p.text-pink-600
+          p.text-terracotta-600
             ' Add private notes, custom fields, and images to your shots by
             = link_to "upgrading to Premium", premium_index_path, class: "font-bold underline hover:no-underline"
             ' .
         div
           = f.label :bean_notes, class: "standard-label"
           .mt-1
-            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
-            .mt-2.text-sm.text-stone-500.dark:text-stone-400
+            = f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+            .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
               ' .
         div
           = f.label :espresso_notes, "Notes", class: "standard-label"
           .mt-1
-            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
-            .mt-2.text-sm.text-stone-500.dark:text-stone-400
+            = f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+            .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
               ' Supports
               a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
               ' .
@@ -95,8 +94,8 @@
           div
             = f.label :private_notes, "Private notes", class: "standard-label"
             .mt-1
-              = f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-emerald-500 focus:border-emerald-500 mt-1 block w-full sm:text-sm border-stone-300 rounded-md dark:bg-stone-800"
-              .mt-2.text-sm.text-stone-500.dark:text-stone-400
+              = f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800"
+              .mt-2.text-sm.text-neutral-500.dark:text-neutral-400
                 ' Only visible to you. Supports
                 a.underline target="_blank" href="https://guides.github.com/features/mastering-markdown/" GitHub Flavored Markdown
                 ' .
@@ -111,5 +110,5 @@
                   = link_to "Remove Image", [:remove_image, @shot], data: { turbo_method: :delete }, class: "underline text-sm"
             .mt-1
               = f.file_field :image
-      .px-4.py-3.bg-stone-50.dark:bg-stone-700.text-right.sm:px-6
-        = f.submit "Save", class: "cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+      .px-4.py-3.bg-neutral-50.dark:bg-neutral-700.text-right.sm:px-6
+        = f.submit "Save", class: "submit-button py-2 px-4"

@@ -33,3 +33,5 @@ en:
       shot:
         drink_tds: Drink TDS (Total Dissolved Solids)
         drink_ey: Drink EY (Extraction Yield)
+        profile_title: Title
+        bean_brand: Roaster

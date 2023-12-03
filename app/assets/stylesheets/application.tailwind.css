@@ -8,11 +8,15 @@
 }
 
 .standard-label {
-  @apply block text-sm font-medium text-stone-700 dark:text-stone-300;
+  @apply block text-sm font-medium text-neutral-700 dark:text-neutral-300;
 }
 
 .standard-input {
-  @apply mt-1 rounded-md shadow-sm text-sm font-medium text-stone-700 dark:text-stone-300 placeholder:text-stone-500 dark:placeholder:text-stone-400 bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-600 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 block w-full;
+  @apply rounded-md shadow-inner-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
+}
+
+.submit-button {
+  @apply cursor-pointer inline-flex justify-center border border-transparent text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
 }
 
 input[type="range"].shot-range::-webkit-slider-runnable-track {
@@ -39,14 +43,14 @@ input[type="range"].shot-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   bottom: 8px;
   cursor: -webkit-grab;
-  @apply relative h-5 w-5 bg-white dark:bg-stone-800 border-2 border-solid border-stone-700 dark:border-stone-300 rounded-full;
+  @apply relative h-5 w-5 bg-white dark:bg-neutral-800 border-2 border-solid border-neutral-700 dark:border-neutral-300 rounded-full;
 }
 
 input[type="range"].shot-range::-moz-range-thumb {
   -moz-appearance: none;
   bottom: 8px;
   cursor: -moz-grab;
-  @apply relative h-5 w-5 bg-white dark:bg-stone-800 border-2 border-solid border-stone-700 dark:border-stone-300 rounded-full;
+  @apply relative h-5 w-5 bg-white dark:bg-neutral-800 border-2 border-solid border-neutral-700 dark:border-neutral-300 rounded-full;
 }
 
 input[type="range"].shot-range::-webkit-slider-thumb:active {
@@ -76,4 +80,62 @@ input[type="color"]::-webkit-color-swatch {
 input[type="color"]::-moz-color-swatch {
   border: none;
   @apply rounded-md;
+}
+
+.turbo-progress-bar {
+  @apply bg-terracotta-500;
+}
+
+a:hover .logo-steam path {
+  animation: moveSteam 1s linear 0s infinite;
+}
+
+.logo-steam path {
+  stroke-dashoffset: 36px;
+}
+
+@keyframes moveSteam {
+  50% {
+    stroke-dashoffset: 18px;
+  }
+  100% {
+    stroke-dashoffset: 0px;
+  }
+}
+
+.logo-loading .bars > path:nth-child(1) {
+  animation: moveBars 0.5s ease-in-out -1.35s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(2) {
+  animation: moveBars 0.5s ease-in-out -1.2s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(3) {
+  animation: moveBars 0.5s ease-in-out -1.05s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(4) {
+  animation: moveBars 0.5s ease-in-out -0.9s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(5) {
+  animation: moveBars 0.5s ease-in-out -0.75s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(6) {
+  animation: moveBars 0.5s ease-in-out -0.6s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(7) {
+  animation: moveBars 0.5s ease-in-out -0.45s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(8) {
+  animation: moveBars 0.5s ease-in-out -0.3s infinite alternate;
+}
+.logo-loading .bars > path:nth-child(9) {
+  animation: moveBars 0.5s ease-in-out -0.15s infinite alternate;
+}
+
+@keyframes moveBars {
+  0% {
+    stroke-dashoffset: 66px;
+  }
+  100% {
+    stroke-dashoffset: 52px;
+  }
 }

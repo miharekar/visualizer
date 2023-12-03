@@ -1,0 +1,39 @@
+<% if current_user.premium? %>
+  <div class="hidden px-4 sm:px-0 sm:block" data-panel-target="instantFilters">
+    <%= form_with(url: search_shots_path, data: {controller: "search", search_target: "form"}) do |f| %>
+      <%= f.hidden_field :fresh_search, value: 1  %>
+      <div class="grid grid-cols-12 gap-3">
+        <% ShotsController::FILTERS.each do |filter| %>
+          <div class="col-span-6 md:col-span-3">
+            <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "standard-label" %>
+            <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: {action: "search#submit"} %>
+          </div>
+        <% end %>
+        <div class="col-span-6 md:col-span-3">
+          <%= f.label :min_enjoyment, class: "standard-label" %>
+          <div class="flex items-center mt-1" data-controller="range">
+            <% min = params[:min_enjoyment].presence || 0 %>
+            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
+              <div class="py-1 text-center text-white" data-range-target="text">
+                <%= min %>
+              </div>
+            </div>
+            <%= f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
+          </div>
+        </div>
+        <div class="col-span-6 md:col-span-3">
+          <%= f.label :max_enjoyment, class: "standard-label" %>
+          <div class="flex items-center mt-1" data-controller="range">
+            <% max = params[:max_enjoyment].presence || 100 %>
+            <div class="w-8 h-8 rounded-full" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
+              <div class="py-1 text-center text-white" data-range-target="text">
+                <%= max %>
+              </div>
+            </div>
+            <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

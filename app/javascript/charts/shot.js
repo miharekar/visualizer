@@ -101,7 +101,7 @@ function isDark() {
 function getColors() {
   if (isDark()) {
     return {
-      background: "#000000",
+      background: "#171717",
       label: "#999999",
       gridLine: "#191919",
       line: "#332914",
@@ -234,7 +234,15 @@ function setupInCupAnnotations(chart) {
     labelOptions: { shape: "connector" },
   })
 
-  chart.renderer.text('<button id="remove-annotations" class="highcharts-no-tooltip cursor-pointer inline-flex px-2 py-1 border border-stone-300 dark:border-stone-600 rounded shadow-sm text-xs font-medium text-stone-700 bg-white dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-900">Hide annotations</span>', 50, 35, true).attr({ zIndex: 3 }).add()
+  chart.renderer
+    .text(
+      '<button id="remove-annotations" class="inline-flex px-2 py-1 text-xs font-medium bg-white border rounded cursor-pointer highcharts-no-tooltip border-neutral-300 dark:border-neutral-600 shadow-sm text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900">Hide annotations</span>',
+      50,
+      35,
+      true
+    )
+    .attr({ zIndex: 3 })
+    .add()
   chart.annotationVisible = true
   document.getElementById("remove-annotations").addEventListener("click", function () {
     if (chart.annotationVisible) {
@@ -339,7 +347,7 @@ function comparisonAdjust(range) {
               }),
               true,
               false,
-              false,
+              false
             )
           }
         })

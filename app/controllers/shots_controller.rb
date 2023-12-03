@@ -1,36 +1,22 @@
 # frozen_string_literal: true
 
 class ShotsController < ApplicationController
-  include Pagy::Backend
+  include CursorPaginatable
+
+  FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
   before_action :authenticate_user!, except: %i[show compare share]
   before_action :load_shot, only: %i[show compare share remove_image]
   before_action :load_users_shot, only: %i[edit update destroy]
+  before_action :load_users_shots, only: %i[index search]
 
-  def index
-    load_shots_with_pagy
-  end
-
-  def recents
-    @recents = current_user.shots.by_start_time
-      .where(start_time: 3.weeks.ago..)
-      .group_by { |s| [s.bean_brand, s.bean_type] }
-      .first(5)
-      .map do |bean_group, shots|
-      [bean_group, shots.group_by { |s| [s.grinder_model, s.profile_title] }]
-    end
-  end
-
-  def enjoyments
-    enjoyments = current_user.shots.by_start_time
-      .where("espresso_enjoyment > 0")
-      .where(created_at: 6.months.ago..)
-    @enjoyments_data = EnjoymentChart.new(enjoyments).chart
+  def search
+    render :index
   end
 
   def show
     @shot.ensure_screenshot
-    @chart = ShotChart.new(@shot, current_user)
+    @chart = ShotChart.new(@shot, current_user) if @shot.information
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
 
     return if current_user.nil?
@@ -40,7 +26,7 @@ class ShotsController < ApplicationController
 
   def compare
     @comparison = Shot.find(params[:comparison])
-    @chart = ShotChartCompare.new(@shot, @comparison, current_user)
+    @chart = ShotChartCompare.new(@shot, @comparison, current_user) if @shot.information && @comparison.information
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
@@ -79,12 +65,12 @@ class ShotsController < ApplicationController
     if params.key?(:drag)
       head :ok
     else
-      redirect_to action: :index
+      redirect_to action: :index, format: :html
     end
   end
 
   def update
-    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Shot::EXTRA_DATA_METHODS]
+    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
     allowed << {metadata: current_user.metadata_fields} if current_user.premium?
     @shot.update(params.require(:shot).permit(allowed))
     if params[:shot][:image].present? && current_user.premium?
@@ -103,17 +89,7 @@ class ShotsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream do
-        if request.referer.ends_with?("shots/#{@shot.id}")
-          flash[:notice] = "Shot successfully deleted."
-          redirect_to action: :index
-        else
-          load_shots_with_pagy
-          if @shots.any?
-            render turbo_stream: turbo_stream.replace("shot-list", partial: "shots/list", locals: {shots: @shots, pagy: @pagy, include_person: false})
-          else
-            redirect_to action: :index
-          end
-        end
+        render turbo_stream: turbo_stream.remove(@shot)
       end
       format.html do
         flash[:notice] = "Shot successfully deleted."
@@ -141,10 +117,21 @@ class ShotsController < ApplicationController
     redirect_to shots_path, alert: "Shot not found!"
   end
 
-  def load_shots_with_pagy
-    @shots = current_user.shots.by_start_time
-    @shots = @shots.non_premium unless current_user.premium?
+  def load_users_shots
+    @shots = current_user.shots.with_attached_image
+
+    unless current_user.premium?
+      @premium_count = @shots.premium.count
+      @shots = @shots.non_premium
+    end
     @shots_count = @shots.count
-    @pagy, @shots = pagy_countless(@shots)
+
+    FILTERS.select { |f| params[f].present? }.each do |filter|
+      @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
+    end
+    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
+    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+
+    @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
   end
 end
