@@ -1,6 +1,6 @@
 <% content_for(:html_title) { "Visualizer | Community" } %>
 <% if @premium_count.to_i > 1 %>
-  <% if current_user.id == params[:user_id] %>
+  <% if current_user&.id == params[:user_id] %>
     <%= render "instant_filters_promo" %>
   <% else %>
     <%= render "shared/premium_banner", count: @premium_count %>
