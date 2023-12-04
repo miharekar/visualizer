@@ -61,7 +61,13 @@ class ShotsController < ApplicationController
         "You uploaded invalid #{"file".pluralize(files.count)}."
       end
     end
-
+  rescue => e
+    flash[:alert] = "Something went wrong: #{e.message}"
+    if Rails.env.production?
+      s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
+      Rails.logger.warn("Something is wrong with this file #{s3_response.etag} | User ID: #{user.id}")
+    end
+  ensure
     if params.key?(:drag)
       head :ok
     else
