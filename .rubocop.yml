@@ -1,5 +1,4 @@
 ---
-
 inherit_gem:
   standard: config/base.yml
   standard-performance: config/base.yml
@@ -15,7 +14,7 @@ require:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
   Exclude:
     - db/schema.rb
     - bin/*

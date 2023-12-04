@@ -8,7 +8,7 @@ primary_region = "fra"
 console_command = "/rails/bin/rails console"
 
 [deploy]
-  strategy = "bluegreen"
+  strategy = "canary"
 
 [http_service]
   processes = ["app"]

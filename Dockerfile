@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.2
+ARG RUBY_VERSION=3.3.0-preview3
 FROM ruby:$RUBY_VERSION-slim as base
 
 LABEL fly_launch_runtime="rails"
@@ -68,8 +68,7 @@ USER rails:rails
 
 # Deployment options
 ENV LD_PRELOAD="libjemalloc.so.2" \
-  MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true" \
-  RUBY_YJIT_ENABLE="1"
+  MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true"
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
