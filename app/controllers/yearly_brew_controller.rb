@@ -4,38 +4,7 @@ class YearlyBrewController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @shots_2023 = current_user.shots.where("extract(year from start_time) = ?", 2023)
-    @shots_2022 = current_user.shots.where("extract(year from start_time) = ?", 2022)
-
-    @coffee_2023 = most_used_coffee(@shots_2023)
-    @coffee_2022 = most_used_coffee(@shots_2022)
-
-    @fav_roaster_2023 = favorite_roaster(@shots_2023)
-    @fav_roaster_2022 = favorite_roaster(@shots_2022)
-
-    @most_used_profile_2023 = most_used_profile(@shots_2023)
-    @most_used_profile_2022 = most_used_profile(@shots_2022)
-
-    @best_rated_coffee_2023 = best_rated_coffee(@shots_2023)
-    @best_rated_coffee_2022 = best_rated_coffee(@shots_2022)
-
-    @average_enjoyment_2023 = average_enjoyment(@shots_2023).to_f.round(2)
-    @average_enjoyment_2022 = average_enjoyment(@shots_2022).to_f.round(2)
-
-    @time_brewed_2023 = (@shots_2023.sum(:duration) / 60).round(2)
-    @time_brewed_2022 = (@shots_2022.sum(:duration) / 60).round(2)
-
-    @amount_used_2023 = (@shots_2023.sum { |s| s.bean_weight.to_f } / 1000).round(3)
-    @amount_used_2022 = (@shots_2022.sum { |s| s.bean_weight.to_f } / 1000).round(3)
-
-    @amount_brewed_2023 = (@shots_2023.sum { |s| s.drink_weight.to_f } / 1000).round(3)
-    @amount_brewed_2022 = (@shots_2022.sum { |s| s.drink_weight.to_f } / 1000).round(3)
-
-    @month_with_most_shots_2023 = month_with_most_shots(@shots_2023)
-    @month_with_most_shots_2022 = month_with_most_shots(@shots_2022)
-
-    @day_with_most_shots_2023 = day_with_most_shots(@shots_2023)
-    @day_with_most_shots_2022 = day_with_most_shots(@shots_2022)
+    @yearly_brew = YearlyBrew.new(current_user, year: 2023)
   end
 
   private

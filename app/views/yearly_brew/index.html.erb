@@ -1,5 +1,5 @@
 <% content_for(:html_title) { "Visualizer | Bean There, Brewed That: Your Year in Coffee" } %>
-<div class="flex flex-col items-center px-4 mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+<div class="flex flex-col items-center px-4 mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
   <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
     Bean There, Brewed That
   </h1>
@@ -15,20 +15,20 @@
     </p>
   </div>
   <div class="w-full space-y-4 max-w-prose">
-    <h2 class="font-serif text-2xl font-semibold leading-6 text-neutral-900">Your Year on Visualizer</h2>
-    <% if @shots_2023.any? %>
+    <h2 class="font-serif text-2xl font-semibold leading-6 text-neutral-900 dark:text-neutral-100">Your Year on Visualizer</h2>
+    <% if @yearly_brew.shots_this_year.any? %>
       <dl class="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2">
-        <%= render partial: "yearly_brew/stat", locals: { title: "Total shots this year", stat: @shots_2023.count, diff: @shots_2023.count - @shots_2022.count } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Favorite roaster", stat: @fav_roaster_2023, diff: @fav_roaster_2022 } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Best rated coffee", stat: @best_rated_coffee_2023, diff: @best_rated_coffee_2022 } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Most brewed coffee", stat: @coffee_2023, diff: @coffee_2022 } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Most used profile", stat: @most_used_profile_2023, diff: @most_used_profile_2022 } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Average enjoyment", stat: @average_enjoyment_2023, diff: (@average_enjoyment_2023.to_f - @average_enjoyment_2022.to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Minutes spent making coffee", stat: @time_brewed_2023, diff: (@time_brewed_2023.to_f - @time_brewed_2022.to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Kg of coffee used", stat: @amount_used_2023, diff: (@amount_used_2023.to_f - @amount_used_2022.to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Kg of coffee produced", stat: @amount_brewed_2023, diff: (@amount_brewed_2023.to_f - @amount_brewed_2022.to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Month with the most shots", stat: @month_with_most_shots_2023, diff: @month_with_most_shots_2022 } %>
-        <%= render partial: "yearly_brew/stat", locals: { title: "Day with the most shots", stat: @day_with_most_shots_2023, diff: @day_with_most_shots_2022 } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Favorite roaster", stat: @yearly_brew.favorite_roaster, diff: @yearly_brew.favorite_roaster(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Best rated coffee", stat: @yearly_brew.best_rated_coffee, diff: @yearly_brew.best_rated_coffee(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Most brewed coffee", stat: @yearly_brew.most_brewed_coffee, diff: @yearly_brew.most_brewed_coffee(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Average enjoyment", stat: @yearly_brew.average_enjoyment, diff: (@yearly_brew.average_enjoyment.to_f - @yearly_brew.average_enjoyment(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Minutes spent making coffee", stat: @yearly_brew.time_brewed, diff: (@yearly_brew.time_brewed.to_f - @yearly_brew.time_brewed(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Kg of coffee used", stat: @yearly_brew.amount_beans_used, diff: (@yearly_brew.amount_beans_used.to_f - @yearly_brew.amount_beans_used(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Kg of coffee brewed", stat: @yearly_brew.amount_brewed, diff: (@yearly_brew.amount_brewed.to_f - @yearly_brew.amount_brewed(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Month with the most shots", stat: @yearly_brew.month_with_most_shots, diff: @yearly_brew.month_with_most_shots(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { title: "Day with the most shots", stat: @yearly_brew.day_with_most_shots, diff: @yearly_brew.day_with_most_shots(:past) } %>
       </dl>
     <% else %>
       <p>
