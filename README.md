@@ -28,7 +28,7 @@ Authenticatication is possible via [OAuth 2.0 authorization code flow](https://w
 The difference between `upload` and `write` is that `upload` is **only** for uploading shots, and `write` is for everything. This enables you to have a "low danger" scope, so that even if a token is stolen, the worst that can happen is that the attacker can upload shots. But they won't be able to delete them.
 All endpoints return JSON.
 
-If you want to create OAuth applications please [contact me](mailto:miha@mr.si).
+If you want to create OAuth applications please [contact me](mailto:miha@visualizer.coffee).
 
 ## Dependencies
 
