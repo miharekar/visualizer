@@ -4,6 +4,8 @@ class User < ApplicationRecord
   include Sluggable
   slug_from :name
 
+  EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable
@@ -48,6 +50,10 @@ class User < ApplicationRecord
     super.presence || []
   end
 
+  def notify?(notification)
+    unsubscribed_from.to_a.exclude?(notification.to_s)
+  end
+
   private
 
   def generate_slug
@@ -83,6 +89,7 @@ end
 #  supporter              :boolean
 #  temperature_unit       :string
 #  timezone               :string
+#  unsubscribed_from      :jsonb
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  stripe_customer_id     :string

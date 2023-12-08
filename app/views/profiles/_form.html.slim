@@ -92,6 +92,15 @@
                         = f.check_box "#{label}-hidden", class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded", checked: chart_settings.for_label(label)["hidden"]
                       .ml-3.text-sm
                         = f.label "#{label}-hidden", "Hidden", class: "text-neutral-700 dark:text-neutral-300"
+          .col-span-3.sm:col-span-2
+            h3.mb-4.font-medium.text-neutral-700.dark:text-neutral-300 Email Notifications
+            .space-y-1
+              = f.collection_check_boxes(:email_notifications, User::EMAIL_NOTIFICATIONS.map{ |en| [en.humanize, en]}, :last, :first) do |cb|
+                .flex.items-start
+                  .flex.items-center.h-5
+                    = cb.check_box class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded", checked: @profile.notify?(cb.value)
+                  .ml-3.text-sm
+                    = cb.label class: "font-medium text-neutral-700 dark:text-neutral-300"
           - if current_user.admin?
             .col-span-3.sm:col-span-2
               h3.mb-4.font-medium.text-neutral-700.dark:text-neutral-300 Admin Area

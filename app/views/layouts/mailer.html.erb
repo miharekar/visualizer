@@ -1,13 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" style="color-scheme: light dark;">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <!--[if mso]>
+      <noscript>
+        <xml>
+          <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+          </o:OfficeDocumentSettings>
+        </xml>
+      </noscript>
+      <style>
+        td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+      </style>
+    <![endif]-->
+    <title><%= yield(:title) %></title>
     <style>
-      /* Email styles need to be inline */
+      :root {
+        color-scheme: light dark;
+      }
+      .hover-bg-indigo-700:hover {
+        background-color: #4338ca !important;
+      }
+      .hover-no-underline:hover {
+        text-decoration-line: none !important;
+      }
+      @media (max-width: 600px) {
+        .sm-w-full {
+          width: 100% !important;
+        }
+        .sm-px-6 {
+          padding-left: 24px !important;
+          padding-right: 24px !important;
+        }
+        .sm-py-8 {
+          padding-top: 32px !important;
+          padding-bottom: 32px !important;
+        }
+        .sm-leading-8 {
+          line-height: 32px !important;
+        }
+      }
     </style>
   </head>
-
-  <body>
-    <%= yield %>
+  <body style="-webkit-font-smoothing: antialiased; word-break: break-word; margin: 0; width: 100%; background-color: #f8fafc; padding: 0">
+    <div style="display: none">
+      <%= yield(:preheader) %>
+      &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;
+    </div>
+    <div lang="en">
+      <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center" style="background-color: #f8fafc">
+            <table class="sm-w-full" style="width: 600px" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="sm-py-8 sm-px-6" style="padding: 48px; text-align: center">
+                  <a href="https://visualizer.coffee/" target="_blank">
+                    <img src="<%= root_url %>visualizer.png" height="70" alt="Visualizer" style="border: 0; max-width: 100%; vertical-align: middle">
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" class="sm-px-6">
+                  <%= yield %>
+                </td>
+              </tr>
+              <% if notification_exists? %>
+                <tr>
+                  <td style="padding: 24px; text-align: center; font-size: 14px">
+                    <p style="color: #9ca3af">
+                      Manage email notifications in <%= link_to "your profile", edit_profiles_url, class: "hover-no-underline", style: "color: #9ca3af; text-decoration-line: underline", target: "_blank" %>.
+                    </p>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

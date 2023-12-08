@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_22_082240) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_08_131335) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -204,6 +204,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_22_082240) do
     t.boolean "developer"
     t.string "temperature_unit"
     t.jsonb "metadata_fields"
+    t.jsonb "unsubscribed_from"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
