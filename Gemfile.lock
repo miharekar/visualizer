@@ -92,7 +92,7 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
@@ -146,7 +146,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    dockerfile-rails (1.5.12)
+    dockerfile-rails (1.5.14)
       rails (>= 3.0.0)
     domain_name (0.6.20231109)
     doorkeeper (5.6.8)
@@ -545,7 +545,7 @@ CHECKSUMS
   activerecord (7.1.2) sha256=7e7305deb74ee4e924815b90b53bdc5fe79fcfb09fb4d8d66a02a581b1f92b34
   activestorage (7.1.2) sha256=42b0f9a9bde084edb4aa045a99413885826262251b6bd5ad9727039b90bcd9ce
   activesupport (7.1.2) sha256=5bd81ef71524a14725ecb6c3b07bfc00ae0ccc77dd611190bd93bd9f92abd0d0
-  addressable (2.8.5) sha256=63f0fbcde42edf116d6da98a9437f19dd1692152f1efa3fcc4741e443c772117
+  addressable (2.8.6) sha256=798f6af3556641a7619bad1dce04cdb6eb44b0216a991b0396ea7339276f2b47
   annotate (3.2.0) sha256=9a61baa1fb13880aa3a8d9f62553889bb2a3b7970f88bbc66d3ac75a567780d3
   appsignal (3.4.16) sha256=029a4dab966d6cada467353cc79858f3e0e3a565f8f401adce012d686f86ee6a
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
@@ -574,7 +574,7 @@ CHECKSUMS
   date (3.3.4) sha256=971f2cb66b945bcbea4ddd9c7908c9400b31a71bc316833cb42fa584b59d3291
   debug (1.8.0) sha256=502bd1ad41a9a4b51f557f181cd13650c746390a82b5d11a5d2c81600ca013da
   devise (4.9.3) sha256=480638d6c51b97f56da6e28d4f3e2a1b8e606681b316aa594b87c6ab94923488
-  dockerfile-rails (1.5.12) sha256=57df88a7c6f87a093b29328d94b7da382ea97942e192c5ad02b78d4d7b0cd348
+  dockerfile-rails (1.5.14) sha256=e2557385385aeab2a8420c26d81985ba10b47a58db38f9cb26bc3f281738d214
   domain_name (0.6.20231109) sha256=5127a1521ecca79d54accefc393f6d19db8600c6224416004414f7eaa28aecbe
   doorkeeper (5.6.8) sha256=bb13508805880758f3552c759e968f4d7abb6a52072d438cf23c6c85c2293642
   drb (2.2.0) sha256=e9e4af1cded3306cfe37e064a0086e302d5f40df9cb4d161d059a6bb3a75d40f
