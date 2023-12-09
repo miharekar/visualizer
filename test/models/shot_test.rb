@@ -34,7 +34,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "38.8", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.1", shot.grinder_setting
-    assert_equal "Bani Beans", shot.bean_brand
+    assert_equal "Banibeans", shot.bean_brand
     assert_equal "Ethiopia Shantawene", shot.bean_type
     assert_nil shot.roast_level
     assert_equal "11.09.2021", shot.roast_date

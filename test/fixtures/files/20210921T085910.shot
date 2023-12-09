@@ -151,7 +151,7 @@ settings {
 	battery_medium_trigger 90
 	battery_very_low_brightness 10
 	battery_very_low_trigger 30
-	bean_brand {Bani Beans}
+	bean_brand {Banibeans}
 	bean_notes {With BPlus}
 	bean_type {Ethiopia Shantawene}
 	beverage_type espresso

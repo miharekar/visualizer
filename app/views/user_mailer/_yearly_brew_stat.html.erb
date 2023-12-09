@@ -1,0 +1,19 @@
+<% if stat.present? && !(stat.is_a?(Numeric) && stat <= 0) %>
+  <p style="margin: 0 0 24px; font-size: 16px; color: #000">
+    <%= title %>:
+    <strong><%= stat %></strong>.
+    <% if defined?(diff) %>
+      <% if diff.respond_to?(:positive?) %>
+        <% if diff.positive? %>
+          <%= diff %> more than last year.
+        <% elsif diff.negative? %>
+          <%= -diff %> less than last year.
+        <% end %>
+      <% else %>
+        <% if diff.present? %>
+          Last year it was <%= diff %>.
+        <% end %>
+      <% end %>
+    <% end %>
+  </p>
+<% end %>
