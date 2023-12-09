@@ -9,6 +9,7 @@ console_command = "/rails/bin/rails console"
 
 [deploy]
   strategy = "canary"
+  release_command = "bin/rails db:migrate"
 
 [http_service]
   processes = ["app"]
