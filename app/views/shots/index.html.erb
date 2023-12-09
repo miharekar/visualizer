@@ -1,5 +1,8 @@
 <% content_for(:html_title) { "Visualizer | Your Shots" } %>
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
+<% if current_user && current_user.shots.where("extract(year from start_time) = ?", 2023).exists? %>
+  <%= render "yearly_brew_promo" %>
+<% end %>
 <% if @premium_count.to_i > 1 %>
   <%= render "shared/premium_banner", count: @premium_count %>
 <% end %>
