@@ -74,7 +74,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :yearly_brew, only: %i[index]
+  resources :yearly_brew, only: %i[index show]
   resources :stats, only: [:index]
   resources :updates, except: %i[destroy]
   get "/changes(/*path)", to: redirect { |params| "/updates/#{params[:path]}" }

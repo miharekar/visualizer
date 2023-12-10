@@ -1,0 +1,33 @@
+<% content_for(:html_title) { "Visualizer | Bean There, Brewed That: Year in Coffee of #{@user.name}" } %>
+<div class="flex flex-col items-center px-4 mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
+  <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+    Bean There, Brewed That: <%= @user.name %>
+  </h1>
+  <div class="w-full space-y-4 max-w-prose">
+    <% if @yearly_brew.shots_this_year.any? %>
+      <dl class="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2">
+        <%= render partial: "yearly_brew/stat", locals: { icon: :stack, title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :fire, title: "Favorite roaster", stat: @yearly_brew.favorite_roaster, diff: @yearly_brew.favorite_roaster(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :trophy, title: "Best rated coffee", stat: @yearly_brew.best_rated_coffee, diff: @yearly_brew.best_rated_coffee(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :heart, title: "Most brewed coffee", stat: @yearly_brew.most_brewed_coffee, diff: @yearly_brew.most_brewed_coffee(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :book, title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :chart, title: "Average enjoyment", stat: @yearly_brew.average_enjoyment, diff: (@yearly_brew.average_enjoyment.to_f - @yearly_brew.average_enjoyment(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :scale, title: "Kg of coffee used", stat: @yearly_brew.amount_beans_used, diff: (@yearly_brew.amount_beans_used.to_f - @yearly_brew.amount_beans_used(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :beaker, title: "Kg of coffee brewed", stat: @yearly_brew.amount_brewed, diff: (@yearly_brew.amount_brewed.to_f - @yearly_brew.amount_brewed(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :clock, title: "Minutes spent brewing coffee", stat: @yearly_brew.time_brewed, diff: (@yearly_brew.time_brewed.to_f - @yearly_brew.time_brewed(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :calendar_days, title: "Month with the most shots", stat: @yearly_brew.month_with_most_shots, diff: @yearly_brew.month_with_most_shots(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :calendar, title: "Day with the most shots", stat: @yearly_brew.day_with_most_shots, diff: @yearly_brew.day_with_most_shots(:past) } %>
+      </dl>
+    <% end %>
+    <% if current_user %>
+      <div class="flex justify-center">
+        <%= link_to yearly_brew_index_path, class: "inline-flex items-center gap-x-2 rounded-md bg-terracotta-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-terracotta-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-600" do %>
+          <svg class="-ml-0.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+          </svg>
+          Check out <strong>your</strong> year in coffee
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

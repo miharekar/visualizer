@@ -7,6 +7,11 @@ class YearlyBrewController < ApplicationController
     @yearly_brew = YearlyBrew.new(current_user, year: 2023)
   end
 
+  def show
+    @user = User.find_by(slug: params[:id])
+    @yearly_brew = YearlyBrew.new(@user, year: 2023)
+  end
+
   private
 
   def most_used_coffee(shots)
