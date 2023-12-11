@@ -8,7 +8,7 @@ class YearlyBrewController < ApplicationController
   end
 
   def show
-    @user = User.find_by(slug: params[:id])
+    @user = User.visible.find_by(slug: params[:id])
 
     if @user
       @yearly_brew = YearlyBrew.new(@user, year: 2023)
