@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.0.dev"
+ruby "3.3.0.rc1"
 
 gem "active_link_to"
 gem "aws-sdk-s3", require: false
