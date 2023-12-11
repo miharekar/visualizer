@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class YearlyBrewController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:show]
 
   def index
     @yearly_brew = YearlyBrew.new(current_user, year: 2023)
@@ -9,7 +9,17 @@ class YearlyBrewController < ApplicationController
 
   def show
     @user = User.find_by(slug: params[:id])
-    @yearly_brew = YearlyBrew.new(@user, year: 2023)
+
+    if @user
+      @yearly_brew = YearlyBrew.new(@user, year: 2023)
+    else
+      flash[:alert] = "Yearly Brew not found"
+      if current_user
+        redirect_to action: :index
+      else
+        redirect_to root_path
+      end
+    end
   end
 
   private
