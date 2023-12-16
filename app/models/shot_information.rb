@@ -67,6 +67,7 @@ end
 #  id             :uuid             not null, primary key
 #  data           :jsonb
 #  extra          :jsonb
+#  metadata       :jsonb
 #  profile_fields :jsonb
 #  timeframe      :jsonb
 #  shot_id        :uuid             not null
