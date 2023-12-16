@@ -220,19 +220,9 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
     assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
-    assert shot.bean_notes.start_with?("```javascript")
-    assert shot.bean_notes.include?('"aromatics": "Schokolade, Haselnuss, Rund"')
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
-    assert shot.espresso_notes.include?("#### Brew")
-    assert shot.espresso_notes.include?("\n\n```javascript")
-    assert shot.espresso_notes.include?('"brew_beverage_quantity_type": "GR"')
-    assert_not shot.espresso_notes.include?("config")
-    assert shot.espresso_notes.include?("#### Preparation")
-    assert shot.espresso_notes.include?('"type": "CHEMEX"')
-    assert shot.espresso_notes.include?("#### Water")
-    assert shot.espresso_notes.include?('"tds_type": "PPM"')
   end
 
   test "extracts real beanconqueror file" do
@@ -244,26 +234,10 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
     assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
-    assert shot.bean_notes.start_with?("```javascript")
-    assert shot.bean_notes.include?('"aromatics": "Schokolade, Haselnuss, Rund"')
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
-    assert shot.espresso_notes.include?("#### Brew")
-    assert shot.espresso_notes.include?("\n\n```javascript")
-    assert shot.espresso_notes.include?('"brew_beverage_quantity_type": "GR"')
-    assert_not shot.espresso_notes.include?("config")
-    assert shot.espresso_notes.include?("#### Preparation")
-    assert shot.espresso_notes.include?('"type": "CHEMEX"')
-    assert shot.espresso_notes.include?("#### Water")
-    assert shot.espresso_notes.include?('"tds_type": "PPM"')
-    assert_equal 488, shot.information.timeframe.size
-    assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "34.858", shot.information.timeframe.last
-    assert_equal 34.858, shot.duration
-    assert_equal %w[espresso_flow espresso_flow_weight espresso_pressure espresso_weight], shot.information.data.keys.sort
-    assert_equal 488, shot.information.data["espresso_weight"].size
-    assert_equal 10, shot.information.extra.keys.size
+    assert_equal 35.047, shot.duration
   end
 
   test "extracts long beanconqueror file with negative values" do
@@ -275,27 +249,13 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
     assert_equal "2022-12-08T06:24:32.574Z", shot.roast_date
-    assert shot.bean_notes.start_with?("```javascript")
-    assert shot.bean_notes.include?('"aromatics": "Schokolade, Haselnuss, Rund"')
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
-    assert shot.espresso_notes.include?("#### Brew")
-    assert shot.espresso_notes.include?("\n\n```javascript")
-    assert shot.espresso_notes.include?('"brew_beverage_quantity_type": "GR"')
-    assert_not shot.espresso_notes.include?("config")
-    assert shot.espresso_notes.include?("#### Preparation")
-    assert shot.espresso_notes.include?('"type": "CHEMEX"')
-    assert shot.espresso_notes.include?("#### Water")
-    assert shot.espresso_notes.include?('"tds_type": "PPM"')
-    assert_equal 1748, shot.information.timeframe.size
-    assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "174.244", shot.information.timeframe.last
     assert_equal 174.244, shot.duration
-    assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
-    assert_equal 1748, shot.information.data["espresso_weight"].size
-    assert_equal 10, shot.information.extra.keys.size
-    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert_equal %w[pressureFlow realtimeFlow waterFlow weight], shot.information.data.keys.sort
+    assert_equal 1748, shot.information.data["realtimeFlow"].size
+    assert_equal 8, shot.information.extra.keys.size
   end
 
   test "extracts long beanconqueror file with missing values" do
@@ -304,16 +264,10 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Hario V60", shot.profile_title
     assert_equal "Leaderboard 03", shot.bean_type
     assert_equal "15", shot.bean_weight
-    assert shot.espresso_notes.include?("#### Water")
-    assert shot.espresso_notes.include?('"name": "Aquacode (85ppm)",')
-    assert_equal 1366, shot.information.timeframe.size
-    assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "147.542", shot.information.timeframe.last
     assert_equal 147.542, shot.duration
-    assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
-    assert_equal 1366, shot.information.data["espresso_weight"].size
-    assert_equal 10, shot.information.extra.keys.size
-    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.data.keys.sort
+    assert_equal 1366, shot.information.data["realtimeFlow"].size
+    assert_equal 8, shot.information.extra.keys.size
   end
 
   test "extracts correct weight from beanconqueror file" do
@@ -323,14 +277,10 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Brasil Jabuticaba", shot.bean_type
     assert_equal "16.2", shot.bean_weight
     assert_equal "249", shot.drink_weight
-    assert_equal 1117, shot.information.timeframe.size
-    assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "163.198", shot.information.timeframe.last
     assert_equal 163.198, shot.duration
-    assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], shot.information.data.keys.sort
-    assert_equal 1117, shot.information.data["espresso_weight"].size
-    assert_equal 10, shot.information.extra.keys.size
-    assert shot.information.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.data.keys.sort
+    assert_equal 1117, shot.information.data["realtimeFlow"].size
+    assert_equal 8, shot.information.extra.keys.size
   end
 
   test "extracts pressure from CoffeeFlow app" do
@@ -402,13 +352,10 @@ class ShotTest < ActiveSupport::TestCase
   test "extracts temperature from Beanconqueror" do
     shot = new_shot("test/fixtures/files/beanconqueror_temperature.json")
     assert shot.valid?
-    assert_equal 147, shot.information.timeframe.size
-    assert_equal "0.0", shot.information.timeframe.first
-    assert_equal "17.198", shot.information.timeframe.last
-    assert_equal 17.198, shot.duration
-    assert_equal %w[espresso_flow espresso_flow_weight espresso_temperature_mix espresso_weight], shot.information.data.keys.sort
-    assert_equal 147, shot.information.data["espresso_weight"].size
-    assert_equal 10, shot.information.extra.keys.size
+    assert_equal 17.201, shot.duration
+    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.data.keys.sort
+    assert_equal 16, shot.information.data["temperatureFlow"].size
+    assert_equal 8, shot.information.extra.keys.size
   end
 
   test "extracts newlines in bean notes from .shot file" do

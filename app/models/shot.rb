@@ -31,7 +31,7 @@ class Shot < ApplicationRecord
   def self.from_file(user, file_content)
     return Shot.new if file_content.blank?
 
-    Parsers::Base.parse(file_content).build_shot(user)
+    Parsers::Base.parser_for(file_content).build_shot(user)
   end
 
   def metadata
