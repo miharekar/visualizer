@@ -10,9 +10,10 @@ LABEL fly_launch_runtime="rails"
 WORKDIR /rails
 
 # Set production environment
-ENV RAILS_ENV="production" \
+ENV BUNDLE_DEPLOYMENT="1" \
+  BUNDLE_PATH="/usr/local/bundle" \
   BUNDLE_WITHOUT="development:test" \
-  BUNDLE_DEPLOYMENT="1"
+  RAILS_ENV="production"
 
 # Update gems and bundler
 RUN gem update --system --no-document && \
