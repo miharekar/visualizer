@@ -13,4 +13,4 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - run: flyctl deploy --remote-only -e APP_REVISION="${{ github.sha }}"
+      - run: FLY_REGISTRY_HOST=registry2.fly.io flyctl deploy --remote-only -e APP_REVISION="${{ github.sha }}"
