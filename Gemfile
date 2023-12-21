@@ -66,6 +66,5 @@ end
 group :test do
   gem "guard"
   gem "guard-minitest"
-  gem "minitest-test_profile"
   gem "webmock"
 end
