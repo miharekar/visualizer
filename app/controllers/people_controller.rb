@@ -7,10 +7,10 @@ class PeopleController < ApplicationController
     @user = User.find_by(slug: params[:id])
     if @user.nil?
       @user = User.find_by(id: params[:id])
-      if @user.nil?
-        redirect_to community_index_path, alert: "User #{params[:id]} was not found"
-      else
+      if @user&.slug.present?
         redirect_to person_path(id: @user.slug), status: :moved_permanently
+      else
+        redirect_to community_index_path, alert: "User #{params[:id]} was not found"
       end
     elsif !@user.public
       redirect_to community_index_path, alert: "User #{params[:id]} was not found"
@@ -28,10 +28,10 @@ class PeopleController < ApplicationController
     @user = User.find_by(slug: params[:id])
     if @user.nil?
       @user = User.find_by(id: params[:id])
-      if @user.nil?
-        head :not_found
-      else
+      if @user&.slug.present?
         redirect_to feed_person_path(id: @user.slug), status: :moved_permanently
+      else
+        head :not_found
       end
     elsif !@user.public
       head :not_found
