@@ -87,7 +87,7 @@ module Parsers
 
     def extract_fields_from_extra(shot)
       EXTRA_DATA_METHODS.each do |attr|
-        shot.public_send("#{attr}=", extra[attr].presence)
+        shot.public_send(:"#{attr}=", extra[attr].presence)
       end
       shot.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
       shot.barista = extra["my_name"].presence

@@ -33,19 +33,19 @@ module Parsers
     private
 
     DATA_LABELS.each do |name|
-      define_method("extract_#{name}") do |data|
+      define_method(:"extract_#{name}") do |data|
         @data[name] = data
       end
     end
 
     EXTRA_DATA_CAPTURE.each do |name|
-      define_method("extract_setting_#{name}") do |data|
+      define_method(:"extract_setting_#{name}") do |data|
         @extra[name] = handle_array(data).force_encoding("UTF-8")
       end
     end
 
     PROFILE_FIELDS.each do |name|
-      define_method("extract_setting_#{name}") do |data|
+      define_method(:"extract_setting_#{name}") do |data|
         @profile_fields[name] = handle_array(data).force_encoding("UTF-8")
       end
     end
