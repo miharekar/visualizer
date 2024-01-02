@@ -63,7 +63,7 @@ class AirtableWebhookJob < AirtableJob
       raise LastTransactionMismatchError if @airtable_info.reload.last_transaction.to_i != @last_transaction
 
       @airtable_info.update!(
-        last_transaction: @payloads.map { |p| p["baseTransactionNumber"] }.max,
+        last_transaction: @payloads.pluck("baseTransactionNumber").max,
         last_cursor: @webhook_payloads["cursor"]
       )
     end
