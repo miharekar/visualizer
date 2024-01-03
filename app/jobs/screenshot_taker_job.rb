@@ -17,7 +17,7 @@ class ScreenshotTakerJob < ApplicationJob
     options["xAxis"]["plotLines"] = chart.stages
     options["series"] = chart.shot_chart
 
-    uri = URI.parse("http://export.highcharts.com/")
+    uri = URI.parse("https://export.highcharts.com/")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri, {"Content-Type": "application/json"})
     request.body = {options:, type: "image/png"}.to_json
