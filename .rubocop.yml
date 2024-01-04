@@ -1,14 +1,7 @@
----
 inherit_gem:
-  standard: config/base.yml
-  standard-performance: config/base.yml
-  standard-custom: config/base.yml
-  standard-rails: config/base.yml
+  rubocop-rails-omakase: rubocop.yml
 
 require:
-  - standard
-  - standard-custom
-  - standard-performance
   - rubocop-performance
   - rubocop-rails
 
@@ -21,78 +14,57 @@ AllCops:
 
 Bundler/OrderedGems:
   Enabled: true
-
 Layout/ClassStructure:
   Enabled: true
-
 Layout/EmptyLineAfterGuardClause:
   Enabled: true
-
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: no_space
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
 Performance/AncestorsInclude:
   Enabled: true
-
 Performance/ArraySemiInfiniteRangeSlice:
   Enabled: true
-
 Performance/CaseWhenSplat:
   Enabled: true
-
 Performance/Casecmp:
   Enabled: true
-
 Performance/CollectionLiteralInLoop:
   Enabled: true
-
 Performance/DeletePrefix:
   Enabled: true
-
 Performance/DeleteSuffix:
   Enabled: true
-
 Performance/IoReadlines:
   Enabled: true
-
 Performance/MapCompact:
   Enabled: true
-
 Performance/MethodObjectAsBlock:
   Enabled: true
-
 Performance/OpenStruct:
   Enabled: true
-
 Performance/RedundantBlockCall:
   Enabled: true
-
 Performance/RedundantEqualityComparisonBlock:
   Enabled: true
-
 Performance/SelectMap:
   Enabled: true
-
 Performance/StringInclude:
   Enabled: true
-
 Performance/Sum:
   Enabled: true
-
 Performance/TimesMap:
   Enabled: true
-
-Style/FrozenStringLiteralComment:
-  Enabled: true
-
-Style/IfUnlessModifier:
-  Enabled: true
-
-Style/Send:
-  Enabled: true
-
-Style/SymbolArray:
-  Enabled: true
-
-Style/WordArray:
-  Enabled: true
-
 Rails/SaveBang:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: true
+Style/IfUnlessModifier:
+  Enabled: true
+Style/Send:
+  Enabled: true
+Style/SymbolArray:
+  Enabled: true
+Style/WordArray:
+  Enabled: true

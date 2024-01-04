@@ -56,10 +56,7 @@ group :development do
   gem "brakeman"
   gem "dockerfile-rails"
   gem "letter_opener"
-  gem "rubocop", require: false
-  gem "standard", require: false
-  gem "standard-performance", require: false
-  gem "standard-rails", require: false
+  gem "rubocop-rails-omakase", require: false
   gem "web-console"
 end
 
