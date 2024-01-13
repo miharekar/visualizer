@@ -25,7 +25,7 @@ class UpdatesController < ApplicationController
     @update = Update.new(update_params)
 
     if @update.save
-      redirect_to action: :index
+      redirect_to updates_path(format: :html)
     else
       render :new, status: :unprocessable_entity
     end
