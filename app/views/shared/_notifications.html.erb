@@ -1,4 +1,4 @@
-<div data-controller="notifications-container" class="fixed inset-0 z-40 flex items-end px-4 py-6 pointer-events-none sm:items-start sm:p-6 sm:top-16">
+<div data-controller="notifications-container" class="fixed inset-0 z-30 flex items-end px-4 py-6 pointer-events-none sm:items-start sm:p-6 sm:top-16">
   <div id="notifications-container" class="flex flex-col items-center w-full space-y-4 sm:items-end">
     <% flash.each do |type, message| %>
       <%= render "notifications/notification", notification: Notification.new(type: type, heading: message) %>
