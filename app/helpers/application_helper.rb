@@ -19,7 +19,7 @@ module ApplicationHelper
   end
 
   def update_count
-    @update_count ||= Update.where("published_at > ?", current_user.last_read_change).count
+    @update_count ||= Update.where("published_at > ?", current_user.last_read_change || Time.current).count
   end
 
   def show_premium_banner?
