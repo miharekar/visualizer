@@ -5,13 +5,11 @@
       "type": "rdbg",
       "name": "Attach with rdbg",
       "request": "attach",
-      "rdbgPath": "PATH=${env:RUBY_ROOT}/bin:${PATH} ${env:GEM_HOME}/bin/rdbg"
     },
     {
       "type": "rdbg",
       "name": "Attach to sidekiq",
       "request": "attach",
-      "rdbgPath": "PATH=${env:RUBY_ROOT}/bin:${PATH} ${env:GEM_HOME}/bin/rdbg",
       "debugPort": "localhost:5163",
     }
   ]
