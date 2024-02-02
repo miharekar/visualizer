@@ -410,4 +410,10 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 147, shot.information.data["espresso_weight"].size
     assert_equal 10, shot.information.extra.keys.size
   end
+
+  test "extracts newlines in bean notes from .shot file" do
+    shot = new_shot("test/fixtures/files/20240202T063530.shot")
+    assert shot.valid?
+    assert_equal "- chocolate\n- woodsy\n- smooth", shot.bean_notes
+  end
 end

@@ -40,7 +40,7 @@ module Parsers
 
     EXTRA_DATA_CAPTURE.each do |name|
       define_method(:"extract_setting_#{name}") do |data|
-        @extra[name] = handle_array(data).force_encoding("UTF-8")
+        @extra[name] = handle_array(data, smart_separator: true).force_encoding("UTF-8")
       end
     end
 
@@ -73,8 +73,10 @@ module Parsers
       nil
     end
 
-    def handle_array(data)
+    def handle_array(data, smart_separator: false)
       return data unless data.is_a?(Array)
+
+      separator = smart_separator && data.first.is_a?(Array) ? "\n" : " "
 
       data.map do |line|
         next line unless line.is_a?(Array)
@@ -97,7 +99,7 @@ module Parsers
         end
 
         line.join(" ")
-      end.join(" ")
+      end.join(separator)
     end
   end
 end
