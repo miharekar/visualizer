@@ -10,6 +10,11 @@ export default class extends Controller {
       }
       currentElement = currentElement.parentElement
     }
-    Turbo.visit(event.currentTarget.dataset.url)
+
+    if (event.metaKey || event.ctrlKey) {
+      window.open(event.currentTarget.dataset.url, "_blank")
+    } else {
+      Turbo.visit(event.currentTarget.dataset.url)
+    }
   }
 }
