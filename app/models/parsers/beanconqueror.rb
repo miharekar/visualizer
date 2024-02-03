@@ -5,8 +5,7 @@ module Parsers
     def parse
       @start_time = Time.at(file.dig("brew", "config", "unix_timestamp").to_i).utc
       @profile_title = file.dig("preparation", "name").presence || "Beanconqueror"
-      @data = file["brewFlow"]
-      @brewdata = file.except("brewFlow")
+      @brewdata = file
       extract_bean(file["bean"])
       extract_grinder(file["mill"])
       extract_brew(file["brew"])
@@ -14,6 +13,10 @@ module Parsers
     end
 
     private
+
+    memo_wise def sha
+      Digest::SHA256.base64digest(brewdata["brewFlow"].sort.to_json) if brewdata["brewFlow"].present?
+    end
 
     def extract_bean(bean)
       @extra["bean_brand"] = bean["roaster"]
@@ -37,7 +40,7 @@ module Parsers
     end
 
     memo_wise def extremes
-      data.filter_map do |_, values|
+      brewdata["brewFlow"].filter_map do |_, values|
         next if values.empty?
 
         [values.first, values.last].map { |v| Time.strptime(v["timestamp"], "%H:%M:%S.%L") }

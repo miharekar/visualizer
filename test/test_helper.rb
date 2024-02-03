@@ -28,5 +28,5 @@ module ActiveSupport
     teardown do
       WebMock.reset!
     end
-end
+  end
 end

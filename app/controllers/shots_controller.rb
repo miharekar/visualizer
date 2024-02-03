@@ -16,10 +16,10 @@ class ShotsController < ApplicationController
 
   def show
     @shot.ensure_screenshot
-    @shot.information.parse_brew_flow
-    @shot.information.data = @shot.information.new_data
-    @shot.information.timeframe = @shot.information.new_timeframe
-    @chart = ShotChart.new(@shot, current_user) if @shot.information
+    if @shot.information
+      @shot.information.parse_brew_flow
+      @chart = ShotChart.new(@shot, current_user)
+    end
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
 
     return if current_user.nil?

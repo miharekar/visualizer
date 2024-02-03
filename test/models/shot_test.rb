@@ -259,8 +259,8 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
     assert_equal 174.244, shot.duration
-    assert_equal %w[pressureFlow realtimeFlow waterFlow weight], shot.information.data.keys.sort
-    assert_equal 1748, shot.information.data["realtimeFlow"].size
+    assert_equal %w[pressureFlow realtimeFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
+    assert_equal 1748, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
     assert_equal 8, shot.information.extra.keys.size
   end
 
@@ -271,8 +271,8 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Leaderboard 03", shot.bean_type
     assert_equal "15", shot.bean_weight
     assert_equal 147.542, shot.duration
-    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.data.keys.sort
-    assert_equal 1366, shot.information.data["realtimeFlow"].size
+    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
+    assert_equal 1366, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
     assert_equal 8, shot.information.extra.keys.size
   end
 
@@ -284,8 +284,8 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "16.2", shot.bean_weight
     assert_equal "249", shot.drink_weight
     assert_equal 163.198, shot.duration
-    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.data.keys.sort
-    assert_equal 1117, shot.information.data["realtimeFlow"].size
+    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
+    assert_equal 1117, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
     assert_equal 8, shot.information.extra.keys.size
   end
 
@@ -362,8 +362,8 @@ class ShotTest < ActiveSupport::TestCase
     shot = new_shot("test/fixtures/files/beanconqueror_temperature.json")
     assert shot.valid?
     assert_equal 17.201, shot.duration
-    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.data.keys.sort
-    assert_equal 16, shot.information.data["temperatureFlow"].size
+    assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
+    assert_equal 16, shot.information.brewdata["brewFlow"]["temperatureFlow"].size
     assert_equal 8, shot.information.extra.keys.size
   end
 

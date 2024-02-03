@@ -42,7 +42,6 @@ module Parsers
 
     def build_shot(user)
       parse
-      sha = Digest::SHA256.base64digest(data.sort.to_json) if data.present?
       shot = Shot.find_or_initialize_by(user:, sha:)
       shot.profile_title = profile_title
       shot.start_time = start_time
@@ -67,6 +66,10 @@ module Parsers
     end
 
     private
+
+    memo_wise def sha
+      Digest::SHA256.base64digest(data.sort.to_json) if data.present?
+    end
 
     def add_information(shot)
       shot.information ||= shot.build_information
