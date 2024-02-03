@@ -3,16 +3,19 @@
 class ShotInformation < ApplicationRecord
   prepend MemoWise
   include Profile
-  include LiveParser
 
   belongs_to :shot
 
   def extra
-    super.presence || {}
+    super || {}
   end
 
   def profile_fields
-    super.presence || {}
+    super || {}
+  end
+
+  def brewdata
+    super || {}
   end
 end
 
