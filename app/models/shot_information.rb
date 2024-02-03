@@ -95,9 +95,9 @@ end
 # Table name: shot_informations
 #
 #  id             :uuid             not null, primary key
+#  brewdata       :jsonb
 #  data           :jsonb
 #  extra          :jsonb
-#  metadata       :jsonb
 #  profile_fields :jsonb
 #  timeframe      :jsonb
 #  shot_id        :uuid             not null

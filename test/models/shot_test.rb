@@ -24,6 +24,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal users(:miha), shot.user
     assert_equal "JoeD's Easy blooming slow ramp to 7 bar", shot.profile_title
     assert_equal "2021-09-21 06:59:10", shot.start_time.to_fs(:db)
+    assert_equal "Parsers::DecentTcl", shot.information.brewdata["parser"]
     assert_equal 100, shot.information.timeframe.size
     assert_equal "0.044", shot.information.timeframe.first
     assert_equal "24.793", shot.information.timeframe.last
@@ -58,6 +59,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
+    assert_equal "Parsers::DecentJson", shot.information.brewdata["parser"]
     assert_equal 109, shot.information.timeframe.size
     assert_equal "0.044", shot.information.timeframe.first
     assert_equal "26.999", shot.information.timeframe.last
@@ -93,6 +95,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal users(:miha), shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
+    assert_equal "Parsers::DecentTcl", shot.information.brewdata["parser"]
     assert_equal 109, shot.information.timeframe.size
     assert_equal "0.044", shot.information.timeframe.first
     assert_equal "26.999", shot.information.timeframe.last
@@ -174,6 +177,7 @@ class ShotTest < ActiveSupport::TestCase
 
   test "smart espresso profiler file" do
     shot = new_shot("test/fixtures/files/sharebrew_tsp.csv")
+    assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
     assert_equal 451, shot.information.timeframe.size
     assert_equal 0.051, shot.information.timeframe.first
     assert_equal 48.403, shot.information.timeframe.last
@@ -223,6 +227,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
   end
 
   test "extracts real beanconqueror file" do
@@ -238,6 +243,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
     assert_equal 35.047, shot.duration
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
   end
 
   test "extracts long beanconqueror file with negative values" do
@@ -304,6 +310,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Eureka Atom Specialty", shot.grinder_model
     assert_equal "18.6", shot.bean_weight
     assert_equal "38.35", shot.drink_weight
+    assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
   end
 
   test "extracts temperature from Pressensor" do
@@ -325,6 +332,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Medium", shot.roast_level
     assert_equal "16.2", shot.bean_weight
     assert_equal "37.87", shot.drink_weight
+    assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
   end
 
   test "extracts correct length from Pressensor" do
@@ -347,6 +355,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Medium", shot.roast_level
     assert_equal "16.0", shot.bean_weight
     assert_equal "36.07", shot.drink_weight
+    assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
   end
 
   test "extracts temperature from Beanconqueror" do

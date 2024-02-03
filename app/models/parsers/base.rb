@@ -9,7 +9,7 @@ module Parsers
     EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
     EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight enable_fahrenheit my_name skin]).freeze
 
-    attr_reader :file, :start_time, :data, :extra, :metadata, :timeframe, :profile_title, :profile_fields, :json
+    attr_reader :file, :start_time, :data, :extra, :brewdata, :timeframe, :profile_title, :profile_fields, :json
 
     def self.parser_for(file)
       if file.start_with?("{")
@@ -37,7 +37,7 @@ module Parsers
       @data = {}
       @extra = {}
       @profile_fields = {}
-      @metadata = {}
+      @brewdata = {}
     end
 
     def build_shot(user)
@@ -74,8 +74,8 @@ module Parsers
       shot.information.extra = extra
       shot.information.timeframe = timeframe
       shot.information.profile_fields = profile_fields
-      shot.information.metadata = metadata
-      shot.information.metadata["parser"] = self.class.name
+      shot.information.brewdata = brewdata
+      shot.information.brewdata["parser"] = self.class.name
     end
 
     def calculate_duration

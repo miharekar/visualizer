@@ -143,7 +143,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_15_114026) do
     t.jsonb "extra"
     t.jsonb "profile_fields"
     t.jsonb "timeframe"
-    t.jsonb "metadata"
+    t.jsonb "brewdata"
     t.index ["shot_id"], name: "index_shot_informations_on_shot_id"
   end
 
