@@ -10,7 +10,7 @@ class ScreenshotTakerJob < ApplicationJob
   end
 
   def perform(shot)
-    return if shot.screenshot? || Rails.env.development? || Rails.env.test?
+    return if shot.screenshot?
 
     Timeout.timeout(10) do
       chart = ShotChart.new(shot)

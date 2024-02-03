@@ -48,7 +48,7 @@ class Shot < ApplicationRecord
   end
 
   def ensure_screenshot
-    return if screenshot?
+    return if screenshot? || Rails.env.local?
 
     ScreenshotTakerJob.perform_later(self)
   end

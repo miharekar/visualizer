@@ -8,7 +8,7 @@ class RefreshTokenJobTest < ActiveJob::TestCase
       .with(body: {"grant_type" => "refresh_token", "refresh_token" => "refresh_token"})
       .to_return(status: 200, body: {refresh_token: "new_refresh_token", access_token: "new_access_token", expires_at: 1.hour.from_now.to_i}.to_json, headers: {"Content-Type" => "application/json"})
 
-    identity = identities(:mr_airtable)
+    identity = identities(:mr_airtable_identity)
     identity.update(expires_at: 1.day.ago)
     RefreshTokenJob.perform_now(identity)
 
@@ -20,7 +20,7 @@ class RefreshTokenJobTest < ActiveJob::TestCase
   end
 
   test "does not refresh token when not expired" do
-    identity = identities(:mr_airtable)
+    identity = identities(:mr_airtable_identity)
     identity.update(expires_at: 1.hour.from_now)
     RefreshTokenJob.perform_now(identity)
     identity.reload

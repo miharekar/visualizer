@@ -1,4 +1,4 @@
-mr_airtable:
+mr_airtable_identity:
   user: mr_airtable
   provider: airtable
   uid: long_string
