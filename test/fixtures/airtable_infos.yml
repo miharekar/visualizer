@@ -1,6 +1,0 @@
-mr_airtable_info:
-  identity: mr_airtable_identity
-  base_id: app1234567890
-  table_id: tbl1234567890
-  webhook_id: ach1234567890
-  table_fields: <%= ["ID", "URL", "Start time", "Image"] + Airtable::Shots::STANDARD_FIELDS.keys + ["Portafilter basket", "Bean variety"] %>

@@ -13,12 +13,10 @@ Redlock::Client.testing_mode = :bypass
 module ActiveSupport
   class TestCase
     include ActiveJob::TestHelper
+    include FactoryBot::Syntax::Methods
 
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
-
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
 
     setup do
       ActionCable.server.pubsub.clear

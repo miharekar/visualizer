@@ -4,6 +4,8 @@ require "test_helper"
 
 class AirtableWebhookRefreshAllJobTest < ActiveJob::TestCase
   test "enqueues jobs for all infos" do
+    airtable_infos = create_list(:airtable_info, 3)
+
     AirtableWebhookRefreshAllJob.perform_now
 
     airtable_infos.map do |airtable_info|

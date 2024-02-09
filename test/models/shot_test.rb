@@ -3,25 +3,23 @@
 require "test_helper"
 
 class ShotTest < ActiveSupport::TestCase
+  setup do
+    @user = build_stubbed(:user)
+  end
+
   def new_shot(path)
-    Shot.from_file(users(:miha), File.read(path))
+    Shot.from_file(@user, File.read(path))
   end
 
   test "returns invalid Shot with empty file" do
-    shot = Shot.from_file(users(:miha), "")
+    shot = Shot.from_file(@user, "")
     assert_not shot.valid?
   end
 
-  test "fixtures are valid" do
-    shots.each do |shot|
-      assert shot.valid?, shot.errors.full_messages
-    end
-  end
-
   test "extracts fields from .shot file" do
-    path = "test/fixtures/files/20210921T085910"
+    path = "test/files/20210921T085910"
     shot = new_shot("#{path}.shot")
-    assert_equal users(:miha), shot.user
+    assert_equal @user, shot.user
     assert_equal "JoeD's Easy blooming slow ramp to 7 bar", shot.profile_title
     assert_equal "2021-09-21 06:59:10", shot.start_time.to_fs(:db)
     assert_equal "Parsers::DecentTcl", shot.information.brewdata["parser"]
@@ -54,9 +52,11 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
-    path = "test/fixtures/files/20211019T100744"
+    @user = create(:user)
+
+    path = "test/files/20211019T100744"
     shot = new_shot("#{path}.json")
-    assert_equal users(:miha), shot.user
+    assert_equal @user, shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
     assert_equal "Parsers::DecentJson", shot.information.brewdata["parser"]
@@ -92,7 +92,7 @@ class ShotTest < ActiveSupport::TestCase
     shot.save!
     assert_equal old_id, shot.id
 
-    assert_equal users(:miha), shot.user
+    assert_equal @user, shot.user
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
     assert_equal "Parsers::DecentTcl", shot.information.brewdata["parser"]
@@ -124,7 +124,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts the non-zero bean weight" do
-    path = "test/fixtures/files/dsx_weight"
+    path = "test/files/dsx_weight"
     shot = new_shot("#{path}.shot")
     assert_equal 18.0, shot.bean_weight.to_f
     assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
@@ -132,7 +132,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "handles invalid machine string" do
-    path = "test/fixtures/files/invalid_machine"
+    path = "test/files/invalid_machine"
     shot = new_shot("#{path}.shot")
     assert_equal "Cremina lever machine", shot.profile_title
     assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
@@ -140,7 +140,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "handles brackets in advanced steps" do
-    path = "test/fixtures/files/brackets"
+    path = "test/files/brackets"
     shot = new_shot("#{path}.shot")
     assert_equal "manual 82", shot.profile_title
     assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
@@ -148,35 +148,35 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "handles invalid profile string" do
-    shot = new_shot("test/fixtures/files/invalid_profile.json")
+    shot = new_shot("test/files/invalid_profile.json")
     assert shot.valid?
     assert_equal "phaad/Extractamundo Dos!", shot.profile_title
     assert_equal 101, shot.information.timeframe.size
   end
 
   test "handles even more invalid profile string" do
-    shot = new_shot("test/fixtures/files/invalid_profile_2.json")
+    shot = new_shot("test/files/invalid_profile_2.json")
     assert shot.valid?
     assert_equal "fill brew release", shot.profile_title
     assert_equal 237, shot.information.timeframe.size
   end
 
   test "handles invalid settings" do
-    shot = new_shot("test/fixtures/files/invalid_settings.json")
+    shot = new_shot("test/files/invalid_settings.json")
     assert shot.valid?
     assert_equal "HELLCAFE Synesso mvp", shot.profile_title
     assert_equal 145, shot.information.timeframe.size
   end
 
   test "handles very invalid settings" do
-    shot = new_shot("test/fixtures/files/very_invalid_settings.json")
+    shot = new_shot("test/files/very_invalid_settings.json")
     assert shot.valid?
     assert_equal "Visualizer/Filter 2.0.2 15 in 18 1:4-5", shot.profile_title
     assert_equal 679, shot.information.timeframe.size
   end
 
   test "smart espresso profiler file" do
-    shot = new_shot("test/fixtures/files/sharebrew_tsp.csv")
+    shot = new_shot("test/files/sharebrew_tsp.csv")
     assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
     assert_equal 451, shot.information.timeframe.size
     assert_equal 0.051, shot.information.timeframe.first
@@ -197,26 +197,26 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "handles invalid file" do
-    shot = new_shot("test/fixtures/files/invalid_file.something")
+    shot = new_shot("test/files/invalid_file.something")
     assert_not shot.valid?
   end
 
   test "handles pyde1 fake tcl file" do
-    shot = new_shot("test/fixtures/files/pyde.faketcl")
+    shot = new_shot("test/files/pyde.faketcl")
     assert shot.valid?
     assert_equal "Extractamundo Dos!", shot.profile_title
     assert_equal 98, shot.information.timeframe.size
   end
 
   test "handles empty instructions inside advanced_shot" do
-    shot = new_shot("test/fixtures/files/empty_flow.shot")
+    shot = new_shot("test/files/empty_flow.shot")
     assert shot.valid?
     assert_equal "6BarFlat", shot.profile_title
     assert_equal 80, shot.information.timeframe.size
   end
 
   test "extracts beanconqueror file" do
-    shot = new_shot("test/fixtures/files/beanconqueror.json")
+    shot = new_shot("test/files/beanconqueror.json")
     assert shot.valid?
     assert_equal "Chemex", shot.profile_title
     assert_equal "onoma", shot.bean_brand
@@ -231,7 +231,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts real beanconqueror file" do
-    shot = new_shot("test/fixtures/files/beanconqueror_real.json")
+    shot = new_shot("test/files/beanconqueror_real.json")
     assert shot.valid?
     assert_equal "Chemex", shot.profile_title
     assert_equal "onoma", shot.bean_brand
@@ -247,7 +247,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts long beanconqueror file with negative values" do
-    shot = new_shot("test/fixtures/files/beanconqueror_negative.json")
+    shot = new_shot("test/files/beanconqueror_negative.json")
     assert shot.valid?
     assert_equal "Chemex", shot.profile_title
     assert_equal "onoma", shot.bean_brand
@@ -265,7 +265,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts long beanconqueror file with missing values" do
-    shot = new_shot("test/fixtures/files/beanconqueror_missing_values.json")
+    shot = new_shot("test/files/beanconqueror_missing_values.json")
     assert shot.valid?
     assert_equal "Hario V60", shot.profile_title
     assert_equal "Leaderboard 03", shot.bean_type
@@ -277,7 +277,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts correct weight from beanconqueror file" do
-    shot = new_shot("test/fixtures/files/beanconqueror_beverage_weight.json")
+    shot = new_shot("test/files/beanconqueror_beverage_weight.json")
     assert shot.valid?
     assert_equal "Ice V60", shot.profile_title
     assert_equal "Brasil Jabuticaba", shot.bean_type
@@ -290,7 +290,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts pressure from CoffeeFlow app" do
-    shot = new_shot("test/fixtures/files/profitec_victoria_arduino.csv")
+    shot = new_shot("test/files/profitec_victoria_arduino.csv")
     assert shot.valid?
     assert_equal 1074, shot.information.timeframe.size
     assert_equal 0.336, shot.information.timeframe.first
@@ -314,7 +314,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts temperature from Pressensor" do
-    shot = new_shot("test/fixtures/files/pressensor.csv")
+    shot = new_shot("test/files/pressensor.csv")
     assert shot.valid?
     assert_equal 703, shot.information.timeframe.size
     assert_equal 0.033, shot.information.timeframe.first
@@ -336,7 +336,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts correct length from Pressensor" do
-    shot = new_shot("test/fixtures/files/pressensor_short.csv")
+    shot = new_shot("test/files/pressensor_short.csv")
     assert shot.valid?
     assert_equal 182, shot.information.timeframe.size
     assert_equal 0.028, shot.information.timeframe.first
@@ -359,7 +359,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts temperature from Beanconqueror" do
-    shot = new_shot("test/fixtures/files/beanconqueror_temperature.json")
+    shot = new_shot("test/files/beanconqueror_temperature.json")
     assert shot.valid?
     assert_equal 17.201, shot.duration
     assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
@@ -368,7 +368,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts newlines in bean notes from .shot file" do
-    shot = new_shot("test/fixtures/files/20240202T063530.shot")
+    shot = new_shot("test/files/20240202T063530.shot")
     assert shot.valid?
     assert_equal "- chocolate\n- woodsy\n- smooth", shot.bean_notes
   end
