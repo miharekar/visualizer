@@ -20,16 +20,18 @@ class ShotChart::ParsedShot
     end
   end
 
-  memo_wise def should_parse?
-    shot.information.brewdata["parser"] == "Parsers::Beanconqueror"
-  end
-
   memo_wise def fahrenheit?
     shot.information.extra["enable_fahrenheit"].to_i == 1
   end
 
   memo_wise def stage_indices
     data.key?("espresso_state_change") ? stages_from_state_change : detect_stages_from_data
+  end
+
+  private
+
+  memo_wise def should_parse?
+    shot.information.brewdata["parser"] == "Parsers::Beanconqueror"
   end
 
   def parse_brew_flow

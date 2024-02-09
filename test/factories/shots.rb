@@ -10,5 +10,9 @@ FactoryBot.define do
       skip_airtable_sync { true }
       sequence(:airtable_id, 1000) { "rec#{_1}" }
     end
+
+    trait :with_information do
+      information factory: :shot_information
+    end
   end
 end
