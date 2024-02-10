@@ -1,0 +1,151 @@
+<% owner = current_user && shot.user == current_user %>
+<% show_start_time = owner || !shot.user&.hide_shot_times? %>
+<% show_name = name && shot.user && shot.user.public? && shot.user != current_user %>
+<% bean_weight = shot.bean_weight.to_f %>
+<% drink_weight = shot.drink_weight.to_f %>
+<% ratio = drink_weight / bean_weight %>
+<% tds = shot.drink_tds.to_f %>
+<% ey = shot.drink_ey.to_f %>
+<% has_enjoyment = shot.espresso_enjoyment.to_i > 0 %>
+<div class="flex">
+  <div class="shrink-0">
+    <% if has_enjoyment %>
+      <div class="flex items-center justify-center w-12 h-12 rounded-full" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+        <div class="py-1 text-center text-white">
+          <%= shot.espresso_enjoyment %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="<%= 'ml-4' if has_enjoyment %>">
+    <a class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100" href="<%= shot_path(shot) %>">
+      <%= shot.profile_title %>
+    </a>
+    <div class="mt-2 text-base text-neutral-600 dark:text-neutral-400">
+      <% if show_name %>
+        <div class="flex items-center">
+          <div>
+            Shot by
+            <%= shot.user.name %>
+          </div>
+          <% if shot.user.premium? %>
+            <%= link_to premium_index_path do %>
+              <svg class="w-4 h-4 ml-1 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+              </svg>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <% if show_start_time %>
+        <div>
+          <%= shot.start_time.in_time_zone(@timezone).to_formatted_s(:long) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="mt-2 text-base text-neutral-600 dark:text-neutral-400">
+  <div>
+    <% if shot.bean_brand.present? %>
+      <%= shot.bean_brand %>
+    <% end %>
+    <% if shot.bean_type.present? %>
+      <%= shot.bean_type %>
+    <% end %>
+    <% if shot.roast_level.present? %>
+      (<%= shot.roast_level %>)
+    <% end %>
+    <% if shot.roast_date.present? %>
+      on <%= shot.roast_date %>
+    <% end %>
+  </div>
+  <div>
+    <% if bean_weight > 0 %>
+      <%= shot.bean_weight %> g
+    <% end %>
+    <% if bean_weight > 0 && drink_weight > 0 %>
+      :
+    <% end %>
+    <% if drink_weight > 0 %>
+      <%= shot.drink_weight %> g
+    <% end %>
+    <% if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite? %>
+      (1:<%= ratio.round(1) %>)
+    <% end %>
+    <% if bean_weight > 0 || drink_weight > 0 %>
+      in
+    <% end %>
+    <%= shot.duration.round(1) %> s
+  </div>
+  <div>
+    <% if shot.grinder_model.present? %>
+      <%= shot.grinder_model %>
+    <% end %>
+    <% if shot.grinder_setting.present? && shot.grinder_setting != "0" %>
+      @ <%= shot.grinder_setting %>
+    <% end %>
+  </div>
+  <div>
+    <% if tds > 0 %>
+      TDS <%= tds %> %
+    <% end %>
+    <% if ey > 0 %>
+      EY <%= ey %> %
+    <% end %>
+  </div>
+  <% if shot.metadata.present? %>
+    <div class="mt-2">
+      <% shot.user.metadata_fields.each do |key| %>
+        <%= metadata_pair(key, shot.metadata[key]) %>
+      <% end %>
+    </div>
+  <% end %>
+  <% if shot.information.brewdata.present? %>
+    <% shot.information.brewdata.each do |group, values| %>
+      <% next if group == "brewFlow" %>
+      <div class="mt-2">
+        <% next unless values.is_a?(Hash) %>
+        <% values.each do |key, value| %>
+          <% if value.is_a?(Hash) %>
+            <% value.each do |k, v| %>
+              <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
+            <% end %>
+          <% elsif value.is_a?(Array) %>
+            <% value.each do |item| %>
+              <% item.each do |k, v| %>
+                <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <%= metadata_pair(key.underscore.humanize, value) %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if shot.barista.present? %>
+    <div class="mt-2">
+      <span>Barista:&nbsp;</span>
+      <span><%= shot.barista %></span>
+    </div>
+  <% end %>
+  <% if shot.bean_notes.present? %>
+    <div class="mt-2">
+      <div class="font-medium text-neutral-900 dark:text-neutral-100">Bean notes:</div>
+      <%= markdown_text_from(shot.bean_notes) %>
+    </div>
+  <% end %>
+  <% if shot.espresso_notes.present? %>
+    <div class="mt-2">
+      <div class="font-medium text-neutral-900 dark:text-neutral-100">Notes:</div>
+      <%= markdown_text_from(shot.espresso_notes) %>
+    </div>
+  <% end %>
+  <% if owner && shot.private_notes.present? %>
+    <div class="mt-2">
+      <div class="font-medium text-neutral-900 dark:text-neutral-100">Private notes:</div>
+      <%= markdown_text_from(shot.private_notes) %>
+    </div>
+  <% end %>
+</div>
