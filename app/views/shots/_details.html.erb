@@ -103,9 +103,8 @@
   <% end %>
   <% if shot.information.brewdata.present? %>
     <% shot.information.brewdata.each do |group, values| %>
-      <% next if group == "brewFlow" %>
+      <% next if group == "brewFlow" || !values.is_a?(Hash) %>
       <div class="mt-2">
-        <% next unless values.is_a?(Hash) %>
         <% values.each do |key, value| %>
           <% if value.is_a?(Hash) %>
             <% value.each do |k, v| %>
