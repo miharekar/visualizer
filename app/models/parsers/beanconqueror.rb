@@ -22,7 +22,7 @@ module Parsers
       @extra["bean_brand"] = bean["roaster"]
       @extra["bean_type"] = bean["name"]
       @extra["roast_level"] = bean["roast"]
-      @extra["roast_date"] = bean["roastingDate"]
+      @extra["roast_date"] = Date.parse(bean["roastingDate"]).strftime("%Y-%m-%d") rescue nil
     end
 
     def extract_brew(brew)
