@@ -47,6 +47,7 @@ gem "stackprof"
 
 group :development, :test do
   gem "debug"
+  gem "factory_bot_rails"
   gem "singed"
 end
 

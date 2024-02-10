@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_08_131335) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_15_114026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -143,6 +143,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_131335) do
     t.jsonb "extra"
     t.jsonb "profile_fields"
     t.jsonb "timeframe"
+    t.jsonb "brewdata"
     t.index ["shot_id"], name: "index_shot_informations_on_shot_id"
   end
 

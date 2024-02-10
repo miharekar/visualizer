@@ -3,12 +3,12 @@
 class ShotChartCompare < ShotChart
   prepend MemoWise
 
-  attr_reader :comparison
+  attr_reader :parsed_comparison
 
   SUFFIX = "_comparison"
 
   def initialize(shot, comparison, user)
-    @comparison = comparison
+    @parsed_comparison = ParsedShot.new(comparison)
     super(shot, user)
   end
 
@@ -21,19 +21,19 @@ class ShotChartCompare < ShotChart
   end
 
   memo_wise def timestep
-    longest_timeframe ||= processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
+    longest_timeframe ||= @processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
     ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
   end
 
   memo_wise def duration
-    processed_shot_data.map { |_, v| v.last.first }.max
+    @processed_shot_data.map { |_, v| v.last.first }.max
   end
 
   private
 
   def prepare_chart_data
     super
-    @processed_shot_data = @processed_shot_data.merge(process_data(comparison, label_suffix: SUFFIX))
+    @processed_shot_data = @processed_shot_data.merge(process_data(parsed_comparison, label_suffix: SUFFIX))
 
     if @processed_shot_data["espresso_pressure_comparison"].present?
       @processed_shot_data["espresso_resistance_comparison"] = resistance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"]) if @processed_shot_data["espresso_pressure_comparison"].present? && @processed_shot_data["espresso_flow_comparison"].present?
@@ -45,7 +45,7 @@ class ShotChartCompare < ShotChart
   end
 
   def normalize_processed_shot_data
-    processed_shot_data.each do |k, v|
+    @processed_shot_data.each do |k, v|
       comparison = k =~ /_comparison$/
       v.size.times do |i|
         v[i][0] = position_for(i, comparison).to_i * timestep
@@ -64,9 +64,9 @@ class ShotChartCompare < ShotChart
   end
 
   memo_wise def fidelity_ratio
-    longest_original = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? 0 : v.size }.second.map(&:first)
+    longest_original = @processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? 0 : v.size }.second.map(&:first)
     original_step = ((longest_original.last - longest_original.first) / longest_original.size)
-    longest_comparison = processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? v.size : 0 }.second.map(&:first)
+    longest_comparison = @processed_shot_data.max_by { |k, v| k.ends_with?("_comparison") ? v.size : 0 }.second.map(&:first)
     comparison_step = ((longest_comparison.last - longest_comparison.first) / longest_comparison.size)
     original_step / comparison_step
   end

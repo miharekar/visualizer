@@ -93,9 +93,9 @@
 - if @chart
   .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
     #shot-chart
-  .max-w-7xl.mx-auto.pb-8.px-2.sm:px-6.lg:px-8
-    #temperature-chart
-
+  - if @chart.temperature_chart.present?
+    .max-w-7xl.mx-auto.px-2.sm:px-6.lg:px-8
+      #temperature-chart
 
   javascript:
     window.shotData = #{{@chart.shot_chart.to_json}}

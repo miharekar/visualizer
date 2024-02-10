@@ -11,7 +11,11 @@ export default class extends Controller {
       currentElement = currentElement.parentElement
     }
 
-    if (event.metaKey || event.ctrlKey) {
+    const isMiddleClick = event.button === 1
+    const isModifierClick = event.metaKey || event.ctrlKey
+
+    if (isMiddleClick || isModifierClick) {
+      event.preventDefault()
       window.open(event.currentTarget.dataset.url, "_blank")
     } else {
       Turbo.visit(event.currentTarget.dataset.url)

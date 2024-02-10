@@ -1,16 +1,21 @@
 # frozen_string_literal: true
 
 class ShotInformation < ApplicationRecord
-  include ShotProfile
+  prepend MemoWise
+  include Profile
 
   belongs_to :shot
 
   def extra
-    super.presence || {}
+    super || {}
   end
 
   def profile_fields
-    super.presence || {}
+    super || {}
+  end
+
+  def brewdata
+    super || {}
   end
 end
 
@@ -19,6 +24,7 @@ end
 # Table name: shot_informations
 #
 #  id             :uuid             not null, primary key
+#  brewdata       :jsonb
 #  data           :jsonb
 #  extra          :jsonb
 #  profile_fields :jsonb

@@ -4,9 +4,12 @@ require "test_helper"
 
 class SharedShotCleanupJobTest < ActiveJob::TestCase
   test "the truth" do
-    assert SharedShot.count == 2
+    fresh = create(:shared_shot)
+    old = create(:shared_shot, :old)
+
     SharedShotCleanupJob.perform_now
-    assert SharedShot.count == 1
-    assert_equal SharedShot.first, shared_shots(:new)
+
+    assert SharedShot.find_by(id: fresh.id)
+    assert_not SharedShot.find_by(id: old.id)
   end
 end

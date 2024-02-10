@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-module ShotProfile
+module ShotInformation::Profile
   JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
-
-  extend ActiveSupport::Concern
 
   def tcl_profile_fields
     @tcl_profile_fields ||= profile_fields.except("json")

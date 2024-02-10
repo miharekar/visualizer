@@ -31,7 +31,7 @@ class Shot < ApplicationRecord
   def self.from_file(user, file_content)
     return Shot.new if file_content.blank?
 
-    Parsers::Base.parse(file_content).build_shot(user)
+    Parsers::Base.parser_for(file_content).build_shot(user)
   end
 
   def metadata
@@ -48,7 +48,7 @@ class Shot < ApplicationRecord
   end
 
   def ensure_screenshot
-    return if screenshot?
+    return if screenshot? || Rails.env.local?
 
     ScreenshotTakerJob.perform_later(self)
   end

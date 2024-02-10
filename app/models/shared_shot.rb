@@ -6,7 +6,7 @@ class SharedShot < ApplicationRecord
   belongs_to :shot
   belongs_to :user, optional: true
 
-  before_save :set_code
+  before_validation :set_code
 
   private
 
