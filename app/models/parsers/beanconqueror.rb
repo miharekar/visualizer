@@ -18,6 +18,10 @@ module Parsers
       Digest::SHA256.base64digest(brewdata["brewFlow"].sort.to_json) if brewdata["brewFlow"].present?
     end
 
+    def existing_shot(user)
+      Shot.find_by(id: file["visualizerId"], user: user) if file["visualizerId"].present?
+    end
+
     def extract_bean(bean)
       @extra["bean_brand"] = bean["roaster"]
       @extra["bean_type"] = bean["name"]

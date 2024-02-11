@@ -246,6 +246,44 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
   end
 
+  test "extracts real beanconqueror file with id to an existing shot" do
+    @user = create(:user)
+    create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user: @user)
+    shot = new_shot("test/files/beanconqueror_real_with_id.json")
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
+  end
+
+  test "extracts real beanconqueror file with id to a new shot when existing belongs to a different user" do
+    @user = create(:user)
+    create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user: create(:user))
+    shot = new_shot("test/files/beanconqueror_real_with_id.json")
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_not_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
+  end
+
+  test "extracts real beanconqueror file with id to a new shot when existing shot doesn't exist" do
+    @user = create(:user)
+    shot = new_shot("test/files/beanconqueror_real_with_id.json")
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_not_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
+  end
+
+  test "extracts real beanconqueror file to a new shot when no id" do
+    @user = create(:user)
+    shot = new_shot("test/files/beanconqueror_real.json")
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_not_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
+  end
+
   test "extracts long beanconqueror file with negative values" do
     shot = new_shot("test/files/beanconqueror_negative.json")
     assert shot.valid?
