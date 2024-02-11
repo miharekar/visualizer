@@ -67,6 +67,9 @@ Rails/SaveBang:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: true
+Style/HashSyntax:
+  EnforcedShorthandSyntax: always
+  EnforcedStyle: ruby19
 Style/IfUnlessModifier:
   Enabled: true
 Style/Send:

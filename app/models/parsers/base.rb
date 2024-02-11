@@ -42,7 +42,9 @@ module Parsers
 
     def build_shot(user)
       parse
+
       shot = existing_shot(user) || Shot.find_or_initialize_by(user:, sha:)
+
       shot.profile_title = profile_title
       shot.start_time = start_time
       add_information(shot)

@@ -19,7 +19,7 @@ module Parsers
     end
 
     def existing_shot(user)
-      Shot.find_by(id: file["visualizerId"], user: user) if file["visualizerId"].present?
+      Shot.find_by(id: file["visualizerId"], user:) if file["visualizerId"].present?
     end
 
     def extract_bean(bean)
