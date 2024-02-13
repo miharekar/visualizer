@@ -4,7 +4,7 @@ class ShotInformation < ApplicationRecord
   prepend MemoWise
   include Profile
 
-  belongs_to :shot
+  belongs_to :shot, inverse_of: :information
 
   def extra
     super || {}

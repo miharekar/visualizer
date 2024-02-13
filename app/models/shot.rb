@@ -4,7 +4,7 @@ class Shot < ApplicationRecord
   include ShotPresenter
 
   belongs_to :user, optional: true, touch: true
-  has_one :information, class_name: "ShotInformation", dependent: :destroy
+  has_one :information, class_name: "ShotInformation", dependent: :destroy, inverse_of: :shot
   has_many :shared_shots, dependent: :destroy
 
   has_one_attached :image do |attachable|

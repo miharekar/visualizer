@@ -7,8 +7,8 @@ class ShotTest < ActiveSupport::TestCase
     @user = build_stubbed(:user)
   end
 
-  def new_shot(path)
-    Shot.from_file(@user, File.read(path))
+  def new_shot(path, user: @user)
+    Shot.from_file(user, File.read(path))
   end
 
   test "returns invalid Shot with empty file" do
@@ -247,19 +247,63 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts real beanconqueror file with id to an existing shot" do
-    @user = create(:user)
-    create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user: @user)
-    shot = new_shot("test/files/beanconqueror_real_with_id.json")
+    user =create(:user)
+    create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user:)
+    shot = new_shot("test/files/beanconqueror_real_with_id.json", user:)
     assert shot.valid?
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
     shot.save
     assert_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
   end
 
+  test "extracts real beanconqueror file with id to an existing shot and overwrites the information" do
+    user = create(:user)
+    shot = new_shot("test/files/beanconqueror_real.json", user:)
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+
+    assert_equal "Chemex", shot.profile_title
+    assert_equal "Kinu M47", shot.grinder_model
+    assert_equal "4", shot.grinder_setting
+    assert_equal "75", shot.bean_weight
+
+    assert_equal "Kinu M47", shot.information.extra["grinder_model"]
+    assert_equal "4", shot.information.extra["grinder_setting"]
+    assert_equal 75, shot.information.extra["bean_weight"]
+
+    assert_equal "Chemex", shot.information.brewdata["preparation"]["name"]
+    assert_equal "Kinu M47", shot.information.brewdata["mill"]["name"]
+    assert_equal "4", shot.information.brewdata["brew"]["grind_size"]
+    assert_equal 75, shot.information.brewdata["brew"]["grind_weight"]
+
+    updated = Oj.load(File.read("test/files/beanconqueror_real_with_id.json"))
+    updated["visualizerId"] = shot.id
+    shot = Shot.from_file(user, Oj.dump(updated))
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+
+    shot = Shot.find(shot.id)
+
+    assert_equal "V60", shot.profile_title
+    assert_equal "Kinu 47", shot.grinder_model
+    assert_equal "3.2", shot.grinder_setting
+    assert_equal "78", shot.bean_weight
+
+    assert_equal "Kinu 47", shot.information.extra["grinder_model"]
+    assert_equal "3.2", shot.information.extra["grinder_setting"]
+    assert_equal 78, shot.information.extra["bean_weight"]
+
+    assert_equal "V60", shot.information.brewdata["preparation"]["name"]
+    assert_equal "Kinu 47", shot.information.brewdata["mill"]["name"]
+    assert_equal "3.2", shot.information.brewdata["brew"]["grind_size"]
+    assert_equal 78, shot.information.brewdata["brew"]["grind_weight"]
+  end
+
   test "extracts real beanconqueror file with id to a new shot when existing belongs to a different user" do
-    @user = create(:user)
     create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user: create(:user))
-    shot = new_shot("test/files/beanconqueror_real_with_id.json")
+    shot = new_shot("test/files/beanconqueror_real_with_id.json", user: create(:user))
     assert shot.valid?
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
     shot.save
@@ -267,8 +311,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts real beanconqueror file with id to a new shot when existing shot doesn't exist" do
-    @user = create(:user)
-    shot = new_shot("test/files/beanconqueror_real_with_id.json")
+    shot = new_shot("test/files/beanconqueror_real_with_id.json", user: create(:user))
     assert shot.valid?
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
     shot.save
@@ -276,8 +319,7 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts real beanconqueror file to a new shot when no id" do
-    @user = create(:user)
-    shot = new_shot("test/files/beanconqueror_real.json")
+    shot = new_shot("test/files/beanconqueror_real.json", user: create(:user))
     assert shot.valid?
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
     shot.save

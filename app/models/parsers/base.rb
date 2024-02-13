@@ -52,6 +52,7 @@ module Parsers
       if shot.valid?
         extract_fields_from_extra(shot)
         shot.duration = calculate_duration
+        shot.information.save if shot.information.persisted?
       elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
       elsif Rails.env.production?

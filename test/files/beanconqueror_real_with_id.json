@@ -50,8 +50,8 @@
     "rating": 0
   },
   "brew": {
-    "grind_size": "4",
-    "grind_weight": 75,
+    "grind_size": "3.2",
+    "grind_weight": 78,
     "mill_speed": 0,
     "mill_timer": 0,
     "pressure_profile": "",
@@ -82,11 +82,11 @@
     }
   },
   "mill": {
-    "name": "Kinu M47"
+    "name": "Kinu 47"
   },
   "preparation": {
-    "name": "Chemex",
-    "type": "CHEMEX",
+    "name": "V60",
+    "type": "V60",
     "style_type": "POUR OVER"
   },
   "water": {
