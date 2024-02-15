@@ -23,11 +23,12 @@ module Api
       render json: {error: "Could not paginate"}, status: :unprocessable_entity
     end
 
-    def download
+    def show
       with_shot do |shot|
         render json: shot_json(shot, with_data: !params[:essentials].presence)
       end
     end
+    alias_method :download, :show
 
     def profile
       with_shot do |shot|
@@ -77,7 +78,8 @@ module Api
     private
 
     def with_shot
-      shot = Shot.find_by(id: params[:shot_id])
+      id = params[:id].presence || params[:shot_id]
+      shot = Shot.find_by(id:)
       if shot
         yield(shot)
       else
