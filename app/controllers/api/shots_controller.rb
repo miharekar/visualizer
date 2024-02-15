@@ -95,8 +95,12 @@ module Api
       allowed_attrs += %w[metadata] if shot.user&.premium?
       json = shot.attributes.slice(*allowed_attrs)
       if with_data
-        json[:timeframe] = shot.information&.timeframe
-        json[:data] = shot.information&.data
+        if shot.information&.has_chart_data?
+          json[:timeframe] = shot.information&.timeframe
+          json[:data] = shot.information&.data
+        else
+          json[:brewdata] = shot.information&.brewdata
+        end
       end
       json[:duration] = shot.duration
       json[:user_name] = shot.user.display_name if shot.user&.public?
