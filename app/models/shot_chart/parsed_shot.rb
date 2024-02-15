@@ -12,11 +12,11 @@ class ShotChart::ParsedShot
   def initialize(shot)
     @shot = shot
 
-    if should_parse?
-      parse_brew_flow
-    else
+    if shot.information.has_chart_data?
       @timeframe = shot.information.timeframe
       @data = shot.information.data
+    else
+      parse_brew_flow
     end
   end
 
@@ -29,10 +29,6 @@ class ShotChart::ParsedShot
   end
 
   private
-
-  memo_wise def should_parse?
-    shot.information.brewdata["parser"] == "Parsers::Beanconqueror"
-  end
 
   def parse_brew_flow
     brew_flow = shot.information.brewdata.try(:[], "brewFlow")

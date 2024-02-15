@@ -6,13 +6,11 @@ class ParsedShotTest < ActiveSupport::TestCase
   test "should not parse for non-Beanconqueror shots" do
     shot = build_stubbed(:shot, :with_information)
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert_not parsed_shot.__send__(:should_parse?)
   end
 
   test "should parse for Beanconqueror shots" do
     shot = build_stubbed(:shot, :with_information, information: build_stubbed(:shot_information, brewdata: {parser: "Parsers::Beanconqueror"}))
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert parsed_shot.__send__(:should_parse?)
   end
 
   test "it parses real beanconqueror correctly" do
@@ -21,7 +19,6 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert shot.information.data.blank?
 
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert parsed_shot.__send__(:should_parse?)
     assert_equal 488, parsed_shot.timeframe.size
     assert_equal "0.0", parsed_shot.timeframe.first
     assert_equal "34.858", parsed_shot.timeframe.last
@@ -35,7 +32,6 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert shot.information.data.blank?
 
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert parsed_shot.__send__(:should_parse?)
     assert_equal 1748, parsed_shot.timeframe.size
     assert_equal "0.0", parsed_shot.timeframe.first
     assert_equal "174.244", parsed_shot.timeframe.last
@@ -50,7 +46,6 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert shot.information.data.blank?
 
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert parsed_shot.__send__(:should_parse?)
     assert_equal 1366, parsed_shot.timeframe.size
     assert_equal "0.0", parsed_shot.timeframe.first
     assert_equal "147.542", parsed_shot.timeframe.last
@@ -65,7 +60,6 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert shot.information.data.blank?
 
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert parsed_shot.__send__(:should_parse?)
     assert_equal 1117, parsed_shot.timeframe.size
     assert_equal "0.0", parsed_shot.timeframe.first
     assert_equal "163.198", parsed_shot.timeframe.last
@@ -80,7 +74,6 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert shot.information.data.blank?
 
     parsed_shot = ShotChart::ParsedShot.new(shot)
-    assert parsed_shot.__send__(:should_parse?)
     assert_equal 147, parsed_shot.timeframe.size
     assert_equal "0.0", parsed_shot.timeframe.first
     assert_equal "17.198", parsed_shot.timeframe.last

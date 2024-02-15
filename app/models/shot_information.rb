@@ -17,6 +17,10 @@ class ShotInformation < ApplicationRecord
   def brewdata
     super || {}
   end
+
+  def has_chart_data?
+    brewdata["parser"] != "Parsers::Beanconqueror"
+  end
 end
 
 # == Schema Information
