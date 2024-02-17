@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
   resources :profiles, only: %i[edit update] do
     get :reset_chart_settings
+    get :decent_serial_numbers
     collection do
       get :edit
       post :add_metadata_field
@@ -73,6 +74,8 @@ Rails.application.routes.draw do
       get :cancel
     end
   end
+
+  resources :decent_tokens, only: %i[new create]
 
   resources :yearly_brew, only: %i[index show]
   resources :stats, only: [:index]

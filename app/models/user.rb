@@ -71,6 +71,8 @@ end
 #  admin                  :boolean
 #  beta                   :boolean
 #  chart_settings         :jsonb
+#  decent_email           :string
+#  decent_token           :string
 #  developer              :boolean
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null

@@ -47,6 +47,10 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def decent_serial_numbers
+    @serial_numbers = DecentApi.new(@profile.decent_email, @profile.decent_token).serial_numbers
+  end
+
   private
 
   def set_profile
