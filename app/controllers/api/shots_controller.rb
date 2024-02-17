@@ -16,7 +16,7 @@ module Api
       shots = shots.non_premium unless current_user&.premium?
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
 
-      pagy, shots = pagy(shots, items:)
+      pagy, shots = pagy(shots, items:, count_args: [:all])
       data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
       render json: {data:, paging: pagy_metadata(pagy)}
     rescue Pagy::VariableError
