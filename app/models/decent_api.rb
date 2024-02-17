@@ -15,7 +15,7 @@ class DecentApi
   end
 
   def serial_numbers
-    get_request("/sn")
+    get_request("/sn").split("\n")
   end
 
   private
