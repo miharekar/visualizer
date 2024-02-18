@@ -22,7 +22,6 @@ class DecentApi
 
   def get_request(path)
     uri = URI(BASE_URL + path)
-    puts uri
     req = Net::HTTP::Get.new(uri)
     req.basic_auth(email, token)
     http = Net::HTTP.new(uri.host, uri.port)
