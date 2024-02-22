@@ -35,7 +35,7 @@ class CommunityController < ApplicationController
         @shots = @shots.non_premium
       end
 
-      @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
+      @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
     else
       @shots = []
     end

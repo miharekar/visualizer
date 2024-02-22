@@ -20,7 +20,7 @@ class PeopleController < ApplicationController
         @premium_count = @shots.premium.count
         @shots = @shots.non_premium
       end
-      @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
+      @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
     end
   end
 

@@ -138,6 +138,6 @@ class ShotsController < ApplicationController
     @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
     @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
 
-    @shots, @cursor = paginate_with_cursor(@shots, by: :start_time, before: params[:before])
+    @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
   end
 end
