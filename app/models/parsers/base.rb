@@ -47,6 +47,7 @@ module Parsers
 
       shot.profile_title = profile_title
       shot.start_time = start_time
+      shot.public = user.public
       add_information(shot)
 
       if shot.valid?

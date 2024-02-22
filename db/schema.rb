@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_17_074642) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_22_144439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -173,6 +173,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_17_074642) do
     t.float "duration"
     t.jsonb "metadata"
     t.string "airtable_id"
+    t.boolean "public"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"

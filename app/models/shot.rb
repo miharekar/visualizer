@@ -12,7 +12,7 @@ class Shot < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
-  scope :visible, -> { where(user_id: User.where(public: true).select(:id)) }
+  scope :visible, -> { where(public: true) }
   scope :visible_or_owned_by_id, ->(user_id) { visible.or(where(user_id:)) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
@@ -87,6 +87,7 @@ end
 #  metadata           :jsonb
 #  private_notes      :text
 #  profile_title      :string
+#  public             :boolean
 #  roast_date         :string
 #  roast_level        :string
 #  s3_etag            :string

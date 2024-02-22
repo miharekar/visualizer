@@ -23,6 +23,8 @@ class User < ApplicationRecord
   scope :visible_or_id, ->(id) { where(public: true).or(where(id:)) }
   scope :by_name, -> { order("LOWER(name)") }
 
+  after_commit :reflect_public_to_shots, on: :update, if: -> { saved_change_to_public? }
+
   validates :name, presence: true, if: :public?
 
   def display_name
@@ -60,6 +62,10 @@ class User < ApplicationRecord
     return unless public?
 
     super
+  end
+
+  def reflect_public_to_shots
+    shots.update_all(public:)
   end
 end
 

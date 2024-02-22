@@ -20,6 +20,7 @@ class ShotTest < ActiveSupport::TestCase
     path = "test/files/20210921T085910"
     shot = new_shot("#{path}.shot")
     assert_equal @user, shot.user
+    assert_not shot.public
     assert_equal "JoeD's Easy blooming slow ramp to 7 bar", shot.profile_title
     assert_equal "2021-09-21 06:59:10", shot.start_time.to_fs(:db)
     assert_equal "Parsers::DecentTcl", shot.information.brewdata["parser"]
@@ -52,11 +53,12 @@ class ShotTest < ActiveSupport::TestCase
   end
 
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
-    @user = create(:user)
+    @user = create(:user, :public)
 
     path = "test/files/20211019T100744"
     shot = new_shot("#{path}.json")
     assert_equal @user, shot.user
+    assert shot.public
     assert_equal "Easy blooming - active pressure decline", shot.profile_title
     assert_equal "2021-10-19 08:07:44", shot.start_time.to_fs(:db)
     assert_equal "Parsers::DecentJson", shot.information.brewdata["parser"]
