@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Shot < ApplicationRecord
-  LIST_ATTRIBUTES = %i[id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
-
   include ShotPresenter
+
+  LIST_ATTRIBUTES = %i[id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   belongs_to :user, optional: true, touch: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy, inverse_of: :shot
@@ -106,8 +106,9 @@ end
 #  index_shots_on_airtable_id             (airtable_id)
 #  index_shots_on_created_at              (created_at)
 #  index_shots_on_sha                     (sha)
+#  index_shots_on_start_time              (start_time)
+#  index_shots_on_user_id                 (user_id)
 #  index_shots_on_user_id_and_created_at  (user_id,created_at)
-#  index_shots_on_user_id_and_start_time  (user_id,start_time)
 #
 # Foreign Keys
 #
