@@ -66,7 +66,7 @@ class ShotsController < ApplicationController
     if Rails.env.production?
       body = files.map { |file| file.read }.join("\n\n")
       s3_response = Aws::S3::Client.new.put_object(body:, acl: "private", bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
-      Rails.logger.warn("Something is wrong with this file #{s3_response.etag} | User ID: #{user.id}")
+      Rails.logger.warn("Something is wrong with this file #{s3_response.etag} | User ID: #{current_user.id}")
     end
   ensure
     if params.key?(:drag)
