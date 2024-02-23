@@ -31,7 +31,7 @@ class CommunityController < ApplicationController
       @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
 
       unless current_user&.premium?
-        @premium_count = @shots.premium.count
+        @premium_count = Rails.cache.fetch(name: "premium_count", sql: @shots.to_sql, expires_in: 1.hour) { @shots.premium.count }
         @shots = @shots.non_premium
       end
 
