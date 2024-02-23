@@ -15,7 +15,7 @@ class Shot < ApplicationRecord
   end
 
   scope :visible, -> { where(public: true) }
-  scope :visible_or_owned_by_id, ->(user_id) { visible.or(where(user_id:)) }
+  scope :visible_or_owned_by_id, ->(user_id) { user_id ? visible.or(where(user_id:)) : visible }
   scope :for_list, -> { select(LIST_ATTRIBUTES) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
@@ -103,12 +103,11 @@ end
 #
 # Indexes
 #
-#  index_shots_on_airtable_id             (airtable_id)
-#  index_shots_on_created_at              (created_at)
-#  index_shots_on_sha                     (sha)
-#  index_shots_on_start_time              (start_time)
-#  index_shots_on_user_id                 (user_id)
-#  index_shots_on_user_id_and_created_at  (user_id,created_at)
+#  index_shots_on_airtable_id  (airtable_id)
+#  index_shots_on_created_at   (created_at)
+#  index_shots_on_sha          (sha)
+#  index_shots_on_start_time   (start_time)
+#  index_shots_on_user_id      (user_id)
 #
 # Foreign Keys
 #

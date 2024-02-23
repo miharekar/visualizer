@@ -20,7 +20,7 @@ class User < ApplicationRecord
   has_one_attached :avatar, service: :cloudinary
 
   scope :visible, -> { where(public: true) }
-  scope :visible_or_id, ->(id) { where(public: true).or(where(id:)) }
+  scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
   scope :by_name, -> { order("LOWER(name)") }
 
   after_commit :reflect_public_to_shots, on: :update, if: -> { saved_change_to_public? }
