@@ -40,5 +40,5 @@ console_command = "/rails/bin/rails console"
       X-Forwarded-Proto = "https"
 
 [processes]
-  app = "./bin/rails server -p 3000"
-  sidekiq = "bundle exec sidekiq -C config/sidekiq.yml"
+  app = "./bin/rails server"
+  sidekiq = "bundle exec sidekiq"
