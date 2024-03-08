@@ -15,7 +15,7 @@ class CommunityController < ApplicationController
   }.freeze
 
   def index
-    if params[:commit] || current_user.blank?
+    if params[:commit] || current_user.blank? || current_user.premium?
       @shots = Shot.visible_or_owned_by_id(current_user&.id).includes(:user)
       FILTERS.each do |filter, options|
         next if params[filter].blank?
