@@ -47,7 +47,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Miha Rekar", shot.barista
     assert_equal "MimojaCafe", shot.information.extra["skin"]
     # FileUtils.cp(shot.information.tcl_profile, "#{path}.tcl")
-    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     # File.write("#{path}.json", shot.information.json_profile)
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
@@ -85,7 +85,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
     assert_equal "MimojaCafe", shot.information.extra["skin"]
-    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json_profile"), shot.information.json_profile
 
     shot.save!
@@ -121,7 +121,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
     assert_equal "MimojaCafe", shot.information.extra["skin"]
-    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json_profile"), shot.information.json_profile
   end
 
@@ -129,7 +129,7 @@ class ShotTest < ActiveSupport::TestCase
     path = "test/files/dsx_weight"
     shot = new_shot("#{path}.shot")
     assert_equal 18.0, shot.bean_weight.to_f
-    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
@@ -137,7 +137,7 @@ class ShotTest < ActiveSupport::TestCase
     path = "test/files/invalid_machine"
     shot = new_shot("#{path}.shot")
     assert_equal "Cremina lever machine", shot.profile_title
-    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 
@@ -145,7 +145,7 @@ class ShotTest < ActiveSupport::TestCase
     path = "test/files/brackets"
     shot = new_shot("#{path}.shot")
     assert_equal "manual 82", shot.profile_title
-    assert_equal File.read("#{path}.tcl"), File.read(shot.information.tcl_profile)
+    assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
 

@@ -14,16 +14,14 @@ module ShotInformation::Profile
   def tcl_profile
     return if tcl_profile_fields.blank?
 
-    content = tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
+    tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
       v = "Visualizer/#{v}" if k == "profile_title"
       v = "#{v.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if k == "profile_notes"
       v = "{}" if v.blank?
       v = "{#{v}}" if /\w\s\w/.match?(v)
 
       "#{k} #{v}"
-    end
-
-    file_from_content(["#{shot.profile_title} from Visualizer", ".tcl"], content.join("\n"))
+    end.join("\n")
   end
 
   def json_profile
@@ -38,14 +36,5 @@ module ShotInformation::Profile
     end
 
     JSON.pretty_generate(json)
-  end
-
-  private
-
-  def file_from_content(filename, content)
-    file = Tempfile.new(filename)
-    file.write(content)
-    file.close
-    file.path
   end
 end

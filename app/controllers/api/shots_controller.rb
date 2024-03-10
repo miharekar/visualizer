@@ -35,7 +35,7 @@ module Api
         if params[:format] == "json" && shot.information&.json_profile_fields.present?
           render json: shot.information&.json_profile
         elsif shot.information&.tcl_profile_fields.present?
-          send_file shot.information&.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+          send_data shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
         else
           render json: {error: "Shot does not have a profile"}, status: :unprocessable_entity
         end
