@@ -12,6 +12,7 @@ export default class extends Controller {
   }
 
   getFloatFromString(string) {
-    return parseFloat(string.replace(",", ".").replace(" ", ""))
+    const number = parseFloat(string.replace(/\s/g, "").replace(",", "."))
+    return isNaN(number) ? 0 : number
   }
 }
