@@ -60,7 +60,7 @@ tr.cursor-pointer.hover:bg-neutral-50.dark:hover:bg-neutral-800 id=dom_id(shot) 
         - if shot.grinder_model.present?
           = shot.grinder_model
           '
-        - if shot.grinder_setting.present? && shot.grinder_setting != "0"
+        - if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0"
           ' @
           = shot.grinder_setting
       span.text-sm.text-neutral-500.dark:text-neutral-400
