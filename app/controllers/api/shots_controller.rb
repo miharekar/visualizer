@@ -57,12 +57,19 @@ module Api
     end
 
     def upload
-      shot = Shot.from_file(current_user, params[:file].read)
+      file_content = params[:file].read
+      shot = Shot.from_file(current_user, file_content)
       if shot&.save
         render json: {id: shot.id}
       else
         render json: {error: "Could not parse the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_entity
       end
+    rescue StandardError => e
+      s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file_content, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}")
+      Appsignal.send_error(e) do |transaction|
+        transaction.set_tags(user_id: current_user.id, s3_etag: s3_response.etag)
+      end
+      render json: {error: "Something went wrong. Please try again later."}, status: :internal_server_error
     end
 
     def destroy
