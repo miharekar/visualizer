@@ -61,7 +61,7 @@ module Api
       if shot&.save
         render json: {id: shot.id}
       else
-        render json: {error: "Could not parse the provided file"}, status: :unprocessable_entity
+        render json: {error: "Could not parse the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_entity
       end
     end
 

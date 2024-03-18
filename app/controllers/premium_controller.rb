@@ -9,7 +9,7 @@ class PremiumController < ApplicationController
       "Sync with Airtable",
       "Access your complete shot history",
       "Explore the vast archive of public community shots",
-      "Quickly review grinder settings of your shots",
+      "Upload over 50 shots per day",
       "Personalize chart colors",
       "Fine-tune the timing of the comparison shot",
       "Attach images to shots for visual documentation and analysis",
@@ -18,7 +18,7 @@ class PremiumController < ApplicationController
       "Immediately find your past shots with Instant Filters"
     ].shuffle + ["Directly support the development and maintenance of Visualizer"]
     @qas = [
-      ["What's the biggest difference between free and premium?", "With premium, you can see all the shots you ever uploaded. On the free plan, you only see and search amongst the ones that were made in the last month."]
+      ["What's the biggest difference between free and premium?", "With premium, you can see all the shots you ever uploaded. On the free plan, you only see the ones made in the last month."]
     ] + [
       ["How much does it cost?", "It costs €5 per month or €50 per year."],
       ["Do you ever erase shot history for non-premium users?", "No, never. You simply lose visibility of the old shots, they're still there."],

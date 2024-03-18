@@ -3,6 +3,7 @@
 class Shot < ApplicationRecord
   include ShotPresenter
 
+  DAILY_LIMIT = 50
   LIST_ATTRIBUTES = %i[id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   belongs_to :user, optional: true, touch: true
@@ -27,12 +28,13 @@ class Shot < ApplicationRecord
   after_save_commit :sync_to_airtable
   after_destroy_commit :cleanup_airtable
 
-  validates :start_time, :sha, presence: true
+  validates :start_time, :sha, :user, presence: true
+  validate :under_daily_limit, on: :create
 
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend
 
   def self.from_file(user, file_content)
-    return Shot.new if file_content.blank?
+    return Shot.new(user:) if file_content.blank?
 
     Parsers::Base.parser_for(file_content).build_shot(user)
   end
@@ -66,6 +68,15 @@ class Shot < ApplicationRecord
     return if airtable_id.blank? || !user.premium? || user.identities.by_provider(:airtable).empty?
 
     AirtableShotDeleteJob.perform_later(user, airtable_id)
+  end
+
+  private
+
+  def under_daily_limit
+    return if user.premium?
+    return if self.class.where(user_id:).where("start_time > NOW() - INTERVAL '1 day'").where.not(id:).count < DAILY_LIMIT
+
+    errors.add(:base, "You've reached your daily limit of #{DAILY_LIMIT} shots. Please consider upgrading to a premium account.")
   end
 end
 
