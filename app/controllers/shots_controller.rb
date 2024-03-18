@@ -58,7 +58,7 @@ class ShotsController < ApplicationController
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
         "You uploaded a profile file, not a history file. Please upload a history file."
       else
-        "You uploaded invalid #{"file".pluralize(files.count)}. #{shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}"
+        "Could not save the provided #{"file".pluralize(files.count)}. #{shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}"
       end
     end
   rescue => e

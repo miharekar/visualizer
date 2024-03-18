@@ -54,7 +54,7 @@ module Parsers
         extract_fields_from_extra(shot)
         shot.duration = calculate_duration
         shot.information.save if shot.information.persisted?
-      elsif file.start_with?("advanced_shot")
+      elsif file.to_s.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
       elsif Rails.env.production?
         s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
