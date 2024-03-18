@@ -37,3 +37,9 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+
+# Restart workers every 6h
+before_fork do
+  require "puma_worker_killer"
+  PumaWorkerKiller.enable_rolling_restart # Default is every 6 hours
+end
