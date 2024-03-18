@@ -42,3 +42,7 @@ console_command = "/rails/bin/rails console"
 [processes]
   app = "./bin/rails server"
   sidekiq = "bundle exec sidekiq"
+[[statics]]
+  guest_path = "/rails/public"
+  url_prefix = "/"
+
