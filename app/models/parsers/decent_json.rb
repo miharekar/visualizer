@@ -5,16 +5,16 @@ module Parsers
     JSON_MAPPING = {"_weight" => "by_weight", "_weight_raw" => "by_weight_raw", "_goal" => "goal"}.freeze
 
     def parse
-      @start_time = Time.at(file["timestamp"].to_i).utc
-      @timeframe = file["elapsed"]
-      @profile_fields["json"] = file["profile"]
-      @profile_title = file.dig("profile", "title")
+      @start_time = Time.at(json["timestamp"].to_i).utc
+      @timeframe = json["elapsed"]
+      @profile_fields["json"] = json["profile"]
+      @profile_title = json.dig("profile", "title")
 
       %w[pressure flow].each do |key|
-        @data["espresso_#{key}"] = file.dig(key, key)
+        @data["espresso_#{key}"] = json.dig(key, key)
 
         JSON_MAPPING.each do |suffix, subkey|
-          value = file.dig(key, subkey)
+          value = json.dig(key, subkey)
           next if value.blank?
 
           @data["espresso_#{key}#{suffix}"] = value
@@ -22,16 +22,16 @@ module Parsers
       end
 
       %w[basket mix goal].each do |key|
-        @data["espresso_temperature_#{key}"] = file.dig("temperature", key)
+        @data["espresso_temperature_#{key}"] = json.dig("temperature", key)
       end
 
       %w[weight water_dispensed].each do |key|
-        @data["espresso_#{key}"] = file.dig("totals", key)
+        @data["espresso_#{key}"] = json.dig("totals", key)
       end
 
-      @data["espresso_state_change"] = file["state_change"]
+      @data["espresso_state_change"] = json["state_change"]
 
-      settings = file.dig("app", "data", "settings")
+      settings = json.dig("app", "data", "settings")
       EXTRA_DATA_CAPTURE.each do |key|
         @extra[key] = settings[key]
       end

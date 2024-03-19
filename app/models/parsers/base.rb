@@ -9,15 +9,15 @@ module Parsers
     EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
     EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight enable_fahrenheit my_name skin]).freeze
 
-    attr_reader :file, :start_time, :data, :extra, :brewdata, :timeframe, :profile_title, :profile_fields, :json
+    attr_reader :file, :json, :start_time, :data, :extra, :brewdata, :timeframe, :profile_title, :profile_fields, :json
 
     def self.parser_for(file)
       if file.start_with?("{")
         json = parse_json(file)
         if json.key?("mill") || json.key?("brewFlow")
-          Beanconqueror.new(json)
+          Beanconqueror.new(file, json)
         else
-          DecentJson.new(json)
+          DecentJson.new(file, json)
         end
       elsif file.start_with?("clock", "sequence_id", "filename")
         DecentTcl.new(file)
@@ -32,8 +32,9 @@ module Parsers
       Oj.load(file)
     end
 
-    def initialize(file)
+    def initialize(file, json = nil)
       @file = file
+      @json = json
       @data = {}
       @extra = {}
       @profile_fields = {}
@@ -54,7 +55,7 @@ module Parsers
         extract_fields_from_extra(shot)
         shot.duration = calculate_duration
         shot.information.save if shot.information.persisted?
-      elsif file.to_s.start_with?("advanced_shot")
+      elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
       elsif Rails.env.production?
         s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")

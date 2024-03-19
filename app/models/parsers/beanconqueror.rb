@@ -3,12 +3,12 @@
 module Parsers
   class Beanconqueror < Base
     def parse
-      @start_time = Time.at(file.dig("brew", "config", "unix_timestamp").to_i).utc
-      @profile_title = file.dig("preparation", "name").presence || "Beanconqueror"
-      @brewdata = file
-      extract_bean(file["bean"])
-      extract_grinder(file["mill"])
-      extract_brew(file["brew"])
+      @start_time = Time.at(json.dig("brew", "config", "unix_timestamp").to_i).utc
+      @profile_title = json.dig("preparation", "name").presence || "Beanconqueror"
+      @brewdata = json
+      extract_bean(json["bean"])
+      extract_grinder(json["mill"])
+      extract_brew(json["brew"])
       fake_timeframe
     end
 
@@ -19,7 +19,7 @@ module Parsers
     end
 
     def existing_shot(user)
-      Shot.find_by(id: file["visualizerId"], user:) if file["visualizerId"].present?
+      Shot.find_by(id: json["visualizerId"], user:) if json["visualizerId"].present?
     end
 
     def extract_bean(bean)
