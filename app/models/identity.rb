@@ -34,6 +34,10 @@ class Identity < ApplicationRecord
     raise
   end
 
+  def airtable?
+    provider == "airtable"
+  end
+
   private
 
   def refresh_token_key
