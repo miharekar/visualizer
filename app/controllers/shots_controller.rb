@@ -66,7 +66,9 @@ class ShotsController < ApplicationController
     if Rails.env.production?
       body = files.map { |file| file.read }.join("\n\n")
       s3_response = Aws::S3::Client.new.put_object(body:, acl: "private", bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
-      Appsignal.send_message("Something is wrong with this file #{s3_response.etag} | User ID: #{current_user.id}")
+      Appsignal.set_error(e) do |transaction|
+        transaction.set_tags(s3_response: s3_response.etag)
+      end
     end
   ensure
     if params.key?(:drag)

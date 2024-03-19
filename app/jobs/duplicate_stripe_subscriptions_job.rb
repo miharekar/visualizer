@@ -14,7 +14,7 @@ class DuplicateStripeSubscriptionsJob < ApplicationJob
       end
     end
     active_subscriptions.select { |email, subscriptions| subscriptions.count > 1 }.each do |email, subscriptions|
-      Appsignal.send_message("Duplicate subscription for #{email}")
+      Appsignal.set_message("Duplicate subscription for #{email}")
     end
   end
 end
