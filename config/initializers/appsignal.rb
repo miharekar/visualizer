@@ -7,6 +7,6 @@ module Appsignal
   def self.send_message(message, ...)
     ex = SimpleMessage.new(message)
     ex.set_backtrace(caller.drop(1))
-    send_error(ex, ...)
+    set_error(ex, ...)
   end
 end
