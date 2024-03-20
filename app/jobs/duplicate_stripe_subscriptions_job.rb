@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DuplicateStripeSubscriptionsJob < ApplicationJob
-  queue_as :default
+  queue_as :low
 
   def perform(*args)
     active_subscriptions = {}

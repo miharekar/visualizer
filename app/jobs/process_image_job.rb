@@ -3,7 +3,7 @@
 require "ruby-vips"
 
 class ProcessImageJob < ApplicationJob
-  queue_as :default
+  queue_as :low
 
   def perform(blob, options)
     blob.variant(options).processed

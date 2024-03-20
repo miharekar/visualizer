@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FillAutocompleteValuesJob < ApplicationJob
-  queue_as :default
+  queue_as :low
 
   def perform
     CommunityController::FILTERS.each do |filter, options|

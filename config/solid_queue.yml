@@ -16,7 +16,7 @@ default: &default
           class: AirtableWebhookRefreshAllJob
           schedule: "0 0 */6 * *"
   workers:
-    - queues: [critical, real_time, default, low]
+    - queues: [real_time, high, default, low]
 
 development:
   <<: *default
