@@ -41,8 +41,7 @@ console_command = "/rails/bin/rails console"
 
 [processes]
   app = "./bin/rails server"
-  sidekiq = "bundle exec sidekiq"
+  queue = "bundle exec rake solid_queue:start"
 [[statics]]
   guest_path = "/rails/public"
   url_prefix = "/"
-
