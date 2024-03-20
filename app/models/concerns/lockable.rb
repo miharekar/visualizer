@@ -1,19 +1,9 @@
 # frozen_string_literal: true
 
 module Lockable
-  def with_lock(key, ttl_ms = 10_000)
-    lock_manager.lock(key, ttl_ms) do |locked|
-      yield if locked
-    end
-  end
+  def with_lock!(name, ttl: 30, attempts: 1, &block)
+    raise ArgumentError, "Block required" unless block
 
-  private
-
-  def lock_manager
-    @lock_manager ||= Redlock::Client.new(redis_servers)
-  end
-
-  def redis_servers
-    Rails.env.test? ? [] : [Sidekiq.redis_pool]
+    PgLock.new(name:, ttl:, attempts:).lock!(&block)
   end
 end

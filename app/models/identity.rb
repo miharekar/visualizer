@@ -18,7 +18,7 @@ class Identity < ApplicationRecord
   def refresh_token!
     return if valid_token?
 
-    with_lock(refresh_token_key) do
+    with_lock!(refresh_token_key) do
       new_token = OAuth2::AccessToken.new(strategy.client, token, {expires_at: expires_at.to_i, refresh_token:})
       new_token = new_token.refresh!
       update!(token: new_token.token, refresh_token: new_token.refresh_token, expires_at: Time.zone.at(new_token.expires_at))
