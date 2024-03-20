@@ -5,12 +5,6 @@
       "type": "rdbg",
       "name": "Attach with rdbg",
       "request": "attach",
-    },
-    {
-      "type": "rdbg",
-      "name": "Attach to sidekiq",
-      "request": "attach",
-      "debugPort": "localhost:5163",
     }
   ]
 }
