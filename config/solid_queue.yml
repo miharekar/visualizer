@@ -16,13 +16,7 @@ default: &default
           class: AirtableWebhookRefreshAllJob
           schedule: "0 0 */6 * *"
   workers:
-    - queues: "*"
-      threads: 3
-      polling_interval: 2
     - queues: [critical, real_time, default, low]
-      threads: 5
-      polling_interval: 0.1
-      processes: 3
 
 development:
   <<: *default
