@@ -51,25 +51,17 @@ class ShotsController < ApplicationController
     files = Array(params[:files])
     shots = files.map { |file| Shot.from_file(current_user, file.read) }
 
-    if shots.all? { |s| s.errors.empty? }
-      shots.each(&:save!)
+    if shots.all? { |shot| shot.save }
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
         "You uploaded a profile file, not a history file. Please upload a history file."
       else
-        "Could not save the provided #{"file".pluralize(files.count)}. #{shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}"
+        {heading: "Could not save the provided #{"file".pluralize(files.count)}", text: shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}
       end
     end
   rescue => e
     flash[:alert] = "Something went wrong: #{e.message}"
-    if Rails.env.production?
-      body = files.map { |file| file.read }.join("\n\n")
-      s3_response = Aws::S3::Client.new.put_object(body:, acl: "private", bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
-      Appsignal.set_error(e) do |transaction|
-        transaction.set_tags(s3_response: s3_response.etag)
-      end
-    end
   ensure
     if params.key?(:drag)
       head :ok

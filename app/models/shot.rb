@@ -29,7 +29,7 @@ class Shot < ApplicationRecord
   after_destroy_commit :cleanup_airtable
 
   validates :start_time, :sha, :user, presence: true
-  validate :under_daily_limit, on: :create
+  validate :daily_limit, on: :create
 
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend
 
@@ -72,11 +72,11 @@ class Shot < ApplicationRecord
 
   private
 
-  def under_daily_limit
+  def daily_limit
     return if user.premium?
     return if self.class.where(user_id:).where("start_time > NOW() - INTERVAL '1 day'").count < DAILY_LIMIT
 
-    errors.add(:base, "You've reached your daily limit of #{DAILY_LIMIT} shots. Please consider upgrading to a premium account.")
+    errors.add(:base, :over_daily_limit, message: "You've reached your daily limit of #{DAILY_LIMIT} shots. Please consider upgrading to a premium account.")
   end
 end
 
