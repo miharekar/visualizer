@@ -19,7 +19,7 @@ default: &default
     - queues: "*"
       threads: 3
       polling_interval: 2
-    - queues: [critical, default, low]
+    - queues: [critical, real_time, default, low]
       threads: 5
       polling_interval: 0.1
       processes: 3
