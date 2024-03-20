@@ -20,12 +20,14 @@ module Airtable
       if shot.airtable_id
         update_record(shot.airtable_id, prepare_record(shot))
       else
-        upload_multiple(::Shot.where(id: shot.id))
+        upload_multiple(::Shot.where(user:, id: shot.id))
       end
     end
 
     def upload_multiple(shots)
-      records = shots.where(user:).with_attached_image.map { |shot| prepare_record(shot) }
+      return unless shots.exists?
+
+      records = shots.with_attached_image.map { |shot| prepare_record(shot) }
       update_records(records) do |response|
         response["records"].each do |record|
           shot = shots.find_by(id: record["fields"]["ID"])
