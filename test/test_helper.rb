@@ -7,9 +7,6 @@ require "rails/test_help"
 require "minitest/unit"
 require "webmock/minitest"
 
-require "redlock/testing"
-Redlock::Client.testing_mode = :bypass
-
 module ActiveSupport
   class TestCase
     include ActiveJob::TestHelper

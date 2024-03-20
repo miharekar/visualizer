@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require "sidekiq/web"
-require "sidekiq-scheduler/web"
-
 Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
   authenticate :user, ->(user) { user.admin? } do
-    mount Sidekiq::Web => "/sidekiq"
-    mount PgHero::Engine => "pghero"
+    mount MissionControl::Jobs::Engine, at: "/jobs"
+    mount PgHero::Engine, at: "/pghero"
   end
 
   devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
