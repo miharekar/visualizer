@@ -3,6 +3,8 @@
 class AirtableWebhookJob < AirtableJob
   class LastTransactionMismatchError < StandardError; end
 
+  retry_on LastTransactionMismatchError, wait: :polynomially_longer
+
   def perform(airtable_info)
     @airtable_info = airtable_info
     @user = @airtable_info.identity.user
