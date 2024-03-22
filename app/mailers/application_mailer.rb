@@ -7,6 +7,11 @@ class ApplicationMailer < ActionMailer::Base
   layout "mailer"
   helper_method :notification_exists?
 
+  rescue_from(Exception) do |exception|
+    Appsignal.send_error(exception)
+    raise exception
+  end
+
   private
 
   def check_subscription

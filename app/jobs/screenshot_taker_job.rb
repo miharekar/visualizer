@@ -5,10 +5,6 @@ require "aws-sdk-s3"
 class ScreenshotTakerJob < ApplicationJob
   queue_as :low
 
-  rescue_from(ActiveJob::DeserializationError) do
-    true
-  end
-
   def perform(shot)
     return if shot.screenshot?
 
