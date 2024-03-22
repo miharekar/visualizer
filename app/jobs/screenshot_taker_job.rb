@@ -3,6 +3,8 @@
 require "aws-sdk-s3"
 
 class ScreenshotTakerJob < ApplicationJob
+  retry_on Timeout::Error, wait: :polynomially_longer
+
   queue_as :low
 
   def perform(shot)
