@@ -60,6 +60,15 @@ module.exports = {
         "inner-sm": "inset 0 1px 2px 0 rgb(0 0 0 / 0.05)",
         "inner-lg": "inset 0 4px 4px 0 rgb(0 0 0 / 0.05)",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            pre: {
+              backgroundColor: "#2e3440",
+            },
+          },
+        },
+      },
     },
   },
   plugins: [
