@@ -5,6 +5,7 @@ xml.rss version: "2.0" do
     xml.description "These are the latest updates from Visualizer"
     xml.link feed_updates_url
     xml.lastBuildDate @updates.first.published_at.rfc822
+    xml.tag! "atom:link", href: feed_updates_url(format: "rss"), rel: "self", type: "application/rss+xml"
 
     @updates.each do |update|
       xml.item do
