@@ -76,7 +76,9 @@ Rails.application.routes.draw do
 
   resources :yearly_brew, only: %i[index show]
   resources :stats, only: [:index]
-  resources :updates, except: %i[destroy]
+  resources :updates, except: %i[destroy] do
+    get :feed, on: :collection
+  end
   get "/changes(/*path)", to: redirect { |params| "/updates/#{params[:path]}" }
 
   post :airtable, to: "airtable#notification"

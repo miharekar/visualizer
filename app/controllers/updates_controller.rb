@@ -11,7 +11,13 @@ class UpdatesController < ApplicationController
     @updates, @cursor = paginate_with_cursor(Update, items: 3, by: :published_at, before: params[:before])
   end
 
+  def feed
+    @updates = Update.order(published_at: :desc)
+    render formats: :rss
+  end
+
   def show
+    redirect_to updates_path, notice: "Update not found" unless @update
   end
 
   def new

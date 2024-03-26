@@ -1,4 +1,5 @@
 <% content_for(:html_title) { "Visualizer | Updates" } %>
+<% content_for(:head) { auto_discovery_link_tag :rss, feed_updates_path(format: :rss) } %>
 <div class="max-w-4xl px-4 mx-auto my-6 sm:px-6">
   <% if current_user&.admin %>
     <div class="text-xs text-right">
