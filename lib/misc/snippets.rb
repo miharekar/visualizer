@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 def top_profiles(from:)
   profiles = Shot.where(created_at: from..).pluck(:profile_title)
   total = profiles.size.to_f

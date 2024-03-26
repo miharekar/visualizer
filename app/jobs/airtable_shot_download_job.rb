@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AirtableShotDownloadJob < AirtableJob
   def perform(user, minutes: 60)
     Airtable::Shots.new(user).download(minutes:)

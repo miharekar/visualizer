@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class EnjoymentChart
   include Rails.application.routes.url_helpers
   include ColorHelper

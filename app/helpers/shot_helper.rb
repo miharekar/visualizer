@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ShotHelper
   def metadata_pair(key, value)
     value = value.to_s

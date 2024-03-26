@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CursorPaginatable
   def paginate_with_cursor(relation, items: 20, before: nil, by: :id, direction: :desc)
     relation = relation.where(by => ..before) if before.present?

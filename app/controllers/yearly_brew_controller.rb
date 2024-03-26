@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class YearlyBrewController < ApplicationController
   before_action :authenticate_user!, except: [:show]
 

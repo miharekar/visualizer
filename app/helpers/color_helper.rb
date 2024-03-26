@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ColorHelper
   def enjoyment_hex(value)
     hsl_to_hex(1.2 * value.to_i, 70, 50)

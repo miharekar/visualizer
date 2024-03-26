@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateShotInformations < ActiveRecord::Migration[7.0]
   def change
     # rubocop:disable Rails/CreateTableWithTimestamps

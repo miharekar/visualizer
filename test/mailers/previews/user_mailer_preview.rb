@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UserMailerPreview < ActionMailer::Preview
   def yearly_brew
     user = User.order("RANDOM()").first

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ShotChart::AdditionalCharts
   MAX_RESISTANCE_VALUE = 19
   MIN_CONDUCTANCE_DIFF_VALUE = -5

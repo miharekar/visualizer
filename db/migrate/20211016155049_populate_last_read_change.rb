@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PopulateLastReadChange < ActiveRecord::Migration[7.0]
   class MigrationUser < ApplicationRecord
     self.table_name = :users

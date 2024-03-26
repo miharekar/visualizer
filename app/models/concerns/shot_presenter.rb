@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ShotPresenter
   SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
 

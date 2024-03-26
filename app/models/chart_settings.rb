@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChartSettings
   DEFAULT = {
     "espresso_pressure" => {"title" => "Pressure", "color" => "#05c793", "suffix" => " bar", "type" => "spline"},

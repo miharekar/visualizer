@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateSharedShots < ActiveRecord::Migration[7.0]
   def change
     create_table :shared_shots, id: :uuid do |t|

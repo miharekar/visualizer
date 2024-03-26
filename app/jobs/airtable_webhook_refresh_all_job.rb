@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AirtableWebhookRefreshAllJob < AirtableJob
   def perform(*args)
     AirtableInfo.find_each do |airtable_info|

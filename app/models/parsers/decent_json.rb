@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Parsers
   class DecentJson < Base
     JSON_MAPPING = {"_weight" => "by_weight", "_weight_raw" => "by_weight_raw", "_goal" => "goal"}.freeze

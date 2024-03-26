@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DecentApi
   BASE_URL = "https://decentespresso.com/support/api"
 

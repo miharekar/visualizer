@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AlterEspressoEnjoymentToInteger < ActiveRecord::Migration[6.1]
   class MigrationShot < ApplicationRecord
     self.table_name = :shots

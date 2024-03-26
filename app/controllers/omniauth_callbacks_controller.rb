@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def airtable
     oauth = OauthWrapper.new(request.env["omniauth.auth"])

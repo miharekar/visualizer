@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UserMailer < ApplicationMailer
   def yearly_brew
     @user = params[:user]

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 if Rails.application.credentials.cloudinary
   Cloudinary.config do |config|
     config.cloud_name = Rails.application.credentials.cloudinary&.cloud_name

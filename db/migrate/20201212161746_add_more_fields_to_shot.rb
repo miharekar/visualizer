@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddMoreFieldsToShot < ActiveRecord::Migration[6.1]
   def change
     add_column :shots, :drink_tds, :string

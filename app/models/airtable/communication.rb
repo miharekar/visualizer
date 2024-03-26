@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Airtable
   module Communication
     API_URL = "https://api.airtable.com/v0"

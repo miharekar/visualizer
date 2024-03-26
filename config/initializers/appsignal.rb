@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Appsignal
   class SimpleMessage < StandardError
   end

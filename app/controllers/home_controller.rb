@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class HomeController < ApplicationController
   def show
     @user_count = (User.count / 100).floor * 100

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ShotChart::Process
   DATA_LABELS_TO_IGNORE = %w[espresso_resistance espresso_resistance_weight espresso_state_change].freeze
 

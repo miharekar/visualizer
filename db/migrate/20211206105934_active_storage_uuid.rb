@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ActiveStorageUuid < ActiveRecord::Migration[7.0]
   class MigrationAttachment < ApplicationRecord
     self.table_name = :active_storage_attachments

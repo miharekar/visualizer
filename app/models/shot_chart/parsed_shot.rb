@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ShotChart::ParsedShot
   prepend MemoWise
   include Bsearch

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -41,6 +39,7 @@ gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails", "~> 2.0.0-beta.1"
 
 gem "appsignal"
+gem "freezolite"
 gem "pghero"
 gem "pg_query"
 gem "rack-mini-profiler"

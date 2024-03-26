@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Update < ApplicationRecord
   self.table_name = :changes
 

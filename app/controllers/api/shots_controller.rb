@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Api
   class ShotsController < Api::BaseController
     include Pagy::Backend

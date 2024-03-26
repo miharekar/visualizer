@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AirtableShotUploadJob < AirtableJob
   def perform(shot)
     Airtable::Shots.new(shot.user).upload(shot)

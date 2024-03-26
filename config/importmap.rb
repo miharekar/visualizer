@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 pin "application"
 pin "@rails/activestorage", to: "activestorage.esm.js"
 pin "@rails/actioncable", to: "actioncable.esm.js"

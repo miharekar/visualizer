@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AirtableWebhookRefreshJob < AirtableJob
   def perform(airtable_info)
     user = airtable_info.identity.user

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AirtableInfo < ApplicationRecord
   belongs_to :identity
 end

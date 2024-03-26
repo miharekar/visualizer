@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Api
   class CredentialsController < Api::BaseController
     before_action :verify_read_access

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ShotInformation < ApplicationRecord
   prepend MemoWise
   include Profile

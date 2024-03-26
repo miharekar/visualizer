@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Airtable
   class Shots < Base
     include Rails.application.routes.url_helpers
