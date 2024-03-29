@@ -50,7 +50,7 @@ module Parsers
       elsif row["metatype"] == "Name"
         @profile_title = row["metadata"]
       elsif row["metatype"] == "Date"
-        @start_time = Time.parse(row["metadata"]).utc
+        @start_time = Time.zone.iso8601(row["metadata"])
       elsif row["metatype"] == "Roasting Date"
         @extra["roast_date"] = Date.parse(row["metadata"]).strftime("%Y-%m-%d")
       else
