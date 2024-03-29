@@ -1,0 +1,59 @@
+<% content_for(:html_title) { "Visualizer | #{@shot.profile_title}" } %>
+<% content_for(:head) do %>
+  <% description = render "meta_description", shot: @shot %>
+  <meta name="description" content="<%= description %>">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:title" content="<%= @shot.profile_title %>">
+  <% if @shot.screenshot? %><meta property="og:image" content="<%= @shot.screenshot_url %>"><% end %>
+  <meta property="og:url" content="https://visualizer.coffee/shots/<%= @shot.id %>">
+  <meta property="og:description" content="<%= description %>">
+<% end %>
+<%= render "shot_header_row" %>
+<% width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3" %>
+<div class="px-2 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex flex-col md:flex-row">
+    <div class="<%= @shot.image.attached? ? "md:w-1/2" : "md:w-full" %>">
+      <%= render "details", shot: @shot, name: false %>
+      <h3 class="mt-3 text-l dark:text-neutral-300">Compare</h3>
+      <div class="flex flex-col mt-3" data-controller="shot-routing" data-shot-routing-shot-id-value="<%= @shot.id %>">
+        <% if @compare_shots.present? %>
+          <div class="flex-1 mb-1 <%= width_class %>">
+            <select class="standard-input" data-action="shot-routing#compare">
+              <option>With one of your recent shots</option>
+              <% @compare_shots.each do |id, title, time| %>
+                <option value="<%= id %>">
+                  <%= [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ") %>
+                </option>
+              <% end %>
+            </select>
+          </div>
+        <% end %>
+        <div class="flex-1 <%= width_class %>">
+          <input class="mt-1 standard-input" type="text" data-action="shot-routing#urlCompare" placeholder="With any shot via its URL">
+        </div>
+      </div>
+    </div>
+    <% if @shot.image.attached? && @shot.image.variable? %>
+      <div class="mt-3 md:w-1/2 md:mt-0 md:ml-3">
+        <%= link_to @shot.image, target: "_blank" do %>
+          <%= image_tag @shot.image.variant(:display), class: "rounded-lg mx-auto" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% if @chart %>
+  <div class="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div id="shot-chart"></div>
+  </div>
+  <% if @chart.temperature_chart.present? %>
+    <div class="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div id="temperature-chart"></div>
+    </div>
+  <% end %>
+  <script>
+    window.shotData = <%== @chart.shot_chart.to_json %>;
+    window.temperatureData = <%== @chart.temperature_chart.to_json %>;
+    window.shotStages = <%== @chart.stages.to_json %>;
+  </script>
+<% end %>
