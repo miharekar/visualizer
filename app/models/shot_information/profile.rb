@@ -60,8 +60,12 @@ module ShotInformation::Profile
       csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, "Export version", "1.0.0", nil]
 
       timeframe.each.with_index do |time, i|
-        csv << ["moment", time, data.dig("espresso_pressure", i), data.dig("espresso_weight", i), data.dig("espresso_flow", i), data.dig("espresso_flow_weight", i), nil, data.dig("espresso_temperature_mix", i), data.dig("espresso_temperature_basket", i), nil, nil, "Visualizer"]
+        csv << ["moment", time.to_f.round(5), data_point("espresso_pressure", i), data_point("espresso_weight", i), data_point("espresso_flow", i), data_point("espresso_flow_weight", i), nil, data_point("espresso_temperature_mix", i), data_point("espresso_temperature_basket", i), nil, nil, "Visualizer"]
       end
     end
+  end
+
+  def data_point(key, index)
+    data[key][index].to_f.round(5) if data[key]
   end
 end

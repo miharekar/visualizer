@@ -394,6 +394,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "18.6", shot.bean_weight
     assert_equal "38.35", shot.drink_weight
     assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
+    assert_equal File.read("test/files/profitec_victoria_arduino_profile.csv"), shot.information.csv_profile
   end
 
   test "extracts temperature from Pressensor" do
