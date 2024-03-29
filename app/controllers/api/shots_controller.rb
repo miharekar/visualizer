@@ -30,7 +30,9 @@ module Api
 
     def profile
       with_shot do |shot|
-        if params[:format] == "json" && shot.information&.json_profile_fields.present?
+        if params[:format] == "csv"
+          send_data shot.information&.csv_profile, filename: "#{shot.profile_title} from Visualizer.csv", type: "text/csv", disposition: "attachment"
+        elsif params[:format] == "json" && shot.information&.json_profile_fields.present?
           render json: shot.information&.json_profile
         elsif shot.information&.tcl_profile_fields.present?
           send_data shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
