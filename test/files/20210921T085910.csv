@@ -1,0 +1,117 @@
+information_type,elapsed,pressure,current_total_shot_weight,flow_in,flow_out,water_temperature_boiler,water_temperature_in,water_temperature_basket,metatype,metadata,comment
+meta,,,,,,,,,Name,JoeD's Easy blooming slow ramp to 7 bar,text
+meta,,,,,,,,,Date,2021-09-21T06:59:10Z,ISO8601 formatted date
+meta,,,,,,,,,Roasting Date,2021-09-11,ISO8601 formatted date
+meta,,,,,,,,,Roastery,Banibeans,text
+meta,,,,,,,,,Beans,Ethiopia Shantawene,text
+meta,,,,,,,,,Description,With BPlus,text
+meta,,,,,,,,,Operator,Miha Rekar,text
+meta,,,,,,,,,Grinder Brand,EK43 with SSP HU,text
+meta,,,,,,,,,Grinder Model,EK43 with SSP HU,text
+meta,,,,,,,,,Grinder Setting,2.1,text
+meta,,,,,,,,,Weight,38.8,text
+meta,,,,,,,,,Tds,0,text
+meta,,,,,,,,,Attribution,Visualizer,
+meta,,,,,,,,,Software,Visualizer,
+meta,,,,,,,,,Url,https://visualizer.coffee/shots/,
+meta,,,,,,,,,Export version,1.0.0,
+moment,0.044,0.0,0.0,0.0,0.0,,95.0,95.0,,,Visualizer
+moment,0.268,1.02,0.0,3.99,0.0,,94.6,90.65,,,Visualizer
+moment,0.539,0.87,0.0,4.33,0.0,,93.54,90.82,,,Visualizer
+moment,0.764,0.85,0.0,4.73,0.0,,90.59,91.02,,,Visualizer
+moment,1.034,1.03,0.0,5.0,0.0,,90.42,91.16,,,Visualizer
+moment,1.259,1.08,0.0,5.23,0.0,,90.92,91.53,,,Visualizer
+moment,1.529,1.06,0.0,5.41,0.0,,91.62,91.64,,,Visualizer
+moment,1.799,1.15,0.0,5.54,0.0,,92.39,91.78,,,Visualizer
+moment,2.023,1.2,0.0,5.66,0.0,,93.27,91.97,,,Visualizer
+moment,2.294,1.28,0.0,5.71,0.0,,93.75,92.23,,,Visualizer
+moment,2.519,1.32,0.0,5.78,0.0,,94.49,92.51,,,Visualizer
+moment,2.789,1.33,0.0,5.83,0.0,,94.9,92.88,,,Visualizer
+moment,3.014,1.28,0.0,5.93,0.0,,95.32,93.23,,,Visualizer
+moment,3.284,1.25,0.0,5.97,0.0,,95.69,93.51,,,Visualizer
+moment,3.509,1.23,0.0,5.98,0.0,,95.8,93.8,,,Visualizer
+moment,3.778,1.26,0.0,5.99,0.0,,95.66,94.05,,,Visualizer
+moment,4.05,1.34,0.0,6.03,0.0,,95.69,94.21,,,Visualizer
+moment,4.274,1.43,0.0,6.0,0.0,,95.59,94.4,,,Visualizer
+moment,4.544,1.53,0.0,6.01,0.0,,95.45,94.53,,,Visualizer
+moment,4.768,1.7,0.0,6.03,0.0,,95.35,94.64,,,Visualizer
+moment,5.038,1.92,0.0,6.04,0.0,,95.25,94.64,,,Visualizer
+moment,5.264,2.14,0.0,6.05,0.0,,95.14,94.71,,,Visualizer
+moment,5.534,2.45,0.0,6.07,0.0,,94.94,94.77,,,Visualizer
+moment,5.804,2.88,0.0,6.08,0.0,,94.9,94.74,,,Visualizer
+moment,6.028,3.58,0.0,6.08,0.0,,94.8,94.73,,,Visualizer
+moment,6.298,4.62,0.0,5.99,0.0,,94.6,94.81,,,Visualizer
+moment,6.523,5.91,0.0,5.64,0.0,,94.43,94.84,,,Visualizer
+moment,6.793,7.04,0.31,5.04,0.3,,94.15,94.79,,,Visualizer
+moment,7.018,7.42,0.51,4.27,0.5,,93.91,94.73,,,Visualizer
+moment,7.29,7.19,0.77,3.53,0.75,,93.64,94.7,,,Visualizer
+moment,7.514,6.72,1.39,2.92,1.36,,93.37,94.69,,,Visualizer
+moment,7.783,6.36,1.39,2.3,1.06,,93.17,94.61,,,Visualizer
+moment,8.008,5.72,1.65,1.79,1.1,,93.1,94.63,,,Visualizer
+moment,8.279,5.09,1.78,1.39,0.99,,93.04,94.59,,,Visualizer
+moment,8.549,4.66,1.8,1.08,0.62,,92.86,94.59,,,Visualizer
+moment,8.775,4.29,2.27,0.84,0.86,,92.73,94.54,,,Visualizer
+moment,9.043,3.98,2.31,0.66,0.65,,92.8,94.55,,,Visualizer
+moment,9.268,3.72,2.53,0.51,0.73,,92.73,94.49,,,Visualizer
+moment,9.539,3.49,2.53,0.4,0.71,,92.7,94.39,,,Visualizer
+moment,9.763,3.28,2.68,0.31,0.4,,92.7,94.38,,,Visualizer
+moment,10.042,3.1,2.84,0.24,0.52,,92.77,94.31,,,Visualizer
+moment,10.258,2.94,2.86,0.19,0.32,,92.59,94.25,,,Visualizer
+moment,10.528,2.79,2.88,0.15,0.32,,92.7,94.27,,,Visualizer
+moment,10.798,2.65,2.92,0.11,0.37,,92.59,94.24,,,Visualizer
+moment,11.023,2.52,3.1,0.09,0.25,,92.7,94.23,,,Visualizer
+moment,11.31,2.41,3.27,0.07,0.4,,92.59,94.24,,,Visualizer
+moment,11.518,2.3,3.34,0.05,0.42,,92.56,94.26,,,Visualizer
+moment,11.788,2.2,3.35,0.09,0.43,,92.63,94.2,,,Visualizer
+moment,12.013,2.22,3.45,0.15,0.48,,92.77,94.13,,,Visualizer
+moment,12.283,2.23,3.62,0.12,0.31,,92.66,94.12,,,Visualizer
+moment,12.509,2.15,3.71,0.23,0.35,,92.73,94.09,,,Visualizer
+moment,12.778,2.29,3.81,0.35,0.45,,92.63,94.02,,,Visualizer
+moment,13.048,2.42,3.81,0.46,0.33,,92.5,93.94,,,Visualizer
+moment,13.274,2.56,3.86,0.54,0.23,,92.06,93.96,,,Visualizer
+moment,13.543,2.73,4.2,0.68,0.48,,91.55,93.99,,,Visualizer
+moment,13.768,2.98,4.21,0.74,0.39,,91.09,93.98,,,Visualizer
+moment,14.04,3.15,4.46,0.87,0.64,,90.62,93.95,,,Visualizer
+moment,14.263,3.41,4.69,0.97,0.81,,89.86,94.0,,,Visualizer
+moment,14.533,3.68,4.86,1.05,0.68,,89.39,94.02,,,Visualizer
+moment,14.758,3.94,5.0,1.13,0.77,,88.87,94.0,,,Visualizer
+moment,15.028,4.18,5.21,1.21,0.98,,88.24,93.98,,,Visualizer
+moment,15.298,4.45,5.53,1.33,1.0,,87.65,94.06,,,Visualizer
+moment,15.523,4.87,6.0,1.3,1.11,,87.39,94.03,,,Visualizer
+moment,15.793,4.85,6.2,1.41,1.2,,87.0,93.92,,,Visualizer
+moment,16.018,5.13,6.55,1.47,1.31,,86.7,93.93,,,Visualizer
+moment,16.288,5.25,6.94,1.57,1.38,,86.61,93.96,,,Visualizer
+moment,16.513,5.29,7.53,1.64,1.5,,86.51,93.84,,,Visualizer
+moment,16.785,5.53,7.93,1.74,1.69,,86.61,93.79,,,Visualizer
+moment,17.008,5.72,8.62,1.83,1.92,,86.84,93.66,,,Visualizer
+moment,17.278,5.91,8.9,1.98,2.05,,87.16,93.55,,,Visualizer
+moment,17.593,6.01,9.88,2.15,2.3,,87.55,93.48,,,Visualizer
+moment,17.773,6.19,10.36,2.28,2.37,,87.85,93.38,,,Visualizer
+moment,18.045,6.24,10.69,2.36,2.48,,88.27,93.18,,,Visualizer
+moment,18.268,6.14,11.8,2.42,2.6,,88.6,93.05,,,Visualizer
+moment,18.538,6.13,12.44,2.53,2.74,,88.96,92.98,,,Visualizer
+moment,18.808,5.98,13.09,2.64,2.93,,89.26,92.83,,,Visualizer
+moment,19.033,6.0,14.14,2.72,3.11,,89.59,92.77,,,Visualizer
+moment,19.258,5.89,14.81,2.86,3.23,,89.73,92.69,,,Visualizer
+moment,19.528,5.94,15.86,2.99,3.34,,90.05,92.61,,,Visualizer
+moment,19.798,5.92,16.61,3.11,3.44,,90.09,92.6,,,Visualizer
+moment,20.023,5.93,17.37,3.16,3.51,,90.32,92.56,,,Visualizer
+moment,20.293,5.86,18.53,3.26,3.64,,90.52,92.5,,,Visualizer
+moment,20.518,5.79,19.23,3.44,3.67,,90.49,92.44,,,Visualizer
+moment,20.788,5.77,20.02,3.63,3.67,,90.62,92.43,,,Visualizer
+moment,21.013,5.74,21.23,3.74,3.77,,90.79,92.37,,,Visualizer
+moment,21.284,5.69,22.01,3.8,3.86,,90.82,92.35,,,Visualizer
+moment,21.508,5.61,23.21,3.88,3.89,,90.92,92.31,,,Visualizer
+moment,21.778,5.45,24.03,3.94,3.92,,91.09,92.3,,,Visualizer
+moment,22.048,5.34,25.23,4.03,3.91,,91.02,92.24,,,Visualizer
+moment,22.273,5.26,26.06,4.08,3.96,,91.15,92.26,,,Visualizer
+moment,22.543,5.13,26.87,4.11,3.93,,91.19,92.25,,,Visualizer
+moment,22.768,5.06,28.01,4.08,3.89,,91.19,92.25,,,Visualizer
+moment,23.043,4.93,28.86,4.06,3.92,,91.32,92.19,,,Visualizer
+moment,23.263,4.72,30.06,4.1,3.91,,91.25,92.2,,,Visualizer
+moment,23.533,4.75,30.79,4.15,3.83,,91.39,92.2,,,Visualizer
+moment,23.758,4.72,31.96,4.15,3.86,,91.52,92.16,,,Visualizer
+moment,24.028,4.67,32.72,4.03,3.77,,91.52,92.22,,,Visualizer
+moment,24.298,4.51,33.98,4.07,3.83,,91.59,92.16,,,Visualizer
+moment,24.523,4.59,34.71,4.0,3.83,,91.69,92.08,,,Visualizer
+moment,24.793,4.48,35.83,4.03,3.78,,91.72,92.14,,,Visualizer

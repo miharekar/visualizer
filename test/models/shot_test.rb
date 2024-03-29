@@ -48,6 +48,8 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     # File.write("#{path}.json", shot.information.json_profile)
     assert_equal File.read("#{path}.json"), shot.information.json_profile
+    # File.write("#{path}.csv", shot.information.csv_profile)
+    assert_equal File.read("#{path}.csv"), shot.information.csv_profile
   end
 
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
@@ -85,6 +87,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "MimojaCafe", shot.information.extra["skin"]
     assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json_profile"), shot.information.json_profile
+    assert_equal File.read("#{path}.csv"), shot.information.csv_profile
 
     shot.save!
     old_id = shot.id
@@ -413,6 +416,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "16.2", shot.bean_weight
     assert_equal "37.87", shot.drink_weight
     assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
+    assert_equal File.read("test/files/pressensor_profile.csv"), shot.information.csv_profile
   end
 
   test "extracts correct length from Pressensor" do
@@ -436,6 +440,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "16.0", shot.bean_weight
     assert_equal "36.07", shot.drink_weight
     assert_equal "Parsers::SepCsv", shot.information.brewdata["parser"]
+    assert_equal File.read("test/files/pressensor_short_profile.csv"), shot.information.csv_profile
   end
 
   test "extracts temperature from Beanconqueror" do
