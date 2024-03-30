@@ -45,7 +45,7 @@ module ShotInformation::Profile
 
       csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, "Name", shot.profile_title, "text"]
       csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, "Date", shot.start_time.iso8601, "ISO8601 formatted date"]
-      csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, "Roasting Date", Date.parse(shot.roast_date)&.iso8601, "ISO8601 formatted date"] if shot.roast_date.present?
+      csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, "Roasting Date", Date.parse(shot.roast_date)&.iso8601, "ISO8601 formatted date"] rescue nil if shot.roast_date.present?
 
       Parsers::SepCsv::MAPPING.each do |key, value|
         metadata_value = extra[value]
