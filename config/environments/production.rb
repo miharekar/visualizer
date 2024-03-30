@@ -70,7 +70,6 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, {url: ENV["CACHE_REDIS_URL"]}
 
   config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.on_thread_error = ->(error) { Appsignal.send_error(error) }
 
   config.action_mailer.perform_caching = false
 
