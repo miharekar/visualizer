@@ -12,6 +12,9 @@ default: &default
         duplicate_stripe_subscriptions_job:
           class: DuplicateStripeSubscriptionsJob
           schedule: "@daily"
+        populate_subscriptions_job:
+          class: PopulateSubscriptionsJob
+          schedule: "@daily"
         airtable_webhook_refresh_all_job:
           class: AirtableWebhookRefreshAllJob
           schedule: "0 0 */6 * *"

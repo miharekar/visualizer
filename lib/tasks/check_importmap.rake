@@ -1,12 +1,11 @@
 require "concurrent"
 
 class ImportMapChecker
-  attr_reader :file, :content, :mutex
+  attr_reader :file, :content
 
   def initialize
     @file = Rails.root.join("config/importmap.rb")
     @content = File.read(file)
-    @mutex = Mutex.new
   end
 
   def check
