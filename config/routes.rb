@@ -74,6 +74,7 @@ Rails.application.routes.draw do
 
   resources :yearly_brew, only: %i[index show]
   resources :stats, only: [:index]
+  resources :subscriptions
   resources :updates, except: %i[destroy] do
     get :feed, on: :collection
   end

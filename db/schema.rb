@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_20_175319) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -284,6 +284,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_175319) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.string "stripe_id"
+    t.string "status"
+    t.string "interval"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "cancel_at"
+    t.datetime "cancelled_at"
+    t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -335,4 +348,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_175319) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "subscriptions", "users"
 end
