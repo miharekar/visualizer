@@ -1,38 +1,46 @@
-<div id="<%= dom_id subscription %>">
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">User:</strong>
-    <%= subscription.user&.display_name %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Stripe:</strong>
-    <%= subscription.stripe_id %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Status:</strong>
+<tr class="even:bg-gray-50 has-[.top-spender]:bg-green-50" id="<%= dom_id subscription %>">
+  <td class="py-4 pl-4 pr-3 text-sm text-gray-900 whitespace-nowrap sm:pl-3">
+    <% if subscription.user %>
+      <span class="font-medium<%= " top-spender" if (@payments[subscription.user.stripe_customer_id].presence || 0) >= 130 %>">
+        <%= subscription.user.display_name %>
+      </span>
+      <br>
+      <%= link_to subscription.user.stripe_customer_id, "https://dashboard.stripe.com/customers/#{subscription.user.stripe_customer_id}", class: "underline hover:no-underline" %>
+      (<%= @payments[subscription.user.stripe_customer_id] %>)
+    <% end %>
+  </td>
+  <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
     <%= subscription.status %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Interval:</strong>
-    <%= subscription.interval %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Started at:</strong>
+  </td>
+  <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap"><%= subscription.interval %></td>
+  <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
     <%= subscription.started_at %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Ended at:</strong>
-    <%= subscription.ended_at %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Cancel at:</strong>
-    <%= subscription.cancel_at %>
-  </p>
-  <p class="my-5">
-    <strong class="block mb-1 font-medium">Cancelled at:</strong>
-    <%= subscription.cancelled_at %>
-  </p>
-  <% if action_name != "show" %>
-    <%= link_to "Show this subscription", subscription, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-  <% end %>
-</div>
+    <br>
+    <%= link_to subscription.stripe_id, "https://dashboard.stripe.com/subscriptions/#{subscription.stripe_id}", class: "underline hover:no-underline" %>
+  </td>
+  <td class="px-3 py-4 text-sm text-gray-500">
+    <% if subscription.ended_at %>
+      Ended <%= subscription.ended_at %>
+      <br>
+    <% end %>
+    <% if subscription.cancelled_at %>
+      Cancelled <%= subscription.cancelled_at %>
+      <br>
+    <% end %>
+    <% if subscription.cancel_at %>
+      Cancel at <%= subscription.cancel_at %>
+      <br>
+    <% end %>
+    <% if subscription.cancellation_details %>
+      <br>
+      <% subscription.cancellation_details.each do |key, value| %>
+        <% next unless value.present? %>
+        <%= key.humanize %>: <%= value %>
+        <br>
+      <% end %>
+      <br>
+    <% end %>
+  </td>
+  <td class="relative py-4 pl-3 pr-4 text-sm font-medium text-right whitespace-nowrap sm:pr-3">
+  </td>
+</tr>

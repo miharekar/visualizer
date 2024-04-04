@@ -6,15 +6,16 @@ end
 #
 # Table name: subscriptions
 #
-#  id           :uuid             not null, primary key
-#  cancel_at    :datetime
-#  cancelled_at :datetime
-#  ended_at     :datetime
-#  interval     :string
-#  started_at   :datetime
-#  status       :string
-#  stripe_id    :string
-#  user_id      :uuid
+#  id                   :uuid             not null, primary key
+#  cancel_at            :datetime
+#  cancellation_details :jsonb
+#  cancelled_at         :datetime
+#  ended_at             :datetime
+#  interval             :string
+#  started_at           :datetime
+#  status               :string
+#  stripe_id            :string
+#  user_id              :uuid
 #
 # Indexes
 #
