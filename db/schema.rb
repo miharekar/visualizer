@@ -293,6 +293,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
     t.datetime "ended_at"
     t.datetime "cancel_at"
     t.datetime "cancelled_at"
+    t.jsonb "cancellation_details"
     t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end

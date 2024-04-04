@@ -9,6 +9,7 @@ class CreateSubscriptions < ActiveRecord::Migration[7.1]
       t.datetime :ended_at
       t.datetime :cancel_at
       t.datetime :cancelled_at
+      t.jsonb :cancellation_details
     end
   end
 end

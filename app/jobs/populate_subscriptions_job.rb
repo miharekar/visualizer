@@ -20,6 +20,7 @@ class PopulateSubscriptionsJob < ApplicationJob
     subscription.ended_at = Time.at(stripe_subscription.ended_at) if stripe_subscription.ended_at
     subscription.cancel_at = Time.at(stripe_subscription.cancel_at) if stripe_subscription.cancel_at
     subscription.cancelled_at = Time.at(stripe_subscription.canceled_at) if stripe_subscription.canceled_at
+    subscription.cancellation_details = stripe_subscription.cancellation_details
     subscription.save!
   rescue ActiveRecord::RecordInvalid => e
     Appsignal.send_error(e)
