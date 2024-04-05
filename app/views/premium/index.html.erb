@@ -83,7 +83,7 @@
           <% @qas.each do |q, a| %>
             <div>
               <dt class="text-lg font-medium leading-6 text-white"><%= q %></dt>
-              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-terracotta-100") %></dd>
+              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"standard-link text-terracotta-100") %></dd>
             </div>
           <% end %>
         </dl>

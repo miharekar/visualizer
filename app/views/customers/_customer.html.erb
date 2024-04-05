@@ -2,7 +2,7 @@
   <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-gray-700 sm:pl-3">
     <%= customer.name %> (<%= customer.email %>)
     <br>
-    <%= link_to customer.stripe_id, "https://dashboard.stripe.com/customers/#{customer.stripe_id}", class: "underline hover:no-underline" %>
+    <%= link_to customer.stripe_id, "https://dashboard.stripe.com/customers/#{customer.stripe_id}", class: "standard-link" %>
   </th>
   <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-gray-700 sm:pl-3">
     <%= customer.amount / 100 %>€
@@ -15,18 +15,18 @@
     <% end%>
   </th>
   <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-gray-700 sm:pl-3">
-    <%= customer.payments.map { |pi| link_to pi, "https://dashboard.stripe.com/payments/#{pi}", class: "underline hover:no-underline" }.join(", ").html_safe %>
+    <%= customer.payments.map { |pi| link_to pi, "https://dashboard.stripe.com/payments/#{pi}", class: "standard-link" }.join(", ").html_safe %>
     <% if customer.refunds.any? %>
       <br>
       <br>
-      <%= customer.refunds.map { |r| link_to r, "https://dashboard.stripe.com/refunds/#{r}", class: "underline hover:no-underline" }.join(", ").html_safe %>
+      <%= customer.refunds.map { |r| link_to r, "https://dashboard.stripe.com/refunds/#{r}", class: "standard-link" }.join(", ").html_safe %>
     <% end %>
   </th>
 </tr>
 <% customer.subscriptions.each do |subscription| %>
   <tr id="<%= dom_id subscription %>">
     <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
-      <%= link_to subscription.stripe_id, "https://dashboard.stripe.com/subscriptions/#{subscription.stripe_id}", class: "underline hover:no-underline" %>
+      <%= link_to subscription.stripe_id, "https://dashboard.stripe.com/subscriptions/#{subscription.stripe_id}", class: "standard-link" %>
     </td>
     <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
       <%= subscription.status %>
