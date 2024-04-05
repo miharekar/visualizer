@@ -1,0 +1,64 @@
+<tr class="border-t border-gray-200 <%= customer.top_spender? ? "bg-green-50" : "bg-gray-50" %>" id="<%= dom_id customer %>">
+  <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-gray-700 sm:pl-3">
+    <%= customer.name %> (<%= customer.email %>)
+    <br>
+    <%= link_to customer.stripe_id, "https://dashboard.stripe.com/customers/#{customer.stripe_id}", class: "underline hover:no-underline" %>
+  </th>
+  <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-gray-700 sm:pl-3">
+    <%= customer.amount / 100 %>€
+  </th>
+  <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-gray-700 sm:pl-3">
+    <% customer.address.each do |key, value| %>
+      <% next unless value.present? %>
+      <%= key.humanize %>: <%= value %>
+      <br>
+    <% end%>
+  </th>
+  <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-gray-700 sm:pl-3">
+    <%= customer.payments.map { |pi| link_to pi, "https://dashboard.stripe.com/payments/#{pi}", class: "underline hover:no-underline" }.join(", ").html_safe %>
+    <% if customer.refunds.any? %>
+      <br>
+      <br>
+      <%= customer.refunds.map { |r| link_to r, "https://dashboard.stripe.com/refunds/#{r}", class: "underline hover:no-underline" }.join(", ").html_safe %>
+    <% end %>
+  </th>
+</tr>
+<% customer.subscriptions.each do |subscription| %>
+  <tr id="<%= dom_id subscription %>">
+    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+      <%= link_to subscription.stripe_id, "https://dashboard.stripe.com/subscriptions/#{subscription.stripe_id}", class: "underline hover:no-underline" %>
+    </td>
+    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+      <%= subscription.status %>
+    </td>
+    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap"><%= subscription.interval %></td>
+    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+      <%= subscription.started_at %>
+    </td>
+    <td class="px-3 py-4 text-sm text-gray-500">
+      <% if subscription.ended_at %>
+        Ended <%= subscription.ended_at %>
+        <br>
+      <% end %>
+      <% if subscription.cancelled_at %>
+        Cancelled <%= subscription.cancelled_at %>
+        <br>
+      <% end %>
+      <% if subscription.cancel_at %>
+        Cancel at <%= subscription.cancel_at %>
+        <br>
+      <% end %>
+      <% if subscription.cancellation_details %>
+        <br>
+        <% subscription.cancellation_details.each do |key, value| %>
+          <% next unless value.present? %>
+          <%= key.humanize %>: <%= value %>
+          <br>
+        <% end %>
+        <br>
+      <% end %>
+    </td>
+    <td class="relative py-4 pl-3 pr-4 text-sm font-medium text-right whitespace-nowrap sm:pr-3">
+    </td>
+  </tr>
+<% end %>

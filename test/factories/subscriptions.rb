@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :subscription do
-    user
+    customer
     stripe_id { "sub_1234567890" }
     status { "active" }
     interval { "year" }

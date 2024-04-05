@@ -1,27 +1,28 @@
-<% content_for(:html_title) { "Visualizer | Subscriptions" } %>
+<% content_for(:html_title) { "Visualizer | Customers" } %>
 <div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-col gap-2 px-4 sm:flex-row sm:px-0 sm:justify-between">
     <div>
       <h1 class="font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
-        Subscriptions
+        Customers
       </h1>
     </div>
   </div>
-  <div class="flow-root mt-8" id="subscriptions">
-    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+  <div class="flow-root mt-8" id="customers">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full py-2 align-middle">
         <table class="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Subscription</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Interval</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Subscribed</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ended</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Payments</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3"></th>
             </tr>
           </thead>
           <tbody class="bg-white">
-            <%= render @subscriptions %>
+            <%= render @customers %>
           </tbody>
         </table>
       </div>

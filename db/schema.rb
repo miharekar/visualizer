@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -65,6 +65,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
     t.string "slug"
     t.string "excerpt"
     t.index ["slug"], name: "index_changes_on_slug", unique: true
+  end
+
+  create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.string "stripe_id"
+    t.string "name"
+    t.string "email"
+    t.integer "amount"
+    t.jsonb "address"
+    t.jsonb "payments"
+    t.jsonb "refunds"
+    t.index ["stripe_id"], name: "index_customers_on_stripe_id"
+    t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
   create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -285,7 +298,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
   end
 
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id"
+    t.uuid "customer_id", null: false
     t.string "stripe_id"
     t.string "status"
     t.string "interval"
@@ -294,8 +307,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
     t.datetime "cancel_at"
     t.datetime "cancelled_at"
     t.jsonb "cancellation_details"
+    t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
     t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id"
-    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -334,6 +347,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "airtable_infos", "identities"
+  add_foreign_key "customers", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
@@ -349,5 +363,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_03_184210) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "subscriptions", "users"
+  add_foreign_key "subscriptions", "customers"
 end

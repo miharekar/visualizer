@@ -1,5 +1,5 @@
 class Subscription < ApplicationRecord
-  belongs_to :user, optional: true
+  belongs_to :customer
 end
 
 # == Schema Information
@@ -14,15 +14,15 @@ end
 #  interval             :string
 #  started_at           :datetime
 #  status               :string
+#  customer_id          :uuid             not null
 #  stripe_id            :string
-#  user_id              :uuid
 #
 # Indexes
 #
-#  index_subscriptions_on_stripe_id  (stripe_id)
-#  index_subscriptions_on_user_id    (user_id)
+#  index_subscriptions_on_customer_id  (customer_id)
+#  index_subscriptions_on_stripe_id    (stripe_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (customer_id => customers.id)
 #
