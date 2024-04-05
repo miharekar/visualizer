@@ -5,6 +5,7 @@ class Shot < ApplicationRecord
   LIST_ATTRIBUTES = %i[id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   belongs_to :user, optional: true, touch: true
+  belongs_to :coffee_bag, optional: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy, inverse_of: :shot
   has_many :shared_shots, dependent: :destroy
 
@@ -108,17 +109,20 @@ end
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  airtable_id        :string
+#  coffee_bag_id      :uuid
 #  user_id            :uuid
 #
 # Indexes
 #
-#  index_shots_on_airtable_id  (airtable_id)
-#  index_shots_on_created_at   (created_at)
-#  index_shots_on_sha          (sha)
-#  index_shots_on_start_time   (start_time)
-#  index_shots_on_user_id      (user_id)
+#  index_shots_on_airtable_id    (airtable_id)
+#  index_shots_on_coffee_bag_id  (coffee_bag_id)
+#  index_shots_on_created_at     (created_at)
+#  index_shots_on_sha            (sha)
+#  index_shots_on_start_time     (start_time)
+#  index_shots_on_user_id        (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (coffee_bag_id => coffee_bags.id)
 #  fk_rails_...  (user_id => users.id)
 #

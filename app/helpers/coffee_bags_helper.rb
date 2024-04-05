@@ -1,0 +1,2 @@
+module CoffeeBagsHelper
+end

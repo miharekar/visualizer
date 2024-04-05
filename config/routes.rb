@@ -45,6 +45,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :roasters
+  resources :coffee_bags
+
   resources :community, only: [:index] do
     collection do
       get :autocomplete

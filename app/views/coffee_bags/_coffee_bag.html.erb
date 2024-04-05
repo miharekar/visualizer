@@ -1,0 +1,72 @@
+<div id="<%= dom_id coffee_bag %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Roaster:</strong>
+    <%= coffee_bag.roaster_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Name:</strong>
+    <%= coffee_bag.name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Roast date:</strong>
+    <%= coffee_bag.roast_date %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Roast level:</strong>
+    <%= coffee_bag.roast_level %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Country:</strong>
+    <%= coffee_bag.country %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Region:</strong>
+    <%= coffee_bag.region %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Farm:</strong>
+    <%= coffee_bag.farm %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Farmer:</strong>
+    <%= coffee_bag.farmer %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Variety:</strong>
+    <%= coffee_bag.variety %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Elevation:</strong>
+    <%= coffee_bag.elevation %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Processing:</strong>
+    <%= coffee_bag.processing %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Harvest time:</strong>
+    <%= coffee_bag.harvest_time %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Quality score:</strong>
+    <%= coffee_bag.quality_score %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this coffee bag", coffee_bag, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this coffee bag", edit_coffee_bag_path(coffee_bag), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>
