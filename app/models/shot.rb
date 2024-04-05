@@ -2,7 +2,7 @@ class Shot < ApplicationRecord
   include ShotPresenter
 
   DAILY_LIMIT = 50
-  LIST_ATTRIBUTES = %i[id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
+  LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   belongs_to :user, optional: true, touch: true
   belongs_to :coffee_bag, optional: true
@@ -16,7 +16,7 @@ class Shot < ApplicationRecord
 
   scope :visible, -> { where(public: true) }
   scope :visible_or_owned_by_id, ->(user_id) { user_id ? visible.or(where(user_id:)) : visible }
-  scope :for_list, -> { select(LIST_ATTRIBUTES) }
+  scope :for_list, -> { select(LIST_ATTRIBUTES).includes(coffee_bag: :roaster) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }

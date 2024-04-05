@@ -1,0 +1,172 @@
+<div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@shot) %>">
+  <%= form_with(model: @shot) do |f| %>
+    <div class="shadow sm:rounded-md sm:overflow-hidden">
+      <div class="px-4 py-5 space-y-6 bg-white dark:bg-neutral-800 sm:p-6">
+        <div class="grid grid-cols-6 gap-6" data-controller="ey-calculator">
+          <div class="col-span-6">
+            <%= f.label :espresso_enjoyment, class: "standard-label" %>
+            <div class="flex items-center mt-1" data-controller="range">
+              <%= f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-neutral-800", data: { action: "input->range#update", range_target: "number" } %>
+              <%= f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update", range_target: "range" } %>
+            </div>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :profile_title, class: "standard-label" %>
+            <%= f.text_field :profile_title, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :barista, class: "standard-label" %>
+            <%= f.text_field :barista, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :bean_weight, class: "standard-label" %>
+            <%= f.text_field :bean_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "beanWeight" } %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :drink_weight, class: "standard-label" %>
+            <%= f.text_field :drink_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "drinkWeight" } %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :grinder_model, class: "standard-label" %>
+            <%= f.text_field :grinder_model, list: "grinder-model-list", class: "mt-1 standard-input" %>
+            <datalist id="grinder-model-list">
+              <% @grinder_models.each do |grinder_model| %>
+                <option><%= grinder_model %></option>
+              <% end %>
+            </datalist>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :grinder_setting, class: "standard-label" %>
+            <%= f.text_field :grinder_setting, class: "mt-1 standard-input" %>
+          </div>
+          <% if @shot.coffee_bag %>
+            <div class="col-span-6 sm:col-span-3">
+              <%= f.label :bean_brand, class: "standard-label" %>
+              <div class="mt-3">
+                <%= link_to @shot.coffee_bag.roaster.name, edit_roaster_path(@shot.coffee_bag.roaster), class: "standard-link  font-medium text-neutral-700 dark:text-neutral-300" %>
+              </div>
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+              <%= f.label :bean_type, class: "standard-label" %>
+              <div class="mt-3">
+                <%= link_to @shot.coffee_bag.name, edit_coffee_bag_path(@shot.coffee_bag), class: "standard-link  font-medium text-neutral-700 dark:text-neutral-300" %>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-span-6 sm:col-span-3">
+              <%= f.label :bean_brand, class: "standard-label" %>
+              <%= f.text_field :bean_brand, list: "bean-brand-list", class: "mt-1 standard-input" %>
+              <datalist id="bean-brand-list">
+                <% @bean_brands.each do |bean_brand| %>
+                  <option><%= bean_brand %></option>
+                <% end %>
+              </datalist>
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+              <%= f.label :bean_type, class: "standard-label" %>
+              <%= f.text_field :bean_type, list: "bean-type-list", class: "mt-1 standard-input" %>
+              <datalist id="bean-type-list">
+                <% @bean_types.each do |bean_type| %>
+                  <option><%= bean_type %></option>
+                <% end %>
+              </datalist>
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+              <%= f.label :roast_date, class: "standard-label" %>
+              <%= f.text_field :roast_date, class: "mt-1 standard-input" %>
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+              <%= f.label :roast_level, class: "standard-label" %>
+              <%= f.text_field :roast_level, class: "mt-1 standard-input" %>
+            </div>
+          <% end %>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :drink_tds, class: "standard-label" %>
+            <%= f.text_field :drink_tds, class: "mt-1 standard-input", data: { ey_calculator_target: "tds" } %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :drink_ey, class: "standard-label" %>
+            <%= f.text_field :drink_ey, class: "mt-1 standard-input", data: { ey_calculator_target: "ey" } %>
+            <span class="text-xs cursor-pointer text-neutral-500 dark:text-neutral-400 hover:text-neutral-400 dark:hover:text-neutral-500" data-action="click->ey-calculator#calculate">
+              Calculate from TDS
+            </span>
+          </div>
+        </div>
+        <% if current_user.premium? %>
+          <% if current_user.metadata_fields.any? %>
+            <%= f.fields_for :metadata do |mf| %>
+              <% current_user.metadata_fields.each do |field| %>
+                <div class="col-span-6 sm:col-span-3">
+                  <%= mf.label field, class: "standard-label" %>
+                  <%= mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input" %>
+                </div>
+              <% end %>
+            <% end %>
+          <% else %>
+            <p class="text-center text-neutral-700 dark:text-neutral-300">
+              You don't have any custom fields yet.
+              <%= link_to "Add some", edit_profile_path(current_user), class: "font-bold standard-link" %>!
+            </p>
+          <% end %>
+        <% else %>
+          <p class="text-terracotta-600">
+            Add private notes, custom fields, and images to your shots by
+            <%= link_to "upgrading to Premium", premium_index_path, class: "font-bold standard-link" %>.
+          </p>
+        <% end %>
+        <div>
+          <%= f.label :bean_notes, class: "standard-label" %>
+          <div class="mt-1">
+            <%= f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
+            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+              Supports
+              <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
+            </div>
+          </div>
+        </div>
+        <div>
+          <%= f.label :espresso_notes, "Notes", class: "standard-label" %>
+          <div class="mt-1">
+            <%= f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
+            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+              Supports
+              <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
+            </div>
+          </div>
+        </div>
+        <% if current_user.premium? %>
+          <div>
+            <%= f.label :private_notes, "Private notes", class: "standard-label" %>
+            <div class="mt-1">
+              <%= f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
+              <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+                Only visible to you. Supports
+                <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
+              </div>
+            </div>
+          </div>
+          <div>
+            <%= f.label :image, "Image", class: "standard-label" %>
+            <% if @shot.image.attached? && @shot.image.variable? %>
+              <div id="shot-image">
+                <%= image_tag @shot.image.variant(:display), class: "rounded-lg mt-1" %>
+                <div class="flex mt-1 mb-4 text-sm text-red-600 hover:text-red-800">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <%= link_to "Remove Image", [:remove_image, @shot], data: { turbo_method: :delete }, class: "standard-link text-sm" %>
+                </div>
+              </div>
+            <% end %>
+            <div class="mt-1">
+              <%= f.file_field :image %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+        <%= f.submit "Save", class: "submit-button py-2 px-4" %>
+      </div>
+    </div>
+  <% end %>
+</div>

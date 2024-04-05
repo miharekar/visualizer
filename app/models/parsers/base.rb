@@ -48,6 +48,7 @@ module Parsers
       shot.start_time = start_time
       shot.public = user.public
       add_information(shot)
+      # TODO: Find or create coffee bag and link
 
       if shot.valid?
         extract_fields_from_extra(shot)
