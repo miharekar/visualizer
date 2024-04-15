@@ -33,7 +33,7 @@ class ShotChart::ParsedShot
     return unless brew_flow.present?
 
     @timeframe = []
-    relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 }
+    relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 } & DATA_LABELS_MAP.keys
     @data = DATA_LABELS_MAP.values_at(*relevant_keys).index_with { |label| [] }
     brew_flow.each do |label, data|
       data.each do |d|
