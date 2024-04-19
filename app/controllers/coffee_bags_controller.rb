@@ -1,5 +1,5 @@
 class CoffeeBagsController < ApplicationController
-  before_action :set_coffee_bag, only: %i[ show edit update destroy ]
+  before_action :set_coffee_bag, only: %i[show edit update destroy form_for_shot]
 
   # GET /coffee_bags
   def index
@@ -43,6 +43,14 @@ class CoffeeBagsController < ApplicationController
   def destroy
     @coffee_bag.destroy!
     redirect_to coffee_bags_url, notice: "Coffee bag was successfully destroyed.", status: :see_other
+  end
+
+  def form_for_shot
+    @roasters = current_user.roasters.order(:name)
+    @roaster = params[:roaster].present? ? current_user.roasters.find(params[:roaster]) : @coffee_bag.roaster
+    @coffee_bags = @roaster.coffee_bags.order(roast_date: :desc)
+
+    render layout: false
   end
 
   private
