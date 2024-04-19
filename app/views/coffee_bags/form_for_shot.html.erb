@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "coffee_bag_fields" do %>
+  <div class="grid grid-cols-6 gap-6">
+    <div class="col-span-6 sm:col-span-3" data-controller="coffee-bag-fields">
+      <%= label_tag :roaster, nil, class: "standard-label" %>
+      <%= select_tag :roaster, options_from_collection_for_select(@roasters, :id, :name, @roaster.id), class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#fetch", coffee_bag_fields_target: "roasters", url: form_for_shot_coffee_bag_path(@coffee_bag) } %>
+    </div>
+    <div class="col-span-6 sm:col-span-3">
+      <%= label_tag :coffee_bag_id, nil, class: "standard-label" %>
+      <%= select_tag :coffee_bag_id, options_from_collection_for_select(@coffee_bags, :id, :display_name, @coffee_bag.id), class: "mt-1 standard-input" %>
+    </div>
+  </div>
+<% end %>

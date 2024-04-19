@@ -40,17 +40,8 @@
             <%= f.text_field :grinder_setting, class: "mt-1 standard-input" %>
           </div>
           <% if @shot.coffee_bag %>
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :bean_brand, class: "standard-label" %>
-              <div class="mt-3">
-                <%= link_to @shot.coffee_bag.roaster.name, edit_roaster_path(@shot.coffee_bag.roaster), class: "standard-link  font-medium text-neutral-700 dark:text-neutral-300" %>
-              </div>
-            </div>
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :bean_type, class: "standard-label" %>
-              <div class="mt-3">
-                <%= link_to @shot.coffee_bag.name, edit_coffee_bag_path(@shot.coffee_bag), class: "standard-link  font-medium text-neutral-700 dark:text-neutral-300" %>
-              </div>
+            <div class="col-span-6">
+              <%= turbo_frame_tag "coffee_bag_fields", src: form_for_shot_coffee_bag_path(@shot.coffee_bag) %>
             </div>
           <% else %>
             <div class="col-span-6 sm:col-span-3">

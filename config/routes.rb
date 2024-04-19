@@ -46,7 +46,11 @@ Rails.application.routes.draw do
   end
 
   resources :roasters
-  resources :coffee_bags
+  resources :coffee_bags do
+    member do
+      get :form_for_shot
+    end
+  end
 
   resources :community, only: [:index] do
     collection do

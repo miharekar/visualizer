@@ -8,6 +8,10 @@ class CoffeeBag < ApplicationRecord
   end
 
   validates :name, presence: true
+
+  def display_name
+    "#{name} (#{roast_date})"
+  end
 end
 
 # == Schema Information
