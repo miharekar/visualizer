@@ -70,7 +70,7 @@ class ShotsController < ApplicationController
 
   def update
     allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
-    allowed << {metadata: current_user.metadata_fields} if current_user.premium?
+    allowed += [:coffee_bag_id, {metadata: current_user.metadata_fields}] if current_user.premium?
     @shot.update(params.require(:shot).permit(allowed))
     if params[:shot][:image].present? && current_user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
