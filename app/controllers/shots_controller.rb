@@ -69,9 +69,7 @@ class ShotsController < ApplicationController
   end
 
   def update
-    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
-    allowed += [:coffee_bag_id, {metadata: current_user.metadata_fields}] if current_user.premium?
-    @shot.update(params.require(:shot).permit(allowed))
+    @shot.update(update_shot_params)
     if params[:shot][:image].present? && current_user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
         @shot.image.attach(params[:shot][:image])
@@ -132,5 +130,12 @@ class ShotsController < ApplicationController
     @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
 
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
+  end
+
+  def update_shot_params
+    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
+    allowed << {metadata: current_user.metadata_fields} if current_user.premium?
+    allowed << :coffee_bag_id if current_user.coffee_management_enabled?
+    params.require(:shot).permit(allowed)
   end
 end

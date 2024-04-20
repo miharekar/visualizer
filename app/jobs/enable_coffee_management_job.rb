@@ -14,7 +14,10 @@ class EnableCoffeeManagementJob < ApplicationJob
       {id: shot.id, coffee_bag_id:}
     end
 
-    Shot.upsert_all(upsert_attributes.compact, returning: false)
+    ActiveRecord::Base.transaction do
+      Shot.upsert_all(upsert_attributes.compact, returning: false)
+      user.update!(coffee_management_enabled: true)
+    end
   end
 
   private

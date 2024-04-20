@@ -10,8 +10,10 @@
         <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
           <% if user_signed_in? %>
             <%= active_link_to "Shots", shots_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
-            <%= active_link_to "Roasters", roasters_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
-            <%= active_link_to "Coffee Bags", coffee_bags_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
+            <% if current_user.coffee_management_enabled? %>
+              <%= active_link_to "Roasters", roasters_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
+              <%= active_link_to "Coffee Bags", coffee_bags_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
+            <% end %>
           <% end %>
           <%= active_link_to "Community", community_index_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
           <% unless user_signed_in? %>
@@ -43,7 +45,7 @@
                 <% if current_user.stripe_customer_id.present? %>
                   <%= link_to "Manage Subscription", manage_premium_index_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
-                <% if !current_user.premium? %>
+                <% unless current_user.premium? %>
                   <%= link_to "Upgrade to Premium", premium_index_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
                 <% if current_user.premium? && !current_user.identities.exists?(provider: "airtable") %>
@@ -103,7 +105,11 @@
   <div class="hidden sm:hidden" data-menu-target="toggleable">
     <div class="pt-2 pb-3 space-y-1">
       <% if user_signed_in? %>
-        <%= active_link_to "Your Shots", shots_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+        <%= active_link_to "Shots", shots_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+        <% if current_user.coffee_management_enabled? %>
+          <%= active_link_to "Roasters", roasters_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+          <%= active_link_to "Coffee Bags", coffee_bags_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+        <% end %>
       <% end %>
       <%= active_link_to "Community", community_index_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
       <% unless user_signed_in? %>

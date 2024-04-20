@@ -39,7 +39,7 @@
             <%= f.label :grinder_setting, class: "standard-label" %>
             <%= f.text_field :grinder_setting, class: "mt-1 standard-input" %>
           </div>
-          <% if @shot.coffee_bag %>
+          <% if current_user.coffee_management_enabled? %>
             <div class="col-span-6">
               <%= turbo_frame_tag "coffee_bag_fields", src: form_for_shot_coffee_bag_path(@shot.coffee_bag) %>
             </div>
