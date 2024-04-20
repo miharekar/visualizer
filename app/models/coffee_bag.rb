@@ -7,9 +7,13 @@ class CoffeeBag < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
+  scope :by_roast_date, -> { order("roast_date DESC NULLS LAST") }
+
   validates :name, presence: true
 
   def display_name
+    return name if roast_date.blank?
+
     "#{name} (#{roast_date})"
   end
 end
