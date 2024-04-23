@@ -19,7 +19,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i + (Rails.configuration.active_record.global_executor_concurrency || 4).to_i %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 }.to_i + (Rails.configuration.active_record.global_executor_concurrency || 4).to_i %>
   # Do not forget to set DB connections with the formula:
   # max_connections = web_processes * number_of_threads_per_web_process + web_processes * global_executor_concurrency + background_processes * number_of_threads_per_background_process + background_processes * global_executor_concurrency
   # For example, if you have 4 web processes, 1 background, 5 threads per web process, 5 threads per background process, and 4 global executors, then:
