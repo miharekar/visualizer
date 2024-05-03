@@ -40,8 +40,8 @@ class CoffeeBagsController < ApplicationController
 
   def shot_form
     @roasters = current_user.roasters.by_name
-    @roaster = params[:roaster].present? ? current_user.roasters.find(params[:roaster]) : @coffee_bag.roaster
-    @coffee_bags = @roaster.coffee_bags.by_roast_date
+    @roaster = params.key?(:roaster) ? current_user.roasters.find_by(id: params[:roaster]) : @coffee_bag&.roaster
+    @coffee_bags = @roaster&.coffee_bags&.by_roast_date
 
     render layout: false
   end
@@ -49,7 +49,7 @@ class CoffeeBagsController < ApplicationController
   private
 
   def set_coffee_bag
-    @coffee_bag = CoffeeBag.find(params[:id])
+    @coffee_bag = CoffeeBag.find_by(id: params[:id])
   end
 
   def coffee_bag_params

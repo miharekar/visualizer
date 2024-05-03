@@ -2,12 +2,16 @@
   <div class="grid grid-cols-6 gap-6">
     <div class="col-span-6 sm:col-span-3" data-controller="coffee-bag-fields" data-new-roaster-path="<%= new_roaster_path %>">
       <%= label_tag :roaster, nil, class: "standard-label" %>
-      <% select_options = "<option value=\"new\">Add New Roaster</option>\n<option disabled=\"disabled\">------</option>\n" + options_from_collection_for_select(@roasters, :id, :name, @roaster.id) %>
-      <%= select_tag :roaster, select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#fetch", coffee_bag_fields_target: "roasters", url: shot_form_coffee_bag_path(@coffee_bag) } %>
+      <% select_options = "<option value=\"new\">Add New Roaster</option>\n<option value=\"\"#{"selected=\"selected\"" if @roaster.nil?}>------</option>\n" + options_from_collection_for_select(@roasters, :id, :name, @roaster&.id) %>
+      <%= select_tag :roaster, select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#fetch", coffee_bag_fields_target: "roasters", url: shot_form_coffee_bags_path(id: @coffee_bag) } %>
     </div>
-    <div class="col-span-6 sm:col-span-3">
-      <%= label_tag :shot_coffee_bag_id, "Coffee Bag", class: "standard-label" %>
-      <%= select_tag "shot[coffee_bag_id]", options_from_collection_for_select(@coffee_bags, :id, :display_name, @coffee_bag.id), class: "mt-1 standard-input" %>
-    </div>
+    <% if @coffee_bags %>
+      <div class="col-span-6 sm:col-span-3">
+        <%= label_tag :shot_coffee_bag_id, "Coffee Bag", class: "standard-label" %>
+        <%= select_tag "shot[coffee_bag_id]", options_from_collection_for_select(@coffee_bags, :id, :display_name, @coffee_bag&.id), class: "mt-1 standard-input" %>
+      </div>
+    <% else %>
+      <%= hidden_field_tag "shot[coffee_bag_id]", nil %>
+    <% end %>
   </div>
 <% end %>

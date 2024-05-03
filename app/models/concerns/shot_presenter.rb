@@ -25,18 +25,18 @@ module ShotPresenter
   end
 
   def bean_brand
-    coffee_bag ? coffee_bag.roaster.name : super
+    user.coffee_management_enabled? ? coffee_bag&.roaster&.name : super
   end
 
   def bean_type
-    coffee_bag ? coffee_bag.name : super
+    user.coffee_management_enabled? ? coffee_bag&.name : super
   end
 
   def roast_level
-    coffee_bag ? coffee_bag.roast_level : super
+    user.coffee_management_enabled? ? coffee_bag&.roast_level : super
   end
 
   def roast_date
-    coffee_bag ? coffee_bag.roast_date&.to_fs(:iso8601) : super
+    user.coffee_management_enabled? ? coffee_bag&.roast_date&.to_fs(:iso8601) : super
   end
 end
