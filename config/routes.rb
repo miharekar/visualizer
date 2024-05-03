@@ -47,7 +47,7 @@ Rails.application.routes.draw do
 
   resources :roasters
   resources :coffee_bags do
-    member do
+    collection do
       get :shot_form
     end
   end
