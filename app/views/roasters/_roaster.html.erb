@@ -1,22 +1,35 @@
-<div id="<%= dom_id roaster %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= roaster.user_id %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= roaster.name %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Website:</strong>
-    <%= roaster.website %>
-  </p>
-
-  <% if action_name != "show" %>
-    <%= link_to "Show this roaster", roaster, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to "Edit this roaster", edit_roaster_path(roaster), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
-    <hr class="mt-6">
-  <% end %>
-</div>
+<li class="relative flex justify-between px-4 py-5 gap-x-6 hover:bg-gray-50 sm:px-6 lg:px-8" id="<%= dom_id roaster %>">
+  <div class="flex min-w-0 gap-x-4">
+    <% if roaster.image.attached? %>
+      <%= image_tag roaster.image.variant(:thumb), class: "flex-none w-12 h-12 rounded bg-gray-50" %>
+    <% end %>
+    <div class="flex-auto min-w-0">
+      <p class="text-sm font-semibold leading-6 text-gray-900">
+        <%= link_to roaster_coffee_bags_path(roaster) do %>
+          <span class="absolute inset-x-0 bottom-0 -top-px"></span>
+          <%= roaster.name %>
+        <% end %>
+      </p>
+      <% if roaster.website.present? %>
+        <p class="flex mt-1 text-xs leading-5 text-gray-500">
+          <%= link_to roaster.website, roaster.website, class: "relative truncate standard-link" %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+  <div class="flex items-center shrink-0 gap-x-4">
+    <div class="hidden sm:flex sm:flex-col sm:items-end">
+      <p class="text-sm leading-6 text-gray-900">
+        <%= pluralize roaster.coffee_bags.count, "bag" %>
+      </p>
+      <% if roaster.coffee_bags.by_roast_date.first&.roast_date %>
+        <p class="mt-1 text-xs leading-5 text-gray-500">
+          Last roasted on <%= time_tag roaster.coffee_bags.by_roast_date.first.roast_date, format: :long %>
+        </p>
+      <% end %>
+    </div>
+    <svg class="flex-none w-5 h-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+    </svg>
+  </div>
+</li>

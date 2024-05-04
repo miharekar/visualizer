@@ -37,6 +37,6 @@ module ShotPresenter
   end
 
   def roast_date
-    user.coffee_management_enabled? ? coffee_bag&.roast_date&.to_fs(:iso8601) : super
+    user.coffee_management_enabled? ? coffee_bag&.roast_date&.to_formatted_s(:long) : super
   end
 end
