@@ -2,7 +2,8 @@ class CoffeeBagsController < ApplicationController
   before_action :set_coffee_bag, only: %i[show edit update destroy shot_form]
 
   def index
-    @coffee_bags = CoffeeBag.all
+    @coffee_bags = current_user.coffee_bags.by_roast_date
+    @coffee_bags = @coffee_bags.where(roaster_id: params[:roaster_id]) if params.key?(:roaster_id)
   end
 
   def show

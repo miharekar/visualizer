@@ -2,12 +2,12 @@ class Roaster < ApplicationRecord
   belongs_to :user
   has_many :coffee_bags, dependent: :destroy
 
-  has_one_attached :logo do |attachable|
+  has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500]
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
-  scope :by_name, -> { order(:name) }
+  scope :by_name, -> { order("LOWER(name)") }
 
   validates :name, presence: true, uniqueness: {scope: :user_id}
 end

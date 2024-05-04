@@ -3,7 +3,7 @@ class RoastersController < ApplicationController
 
   # GET /roasters
   def index
-    @roasters = Roaster.all
+    @roasters = Roaster.by_name
   end
 
   # GET /roasters/1
@@ -53,6 +53,6 @@ class RoastersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def roaster_params
-    params.require(:roaster).permit(:user_id, :name, :website)
+    params.require(:roaster).permit(:user_id, :name, :website, :image)
   end
 end
