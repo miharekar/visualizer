@@ -3,7 +3,7 @@
     <div class="col-span-6 sm:col-span-3" data-controller="coffee-bag-fields" data-new-roaster-path="<%= new_roaster_path %>">
       <%= label_tag :roaster, nil, class: "standard-label" %>
       <% select_options = "<option value=\"new\">Add New Roaster</option>\n<option value=\"\"#{"selected=\"selected\"" if @roaster.nil?}>------</option>\n" + options_from_collection_for_select(@roasters, :id, :name, @roaster&.id) %>
-      <%= select_tag :roaster, select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#fetch", coffee_bag_fields_target: "roasters", url: shot_form_coffee_bags_path(id: @coffee_bag) } %>
+      <%= select_tag :roaster, select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#fetch", coffee_bag_fields_target: "roasters", url: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } %>
     </div>
     <% if @coffee_bags %>
       <div class="col-span-6 sm:col-span-3">

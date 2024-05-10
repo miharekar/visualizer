@@ -41,7 +41,7 @@
           </div>
           <% if current_user.coffee_management_enabled? %>
             <div class="col-span-6">
-              <%= turbo_frame_tag "coffee_bag_fields", src: shot_form_coffee_bags_path(id: @shot.coffee_bag) %>
+              <%= turbo_frame_tag "coffee_bag_fields", src: coffee_bag_form_shots_path(coffee_bag: @shot.coffee_bag) %>
             </div>
           <% else %>
             <div class="col-span-6 sm:col-span-3">
