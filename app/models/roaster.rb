@@ -7,7 +7,7 @@ class Roaster < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
-  scope :by_name, -> { order("LOWER(name)") }
+  scope :by_name, -> { order("LOWER(roasters.name)") }
 
   validates :name, presence: true, uniqueness: {scope: :user_id}
 end

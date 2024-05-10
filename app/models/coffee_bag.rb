@@ -1,5 +1,5 @@
 class CoffeeBag < ApplicationRecord
-  belongs_to :roaster
+  belongs_to :roaster, touch: true
   has_many :shots, dependent: :nullify
 
   has_one_attached :image do |attachable|
