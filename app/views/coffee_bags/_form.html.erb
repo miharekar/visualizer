@@ -1,82 +1,78 @@
-<%= form_with(model: coffee_bag, class: "contents") do |form| %>
-  <% if coffee_bag.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
-      <h2><%= pluralize(coffee_bag.errors.count, "error") %> prohibited this coffee_bag from being saved:</h2>
-
-      <ul>
-        <% coffee_bag.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@coffee_bag) %>">
+  <%= form_with(model: [@roaster, @coffee_bag]) do |f| %>
+    <div class="shadow sm:rounded-md sm:overflow-hidden">
+      <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
+        <div class="grid grid-cols-6 gap-6">
+          <div class="col-span-6 sm:col-span-4">
+            <% has_error = f.object.errors.any? { |e| e.attribute == :name && e.type == :blank } %>
+            <% if has_error %>
+              <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
+            <% end %>
+            <%= f.label :name, class: "text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.text_field :name, class: "#{extra_classes} mt-1 standard-input", autocomplete: "name" %>
+            <% if has_error %>
+              <p class="text-sm font-medium text-red-500">Name is required.</p>
+            <% end %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :roast_date, class: "standard-label" %>
+            <%= f.date_field :roast_date, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :roast_level, class: "standard-label" %>
+            <%= f.text_field :roast_level, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :country, class: "standard-label" %>
+            <%= f.text_field :country, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :region, class: "standard-label" %>
+            <%= f.text_field :region, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :farm, class: "standard-label" %>
+            <%= f.text_field :farm, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :farmer, class: "standard-label" %>
+            <%= f.text_field :farmer, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :variety, class: "standard-label" %>
+            <%= f.text_field :variety, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :elevation, class: "standard-label" %>
+            <%= f.text_field :elevation, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :processing, class: "standard-label" %>
+            <%= f.text_field :processing, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :harvest_time, class: "standard-label" %>
+            <%= f.text_field :harvest_time, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :quality_score, class: "standard-label" %>
+            <%= f.text_field :quality_score, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-4">
+            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Image</label>
+            <div class="flex items-center mt-2" data-controller="image-form">
+              <% if @coffee_bag.image.attached? %>
+                <%= image_tag @coffee_bag.image.variant(:thumb), class: "w-12 h-12 rounded mr-3" %>
+              <% end %>
+              <%= f.label :image, "Change", data: {image_form_target: "label"}, class: "cursor-pointer bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" %>
+              <%= f.file_field :image, data: {action: "input->image-form#update"}, class: "hidden" %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+        <%= f.submit "Save", class: "submit-button py-2 px-4" %>
+      </div>
     </div>
   <% end %>
-
-  <div class="my-5">
-    <%= form.label :roaster_id %>
-    <%= form.text_field :roaster_id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :roast_date %>
-    <%= form.date_field :roast_date, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :roast_level %>
-    <%= form.text_field :roast_level, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :country %>
-    <%= form.text_field :country, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :region %>
-    <%= form.text_field :region, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :farm %>
-    <%= form.text_field :farm, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :farmer %>
-    <%= form.text_field :farmer, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :variety %>
-    <%= form.text_field :variety, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :elevation %>
-    <%= form.text_field :elevation, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :processing %>
-    <%= form.text_field :processing, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :harvest_time %>
-    <%= form.text_field :harvest_time, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :quality_score %>
-    <%= form.text_field :quality_score, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-  </div>
-<% end %>
+</div>

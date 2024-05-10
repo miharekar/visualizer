@@ -1,6 +1,6 @@
 class RoastersController < ApplicationController
   before_action :check_premium!
-  before_action :set_roaster, only: %i[ show edit update destroy ]
+  before_action :set_roaster, only: %i[edit update destroy]
   before_action :load_roasters, only: %i[index search]
 
   def index

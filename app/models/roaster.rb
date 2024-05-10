@@ -3,7 +3,6 @@ class Roaster < ApplicationRecord
   has_many :coffee_bags, dependent: :destroy
 
   has_one_attached :image do |attachable|
-    attachable.variant :display, resize_to_limit: [1000, 500]
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 

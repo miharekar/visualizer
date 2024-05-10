@@ -15,7 +15,7 @@ class UpdatesController < ApplicationController
   end
 
   def show
-    redirect_to updates_path, notice: "Update not found" unless @update
+    redirect_to updates_path, alert: "Update not found" unless @update
   end
 
   def new

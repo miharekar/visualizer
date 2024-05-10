@@ -20,7 +20,7 @@
         </div>
         <div>
           <p class="w-5/6 mt-1 text-xs leading-5 text-gray-500 truncate">
-            <%= roaster.coffee_bags.sort_by{|cb| cb.roast_date.presence || Date.new}.reverse.map(&:name).to_sentence %>
+            <%= roaster.coffee_bags.sort_by { |cb| cb.roast_date.presence || Date.new }.reverse.map { |cb| "#{cb.name} (#{cb.roast_date&.strftime("%d %b %y") || "-"})" }.to_sentence %>
           </p>
         </div>
       </div>
