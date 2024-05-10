@@ -10,21 +10,17 @@ class RoastersController < ApplicationController
     render :index
   end
 
-  def show
-  end
-
   def new
-    @roaster = Roaster.new
+    @roaster = current_user.roasters.build
   end
 
   def edit
   end
 
   def create
-    @roaster = Roaster.new(roaster_params)
-
+    @roaster = current_user.roasters.build(roaster_params)
     if @roaster.save
-      redirect_to @roaster, notice: "Roaster was successfully created."
+      redirect_to roasters_path(format: :html), notice: "Roaster was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,7 +28,7 @@ class RoastersController < ApplicationController
 
   def update
     if @roaster.update(roaster_params)
-      redirect_to @roaster, notice: "Roaster was successfully updated.", status: :see_other
+      redirect_to roasters_path(format: :html), notice: "Roaster was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,23 +36,22 @@ class RoastersController < ApplicationController
 
   def destroy
     @roaster.destroy!
-    redirect_to roasters_url, notice: "Roaster was successfully destroyed.", status: :see_other
+    redirect_to roasters_path(format: :html), notice: "Roaster was successfully destroyed."
   end
 
   private
 
   def set_roaster
-    @roaster = Roaster.find(params[:id])
+    @roaster = current_user.roasters.find(params[:id])
   end
 
   def load_roasters
-    # include coffee bags with attached images
     @roasters = current_user.roasters.by_name.includes(:coffee_bags)
     @roasters = @roasters.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
     @roasters = @roasters.joins(:coffee_bags).where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
   end
 
   def roaster_params
-    params.require(:roaster).permit(:user_id, :name, :website, :image)
+    params.require(:roaster).permit(:name, :website, :image)
   end
 end
