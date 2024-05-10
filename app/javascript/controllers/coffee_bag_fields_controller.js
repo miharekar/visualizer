@@ -10,7 +10,7 @@ export default class extends Controller {
       Turbo.visit(this.element.dataset.newRoasterPath)
     } else {
       const frame = document.getElementById("coffee_bag_fields")
-      frame.src = this.roastersTarget.dataset.url + `?roaster=${roaster}`
+      frame.src = this.roastersTarget.dataset.url + `&roaster=${roaster}`
       frame.reload()
     }
   }

@@ -100,6 +100,15 @@ class ShotsController < ApplicationController
     render turbo_stream: turbo_stream.remove("shot-image")
   end
 
+  def coffee_bag_form
+    @coffee_bag = CoffeeBag.find_by(id: params[:coffee_bag])
+    @roasters = current_user.roasters.by_name.with_at_least_one_coffee_bag
+    @roaster = params.key?(:roaster) ? current_user.roasters.find_by(id: params[:roaster]) : @coffee_bag&.roaster
+    @coffee_bags = @roaster&.coffee_bags&.by_roast_date
+
+    render layout: false
+  end
+
   private
 
   def load_shot

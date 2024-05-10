@@ -1,5 +1,5 @@
 class CoffeeBagsController < ApplicationController
-  before_action :set_coffee_bag, only: %i[show edit update destroy shot_form]
+  before_action :set_coffee_bag, only: %i[show edit update destroy]
 
   def index
     @coffee_bags = current_user.coffee_bags.by_roast_date
@@ -37,14 +37,6 @@ class CoffeeBagsController < ApplicationController
   def destroy
     @coffee_bag.destroy!
     redirect_to coffee_bags_url, notice: "Coffee bag was successfully destroyed.", status: :see_other
-  end
-
-  def shot_form
-    @roasters = current_user.roasters.by_name
-    @roaster = params.key?(:roaster) ? current_user.roasters.find_by(id: params[:roaster]) : @coffee_bag&.roaster
-    @coffee_bags = @roaster&.coffee_bags&.by_roast_date
-
-    render layout: false
   end
 
   private
