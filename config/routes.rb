@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roasters do
+  resources :roasters, except: [:show] do
     resources :coffee_bags
     collection do
       post :search

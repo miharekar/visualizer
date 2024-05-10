@@ -1,31 +1,38 @@
-<%= form_with(model: roaster, class: "contents") do |form| %>
-  <% if roaster.errors.any? %>
-    <div id="error_explanation" class="px-3 py-2 mt-3 font-medium text-red-500 rounded-lg bg-red-50">
-      <h2><%= pluralize(roaster.errors.count, "error") %> prohibited this roaster from being saved:</h2>
-      <ul>
-        <% roaster.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@roaster) %>">
+  <%= form_with(model: @roaster) do |f| %>
+    <div class="shadow sm:rounded-md sm:overflow-hidden">
+      <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
+        <div class="grid grid-cols-3 gap-6">
+          <div class="col-span-3 sm:col-span-2">
+            <% has_error = f.object.errors.any? { |e| e.attribute == :name } %>
+            <% if has_error %>
+              <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
+            <% end %>
+            <%= f.label :name, class: "text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.text_field :name, class: "#{extra_classes} mt-1 standard-input", autocomplete: "name" %>
+            <% if has_error %>
+              <p class="text-sm font-medium text-red-500">Name is required and has to be unique.</p>
+            <% end %>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <%= f.label :website, class: "standard-label" %>
+            <%= f.text_field :website, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Image</label>
+            <div class="flex items-center mt-2" data-controller="image-form">
+              <% if @roaster.image.attached? %>
+                <%= image_tag @roaster.image.variant(:thumb), class: "w-12 h-12 rounded mr-3" %>
+              <% end %>
+              <%= f.label :image, "Change", data: {image_form_target: "label"}, class: "cursor-pointer bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" %>
+              <%= f.file_field :image, data: {action: "input->image-form#update"}, class: "hidden" %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+        <%= f.submit "Save", class: "submit-button py-2 px-4" %>
+      </div>
     </div>
   <% end %>
-  <div class="my-5">
-    <%= form.label :user_id %>
-    <%= form.text_field :user_id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-  <div class="my-5">
-    <%= form.label :website %>
-    <%= form.text_field :website, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-  <div class="my-5">
-    <%= form.label :image %>
-    <%= form.file_field :image, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
-  </div>
-  <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-  </div>
-<% end %>
+</div>
