@@ -46,12 +46,9 @@ Rails.application.routes.draw do
   end
 
   resources :roasters do
-    resources :coffee_bags, only: %i[index]
-  end
-
-  resources :coffee_bags do
+    resources :coffee_bags
     collection do
-      get :shot_form
+      post :search
     end
   end
 

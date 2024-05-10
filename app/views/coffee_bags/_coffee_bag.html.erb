@@ -1,72 +1,72 @@
 <div id="<%= dom_id coffee_bag %>">
   <p class="my-5">
-    <strong class="block font-medium mb-1">Roaster:</strong>
+    <strong class="block mb-1 font-medium">Roaster:</strong>
     <%= coffee_bag.roaster_id %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Name:</strong>
+    <strong class="block mb-1 font-medium">Name:</strong>
     <%= coffee_bag.name %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Roast date:</strong>
+    <strong class="block mb-1 font-medium">Roast date:</strong>
     <%= coffee_bag.roast_date %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Roast level:</strong>
+    <strong class="block mb-1 font-medium">Roast level:</strong>
     <%= coffee_bag.roast_level %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Country:</strong>
+    <strong class="block mb-1 font-medium">Country:</strong>
     <%= coffee_bag.country %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Region:</strong>
+    <strong class="block mb-1 font-medium">Region:</strong>
     <%= coffee_bag.region %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Farm:</strong>
+    <strong class="block mb-1 font-medium">Farm:</strong>
     <%= coffee_bag.farm %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Farmer:</strong>
+    <strong class="block mb-1 font-medium">Farmer:</strong>
     <%= coffee_bag.farmer %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Variety:</strong>
+    <strong class="block mb-1 font-medium">Variety:</strong>
     <%= coffee_bag.variety %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Elevation:</strong>
+    <strong class="block mb-1 font-medium">Elevation:</strong>
     <%= coffee_bag.elevation %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Processing:</strong>
+    <strong class="block mb-1 font-medium">Processing:</strong>
     <%= coffee_bag.processing %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Harvest time:</strong>
+    <strong class="block mb-1 font-medium">Harvest time:</strong>
     <%= coffee_bag.harvest_time %>
   </p>
 
   <p class="my-5">
-    <strong class="block font-medium mb-1">Quality score:</strong>
+    <strong class="block mb-1 font-medium">Quality score:</strong>
     <%= coffee_bag.quality_score %>
   </p>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this coffee bag", coffee_bag, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to "Edit this coffee bag", edit_coffee_bag_path(coffee_bag), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Show this coffee bag", roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this coffee bag", edit_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
     <hr class="mt-6">
   <% end %>
 </div>
