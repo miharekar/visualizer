@@ -1,6 +1,6 @@
 class RoastersController < ApplicationController
   before_action :check_premium!
-  before_action :set_roaster, only: %i[edit update destroy]
+  before_action :set_roaster, only: %i[edit update destroy remove_image]
   before_action :load_roasters, only: %i[index search]
 
   def index
@@ -37,6 +37,11 @@ class RoastersController < ApplicationController
   def destroy
     @roaster.destroy!
     redirect_to roasters_path(format: :html), notice: "Roaster was successfully destroyed."
+  end
+
+  def remove_image
+    @roaster.image.purge
+    render turbo_stream: turbo_stream.remove("roaster-image")
   end
 
   private

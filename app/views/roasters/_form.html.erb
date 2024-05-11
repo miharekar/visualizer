@@ -19,13 +19,22 @@
             <%= f.text_field :website, class: "mt-1 standard-input" %>
           </div>
           <div class="col-span-3 sm:col-span-2">
-            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Image</label>
-            <div class="flex items-center mt-2" data-controller="image-form">
-              <% if @roaster.image.attached? %>
-                <%= image_tag @roaster.image.variant(:thumb), class: "w-12 h-12 rounded mr-3" %>
+            <div data-controller="image-form">
+              <%= f.label :image, "Image", class: "standard-label" %>
+              <% if @roaster.image.attached? && @roaster.image.variable? %>
+                <div id="roaster-image">
+                  <%= image_tag @roaster.image.variant(:thumb), class: "rounded-lg mt-1" %>
+                  <div class="flex mt-1 mb-4 text-sm text-red-600 hover:text-red-800">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <%= link_to "Remove Image", [:remove_image, @roaster], data: { turbo_method: :delete }, class: "standard-link text-sm" %>
+                  </div>
+                </div>
               <% end %>
-              <%= f.label :image, "Change", data: {image_form_target: "label"}, class: "cursor-pointer bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" %>
-              <%= f.file_field :image, data: {action: "input->image-form#update"}, class: "hidden" %>
+              <div class="mt-1">
+                <%= f.file_field :image %>
+              </div>
             </div>
           </div>
         </div>
