@@ -1,14 +1,42 @@
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="inline-block px-3 py-2 mb-5 font-medium text-green-500 rounded-lg bg-green-50" id="notice"><%= notice %></p>
+<% content_for(:html_title) { "Visualizer | #{@roaster.name} Coffee Bags" } %>
+<div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex flex-row justify-between gap-2 px-4 sm:px-0">
+    <div>
+      <h1 class="font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
+        <%= @roaster.name %> Coffee Bags
+      </h1>
+    </div>
+    <%= link_to new_roaster_coffee_bag_path, class: "flex items-center px-3 py-2 text-sm font-semibold bg-white rounded-md shadow-sm sm:ml-auto text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" do %>
+      <svg class="-ml-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
+      </svg>
+      New <span class="hidden sm:block">&nbsp;Coffee Bag</span>
+    <% end %>
+  </div>
+  <% if @coffee_bags.any? %>
+    <div class="px-4 sm:px-0">
+      <%= form_with(url: search_roasters_path, data: {controller: "search", search_target: "form"}) do |f| %>
+        <div class="grid grid-cols-12 gap-3">
+          <div class="col-span-6 md:col-span-3">
+            <%= f.label :roaster, class: "standard-label" %>
+            <%= f.search_field :roaster, value: params[:roaster], class: "mt-1 standard-input", data: {action: "search#submit"} %>
+          </div>
+          <div class="col-span-6 md:col-span-3">
+            <%= f.label :coffee, class: "standard-label" %>
+            <%= f.search_field :coffee, value: params[:coffee], class: "mt-1 standard-input", data: {action: "search#submit"} %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div data-controller="modal">
+      <%= render "shared/modal" %>
+      <div id="shots" class="divide-y sm:mt-10 sm:space-y-4 sm:divide-none dark:divide-neutral-800">
+        <%= render @coffee_bags %>
+      </div>
+    </div>
+  <% else %>
+    <div class="pt-12 text-center text-neutral-500">
+      No coffee bags yet 😢
+    </div>
   <% end %>
-
-  <div class="flex items-center justify-between">
-    <h1 class="text-4xl font-bold">Coffee bags</h1>
-    <%= link_to "New coffee bag", new_roaster_coffee_bag_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
-  </div>
-
-  <div id="coffee_bags" class="min-w-full">
-    <%= render @coffee_bags %>
-  </div>
 </div>
