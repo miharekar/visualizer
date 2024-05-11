@@ -47,10 +47,11 @@ Rails.application.routes.draw do
   end
 
   resources :roasters, except: [:show] do
-    resources :coffee_bags, except: [:show]
-    collection do
-      post :search
+    resources :coffee_bags, except: [:show] do
+      delete :remove_image, on: :member
     end
+    delete :remove_image, on: :member
+    post :search, on: :collection
   end
 
   resources :community, only: [:index] do

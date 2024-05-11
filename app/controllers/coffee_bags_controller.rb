@@ -1,6 +1,6 @@
 class CoffeeBagsController < ApplicationController
   before_action :set_roaster
-  before_action :set_coffee_bag, only: %i[edit update destroy]
+  before_action :set_coffee_bag, only: %i[edit update destroy remove_image]
 
   def index
     @coffee_bags = @roaster.coffee_bags.by_roast_date
@@ -33,6 +33,11 @@ class CoffeeBagsController < ApplicationController
   def destroy
     @coffee_bag.destroy!
     redirect_to coffee_bags_url, notice: "Coffee bag was successfully destroyed.", status: :see_other
+  end
+
+  def remove_image
+    @coffee_bag.image.purge
+    render turbo_stream: turbo_stream.remove("coffee-bag-image")
   end
 
   private
