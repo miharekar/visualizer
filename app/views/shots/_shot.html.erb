@@ -1,82 +1,99 @@
 <%= tag.div id: dom_id(shot) do %>
-  <div class="relative flex p-4 cursor-pointer sm:space-x-8 md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
-    <% if shot.image.attached? && shot.image.variable? %>
-      <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
-        <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
-          <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
+  <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200">
+    <div class="relative flex p-4 cursor-pointer grow sm:space-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
+      <% if shot.image.attached? && shot.image.variable? %>
+        <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
+          <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
+            <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
+          </div>
         </div>
-      </div>
-    <% end %>
-    <div class="flex flex-col space-y-2 grow">
-      <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap") %>
-      <div class="flex flex-col justify-between space-y-2 md:space-y-0 md:flex-row md:space-x-8 grow">
-        <div class="flex flex-col justify-between md:space-y-2">
-          <div class="flex flex-col md:space-y-2">
-            <div>
-              <% if shot.espresso_enjoyment.to_i > 0 %>
-                <span class="mr-1 inline-flex text-sm items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
-                  <%= shot.espresso_enjoyment %>
-                </span>
-              <% end %>
-              <span class="font-semibold">
-                <%= shot.profile_title %>
-              </span>
-            </div>
-            <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
+      <% end %>
+      <div class="flex flex-col space-y-2 grow">
+        <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap") %>
+        <div class="flex flex-col justify-between space-y-2 md:space-y-0 md:flex-row md:space-x-8 grow">
+          <div class="flex flex-col justify-between md:space-y-2">
+            <div class="flex flex-col md:space-y-2">
               <div>
-                <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
-                  <%= shot.grinder_setting %>
+                <% if shot.espresso_enjoyment.to_i > 0 %>
+                  <span class="mr-1 inline-flex text-sm items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+                    <%= shot.espresso_enjoyment %>
+                  </span>
                 <% end %>
-                <% if shot.grinder_model.present? %>
-                  on <%= shot.grinder_model %>
+                <span class="font-semibold">
+                  <%= shot.profile_title %>
+                </span>
+              </div>
+              <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
+                <div>
+                  <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
+                    <%= shot.grinder_setting %>
+                  <% end %>
+                  <% if shot.grinder_model.present? %>
+                    on <%= shot.grinder_model %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="flex flex-col grow md:space-y-2 text-neutral-500 dark:text-neutral-400">
+            <% if shot.bean_brand.present? || shot.bean_type.present? %>
+              <div>
+                <% if shot.bean_brand.present? %>
+                  <%= shot.bean_brand %>
                 <% end %>
+                <% if shot.bean_type.present? %>
+                  <%= shot.bean_type %>
+                <% end %>
+              </div>
+            <% end %>
+            <% if shot.weight_and_ratio_info.present? || shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+              <div>
+                <% if shot.weight_and_ratio_info.present? %>
+                  <%= shot.weight_and_ratio_info %>
+                <% end %>
+                <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+                  in <%= shot.duration.round(1) %> s
+                <% end %>
+              </div>
+            <% end %>
+            <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
+              <div>
+                <% if shot.drink_tds_f > 0 %>
+                  TDS: <%= shot.drink_tds_f %>%
+                <% end %>
+                <% if shot.drink_ey_f > 0 %>
+                  EY: <%= shot.drink_ey_f %>%
+                <% end %>
+              </div>
+            <% end %>
+            <% if shot.barista.present? %>
+              <div>
+                By <%= shot.barista %>
               </div>
             <% end %>
           </div>
         </div>
-        <div class="flex flex-col grow md:space-y-2 text-neutral-500 dark:text-neutral-400">
-          <% if shot.bean_brand.present? || shot.bean_type.present? %>
-            <div>
-              <% if shot.bean_brand.present? %>
-                <%= shot.bean_brand %>
-              <% end %>
-              <% if shot.bean_type.present? %>
-                <%= shot.bean_type %>
-              <% end %>
-            </div>
+      </div>
+    </div>
+    <div class="flex border-l border-neutral-200 dark:border-neutral-800 w-28">
+      <div class="flex flex-col w-full -mt-px divide-y divide-neutral-200 dark:divide-neutral-800">
+        <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+          <%= link_to edit_shot_path(shot), class: "relative inline-flex items-center ml-4 flex-1 py-4 -mr-px text-sm border border-transparent rounded-bl-lg gap-x-3" do %>
+            <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+            </svg>
+            Edit
           <% end %>
-          <% if shot.weight_and_ratio_info.present? || shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-            <div>
-              <% if shot.weight_and_ratio_info.present? %>
-                <%= shot.weight_and_ratio_info %>
-              <% end %>
-              <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-                in <%= shot.duration.round(1) %> s
-              <% end %>
-            </div>
-          <% end %>
-          <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
-            <div>
-              <% if shot.drink_tds_f > 0 %>
-                TDS: <%= shot.drink_tds_f %>%
-              <% end %>
-              <% if shot.drink_ey_f > 0 %>
-                EY: <%= shot.drink_ey_f %>%
-              <% end %>
-            </div>
-          <% end %>
-          <% if shot.barista.present? %>
-            <div>
-              By <%= shot.barista %>
-            </div>
+        </div>
+        <div class="flex flex-1 -ml-px hover:bg-red-100/25 dark:hover:bg-red-900/25">
+          <%= link_to shot_path(shot), class: "relative inline-flex items-center ml-4 flex-1 py-4 text-sm border border-transparent rounded-br-lg gap-x-3", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do %>
+            <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+            </svg>
+            Delete
           <% end %>
         </div>
       </div>
-    </div>
-    <div class="flex flex-col items-center justify-center md:flex-row sm:space-y-6 md:space-y-0 md:space-x-6">
-      <%= button_to "Delete", shot_path(shot), method: :delete, class: "hidden sm:flex text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-700 hover:underline dark:hover:text-oxford-blue-300", data: {action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} %>
-      <%= link_to "Edit", edit_shot_path(shot), class: "hidden sm:flex rounded-md bg-white px-3 py-2 text-sm font-semibold text-neutral-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" %>
-      <%= link_to "View", shot_path(shot), class: "sm:hidden rounded-md bg-oxford-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-oxford-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford-blue-500" %>
     </div>
   </div>
 <% end %>
