@@ -1,8 +1,8 @@
 <% content_for(:html_title) { "Visualizer | #{@roaster.name} Coffee Bags" } %>
-<div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
-  <div class="flex flex-row justify-between gap-2 px-4 sm:px-0">
+<div class="px-4 mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex flex-row justify-between gap-2">
     <div>
-      <h1 class="font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
+      <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 overflow-clip">
         <%= @roaster.name %> Coffee Bags
       </h1>
     </div>
@@ -14,7 +14,7 @@
     <% end %>
   </div>
   <% if @coffee_bags.any? %>
-    <div class="px-4 sm:px-0">
+    <div>
       <%= form_with(url: search_roasters_path, data: {controller: "search", search_target: "form"}) do |f| %>
         <div class="grid grid-cols-12 gap-3">
           <div class="col-span-6 md:col-span-3">
@@ -30,7 +30,7 @@
     </div>
     <div data-controller="modal">
       <%= render "shared/modal" %>
-      <div id="shots" class="divide-y sm:mt-10 sm:space-y-4 sm:divide-none dark:divide-neutral-800">
+      <div id="coffee-bags"  class="grid max-w-2xl grid-cols-1 mx-auto mt-16 gap-x-8 gap-y-20 sm:mx-0 sm:max-w-none sm:grid-cols-2 md:grid-cols-3">
         <%= render @coffee_bags %>
       </div>
     </div>

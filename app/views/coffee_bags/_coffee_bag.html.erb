@@ -1,83 +1,91 @@
-<div id="<%= dom_id coffee_bag %>">
-  <div class="relative flex p-4 sm:space-x-8 md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
-    <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
-      <div class="flex-none hidden w-40 -my-4 -ml-4 sm:block">
-        <div class="aspect-square">
-          <%= image_tag coffee_bag.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
-        </div>
+<div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 rounded shadow dark:shadow-none dark:border dark:border-neutral-800 dark:text-neutral-200">
+  <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
+    <div class="relative w-full aspect-h-2 aspect-w-3">
+      <%= image_tag coffee_bag.image.variant(:thumb), class: " object-cover object-center w-full h-full" %>
+    </div>
+  <% end %>
+  <div class="flex flex-col flex-1 p-8">
+    <% if coffee_bag.roast_date.present? %>
+      <div class="flex items-center mt-8 text-xs gap-x-4">
+        <%= time_tag coffee_bag.roast_date %>
       </div>
     <% end %>
-    <div class="flex flex-col justify-between space-y-2 md:space-y-0 md:flex-row md:space-x-8 grow">
-      <div class="flex flex-col justify-between md:space-y-2">
-        <div class="flex flex-col md:space-y-2">
-          <span class="font-semibold">
-            <%= coffee_bag.name %>
-          </span>
-          <% if coffee_bag.roast_date.present? %>
-            <span>
-              <%= coffee_bag.roast_date&.to_formatted_s(:long) %>
-            </span>
-          <% end %>
-          <% if coffee_bag.roast_level.present? %>
-            <span>
-              <%= coffee_bag.roast_level %>
-            </span>
-          <% end %>
-          <% if coffee_bag.country.present? %>
-            <span>
-              <%= coffee_bag.country %>
-            </span>
-          <% end %>
-          <% if coffee_bag.region.present? %>
-            <span>
-              <%= coffee_bag.region %>
-            </span>
-          <% end %>
-        </div>
-      </div>
-      <div class="flex flex-col grow md:space-y-2 text-neutral-500 dark:text-neutral-400">
-        <div class="flex flex-col md:space-y-2">
-          <% if coffee_bag.farm.present? %>
-            <span>
-              <%= coffee_bag.farm %>
-            </span>
-          <% end %>
-          <% if coffee_bag.farmer.present? %>
-            <span>
-              <%= coffee_bag.farmer %>
-            </span>
-          <% end %>
-          <% if coffee_bag.variety.present? %>
-            <span>
-              <%= coffee_bag.variety %>
-            </span>
-          <% end %>
-          <% if coffee_bag.elevation.present? %>
-            <span>
-              <%= coffee_bag.elevation %>
-            </span>
-          <% end %>
-          <% if coffee_bag.processing.present? %>
-            <span>
-              <%= coffee_bag.processing %>
-            </span>
-          <% end %>
-          <% if coffee_bag.harvest_time.present? %>
-            <span>
-              <%= coffee_bag.harvest_time %>
-            </span>
-          <% end %>
-          <% if coffee_bag.quality_score.present? %>
-            <span>
-              <%= coffee_bag.quality_score %>
-            </span>
-          <% end %>
-        </div>
+    <div class="relative group">
+      <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+        <%= coffee_bag.name %>
+      </h3>
+      <div class="mt-5 text-sm leading-6 text-gray-600">
+        <% if coffee_bag.roast_level.present? %>
+          <div>
+            <%= coffee_bag.roast_level %>
+          </div>
+        <% end %>
+        <% if coffee_bag.country.present? %>
+          <div>
+            <%= coffee_bag.country %>
+          </div>
+        <% end %>
+        <% if coffee_bag.region.present? %>
+          <div>
+            <%= coffee_bag.region %>
+          </div>
+        <% end %>
+        <% if coffee_bag.farm.present? %>
+          <div>
+            <%= coffee_bag.farm %>
+          </div>
+        <% end %>
+        <% if coffee_bag.farmer.present? %>
+          <div>
+            <%= coffee_bag.farmer %>
+          </div>
+        <% end %>
+        <% if coffee_bag.variety.present? %>
+          <div>
+            <%= coffee_bag.variety %>
+          </div>
+        <% end %>
+        <% if coffee_bag.elevation.present? %>
+          <div>
+            <%= coffee_bag.elevation %>
+          </div>
+        <% end %>
+        <% if coffee_bag.processing.present? %>
+          <div>
+            <%= coffee_bag.processing %>
+          </div>
+        <% end %>
+        <% if coffee_bag.harvest_time.present? %>
+          <div>
+            <%= coffee_bag.harvest_time %>
+          </div>
+        <% end %>
+        <% if coffee_bag.quality_score.present? %>
+          <div>
+            <%= coffee_bag.quality_score %>
+          </div>
+        <% end %>
       </div>
     </div>
-    <div class="flex flex-col items-center justify-center md:flex-row sm:space-y-6 md:space-y-0 md:space-x-6">
-      <%= button_to "Delete", roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), method: :delete, class: "hidden sm:flex text-oxford-blue-500 text-sm font-medium hover:text-oxford-blue-700 hover:underline dark:hover:text-oxford-blue-300", data: {action: "click->modal#confirm", title: "Delete #{coffee_bag.name}", text: "Are you sure you want to permanently delete #{coffee_bag.display_name} bag?"} %>
-      <%= link_to "Edit", edit_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "hidden sm:flex rounded-md bg-white px-3 py-2 text-sm font-semibold text-neutral-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" %>
+  </div>
+  <div class="border-t border-gray-200">
+    <div class="flex -mt-px divide-x divide-gray-200">
+      <div class="flex flex-1 w-0">
+        <%= link_to edit_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "relative inline-flex items-center justify-center flex-1 w-0 py-4 -mr-px text-sm font-semibold text-gray-900 border border-transparent rounded-bl-lg gap-x-3" do %>
+          <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+          </svg>
+          Edit
+        <% end %>
+      </div>
+      <div class="flex flex-1 w-0 -ml-px">
+        <%= link_to roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "relative inline-flex items-center justify-center flex-1 w-0 py-4 text-sm font-semibold text-gray-900 border border-transparent rounded-br-lg gap-x-3", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{coffee_bag.name}", text: "Are you sure you want to permanently delete #{coffee_bag.display_name} bag?"} do %>
+          <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+          </svg>
+          Delete
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
