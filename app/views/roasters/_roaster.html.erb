@@ -1,25 +1,25 @@
 <% cache roaster do %>
-  <li class="relative flex justify-between py-5 gap-x-6 hover:bg-gray-50" id="<%= dom_id roaster %>">
+  <li class="relative flex justify-between py-5 gap-x-6 hover:bg-neutral-50" id="<%= dom_id roaster %>">
     <div class="flex w-full min-w-0 gap-x-4">
       <% if roaster.image.attached? %>
-        <%= image_tag roaster.image.variant(:thumb), class: "flex-none w-12 h-12 rounded bg-gray-50" %>
+        <%= image_tag roaster.image.variant(:thumb), class: "flex-none w-12 h-12 rounded bg-neutral-50" %>
       <% end %>
       <div class="flex-col w-full min-w-0">
         <div>
-          <span class="text-sm font-semibold leading-6 text-gray-900">
+          <span class="text-sm font-semibold leading-6 text-neutral-900">
             <%= link_to roaster_coffee_bags_path(roaster) do %>
               <span class="absolute inset-x-0 bottom-0 -top-px"></span>
               <%= roaster.name %>
             <% end %>
           </span>
           <% if roaster.website.present? %>
-            <span class="text-xs text-gray-500">
+            <span class="text-xs text-neutral-500">
               (<%= link_to roaster.website, roaster.website, class: "relative truncate standard-link" %>)
             </span>
           <% end %>
         </div>
         <div>
-          <p class="w-5/6 mt-1 text-xs leading-5 text-gray-500 truncate">
+          <p class="w-5/6 mt-1 text-xs leading-5 text-neutral-500 truncate">
             <%= roaster.coffee_bags.sort_by { |cb| cb.roast_date.presence || Date.new }.reverse.map(&:display_name).to_sentence %>
           </p>
         </div>
@@ -27,17 +27,17 @@
     </div>
     <div class="flex items-center shrink-0 gap-x-4">
       <div class="hidden sm:flex sm:flex-col sm:items-end">
-        <p class="text-sm leading-6 text-gray-900">
+        <p class="text-sm leading-6 text-neutral-900">
           <%= pluralize roaster.coffee_bags.count, "bag" %>
         </p>
         <% latest_bag = roaster.coffee_bags.select(&:roast_date).max_by(&:roast_date) %>
         <% if latest_bag %>
-          <p class="mt-1 text-xs leading-5 text-gray-500">
+          <p class="mt-1 text-xs leading-5 text-neutral-500">
             Last roasted on <%= time_tag latest_bag.roast_date, format: :long %>
           </p>
         <% end %>
       </div>
-      <svg class="flex-none w-5 h-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+      <svg class="flex-none w-5 h-5 text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
       </svg>
     </div>
