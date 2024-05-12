@@ -16,7 +16,7 @@ class CoffeeBagsController < ApplicationController
   def create
     @coffee_bag = @roaster.coffee_bags.build(coffee_bag_params)
     if @coffee_bag.save
-      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "Coffee bag was successfully created."
+      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -24,7 +24,7 @@ class CoffeeBagsController < ApplicationController
 
   def update
     if @coffee_bag.update(coffee_bag_params)
-      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "Coffee bag was successfully updated."
+      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class CoffeeBagsController < ApplicationController
 
   def destroy
     @coffee_bag.destroy!
-    redirect_to coffee_bags_url, notice: "Coffee bag was successfully destroyed.", status: :see_other
+    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully destroyed."
   end
 
   def remove_image
