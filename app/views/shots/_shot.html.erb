@@ -1,6 +1,6 @@
 <%= tag.div id: dom_id(shot) do %>
   <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200">
-    <div class="relative flex p-4 cursor-pointer grow sm:space-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
+    <div class="relative flex p-4 cursor-pointer grow sm:space-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
       <% if shot.image.attached? && shot.image.variable? %>
         <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
           <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
@@ -20,7 +20,10 @@
                   </span>
                 <% end %>
                 <span class="font-semibold">
-                  <%= shot.profile_title %>
+                  <%= link_to shot_path(shot) do %>
+                    <span class="absolute inset-x-0 bottom-0 -top-px"></span>
+                    <%= shot.profile_title %>
+                  <% end %>
                 </span>
               </div>
               <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
