@@ -1,15 +1,15 @@
 <% cache roaster do %>
   <%= tag.div id: dom_id(roaster) do %>
     <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200">
-      <div class="relative flex w-full p-4 overflow-hidden cursor-pointer grow sm:space-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
-        <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40 sm:block">
+      <div class="relative flex w-full p-4 overflow-hidden cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+        <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40" data-check-images-target="container">
           <% if roaster.image.attached? && roaster.image.variable? %>
             <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
               <%= image_tag roaster.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
             </div>
           <% end %>
         </div>
-        <div class="flex flex-col justify-between space-y-2 overflow-hidden md:space-y-0 md:flex-row md:space-x-8 grow">
+        <div class="flex flex-col justify-between overflow-hidden gap-y-2 md:gap-y-0 md:flex-row md:gap-x-8 grow">
           <div class="basis-1/4">
             <div class="font-semibold">
               <%= link_to roaster_coffee_bags_path(roaster) do %>
