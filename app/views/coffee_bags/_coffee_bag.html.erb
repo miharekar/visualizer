@@ -10,17 +10,18 @@
         </div>
       <% end %>
       <div class="flex flex-col flex-1 p-8">
-        <% if coffee_bag.roast_date.present? %>
-          <div class="flex items-center mt-8 text-xs gap-x-4">
-            <%= time_tag coffee_bag.roast_date %>
-          </div>
-        <% end %>
         <div class="relative group">
           <h3 class="mt-3 text-lg font-semibold leading-6 group-hover:text-neutral-600">
             <%= coffee_bag.name %>
           </h3>
           <div class="mt-2 prose prose-neutral dark:prose-invert">
             <table>
+              <% if coffee_bag.roast_date.present? %>
+                <tr>
+                  <td>Roasted on</td>
+                  <td><%= time_tag coffee_bag.roast_date, format: :long %></td>
+                </tr>
+              <% end %>
               <% [:roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score].each do |attribute| %>
                 <% if coffee_bag.send(attribute).present? %>
                   <tr>
