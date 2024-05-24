@@ -1,31 +1,36 @@
 <% cache coffee_bag do %>
   <div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 rounded shadow dark:shadow-none dark:border dark:border-neutral-800 dark:text-neutral-200">
-    <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
-      <div class="relative w-full aspect-square">
-        <%= image_tag coffee_bag.image.variant(:thumb), class: " object-cover object-center w-full h-full" %>
-      </div>
-    <% end %>
-    <div class="flex flex-col flex-1 p-8">
-      <% if coffee_bag.roast_date.present? %>
-        <div class="flex items-center mt-8 text-xs gap-x-4">
-          <%= time_tag coffee_bag.roast_date %>
+    <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+      <%= link_to shots_path(coffee_bag: coffee_bag) do %>
+        <span class="absolute inset-x-0 bottom-0 z-10 -top-px"></span>
+      <% end %>
+      <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
+        <div class="relative w-full aspect-square">
+          <%= image_tag coffee_bag.image.variant(:thumb), class: " object-cover object-center w-full h-full" %>
         </div>
       <% end %>
-      <div class="relative group">
-        <h3 class="mt-3 text-lg font-semibold leading-6 text-neutral-900 group-hover:text-neutral-600">
-          <%= coffee_bag.name %>
-        </h3>
-        <div class="mt-2 prose prose-neutral dark:prose-invert">
-          <table>
-            <% [:roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score].each do |attribute| %>
-              <% if coffee_bag.send(attribute).present? %>
-                <tr>
-                  <td><%= attribute.to_s.humanize %></td>
-                  <td><%= coffee_bag.send(attribute) %></td>
-                </tr>
+      <div class="flex flex-col flex-1 p-8">
+        <% if coffee_bag.roast_date.present? %>
+          <div class="flex items-center mt-8 text-xs gap-x-4">
+            <%= time_tag coffee_bag.roast_date %>
+          </div>
+        <% end %>
+        <div class="relative group">
+          <h3 class="mt-3 text-lg font-semibold leading-6 text-neutral-900 group-hover:text-neutral-600">
+            <%= coffee_bag.name %>
+          </h3>
+          <div class="mt-2 prose prose-neutral dark:prose-invert">
+            <table>
+              <% [:roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score].each do |attribute| %>
+                <% if coffee_bag.send(attribute).present? %>
+                  <tr>
+                    <td><%= attribute.to_s.humanize %></td>
+                    <td><%= coffee_bag.send(attribute) %></td>
+                  </tr>
+                <% end %>
               <% end %>
-            <% end %>
-          </table>
+            </table>
+          </div>
         </div>
       </div>
     </div>
