@@ -1,7 +1,7 @@
 <div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@shot) %>">
   <%= form_with(model: @shot) do |f| %>
     <div class="shadow sm:rounded-md sm:overflow-hidden">
-      <div class="px-4 py-5 space-y-6 bg-white dark:bg-neutral-800 sm:p-6">
+      <div class="px-4 py-5 bg-white gap-y-6 dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6" data-controller="ey-calculator">
           <div class="col-span-6">
             <%= f.label :espresso_enjoyment, class: "standard-label" %>

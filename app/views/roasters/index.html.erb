@@ -1,5 +1,5 @@
 <% content_for(:html_title) { "Visualizer | Your Roasters" } %>
-<div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+<div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-row justify-between gap-2 px-4 sm:px-0">
     <div>
       <h1 class="font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
@@ -30,7 +30,7 @@
     </div>
     <div data-controller="modal">
       <%= render "shared/modal" %>
-      <div id="roasters" class="border-t divide-y sm:mt-10 sm:space-y-4 sm:divide-none sm:border-none dark:divide-neutral-800 dark:border-neutral-800" data-controller="check-images">
+      <div id="roasters" class="flex flex-col border-t divide-y sm:gap-y-4 sm:divide-none sm:border-none dark:divide-neutral-800 dark:border-neutral-800" data-controller="check-images">
         <%= render @roasters %>
       </div>
     </div>
