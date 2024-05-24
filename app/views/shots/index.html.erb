@@ -31,8 +31,8 @@
       </div>
     <% end %>
   </div>
+  <%= render "upload_form", show_form: @shots.none? %>
   <% if @shots.any? %>
-    <%= render "upload_form", show_form: false %>
     <%= render "filters" %>
     <div id="shots_live_stream">
       <%= turbo_stream_from current_user, :shots %>
@@ -45,7 +45,6 @@
     </div>
     <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(before: @cursor, format: :turbo_stream) } %>
   <% else %>
-    <%= render "upload_form", show_form: true %>
     <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
       <% if @premium_count.to_i > 1 %>
         Consider <%= link_to("upgrading", premium_index_path, class: "standard-link text-terracotta-600") %> to see your old shots.

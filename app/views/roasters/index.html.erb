@@ -28,9 +28,12 @@
         </div>
       <% end %>
     </div>
-    <ul id="roasters" class="px-4 divide-y divide-neutral-100 sm:px-0">
-      <%= render @roasters %>
-    </ul>
+    <div data-controller="modal">
+      <%= render "shared/modal" %>
+      <div id="roasters" class="border-t divide-y sm:mt-10 sm:space-y-4 sm:divide-none dark:divide-neutral-800 dark:border-neutral-800">
+        <%= render @roasters %>
+      </div>
+    </div>
   <% else %>
     <div class="pt-12 text-center text-neutral-500">
       No roasters yet 😢
