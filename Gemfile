@@ -7,6 +7,7 @@ gem "active_link_to"
 gem "aws-sdk-s3", require: false
 gem "bootsnap", require: false
 gem "cloudinary"
+gem "csv"
 gem "devise"
 gem "doorkeeper"
 gem "image_processing"
@@ -61,7 +62,5 @@ group :development do
 end
 
 group :test do
-  gem "guard"
-  gem "guard-minitest"
   gem "webmock"
 end
