@@ -129,7 +129,7 @@
           <% end %>
           <div class="col-span-3 sm:col-span-2">
             <h3 class="mb-4 font-medium text-neutral-700 dark:text-neutral-300">Email Notifications</h3>
-            <div class="space-y-1">
+            <div class="flex flex-col gap-y-1">
               <%= f.collection_check_boxes(:email_notifications, User::EMAIL_NOTIFICATIONS.map{ |en| [en.humanize, en]}, :last, :first) do |cb| %>
                 <div class="flex items-start">
                   <div class="flex items-center h-5">
