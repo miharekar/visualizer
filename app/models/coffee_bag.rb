@@ -11,7 +11,7 @@ class CoffeeBag < ApplicationRecord
   validates :name, presence: true
 
   def display_name
-    roast_date.blank? ? name : "#{name} (#{roast_date.strftime("%d %b %y")})"
+    roast_date.blank? ? name : "#{name} (#{roast_date.to_fs(:long)})"
   end
 end
 
