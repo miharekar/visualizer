@@ -246,6 +246,8 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
     assert_equal 35.047, shot.duration
+    assert_equal "3", shot.drink_tds
+    assert_equal "4", shot.drink_ey
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
   end
 
@@ -344,7 +346,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 174.244, shot.duration
     assert_equal %w[pressureFlow realtimeFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
     assert_equal 1748, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
-    assert_equal 8, shot.information.extra.keys.size
+    assert_equal 10, shot.information.extra.keys.size
   end
 
   test "extracts long beanconqueror file with missing values" do
@@ -356,7 +358,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 147.542, shot.duration
     assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
     assert_equal 1366, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
-    assert_equal 8, shot.information.extra.keys.size
+    assert_equal 10, shot.information.extra.keys.size
   end
 
   test "extracts correct weight from beanconqueror file" do
@@ -369,7 +371,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 163.198, shot.duration
     assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
     assert_equal 1117, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
-    assert_equal 8, shot.information.extra.keys.size
+    assert_equal 10, shot.information.extra.keys.size
   end
 
   test "extracts pressure from CoffeeFlow app" do
@@ -450,7 +452,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 17.201, shot.duration
     assert_equal %w[pressureFlow realtimeFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
     assert_equal 16, shot.information.brewdata["brewFlow"]["temperatureFlow"].size
-    assert_equal 8, shot.information.extra.keys.size
+    assert_equal 10, shot.information.extra.keys.size
   end
 
   test "extracts newlines in bean notes from .shot file" do

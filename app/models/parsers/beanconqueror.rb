@@ -31,6 +31,8 @@ module Parsers
       @extra["grinder_setting"] = brew["grind_size"]
       @extra["drink_weight"] = brew["brew_beverage_quantity"]
       @extra["bean_weight"] = brew["grind_weight"]
+      @extra["drink_tds"] = brew["tds"]
+      @extra["drink_ey"] = brew["ey"]
     end
 
     def extract_grinder(mill)
