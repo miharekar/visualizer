@@ -36,7 +36,7 @@ class CoffeeBagsController < ApplicationController
 
   def destroy
     @coffee_bag.destroy!
-    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully destroyed."
+    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully deleted."
   end
 
   def remove_image

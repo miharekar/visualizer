@@ -36,7 +36,7 @@ class RoastersController < ApplicationController
 
   def destroy
     @roaster.destroy!
-    redirect_to roasters_path(format: :html), notice: "Roaster was successfully destroyed."
+    redirect_to roasters_path(format: :html), notice: "Roaster was successfully deleted."
   end
 
   def remove_image
