@@ -15,12 +15,8 @@
   </div>
   <% if @coffee_bags.any? %>
     <div>
-      <%= form_with(url: search_roasters_path, data: {controller: "search", search_target: "form"}) do |f| %>
+      <%= form_with(url: search_roaster_coffee_bags_path, data: {controller: "search", search_target: "form"}) do |f| %>
         <div class="grid grid-cols-12 gap-3">
-          <div class="col-span-6 md:col-span-3">
-            <%= f.label :roaster, class: "standard-label" %>
-            <%= f.search_field :roaster, value: params[:roaster], class: "mt-1 standard-input", data: {action: "search#submit"} %>
-          </div>
           <div class="col-span-6 md:col-span-3">
             <%= f.label :coffee, class: "standard-label" %>
             <%= f.search_field :coffee, value: params[:coffee], class: "mt-1 standard-input", data: {action: "search#submit"} %>
