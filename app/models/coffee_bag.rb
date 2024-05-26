@@ -1,4 +1,7 @@
 class CoffeeBag < ApplicationRecord
+  before_destroy :update_shots
+  after_save_commit :update_shots, if: -> { saved_change_to_name? || saved_change_to_roast_date? || saved_change_to_roast_level? }
+
   belongs_to :roaster, touch: true
   has_many :shots, dependent: :nullify
 
@@ -19,6 +22,13 @@ class CoffeeBag < ApplicationRecord
 
   def display_name
     roast_date.blank? ? name : "#{name} (#{roast_date.to_fs(:long)})"
+  end
+
+  private
+
+  def update_shots
+    update_shot_jobs = shots.map { |shot| RefreshCoffeeBagFieldsForShotJob.new(shot) }
+    ActiveJob.perform_all_later(update_shot_jobs)
   end
 end
 
