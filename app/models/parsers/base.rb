@@ -48,7 +48,7 @@ module Parsers
       shot.start_time = start_time
       shot.public = user.public
       add_information(shot)
-      # TODO: Find or create coffee bag and link
+      link_coffee_bag(shot, user) if user.coffee_management_enabled?
 
       if shot.valid?
         extract_fields_from_extra(shot)
@@ -87,6 +87,11 @@ module Parsers
       shot.information.profile_fields = profile_fields
       shot.information.brewdata = brewdata
       shot.information.brewdata["parser"] = self.class.name
+    end
+
+    def link_coffee_bag(shot, user)
+      roaster = user.roasters.find_or_create_by(name: extra["bean_brand"])
+      shot.coffee_bag = CoffeeBag.for_roaster_and_shot(roaster, shot)
     end
 
     def calculate_duration

@@ -10,6 +10,13 @@ class CoffeeBag < ApplicationRecord
 
   validates :name, presence: true
 
+  def self.for_roaster_and_shot(roaster, shot)
+    roast_date = Date.parse(shot.roast_date) rescue nil
+    roaster.coffee_bags.find_or_create_by(name: shot.bean_type, roast_date:) do |bag|
+      bag.roast_level = shot.roast_level
+    end
+  end
+
   def display_name
     roast_date.blank? ? name : "#{name} (#{roast_date.to_fs(:long)})"
   end
