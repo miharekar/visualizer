@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter].freeze
 
+  after_commit :reflect_public_to_shots, on: :update, if: -> { saved_change_to_public? }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable
@@ -23,8 +25,6 @@ class User < ApplicationRecord
   scope :visible, -> { where(public: true) }
   scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
   scope :by_name, -> { order("LOWER(name)") }
-
-  after_commit :reflect_public_to_shots, on: :update, if: -> { saved_change_to_public? }
 
   validates :name, presence: true, if: :public?
 
