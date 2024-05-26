@@ -1,17 +1,19 @@
 <%= turbo_frame_tag "coffee_bag_fields" do %>
-  <div class="grid grid-cols-6 gap-6">
-    <div class="col-span-6 sm:col-span-3" data-controller="coffee-bag-fields" data-new-roaster-path="<%= new_roaster_path %>">
+  <% new_coffee_bag_path = new_roaster_coffee_bag_path(roaster_id: @roaster.id) if @roaster.present? %>
+  <% tag.div class: "grid grid-cols-6 gap-6", data: { controller: "coffee-bag-fields", new_roaster_path: new_roaster_path, new_coffee_bag_path: new_coffee_bag_path } do %>
+    <div class="col-span-6 sm:col-span-3">
       <%= label_tag :roaster, nil, class: "standard-label" %>
       <% select_options = "<option value=\"new\">Add New Roaster</option>\n<option value=\"\"#{"selected=\"selected\"" if @roaster.nil?}>------</option>\n" + options_from_collection_for_select(@roasters, :id, :name, @roaster&.id) %>
-      <%= select_tag :roaster, select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#fetch", coffee_bag_fields_target: "roasters", url: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } %>
+      <%= select_tag :roaster, select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#roaster_changed", coffee_bag_fields_target: "roasters", url: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } %>
     </div>
     <% if @coffee_bags %>
       <div class="col-span-6 sm:col-span-3">
         <%= label_tag :shot_coffee_bag_id, "Coffee Bag", class: "standard-label" %>
-        <%= select_tag "shot[coffee_bag_id]", options_from_collection_for_select(@coffee_bags, :id, :display_name, @coffee_bag&.id), class: "mt-1 standard-input" %>
+        <% select_options = "<option value=\"new\">Add New Coffee Bag</option>\n<option value=\"\"#{"selected=\"selected\"" if @coffee_bag.nil? || @roaster != @coffee_bag.roaster}>------</option>\n" + options_from_collection_for_select(@coffee_bags, :id, :display_name, @coffee_bag&.id) %>
+        <%= select_tag "shot[coffee_bag_id]", select_options.html_safe, class: "mt-1 standard-input", data: { action: "change->coffee-bag-fields#coffee_bag_changed", coffee_bag_fields_target: "coffeeBags" } %>
       </div>
     <% else %>
       <%= hidden_field_tag "shot[coffee_bag_id]", nil %>
     <% end %>
-  </div>
+  <% end %>
 <% end %>
