@@ -23,6 +23,7 @@ class Shot < ApplicationRecord
 
   attr_accessor :skip_airtable_sync
 
+  before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
   after_create :ensure_screenshot
   after_save_commit :sync_to_airtable
   after_destroy_commit :cleanup_airtable
@@ -40,6 +41,13 @@ class Shot < ApplicationRecord
 
   def metadata
     super.presence || {}
+  end
+
+  def refresh_coffee_bag_fields
+    self.bean_brand = coffee_bag&.roaster&.name
+    self.bean_type = coffee_bag&.name
+    self.roast_date = coffee_bag&.roast_date&.to_fs(:long)
+    self.roast_level = coffee_bag&.roast_level
   end
 
   def related_shots(limit: 5)

@@ -23,20 +23,4 @@ module ShotPresenter
     ratio_string = "(1:#{weight_ratio.round(1)})" if bean_weight_f > 0 && drink_weight_f > 0 && weight_ratio > 0
     [weight_string, ratio_string].compact.join(" ")
   end
-
-  def bean_brand
-    user.coffee_management_enabled? ? coffee_bag&.roaster&.name : super
-  end
-
-  def bean_type
-    user.coffee_management_enabled? ? coffee_bag&.name : super
-  end
-
-  def roast_level
-    user.coffee_management_enabled? ? coffee_bag&.roast_level : super
-  end
-
-  def roast_date
-    user.coffee_management_enabled? ? coffee_bag&.roast_date&.to_formatted_s(:long) : super
-  end
 end

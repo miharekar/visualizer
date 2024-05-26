@@ -1,6 +1,10 @@
 class Roaster < ApplicationRecord
+  before_destroy :update_shots
+  after_save_commit :update_shots, if: -> { saved_change_to_name? }
+
   belongs_to :user
   has_many :coffee_bags, dependent: :destroy
+  has_many :shots, through: :coffee_bags
 
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [200, 200]
@@ -10,6 +14,13 @@ class Roaster < ApplicationRecord
   scope :with_at_least_one_coffee_bag, -> { joins(:coffee_bags).group(:id) }
 
   validates :name, presence: true, uniqueness: {scope: :user_id}
+
+  private
+
+  def update_shots
+    update_shot_jobs = shots.map { |shot| RefreshCoffeeBagFieldsForShotJob.new(shot) }
+    ActiveJob.perform_all_later(update_shot_jobs)
+  end
 end
 
 # == Schema Information
