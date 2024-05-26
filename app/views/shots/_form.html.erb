@@ -1,7 +1,7 @@
 <div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@shot) %>">
   <%= form_with(model: @shot) do |f| %>
     <div class="shadow sm:rounded-md sm:overflow-hidden">
-      <div class="px-4 py-5 bg-white gap-y-6 dark:bg-neutral-800 sm:p-6">
+      <div class="flex flex-col px-4 py-5 bg-white gap-y-6 dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6" data-controller="ey-calculator">
           <div class="col-span-6">
             <%= f.label :espresso_enjoyment, class: "standard-label" %>
@@ -86,15 +86,17 @@
         <% if current_user.premium? %>
           <% if current_user.metadata_fields.any? %>
             <%= f.fields_for :metadata do |mf| %>
-              <% current_user.metadata_fields.each do |field| %>
-                <div class="col-span-6 sm:col-span-3">
-                  <%= mf.label field, class: "standard-label" %>
-                  <%= mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input" %>
-                </div>
-              <% end %>
+              <div class="grid grid-cols-6 gap-6">
+                <% current_user.metadata_fields.each do |field| %>
+                  <div class="col-span-6 sm:col-span-3">
+                    <%= mf.label field, class: "standard-label" %>
+                    <%= mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input" %>
+                  </div>
+                <% end %>
+              </div>
             <% end %>
           <% else %>
-            <p class="text-center text-neutral-700 dark:text-neutral-300">
+            <p class="text-neutral-700 dark:text-neutral-300">
               You don't have any custom fields yet.
               <%= link_to "Add some", edit_profile_path(current_user), class: "font-bold standard-link" %>!
             </p>
