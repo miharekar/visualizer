@@ -28,10 +28,9 @@ const getHoverPoint = (chart, e) => {
   return chart.pointer.findNearestKDPoint(chart.series, true, chart.pointer.normalize(e))
 }
 
-const syncMouse = (e) => {
-  const thisChart = this
+function syncMouse(e) {
   Highcharts.charts.forEach((chart) => {
-    if (!isObject(chart) || thisChart === chart.renderTo) return
+    if (!isObject(chart) || this === chart.renderTo) return
 
     const hoverPoint = getHoverPoint(chart, e)
     const hoverPoints = []
