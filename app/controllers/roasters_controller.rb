@@ -51,7 +51,7 @@ class RoastersController < ApplicationController
   end
 
   def load_roasters
-    @roasters = current_user.roasters.by_name.includes(:coffee_bags)
+    @roasters = current_user.roasters.order_by_name.includes(:coffee_bags)
     @roasters = @roasters.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
     @roasters = @roasters.joins(:coffee_bags).where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
   end

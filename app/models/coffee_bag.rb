@@ -9,9 +9,10 @@ class CoffeeBag < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
-  scope :by_roast_date, -> { order("roast_date DESC NULLS LAST") }
+  scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase) }
+  scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: {scope: :roaster_id, case_sensitive: false}
 
   def self.for_roaster_and_shot(roaster, shot)
     roast_date = Date.parse(shot.roast_date) rescue nil

@@ -47,7 +47,7 @@ class CommunityController < ApplicationController
 
   def unique_values_for(filter)
     if filter == :user
-      User.visible_or_id(current_user&.id).by_name
+      User.visible_or_id(current_user&.id).order_by_name
     else
       Rails.cache.read("unique_values_for_#{filter}")
     end
