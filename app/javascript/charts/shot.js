@@ -1,18 +1,21 @@
 import Highcharts from "highcharts"
 import "highcharts-annotations"
 
-Highcharts.wrap(Highcharts.Chart.prototype, "zoom", function (proceed) {
-  proceed.apply(this, [].slice.call(arguments, 1))
+function deepMerge(obj1, obj2) {
+  const result = { ...obj1 }
 
-  if (!isObject(this.resetZoomButton)) {
-    Highcharts.charts.forEach(function (chart) {
-      if (isObject(chart) && isObject(chart.resetZoomButton)) {
-        chart.resetZoomButton.destroy()
-        chart.resetZoomButton = undefined
+  for (let key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
+        result[key] = deepMerge(obj1[key], obj2[key])
+      } else {
+        result[key] = obj2[key]
       }
-    })
+    }
   }
-})
+
+  return result
+}
 
 function isObject(obj) {
   return obj && typeof obj === "object"
@@ -73,21 +76,28 @@ function mouseLeave(e) {
   })
 }
 
+function syncZoomReset(e) {
+  if (!e.resetSelection) return
+
+  Highcharts.charts.forEach(function (chart) {
+    if (!isObject(chart) || !isObject(chart.resetZoomButton)) return
+
+    chart.resetZoomButton = chart.resetZoomButton.destroy()
+  })
+}
+
 function syncExtremes(e) {
-  const thisChart = this.chart
+  if (e.trigger === "syncExtremes") return
 
-  if (e.trigger !== "syncExtremes") {
-    Highcharts.charts.forEach(function (chart) {
-      if (!isObject(chart) || chart === thisChart) return
+  Highcharts.charts.forEach(chart => {
+    if (!isObject(chart) || chart === this.chart) return
+    if (!chart.xAxis[0].setExtremes) return
 
-      if (chart.xAxis[0].setExtremes) {
-        chart.xAxis[0].setExtremes(e.min, e.max, undefined, false, { trigger: "syncExtremes" })
-        if (!isObject(chart.resetZoomButton)) {
-          chart.showResetZoom()
-        }
-      }
-    })
-  }
+    chart.xAxis[0].setExtremes(e.min, e.max, undefined, false, { trigger: "syncExtremes" })
+    if (isObject(chart.resetZoomButton) || e.min === undefined || e.max === undefined) return
+
+    chart.showResetZoom()
+  })
 }
 
 function isDark() {
@@ -124,10 +134,16 @@ function getColors() {
 
 function commonOptions() {
   const colors = getColors()
+
   return {
     accessibility: { enabled: false },
     animation: false,
     title: false,
+    chart: {
+      zoomType: "x",
+      backgroundColor: colors.background,
+      events: { selection: syncZoomReset },
+    },
     xAxis: {
       type: "datetime",
       events: { setExtremes: syncExtremes },
@@ -275,22 +291,15 @@ function updateInCupVisibility(chart) {
 }
 
 function drawShotChart() {
-  const colors = getColors()
-
   const custom = {
     chart: {
-      zoomType: "x",
       height: 650,
-      backgroundColor: colors.background,
-      events: {
-        redraw: (x) => updateInCupVisibility(x.target),
-      },
+      events: { redraw: (x) => updateInCupVisibility(x.target) },
     },
     series: window.shotData,
   }
 
-  let options = { ...commonOptions(), ...custom }
-
+  let options = deepMerge(commonOptions(), custom)
   let chart = Highcharts.chart("shot-chart", options)
   if (window.shotStages?.length > 0) {
     setupInCupAnnotations(chart)
@@ -318,19 +327,14 @@ function drawShotStages() {
 }
 
 function drawTemperatureChart() {
-  const colors = getColors()
-
   const custom = {
     chart: {
-      zoomType: "x",
       height: 400,
-      backgroundColor: colors.background,
     },
     series: window.temperatureData,
   }
 
-  let options = { ...commonOptions(), ...custom }
-
+  let options = deepMerge(commonOptions(), custom)
   Highcharts.chart("temperature-chart", options)
 }
 
