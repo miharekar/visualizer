@@ -4,7 +4,7 @@
     <div class="col-span-6 sm:col-span-3">
       <%= label_tag :roaster, nil, class: "standard-label" %>
       <div class="relative" data-controller="combobox">
-        <%= text_field_tag :roaster, @roaster.name, class: "mt-1 standard-input", autocomplete: "off", data: { action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext keydown.up->combobox#highlightPrevious keydown.enter->combobox#select keydown.esc->combobox#hide ", combobox_target: "input" } %>
+        <%= text_field_tag :roaster, @roaster.name, class: "mt-1 standard-input", autocomplete: "off", data: { action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input" } %>
         <%= hidden_field_tag :roaster_id, @roaster.id, data: { action: "change->coffee-bag-fields#roaster_changed", combobox_target: "hiddenInput" } %>
         <button type="button" class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none" data-action="click->combobox#toggle" tabindex="-1">
           <svg class="w-5 h-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -13,7 +13,7 @@
         </button>
         <ul class="absolute z-10 hidden w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" data-combobox-target="list">
           <% @roasters.each do |roaster| %>
-            <li class="relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9 group<%= roaster == @roaster ? " is-selected" : "" %>" data-action="click->combobox#select mouseenter->combobox#highlight mouseleave->combobox#unhighlight" data-roaster-id="<%= roaster.id %>" data-roaster-name="<%= roaster.name %>">
+            <li class="relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9 group<%= roaster == @roaster ? " is-selected" : "" %>" data-action="click->combobox#select mouseenter->combobox#highlight mouseleave->combobox#markAllAsInactive" data-roaster-id="<%= roaster.id %>" data-roaster-name="<%= roaster.name %>">
               <span class="block truncate group-[.is-selected]:font-semibold"><%= roaster.name %></span>
               <span class="absolute inset-y-0 right-0 items-center pr-4 hidden group-[.is-selected]:flex text-terracotta-500 group-[.text-white]:text-white">
                 <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
