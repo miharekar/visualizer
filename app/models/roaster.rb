@@ -10,10 +10,11 @@ class Roaster < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
-  scope :by_name, -> { order("LOWER(roasters.name)") }
+  scope :filter_by_name, ->(name) { where("LOWER(roasters.name) = ?", name.downcase) }
+  scope :order_by_name, -> { order("LOWER(roasters.name)") }
   scope :with_at_least_one_coffee_bag, -> { joins(:coffee_bags).group(:id) }
 
-  validates :name, presence: true, uniqueness: {scope: :user_id}
+  validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
 
   private
 

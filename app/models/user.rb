@@ -24,7 +24,7 @@ class User < ApplicationRecord
 
   scope :visible, -> { where(public: true) }
   scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
-  scope :by_name, -> { order("LOWER(name)") }
+  scope :order_by_name, -> { order("LOWER(name)") }
 
   validates :name, presence: true, if: :public?
 
