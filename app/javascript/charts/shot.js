@@ -1,54 +1,46 @@
 import Highcharts from "highcharts"
 import "highcharts-annotations"
 
-function deepMerge(obj1, obj2) {
+const deepMerge = (obj1, obj2) => {
   const result = { ...obj1 }
+  for (const key in obj2) {
+    if (!obj2.hasOwnProperty(key)) return
 
-  for (let key in obj2) {
-    if (obj2.hasOwnProperty(key)) {
-      if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
-        result[key] = deepMerge(obj1[key], obj2[key])
-      } else {
-        result[key] = obj2[key]
-      }
+    if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
+      result[key] = deepMerge(obj1[key], obj2[key])
+    } else {
+      result[key] = obj2[key]
     }
   }
-
   return result
 }
 
-function isObject(obj) {
-  return obj && typeof obj === "object"
-}
+const isObject = (obj) => obj && typeof obj === "object"
 
-function syncMouseEvents(element) {
+const syncMouseEvents = (element) => {
   element.addEventListener("mousemove", syncMouse)
   element.addEventListener("touchstart", syncMouse)
   element.addEventListener("touchmove", syncMouse)
   element.addEventListener("mouseleave", mouseLeave)
 }
 
-function getHoverPoint(chart, e) {
-  e = chart.pointer.normalize(e)
-  return chart.pointer.findNearestKDPoint(chart.series, true, e)
+const getHoverPoint = (chart, e) => {
+  return chart.pointer.findNearestKDPoint(chart.series, true, chart.pointer.normalize(e))
 }
 
-function syncMouse(e) {
+const syncMouse = (e) => {
   const thisChart = this
-
-  Highcharts.charts.forEach(function (chart) {
+  Highcharts.charts.forEach((chart) => {
     if (!isObject(chart) || thisChart === chart.renderTo) return
 
     const hoverPoint = getHoverPoint(chart, e)
-    let hoverPoints = []
+    const hoverPoints = []
+
     if (hoverPoint) {
-      chart.series.forEach(function (s) {
+      chart.series.forEach((s) => {
         if (!s.visible) return
 
-        const point = Highcharts.find(s.points, function (p) {
-          return p.x === hoverPoint.x && !p.isNull
-        })
-
+        const point = s.points.find((p) => p.x === hoverPoint.x && !p.isNull)
         if (isObject(point)) {
           hoverPoints.push(point)
         }
@@ -62,8 +54,8 @@ function syncMouse(e) {
   })
 }
 
-function mouseLeave(e) {
-  Highcharts.charts.forEach(function (chart) {
+const mouseLeave = (e) => {
+  Highcharts.charts.forEach((chart) => {
     if (!isObject(chart)) return
 
     const hoverPoint = getHoverPoint(chart, e)
@@ -76,20 +68,19 @@ function mouseLeave(e) {
   })
 }
 
-function syncZoomReset(e) {
+const syncZoomReset = (e) => {
   if (!e.resetSelection) return
 
-  Highcharts.charts.forEach(function (chart) {
+  Highcharts.charts.forEach((chart) => {
     if (!isObject(chart) || !isObject(chart.resetZoomButton)) return
-
     chart.resetZoomButton = chart.resetZoomButton.destroy()
   })
 }
 
-function syncExtremes(e) {
+const syncExtremes = function (e) {
   if (e.trigger === "syncExtremes") return
 
-  Highcharts.charts.forEach(chart => {
+  Highcharts.charts.forEach((chart) => {
     if (!isObject(chart) || chart === this.chart) return
     if (!chart.xAxis[0].setExtremes) return
 
@@ -100,7 +91,7 @@ function syncExtremes(e) {
   })
 }
 
-function isDark() {
+const isDark = () => {
   if (document.body.classList.contains("system")) {
     return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
   } else {
@@ -108,7 +99,7 @@ function isDark() {
   }
 }
 
-function getColors() {
+const getColors = () => {
   if (isDark()) {
     return {
       background: "#171717",
@@ -132,7 +123,7 @@ function getColors() {
   }
 }
 
-function commonOptions() {
+const commonOptions = () => {
   const colors = getColors()
 
   return {
@@ -152,7 +143,7 @@ function commonOptions() {
         style: { color: colors.label },
         formatter: function () {
           if (this.value < 0) {
-            return "-" + Highcharts.dateFormat("%M:%S", -this.value)
+            return `-${Highcharts.dateFormat("%M:%S", -this.value)}`
           } else {
             return Highcharts.dateFormat("%M:%S", this.value)
           }
@@ -178,11 +169,10 @@ function commonOptions() {
       formatter: function (tooltip) {
         let s
         if (this.x < 0) {
-          s = ["-" + Highcharts.dateFormat("%M:%S.%L", -this.x) + "<br>"]
+          s = [`-${Highcharts.dateFormat("%M:%S.%L", -this.x)}<br>`]
         } else {
-          s = [Highcharts.dateFormat("%M:%S.%L", this.x) + "<br>"]
+          s = [`${Highcharts.dateFormat("%M:%S.%L", this.x)}<br>`]
         }
-
         return s.concat(tooltip.bodyFormatter(this.points))
       },
     },
@@ -196,9 +186,7 @@ function commonOptions() {
         animation: false,
         marker: {
           enabled: false,
-          states: {
-            hover: { enabled: false },
-          },
+          states: { hover: { enabled: false } },
         },
         states: {
           hover: { enabled: false },
@@ -210,20 +198,17 @@ function commonOptions() {
   }
 }
 
-function extractStages(field, timings) {
-  for (let i = 0; i < window.shotData.length; i++) {
-    let fieldData = window.shotData[i]
-    if (fieldData.name == field) {
+const extractStages = (field, timings) => {
+  for (const fieldData of window.shotData) {
+    if (fieldData.name === field) {
       return timings.map((time) => new Map(fieldData.data).get(time))
     }
   }
-
-  // If the series is not present, assume all 0
-  return timings.map((_) => 0)
+  return timings.map(() => 0)
 }
 
 function setupInCupAnnotations(chart) {
-  const weightColor = chart.series.filter((x) => x.name == "Weight Flow")[0].color
+  const weightColor = chart.series.find((x) => x.name === "Weight Flow").color
   const timings = shotStages.map((x) => x.value)
   const weightFlow = extractStages("Weight Flow", timings)
   const weight = extractStages("Weight", timings)
@@ -276,12 +261,10 @@ function setupInCupAnnotations(chart) {
 }
 
 function updateInCupVisibility(chart) {
-  const weightFlowSeries = chart.series.filter((x) => x.name == "Weight Flow" && x.visible)
+  const weightFlowSeries = chart.series.filter((x) => x.name === "Weight Flow" && x.visible)
   const isVisible = weightFlowSeries.length > 0
   const annotation = chart.inCupAnnotation
 
-  // Highcharts does not allow changing the visibility of a chart, so it must be removed and recreated
-  // Doing so causes a redraw within the redraw, but we only apply changes when the visibility toggles
   if (annotation && !isVisible) {
     chart.removeAnnotation(annotation)
     chart.inCupAnnotation = null
@@ -294,7 +277,7 @@ function drawShotChart() {
   const custom = {
     chart: {
       height: 650,
-      events: { redraw: (x) => updateInCupVisibility(x.target) },
+      events: { redraw: (e) => updateInCupVisibility(e.target) },
     },
     series: window.shotData,
   }
@@ -307,10 +290,10 @@ function drawShotChart() {
 }
 
 function destroyShotStages() {
-  Highcharts.charts.forEach(function (chart) {
+  Highcharts.charts.forEach((chart) => {
     if (isObject(chart)) {
       while (chart.xAxis[0].plotLinesAndBands.length > 0) {
-        chart.xAxis[0].plotLinesAndBands.forEach(function (plotLine) {
+        chart.xAxis[0].plotLinesAndBands.forEach((plotLine) => {
           chart.xAxis[0].removePlotLine(plotLine.id)
         })
       }
@@ -319,7 +302,7 @@ function destroyShotStages() {
 }
 
 function drawShotStages() {
-  Highcharts.charts.forEach(function (chart) {
+  Highcharts.charts.forEach((chart) => {
     if (isObject(chart)) {
       window.shotStages.forEach((x) => chart.xAxis[0].addPlotLine(x))
     }
@@ -338,17 +321,15 @@ function drawTemperatureChart() {
   Highcharts.chart("temperature-chart", options)
 }
 
-function comparisonAdjust(range) {
+const comparisonAdjust = (range) => {
   range.addEventListener("input", function () {
     const value = parseInt(this.value)
-    Highcharts.charts.forEach(function (chart) {
+    Highcharts.charts.forEach((chart) => {
       if (isObject(chart)) {
-        chart.series.forEach(function (s) {
+        chart.series.forEach((s) => {
           if (window.comparisonData[s.name]) {
             s.setData(
-              window.comparisonData[s.name].map(function (d) {
-                return [d[0] + value, d[1]]
-              }),
+              window.comparisonData[s.name].map((d) => [d[0] + value, d[1]]),
               true,
               false,
               false
@@ -364,8 +345,8 @@ function comparisonAdjust(range) {
   })
 }
 
-document.addEventListener("turbo:load", function () {
-  Highcharts.charts.forEach(function (chart) {
+document.addEventListener("turbo:load", () => {
+  Highcharts.charts.forEach((chart) => {
     if (isObject(chart)) {
       chart.destroy()
     }
@@ -389,14 +370,12 @@ document.addEventListener("turbo:load", function () {
   }
 
   if (window.shotStages?.length > 0) {
-    window.shotStages = window.shotStages.map((x) => {
-      return { ...x, id: x }
-    })
+    window.shotStages = window.shotStages.map((x) => ({ ...x, id: x }))
     drawShotStages()
   }
 })
 
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
   if (document.body.classList.contains("system")) {
     if (document.getElementById("shot-chart")) {
       drawShotChart()
