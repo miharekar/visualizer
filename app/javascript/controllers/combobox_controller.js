@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.shown = false
-    this.selected = this.listTarget.querySelector(".is-selected") || this.listTarget.querySelector("li")
+    this.selected = this.listTarget.querySelector(".is-selected") || this.getActive()
   }
 
   show() {
@@ -22,12 +22,14 @@ export default class extends Controller {
 
     event.stopPropagation()
     this.shown = false
+    this.inputTarget.value = this.selected.dataset.roasterName
     this.listTarget.classList.add("hidden")
   }
 
   windowClick(event) {
     if (this.shown && !this.element.contains(event.target)) {
       this.hide(event)
+      event.stopPropagation()
     }
   }
 
@@ -40,72 +42,72 @@ export default class extends Controller {
   toggle(event) {
     if (this.shown) {
       this.hide(event)
-      this.inputTarget.value = this.selected.dataset.roasterName
     } else {
-      this.shown = true
-      this.listTarget.classList.remove("hidden")
-      this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("hidden") })
+      this.inputTarget.value = ""
+      this.show()
     }
-  }
-
-  highlight(event) {
-    this.markAsActive(event.currentTarget)
   }
 
   filter() {
     const query = this.inputTarget.value.toLowerCase()
+
     this.listTarget.querySelectorAll("li").forEach((el) => {
-      const name = el.dataset.roasterName.toLowerCase()
-      if (name.includes(query)) {
+      if (el.dataset.roasterName.toLowerCase().includes(query)) {
         el.classList.remove("hidden")
       } else {
         el.classList.add("hidden")
         if (this.active === el) {
           this.active = null
+          this.markAllAsInactive()
         }
       }
     })
   }
 
-  findPreviousVisibleElement(element) {
-    while (element) {
-      element = element.previousElementSibling
-      if (element && !element.classList.contains('hidden')) {
-        console.log("here")
-        return element
-      }
+  select(event) {
+    if (!this.shown) return
+    event.preventDefault()
+
+    if (this.listTarget.contains(event.currentTarget)) {
+      this.active = event.currentTarget
     }
+
+    let active = this.getActive()
+    if (!active) return
+
+    if (active === this.selected) {
+      this.hide(event)
+      return
+    }
+
+    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
+    this.selected = active
+    this.selected.classList.add("is-selected")
+    this.hiddenInputTarget.value = this.selected.dataset.roasterId
+    this.hiddenInputTarget.dispatchEvent(new Event("change"))
+    this.hide(event)
   }
 
-  findNextVisibleElement(element) {
-    while (element) {
-      element = element.nextElementSibling
-      if (element && !element.classList.contains('hidden')) {
-        return element
-      }
-    }
+  mouseMove(event) {
+    this.markAsActive(event.currentTarget)
   }
 
   highlightPrevious(event) {
-    if (!this.shown) this.show()
-
-    event.stopPropagation()
-    const previous = this.findPreviousVisibleElement(this.getActive()) || this.getActive()
-    this.markAllAsInactive()
-    this.markAsActive(previous)
+    event.preventDefault()
+    this.markAsActive(this.findPreviousVisibleElement())
   }
 
   highlightNext(event) {
-    if (!this.shown) this.show()
-
-    event.stopPropagation()
-    const next = this.findNextVisibleElement(this.getActive()) || this.getActive()
-    this.markAllAsInactive()
-    this.markAsActive(next)
+    event.preventDefault()
+    this.markAsActive(this.findNextVisibleElement())
   }
 
   markAsActive(element) {
+    element = element || this.getActive()
+    if (element.classList.contains("bg-terracotta-500")) return
+
     this.active = element
+    this.markAllAsInactive()
     element.classList.remove("text-gray-900")
     element.classList.add("text-white", "bg-terracotta-500")
     element.scrollIntoView({ block: "nearest" })
@@ -118,30 +120,20 @@ export default class extends Controller {
     })
   }
 
-  select(event) {
-    if (!this.shown) return
-    event.preventDefault()
-
-    let active = this.getActive()
-    if (!active) return
-    this.inputTarget.value = this.active.dataset.roasterName
-
-    if (active === this.selected) {
-      this.hide(event)
-      return
+  findPreviousVisibleElement() {
+    let element = this.getActive()
+    while (element) {
+      element = element.previousElementSibling
+      if (element && !element.classList.contains("hidden")) return element
     }
+  }
 
-    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
-
-    if (this.listTarget.contains(event.currentTarget)) {
-      this.active = event.currentTarget
+  findNextVisibleElement() {
+    let element = this.getActive()
+    while (element) {
+      element = element.nextElementSibling
+      if (element && !element.classList.contains("hidden")) return element
     }
-
-    this.selected = active
-    this.selected.classList.add("is-selected")
-    this.hiddenInputTarget.value = this.selected.dataset.roasterId
-    this.hiddenInputTarget.dispatchEvent(new Event("change"))
-    this.hide(event)
   }
 
   getActive() {
