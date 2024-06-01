@@ -22,8 +22,9 @@ export default class extends Controller {
 
     event.stopPropagation()
     this.shown = false
-    this.inputTarget.value = this.selected.dataset.roasterName
+    this.inputTarget.value = this.selected.dataset.name
     this.listTarget.classList.add("hidden")
+    this.inputTarget.blur()
   }
 
   windowClick(event) {
@@ -52,7 +53,7 @@ export default class extends Controller {
     const query = this.inputTarget.value.toLowerCase()
 
     this.listTarget.querySelectorAll("li").forEach((el) => {
-      if (el.dataset.roasterName.toLowerCase().includes(query)) {
+      if (el.dataset.name.toLowerCase().includes(query)) {
         el.classList.remove("hidden")
       } else {
         el.classList.add("hidden")
@@ -83,7 +84,7 @@ export default class extends Controller {
     this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
     this.selected = active
     this.selected.classList.add("is-selected")
-    this.hiddenInputTarget.value = this.selected.dataset.roasterId
+    this.hiddenInputTarget.value = this.selected.dataset.id
     this.hiddenInputTarget.dispatchEvent(new Event("change"))
     this.hide(event)
   }
