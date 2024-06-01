@@ -13,7 +13,7 @@
         </button>
         <ul class="absolute z-10 hidden w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" data-combobox-target="list">
           <% @roasters.each do |roaster| %>
-            <li class="relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9 group<%= roaster == @roaster ? " is-selected" : "" %>" data-action="click->combobox#select mouseenter->combobox#highlight mouseleave->combobox#markAllAsInactive" data-roaster-id="<%= roaster.id %>" data-roaster-name="<%= roaster.name %>">
+            <li class="relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9 group<%= roaster == @roaster ? " is-selected" : "" %>" data-action="click->combobox#select mousemove->combobox#mouseMove mouseleave->combobox#markAllAsInactive" data-roaster-id="<%= roaster.id %>" data-roaster-name="<%= roaster.name %>">
               <span class="block truncate group-[.is-selected]:font-semibold"><%= roaster.name %></span>
               <span class="absolute inset-y-0 right-0 items-center pr-4 hidden group-[.is-selected]:flex text-terracotta-500 group-[.text-white]:text-white">
                 <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
