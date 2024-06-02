@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { matchSorter } from "match-sorter"
 
 export default class extends Controller {
   static targets = ["input", "hiddenInput", "list"]
@@ -51,10 +52,10 @@ export default class extends Controller {
   }
 
   filter() {
-    const query = this.inputTarget.value.toLowerCase()
-
-    this.listTarget.querySelectorAll("li").forEach((el) => {
-      if (el.dataset.name.toLowerCase().includes(query)) {
+    const items = this.listTarget.querySelectorAll("li")
+    const matches = matchSorter([...items], this.inputTarget.value, { keys: [item => item.dataset.name] })
+    items.forEach((el) => {
+      if (matches.includes(el)) {
         el.classList.remove("hidden")
       } else {
         el.classList.add("hidden")
