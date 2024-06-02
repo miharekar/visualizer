@@ -1,11 +1,19 @@
 <%= turbo_frame_tag "coffee_bag_fields" do %>
-  <% new_coffee_bag_path = new_roaster_coffee_bag_path(roaster_id: @roaster.id) if @roaster.present? %>
-  <% tag.div class: "grid grid-cols-6 gap-6", data: { controller: "coffee-bag-fields", new_roaster_path:, new_coffee_bag_path:, coffee_bag_form_shots_path: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } do %>
+  <% tag.div class: "grid grid-cols-6 gap-6", data: { controller: "coffee-bag-fields", coffee_bag_form_shots_path: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } do %>
     <div class="col-span-6 sm:col-span-3">
+      <div class="flex justify-between">
+        <%= label_tag :roaster, nil, class: "standard-label" %>
+        <%= link_to "New", new_roaster_path, class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
+      </div>
       <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: :roaster_id, selected: @roaster, collection: @roasters, hidden_data: { action: "change->coffee-bag-fields#roaster_changed" }} %>
     </div>
     <% if @coffee_bags %>
       <div class="col-span-6 sm:col-span-3">
+        <div class="flex justify-between">
+          <%= label_tag :coffee_bag, nil, class: "standard-label" %>
+          <% if @roaster.present? %>
+            <%= link_to "New", new_roaster_coffee_bag_path(roaster_id: @roaster.id), class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
+          <% end %>      </div>
         <% selected_bag = @coffee_bag if @roaster == @coffee_bag&.roaster %>
         <%= render partial: "shared/combobox", locals: { input_name: :coffee_bag, hidden_input_name: "shot[coffee_bag_id]", selected: selected_bag, collection: @coffee_bags, name_method: :display_name} %>
       </div>
