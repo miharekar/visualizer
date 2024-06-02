@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.shown = false
-    this.selected = this.listTarget.querySelector(".is-selected") || this.getActive()
+    this.selected = this.listTarget.querySelector(".is-selected") || this.active
   }
 
   show() {
@@ -22,7 +22,7 @@ export default class extends Controller {
 
     event.stopPropagation()
     this.shown = false
-    this.inputTarget.value = this.selected.dataset.name
+    if (this.selected) this.inputTarget.value = this.selected.dataset.name
     this.listTarget.classList.add("hidden")
     this.inputTarget.blur()
   }
