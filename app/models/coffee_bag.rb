@@ -1,5 +1,4 @@
 class CoffeeBag < ApplicationRecord
-  before_destroy :update_shots
   after_save_commit :update_shots, if: -> { saved_change_to_name? || saved_change_to_roast_date? || saved_change_to_roast_level? }
 
   belongs_to :roaster, touch: true
@@ -14,11 +13,9 @@ class CoffeeBag < ApplicationRecord
 
   validates :name, presence: true, uniqueness: {scope: :roaster_id, case_sensitive: false}
 
-  def self.for_roaster_and_shot(roaster, shot)
-    roast_date = Date.parse(shot.roast_date) rescue nil
-    roaster.coffee_bags.find_or_create_by(name: shot.bean_type, roast_date:) do |bag|
-      bag.roast_level = shot.roast_level
-    end
+  def self.for_roaster_by_name_and_date(roaster, name, roast_date, roast_level: nil)
+    roast_date = Date.parse(roast_date) rescue nil
+    where(roaster:).filter_by_name(name).where(roast_date:).first || create(name:, roaster:, roast_date:, roast_level:)
   end
 
   def display_name
