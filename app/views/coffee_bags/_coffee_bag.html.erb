@@ -22,13 +22,8 @@
                   <td><%= time_tag coffee_bag.roast_date, format: :long %></td>
                 </tr>
               <% end %>
-              <% [:roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score].each do |attribute| %>
-                <% if coffee_bag.send(attribute).present? %>
-                  <tr>
-                    <td><%= attribute.to_s.humanize %></td>
-                    <td><%= coffee_bag.send(attribute) %></td>
-                  </tr>
-                <% end %>
+              <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+                <%= metadata_pair(attribute.to_s.underscore.humanize, coffee_bag.send(attribute)) %>
               <% end %>
             </table>
           </div>

@@ -67,6 +67,29 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal Date.new(2021, 9, 11), user.coffee_bags.first.roast_date
   end
 
+  test "it overwrites existing shot if it exists" do
+    user = create(:user)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    old_id = shot.id
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    assert_equal old_id, shot.id
+  end
+
+  test "it resets coffee bag when user disables coffee management" do
+    user = create(:user, :with_coffee_management)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    old_id = shot.id
+    assert shot.coffee_bag_id
+    user.update!(coffee_management_enabled: false)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    assert_equal old_id, shot.id
+    assert_nil shot.coffee_bag_id
+  end
+
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
     @user = create(:user, :public)
 

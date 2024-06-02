@@ -125,6 +125,11 @@
           <% end %>
         <% end %>
       <% end %>
+      <% if shot.coffee_bag %>
+        <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+          <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+        <% end %>
+      <% end %>
     </table>
   </div>
   <% if shot.bean_notes.present? %>
