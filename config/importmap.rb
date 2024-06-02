@@ -11,6 +11,8 @@ pin "stimulus-autocomplete", to: "https://cdn.jsdelivr.net/npm/stimulus-autocomp
 pin "highcharts", to: "https://cdn.jsdelivr.net/npm/highcharts@11/es-modules/masters/highcharts.src.min.js"
 pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@11/es-modules/masters/modules/annotations.src.min.js"
 pin "highlight.js", to: "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js"
+pin "match-sorter", to: "https://cdn.jsdelivr.net/npm/match-sorter@6/dist/match-sorter.esm.min.js"
+pin "remove-accents", to: "https://cdn.jsdelivr.net/npm/remove-accents@0.5.0/+esm"
 
 pin_all_from "app/javascript/channels", under: "channels"
 pin_all_from "app/javascript/controllers", under: "controllers"
