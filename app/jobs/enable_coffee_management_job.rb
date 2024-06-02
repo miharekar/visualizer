@@ -24,8 +24,7 @@ class EnableCoffeeManagementJob < ApplicationJob
 
   memo_wise def roasters
     user.shots.distinct.pluck(:bean_brand).reject(&:blank?).to_h do |name|
-      roaster = user.roasters.filter_by_name(name).first || user.roasters.create!(name:)
-      [name, roaster]
+      [name, Roaster.for_user_by_name(user, name)]
     end
   end
 
@@ -33,10 +32,8 @@ class EnableCoffeeManagementJob < ApplicationJob
     user.shots.distinct
       .pluck(:bean_brand, :bean_type, :roast_date, :roast_level)
       .reject { |bean_brand, bean_type, _, _| bean_brand.blank? || bean_type.blank? }
-      .to_h do |bean_brand, bean_type, string_roast_date, roast_level|
-        roast_date = Date.parse(string_roast_date) rescue nil
-        coffee_bag = roasters[bean_brand].coffee_bags.filter_by_name(bean_type).where(roast_date:).first
-        coffee_bag ||= roasters[bean_brand].coffee_bags.create!(name: bean_type, roast_date:, roast_level:)
+      .to_h do |bean_brand, bean_type, roast_date, roast_level|
+        coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roasters[bean_brand], bean_type, roast_date, roast_level:)
 
         ["#{bean_brand}_#{bean_type}_#{string_roast_date}", coffee_bag]
       end

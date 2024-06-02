@@ -90,8 +90,8 @@ module Parsers
     end
 
     def link_coffee_bag(shot, user)
-      roaster = user.roasters.find_or_create_by(name: extra["bean_brand"])
-      shot.coffee_bag = CoffeeBag.for_roaster_and_shot(roaster, shot)
+      roaster = Roaster.for_user_by_name(user, extra["bean_brand"])
+      shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], extra["roast_date"], roast_level: extra["roast_level"])
     end
 
     def calculate_duration

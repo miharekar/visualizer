@@ -1,5 +1,4 @@
 class Roaster < ApplicationRecord
-  before_destroy :update_shots
   after_save_commit :update_shots, if: -> { saved_change_to_name? }
 
   belongs_to :user
@@ -15,6 +14,10 @@ class Roaster < ApplicationRecord
   scope :with_at_least_one_coffee_bag, -> { joins(:coffee_bags).group(:id) }
 
   validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
+
+  def self.for_user_by_name(user, name)
+    where(user:).filter_by_name(name).first || create(name:, user:)
+  end
 
   private
 

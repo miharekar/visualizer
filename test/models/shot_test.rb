@@ -52,6 +52,21 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal File.read("#{path}.csv"), shot.information.csv_profile
   end
 
+  test "it creates a roaster and a coffee bag when user has coffee management enabled" do
+    user = create(:user, :with_coffee_management)
+    assert_equal 0, user.roasters.count
+    assert_equal 0, user.coffee_bags.count
+
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    assert_equal user, shot.user
+    assert_equal 1, user.roasters.count
+    assert_equal 1, user.coffee_bags.count
+    assert_equal "Banibeans", user.roasters.first.name
+    assert_equal "Ethiopia Shantawene", user.coffee_bags.first.name
+    assert_equal "", user.coffee_bags.first.roast_level
+    assert_equal Date.new(2021, 9, 11), user.coffee_bags.first.roast_date
+  end
+
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
     @user = create(:user, :public)
 
