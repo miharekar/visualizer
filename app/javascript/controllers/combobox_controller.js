@@ -12,6 +12,7 @@ export default class extends Controller {
     this.shown = true
     this.inputTarget.focus()
     this.listTarget.classList.remove("hidden")
+    this.listTarget.scrollIntoView({ block: "nearest" })
     this.markAllAsInactive()
     this.active = this.selected
     this.filter()
@@ -109,15 +110,15 @@ export default class extends Controller {
 
     this.active = element
     this.markAllAsInactive()
-    element.classList.remove("text-gray-900")
-    element.classList.add("text-white", "bg-terracotta-500")
+    element.classList.remove("text-neutral-700", "dark:text-neutral-300")
+    element.classList.add("text-white", "bg-terracotta-500", "dark:bg-terracotta-800")
     element.scrollIntoView({ block: "nearest" })
   }
 
   markAllAsInactive() {
     this.listTarget.querySelectorAll("li").forEach((el) => {
-      el.classList.add("text-gray-900")
-      el.classList.remove("text-white", "bg-terracotta-500")
+      el.classList.add("text-neutral-700", "dark:text-neutral-300")
+      el.classList.remove("text-white", "bg-terracotta-500", "dark:bg-terracotta-800")
     })
   }
 
