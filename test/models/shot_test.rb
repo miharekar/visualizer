@@ -289,6 +289,30 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
   end
 
+  test "it creates a roaster and a coffee bag with details when user has coffee management enabled" do
+    user = create(:user, :with_coffee_management)
+    assert_equal 0, user.roasters.count
+    assert_equal 0, user.coffee_bags.count
+
+    shot = new_shot("test/files/beanconqueror_real.json", user:)
+    assert_equal user, shot.user
+    assert_equal 1, user.roasters.count
+    assert_equal 1, user.coffee_bags.count
+    assert_equal "onoma", user.roasters.first.name
+    assert_equal "Holm", shot.coffee_bag.name
+    assert_equal "AMERICAN_ROAST", shot.coffee_bag.roast_level
+    assert_equal Date.new(2022, 12, 8), shot.coffee_bag.roast_date
+    assert_equal "Country 1", shot.coffee_bag.country
+    assert_equal "Region 1", shot.coffee_bag.region
+    assert_equal "Farm 1", shot.coffee_bag.farm
+    assert_equal "Farmer 1", shot.coffee_bag.farmer
+    assert_equal "Variety 1", shot.coffee_bag.variety
+    assert_equal "Elevation 1", shot.coffee_bag.elevation
+    assert_equal "Processing 1", shot.coffee_bag.processing
+    assert_equal "Harvest 1", shot.coffee_bag.harvest_time
+    assert_equal "99", shot.coffee_bag.quality_score
+  end
+
   test "extracts real beanconqueror file with id to an existing shot" do
     user =create(:user)
     create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user:)
