@@ -4,8 +4,8 @@
       <div class="relative flex w-full p-4 overflow-hidden cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
         <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40" data-check-images-target="container">
           <% if roaster.image.attached? && roaster.image.variable? %>
-            <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
-              <%= image_tag roaster.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
+            <div class="flex w-full h-full">
+              <%= image_tag roaster.image.variant(:thumb), class: "rounded-l object-cover object-center" %>
             </div>
           <% end %>
         </div>

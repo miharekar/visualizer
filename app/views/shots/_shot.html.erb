@@ -3,78 +3,76 @@
     <div class="relative flex p-4 cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
       <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40" data-check-images-target="container">
         <% if shot.image.attached? && shot.image.variable? %>
-          <div class="aspect-h-2 aspect-w-1 lg:aspect-h-1">
-            <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center w-full h-full" %>
+          <div class="flex w-full h-full">
+            <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center" %>
           </div>
         <% end %>
       </div>
-      <div class="flex flex-col gap-y-2 grow">
-        <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitegap-nowrap") %>
-        <div class="flex flex-col justify-between gap-y-2 md:gap-y-0 md:flex-row md:gap-x-8 grow">
-          <div class="flex flex-col justify-between md:gap-y-2 basis-1/3">
-            <div class="flex flex-col md:gap-y-2">
-              <div>
-                <% if shot.espresso_enjoyment.to_i > 0 %>
-                  <span class="mr-1 inline-flex text-sm items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
-                    <%= shot.espresso_enjoyment %>
-                  </span>
-                <% end %>
-                <span class="font-semibold">
-                  <%= link_to shot_path(shot) do %>
-                    <span class="absolute inset-x-0 bottom-0 -top-px"></span>
-                    <%= shot.profile_title %>
-                  <% end %>
+      <div class="flex flex-col justify-between md:flex-row md:gap-x-8 grow">
+        <div class="flex flex-col justify-between md:gap-y-2 basis-1/3">
+          <div class="flex flex-col md:gap-y-2">
+            <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm text-neutral-500 dark:text-neutral-400 whitespace-nowrap") %>
+            <div>
+              <% if shot.espresso_enjoyment.to_i > 0 %>
+                <span class="mr-1 inline-flex text-sm items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+                  <%= shot.espresso_enjoyment %>
                 </span>
+              <% end %>
+              <span class="font-semibold">
+                <%= link_to shot_path(shot) do %>
+                  <span class="absolute inset-x-0 bottom-0 -top-px"></span>
+                  <%= shot.profile_title %>
+                <% end %>
+              </span>
+            </div>
+            <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
+              <div>
+                <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
+                  <%= shot.grinder_setting %>
+                <% end %>
+                <% if shot.grinder_model.present? %>
+                  on <%= shot.grinder_model %>
+                <% end %>
               </div>
-              <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
-                <div>
-                  <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
-                    <%= shot.grinder_setting %>
-                  <% end %>
-                  <% if shot.grinder_model.present? %>
-                    on <%= shot.grinder_model %>
-                  <% end %>
-                </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="flex flex-col grow md:gap-y-2 text-neutral-500 dark:text-neutral-400 basis-2/3">
+          <% if shot.bean_brand.present? || shot.bean_type.present? %>
+            <div>
+              <% if shot.bean_brand.present? %>
+                <%= shot.bean_brand %>
+              <% end %>
+              <% if shot.bean_type.present? %>
+                <%= shot.bean_type %>
               <% end %>
             </div>
-          </div>
-          <div class="flex flex-col grow md:gap-y-2 text-neutral-500 dark:text-neutral-400 basis-2/3">
-            <% if shot.bean_brand.present? || shot.bean_type.present? %>
-              <div>
-                <% if shot.bean_brand.present? %>
-                  <%= shot.bean_brand %>
-                <% end %>
-                <% if shot.bean_type.present? %>
-                  <%= shot.bean_type %>
-                <% end %>
-              </div>
-            <% end %>
-            <% if shot.weight_and_ratio_info.present? || shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-              <div>
-                <% if shot.weight_and_ratio_info.present? %>
-                  <%= shot.weight_and_ratio_info %>
-                <% end %>
-                <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-                  in <%= shot.duration.round(1) %> s
-                <% end %>
-              </div>
-            <% end %>
-            <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
-              <div>
-                <% if shot.drink_tds_f > 0 %>
-                  TDS: <%= shot.drink_tds_f %>%
-                <% end %>
-                <% if shot.drink_ey_f > 0 %>
-                  EY: <%= shot.drink_ey_f %>%
-                <% end %>
-              </div>
-            <% end %>
-            <% if shot.barista.present? %>
-              <div>
-                By <%= shot.barista %>
-              </div>
-            <% end %>
-          </div>
+          <% end %>
+          <% if shot.weight_and_ratio_info.present? || shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+            <div>
+              <% if shot.weight_and_ratio_info.present? %>
+                <%= shot.weight_and_ratio_info %>
+              <% end %>
+              <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
+                in <%= shot.duration.round(1) %> s
+              <% end %>
+            </div>
+          <% end %>
+          <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
+            <div>
+              <% if shot.drink_tds_f > 0 %>
+                TDS: <%= shot.drink_tds_f %>%
+              <% end %>
+              <% if shot.drink_ey_f > 0 %>
+                EY: <%= shot.drink_ey_f %>%
+              <% end %>
+            </div>
+          <% end %>
+          <% if shot.barista.present? %>
+            <div>
+              By <%= shot.barista %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
