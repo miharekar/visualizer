@@ -7,6 +7,7 @@ export default class extends Controller {
   connect() {
     this.shown = false
     this.selected = this.listTarget.querySelector(".is-selected") || this.active
+    this.allowCustom = this.element.hasAttribute("data-allow-custom")
   }
 
   show() {
@@ -24,7 +25,7 @@ export default class extends Controller {
 
     event.stopPropagation()
     this.shown = false
-    if (this.selected) this.inputTarget.value = this.selected.dataset.name
+    if (this.selected && !this.allowCustom) this.inputTarget.value = this.selected.dataset.name
     this.listTarget.classList.add("hidden")
     this.inputTarget.blur()
   }
@@ -78,7 +79,7 @@ export default class extends Controller {
     let active = this.getActive()
     if (!active) return
 
-    if (active === this.selected) {
+    if (active === this.selected && !this.allowCustom) {
       this.hide(event)
       return
     }
@@ -86,6 +87,7 @@ export default class extends Controller {
     this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
     this.selected = active
     this.selected.classList.add("is-selected")
+    this.inputTarget.value = this.selected.dataset.name
     this.hiddenInputTarget.value = this.selected.dataset.id
     this.hiddenInputTarget.dispatchEvent(new Event("change"))
     this.hide(event)
@@ -107,6 +109,7 @@ export default class extends Controller {
 
   markAsActive(element) {
     element = element || this.getActive()
+    if (!element) return
     if (element.classList.contains("bg-terracotta-500")) return
 
     this.active = element

@@ -28,12 +28,7 @@
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :grinder_model, class: "standard-label" %>
-            <%= f.text_field :grinder_model, list: "grinder-model-list", class: "mt-1 standard-input" %>
-            <datalist id="grinder-model-list">
-              <% @grinder_models.each do |grinder_model| %>
-                <option><%= grinder_model %></option>
-              <% end %>
-            </datalist>
+            <%= render partial: "shared/combobox", locals: { input_name: "shot[grinder_model]", hidden_input_name: "_grinder_model", selected: @shot.grinder_model, collection: @grinder_models, name_method: :itself, id_method: :itself, allow_custom: true} %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :grinder_setting, class: "standard-label" %>
@@ -46,21 +41,11 @@
           <% else %>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :bean_brand, class: "standard-label" %>
-              <%= f.text_field :bean_brand, list: "bean-brand-list", class: "mt-1 standard-input" %>
-              <datalist id="bean-brand-list">
-                <% @bean_brands.each do |bean_brand| %>
-                  <option><%= bean_brand %></option>
-                <% end %>
-              </datalist>
+              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_brand]", hidden_input_name: "_bean_brand", selected: @shot.bean_brand, collection: @bean_brands, name_method: :itself, id_method: :itself, allow_custom: true} %>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :bean_type, class: "standard-label" %>
-              <%= f.text_field :bean_type, list: "bean-type-list", class: "mt-1 standard-input" %>
-              <datalist id="bean-type-list">
-                <% @bean_types.each do |bean_type| %>
-                  <option><%= bean_type %></option>
-                <% end %>
-              </datalist>
+              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_type]", hidden_input_name: "_bean_type", selected: @shot.bean_type, collection: @bean_types, name_method: :itself, id_method: :itself, allow_custom: true} %>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :roast_date, class: "standard-label" %>
