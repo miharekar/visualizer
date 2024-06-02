@@ -1,6 +1,5 @@
 <% name_method = :name unless name_method %>
 <% hidden_data = {} unless hidden_data %>
-<%= label_tag input_name, nil, class: "standard-label" %>
 <div class="relative" data-controller="combobox">
   <%= text_field_tag input_name, selected&.send(name_method), class: "mt-1 standard-input", autocomplete: "off", data: { action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input" } %>
   <%= hidden_field_tag hidden_input_name, selected&.id, data: hidden_data.merge({ combobox_target: "hiddenInput" }) %>

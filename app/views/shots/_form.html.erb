@@ -76,11 +76,13 @@
             <%= f.text_field :drink_tds, class: "mt-1 standard-input", data: { ey_calculator_target: "tds" } %>
           </div>
           <div class="col-span-6 sm:col-span-3">
-            <%= f.label :drink_ey, class: "standard-label" %>
+            <div class="flex justify-between">
+              <%= f.label :drink_ey, class: "standard-label" %>
+              <span class="text-sm cursor-pointer text-neutral-500 dark:text-neutral-400 standard-link" data-action="click->ey-calculator#calculate">
+                Calculate
+              </span>
+            </div>
             <%= f.text_field :drink_ey, class: "mt-1 standard-input", data: { ey_calculator_target: "ey" } %>
-            <span class="text-xs cursor-pointer text-neutral-500 dark:text-neutral-400 hover:text-neutral-400 dark:hover:text-neutral-500" data-action="click->ey-calculator#calculate">
-              Calculate from TDS
-            </span>
           </div>
         </div>
         <% if current_user.premium? %>
