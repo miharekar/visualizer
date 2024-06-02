@@ -105,6 +105,11 @@
           <%= metadata_pair(key, shot.metadata[key]) %>
         <% end %>
       <% end %>
+      <% if shot.coffee_bag %>
+        <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+          <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+        <% end %>
+      <% end %>
       <% if shot.information.brewdata.present? %>
         <% shot.information.brewdata.each do |group, values| %>
           <% next if group == "brewFlow" || !values.is_a?(Hash) %>
@@ -123,11 +128,6 @@
               <%= metadata_pair(key.underscore.humanize, value) %>
             <% end %>
           <% end %>
-        <% end %>
-      <% end %>
-      <% if shot.coffee_bag %>
-        <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
-          <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
         <% end %>
       <% end %>
     </table>

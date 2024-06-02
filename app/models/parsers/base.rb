@@ -47,12 +47,8 @@ module Parsers
       shot.profile_title = profile_title
       shot.start_time = start_time
       shot.public = user.public
-      add_information(shot)
-      if user.coffee_management_enabled?
-        link_coffee_bag(shot, user)
-      else
-        shot.coffee_bag = nil
-      end
+      set_information(shot)
+      set_coffee_bag(shot)
 
       if shot.valid?
         extract_fields_from_extra(shot)
@@ -83,7 +79,7 @@ module Parsers
       nil
     end
 
-    def add_information(shot)
+    def set_information(shot)
       shot.information ||= shot.build_information
       shot.information.data = data
       shot.information.extra = extra
@@ -93,9 +89,18 @@ module Parsers
       shot.information.brewdata["parser"] = self.class.name
     end
 
-    def link_coffee_bag(shot, user)
-      roaster = Roaster.for_user_by_name(user, extra["bean_brand"])
-      shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], extra["roast_date"], roast_level: extra["roast_level"])
+    def set_coffee_bag(shot)
+      if shot.user.coffee_management_enabled?
+        roaster = Roaster.for_user_by_name(shot.user, extra["bean_brand"])
+        shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], extra["roast_date"], roast_level: extra["roast_level"])
+        set_coffee_bag_attributes(shot)
+      else
+        shot.coffee_bag = nil
+      end
+    end
+
+    def set_coffee_bag_attributes(shot)
+      nil
     end
 
     def calculate_duration
