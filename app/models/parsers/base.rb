@@ -48,7 +48,11 @@ module Parsers
       shot.start_time = start_time
       shot.public = user.public
       add_information(shot)
-      link_coffee_bag(shot, user) if user.coffee_management_enabled?
+      if user.coffee_management_enabled?
+        link_coffee_bag(shot, user)
+      else
+        shot.coffee_bag = nil
+      end
 
       if shot.valid?
         extract_fields_from_extra(shot)

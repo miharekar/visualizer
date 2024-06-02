@@ -1,4 +1,6 @@
 class CoffeeBag < ApplicationRecord
+  DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score]
+
   after_save_commit :update_shots, if: -> { saved_change_to_name? || saved_change_to_roast_date? || saved_change_to_roast_level? }
 
   belongs_to :roaster, touch: true
