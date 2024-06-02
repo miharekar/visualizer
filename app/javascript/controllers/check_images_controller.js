@@ -8,7 +8,7 @@ export default class extends Controller {
   }
 
   containerTargetConnected() {
-    if (!this.hasImages) this.checkIfContainersHaveImages()
+    this.checkIfContainersHaveImages()
     if (this.hasImages) this.showContainers()
   }
 
