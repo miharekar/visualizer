@@ -110,7 +110,7 @@
           <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
         <% end %>
       <% end %>
-      <% if shot.information.brewdata.present? %>
+      <% if shot.information&.brewdata.present? %>
         <% shot.information.brewdata.each do |group, values| %>
           <% next if group == "brewFlow" || !values.is_a?(Hash) %>
           <% values.each do |key, value| %>

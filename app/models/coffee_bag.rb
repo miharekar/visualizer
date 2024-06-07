@@ -13,7 +13,7 @@ class CoffeeBag < ApplicationRecord
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase) }
   scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
 
-  validates :name, presence: true, uniqueness: {scope: :roaster_id, case_sensitive: false}
+  validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false}
 
   def self.for_roaster_by_name_and_date(roaster, name, roast_date, roast_level: nil)
     roast_date = Date.parse(roast_date) rescue nil

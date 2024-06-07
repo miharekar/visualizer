@@ -4,10 +4,9 @@ class User < ApplicationRecord
 
   EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter].freeze
 
-  after_commit :reflect_public_to_shots, on: :update, if: -> { saved_change_to_public? }
+  after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
+  after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable
 
   has_many :shots, dependent: :nullify
@@ -71,6 +70,13 @@ class User < ApplicationRecord
 
   def reflect_public_to_shots
     shots.update_all(public:)
+  end
+
+  def update_coffee_management
+    roasters.destroy_all
+    return unless coffee_management_enabled?
+
+    EnableCoffeeManagementJob.perform_later(self)
   end
 end
 
