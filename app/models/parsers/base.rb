@@ -27,7 +27,7 @@ module Parsers
     end
 
     def self.parse_json(file)
-      Oj.load(file)
+      Oj.safe_load(file)
     end
 
     def initialize(file, json = nil)

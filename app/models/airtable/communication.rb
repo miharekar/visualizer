@@ -94,7 +94,7 @@ module Airtable
       end
       airtable_info.update(table_fields: table_fields.pluck(:name))
     rescue Airtable::DataError => e
-      raise if retrying || %w[DUPLICATE_OR_EMPTY_FIELD_NAME UNKNOWN_FIELD_NAME].exclude?(Oj.load(e.message)["error"]["type"])
+      raise if retrying || %w[DUPLICATE_OR_EMPTY_FIELD_NAME UNKNOWN_FIELD_NAME].exclude?(Oj.safe_load(e.message)["error"]["type"])
 
       reset_fields!
       retrying = true
@@ -116,7 +116,7 @@ module Airtable
         attrs = [uri, data, headers].compact
         response = http.public_send(method, *attrs)
         if response.is_a?(Net::HTTPSuccess)
-          Oj.load(response.body)
+          Oj.safe_load(response.body)
         else
           raise DataError.new(response.body, data:, response:)
         end

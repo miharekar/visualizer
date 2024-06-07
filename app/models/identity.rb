@@ -22,7 +22,7 @@ class Identity < ApplicationRecord
       update!(token: new_token.token, refresh_token: new_token.refresh_token, expires_at: Time.zone.at(new_token.expires_at))
     end
   rescue OAuth2::Error => e
-    if Oj.load(e.body)["error"] == "invalid_grant"
+    if Oj.safe_load(e.body)["error"] == "invalid_grant"
       Appsignal.set_error(e) do |transaction|
         transaction.set_tags(user_id:)
       end

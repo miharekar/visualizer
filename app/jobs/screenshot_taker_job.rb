@@ -10,7 +10,7 @@ class ScreenshotTakerJob < ApplicationJob
 
     Timeout.timeout(10) do
       chart = ShotChart.new(shot)
-      options = Oj.load(File.read("lib/assets/chart_options.json"))
+      options = Oj.safe_load(File.read("lib/assets/chart_options.json"))
       options["xAxis"]["plotLines"] = chart.stages
       options["series"] = chart.shot_chart
 
