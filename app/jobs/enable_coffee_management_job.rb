@@ -16,7 +16,6 @@ class EnableCoffeeManagementJob < ApplicationJob
 
     ActiveRecord::Base.transaction do
       Shot.upsert_all(upsert_attributes.compact, returning: false)
-      user.update!(coffee_management_enabled: true)
     end
   end
 
@@ -35,7 +34,7 @@ class EnableCoffeeManagementJob < ApplicationJob
       .to_h do |bean_brand, bean_type, roast_date, roast_level|
         coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roasters[bean_brand], bean_type, roast_date, roast_level:)
 
-        ["#{bean_brand}_#{bean_type}_#{string_roast_date}", coffee_bag]
+        ["#{bean_brand}_#{bean_type}_#{roast_date}", coffee_bag]
       end
   end
 end

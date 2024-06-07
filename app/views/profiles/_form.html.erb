@@ -34,7 +34,7 @@
             <%= f.label :skin, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
             <%= f.select :skin, ["Light", "Dark", "System"], {}, class: "mt-1 standard-input" %>
           </div>
-          <div class="col-span-3 sm:col-span-2">
+          <div class="col-span-3">
             <div class="flex items-start">
               <div class="flex items-center h-5">
                 <%= f.check_box :public, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
@@ -42,9 +42,7 @@
               <div class="ml-3 text-sm">
                 <%= f.label :public, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
                 <p class="text-neutral-500 dark:text-neutral-400">
-                  Be visible in
-                  <%= link_to "Community", community_index_path, class: "standard-link" %>
-                  .
+                  Be visible in <%= link_to "Community", community_index_path, class: "standard-link" %>.
                 </p>
               </div>
             </div>
@@ -55,10 +53,23 @@
               <div class="ml-3 text-sm">
                 <%= f.label :hide_shot_times, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
                 <p class="text-neutral-500 dark:text-neutral-400">
-                  Hide date and time at which your shots were made to other people.
+                  Prevent others from seeing the date and time your shots were taken.
                 </p>
               </div>
             </div>
+            <% if @profile.premium? %>
+              <div class="flex items-start mt-1">
+                <div class="flex items-center h-5">
+                  <%= f.check_box :coffee_management_enabled, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= f.label :coffee_management_enabled, "Coffee Management", class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                  <p class="text-neutral-500 dark:text-neutral-400">
+                    Enable coffee management of roasters and coffee bags.
+                  </p>
+                </div>
+              </div>
+            <% end %>
           </div>
           <% if @profile.premium? %>
             <div class="col-span-3" data-controller="modal">
