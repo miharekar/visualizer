@@ -13,47 +13,6 @@ module Airtable
       "private_notes" => {type: "richText"}
     }
 
-    def upload(shot)
-      if shot.airtable_id
-        update_record(shot.airtable_id, prepare_record(shot))
-      else
-        upload_multiple(::Shot.where(user:, id: shot.id))
-      end
-    end
-
-    def upload_multiple(shots)
-      return unless shots.exists?
-
-      records = shots.with_attached_image.map { |shot| prepare_record(shot) }
-      update_records(records) do |response|
-        response["records"].each do |record|
-          shot = shots.find_by(id: record["fields"]["ID"])
-          next unless shot
-
-          shot.update(airtable_id: record["id"], skip_airtable_sync: true)
-        end
-      end
-    end
-
-    def download(minutes: 60, timestamps: {})
-      request_time = Time.zone.now
-      records = get_records(minutes:)
-      shots = user.shots.where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
-      records.each do |record|
-        shot = shots[record["id"]]
-        next unless shot
-
-        attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
-        attributes[:metadata] = user.metadata_fields.index_with { |f| record["fields"][f] }
-        attributes[:updated_at] = timestamps[record["id"]].presence || request_time
-        shot.update!(attributes.merge(skip_airtable_sync: true))
-      end
-    end
-
-    def delete(airtable_id)
-      delete_record(airtable_id)
-    end
-
     private
 
     def table_fields
@@ -72,6 +31,13 @@ module Airtable
       user.metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
       {fields: fields.compact}
+    end
+
+    def update_local_record(shot, record, updated_at)
+      attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
+      attributes[:metadata] = user.metadata_fields.index_with { |f| record["fields"][f] }
+      attributes[:updated_at] = updated_at
+      shot.update!(attributes.merge(skip_airtable_sync: true))
     end
   end
 end
