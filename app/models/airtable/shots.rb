@@ -1,5 +1,7 @@
 module Airtable
   class Shots < Base
+    DB_TABLE_NAME = :shots
+    TABLE_NAME = "Shots"
     TABLE_DESCRIPTION = "Shots from Visualizer"
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
@@ -17,7 +19,13 @@ module Airtable
 
     def table_fields
       @table_fields ||= begin
-        static = [{name: "ID", type: "singleLineText"}, {name: "URL", type: "url"}, {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}, {name: "Image", type: "multipleAttachments"}]
+        static = [
+          {name: "ID", type: "singleLineText"},
+          {name: "URL", type: "url"},
+          {name: "Coffee Bag", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[CoffeeBags::TABLE_NAME]["id"]}},
+          {name: "Image", type: "multipleAttachments"},
+          {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}
+        ]
         standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
         metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
@@ -26,7 +34,13 @@ module Airtable
     end
 
     def prepare_record(shot)
-      fields = {"ID" => shot.id, "URL" => shot_url(shot), "Start time" => shot.start_time}
+      fields = {
+        "ID" => shot.id,
+        "URL" => shot_url(shot),
+        "Start time" => shot.start_time,
+        "Coffee Bag" => [shot.coffee_bag&.airtable_id].compact
+      }
+
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
       user.metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?

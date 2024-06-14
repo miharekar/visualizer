@@ -21,23 +21,23 @@ module Airtable
           record = records.find_by(id: record_data["fields"]["ID"])
           next unless record
 
-          record.update(airtable_id: record_data["id"], skip_airtable_sync: true)
+          record.update_columns(airtable_id: record_data["id"])
         end
       end
     end
 
     def download(minutes: 60, timestamps: {})
-    request_time = Time.zone.now
-    records = get_records(minutes:)
-    existing_records = user.public_send(table_name.downcase.to_sym).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
-    records.each do |record|
-      existing_record = existing_records[record["id"]]
-      next unless existing_record
+      request_time = Time.zone.now
+      records = get_records(minutes:)
+      existing_records = user.public_send(self.class::DB_TABLE_NAME).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
+      records.each do |record|
+        existing_record = existing_records[record["id"]]
+        next unless existing_record
 
-      updated_at = timestamps[record["id"]].presence || request_time
-      update_local_record(existing_record, record, updated_at)
+        updated_at = timestamps[record["id"]].presence || request_time
+        update_local_record(existing_record, record, updated_at)
+      end
     end
-  end
 
     def delete(airtable_id)
       delete_record(airtable_id)
@@ -54,13 +54,13 @@ module Airtable
     private
 
     def update_record(record_id, fields)
-      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[table_name]["id"]}/#{record_id}", fields, method: :patch)
+      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", fields, method: :patch)
     end
 
     def update_records(records, merge_on: ["ID"])
       records.each_slice(10).map do |batch|
         data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
-        response = api_request("/#{airtable_info.base_id}/#{airtable_info.tables[table_name]["id"]}", data, method: :patch)
+        response = api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}", data, method: :patch)
         yield response if block_given?
       end
     end
@@ -69,7 +69,7 @@ module Airtable
       records = []
       query = {filterByFormula: "DATETIME_DIFF(NOW(), LAST_MODIFIED_TIME(), 'minutes') < #{minutes}"}
       loop do
-        url = "/#{airtable_info.base_id}/#{airtable_info.tables[table_name]["id"]}?#{query.to_query}"
+        url = "/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}?#{query.to_query}"
         data = api_request(url, method: :get)
         records += data["records"]
         query[:offset] = data["offset"]
@@ -79,7 +79,7 @@ module Airtable
     end
 
     def delete_record(record_id)
-      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[table_name]["id"]}/#{record_id}", method: :delete)
+      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", method: :delete)
     end
 
     def api_request(path, data = nil, method: :post)
