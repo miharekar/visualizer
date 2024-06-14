@@ -5,6 +5,14 @@ module Airtable
 
     attr_reader :user, :identity, :table_description, :airtable_info
 
+    def self.prepare_for(user)
+      if user.coffee_management_enabled?
+        [Roasters, CoffeeBags, Shots].each { |klass| klass.new(user) }
+      else
+        Shots.new(user)
+      end
+    end
+
     def initialize(user)
       @user = user
       set_identity

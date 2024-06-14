@@ -7,7 +7,7 @@ class EnableCoffeeManagementJob < ApplicationJob
 
   def perform(user)
     @user = user
-    upsert_attributes = user.shots.where(coffee_bag_id: nil).map do |shot|
+    upsert_attributes = user.shots.where(coffee_bag_id: nil).filter_map do |shot|
       coffee_bag = coffee_bags["#{shot.bean_brand}_#{shot.bean_type}_#{shot.roast_date}"]
       next unless coffee_bag
 
@@ -15,8 +15,11 @@ class EnableCoffeeManagementJob < ApplicationJob
     end
 
     ActiveRecord::Base.transaction do
-      Shot.upsert_all(upsert_attributes.compact, returning: false)
+      Shot.upsert_all(upsert_attributes, returning: false)
     end
+    return if user.identities.by_provider(:airtable).empty?
+
+    AirtableShotUploadAllJob.perform_later(user, upsert_attributes.map { |attrs| attrs[:id] })
   end
 
   private

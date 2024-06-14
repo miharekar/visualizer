@@ -22,14 +22,14 @@ module Airtable
         static = [
           {name: "ID", type: "singleLineText"},
           {name: "URL", type: "url"},
-          {name: "Coffee Bag", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[CoffeeBags::TABLE_NAME]["id"]}},
           {name: "Image", type: "multipleAttachments"},
           {name: "Start time", type: "dateTime", options: {timeZone: "client", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}
         ]
+        coffee_management = user.coffee_management_enabled? ? [{name: "Coffee Bag", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[CoffeeBags::TABLE_NAME]["id"]}}] : []
         standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
         metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
-        static + standard + metadata
+        static + coffee_management + standard + metadata
       end.map(&:deep_stringify_keys)
     end
 
@@ -37,10 +37,10 @@ module Airtable
       fields = {
         "ID" => shot.id,
         "URL" => shot_url(shot),
-        "Start time" => shot.start_time,
-        "Coffee Bag" => [shot.coffee_bag&.airtable_id].compact
+        "Start time" => shot.start_time
       }
 
+      fields["Coffee Bag"] = [shot.coffee_bag&.airtable_id].compact if user.coffee_management_enabled?
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
       user.metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
