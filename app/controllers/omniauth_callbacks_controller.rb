@@ -9,6 +9,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
     AirtableShotUploadAllJob.perform_later(current_user)
     AirtableRoasterUploadAllJob.perform_later(current_user)
+    AirtableCoffeeBagUploadAllJob.perform_later(current_user)
 
     redirect_to shots_path, notice: "Successfully connected to Airtable"
   end

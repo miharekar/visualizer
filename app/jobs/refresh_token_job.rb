@@ -9,5 +9,6 @@ class RefreshTokenJob < ApplicationJob
 
     AirtableShotUploadAllJob.set(wait: 2.minutes).perform_later(identity.user)
     AirtableRoasterUploadAllJob.set(wait: 2.minutes).perform_later(identity.user)
+    AirtableCoffeeBagUploadAllJob.set(wait: 2.minutes).perform_later(identity.user)
   end
 end

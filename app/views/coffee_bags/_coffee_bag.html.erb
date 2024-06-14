@@ -6,7 +6,7 @@
       <% end %>
       <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
         <div class="relative w-full aspect-square">
-          <%= image_tag coffee_bag.image.variant(:thumb), class: " object-cover object-center w-full h-full" %>
+          <%= image_tag coffee_bag.image.variant(:display), class: " object-cover object-center w-full h-full" %>
         </div>
       <% end %>
       <div class="flex flex-col flex-1 p-8">

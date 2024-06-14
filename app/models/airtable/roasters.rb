@@ -20,7 +20,7 @@ module Airtable
     end
 
     def prepare_record(roaster)
-      fields = {"ID" => roaster.id, "URL" => roaster_url(roaster)}
+      fields = {"ID" => roaster.id, "URL" => roaster_coffee_bags_url(roaster)}
       STANDARD_FIELDS.each { |name, attribute| fields[name] = roaster.public_send(attribute) }
       fields["Image"] = [{url: roaster.image.url(disposition: "attachment"), filename: roaster.image.filename.to_s}] if roaster.image.attached?
       {fields: fields.compact}
