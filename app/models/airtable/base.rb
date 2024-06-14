@@ -3,11 +3,10 @@ module Airtable
     include Rails.application.routes.url_helpers
     include Communication
 
-    attr_reader :user, :identity, :table_name, :table_description, :airtable_info
+    attr_reader :user, :identity, :table_description, :airtable_info
 
     def initialize(user)
       @user = user
-      @table_name = self.class.name.demodulize
       set_identity
       @airtable_info = identity.airtable_info || create_airtable_info
       set_table
@@ -60,22 +59,22 @@ module Airtable
     end
 
     def set_table
-      create_table unless airtable_info.tables&.key?(table_name)
+      create_table unless airtable_info.tables&.key?(self.class::TABLE_NAME)
       create_missing_fields
     end
 
     def create_table
       tables = api_request("/meta/bases/#{airtable_info.base_id}/tables", method: :get)["tables"]
-      table = tables.find { |t| t["name"] == table_name } || api_request("/meta/bases/#{airtable_info.base_id}/tables", {name: table_name, fields: table_fields, description: self.class::TABLE_DESCRIPTION})
-      airtable_info.update_tables(table_name, id: table["id"], fields: table["fields"])
+      table = tables.find { |t| t["name"] == self.class::TABLE_NAME } || api_request("/meta/bases/#{airtable_info.base_id}/tables", {name: self.class::TABLE_NAME, fields: table_fields, description: self.class::TABLE_DESCRIPTION})
+      airtable_info.update_tables(self.class::TABLE_NAME, id: table["id"], fields: table["fields"])
     end
 
     def create_missing_fields(retrying: false)
-      existing_fields = airtable_info.table_fields_for(table_name).keys
+      existing_fields = airtable_info.table_fields_for(self.class::TABLE_NAME).keys
       table_fields.select { |f| existing_fields.exclude?(f["name"]) }.each do |field|
-        api_request("/meta/bases/#{airtable_info.base_id}/tables/#{airtable_info.tables[table_name]["id"]}/fields", field)
+        api_request("/meta/bases/#{airtable_info.base_id}/tables/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/fields", field)
       end
-      airtable_info.update_tables(table_name, fields: table_fields)
+      airtable_info.update_tables(self.class::TABLE_NAME, fields: table_fields)
     rescue Airtable::DataError => e
       raise if retrying || %w[DUPLICATE_OR_EMPTY_FIELD_NAME UNKNOWN_FIELD_NAME].exclude?(Oj.safe_load(e.message)["error"]["type"])
 
@@ -86,8 +85,8 @@ module Airtable
 
     def reset_fields!
       tables = api_request("/meta/bases/#{airtable_info.base_id}/tables", method: :get)
-      fields = tables["tables"].find { |t| t["id"] == airtable_info.tables[table_name]["id"] }["fields"]
-      airtable_info.update_tables(table_name, fields:)
+      fields = tables["tables"].find { |t| t["id"] == airtable_info.tables[self.class::TABLE_NAME]["id"] }["fields"]
+      airtable_info.update_tables(self.class::TABLE_NAME, fields:)
     end
   end
 end
