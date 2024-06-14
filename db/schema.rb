@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_20_123955) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_08_083341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -46,13 +46,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_20_123955) do
   create_table "airtable_infos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "identity_id", null: false
     t.string "base_id"
-    t.string "table_id"
-    t.jsonb "table_fields"
     t.string "webhook_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "last_transaction"
-    t.integer "last_cursor"
+    t.jsonb "tables"
     t.index ["identity_id"], name: "index_airtable_infos_on_identity_id"
   end
 
@@ -83,6 +80,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_20_123955) do
     t.string "quality_score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "airtable_id"
+    t.index ["airtable_id"], name: "index_coffee_bags_on_airtable_id"
     t.index ["roaster_id"], name: "index_coffee_bags_on_roaster_id"
   end
 
@@ -164,6 +163,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_20_123955) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "airtable_id"
+    t.index ["airtable_id"], name: "index_roasters_on_airtable_id"
     t.index ["user_id", "name"], name: "index_roasters_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_roasters_on_user_id"
   end

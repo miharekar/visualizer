@@ -1,7 +1,6 @@
 module Airtable
   class Shots < Base
-    include Rails.application.routes.url_helpers
-
+    TABLE_DESCRIPTION = "Shots from Visualizer"
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
@@ -64,7 +63,7 @@ module Airtable
         metadata = user.metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
         static + standard + metadata
-      end
+      end.map(&:deep_stringify_keys)
     end
 
     def prepare_record(shot)
