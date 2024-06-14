@@ -8,5 +8,6 @@ class RefreshTokenJob < ApplicationJob
     return unless identity.airtable?
 
     AirtableShotUploadAllJob.set(wait: 2.minutes).perform_later(identity.user)
+    AirtableRoasterUploadAllJob.set(wait: 2.minutes).perform_later(identity.user)
   end
 end

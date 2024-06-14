@@ -8,6 +8,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       current_user.identities.create!(oauth.identifiers_with_blob_and_token)
     end
     AirtableShotUploadAllJob.perform_later(current_user)
+    AirtableRoasterUploadAllJob.perform_later(current_user)
 
     redirect_to shots_path, notice: "Successfully connected to Airtable"
   end
