@@ -8,7 +8,7 @@ module Airtable
       if record.airtable_id
         update_record(record.airtable_id, prepare_record(record))
       else
-        upload_multiple(record.class.where(user: record.user, id: record.id))
+        upload_multiple(record.class.where(id: record.id))
       end
     end
 
