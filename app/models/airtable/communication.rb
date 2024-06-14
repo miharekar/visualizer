@@ -4,6 +4,55 @@ module Airtable
 
     attr_reader :airtable_info
 
+    def upload(record)
+      if record.airtable_id
+        update_record(record.airtable_id, prepare_record(record))
+      else
+        upload_multiple(record.class.where(user: record.user, id: record.id))
+      end
+    end
+
+    def upload_multiple(records)
+      return unless records.exists?
+
+      prepared_records = records.with_attached_image.map { |record| prepare_record(record) }
+      update_records(prepared_records) do |response|
+        response["records"].each do |record_data|
+          record = records.find_by(id: record_data["fields"]["ID"])
+          next unless record
+
+          record.update(airtable_id: record_data["id"], skip_airtable_sync: true)
+        end
+      end
+    end
+
+    def download(minutes: 60, timestamps: {})
+    request_time = Time.zone.now
+    records = get_records(minutes:)
+    existing_records = user.public_send(table_name.downcase.to_sym).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
+    records.each do |record|
+      existing_record = existing_records[record["id"]]
+      next unless existing_record
+
+      updated_at = timestamps[record["id"]].presence || request_time
+      update_local_record(existing_record, record, updated_at)
+    end
+  end
+
+    def delete(airtable_id)
+      delete_record(airtable_id)
+    end
+
+    def webhook_payloads(cursor: nil)
+      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/payloads?cursor=#{cursor.to_i}", method: :get)
+    end
+
+    def webhook_refresh
+      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/refresh", {})
+    end
+
+    private
+
     def update_record(record_id, fields)
       api_request("/#{airtable_info.base_id}/#{airtable_info.tables[table_name]["id"]}/#{record_id}", fields, method: :patch)
     end
@@ -29,19 +78,9 @@ module Airtable
       records
     end
 
-    def webhook_payloads(cursor: nil)
-      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/payloads?cursor=#{cursor.to_i}", method: :get)
-    end
-
-    def webhook_refresh
-      api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/refresh", {})
-    end
-
     def delete_record(record_id)
       api_request("/#{airtable_info.base_id}/#{airtable_info.tables[table_name]["id"]}/#{record_id}", method: :delete)
     end
-
-    private
 
     def api_request(path, data = nil, method: :post)
       uri = URI.parse(API_URL + path)
