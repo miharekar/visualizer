@@ -57,7 +57,7 @@ module Airtable
         standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
 
         static + standard
-      end
+      end.map(&:deep_stringify_keys)
     end
 
     def prepare_record(roaster)

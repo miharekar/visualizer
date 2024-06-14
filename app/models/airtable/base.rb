@@ -66,7 +66,6 @@ module Airtable
 
     def create_table
       tables = api_request("/meta/bases/#{airtable_info.base_id}/tables", method: :get)["tables"]
-      debugger
       table = tables.find { |t| t["name"] == table_name } || api_request("/meta/bases/#{airtable_info.base_id}/tables", {name: table_name, fields: table_fields, description: self.class::TABLE_DESCRIPTION})
       airtable_info.update_tables(table_name, id: table["id"], fields: table["fields"])
     end
