@@ -27,15 +27,16 @@ module Airtable
     end
 
     def download(minutes: 60, timestamps: {})
-      request_time = Time.zone.now
+      request_time = Time.current
       records = get_records(minutes:)
-      existing_records = user.public_send(self.class::DB_TABLE_NAME).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
+      local_records = user.public_send(self.class::DB_TABLE_NAME).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
       records.each do |record|
-        existing_record = existing_records[record["id"]]
-        next unless existing_record
+        local_record = local_records[record["id"]]
+        next unless local_record
 
         updated_at = timestamps[record["id"]].presence || request_time
-        update_local_record(existing_record, record, updated_at)
+        attributes = local_record_attributes(local_record, record)
+        local_record.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
       end
     end
 

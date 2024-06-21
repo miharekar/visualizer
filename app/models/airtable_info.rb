@@ -20,13 +20,15 @@ end
 #
 # Table name: airtable_infos
 #
-#  id          :uuid             not null, primary key
-#  tables      :jsonb
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  base_id     :string
-#  identity_id :uuid             not null
-#  webhook_id  :string
+#  id               :uuid             not null, primary key
+#  last_cursor      :integer
+#  last_transaction :integer
+#  tables           :jsonb
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  base_id          :string
+#  identity_id      :uuid             not null
+#  webhook_id       :string
 #
 # Indexes
 #

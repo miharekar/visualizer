@@ -17,7 +17,7 @@ module Airtable
       @user = user
       set_identity
       @airtable_info = identity.airtable_info || create_airtable_info
-      set_table
+      set_table unless self.class == Base
     end
 
     private

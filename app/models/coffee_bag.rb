@@ -37,7 +37,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   def sync_to_airtable
-    return if skip_airtable_sync || !user.premium? || user.identities.by_provider(:airtable).empty?
+    return if skip_airtable_sync || !user.sync_to_airtable?
 
     AirtableCoffeeBagUploadJob.perform_later(self)
   end
