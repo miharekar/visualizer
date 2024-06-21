@@ -14,37 +14,37 @@
             Your profile is <strong>PUBLIC</strong>.
           </h3>
           <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-            Anyone can see you and all of your shots in <%= link_to "Community", community_index_path, class: "underline" %>.
+            Anyone can see you and all of your shots in <%= link_to "Community", community_index_path, class: "standard-link" %>.
           </p>
         <% else %>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             Your profile is <strong>PRIVATE</strong>.
           </h3>
           <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-            People can still view any of your shots if you give them a direct link, but you are not visible in <%= link_to "Community", community_index_path, class: "underline" %>.
+            People can still view any of your shots if you give them a direct link, but you are not visible in <%= link_to "Community", community_index_path, class: "standard-link" %>.
           </p>
         <% end %>
-        <% if @profile.decent_token.present? %>
-          <hr class="my-6">
-          <div class="px-4 sm:px-0">
-            <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
-              Your profile is connected to Decent.
-            </h3>
-            <%= turbo_frame_tag "decent_serial_numbers", src: profile_decent_serial_numbers_path(@profile) %>
-          </div>
-        <% end %>
-        <% if @authorized_applications.any? %>
-          <hr class="my-6">
-          <div class="px-4 sm:px-0">
-            <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
-              You have <strong><%= pluralize(@authorized_applications.size, "application") %></strong> authorized via OAuth.
-            </h3>
-            <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-              You can <%= link_to "manage #{@authorized_applications.size == 1 ? "it" : "them"} here", oauth_authorized_applications_path, class: "underline", data: {turbo: false} %>.
-            </p>
-          </div>
-        <% end %>
       </div>
+      <% if @profile.decent_token.present? %>
+        <hr class="my-6">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+            Your profile is connected to Decent.
+          </h3>
+          <%= turbo_frame_tag "decent_serial_numbers", src: profile_decent_serial_numbers_path(@profile) %>
+        </div>
+      <% end %>
+      <% if @authorized_applications.any? %>
+        <hr class="my-6">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+            You have <strong><%= pluralize(@authorized_applications.size, "application") %></strong> authorized via OAuth.
+          </h3>
+          <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+            You can <%= link_to "manage #{@authorized_applications.size == 1 ? "it" : "them"} here", oauth_authorized_applications_path, class: "standard-link", data: {turbo: false} %>.
+          </p>
+        </div>
+      <% end %>
     </div>
     <%= render "form" %>
   </div>

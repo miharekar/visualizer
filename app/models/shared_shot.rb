@@ -1,10 +1,10 @@
 class SharedShot < ApplicationRecord
   CHARS = ("A".."Z").to_a
 
+  before_validation :set_code
+
   belongs_to :shot
   belongs_to :user, optional: true
-
-  before_validation :set_code
 
   private
 

@@ -16,6 +16,11 @@ FactoryBot.define do
       premium_expires_at { 1.week.from_now }
     end
 
+    trait :with_coffee_management do
+      premium
+      coffee_management_enabled { true }
+    end
+
     trait :with_metadata do
       metadata_fields { ["Portafilter basket", "Bean variety"] }
     end

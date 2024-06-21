@@ -1,0 +1,9 @@
+<%= turbo_stream.update "roasters" do %>
+  <% if @roasters.any? %>
+    <%= render @roasters %>
+  <% else %>
+    <div class="pt-12 text-center text-neutral-500">
+      No roasters found 😢
+    </div>
+  <% end %>
+<% end %>

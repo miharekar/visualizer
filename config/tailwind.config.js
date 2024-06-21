@@ -16,19 +16,6 @@ module.exports = {
         serif: ["Ragazzi", ...defaultTheme.fontFamily.serif],
       },
       colors: {
-        celeste: {
-          50: "#f6f6f4",
-          100: "#dbdbd1",
-          200: "#cbcbbc",
-          300: "#b0af99",
-          400: "#9d9b82",
-          500: "#8f8a71",
-          600: "#7d7562",
-          700: "#696154",
-          800: "#585148",
-          900: "#4a453d",
-          950: "#282520",
-        },
         terracotta: {
           50: "#fef4f2",
           100: "#fee6e2",

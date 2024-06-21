@@ -1,3 +1,3 @@
 web: RUBY_DEBUG_OPEN=true RUBY_DEBUG_SESSION_NAME=rails bin/rails s -p 3000
 css: bin/rails tailwindcss:watch
-solid_queue: RUBY_DEBUG_OPEN=true RUBY_DEBUG_SESSION_NAME=solid_queue bundle exec rake solid_queue:start
+solid_queue: bundle exec rake solid_queue:start

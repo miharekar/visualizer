@@ -1,9 +1,9 @@
 <% content_for(:html_title) { "Visualizer | Bean There, Brewed That: Your Year in Coffee" } %>
-<div class="flex flex-col items-center px-4 mx-auto my-6 space-y-12 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
+<div class="flex flex-col items-center px-4 mx-auto my-6 gap-y-12 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
   <h1 class="font-serif text-4xl font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100">
     Bean There, Brewed That
   </h1>
-  <div class="space-y-4 max-w-prose">
+  <div class="flex flex-col gap-y-4 max-w-prose">
     <p>
       Welcome to a special look back at your year in coffee.
       It's a tale about the beans you've fallen in love with, the brews you've perfected, and those cozy, caffeinated moments that have brightened your days.
@@ -14,12 +14,11 @@
       From the first morning cup to that late-night espresso, let's reminisce over how your coffee game has evolved and celebrate your journey in the world of coffee.
     </p>
   </div>
-  <div class="w-full space-y-4 max-w-prose">
+  <div class="flex flex-col w-full gap-y-4 max-w-prose">
     <h2 class="font-serif text-2xl font-semibold leading-6 text-neutral-900 dark:text-neutral-100">Your Year on Visualizer</h2>
     <% if @yearly_brew.shots_this_year.any? %>
       <dl class="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2">
         <%= render partial: "yearly_brew/stat", locals: { icon: :stack, title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
-        <%= render partial: "yearly_brew/stat", locals: { icon: :fire, title: "Favorite roaster", stat: @yearly_brew.favorite_roaster, diff: @yearly_brew.favorite_roaster(:past) } %>
         <%= render partial: "yearly_brew/stat", locals: { icon: :trophy, title: "Best rated coffee", stat: @yearly_brew.best_rated_coffee, diff: @yearly_brew.best_rated_coffee(:past) } %>
         <%= render partial: "yearly_brew/stat", locals: { icon: :heart, title: "Most brewed coffee", stat: @yearly_brew.most_brewed_coffee, diff: @yearly_brew.most_brewed_coffee(:past) } %>
         <%= render partial: "yearly_brew/stat", locals: { icon: :book, title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
@@ -41,7 +40,7 @@
         </div>
       <% else %>
         <p>
-          You can share your Yearly Brew if you <%= link_to "make your profile public", edit_profiles_path, class: "text-terracotta-600 underline hover:no-underline" %>.
+          You can share your Yearly Brew if you <%= link_to "make your profile public", edit_profiles_path, class: "text-terracotta-600 standard-link" %>.
         </p>
       <% end %>
     <% else %>
@@ -53,7 +52,7 @@
       </p>
     <% end %>
   </div>
-  <div class="space-y-4 max-w-prose">
+  <div class="flex flex-col gap-y-4 max-w-prose">
     <h2 class="font-serif text-2xl font-semibold leading-6 text-neutral-900 dark:text-neutral-100">Happy Holidays!</h2>
     <p>
       As we wrap up this year, I can't help but feel incredibly grateful for your participation in the Visualizer community.
@@ -61,8 +60,8 @@
       Your contributions have helped shape Visualizer into what it is today, and for that, I am sincerely thankful. 🥰
     </p>
     <p>
-      As a small token of my appreciation, and to add a little extra joy to your coffee experiences, I've arranged a special deal with my <strong>favorite roaster</strong>, <a href="https://banibeans.si/" class="underline hover:no-underline" target="_blank">Banibeans</a>.
-      Use the code <code class="px-1 rounded text-neutral-800 bg-neutral-200">VISUALIZER10</code> in <a href="https://banibeans.si/pages/shop" class="underline hover:no-underline" target="_blank">the shop</a> to enjoy a 10% discount on your purchase. ✨
+      As a small token of my appreciation, and to add a little extra joy to your coffee experiences, I've arranged a special deal with my <strong>favorite roaster</strong>, <a href="https://banibeans.si/" class="standard-link" target="_blank">Banibeans</a>.
+      Use the code <code class="px-1 rounded text-neutral-800 bg-neutral-200">VISUALIZER10</code> in <a href="https://banibeans.si/pages/shop" class="standard-link" target="_blank">the shop</a> to enjoy a 10% discount on your purchase. ✨
     </p>
     <p>
       Whether you're decorating the Christmas tree, lighting the menorah, raising an aluminum pole, or celebrating in your own special way, I wish you happiness and cheer. 🎄
