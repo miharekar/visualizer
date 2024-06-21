@@ -49,6 +49,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_083341) do
     t.string "webhook_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "last_transaction"
+    t.integer "last_cursor"
     t.jsonb "tables"
     t.index ["identity_id"], name: "index_airtable_infos_on_identity_id"
   end

@@ -85,4 +85,3 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 end
 Rails.application.routes.default_url_options = {host: "visualizer.test", protocol: "https"}
-# Rails.application.routes.default_url_options = {host: "1365-194-249-200-10.ngrok-free.app", protocol: "https"}

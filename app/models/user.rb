@@ -44,6 +44,10 @@ class User < ApplicationRecord
     premium_expires_at&.future? || supporter
   end
 
+  def sync_to_airtable?
+    premium? && identities.by_provider(:airtable).exists?
+  end
+
   def coffee_management_enabled?
     premium? && coffee_management_enabled
   end

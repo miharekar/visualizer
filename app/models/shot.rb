@@ -66,13 +66,13 @@ class Shot < ApplicationRecord
   end
 
   def sync_to_airtable
-    return if skip_airtable_sync || !user.premium? || user.identities.by_provider(:airtable).empty?
+    return if skip_airtable_sync || !user.sync_to_airtable?
 
     AirtableShotUploadJob.perform_later(self)
   end
 
   def cleanup_airtable
-    return if airtable_id.blank? || !user.premium? || user.identities.by_provider(:airtable).empty?
+    return if airtable_id.blank? || !user.sync_to_airtable?
 
     AirtableShotDeleteJob.perform_later(user, airtable_id)
   end

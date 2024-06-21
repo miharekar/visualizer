@@ -39,8 +39,10 @@ module Airtable
       {fields: fields.compact}
     end
 
-    def update_local_record(coffee_bag, record, updated_at)
-      # TODO: Implement this
+    def local_record_attributes(coffee_bag, record)
+      attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
+      attributes[:name] = record["fields"]["Name"]
+      attributes
     end
   end
 end

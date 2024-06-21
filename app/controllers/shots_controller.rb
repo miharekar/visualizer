@@ -32,7 +32,7 @@ class ShotsController < ApplicationController
 
   def share
     share = SharedShot.find_or_initialize_by(shot: @shot, user: current_user)
-    share.created_at = Time.zone.now
+    share.created_at = Time.current
     share.save!
     render json: {code: share.code}
   end
