@@ -1,4 +1,4 @@
-class AirtableShotUploadAllJob < AirtableJob
+class AirtableUploadAllJob < AirtableJob
   def perform(user, shot_ids = nil)
     Airtable::Base.prepare_for(user)
 

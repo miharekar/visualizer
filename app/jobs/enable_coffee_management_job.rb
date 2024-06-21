@@ -19,7 +19,7 @@ class EnableCoffeeManagementJob < ApplicationJob
     end
     return if user.identities.by_provider(:airtable).empty?
 
-    AirtableShotUploadAllJob.perform_later(user, upsert_attributes.map { |attrs| attrs[:id] })
+    AirtableUploadAllJob.perform_later(user, upsert_attributes.map { |attrs| attrs[:id] })
   end
 
   private

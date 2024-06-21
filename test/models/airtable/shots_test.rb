@@ -45,7 +45,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
 
   test "it uploads changes to airtable after shot save" do
     Shot.find(@shot.id).update(espresso_enjoyment: 80)
-    assert_enqueued_with(job: AirtableShotUploadJob, args: [@shot], queue: "default")
+    assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default")
 
     stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
       .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"})
@@ -59,7 +59,7 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
     shot_id = "e5b3a587-809a-444a-bb27-e2f5bdbeacbe"
     sync = Airtable::Shots.new(@user)
     shot = @user.shots.create!(id: shot_id, espresso_enjoyment: 80, start_time: "2023-05-05T15:50:44.093Z", information: ShotInformation.new(timeframe: ["1"], data: {weight: []}), sha: "123")
-    assert_enqueued_with(job: AirtableShotUploadJob, args: [shot], queue: "default")
+    assert_enqueued_with(job: AirtableUploadRecordJob, args: [shot], queue: "default")
 
     stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}")
       .with(
@@ -71,6 +71,20 @@ class Airtable::ShotsTest < ActiveSupport::TestCase
     assert_requested(stub)
     shot.reload
     assert_equal "receheiFe9F63F8EG", shot.airtable_id
+  end
+
+  test "it deletes in airtable after destroy" do
+    perform_enqueued_jobs
+
+    @shot.destroy
+    assert_enqueued_with(job: AirtableDeleteRecordJob, args: [Airtable::Shots, @user, "rec1"], queue: "default")
+
+    stub = stub_request(:delete, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
+      .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"})
+      .to_return(status: 200, body: {id: @shot.airtable_id}.to_json, headers: {})
+
+    perform_enqueued_jobs
+    assert_requested(stub)
   end
 
   test "it raises error when no identity is present" do

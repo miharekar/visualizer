@@ -1,8 +1,9 @@
 class CoffeeBag < ApplicationRecord
+  include Airtablable
+
   DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score]
 
   after_save_commit :update_shots, if: -> { saved_change_to_name? || saved_change_to_roast_date? || saved_change_to_roast_level? }
-  after_save_commit :sync_to_airtable
 
   belongs_to :roaster, touch: true
   has_many :shots, dependent: :nullify
@@ -15,8 +16,6 @@ class CoffeeBag < ApplicationRecord
 
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase) }
   scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
-
-  attr_accessor :skip_airtable_sync
 
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false}
 
@@ -34,12 +33,6 @@ class CoffeeBag < ApplicationRecord
   def update_shots
     update_shot_jobs = shots.map { |shot| RefreshCoffeeBagFieldsForShotJob.new(shot) }
     ActiveJob.perform_all_later(update_shot_jobs)
-  end
-
-  def sync_to_airtable
-    return if skip_airtable_sync || !user.sync_to_airtable?
-
-    AirtableCoffeeBagUploadJob.perform_later(self)
   end
 end
 
