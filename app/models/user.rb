@@ -44,7 +44,7 @@ class User < ApplicationRecord
     premium_expires_at&.future? || supporter
   end
 
-  def sync_to_airtable?
+  def should_sync_to_airtable?
     premium? && identities.by_provider(:airtable).exists?
   end
 

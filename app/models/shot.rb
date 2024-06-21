@@ -1,13 +1,12 @@
 class Shot < ApplicationRecord
   include ShotPresenter
+  include Airtablable
 
   DAILY_LIMIT = 50
   LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
   after_create :ensure_screenshot
-  after_save_commit :sync_to_airtable
-  after_destroy_commit :cleanup_airtable
 
   belongs_to :user, optional: true, touch: true
   belongs_to :coffee_bag, optional: true
@@ -25,8 +24,6 @@ class Shot < ApplicationRecord
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
-
-  attr_accessor :skip_airtable_sync
 
   validates :start_time, :sha, :user, presence: true
   validate :daily_limit, on: :create
@@ -63,18 +60,6 @@ class Shot < ApplicationRecord
     return if screenshot? || Rails.env.local?
 
     ScreenshotTakerJob.perform_later(self)
-  end
-
-  def sync_to_airtable
-    return if skip_airtable_sync || !user.sync_to_airtable?
-
-    AirtableShotUploadJob.perform_later(self)
-  end
-
-  def cleanup_airtable
-    return if airtable_id.blank? || !user.sync_to_airtable?
-
-    AirtableShotDeleteJob.perform_later(user, airtable_id)
   end
 
   private
