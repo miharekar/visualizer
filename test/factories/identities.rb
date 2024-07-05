@@ -10,7 +10,7 @@ FactoryBot.define do
 
     trait :airtable do
       provider { "airtable" }
-      airtable_info { association(:airtable_info, :with_table) }
+      airtable_info { association(:airtable_info, :with_tables) }
     end
 
     trait :expired do

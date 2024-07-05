@@ -1,0 +1,20 @@
+<div class="bg-white shadow dark:bg-neutral-900">
+  <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold leading-tight text-neutral-900 dark:text-neutral-100">
+      Edit Shot
+    </h1>
+  </div>
+</div>
+<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="md:grid md:grid-cols-3 md:gap-6">
+    <div class="md:col-span-1">
+      <div class="px-4 sm:px-0">
+        <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          You're editing shot made on
+          <strong><%= @shot.start_time.in_time_zone(@timezone).to_formatted_s(:long) %></strong>.
+        </p>
+      </div>
+    </div>
+    <%= render "form" %>
+  </div>
+</div>

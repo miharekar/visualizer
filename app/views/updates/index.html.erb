@@ -6,7 +6,7 @@
       <%= link_to "New", new_update_path, class: "text-right" %>
     </div>
   <% end %>
-  <div id="updates" class="space-y-20">
+  <div id="updates" class="flex flex-col gap-y-20">
     <%= render @updates %>
   </div>
   <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(before: @cursor, format: :turbo_stream) } %>

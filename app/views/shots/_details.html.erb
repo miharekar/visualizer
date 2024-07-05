@@ -70,7 +70,7 @@
       <%= shot.drink_weight %> g
     <% end %>
     <% if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite? %>
-      (1:<%= ratio.round(1) %>)
+      (1 : <%= ratio.round(1) %>)
     <% end %>
     <% if bean_weight > 0 || drink_weight > 0 %>
       in
@@ -93,41 +93,45 @@
       EY <%= ey %> %
     <% end %>
   </div>
-  <% if shot.metadata.present? %>
-    <div class="mt-2">
-      <% shot.user.metadata_fields.each do |key| %>
-        <%= metadata_pair(key, shot.metadata[key]) %>
-      <% end %>
+  <% if shot.barista.present? %>
+    <div>
+      By <%= shot.barista %>
     </div>
   <% end %>
-  <% if shot.information.brewdata.present? %>
-    <% shot.information.brewdata.each do |group, values| %>
-      <% next if group == "brewFlow" || !values.is_a?(Hash) %>
-      <div class="mt-2">
-        <% values.each do |key, value| %>
-          <% if value.is_a?(Hash) %>
-            <% value.each do |k, v| %>
-              <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
-            <% end %>
-          <% elsif value.is_a?(Array) %>
-            <% value.each do |item| %>
-              <% item.each do |k, v| %>
+  <div class="mt-2 prose prose-neutral dark:prose-invert">
+    <table>
+      <% if shot.metadata.present? %>
+        <% shot.user.metadata_fields.each do |key| %>
+          <%= metadata_pair(key, shot.metadata[key]) %>
+        <% end %>
+      <% end %>
+      <% if shot.coffee_bag %>
+        <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+          <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+        <% end %>
+      <% end %>
+      <% if shot.information&.brewdata.present? %>
+        <% shot.information.brewdata.each do |group, values| %>
+          <% next if group == "brewFlow" || !values.is_a?(Hash) %>
+          <% values.each do |key, value| %>
+            <% if value.is_a?(Hash) %>
+              <% value.each do |k, v| %>
                 <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
               <% end %>
+            <% elsif value.is_a?(Array) %>
+              <% value.each do |item| %>
+                <% item.each do |k, v| %>
+                  <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <%= metadata_pair(key.underscore.humanize, value) %>
             <% end %>
-          <% else %>
-            <%= metadata_pair(key.underscore.humanize, value) %>
           <% end %>
         <% end %>
-      </div>
-    <% end %>
-  <% end %>
-  <% if shot.barista.present? %>
-    <div class="mt-2">
-      <span>Barista:&nbsp;</span>
-      <span><%= shot.barista %></span>
-    </div>
-  <% end %>
+      <% end %>
+    </table>
+  </div>
   <% if shot.bean_notes.present? %>
     <div class="mt-2">
       <div class="font-medium text-neutral-900 dark:text-neutral-100">Bean notes:</div>

@@ -79,11 +79,11 @@
     <div class="px-4 py-16 mx-auto max-w-7xl sm:py-24 sm:px-6 lg:px-8">
       <h2 class="font-serif text-4xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
       <div class="pt-10 mt-6 border-t border-terracottaborder-oxford-blue-400">
-        <dl class="space-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-12 md:space-y-0">
+        <dl class="flex flex-col gap-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-8">
           <% @qas.each do |q, a| %>
             <div>
               <dt class="text-lg font-medium leading-6 text-white"><%= q %></dt>
-              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"underline hover:no-underline text-terracotta-100") %></dd>
+              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"standard-link text-terracotta-100") %></dd>
             </div>
           <% end %>
         </dl>

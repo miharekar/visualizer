@@ -2,21 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-.shot-range {
-  -webkit-appearance: none;
-  -moz-appearance: none;
+.standard-link {
+  @apply underline hover:no-underline;
 }
 
 .standard-label {
-  @apply block text-sm font-medium text-neutral-700 dark:text-neutral-300;
+  @apply block sm:text-sm font-medium text-neutral-700 dark:text-neutral-300;
 }
 
 .standard-input {
-  @apply rounded-md shadow-inner-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
+  @apply rounded-md shadow-inner-sm sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
 }
 
 .submit-button {
-  @apply cursor-pointer inline-flex justify-center border border-transparent text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
+  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
+}
+
+.shot-range {
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 input[type="range"].shot-range::-webkit-slider-runnable-track {

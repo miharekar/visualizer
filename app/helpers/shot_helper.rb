@@ -3,9 +3,9 @@ module ShotHelper
     value = value.to_s
     return if value.blank? || value == "0" || value == "UNKNOWN"
 
-    tag.div do
-      concat tag.span((key + ":&nbsp;").html_safe)
-      concat tag.span(value)
+    tag.tr do
+      concat tag.td(key)
+      concat tag.td(value)
     end
   end
 end

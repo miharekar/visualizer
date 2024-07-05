@@ -3,68 +3,74 @@ class AirtableWebhookJob < AirtableJob
 
   retry_on LastTransactionMismatchError, wait: :polynomially_longer
 
+  attr_reader :airtable_info, :last_transaction, :webhook_payloads, :payloads, :record_timestamps, :relevant_tables, :relevant_timestamps
+
   def perform(airtable_info)
     @airtable_info = airtable_info
-    @user = @airtable_info.identity.user
-    @shots = Airtable::Shots.new(@user)
-    @last_transaction = @airtable_info.last_transaction.to_i
-    @last_cursor = @airtable_info.last_cursor.to_i
+    @last_transaction = airtable_info.last_transaction.to_i
 
     get_payloads
-    return if @payloads.empty?
+    return if payloads.empty?
 
     get_record_timestamps
-    return if @record_timestamps.empty?
+    return if record_timestamps.empty?
 
     get_relevant_timestamps
-    return if @relevant_timestamps.empty?
-
-    download_shot_updates
+    download_updates
   end
 
   private
 
   def get_payloads
-    @webhook_payloads = @shots.webhook_payloads(cursor: @last_cursor)
-    @payloads = @webhook_payloads["payloads"].reject do |p|
-      p.dig("actionMetadata", "source") == "publicApi" || p["baseTransactionNumber"] <= @last_transaction
+    @webhook_payloads = Airtable::Base.new(airtable_info.identity.user).webhook_payloads(cursor: airtable_info.last_cursor.to_i)
+    @payloads = webhook_payloads["payloads"].reject do |p|
+      p.dig("actionMetadata", "source") == "publicApi" || p["baseTransactionNumber"] <= last_transaction
     end
   end
 
   def get_record_timestamps
     @record_timestamps = {}
-    @payloads.each do |payload|
+    @relevant_tables = airtable_info.tables.to_h { |k, t| [t["id"], "Airtable::#{k.gsub(" ", "")}".constantize] }
+    payloads.each do |payload|
       time = Time.iso8601(payload["timestamp"])
-      changed_records = payload.dig("changedTablesById", @airtable_info.table_id, "changedRecordsById")
-      next if changed_records.blank?
+      payload["changedTablesById"].each do |table_id, table_payload|
+        next unless relevant_tables.key?(table_id)
 
-      changed_records.keys.each do |record_id|
-        @record_timestamps[record_id] ||= []
-        @record_timestamps[record_id] << time
+        @record_timestamps[table_id] ||= {}
+        table_payload["changedRecordsById"].keys.each do |record_id|
+          @record_timestamps[table_id][record_id] ||= []
+          @record_timestamps[table_id][record_id] << time
+        end
       end
     end
-    @record_timestamps
   end
 
   def get_relevant_timestamps
-    @relevant_timestamps = []
-    @user.shots.where(airtable_id: @record_timestamps.keys).find_each do |shot|
-      @relevant_timestamps += @record_timestamps[shot.airtable_id].select { |t| t > shot.updated_at }
+    @relevant_timestamps = {}
+    record_timestamps.each do |table_id, timestamps|
+      @relevant_timestamps[table_id] ||= []
+      table_name = relevant_tables[table_id]::DB_TABLE_NAME
+      airtable_info.identity.user.public_send(table_name).where(airtable_id: timestamps.keys).find_each do |record|
+        @relevant_timestamps[table_id] += timestamps[record.airtable_id].select { |t| t > record.updated_at }
+      end
     end
-    @relevant_timestamps
   end
 
-  def download_shot_updates
+  def download_updates
     ActiveRecord::Base.transaction do
-      minutes = ((Time.zone.now - @relevant_timestamps.min) / 60).ceil
-      timestamps = @record_timestamps.transform_values { |v| v.max }
-      @shots.download(minutes:, timestamps:)
+      relevant_timestamps.each do |table_id, relevant|
+        next if relevant.empty?
 
-      raise LastTransactionMismatchError if @airtable_info.reload.last_transaction.to_i != @last_transaction
+        minutes = ((Time.current - relevant.min) / 60).ceil
+        timestamps = record_timestamps[table_id].transform_values { |v| v.max }
+        relevant_tables[table_id].new(airtable_info.identity.user).download(minutes:, timestamps:)
+      end
 
-      @airtable_info.update!(
-        last_transaction: @payloads.pluck("baseTransactionNumber").max,
-        last_cursor: @webhook_payloads["cursor"]
+      raise LastTransactionMismatchError if airtable_info.reload.last_transaction.to_i != last_transaction
+
+      airtable_info.update!(
+        last_transaction: payloads.pluck("baseTransactionNumber").max,
+        last_cursor: webhook_payloads["cursor"]
       )
     end
   end

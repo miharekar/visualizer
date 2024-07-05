@@ -4,29 +4,44 @@ module Airtable
 
     attr_reader :airtable_info
 
-    def update_record(record_id, fields)
-      api_request("/#{airtable_info.base_id}/#{airtable_info.table_id}/#{record_id}", fields, method: :patch)
-    end
-
-    def update_records(records, merge_on: ["ID"])
-      records.each_slice(10).map do |batch|
-        data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
-        response = api_request("/#{airtable_info.base_id}/#{airtable_info.table_id}", data, method: :patch)
-        yield response if block_given?
+    def upload(record)
+      if record.airtable_id
+        update_record(record.airtable_id, prepare_record(record))
+      else
+        upload_multiple(record.class.where(id: record.id))
       end
     end
 
-    def get_records(minutes: 60)
-      records = []
-      query = {filterByFormula: "DATETIME_DIFF(NOW(), LAST_MODIFIED_TIME(), 'minutes') < #{minutes}"}
-      loop do
-        url = "/#{airtable_info.base_id}/#{airtable_info.table_id}?#{query.to_query}"
-        data = api_request(url, method: :get)
-        records += data["records"]
-        query[:offset] = data["offset"]
-        break if query[:offset].blank?
+    def upload_multiple(records)
+      return unless records.exists?
+
+      prepared_records = records.with_attached_image.map { |record| prepare_record(record) }
+      update_records(prepared_records) do |response|
+        response["records"].each do |record_data|
+          record = records.find_by(id: record_data["fields"]["ID"])
+          next unless record
+
+          record.update_columns(airtable_id: record_data["id"])
+        end
       end
-      records
+    end
+
+    def download(minutes: 60, timestamps: {})
+      request_time = Time.current
+      records = get_records(minutes:)
+      local_records = user.public_send(self.class::DB_TABLE_NAME).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
+      records.each do |record|
+        local_record = local_records[record["id"]]
+        next unless local_record
+
+        updated_at = timestamps[record["id"]].presence || request_time
+        attributes = local_record_attributes(local_record, record)
+        local_record.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
+      end
+    end
+
+    def delete(airtable_id)
+      delete_record(airtable_id)
     end
 
     def webhook_payloads(cursor: nil)
@@ -37,75 +52,35 @@ module Airtable
       api_request("/bases/#{airtable_info.base_id}/webhooks/#{airtable_info.webhook_id}/refresh", {})
     end
 
-    def delete_record(record_id)
-      api_request("/#{airtable_info.base_id}/#{airtable_info.table_id}/#{record_id}", method: :delete)
-    end
-
     private
 
-    def prepare_table
-      @airtable_info = identity.airtable_info || create_airtable_info
-      create_missing_fields
+    def update_record(record_id, fields)
+      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", fields, method: :patch)
     end
 
-    def create_airtable_info
-      base = set_base
-      table = set_table(base)
-      webhook = set_webhook(base, table)
-      ActiveRecord::Base.transaction do
-        AirtableInfo.where(identity:).destroy_all
-        identity.create_airtable_info(base_id: base["id"], table_id: table["id"], table_fields: table["fields"].pluck("name"), webhook_id: webhook["id"])
+    def update_records(records, merge_on: ["ID"])
+      records.each_slice(10).map do |batch|
+        data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
+        response = api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}", data, method: :patch)
+        yield response if block_given?
       end
     end
 
-    def set_base
-      bases = api_request("/meta/bases", method: :get)["bases"]
-      if bases.any?
-        @base = bases.find { |b| b["name"] == "Visualizer" } || bases.first
-      else
-        identity.destroy
+    def get_records(minutes: 60)
+      records = []
+      query = {filterByFormula: "DATETIME_DIFF(NOW(), LAST_MODIFIED_TIME(), 'minutes') < #{minutes}"}
+      loop do
+        url = "/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}?#{query.to_query}"
+        data = api_request(url, method: :get)
+        records += data["records"]
+        query[:offset] = data["offset"]
+        break if query[:offset].blank?
       end
+      records
     end
 
-    def set_table(base)
-      tables = api_request("/meta/bases/#{base["id"]}/tables", method: :get)["tables"]
-      tables.find { |t| t["name"] == table_name } || api_request("/meta/bases/#{base["id"]}/tables", {name: table_name, fields: table_fields, description: "Shots from Visualizer"})
-    end
-
-    def set_webhook(base, table)
-      delete_existing_webhooks(base)
-      data = {
-        notificationUrl: Rails.application.routes.url_helpers.airtable_url,
-        specification: {options: {filters: {dataTypes: ["tableData"], changeTypes: ["update"], recordChangeScope: table["id"]}}}
-      }
-      api_request("/bases/#{base["id"]}/webhooks", data)
-    end
-
-    def delete_existing_webhooks(base)
-      webhooks = api_request("/bases/#{base["id"]}/webhooks", method: :get)["webhooks"]
-      webhooks.each do |webhook|
-        api_request("/bases/#{base["id"]}/webhooks/#{webhook["id"]}", method: :delete)
-      end
-    end
-
-    def create_missing_fields(retrying: false)
-      table_fields.select { |f| airtable_info.table_fields.exclude?(f[:name]) }.each do |field|
-        api_request("/meta/bases/#{airtable_info.base_id}/tables/#{airtable_info.table_id}/fields", field)
-      end
-      airtable_info.update(table_fields: table_fields.pluck(:name))
-    rescue Airtable::DataError => e
-      raise if retrying || %w[DUPLICATE_OR_EMPTY_FIELD_NAME UNKNOWN_FIELD_NAME].exclude?(Oj.safe_load(e.message)["error"]["type"])
-
-      reset_fields!
-      retrying = true
-      retry
-    end
-
-    def reset_fields!
-      tables = api_request("/meta/bases/#{airtable_info.base_id}/tables", method: :get)
-      airtable_fields = tables["tables"].find { |t| t["id"] == airtable_info.table_id }["fields"].pluck("name")
-      actual_fields = airtable_fields & table_fields.pluck(:name)
-      airtable_info.update(table_fields: actual_fields)
+    def delete_record(record_id)
+      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", method: :delete)
     end
 
     def api_request(path, data = nil, method: :post)

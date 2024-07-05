@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_08_083341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -46,13 +46,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
   create_table "airtable_infos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "identity_id", null: false
     t.string "base_id"
-    t.string "table_id"
-    t.jsonb "table_fields"
     t.string "webhook_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "last_transaction"
     t.integer "last_cursor"
+    t.jsonb "tables"
     t.index ["identity_id"], name: "index_airtable_infos_on_identity_id"
   end
 
@@ -65,6 +64,27 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
     t.string "slug"
     t.string "excerpt"
     t.index ["slug"], name: "index_changes_on_slug", unique: true
+  end
+
+  create_table "coffee_bags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "roaster_id", null: false
+    t.string "name"
+    t.date "roast_date"
+    t.string "roast_level"
+    t.string "country"
+    t.string "region"
+    t.string "farm"
+    t.string "farmer"
+    t.string "variety"
+    t.string "elevation"
+    t.string "processing"
+    t.string "harvest_time"
+    t.string "quality_score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "airtable_id"
+    t.index ["airtable_id"], name: "index_coffee_bags_on_airtable_id"
+    t.index ["roaster_id"], name: "index_coffee_bags_on_roaster_id"
   end
 
   create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -139,6 +159,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "roasters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "name"
+    t.string "website"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "airtable_id"
+    t.index ["airtable_id"], name: "index_roasters_on_airtable_id"
+    t.index ["user_id", "name"], name: "index_roasters_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_roasters_on_user_id"
+  end
+
   create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "shot_id", null: false
     t.string "code", null: false
@@ -187,7 +219,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
     t.jsonb "metadata"
     t.string "airtable_id"
     t.boolean "public"
+    t.uuid "coffee_bag_id"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
+    t.index ["coffee_bag_id"], name: "index_shots_on_coffee_bag_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["start_time"], name: "index_shots_on_start_time"
@@ -339,6 +373,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
     t.jsonb "unsubscribed_from"
     t.string "decent_email"
     t.string "decent_token"
+    t.boolean "coffee_management_enabled"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
@@ -347,15 +382,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_05_184210) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "airtable_infos", "identities"
+  add_foreign_key "coffee_bags", "roasters"
   add_foreign_key "customers", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "roasters", "users"
   add_foreign_key "shared_shots", "shots"
   add_foreign_key "shared_shots", "users"
   add_foreign_key "shot_informations", "shots"
+  add_foreign_key "shots", "coffee_bags"
   add_foreign_key "shots", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

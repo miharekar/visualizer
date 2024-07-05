@@ -52,6 +52,44 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal File.read("#{path}.csv"), shot.information.csv_profile
   end
 
+  test "it creates a roaster and a coffee bag when user has coffee management enabled" do
+    user = create(:user, :with_coffee_management)
+    assert_equal 0, user.roasters.count
+    assert_equal 0, user.coffee_bags.count
+
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    assert_equal user, shot.user
+    assert_equal 1, user.roasters.count
+    assert_equal 1, user.coffee_bags.count
+    assert_equal "Banibeans", user.roasters.first.name
+    assert_equal "Ethiopia Shantawene", user.coffee_bags.first.name
+    assert_equal "", user.coffee_bags.first.roast_level
+    assert_equal Date.new(2021, 9, 11), user.coffee_bags.first.roast_date
+  end
+
+  test "it overwrites existing shot if it exists" do
+    user = create(:user)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    old_id = shot.id
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    assert_equal old_id, shot.id
+  end
+
+  test "it resets coffee bag when user disables coffee management" do
+    user = create(:user, :with_coffee_management)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    old_id = shot.id
+    assert shot.coffee_bag_id
+    user.update!(coffee_management_enabled: false)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    shot.save!
+    assert_equal old_id, shot.id
+    assert_nil shot.coffee_bag_id
+  end
+
   test "extracts fields from .json upload file and replaces content when .shot of same shot" do
     @user = create(:user, :public)
 
@@ -249,6 +287,30 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "3", shot.drink_tds
     assert_equal "4", shot.drink_ey
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+  end
+
+  test "it creates a roaster and a coffee bag with details when user has coffee management enabled" do
+    user = create(:user, :with_coffee_management)
+    assert_equal 0, user.roasters.count
+    assert_equal 0, user.coffee_bags.count
+
+    shot = new_shot("test/files/beanconqueror_real.json", user:)
+    assert_equal user, shot.user
+    assert_equal 1, user.roasters.count
+    assert_equal 1, user.coffee_bags.count
+    assert_equal "onoma", user.roasters.first.name
+    assert_equal "Holm", shot.coffee_bag.name
+    assert_equal "AMERICAN_ROAST", shot.coffee_bag.roast_level
+    assert_equal Date.new(2022, 12, 8), shot.coffee_bag.roast_date
+    assert_equal "Country 1", shot.coffee_bag.country
+    assert_equal "Region 1", shot.coffee_bag.region
+    assert_equal "Farm 1", shot.coffee_bag.farm
+    assert_equal "Farmer 1", shot.coffee_bag.farmer
+    assert_equal "Variety 1", shot.coffee_bag.variety
+    assert_equal "Elevation 1", shot.coffee_bag.elevation
+    assert_equal "Processing 1", shot.coffee_bag.processing
+    assert_equal "Harvest 1", shot.coffee_bag.harvest_time
+    assert_equal "99", shot.coffee_bag.quality_score
   end
 
   test "extracts real beanconqueror file with id to an existing shot" do

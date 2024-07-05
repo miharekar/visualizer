@@ -1,0 +1,184 @@
+<div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@profile) %>">
+  <%= form_with(model: @profile, url: profile_path(@profile)) do |f| %>
+    <div class="shadow sm:rounded-md sm:overflow-hidden">
+      <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
+        <div class="grid grid-cols-3 gap-6">
+          <div class="col-span-3 sm:col-span-2">
+            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Avatar</label>
+            <div class="flex items-center mt-2" data-controller="image-form">
+              <img class="w-12 h-12 rounded" src="<%= avatar_url(@profile, 96) %>">
+              <%= f.label :avatar, "Change", data: {image_form_target: "label"}, class: "cursor-pointer ml-3 bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" %>
+              <%= f.file_field :avatar, data: {action: "input->image-form#update"}, class: "hidden" %>
+            </div>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <% has_error = f.object.errors.any? { |e| e.attribute == :name && e.type == :blank } %>
+            <% if has_error %>
+              <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
+            <% end %>
+            <%= f.label :name, class: "text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.text_field :name, class: "#{extra_classes} mt-1 standard-input", autocomplete: "name" %>
+            <% if has_error %>
+              <p class="text-sm font-medium text-red-500">Name is required for public profiles</p>
+            <% end %>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <%= f.label :timezone, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 standard-input"} %>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <%= f.label :temperature_unit, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.select :temperature_unit, ["Celsius", "Fahrenheit"], {}, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <%= f.label :skin, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.select :skin, ["Light", "Dark", "System"], {}, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-3">
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                <%= f.check_box :public, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= f.label :public, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                <p class="text-neutral-500 dark:text-neutral-400">
+                  Be visible in <%= link_to "Community", community_index_path, class: "standard-link" %>.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start mt-1">
+              <div class="flex items-center h-5">
+                <%= f.check_box :hide_shot_times, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= f.label :hide_shot_times, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                <p class="text-neutral-500 dark:text-neutral-400">
+                  Prevent others from seeing the date and time your shots were taken.
+                </p>
+              </div>
+            </div>
+            <% if @profile.premium? && 1 == 2 %> <!-- Temporarily disabled -->
+              <div class="flex items-start mt-1">
+                <div class="flex items-center h-5">
+                  <%= f.check_box :coffee_management_enabled, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= f.label :coffee_management_enabled, "Coffee Management", class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                  <p class="text-neutral-500 dark:text-neutral-400">
+                    Enable coffee management of roasters and coffee bags.
+                  </p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% if @profile.premium? %>
+            <div class="col-span-3" data-controller="modal">
+              <%= render "shared/modal" %>
+              <h3 class="font-medium text-neutral-700 dark:text-neutral-300">Custom fields</h3>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <% @profile.metadata_fields.each do |field| %>
+                  <span class="inline-flex items-center rounded-full pr-1 text-sm text-neutral-700 bg-neutral-100 py-0.5 pl-2.5">
+                    <%= field %>
+                    <%= link_to remove_metadata_field_profiles_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} custom field? This will remove the data from all the shots that have it filled in!"}, class: "ml-1 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
+                      <svg class="w-2 h-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                        <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+                      </svg>
+                    <% end %>
+                  </span>
+                <% end %>
+              </div>
+              <div class="flex items-center w-full max-w-sm my-2" data-controller="metadata-fields" data-metadata-fields-url-value="<%= add_metadata_field_profiles_path %>">
+                <%= text_field_tag :field_name, {}, class: "flex-grow standard-input", data: {metadata_fields_target: "input", action: "keydown.enter->metadata-fields#add"} %>
+                <button class="px-3 py-2 ml-2 text-sm font-medium leading-4 bg-white border rounded-md shadow-sm cursor-pointer dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black" data-action="click->metadata-fields#add">
+                  Add
+                </button>
+                <a class="hidden" data-turbo-method="post" data-metadata-fields-target="link"></a>
+              </div>
+              <p class="text-sm text-neutral-500 dark:text-neutral-400">Add custom fields to your shots like "Portafilter basket" or "Bean variety".</p>
+              <p class="text-sm text-neutral-500 dark:text-neutral-400">Only letters, numbers, spaces and underscores are allowed.</p>
+            </div>
+            <div class="hidden col-span-3 sm:block">
+              <div class="flex items-center">
+                <h3 class="font-medium text-neutral-700 dark:text-neutral-300">Chart Settings</h3>
+                <%= link_to "Reset to Default", profile_reset_chart_settings_path(@profile), class: "ml-4 cursor-pointer bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black" %>
+              </div>
+              <% chart_settings = ChartSettings.new(@profile) %>
+              <% ChartSettings::DEFAULT.each_key do |label| %>
+                <p class="mt-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                  <%= label.humanize %>
+                </p>
+                <div class="flex">
+                  <div class="flex-1">
+                    <%= f.color_field "#{label}-color", class: "mt-1 dark:bg-neutral-800 w-full", value: chart_settings.for_label(label)["color"] %>
+                  </div>
+                  <div class="flex-1 ml-6">
+                    <%= f.select "#{label}-type", options_for_select([["Smooth", "spline"], ["Exact", "none"]], chart_settings.for_label(label)["type"]), {}, {class: "mt-1 standard-input"} %>
+                  </div>
+                  <div class="flex-1 ml-8">
+                    <div class="flex mt-3">
+                      <div class="flex items-center h-5">
+                        <%= f.check_box "#{label}-dashed", class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded", checked: chart_settings.for_label(label)["dashed"] %>
+                      </div>
+                      <div class="ml-3 text-sm">
+                        <%= f.label "#{label}-dashed", "Dashed", class: "text-neutral-700 dark:text-neutral-300" %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex mt-3">
+                      <div class="flex items-center h-5">
+                        <%= f.check_box "#{label}-hidden", class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded", checked: chart_settings.for_label(label)["hidden"] %>
+                      </div>
+                      <div class="ml-3 text-sm">
+                        <%= f.label "#{label}-hidden", "Hidden", class: "text-neutral-700 dark:text-neutral-300" %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <div class="col-span-3 sm:col-span-2">
+            <h3 class="mb-4 font-medium text-neutral-700 dark:text-neutral-300">Email Notifications</h3>
+            <div class="flex flex-col gap-y-1">
+              <%= f.collection_check_boxes(:email_notifications, User::EMAIL_NOTIFICATIONS.map{ |en| [en.humanize, en]}, :last, :first) do |cb| %>
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <%= cb.check_box class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded", checked: @profile.notify?(cb.value) %>
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <%= cb.label class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <% if current_user.admin? %>
+            <div class="col-span-3 sm:col-span-2">
+              <h3 class="mb-4 font-medium text-neutral-700 dark:text-neutral-300">Admin Area</h3>
+              <div class="flex items-start">
+                <div class="flex items-center h-5">
+                  <%= f.check_box :supporter, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= f.label :supporter, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                </div>
+              </div>
+              <div class="flex items-start mt-1">
+                <div class="flex items-center h-5">
+                  <%= f.check_box :developer, class: "focus:ring-oxford-blue-500 h-4 w-4 text-oxford-blue-600 border-neutral-300 rounded" %>
+                </div>
+                <div class="ml-3 text-sm">
+                  <%= f.label :developer, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+        <%= f.submit "Save", class: "submit-button py-2 px-4" %>
+      </div>
+    </div>
+  <% end %>
+</div>

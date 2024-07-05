@@ -1,41 +1,41 @@
-<tr class="border-t border-gray-200 <%= customer.top_spender? ? "bg-green-50" : "bg-gray-50" %>" id="<%= dom_id customer %>">
-  <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-gray-700 sm:pl-3">
+<tr class="border-t border-neutral-200 <%= customer.top_spender? ? "bg-green-50" : "bg-neutral-50" %>" id="<%= dom_id customer %>">
+  <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-neutral-700 sm:pl-3">
     <%= customer.name %> (<%= customer.email %>)
     <br>
-    <%= link_to customer.stripe_id, "https://dashboard.stripe.com/customers/#{customer.stripe_id}", class: "underline hover:no-underline" %>
+    <%= link_to customer.stripe_id, "https://dashboard.stripe.com/customers/#{customer.stripe_id}", class: "standard-link" %>
   </th>
-  <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-gray-700 sm:pl-3">
+  <th class="py-2 pl-4 pr-3 text-sm font-semibold text-left text-neutral-700 sm:pl-3">
     <%= customer.amount / 100 %>€
   </th>
-  <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-gray-700 sm:pl-3">
+  <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-neutral-700 sm:pl-3">
     <% customer.address.each do |key, value| %>
       <% next unless value.present? %>
       <%= key.humanize %>: <%= value %>
       <br>
     <% end%>
   </th>
-  <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-gray-700 sm:pl-3">
-    <%= customer.payments.map { |pi| link_to pi, "https://dashboard.stripe.com/payments/#{pi}", class: "underline hover:no-underline" }.join(", ").html_safe %>
+  <th colspan="2" class="py-2 pl-4 pr-3 text-sm font-normal text-left text-neutral-700 sm:pl-3">
+    <%= customer.payments.map { |pi| link_to pi, "https://dashboard.stripe.com/payments/#{pi}", class: "standard-link" }.join(", ").html_safe %>
     <% if customer.refunds.any? %>
       <br>
       <br>
-      <%= customer.refunds.map { |r| link_to r, "https://dashboard.stripe.com/refunds/#{r}", class: "underline hover:no-underline" }.join(", ").html_safe %>
+      <%= customer.refunds.map { |r| link_to r, "https://dashboard.stripe.com/refunds/#{r}", class: "standard-link" }.join(", ").html_safe %>
     <% end %>
   </th>
 </tr>
 <% customer.subscriptions.each do |subscription| %>
   <tr id="<%= dom_id subscription %>">
-    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
-      <%= link_to subscription.stripe_id, "https://dashboard.stripe.com/subscriptions/#{subscription.stripe_id}", class: "underline hover:no-underline" %>
+    <td class="px-3 py-4 text-sm text-neutral-500 whitespace-nowrap">
+      <%= link_to subscription.stripe_id, "https://dashboard.stripe.com/subscriptions/#{subscription.stripe_id}", class: "standard-link" %>
     </td>
-    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+    <td class="px-3 py-4 text-sm text-neutral-500 whitespace-nowrap">
       <%= subscription.status %>
     </td>
-    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap"><%= subscription.interval %></td>
-    <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+    <td class="px-3 py-4 text-sm text-neutral-500 whitespace-nowrap"><%= subscription.interval %></td>
+    <td class="px-3 py-4 text-sm text-neutral-500 whitespace-nowrap">
       <%= subscription.started_at %>
     </td>
-    <td class="px-3 py-4 text-sm text-gray-500">
+    <td class="px-3 py-4 text-sm text-neutral-500">
       <% if subscription.ended_at %>
         Ended <%= subscription.ended_at %>
         <br>

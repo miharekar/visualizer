@@ -47,7 +47,8 @@ module Parsers
       shot.profile_title = profile_title
       shot.start_time = start_time
       shot.public = user.public
-      add_information(shot)
+      set_information(shot)
+      set_coffee_bag(shot)
 
       if shot.valid?
         extract_fields_from_extra(shot)
@@ -56,7 +57,7 @@ module Parsers
       elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
       elsif Rails.env.production? && shot.errors.reject { |e| e.type == :over_daily_limit }.any?
-        s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.zone.now.iso8601}.json")
+        s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.current.iso8601}.json")
         Appsignal.set_message("Something is wrong with this file #{s3_response.etag} | #{shot.errors.full_messages.join(", ")}")
       end
       shot
@@ -78,7 +79,7 @@ module Parsers
       nil
     end
 
-    def add_information(shot)
+    def set_information(shot)
       shot.information ||= shot.build_information
       shot.information.data = data
       shot.information.extra = extra
@@ -86,6 +87,20 @@ module Parsers
       shot.information.profile_fields = profile_fields
       shot.information.brewdata = brewdata
       shot.information.brewdata["parser"] = self.class.name
+    end
+
+    def set_coffee_bag(shot)
+      if shot.user.coffee_management_enabled?
+        roaster = Roaster.for_user_by_name(shot.user, extra["bean_brand"])
+        shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], extra["roast_date"], roast_level: extra["roast_level"])
+        set_coffee_bag_attributes(shot)
+      else
+        shot.coffee_bag = nil
+      end
+    end
+
+    def set_coffee_bag_attributes(shot)
+      nil
     end
 
     def calculate_duration

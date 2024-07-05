@@ -62,6 +62,9 @@ class ProfilesController < ApplicationController
   def profile_params
     allowed_params = %i[avatar name timezone temperature_unit skin public hide_shot_times]
     allowed_params << %i[github supporter developer] if current_user.admin?
+    # allowed_params << %i[coffee_management_enabled] if current_user.premium? # Temporarily disabled
+    notification_settings = {unsubscribed_from: User::EMAIL_NOTIFICATIONS - params[:user][:email_notifications] || []}
+
     params.require(:user).permit(allowed_params).merge(chart_settings).merge(notification_settings)
   end
 
@@ -78,9 +81,5 @@ class ProfilesController < ApplicationController
     end
 
     {chart_settings: settings}
-  end
-
-  def notification_settings
-    {unsubscribed_from: User::EMAIL_NOTIFICATIONS - params[:user][:email_notifications] || []}
   end
 end

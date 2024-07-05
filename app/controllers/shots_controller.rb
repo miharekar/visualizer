@@ -3,6 +3,7 @@ class ShotsController < ApplicationController
 
   FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
+  before_action :check_premium!, only: :coffee_bag_form
   before_action :authenticate_user!, except: %i[show compare share]
   before_action :load_shot, only: %i[show compare share remove_image]
   before_action :load_users_shot, only: %i[edit update destroy]
@@ -32,7 +33,7 @@ class ShotsController < ApplicationController
 
   def share
     share = SharedShot.find_or_initialize_by(shot: @shot, user: current_user)
-    share.created_at = Time.zone.now
+    share.created_at = Time.current
     share.save!
     render json: {code: share.code}
   end
@@ -69,9 +70,7 @@ class ShotsController < ApplicationController
   end
 
   def update
-    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
-    allowed << {metadata: current_user.metadata_fields} if current_user.premium?
-    @shot.update(params.require(:shot).permit(allowed))
+    @shot.update(update_shot_params)
     if params[:shot][:image].present? && current_user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
         @shot.image.attach(params[:shot][:image])
@@ -102,6 +101,15 @@ class ShotsController < ApplicationController
     render turbo_stream: turbo_stream.remove("shot-image")
   end
 
+  def coffee_bag_form
+    @coffee_bag = CoffeeBag.find_by(id: params[:coffee_bag])
+    @roasters = current_user.roasters.order_by_name.with_at_least_one_coffee_bag
+    @roaster = params.key?(:roaster_id) ? current_user.roasters.find_by(id: params[:roaster_id]) : @coffee_bag&.roaster
+    @coffee_bags = @roaster&.coffee_bags&.order_by_roast_date
+
+    render layout: false
+  end
+
   private
 
   def load_shot
@@ -130,7 +138,15 @@ class ShotsController < ApplicationController
     end
     @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
     @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+    @shots = @shots.where(coffee_bag_id: params[:coffee_bag]) if params[:coffee_bag].present?
 
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
+  end
+
+  def update_shot_params
+    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
+    allowed << {metadata: current_user.metadata_fields} if current_user.premium?
+    allowed << :coffee_bag_id if current_user.coffee_management_enabled?
+    params.require(:shot).permit(allowed)
   end
 end

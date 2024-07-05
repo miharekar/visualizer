@@ -6,11 +6,13 @@
     <%= render "shared/premium_banner", count: @premium_count %>
   <% end %>
 <% end %>
-<div class="mx-auto my-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
-  <div class="px-4 sm:hidden">
-    <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-      Community
-    </h1>
+<div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex flex-row justify-between gap-2 px-4 sm:px-0">
+    <div>
+      <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
+        Community Shots
+      </h1>
+    </div>
   </div>
   <%= render "filters" %>
   <%= render "shots/table_list", shots: @shots, include_person: true, cursor: @cursor, cursor_path: community_index_path(params.permit(*CommunityController::FILTERS, :min_enjoyment, :max_enjoyment).merge(commit: "Search", before: @cursor, format: :turbo_stream)) %>
