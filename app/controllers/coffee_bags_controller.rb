@@ -1,4 +1,5 @@
 class CoffeeBagsController < ApplicationController
+  before_action :check_premium!
   before_action :set_roaster
   before_action :set_coffee_bag, only: %i[edit update destroy remove_image]
   before_action :load_coffee_bags, only: %i[index search]
