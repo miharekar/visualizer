@@ -27,6 +27,10 @@ class User < ApplicationRecord
 
   validates :name, presence: true, if: :public?
 
+  def self.admin
+    where(admin: true).first
+  end
+
   def display_name
     name.presence || email
   end
