@@ -84,7 +84,8 @@ module Airtable
       end
       airtable_info.update_tables(self.class::TABLE_NAME, fields: table_fields)
     rescue Airtable::DataError => e
-      raise if retrying || %w[DUPLICATE_OR_EMPTY_FIELD_NAME UNKNOWN_FIELD_NAME].exclude?(Oj.safe_load(e.message)["error"]["type"])
+      error_type = Oj.safe_load(e.message)&.dig("error", "type") || ""
+      raise if retrying || %w[DUPLICATE_OR_EMPTY_FIELD_NAME UNKNOWN_FIELD_NAME].exclude?(error_type)
 
       reset_fields!
       retrying = true
