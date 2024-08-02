@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_08_083341) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_133224) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -168,7 +168,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_083341) do
     t.string "airtable_id"
     t.index ["airtable_id"], name: "index_roasters_on_airtable_id"
     t.index ["user_id", "name"], name: "index_roasters_on_user_id_and_name", unique: true
-    t.index ["user_id"], name: "index_roasters_on_user_id"
   end
 
   create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

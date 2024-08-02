@@ -44,7 +44,6 @@ end
 # Indexes
 #
 #  index_roasters_on_airtable_id       (airtable_id)
-#  index_roasters_on_user_id           (user_id)
 #  index_roasters_on_user_id_and_name  (user_id,name) UNIQUE
 #
 # Foreign Keys
