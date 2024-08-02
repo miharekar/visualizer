@@ -3,8 +3,7 @@ class AirtableJob < ApplicationJob
   retry_on Airtable::TokenError, attempts: 2
 
   rescue_from Airtable::DataError do |airtable_error|
-    error_type = Oj.safe_load(airtable_error.message)&.dig("error", "type")
-    if error_type == "RATE_LIMIT_REACHED" && executions < 5
+    if airtable_error.matches_error_type?("RATE_LIMIT_REACHED") && executions < 5
       delay = executions**4
       delay_jitter = determine_jitter_for_delay(delay, self.class.retry_jitter)
       wait = delay + delay_jitter + 1.minute
