@@ -36,7 +36,7 @@ class AirtableWebhookRefreshJobTest < ActiveJob::TestCase
     {type: "CANNOT_REFRESH_DISABLED_WEBHOOK", status: 400}
   ].each do |error_case|
     test "destroys airtable_info when #{error_case[:type]} error occurs and is returned in errors" do
-      error_response = {errors: [{type: error_case[:type], message: "Error message"}]}.to_json
+      error_response = {errors: [{error: error_case[:type], message: "Error message"}]}.to_json
       stub_request(:post, @refresh_url).to_return(status: error_case[:status], body: error_response, headers: {})
 
       assert_difference -> { AirtableInfo.count }, -1 do

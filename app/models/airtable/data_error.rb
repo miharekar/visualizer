@@ -15,7 +15,7 @@ module Airtable
     private
 
     def airtable_error_types
-      @airtable_error_types ||= airtable_errors.map { |error| error["type"] }
+      @airtable_error_types ||= airtable_errors.filter_map { |error| error["type"] || error["error"] }.uniq
     end
 
     def airtable_errors
@@ -23,7 +23,7 @@ module Airtable
     end
 
     def airtable_body
-      Oj.safe_load(message) || {}
+      @airtable_body ||= Oj.safe_load(message) || {}
     end
   end
 end
