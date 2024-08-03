@@ -1,16 +1,6 @@
 require "test_helper"
 
 class ParsedShotTest < ActiveSupport::TestCase
-  test "should not parse for non-Beanconqueror shots" do
-    shot = build_stubbed(:shot, :with_information)
-    parsed_shot = ShotChart::ParsedShot.new(shot)
-  end
-
-  test "should parse for Beanconqueror shots" do
-    shot = build_stubbed(:shot, :with_information, information: build_stubbed(:shot_information, brewdata: {parser: "Parsers::Beanconqueror"}))
-    parsed_shot = ShotChart::ParsedShot.new(shot)
-  end
-
   test "it parses real beanconqueror correctly" do
     shot = Shot.from_file(build_stubbed(:user), File.read("test/files/beanconqueror_real.json"))
     assert_equal 1, shot.information.timeframe.count
