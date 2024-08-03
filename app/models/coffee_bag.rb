@@ -19,9 +19,9 @@ class CoffeeBag < ApplicationRecord
 
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false}
 
-  def self.for_roaster_by_name_and_date(roaster, name, roast_date, roast_level: nil)
+  def self.for_roaster_by_name_and_date(roaster, name, roast_date, **create_attrs)
     roast_date = Date.parse(roast_date) rescue nil
-    where(roaster:).filter_by_name(name).where(roast_date:).first || create(name:, roaster:, roast_date:, roast_level:)
+    where(roaster:).filter_by_name(name).where(roast_date:).first || create(name:, roaster:, roast_date:, **create_attrs)
   end
 
   def display_name

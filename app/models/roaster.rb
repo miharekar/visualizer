@@ -17,8 +17,8 @@ class Roaster < ApplicationRecord
 
   validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
 
-  def self.for_user_by_name(user, name)
-    where(user:).filter_by_name(name).first || create(name:, user:)
+  def self.for_user_by_name(user, name, **create_attrs)
+    where(user:).filter_by_name(name).first || create(name:, user:, **create_attrs)
   end
 
   private

@@ -26,7 +26,7 @@ class EnableCoffeeManagementJob < ApplicationJob
 
   memo_wise def roasters
     user.shots.distinct.pluck(:bean_brand).reject(&:blank?).to_h do |name|
-      [name, Roaster.for_user_by_name(user, name)]
+      [name, Roaster.for_user_by_name(user, name, skip_airtable_sync: true)]
     end
   end
 
@@ -35,7 +35,7 @@ class EnableCoffeeManagementJob < ApplicationJob
       .pluck(:bean_brand, :bean_type, :roast_date, :roast_level)
       .reject { |bean_brand, bean_type, _, _| bean_brand.blank? || bean_type.blank? }
       .to_h do |bean_brand, bean_type, roast_date, roast_level|
-        coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roasters[bean_brand], bean_type, roast_date, roast_level:)
+        coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roasters[bean_brand], bean_type, roast_date, roast_level:, skip_airtable_sync: true)
 
         ["#{bean_brand}_#{bean_type}_#{roast_date}", coffee_bag]
       end
