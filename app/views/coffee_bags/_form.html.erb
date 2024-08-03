@@ -3,7 +3,7 @@
     <div class="shadow sm:rounded-md sm:overflow-hidden">
       <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6">
-          <div class="col-span-6 sm:col-span-4">
+          <div class="col-span-6 sm:col-span-3">
             <% has_error = f.object.errors.any? { |e| e.attribute == :name && e.type == :blank } %>
             <% if has_error %>
               <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
@@ -13,6 +13,10 @@
             <% if has_error %>
               <p class="text-sm font-medium text-red-500">Name is required.</p>
             <% end %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :roaster, class: "standard-label" %>
+            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters} %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :roast_date, class: "standard-label" %>

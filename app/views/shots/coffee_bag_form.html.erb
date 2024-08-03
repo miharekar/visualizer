@@ -13,7 +13,8 @@
           <%= label_tag :coffee_bag, nil, class: "standard-label" %>
           <% if @roaster.present? %>
             <%= link_to "New", new_roaster_coffee_bag_path(roaster_id: @roaster.id), class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
-          <% end %>      </div>
+          <% end %>
+        </div>
         <% selected_bag = @coffee_bag if @roaster == @coffee_bag&.roaster %>
         <%= render partial: "shared/combobox", locals: { input_name: :coffee_bag, hidden_input_name: "shot[coffee_bag_id]", selected: selected_bag, collection: @coffee_bags, name_method: :display_name} %>
       </div>
