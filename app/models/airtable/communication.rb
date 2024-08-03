@@ -93,7 +93,7 @@ module Airtable
         if response.is_a?(Net::HTTPSuccess)
           Oj.safe_load(response.body)
         else
-          raise DataError.new(response.body, data:, response:)
+          raise DataError.new(data:, response:)
         end
       end
     end
