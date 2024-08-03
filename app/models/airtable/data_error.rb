@@ -7,6 +7,7 @@ module Airtable
     def initialize(data: nil, response: nil)
       @data = data
       @response = response
+      Appsignal.set_custom_data(api_data: data, api_response: airtable_body)
       super(airtable_errors.map { |e| "#{e["type"] || e["error"]}: #{e["message"]}" }.join(", "))
     end
 
