@@ -36,7 +36,7 @@ gem "inline_svg"
 gem "stripe"
 gem "tailwindcss-rails"
 gem "tickly", github: "miharekar/tickly"
-gem "turbo-rails", "~> 2.0.0-beta.1"
+gem "turbo-rails"
 
 gem "appsignal"
 gem "freezolite"
