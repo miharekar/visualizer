@@ -6,7 +6,7 @@ class ProcessImageJob < ApplicationJob
   def perform(blob, options)
     blob.variant(options).processed
   rescue Vips::Error => e
-    Appsignal.set_error(e) do |transaction|
+    Appsignal.report_error(e) do |transaction|
       transaction.set_tags(blob_id: blob.id, attachments: blob.attachments.map { |a| a.record.to_global_id.to_s })
     end
     blob.attachments.each { |a| a.purge_later }

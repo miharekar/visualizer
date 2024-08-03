@@ -9,7 +9,7 @@ class AirtableJob < ApplicationJob
       wait = delay + delay_jitter + 1.minute
       retry_job(wait:, queue: :low)
     else
-      Appsignal.send_error(airtable_error)
+      Appsignal.report_error(airtable_error)
     end
   end
 end

@@ -35,7 +35,7 @@ class PopulateStripeJob < ApplicationJob
     customer.amount = payments.sum(&:amount) - refunds.sum(&:amount)
     customer.save!
   rescue ActiveRecord::RecordInvalid => e
-    Appsignal.send_error(e)
+    Appsignal.report_error(e)
   end
 
   def upsert_subscription(stripe_subscription)
@@ -50,7 +50,7 @@ class PopulateStripeJob < ApplicationJob
     subscription.cancellation_details = stripe_subscription.cancellation_details
     subscription.save!
   rescue ActiveRecord::RecordInvalid => e
-    Appsignal.send_error(e)
+    Appsignal.report_error(e)
   end
 
   memo_wise def stripe_payments

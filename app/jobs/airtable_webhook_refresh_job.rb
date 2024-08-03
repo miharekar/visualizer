@@ -6,7 +6,7 @@ class AirtableWebhookRefreshJob < AirtableJob
     if e.matches_error_type?(%w[NOT_FOUND INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND CANNOT_REFRESH_DISABLED_WEBHOOK])
       airtable_info.destroy
     else
-      Appsignal.set_error(e) do |transaction|
+      Appsignal.report_error(e) do |transaction|
         transaction.set_tags(user_id: user.id)
       end
     end

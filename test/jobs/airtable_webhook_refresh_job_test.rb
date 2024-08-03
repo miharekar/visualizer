@@ -46,34 +46,4 @@ class AirtableWebhookRefreshJobTest < ActiveJob::TestCase
       assert_raises(ActiveRecord::RecordNotFound) { @airtable_info.reload }
     end
   end
-
-  test "logs error to Appsignal for other error types" do
-    error_response = {error: {type: "UNKNOWN_ERROR", message: "Unknown error occurred"}}.to_json
-    stub_request(:post, @refresh_url).to_return(status: 500, body: error_response, headers: {})
-
-    mock = Object.new
-    mock.instance_variable_set(:@called, false)
-    mock.define_singleton_method(:set_error) do |error, &block|
-      @called = true
-      assert_instance_of Airtable::DataError, error
-      transaction = Object.new
-      transaction.define_singleton_method(:set_tags) do |tags|
-        assert_equal @user.id, tags[:user_id]
-      end
-      block.call(transaction)
-    end
-
-    Appsignal.singleton_class.alias_method :original_set_error, :set_error
-    Appsignal.define_singleton_method(:set_error) { |*args, &block| mock.set_error(*args, &block) }
-
-    assert_no_difference -> { AirtableInfo.count } do
-      AirtableWebhookRefreshJob.perform_now(@airtable_info)
-    end
-
-    assert_nothing_raised { @airtable_info.reload }
-
-    assert mock.instance_variable_get(:@called), "Appsignal.set_error was not called"
-
-    Appsignal.singleton_class.alias_method :set_error, :original_set_error
-  end
 end

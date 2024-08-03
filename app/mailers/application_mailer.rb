@@ -6,7 +6,7 @@ class ApplicationMailer < ActionMailer::Base
   helper_method :notification_exists?
 
   rescue_from(Exception) do |exception|
-    Appsignal.send_error(exception)
+    Appsignal.report_error(exception)
     raise exception
   end
 
