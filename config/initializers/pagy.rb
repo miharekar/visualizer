@@ -105,7 +105,7 @@
 # require 'pagy/extras/frontend_helpers'
 require "pagy/extras/metadata"
 # For performance reasons, you should explicitly set ONLY the metadata you use in the frontend
-Pagy::DEFAULT[:metadata] = %i[count page items pages]
+Pagy::DEFAULT[:metadata] = %i[count page limit pages]
 
 # Searchkick extra: Paginate `Searchkick::Results` objects
 # See https://ddnexus.github.io/pagy/docs/extras/searchkick

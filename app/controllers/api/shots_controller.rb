@@ -6,15 +6,15 @@ module Api
     before_action :verify_write_access, only: %i[destroy]
 
     def index
-      items = params[:items].presence.to_i
-      items = 10 if items.zero?
-      items = 100 if items.to_i > 100
+      limit = params[:items].presence.to_i
+      limit = 10 if limit.zero?
+      limit = 100 if limit.to_i > 100
 
       shots = current_user.present? ? current_user.shots : Shot.visible
       shots = shots.non_premium unless current_user&.premium?
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
 
-      pagy, shots = pagy(shots, items:)
+      pagy, shots = pagy(shots, limit:)
       data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
       render json: {data:, paging: pagy_metadata(pagy)}
     rescue Pagy::VariableError
