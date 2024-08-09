@@ -17,6 +17,12 @@ module Airtable
 
     private
 
+    def prepare_related_tables
+      return unless user.coffee_management_enabled?
+
+      [Roasters, CoffeeBags].each { |klass| klass.new(user) }
+    end
+
     def table_fields
       @table_fields ||= begin
         static = [

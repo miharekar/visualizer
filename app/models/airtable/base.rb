@@ -5,16 +5,9 @@ module Airtable
 
     attr_reader :user, :identity, :table_description, :airtable_info
 
-    def self.prepare_for(user)
-      if user.coffee_management_enabled?
-        [Roasters, CoffeeBags, Shots].each { |klass| klass.new(user) }
-      else
-        Shots.new(user)
-      end
-    end
-
     def initialize(user)
       @user = user
+      prepare_related_tables
       set_identity
       @airtable_info = identity.airtable_info || create_airtable_info
       set_table unless self.class == Base
@@ -38,6 +31,10 @@ module Airtable
         AirtableInfo.where(identity:).destroy_all
         identity.create_airtable_info(base_id: base["id"], webhook_id: webhook["id"])
       end
+    end
+
+    def prepare_related_tables
+      nil
     end
 
     def set_base
