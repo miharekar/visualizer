@@ -46,3 +46,7 @@ module ActiveSupport
     end
   end
 end
+
+class MinitestPatch
+  # make Zeitwerk happy
+end
