@@ -1,7 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
   before_action :check_subscription
 
-  default from: email_address_with_name("miha@visualizer.coffee", "Miha Rekar"), message_stream: -> { notification_exists? ? "broadcast" : "outbound" }
+  default from: email_address_with_name("miha@visualizer.coffee", "Miha from Visualizer"), message_stream: -> { notification_exists? ? "broadcast" : "outbound" }
   layout "mailer"
   helper_method :notification_exists?
 
