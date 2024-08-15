@@ -294,6 +294,11 @@ GEM
       google-protobuf (>= 3.22.3)
     pghero (3.6.0)
       activerecord (>= 6.1)
+    postmark (1.25.1)
+      json
+    postmark-rails (0.22.1)
+      actionmailer (>= 3.0.0)
+      postmark (>= 1.21.3, < 2.0)
     prism (0.30.0)
     propshaft (0.9.1)
       actionpack (>= 7.0.0)
@@ -504,6 +509,7 @@ DEPENDENCIES
   pg_lock
   pg_query
   pghero
+  postmark-rails
   propshaft
   puma
   rack-mini-profiler

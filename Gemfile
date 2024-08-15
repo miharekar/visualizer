@@ -42,6 +42,7 @@ gem "appsignal"
 gem "freezolite"
 gem "pghero"
 gem "pg_query"
+gem "postmark-rails"
 gem "rack-mini-profiler"
 gem "stackprof"
 
