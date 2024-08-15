@@ -47,7 +47,7 @@ gem "rack-mini-profiler"
 gem "stackprof"
 
 group :development, :test do
-  gem "debug"
+  gem "debug", require: "debug/prelude"
   gem "factory_bot_rails"
   gem "singed"
 end
@@ -55,7 +55,7 @@ end
 group :development do
   gem "annotate"
   gem "benchmark-ips"
-  gem "brakeman"
+  gem "brakeman", require: false
   gem "dockerfile-rails"
   gem "letter_opener"
   gem "rubocop-rails-omakase", require: false

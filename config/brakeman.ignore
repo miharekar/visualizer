@@ -1,15 +1,106 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "0bce48970a8facd98ce4645c332c8b0eb127bcfdb0c3b9cf4c308d8e71898141",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/coffee_bags/index.html.erb",
+      "line": 30,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => current_user.roasters.find(params[:roaster_id]).coffee_bags.order_by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "CoffeeBagsController",
+          "method": "index",
+          "line": 8,
+          "file": "app/controllers/coffee_bags_controller.rb",
+          "rendered": {
+            "name": "coffee_bags/index",
+            "file": "app/views/coffee_bags/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "coffee_bags/index"
+      },
+      "user_input": "params[:coffee]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "197b88a618b94bb65b610094a20e6f1950949fabb17cc0770573a0e5461493e9",
+      "fingerprint": "2a85e33173873dd3443542167f774a47c52dcf9a8f7330889bbc763a5d092c77",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/shots_controller.rb",
+      "line": 137,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "current_user.shots.with_attached_image.non_premium.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ShotsController",
+        "method": "load_users_shots"
+      },
+      "user_input": "filter",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "6314ad125b248ab4348223bf72a502df65c954168a6dd6ab92ae2541d5907ead",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/roasters/index.html.erb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => current_user.roasters.order_by_name.includes(:coffee_bags).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "RoastersController",
+          "method": "index",
+          "line": 7,
+          "file": "app/controllers/roasters_controller.rb",
+          "rendered": {
+            "name": "roasters/index",
+            "file": "app/views/roasters/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "roasters/index"
+      },
+      "user_input": "params[:coffee]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "980f7b358defa70d4f2f3393b5d08890cbd80727be859d8cff677b9d4e0d9be2",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/community_controller.rb",
-      "line": 27,
+      "line": 25,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Shot.visible_or_owned_by_id(current_user.id).by_start_time.includes(:user).where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "code": "Shot.visible_or_owned_by_id(current_user.id).includes(:user).where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
       "render_path": null,
       "location": {
         "type": "method",
@@ -24,6 +115,6 @@
       "note": ""
     }
   ],
-  "updated": "2023-11-05 13:30:07 +0100",
-  "brakeman_version": "6.0.1"
+  "updated": "2024-08-15 09:05:26 +0200",
+  "brakeman_version": "6.1.2"
 }
