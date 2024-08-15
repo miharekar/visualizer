@@ -9,6 +9,8 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable
 
+  generates_token_for :unsubscribe
+
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
   has_many :identities, dependent: :destroy
@@ -29,6 +31,19 @@ class User < ApplicationRecord
 
   def self.admin
     where(admin: true).first
+  end
+
+  def self.unsubscribe_by_token!(token)
+    token_definition = token_definitions[:unsubscribe]
+    payload = token_definition.message_verifier.verified(token, purpose: token_definition.full_purpose)
+    return unless payload && payload["id"].present? && payload["notification"].present?
+
+    user = find_by(id: payload["id"])
+    return unless user
+
+    unsubscribed_from = (user.unsubscribed_from + [payload["notification"]]).uniq
+    user.update!(unsubscribed_from:)
+    payload["notification"]
   end
 
   def display_name
@@ -64,8 +79,17 @@ class User < ApplicationRecord
     super.presence || []
   end
 
+  def unsubscribed_from
+    super.presence || []
+  end
+
   def notify?(notification)
-    unsubscribed_from.to_a.exclude?(notification.to_s)
+    unsubscribed_from.exclude?(notification.to_s)
+  end
+
+  def unsubscribe_token_for(notification)
+    token_definition = self.class.token_definitions[:unsubscribe]
+    token_definition.message_verifier.generate({id:, notification:}, purpose: token_definition.full_purpose)
   end
 
   private

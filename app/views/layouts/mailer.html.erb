@@ -72,13 +72,15 @@
                   </td>
                 </tr>
                 <%= yield %>
-                <tr>
-                  <td style="padding: 24px; text-align: center; font-size: 14px">
-                    <p style="color: #9ca3af">
-                      Manage email notifications in <%= link_to "your profile", edit_profiles_url, class: "hover-no-underline", style: "color: #9ca3af; text-decoration-line: underline", target: "_blank" %>.
-                    </p>
-                  </td>
-                </tr>
+                <% if notification_exists? %>
+                  <tr>
+                    <td style="padding: 24px; text-align: center; font-size: 14px">
+                      <p style="color: #9ca3af">
+                        Manage email notifications in <%= link_to "your profile", edit_profiles_url, class: "hover-no-underline", style: "color: #9ca3af; text-decoration-line: underline", target: "_blank" %>.
+                      </p>
+                    </td>
+                  </tr>
+                <% end %>
                 <tr>
                   <td class="sm-leading-8" style="line-height: 48px">&zwj;</td>
                 </tr>

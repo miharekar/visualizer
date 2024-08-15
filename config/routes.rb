@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get :heartbeat, to: "heartbeat#show"
   get :privacy, to: "home#privacy"
   post :stripe, to: "stripe#create"
+  post "emails/unsubscribe"
 
   resources :people, only: %i[show] do
     get :feed, on: :member
