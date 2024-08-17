@@ -2,7 +2,6 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 
 require "rails/test_help"
-require_relative "../lib/minitest_patch"
 require "minitest/unit"
 require "webmock/minitest"
 
