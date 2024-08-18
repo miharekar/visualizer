@@ -25,13 +25,16 @@
           </p>
         <% end %>
       </div>
-      <% if @profile.decent_token.present? %>
+      <% if current_user.has_airtable? %>
         <hr class="my-6">
-        <div class="px-4 sm:px-0">
+        <div class="px-4 sm:px-0" data-controller="modal">
+          <%= render "shared/modal" %>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
-            Your profile is connected to Decent.
+            You are connected to Airtable.
           </h3>
-          <%= turbo_frame_tag "decent_serial_numbers", src: profile_decent_serial_numbers_path(@profile) %>
+          <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+            If you want to disconnect or reset your Airtable connection, you can <%= link_to "do so here", disconnect_airtable_profiles_path, class: "standard-link",  data: {turbo_method: :delete, action: "click->modal#confirm", title: "Disconnect Airtable", text: "Are you sure you want to disconnect your Airtable account? Your data will NOT be deleted from Airtable or Visualizer. You will be able to reconnect at any time to resume syncing."} %>.
+          </p>
         </div>
       <% end %>
       <% if @authorized_applications.any? %>
@@ -43,6 +46,15 @@
           <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             You can <%= link_to "manage #{@authorized_applications.size == 1 ? "it" : "them"} here", oauth_authorized_applications_path, class: "standard-link", data: {turbo: false} %>.
           </p>
+        </div>
+      <% end %>
+      <% if @profile.decent_token.present? %>
+        <hr class="my-6">
+        <div class="px-4 sm:px-0">
+          <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+            Your profile is connected to Decent.
+          </h3>
+          <%= turbo_frame_tag "decent_serial_numbers", src: profile_decent_serial_numbers_path(@profile) %>
         </div>
       <% end %>
     </div>

@@ -6,11 +6,11 @@ export default class extends Controller {
 
   initialize() {
     this.modalShown = false
-    this.blockClick = true
+    this.preventClick = true
   }
 
   confirm(event) {
-    if (this.blockClick) {
+    if (this.preventClick) {
       event.preventDefault()
       this.currentTarget = event.currentTarget
       const data = event.currentTarget.dataset
@@ -39,11 +39,11 @@ export default class extends Controller {
     this.modalShown = false
   }
 
-  delete() {
-    this.blockClick = false
+  performClick() {
+    this.preventClick = false
     this.currentTarget.click()
     this.hide()
-    this.blockClick = true
+    this.preventClick = true
   }
 
   keydown(event) {
@@ -53,7 +53,7 @@ export default class extends Controller {
         this.hide()
       } else if (event.keyCode == 13) {
         event.preventDefault()
-        this.delete()
+        this.performClick()
       }
     }
   }

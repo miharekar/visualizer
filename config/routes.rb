@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       get :edit
       post :add_metadata_field
       delete :remove_metadata_field
+      delete :disconnect_airtable
     end
   end
 

@@ -17,13 +17,13 @@ module Airtablable
   private
 
   def sync_to_airtable
-    return if skip_airtable_sync || !user.should_sync_to_airtable?
+    return if skip_airtable_sync || !user.has_airtable?
 
     AirtableUploadRecordJob.perform_later(self)
   end
 
   def cleanup_airtable
-    return if airtable_id.blank? || !user.should_sync_to_airtable?
+    return if airtable_id.blank? || !user.has_airtable?
 
     AirtableDeleteRecordJob.perform_later(self.class.airtable_class, user, airtable_id)
   end

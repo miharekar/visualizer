@@ -49,6 +49,14 @@ class ProfilesController < ApplicationController
     @serial_numbers = DecentApi.new(@profile.decent_email, @profile.decent_token).serial_numbers
   end
 
+  def disconnect_airtable
+    airtables = @profile.identities.by_provider(:airtable)
+    return unless airtables.exists?
+
+    airtables.destroy_all
+    redirect_to edit_profile_path(@profile), notice: "Airtable disconnected."
+  end
+
   private
 
   def set_profile
