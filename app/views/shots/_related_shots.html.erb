@@ -1,0 +1,13 @@
+<div class="flex-1" data-controller="related-shots">
+  <select class="mt-0 standard-input" data-action="related-shots#goTo">
+    <% related_shots.each do |id, title, time| %>
+      <% if id == shot.id %>
+        <option value="<%= shot_path(id) %>" selected="selected">Go to another shot</option>
+      <% else %>
+        <option value="<%= id %>">
+          <%= [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ") %>
+        </option>
+      <% end %>
+    <% end %>
+  </select>
+</div>

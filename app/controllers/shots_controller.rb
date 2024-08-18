@@ -8,6 +8,7 @@ class ShotsController < ApplicationController
   before_action :load_shot, only: %i[show compare share remove_image]
   before_action :load_users_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index search]
+  before_action :load_related_shots, only: %i[show edit]
 
   def search
     render :index
@@ -16,8 +17,6 @@ class ShotsController < ApplicationController
   def show
     @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, current_user) if @shot.information
-    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
-
     return if current_user.nil?
 
     @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
@@ -141,6 +140,10 @@ class ShotsController < ApplicationController
     @shots = @shots.where(coffee_bag_id: params[:coffee_bag]) if params[:coffee_bag].present?
 
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
+  end
+
+  def load_related_shots
+    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
   end
 
   def update_shot_params
