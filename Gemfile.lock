@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/miharekar/omniauth-airtable.git
-  revision: c51d9652ee2ab6e1e9808bf172c22d14174915a6
-  specs:
-    omniauth-airtable (1.0.0)
-      omniauth (>= 1.9, < 3)
-      omniauth-oauth2 (>= 1.4.0, < 2.0)
-
-GIT
   remote: https://github.com/miharekar/tickly.git
   revision: 277b63c371e5a7f9d2a2a1410087ff6f21906cae
   specs:
@@ -168,9 +160,6 @@ GEM
       multipart-post (~> 2)
     faraday-net_http (3.1.1)
       net-http
-    ffi (1.17.0-aarch64-linux-gnu)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
     freezolite (0.5.0)
       require-hooks (~> 0.2)
     fugit (1.11.1)
@@ -191,9 +180,7 @@ GEM
     hashie (5.0.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
-    image_processing (1.13.0)
-      mini_magick (>= 4.9.5, < 5)
-      ruby-vips (>= 2.0.17, < 3)
+    image_processing (0.11.2)
     importmap-rails (2.0.1)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -230,7 +217,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     memo_wise (1.9.0)
-    mini_magick (4.13.2)
+    mini_magick (5.0.1)
     mini_mime (1.1.5)
     minitest (5.25.1)
     mission_control-jobs (0.3.1)
@@ -275,6 +262,9 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
+    omniauth-airtable (2.0.0)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (>= 1.4.0, < 2.0)
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
@@ -384,7 +374,7 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.32.0)
+    rubocop-ast (1.32.1)
       parser (>= 3.3.1.0)
     rubocop-minitest (0.35.1)
       rubocop (>= 1.61, < 2.0)
@@ -408,9 +398,6 @@ GEM
       rbs (>= 3, < 4)
       sorbet-runtime (>= 0.5.10782)
     ruby-progressbar (1.13.0)
-    ruby-vips (2.2.2)
-      ffi (~> 1.12)
-      logger
     securerandom (0.3.1)
     singed (0.2.2)
       colorize
@@ -502,7 +489,7 @@ DEPENDENCIES
   mini_magick
   mission_control-jobs
   oj
-  omniauth-airtable!
+  omniauth-airtable
   omniauth-rails_csrf_protection
   pagy
   pg
