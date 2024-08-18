@@ -172,7 +172,19 @@ const commonOptions = () => {
         } else {
           s = [`${Highcharts.dateFormat("%M:%S.%L", this.x)}<br>`]
         }
-        return s.concat(tooltip.bodyFormatter(this.points))
+
+        const visibleSeries = this.points.filter(point => point.series.visible)
+        if (visibleSeries.length === 2) {
+          const [series1, series2] = visibleSeries
+          const diff = Math.abs(series1.y - series2.y)
+          const formattedDiff = Highcharts.numberFormat(diff, 2)
+          s = s.concat(tooltip.bodyFormatter(visibleSeries))
+          s.push(`Δ <strong>${formattedDiff}</strong>`)
+        } else {
+          s = s.concat(tooltip.bodyFormatter(this.points))
+        }
+
+        return s
       },
     },
     legend: {
