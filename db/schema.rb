@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_15_061156) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_24_092339) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -286,6 +286,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_15_061156) do
     t.string "hostname"
     t.text "metadata"
     t.datetime "created_at", null: false
+    t.string "name"
     t.index ["last_heartbeat_at"], name: "index_solid_queue_processes_on_last_heartbeat_at"
     t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
   end
