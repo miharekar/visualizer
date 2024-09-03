@@ -9,6 +9,7 @@ module ShotChart::Process
     to_fahrenheit = user&.wants_fahrenheit?
     parsed_shot.data.filter_map do |label, data|
       next if DATA_LABELS_TO_IGNORE.include?(label)
+      next unless data.respond_to?(:map)
 
       times10 = label == "espresso_water_dispensed"
       temperature_label = label.include?("temperature")
