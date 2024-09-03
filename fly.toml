@@ -41,4 +41,4 @@ console_command = "/rails/bin/rails console"
 
 [processes]
   app = "./bin/rails server"
-  queue = "bundle exec rake solid_queue:start"
+  queue = "./bin/jobs"
