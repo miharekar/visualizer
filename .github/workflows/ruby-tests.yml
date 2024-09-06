@@ -33,7 +33,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.4
+          ruby-version: 3.3.5
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
