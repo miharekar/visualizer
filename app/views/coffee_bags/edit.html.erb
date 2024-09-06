@@ -9,6 +9,12 @@
   <div class="md:grid md:grid-cols-3 md:gap-6">
     <div class="md:col-span-1">
       <div class="px-4 sm:px-0">
+        <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+          You made <%=  @coffee_bag.shots.count %> shots with <%= @coffee_bag.name %>
+        </h3>
+        <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          <%= link_to "View shots", shots_path(coffee_bag: @coffee_bag), class: "standard-link" %> with this coffee bag.
+        </p>
       </div>
     </div>
     <%= render "form", coffee_bag: @coffee_bag %>
