@@ -68,6 +68,8 @@ class ShotChart::ParsedShot
   def detect_stages_from_data
     indices = []
     data.select { |label, _| label.end_with?("_goal") }.each do |_, d|
+      next if d.blank?
+
       d = d.map(&:to_f)
       d.each.with_index do |a, i|
         next if i < 5
