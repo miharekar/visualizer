@@ -23,7 +23,8 @@ class ShotChart::ParsedShot
   end
 
   memo_wise def stage_indices
-    data.key?("espresso_state_change") ? stages_from_state_change : detect_stages_from_data
+    has_state_data = data.key?("espresso_state_change") && data["espresso_state_change"].present?
+    has_state_data ? stages_from_state_change : detect_stages_from_data
   end
 
   private
