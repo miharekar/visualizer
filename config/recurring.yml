@@ -13,3 +13,7 @@ populate_stripe_job:
 airtable_webhook_refresh_all_job:
   class: AirtableWebhookRefreshAllJob
   schedule: "0 0 */6 * *"
+solid_queue_cleanup_job:
+  queue: low
+  command: "SolidQueue::Job.clear_finished_in_batches"
+  schedule: "@daily"
