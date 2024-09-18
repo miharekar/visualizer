@@ -4,8 +4,9 @@ class ShotsController < ApplicationController
   FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
   before_action :check_premium!, only: :coffee_bag_form
-  before_action :authenticate_user!, except: %i[show compare share]
-  before_action :load_shot, only: %i[show compare share remove_image]
+  before_action :authenticate_user!, except: %i[show compare share beanconqueror]
+  before_action :load_shot, only: %i[show compare remove_image]
+  before_action :create_shared_shot, only: %i[share beanconqueror]
   before_action :load_users_shot, only: %i[edit update destroy]
   before_action :load_users_shots, only: %i[index search]
   before_action :load_related_shots, only: %i[show edit]
@@ -31,10 +32,11 @@ class ShotsController < ApplicationController
   end
 
   def share
-    share = SharedShot.find_or_initialize_by(shot: @shot, user: current_user)
-    share.created_at = Time.current
-    share.save!
-    render json: {code: share.code}
+    render json: {code: @shared_shot.code}
+  end
+
+  def beanconqueror
+    redirect_to "https://beanconqueror.com?visualizerShare=#{@shared_shot.code}", allow_other_host: true
   end
 
   def edit
@@ -144,6 +146,13 @@ class ShotsController < ApplicationController
 
   def load_related_shots
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
+  end
+
+  def create_shared_shot
+    load_shot
+    @shared_shot = SharedShot.find_or_initialize_by(shot: @shot, user: current_user)
+    @shared_shot.created_at = Time.current
+    @shared_shot.save!
   end
 
   def update_shot_params

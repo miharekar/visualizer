@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     member do
       delete :remove_image
       get :share
+      get :beanconqueror
       get "/compare/:comparison", to: "shots#compare"
     end
     collection do

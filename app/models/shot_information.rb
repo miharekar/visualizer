@@ -16,8 +16,12 @@ class ShotInformation < ApplicationRecord
     super || {}
   end
 
+  def parser
+    brewdata.fetch("parser", "Parsers::DecentTcl")
+  end
+
   def has_chart_data?
-    brewdata["parser"] != "Parsers::Beanconqueror"
+    parser != "Parsers::Beanconqueror"
   end
 end
 
