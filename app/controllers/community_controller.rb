@@ -15,7 +15,7 @@ class CommunityController < ApplicationController
   def index
     if params[:commit] || current_user.blank? || current_user.premium?
       load_shots
-      @shots = @shots unless current_user&.premium?
+      @shots = @shots.non_premium unless current_user&.premium?
       @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
     else
       @shots = []
