@@ -37,6 +37,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "14055d9924608c232748f193d80566000d6e0a22dc6c90a8303ac816f73f8c37",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/community_controller.rb",
+      "line": 55,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Shot.visible_or_owned_by_id(current_user.id).includes(:user).where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CommunityController",
+        "method": "load_shots"
+      },
+      "user_input": "filter",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "2a85e33173873dd3443542167f774a47c52dcf9a8f7330889bbc763a5d092c77",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -113,31 +136,8 @@
         22
       ],
       "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "980f7b358defa70d4f2f3393b5d08890cbd80727be859d8cff677b9d4e0d9be2",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/community_controller.rb",
-      "line": 25,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Shot.visible_or_owned_by_id(current_user.id).includes(:user).where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CommunityController",
-        "method": "index"
-      },
-      "user_input": "filter",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": ""
     }
   ],
-  "updated": "2024-09-18 14:31:35 +0200",
+  "updated": "2024-09-19 10:27:36 +0200",
   "brakeman_version": "6.2.1"
 }

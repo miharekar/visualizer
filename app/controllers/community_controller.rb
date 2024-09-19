@@ -14,29 +14,17 @@ class CommunityController < ApplicationController
 
   def index
     if params[:commit] || current_user.blank? || current_user.premium?
-      @shots = Shot.visible_or_owned_by_id(current_user&.id).includes(:user)
-      FILTERS.each do |filter, options|
-        next if params[filter].blank?
-
-        @shots = if options[:target]
-          find_user_by_name if filter == :user && params[options[:target]].blank?
-          @shots.where(options[:target] => params[options[:target]])
-        else
-          @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
-        end
-      end
-      @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
-      @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
-
-      unless current_user&.premium?
-        @premium_count = Rails.cache.fetch(name: "premium_count", sql: @shots.to_sql, expires_in: 1.hour) { @shots.premium.count }
-        @shots = @shots.non_premium
-      end
-
+      load_shots
+      @shots = @shots unless current_user&.premium?
       @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
     else
       @shots = []
     end
+  end
+
+  def banner
+    load_shots
+    @premium_count = Rails.cache.fetch("premium_count/#{@shots.to_sql}", expires_in: 1.hour) { @shots.premium.count }
   end
 
   def autocomplete
@@ -54,6 +42,22 @@ class CommunityController < ApplicationController
   end
 
   private
+
+  def load_shots
+    @shots = Shot.visible_or_owned_by_id(current_user&.id).includes(:user)
+    FILTERS.each do |filter, options|
+      next if params[filter].blank?
+
+      @shots = if options[:target]
+        find_user_by_name if filter == :user && params[options[:target]].blank?
+        @shots.where(options[:target] => params[options[:target]])
+      else
+        @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
+      end
+    end
+    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
+    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+  end
 
   def find_user_by_name
     user = values_for_query(:user, params[:user]).first

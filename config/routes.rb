@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   resources :community, only: [:index] do
     collection do
       get :autocomplete
+      get :banner
     end
   end
   get "/search", to: redirect("/community")
