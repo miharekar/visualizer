@@ -41,7 +41,7 @@ profile_language en
 profile_notes {...
 
 Downloaded from Visualizer}
-profile_title Visualizer/TurboBloom
+profile_title TurboBloom
 profile_to_save TurboBloom
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

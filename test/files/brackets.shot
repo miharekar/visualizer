@@ -12,7 +12,7 @@ espresso_pressure_goal {-1.0 1.75 1.875 1.9375 1.9375 2.0 2.0 2.0 2.0 2.0 2.0 1.
 espresso_flow_goal {-1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0 -1.0}
 espresso_temperature_goal {84.5 84.5 84.5 84.5 84.5 84.5 84.5 84.5 84.5 84.5 84.5 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0 84.0}
 profile {
-  "title": "manual 82",
+  "title": "Visualizer/manual 82",
   "author": "Decent",
   "notes": "This profile simulates a Londinium R machines extraction style. This is an advanced profile with some added steps to assist with less than ideal puck prep. Christee-Lee described it as like having a milkshake with extra syrup. Great body and flavour range.  By Damian Brakel https:\/\/www.diy.brakel.com.au\/londinium-r-style-profile\/",
   "beverage_type": "espresso",
@@ -271,7 +271,7 @@ settings {
 	pressure_rampup_stop_volumetric 100
 	pressure_rampup_timeout 20
 	preview_graph_smoothing_technique quadratic
-	profile {manual 82}
+	profile {Visualizer/manual 82}
 	profile_filename manual_82
 	profile_graph_smoothing_technique quadratic
 	profile_has_changed 0
@@ -279,7 +279,7 @@ settings {
 	profile_language en
 	profile_notes {This profile simulates a Londinium R machines extraction style. This is an advanced profile with some added steps to assist with less than ideal puck prep. Christee-Lee described it as like having a milkshake with extra syrup. Great body and flavour range.  By Damian Brakel https://www.diy.brakel.com.au/londinium-r-style-profile/}
 	profile_step {}
-	profile_title {manual 82}
+	profile_title {Visualizer/manual 82}
 	profile_to_save {manual 84}
 	reconnect_to_scale_on_espresso_start 1
 	repository_links {}

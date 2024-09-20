@@ -41,7 +41,7 @@ profile_language en
 profile_notes {This profile is a more forgiving evolution of Scott Rao’s original blooming profile.
 
 Downloaded from Visualizer}
-profile_title {Visualizer/Easy blooming - active pressure decline}
+profile_title {Easy blooming - active pressure decline}
 profile_to_save {Easy blooming - active pressure decline}
 settings_profile_type settings_2c
 tank_desired_water_temperature 0

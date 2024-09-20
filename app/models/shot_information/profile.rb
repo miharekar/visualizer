@@ -16,7 +16,6 @@ module ShotInformation::Profile
     return if tcl_profile_fields.blank?
 
     tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
-      v = "Visualizer/#{v}" if k == "profile_title"
       v = "#{v.to_s.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if k == "profile_notes"
       v = "{}" if v.blank?
       v = "{#{v}}" if /\w\s\w/.match?(v)
@@ -31,7 +30,6 @@ module ShotInformation::Profile
     json = {}
     JSON_PROFILE_KEYS.each do |key|
       v = profile_fields["json"][key]
-      v = "Visualizer/#{v}" if key == "title"
       v = "#{v.to_s.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if key == "notes"
       json[key] = v
     end

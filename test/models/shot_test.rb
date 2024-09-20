@@ -183,7 +183,7 @@ class ShotTest < ActiveSupport::TestCase
   test "handles brackets in advanced steps" do
     path = "test/files/brackets"
     shot = new_shot("#{path}.shot")
-    assert_equal "manual 82", shot.profile_title
+    assert_equal "Visualizer/manual 82", shot.profile_title
     assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
