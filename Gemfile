@@ -53,7 +53,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "annotate"
+  gem "annotaterb"
   gem "benchmark-ips"
   gem "brakeman", require: false
   gem "dockerfile-rails"
