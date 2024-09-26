@@ -10,3 +10,4 @@ options:
   postgresql: true
   procfile: Procfile.fly
   redis: true
+  thruster: true
