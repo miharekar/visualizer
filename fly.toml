@@ -13,7 +13,7 @@ console_command = "/rails/bin/rails console"
 
 [http_service]
   processes = ["app"]
-  internal_port = 3000
+  internal_port = 80
   force_https = true
   auto_stop_machines = false
   auto_start_machines = true
@@ -27,7 +27,7 @@ console_command = "/rails/bin/rails console"
 
 [checks]
   [checks.status]
-    port = 3000
+    port = 80
     type = "http"
     interval = "10s"
     timeout = "2s"
