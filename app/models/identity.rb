@@ -44,9 +44,17 @@ class Identity < ApplicationRecord
   end
 
   def strategy
-    # TODO fix this
-    # devise_config = Devise.omniauth_configs[provider.to_sym]
-    # devise_config.strategy_class.new(nil, *devise_config.args)
+    case provider
+    when "airtable"
+      OmniAuth::Strategies::Airtable.new(
+        nil,
+        Rails.application.credentials.dig(:airtable, :client_id),
+        Rails.application.credentials.dig(:airtable, :client_secret),
+        scope: "data.records:read data.records:write schema.bases:read schema.bases:write webhook:manage"
+      )
+    else
+      raise "Unknown provider: #{provider}"
+    end
   end
 end
 

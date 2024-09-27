@@ -32,8 +32,7 @@ module Api
 
     def user_from_basic
       authenticate_with_http_basic do |email, password|
-        user = User.find_by(email:)
-        user if user&.valid_password?(password)
+        User.authenticate_by(email:, password:)
       end
     end
   end
