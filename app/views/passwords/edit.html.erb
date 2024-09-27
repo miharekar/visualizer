@@ -1,21 +1,32 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <% if alert = flash[:alert] %>
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
-  <% end %>
-
-  <h1 class="font-bold text-4xl">Update your password</h1>
-
-  <%= form_with url: password_path(params[:token]), method: :put, class: "contents" do |form| %>
-    <div class="my-5">
-      <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter new password", maxlength: 72, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <%= inline_svg_tag "logo.svg", class: "w-auto h-16 mx-auto fill-current text-neutral-900 dark:text-neutral-200" %>
+      <h2 class="mt-10 text-3xl font-extrabold text-center text-neutral-900 dark:text-neutral-200">
+        Update your password
+      </h2>
     </div>
-
-    <div class="my-5">
-      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat new password", maxlength: 72, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    </div>
-
-    <div class="inline">
-      <%= form.submit "Save", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-    </div>
-  <% end %>
+    <%= form_with url: password_path(params[:token]), method: :put, class: "mt-8 space-y-6" do |f| %>
+      <div class="-space-y-px rounded-md shadow-sm">
+        <div>
+          <%= f.password_field :password, required: true, placeholder: "Password (min 8 characters)", autocomplete: "new-password", class: "appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-t-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.password_field :password_confirmation, required: true, placeholder: "Password confirmation", autocomplete: "new-password", class: "appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-b-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm" %>
+        </div>
+      </div>
+      <div>
+        <button class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md group bg-terracotta-600 hover:bg-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" type="submit" data-turbo="false">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <!-- Heroicon name: lock-closed -->
+            <svg class="w-5 h-5 text-terracotta-500 group-hover:text-terracotta-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+            </svg>
+          </span>
+          Update my password
+        </button>
+      </div>
+    <% end %>
+  </div>
 </div>

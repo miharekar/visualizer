@@ -1,6 +1,5 @@
 class PasswordsController < ApplicationController
-  allow_unauthenticated_access
-  before_action :set_user_by_token, only: %i[ edit update ]
+  before_action :set_user_by_token, only: %i[edit update]
 
   def new
   end
@@ -20,7 +19,7 @@ class PasswordsController < ApplicationController
     if @user.update(params.permit(:password, :password_confirmation))
       redirect_to new_session_url, notice: "Password has been reset."
     else
-      redirect_to edit_password_url(params[:token]), alert: "Passwords did not match."
+      redirect_to edit_password_url(params[:token]), alert: @user.errors.full_messages.join(", ")
     end
   end
 
