@@ -1,6 +1,5 @@
 module Api
   class BaseController < ApplicationController
-    allow_unauthenticated_access
     skip_before_action :verify_authenticity_token
 
     private
