@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
   authenticate :user, ->(user) { user.admin? } do
@@ -6,7 +8,8 @@ Rails.application.routes.draw do
     mount PgHero::Engine, at: "/pghero"
   end
 
-  devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
+  # Have to comment this out, otherwise it raises error on rails generate authentication
+  # devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
 
   use_doorkeeper do
     controllers applications: "oauth/applications"

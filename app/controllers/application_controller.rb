@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Authentication
   before_action :profiling
   before_action :set_timezone
   before_action :set_skin
