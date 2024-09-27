@@ -9,5 +9,6 @@ options:
   link: true
   parallel: true
   postgresql: true
+  prepare: false
   redis: true
   thruster: true

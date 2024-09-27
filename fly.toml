@@ -9,16 +9,20 @@ console_command = "/rails/bin/rails console"
 
 [deploy]
   strategy = "canary"
-  release_command = "bin/rails db:migrate"
+  release_command = "./bin/rails db:prepare"
+
+[processes]
+  app = "./bin/thrust ./bin/rails server"
+  queue = "./bin/jobs"
 
 [http_service]
-  processes = ["app"]
-  internal_port = 80
+  internal_port = 3000
   force_https = true
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1
   h2_backend = true
+  processes = ["app"]
 
   [http_service.concurrency]
     type = "requests"
@@ -27,7 +31,7 @@ console_command = "/rails/bin/rails console"
 
 [checks]
   [checks.status]
-    port = 80
+    port = 3000
     type = "http"
     interval = "10s"
     timeout = "2s"
@@ -36,9 +40,6 @@ console_command = "/rails/bin/rails console"
     path = "/up"
     protocol = "http"
     tls_skip_verify = false
+
     [checks.status.headers]
       X-Forwarded-Proto = "https"
-
-[processes]
-  app = "./bin/thrust bin/rails server"
-  queue = "./bin/jobs"
