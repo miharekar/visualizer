@@ -56,7 +56,7 @@ FROM base
 RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
   --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl imagemagick libjemalloc2 libvips postgresql-client ruby-foreman
+  apt-get install --no-install-recommends -y curl imagemagick libjemalloc2 libvips postgresql-client
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
@@ -73,3 +73,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 80
+CMD ["./bin/rails", "thrust", "./bin/rails", "server"]

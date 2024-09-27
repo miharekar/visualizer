@@ -6,8 +6,8 @@ options:
   jemalloc: true
   label:
     fly_launch_runtime: rails
+  link: true
   parallel: true
   postgresql: true
-  procfile: Procfile.fly
   redis: true
   thruster: true

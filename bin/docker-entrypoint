@@ -5,8 +5,4 @@ if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi
 
-if [ "${*}" == "foreman start --procfile=Procfile.fly" ]; then
-  ./bin/rails db:prepare
-fi
-
 exec "${@}"
