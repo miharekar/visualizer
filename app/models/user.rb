@@ -28,6 +28,8 @@ class User < ApplicationRecord
   scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
   scope :order_by_name, -> { order("LOWER(name)") }
 
+  validates :email, presence: true, uniqueness: true
+  validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
 
   normalizes :email, with: ->(e) { e.strip.downcase }
