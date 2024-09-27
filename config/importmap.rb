@@ -6,11 +6,12 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 
 # use rails importmap:check to check for major version changes
-pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@11.4.7/es-modules/masters/modules/annotations.src.min.js"
 pin "highcharts", to: "https://cdn.jsdelivr.net/npm/highcharts@11.4.7/es-modules/masters/highcharts.src.min.js"
-pin "highlight.js", to: "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js"
+pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@11.4.7/es-modules/masters/modules/annotations.src.min.js"
 
-# use bin/importmap update to update the local ones
+pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js
+
+# use bin/importmap update to update the local ones below
 pin "el-transition" # @0.0.7
 pin "match-sorter" # @6.3.4
 pin "remove-accents" # @0.5.0
