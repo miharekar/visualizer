@@ -8,9 +8,13 @@ export default class extends Controller {
     this.shown = false
     this.selected = this.listTarget.querySelector(".is-selected") || this.active
     this.allowCustom = this.element.hasAttribute("data-allow-custom")
+    this.allItems = Array.from(this.listTarget.querySelectorAll("li"))
+    this.listTarget.innerHTML = ""
   }
 
   show() {
+    if (this.shown) return
+
     this.shown = true
     this.inputTarget.focus()
     this.listTarget.classList.remove("hidden")
@@ -25,7 +29,20 @@ export default class extends Controller {
 
     event.stopPropagation()
     this.shown = false
-    if (this.selected && !this.allowCustom) this.inputTarget.value = this.selected.dataset.name
+
+    if (this.allowCustom) {
+      if (this.selected?.dataset.name !== this.inputTarget.value) {
+        this.selected = null
+      }
+    } else {
+      if (this.selected) {
+        this.inputTarget.value = this.selected.dataset.name
+      } else {
+        this.inputTarget.value = ""
+      }
+    }
+
+    this.markAllAsUnselected()
     this.listTarget.classList.add("hidden")
     this.inputTarget.blur()
   }
@@ -53,19 +70,19 @@ export default class extends Controller {
   }
 
   filter() {
-    const items = this.listTarget.querySelectorAll("li")
-    const matches = matchSorter([...items], this.inputTarget.value, { keys: [item => item.dataset.name] })
-    items.forEach((el) => {
-      if (matches.includes(el)) {
-        el.classList.remove("hidden")
-      } else {
-        el.classList.add("hidden")
-        if (this.active === el) {
-          this.active = null
-          this.markAllAsInactive()
-        }
-      }
-    })
+    this.show()
+    const sortedMatches = matchSorter(this.allItems, this.inputTarget.value, { keys: [item => item.dataset.name] })
+
+    const matchesHtml = sortedMatches
+      .map(el => this.listTarget.appendChild(el).outerHTML)
+      .join("")
+
+    this.listTarget.innerHTML = matchesHtml
+
+    if (this.active && !sortedMatches.includes(this.active)) {
+      this.active = null
+      this.markAllAsInactive()
+    }
   }
 
   select(event) {
@@ -79,17 +96,13 @@ export default class extends Controller {
     let active = this.getActive()
     if (!active) return
 
-    if (active === this.selected && !this.allowCustom) {
-      this.hide(event)
-      return
+    if (active !== this.selected) {
+      this.selected = active
+      this.inputTarget.value = this.selected.dataset.name
+      this.hiddenInputTarget.value = this.selected.dataset.id
+      this.hiddenInputTarget.dispatchEvent(new Event("change"))
     }
 
-    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
-    this.selected = active
-    this.selected.classList.add("is-selected")
-    this.inputTarget.value = this.selected.dataset.name
-    this.hiddenInputTarget.value = this.selected.dataset.id
-    this.hiddenInputTarget.dispatchEvent(new Event("change"))
     this.hide(event)
   }
 
@@ -97,14 +110,19 @@ export default class extends Controller {
     this.markAsActive(event.currentTarget)
   }
 
+  highlightNext(event) {
+    event.preventDefault()
+
+    if (this.active) {
+      this.markAsActive(this.findNextVisibleElement())
+    } else {
+      this.markAsActive(this.getActive())
+    }
+  }
+
   highlightPrevious(event) {
     event.preventDefault()
     this.markAsActive(this.findPreviousVisibleElement())
-  }
-
-  highlightNext(event) {
-    event.preventDefault()
-    this.markAsActive(this.findNextVisibleElement())
   }
 
   markAsActive(element) {
@@ -143,6 +161,15 @@ export default class extends Controller {
   }
 
   getActive() {
-    return this.active || this.listTarget.querySelector("li:not(.hidden)")
+    let activeId = this.active?.dataset.id
+    if (activeId) return this.listTarget.querySelector(`[data-id="${activeId}"]`)
+    return this.listTarget.querySelector("li:not(.hidden)")
+  }
+
+  markAllAsUnselected() {
+    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
+    this.allItems.forEach(item => {
+      item.classList[item.dataset.id === this.selected?.dataset.id ? "add" : "remove"]("is-selected")
+    })
   }
 }
