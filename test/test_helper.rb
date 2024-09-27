@@ -14,7 +14,6 @@ module ActiveSupport
     parallelize(workers: :number_of_processors)
 
     setup do
-      ActionCable.server.pubsub.clear
       WebMock.disable_net_connect!
     end
 
