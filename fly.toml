@@ -40,5 +40,5 @@ console_command = "/rails/bin/rails console"
       X-Forwarded-Proto = "https"
 
 [processes]
-  app = "./bin/rails server"
+  app = "./bin/thrust bin/rails server"
   queue = "./bin/jobs"
