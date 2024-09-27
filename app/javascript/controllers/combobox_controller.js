@@ -4,10 +4,17 @@ import { matchSorter } from "match-sorter"
 export default class extends Controller {
   static targets = ["input", "hiddenInput", "list"]
 
+  static values = {
+    allowCustom: { type: Boolean, default: false },
+    activeClasses: { type: Array, default: ["bg-terracotta-500", "dark:bg-terracotta-800", "text-white"] },
+    inactiveClasses: { type: Array, default: ["text-neutral-700", "dark:text-neutral-300"] },
+    hiddenClass: { type: String, default: "hidden" },
+    selectedClass: { type: String, default: "is-selected" }
+  }
+
   connect() {
     this.shown = false
-    this.selected = this.listTarget.querySelector(".is-selected") || this.active
-    this.allowCustom = this.element.hasAttribute("data-allow-custom")
+    this.selected = this.listTarget.querySelector(`.${this.selectedClassValue}`) || this.active
     this.allItems = Array.from(this.listTarget.querySelectorAll("li"))
     this.listTarget.innerHTML = ""
   }
@@ -17,7 +24,7 @@ export default class extends Controller {
 
     this.shown = true
     this.inputTarget.focus()
-    this.listTarget.classList.remove("hidden")
+    this.listTarget.classList.remove(this.hiddenClassValue)
     this.listTarget.scrollIntoView({ block: "nearest" })
     this.markAllAsInactive()
     this.active = this.selected
@@ -30,7 +37,7 @@ export default class extends Controller {
     event.stopPropagation()
     this.shown = false
 
-    if (this.allowCustom) {
+    if (this.allowCustomValue) {
       if (this.selected?.dataset.name !== this.inputTarget.value) {
         this.selected = null
       }
@@ -43,7 +50,7 @@ export default class extends Controller {
     }
 
     this.markAllAsUnselected()
-    this.listTarget.classList.add("hidden")
+    this.listTarget.classList.add(this.hiddenClassValue)
     this.inputTarget.blur()
   }
 
@@ -128,19 +135,19 @@ export default class extends Controller {
   markAsActive(element) {
     element = element || this.getActive()
     if (!element) return
-    if (element.classList.contains("bg-terracotta-500")) return
+    if (element.classList.contains(this.activeClassesValue[1])) return
 
     this.active = element
     this.markAllAsInactive()
-    element.classList.remove("text-neutral-700", "dark:text-neutral-300")
-    element.classList.add("text-white", "bg-terracotta-500", "dark:bg-terracotta-800")
+    element.classList.remove(...this.inactiveClassesValue)
+    element.classList.add(...this.activeClassesValue)
     element.scrollIntoView({ block: "nearest" })
   }
 
   markAllAsInactive() {
     this.listTarget.querySelectorAll("li").forEach((el) => {
-      el.classList.add("text-neutral-700", "dark:text-neutral-300")
-      el.classList.remove("text-white", "bg-terracotta-500", "dark:bg-terracotta-800")
+      el.classList.add(...this.inactiveClassesValue)
+      el.classList.remove(...this.activeClassesValue)
     })
   }
 
@@ -148,7 +155,7 @@ export default class extends Controller {
     let element = this.getActive()
     while (element) {
       element = element.previousElementSibling
-      if (element && !element.classList.contains("hidden")) return element
+      if (element && !element.classList.contains(this.hiddenClassValue)) return element
     }
   }
 
@@ -156,20 +163,20 @@ export default class extends Controller {
     let element = this.getActive()
     while (element) {
       element = element.nextElementSibling
-      if (element && !element.classList.contains("hidden")) return element
+      if (element && !element.classList.contains(this.hiddenClassValue)) return element
     }
   }
 
   getActive() {
     let activeId = this.active?.dataset.id
     if (activeId) return this.listTarget.querySelector(`[data-id="${activeId}"]`)
-    return this.listTarget.querySelector("li:not(.hidden)")
+    return this.listTarget.querySelector(`li:not(.${this.hiddenClassValue})`)
   }
 
   markAllAsUnselected() {
-    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove("is-selected") })
+    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove(this.selectedClassValue) })
     this.allItems.forEach(item => {
-      item.classList[item.dataset.id === this.selected?.dataset.id ? "add" : "remove"]("is-selected")
+      item.classList[item.dataset.id === this.selected?.dataset.id ? "add" : "remove"](this.selectedClassValue)
     })
   }
 }

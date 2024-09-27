@@ -2,7 +2,7 @@
 <% id_method = :id unless id_method %>
 <% hidden_data = {} unless hidden_data %>
 <% allow_custom = false unless allow_custom %>
-<div class="relative" data-controller="combobox"<%= " data-allow-custom" if allow_custom %>>
+<div class="relative" data-controller="combobox"<%= "data-combobox-allow-custom-value='true'" if allow_custom %>>
   <%= text_field_tag input_name, selected&.send(name_method), class: "mt-1 standard-input", autocomplete: "off", data: { action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input" } %>
   <%= hidden_field_tag hidden_input_name, selected&.send(id_method), data: hidden_data.merge({ combobox_target: "hiddenInput" }) %>
   <button type="button" class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none" data-action="click->combobox#toggle" tabindex="-1">
