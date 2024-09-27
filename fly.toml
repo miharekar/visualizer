@@ -12,7 +12,7 @@ console_command = "/rails/bin/rails console"
   release_command = "./bin/rails db:prepare"
 
 [processes]
-  app = "./bin/thrust ./bin/rails server"
+  app = "./bin/rails server"
   queue = "./bin/jobs"
 
 [http_service]

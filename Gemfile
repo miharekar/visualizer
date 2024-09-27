@@ -30,7 +30,6 @@ gem "responders"
 gem "slim"
 gem "solid_queue"
 gem "stimulus-rails"
-gem "thruster", "~> 0.1.8"
 
 gem "inline_svg"
 gem "stripe"
