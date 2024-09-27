@@ -1,5 +1,5 @@
 class PremiumController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
+  before_action :require_authentication, except: [:index]
 
   def index
     @features = [
@@ -40,7 +40,7 @@ class PremiumController < ApplicationController
   end
 
   def create
-    if current_user.premium_expires_at&.future?
+    if Current.user.premium_expires_at&.future?
       redirect_to shots_path, flash: {premium: "You're already a premium user. Thank you for your support!"}
     else
       price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
@@ -50,15 +50,15 @@ class PremiumController < ApplicationController
         mode: "subscription",
         allow_promotion_codes: true,
         automatic_tax: {enabled: true},
-        metadata: {user_id: current_user.id},
+        metadata: {user_id: Current.user.id},
         line_items: [{quantity: 1, price: price_id}]
       }
 
-      if current_user.stripe_customer_id.present?
-        session_params[:customer] = current_user.stripe_customer_id
+      if Current.user.stripe_customer_id.present?
+        session_params[:customer] = Current.user.stripe_customer_id
       else
         session_params = session_params.merge(
-          customer_email: current_user.email,
+          customer_email: Current.user.email,
           tax_id_collection: {enabled: true},
           subscription_data: {trial_period_days: 7}
         )
@@ -70,11 +70,11 @@ class PremiumController < ApplicationController
   end
 
   def manage
-    if current_user.stripe_customer_id.blank?
+    if Current.user.stripe_customer_id.blank?
       redirect_to shots_path, flash: {alert: "You don't have a Stripe customer ID. Please subscribe first."}
     else
       session = Stripe::BillingPortal::Session.create(
-        customer: current_user.stripe_customer_id,
+        customer: Current.user.stripe_customer_id,
         return_url: shots_url
       )
       redirect_to session.url, allow_other_host: true
@@ -84,7 +84,7 @@ class PremiumController < ApplicationController
   def success
     session = Stripe::Checkout::Session.retrieve(params[:session_id])
     subscription = Stripe::Subscription.retrieve(session.subscription)
-    current_user.update(
+    Current.user.update(
       stripe_customer_id: session.customer,
       premium_expires_at: Time.zone.at(subscription.current_period_end) + 1.day
     )

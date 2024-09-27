@@ -7,7 +7,7 @@
       Join a thriving community of coffee enthusiasts. Upload, analyze, and perfect your espresso or filter coffee shots with advanced tools and insights.
     </p>
     <div class="flex items-center justify-center mt-10 gap-x-6">
-      <% path = user_signed_in? ? shots_path : new_user_registration_path %>
+      <% path = authenticated? ? shots_path : registration_new_path %>
       <%= link_to "Get started", path, class: "submit-button px-3.5 py-2.5" %>
     </div>
   </div>

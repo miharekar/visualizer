@@ -1,21 +1,20 @@
 Rails.application.routes.draw do
-  resource :session
-  resources :passwords, param: :token
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
-  authenticate :user, ->(user) { user.admin? } do
+  constraints ->(request) { AuthConstraint.admin?(request) } do
     mount MissionControl::Jobs::Engine, at: "/jobs"
     mount PgHero::Engine, at: "/pghero"
   end
-
-  # Have to comment this out, otherwise it raises error on rails generate authentication
-  # devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
 
   use_doorkeeper do
     controllers applications: "oauth/applications"
   end
 
   root to: "home#show"
+
+  resource :session
+  resources :passwords, param: :token
+  resources :registrations, only: %i[new create]
 
   namespace :api do
     get :me, to: "credentials#me"

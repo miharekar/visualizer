@@ -3,30 +3,30 @@
     <div class="flex justify-between h-16">
       <div class="flex">
         <div class="flex items-center flex-shrink-0">
-          <a class="focus:outline-neutral-500" href="<%= user_signed_in? ? shots_path : root_path %>">
+          <a class="focus:outline-neutral-500" href="<%= authenticated? ? shots_path : root_path %>">
             <%= inline_svg_tag "logo-steam.svg", class: "logo-steam w-10 fill-current stroke-current text-neutral-900 dark:text-neutral-200" %>
           </a>
         </div>
         <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:gap-x-8">
-          <% if user_signed_in? %>
+          <% if authenticated? %>
             <%= active_link_to "Shots", shots_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
-            <% if current_user.coffee_management_enabled? %>
+            <% if Current.user.coffee_management_enabled? %>
               <%= active_link_to "Roasters", roasters_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
             <% end %>
           <% end %>
           <%= active_link_to "Community", community_index_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
-          <% unless user_signed_in? %>
+          <% unless authenticated? %>
             <%= active_link_to "Updates", updates_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium focus:outline-terracotta-500", active: :exclusive, class_active: "border-terracotta-500 text-neutral-900 dark:text-neutral-200", class_inactive: "border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
           <% end %>
         </div>
       </div>
-      <% if user_signed_in? %>
+      <% if authenticated? %>
         <div class="items-center hidden sm:ml-6 sm:flex">
           <div class="relative ml-3">
             <div>
               <button type="button" class="relative flex items-center max-w-xs text-sm bg-white rounded focus:outline-none focus:ring-2 focus:ring-terracotta-500 focus:ring-offset-2 dark:ring-offset-black" data-action="click->menu#transform click@window->menu#hide" data-menu-target="button">
                 <span class="absolute -inset-1.5"></span>
-                <img class="w-8 h-8 rounded" src="<%= avatar_url(current_user, 64) %>">
+                <img class="w-8 h-8 rounded" src="<%= avatar_url(Current.user, 64) %>">
               </button>
               <% if update_count > 0 %>
                 <span class="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-terracotta-600"></span>
@@ -36,24 +36,24 @@
               <div class="px-4 py-3 text-neutral-900 dark:text-neutral-100">
                 <p class="text-sm" >Signed in as</p>
                 <p class="text-sm font-medium truncate">
-                  <%= current_user.display_name %>
+                  <%= Current.user.display_name %>
                 </p>
               </div>
               <div class="py-1">
                 <%= link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
-                <% if current_user.stripe_customer_id.present? %>
+                <% if Current.user.stripe_customer_id.present? %>
                   <%= link_to "Manage Subscription", manage_premium_index_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
-                <% unless current_user.premium? %>
+                <% unless Current.user.premium? %>
                   <%= link_to "Upgrade to Premium", premium_index_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
-                <% if current_user.premium? && !current_user.identities.exists?(provider: "airtable") %>
+                <% if Current.user.premium? && !Current.user.identities.exists?(provider: "airtable") %>
                   <%= button_to "Connect Airtable", user_airtable_omniauth_authorize_path, class: "block px-4 py-2 w-full text-left text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo: false} %>
                 <% end %>
-                <% if current_user.developer? %>
+                <% if Current.user.developer? %>
                   <%= link_to "OAuth Applications", oauth_applications_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo: false} %>
                 <% end %>
-                <% if current_user.decent_token.blank? %>
+                <% if Current.user.decent_token.blank? %>
                   <%= link_to "Connect with Decent", new_decent_token_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
               </div>
@@ -70,7 +70,7 @@
                 <% end %>
               </div>
               <div class="py-1">
-                <%= link_to "Sign Out", destroy_user_session_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_method: :delete} %>
+                <%= link_to "Sign Out", session_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_method: :delete} %>
               </div>
             </div>
           </div>
@@ -78,10 +78,10 @@
       <% else %>
         <div class="hidden sm:ml-6 sm:flex sm:gap-x-8">
           <% if controller_name != "sessions" %>
-            <%= link_to "Sign In", new_user_session_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
+            <%= link_to "Sign In", new_session_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
           <% end %>
           <% if controller_name != "registrations" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
+            <%= link_to "Sign Up", registration_new_path, class: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium border-transparent text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:border-neutral-300" %>
           <% end %>
         </div>
       <% end %>
@@ -94,7 +94,7 @@
           <svg class="hidden w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-menu-target="toggleable">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <% if current_user && update_count > 0 %>
+          <% if authenticated? && update_count > 0 %>
             <span class="absolute top-0 right-0 inline-block w-3 h-3 transform bg-terracotta-600 rounded-full -translate-x-1 translate-y-1.5" data-menu-target="toggleable"></span>
           <% end %>
         </button>
@@ -103,21 +103,21 @@
   </div>
   <div class="hidden sm:hidden" data-menu-target="toggleable">
     <div class="pt-2 pb-3 gap-y-1">
-      <% if user_signed_in? %>
+      <% if authenticated? %>
         <%= active_link_to "Shots", shots_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
-        <% if current_user.coffee_management_enabled? %>
+        <% if Current.user.coffee_management_enabled? %>
           <%= active_link_to "Roasters", roasters_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
         <% end %>
       <% end %>
       <%= active_link_to "Community", community_index_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
-      <% unless user_signed_in? %>
+      <% unless authenticated? %>
         <%= active_link_to "Updates", updates_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/5", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
       <% end %>
     </div>
     <div class="pb-3 border-t border-neutral-200 dark:border-neutral-800">
       <div class="mt-3 gap-y-1">
         <%= active_link_to "Edit Profile", edit_profiles_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/50", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
-        <% if user_signed_in? %>
+        <% if authenticated? %>
           <%= active_link_to updates_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/50", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" do %>
             <div class="flex items-center">
               <div class="grow">Updates</div>
@@ -130,19 +130,19 @@
               <% end %>
             </div>
           <% end %>
-          <% if current_user.stripe_customer_id.present? %>
+          <% if Current.user.stripe_customer_id.present? %>
             <%= link_to "Manage Subscription", manage_premium_index_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
           <% end %>
-          <% unless current_user.premium? %>
+          <% unless Current.user.premium? %>
             <%= active_link_to "Upgrade to Premium", premium_index_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/50", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
           <% end %>
-          <%= link_to "Sign Out", destroy_user_session_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300", data: {turbo_method: :delete} %>
+          <%= link_to "Sign Out", session_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300", data: {turbo_method: :delete} %>
         <% else %>
           <% if controller_name != "sessions" %>
-            <%= link_to "Sign In", new_user_session_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+            <%= link_to "Sign In", new_session_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
           <% end %>
           <% if controller_name != "registrations" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+            <%= link_to "Sign Up", registration_new_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
           <% end %>
         <% end %>
       </div>

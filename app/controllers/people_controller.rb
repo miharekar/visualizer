@@ -14,7 +14,7 @@ class PeopleController < ApplicationController
       redirect_to community_index_path, alert: "User #{params[:id]} was not found"
     else
       @shots = @user.shots
-      unless current_user&.premium?
+      unless Current.user&.premium?
         @premium_count = @shots.premium.count
         @shots = @shots.non_premium
       end

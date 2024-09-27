@@ -4,7 +4,7 @@ class ShotsController < ApplicationController
   FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
   before_action :check_premium!, only: :coffee_bag_form
-  before_action :authenticate_user!, except: %i[show compare share beanconqueror]
+  before_action :require_authentication, except: %i[show compare share beanconqueror]
   before_action :load_shot, only: %i[show compare remove_image]
   before_action :create_shared_shot, only: %i[share beanconqueror]
   before_action :load_users_shot, only: %i[edit update destroy]
@@ -17,15 +17,15 @@ class ShotsController < ApplicationController
 
   def show
     @shot.ensure_screenshot
-    @chart = ShotChart.new(@shot, current_user) if @shot.information
-    return if current_user.nil?
+    @chart = ShotChart.new(@shot, Current.user) if @shot.information
+    return if Current.user.nil?
 
-    @compare_shots = current_user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
+    @compare_shots = Current.user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
   end
 
   def compare
     @comparison = Shot.find(params[:comparison])
-    @chart = ShotChartCompare.new(@shot, @comparison, current_user) if @shot.information && @comparison.information
+    @chart = ShotChartCompare.new(@shot, @comparison, Current.user) if @shot.information && @comparison.information
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
@@ -40,7 +40,7 @@ class ShotsController < ApplicationController
   end
 
   def edit
-    shots = current_user.shots
+    shots = Current.user.shots
     %i[grinder_model bean_brand bean_type].each do |method|
       unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).select(&:present?) }
       instance_variable_set(:"@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
@@ -49,7 +49,7 @@ class ShotsController < ApplicationController
 
   def create
     files = Array(params[:files])
-    shots = files.map { |file| Shot.from_file(current_user, file.read) }
+    shots = files.map { |file| Shot.from_file(Current.user, file.read) }
 
     if shots.all? { |shot| shot.save }
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
@@ -72,7 +72,7 @@ class ShotsController < ApplicationController
 
   def update
     @shot.update(update_shot_params)
-    if params[:shot][:image].present? && current_user.premium?
+    if params[:shot][:image].present? && Current.user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
         @shot.image.attach(params[:shot][:image])
       else
@@ -104,8 +104,8 @@ class ShotsController < ApplicationController
 
   def coffee_bag_form
     @coffee_bag = CoffeeBag.find_by(id: params[:coffee_bag])
-    @roasters = current_user.roasters.order_by_name.with_at_least_one_coffee_bag
-    @roaster = params.key?(:roaster_id) ? current_user.roasters.find_by(id: params[:roaster_id]) : @coffee_bag&.roaster
+    @roasters = Current.user.roasters.order_by_name.with_at_least_one_coffee_bag
+    @roaster = params.key?(:roaster_id) ? Current.user.roasters.find_by(id: params[:roaster_id]) : @coffee_bag&.roaster
     @coffee_bags = @roaster&.coffee_bags&.order_by_roast_date
 
     render layout: false
@@ -120,15 +120,15 @@ class ShotsController < ApplicationController
   end
 
   def load_users_shot
-    @shot = current_user.shots.find(params[:id])
+    @shot = Current.user.shots.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to shots_path, alert: "Shot not found!"
   end
 
   def load_users_shots
-    @shots = current_user.shots.with_attached_image
+    @shots = Current.user.shots.with_attached_image
 
-    unless current_user.premium?
+    unless Current.user.premium?
       @premium_count = @shots.premium.count
       @shots = @shots.non_premium
     end
@@ -150,15 +150,15 @@ class ShotsController < ApplicationController
 
   def create_shared_shot
     load_shot
-    @shared_shot = SharedShot.find_or_initialize_by(shot: @shot, user: current_user)
+    @shared_shot = SharedShot.find_or_initialize_by(shot: @shot, user: Current.user)
     @shared_shot.created_at = Time.current
     @shared_shot.save!
   end
 
   def update_shot_params
     allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
-    allowed << {metadata: current_user.metadata_fields} if current_user.premium?
-    allowed << :coffee_bag_id if current_user.coffee_management_enabled?
+    allowed << {metadata: Current.user.metadata_fields} if Current.user.premium?
+    allowed << :coffee_bag_id if Current.user.coffee_management_enabled?
     params.require(:shot).permit(allowed)
   end
 end

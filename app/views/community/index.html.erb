@@ -1,6 +1,6 @@
 <% content_for(:html_title) { "Visualizer | Community" } %>
-<% unless current_user&.premium? %>
-  <% if current_user&.id == params[:user_id] %>
+<% unless Current.user&.premium? %>
+  <% if Current.user&.id == params[:user_id] %>
     <%= render "instant_filters_promo" %>
   <% else %>
     <%= turbo_frame_tag "banner", src: banner_community_index_path(params.permit!) %>

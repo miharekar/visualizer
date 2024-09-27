@@ -5,10 +5,10 @@ ruby "3.3.5"
 
 gem "active_link_to"
 gem "aws-sdk-s3", require: false
+gem "bcrypt"
 gem "bootsnap", require: false
 gem "cloudinary"
 gem "csv"
-gem "devise"
 gem "doorkeeper"
 gem "image_processing"
 gem "importmap-rails"

@@ -1,8 +1,8 @@
 class YearlyBrewController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
+  before_action :require_authentication, except: [:show]
 
   def index
-    @yearly_brew = YearlyBrew.new(current_user, year: 2023)
+    @yearly_brew = YearlyBrew.new(Current.user, year: 2023)
   end
 
   def show
@@ -12,7 +12,7 @@ class YearlyBrewController < ApplicationController
       @yearly_brew = YearlyBrew.new(@user, year: 2023)
     else
       flash[:alert] = "Yearly Brew not found"
-      if current_user
+      if Current.user
         redirect_to action: :index
       else
         redirect_to root_path

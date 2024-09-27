@@ -5,7 +5,8 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_user || warden.authenticate!(scope: :user)
+    # TODO fix this
+    Current.user || warden.authenticate!(scope: :user)
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -14,7 +15,7 @@ Doorkeeper.configure do
   # every time somebody will try to access the admin web interface.
 
   admin_authenticator do
-    next true if current_user&.developer?
+    next true if Current.user&.developer?
 
     redirect_to root_url, alert: "You don't have access to this page."
   end

@@ -5,7 +5,7 @@
     .flex-1.mt-6.md:ml-3.md:mt-0
       = render "details", shot: @comparison, name: true
 
-- if current_user&.premium? && @chart
+- if Current.user&.premium? && @chart
   .max-w-7xl.mx-auto.py-6.px-2.sm:px-6.lg:px-8
     .text-center.text-lg.text-neutral-900.dark:text-neutral-100
       ' Adjust comparison timing

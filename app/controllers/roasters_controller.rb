@@ -11,14 +11,14 @@ class RoastersController < ApplicationController
   end
 
   def new
-    @roaster = current_user.roasters.build
+    @roaster = Current.user.roasters.build
   end
 
   def edit
   end
 
   def create
-    @roaster = current_user.roasters.build(roaster_params)
+    @roaster = Current.user.roasters.build(roaster_params)
     if @roaster.save
       redirect_to roasters_path(format: :html), notice: "Roaster was successfully created."
     else
@@ -47,11 +47,11 @@ class RoastersController < ApplicationController
   private
 
   def set_roaster
-    @roaster = current_user.roasters.find(params[:id])
+    @roaster = Current.user.roasters.find(params[:id])
   end
 
   def load_roasters
-    @roasters = current_user.roasters.order_by_name.includes(:coffee_bags)
+    @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
     @roasters = @roasters.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
     @roasters = @roasters.joins(:coffee_bags).where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
   end

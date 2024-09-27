@@ -13,6 +13,7 @@ module Authentication
   end
 
   private
+
   def authenticated?
     Current.session.present?
   end

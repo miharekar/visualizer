@@ -44,8 +44,9 @@ class Identity < ApplicationRecord
   end
 
   def strategy
-    devise_config = Devise.omniauth_configs[provider.to_sym]
-    devise_config.strategy_class.new(nil, *devise_config.args)
+    # TODO fix this
+    # devise_config = Devise.omniauth_configs[provider.to_sym]
+    # devise_config.strategy_class.new(nil, *devise_config.args)
   end
 end
 

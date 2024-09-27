@@ -17,11 +17,11 @@ module ApplicationHelper
   end
 
   def update_count
-    @update_count ||= Update.where("published_at > ?", current_user.last_read_change || Time.current).count
+    @update_count ||= Update.where("published_at > ?", Current.user.last_read_change || Time.current).count
   end
 
   def show_premium_banner?
-    current_user && !current_user.premium? && current_user.shots.premium.any?
+    Current.user && !Current.user.premium? && Current.user.shots.premium.any?
   end
 
   def public_image_url(image)

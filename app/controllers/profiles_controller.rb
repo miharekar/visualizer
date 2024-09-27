@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :require_authentication
   before_action :set_profile
   before_action :set_authorized_applications
 
@@ -60,17 +60,17 @@ class ProfilesController < ApplicationController
   private
 
   def set_profile
-    @profile = (params.key?(:id) && current_user.admin?) ? User.find(params[:id]) : current_user
+    @profile = (params.key?(:id) && Current.user.admin?) ? User.find(params[:id]) : Current.user
   end
 
   def set_authorized_applications
-    @authorized_applications = Doorkeeper.config.application_model.authorized_for(current_user)
+    @authorized_applications = Doorkeeper.config.application_model.authorized_for(Current.user)
   end
 
   def profile_params
     allowed_params = %i[avatar name timezone temperature_unit skin public hide_shot_times]
-    allowed_params << %i[github supporter developer] if current_user.admin?
-    allowed_params << %i[coffee_management_enabled] if current_user.premium?
+    allowed_params << %i[github supporter developer] if Current.user.admin?
+    allowed_params << %i[coffee_management_enabled] if Current.user.premium?
     notification_settings = {unsubscribed_from: User::EMAIL_NOTIFICATIONS - params[:user][:email_notifications] || []}
 
     params.require(:user).permit(allowed_params).merge(chart_settings).merge(notification_settings)
