@@ -12,8 +12,8 @@ Rails.application.routes.draw do
 
   root to: "home#show"
 
-  resource :session
-  resources :passwords, param: :token
+  resource :session, only: %i[new create destroy]
+  resources :passwords, param: :token, only: %i[new create edit update]
   resources :registrations, only: %i[new create]
 
   get "auth/airtable/callback", to: "omniauth_callbacks#airtable"
