@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resources :registrations, only: %i[new create]
 
+  get "auth/airtable/callback", to: "omniauth_callbacks#airtable"
+  get "auth/airtable", as: :connect_airtable
+  get "auth/failure", to: "sessions#omniauth_failure"
+
   namespace :api do
     get :me, to: "credentials#me"
     resources :shots, only: %i[show index destroy] do

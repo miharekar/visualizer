@@ -18,4 +18,9 @@ class SessionsController < ApplicationController
     terminate_session
     redirect_to new_session_url
   end
+
+  def omniauth_failure
+    Appsignal.set_message(params[:message])
+    redirect_to root_url, alert: params.values_at(:strategy, :message).join(" ").titleize
+  end
 end

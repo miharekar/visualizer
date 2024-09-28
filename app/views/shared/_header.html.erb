@@ -48,7 +48,7 @@
                   <%= link_to "Upgrade to Premium", premium_index_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
                 <% if Current.user.premium? && !Current.user.identities.exists?(provider: "airtable") %>
-                  <%= button_to "Connect Airtable", user_airtable_omniauth_authorize_path, class: "block px-4 py-2 w-full text-left text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo: false} %>
+                  <%= button_to "Connect Airtable", connect_airtable_path, class: "block px-4 py-2 w-full text-left text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo: false} %>
                 <% end %>
                 <% if Current.user.developer? %>
                   <%= link_to "OAuth Applications", oauth_applications_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo: false} %>
