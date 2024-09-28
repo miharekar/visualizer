@@ -44,8 +44,16 @@ class Identity < ApplicationRecord
   end
 
   def strategy
-    devise_config = Devise.omniauth_configs[provider.to_sym]
-    devise_config.strategy_class.new(nil, *devise_config.args)
+    case provider
+    when "airtable"
+      OmniAuth::Strategies::Airtable.new(
+        nil,
+        Rails.application.credentials.dig(:airtable, :client_id),
+        Rails.application.credentials.dig(:airtable, :client_secret),
+      )
+    else
+      raise "Unknown provider: #{provider}"
+    end
   end
 end
 

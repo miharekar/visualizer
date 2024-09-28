@@ -10,8 +10,8 @@ module Api
       limit = 10 if limit.zero?
       limit = 100 if limit.to_i > 100
 
-      shots = current_user.present? ? current_user.shots : Shot.visible
-      shots = shots.non_premium unless current_user&.premium?
+      shots = Current.user.present? ? Current.user.shots : Shot.visible
+      shots = shots.non_premium unless Current.user&.premium?
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
 
       pagy, shots = pagy(shots, limit:)
@@ -43,8 +43,8 @@ module Api
     end
 
     def shared
-      if current_user.present?
-        distinct_shots = current_user.shared_shots.distinct.pluck(:shot_id)
+      if Current.user.present?
+        distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
         render json: Shot.where(id: distinct_shots).map { |s| shot_json(s, with_data: params[:with_data].presence) }
       else
         shared = SharedShot.find_by(code: params[:code].to_s.upcase)
@@ -57,7 +57,7 @@ module Api
     end
 
     def upload
-      shot = Shot.from_file(current_user, params[:file].read)
+      shot = Shot.from_file(Current.user, params[:file].read)
       if shot&.save
         render json: {id: shot.id}
       else
@@ -66,7 +66,7 @@ module Api
     end
 
     def destroy
-      shot = current_user.shots.find_by(id: params[:id])
+      shot = Current.user.shots.find_by(id: params[:id])
       if shot
         shot.destroy!
         render json: {success: true}

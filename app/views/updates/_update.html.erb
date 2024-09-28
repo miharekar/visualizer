@@ -10,7 +10,7 @@
         <span class="h-4 w-0.5 rounded-full bg-neutral-200 dark:bg-neutral-500"></span>
         <span class="ml-2"><%= update.published_at.strftime('%B %-d, %Y') %></span>
       </time>
-      <%= link_to "Edit", edit_update_path(update) if current_user&.admin %>
+      <%= link_to "Edit", edit_update_path(update) if Current.user&.admin %>
     </div>
     <%= markdown_text_from(update.body) %>
   </div>

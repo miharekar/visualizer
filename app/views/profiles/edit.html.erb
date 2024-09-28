@@ -25,7 +25,7 @@
           </p>
         <% end %>
       </div>
-      <% if current_user.has_airtable? %>
+      <% if Current.user.has_airtable? %>
         <hr class="my-6">
         <div class="px-4 sm:px-0" data-controller="modal">
           <%= render "shared/modal" %>

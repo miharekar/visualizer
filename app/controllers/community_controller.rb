@@ -13,9 +13,9 @@ class CommunityController < ApplicationController
   }.freeze
 
   def index
-    if params[:commit] || current_user.blank? || current_user.premium?
+    if params[:commit] || Current.user.blank? || Current.user.premium?
       load_shots
-      @shots = @shots.non_premium unless current_user&.premium?
+      @shots = @shots.non_premium unless Current.user&.premium?
       @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
     else
       @shots = []
@@ -35,7 +35,7 @@ class CommunityController < ApplicationController
 
   def unique_values_for(filter)
     if filter == :user
-      User.visible_or_id(current_user&.id).order_by_name
+      User.visible_or_id(Current.user&.id).order_by_name
     else
       Rails.cache.read("unique_values_for_#{filter}")
     end
@@ -44,7 +44,7 @@ class CommunityController < ApplicationController
   private
 
   def load_shots
-    @shots = Shot.visible_or_owned_by_id(current_user&.id).includes(:user)
+    @shots = Shot.visible_or_owned_by_id(Current.user&.id).includes(:user)
     FILTERS.each do |filter, options|
       next if params[filter].blank?
 

@@ -2,15 +2,16 @@ class User < ApplicationRecord
   include Sluggable
   slug_from :name
 
+  has_secure_password
+
   EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter].freeze
 
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
 
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :omniauthable
-
   generates_token_for :unsubscribe
 
+  has_many :sessions, dependent: :destroy
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
   has_many :identities, dependent: :destroy
@@ -27,7 +28,11 @@ class User < ApplicationRecord
   scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
   scope :order_by_name, -> { order("LOWER(name)") }
 
+  validates :email, presence: true, uniqueness: true
+  validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
+
+  normalizes :email, with: ->(e) { e.strip.downcase }
 
   def self.admin
     where(admin: true).first
@@ -125,17 +130,14 @@ end
 #  decent_token              :string
 #  developer                 :boolean
 #  email                     :string           default(""), not null
-#  encrypted_password        :string           default(""), not null
 #  github                    :string
 #  hide_shot_times           :boolean
 #  last_read_change          :datetime
 #  metadata_fields           :jsonb
 #  name                      :string
+#  password_digest           :string           default(""), not null
 #  premium_expires_at        :datetime
 #  public                    :boolean          default(FALSE)
-#  remember_created_at       :datetime
-#  reset_password_sent_at    :datetime
-#  reset_password_token      :string
 #  skin                      :string
 #  slug                      :string
 #  supporter                 :boolean
@@ -148,7 +150,6 @@ end
 #
 # Indexes
 #
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
-#  index_users_on_slug                  (slug) UNIQUE
+#  index_users_on_email  (email) UNIQUE
+#  index_users_on_slug   (slug) UNIQUE
 #

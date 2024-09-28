@@ -5,7 +5,7 @@ class UpdatesController < ApplicationController
   before_action :set_update, only: %i[show edit update]
 
   def index
-    current_user&.update(last_read_change: Time.current)
+    Current.user&.update(last_read_change: Time.current)
     @updates, @cursor = paginate_with_cursor(Update, items: 3, by: :published_at, before: params[:before])
   end
 

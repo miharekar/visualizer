@@ -1,4 +1,4 @@
-<% owner = current_user && @shot.user_id == current_user.id %>
+<% owner = Current.user && @shot.user_id == Current.user.id %>
 <% if owner || @shot.user&.public? || @shot.information&.tcl_profile_fields.present? %>
   <div class="bg-white shadow dark:bg-neutral-900" data-controller="modal">
     <%= render "shared/modal" %>

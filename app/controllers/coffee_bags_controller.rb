@@ -16,7 +16,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def edit
-    @roasters = current_user.roasters.order_by_name.includes(:coffee_bags)
+    @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
   end
 
   def create
@@ -32,7 +32,7 @@ class CoffeeBagsController < ApplicationController
     if @coffee_bag.update(coffee_bag_params)
       redirect_to roaster_coffee_bags_path(@coffee_bag.roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully updated."
     else
-      @roasters = current_user.roasters.order_by_name.includes(:coffee_bags)
+      @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -50,7 +50,7 @@ class CoffeeBagsController < ApplicationController
   private
 
   def set_roaster
-    @roaster = current_user.roasters.find(params[:roaster_id])
+    @roaster = Current.user.roasters.find(params[:roaster_id])
   end
 
   def set_coffee_bag
@@ -64,7 +64,7 @@ class CoffeeBagsController < ApplicationController
 
   def coffee_bag_params
     cb_params = params.require(:coffee_bag).permit(:name, :roaster_id, :roast_date, :roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score, :image)
-    roaster = current_user.roasters.find_by(id: cb_params[:roaster_id])
+    roaster = Current.user.roasters.find_by(id: cb_params[:roaster_id])
     cb_params[:roaster_id] = @roaster.id unless roaster.present?
     cb_params
   end

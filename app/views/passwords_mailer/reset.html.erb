@@ -1,0 +1,43 @@
+<%= content_for :title, "Reset Your Password" %>
+<%= content_for :preheader, "Your password reset link is ready." %>
+<tr>
+  <td class="sm-px-0" style="width: 100%; padding-left: 24px; padding-right: 24px; text-align: left">
+    <table style="width: 100%;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+          <table style="width: 100%;" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="border-radius: 4px; background-color: #fff; padding: 24px; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05)">
+                <h1 style="margin: 0 0 36px; font-size: 36px; line-height: 36px; color: #000">
+                  Reset Your Password
+                </h1>
+                <p style="margin: 0 0 24px; font-size: 16px; color: #000">
+                  You can reset your password within the next 15 minutes by clicking the button below:
+                </p>
+                <table cellpadding="0" cellspacing="0" style="width: 100%;">
+                  <tr>
+                    <td align="center">
+                      <table cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="border-radius: 4px; background-color: #db3e27; text-align: center;">
+                            <%= link_to "Reset Password", edit_password_url(@user.password_reset_token), style: "display: inline-block; padding: 16px 24px; font-size: 16px; color: #ffffff; text-decoration: none;", target: "_blank" %>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin: 24px 0 0; font-size: 16px; color: #000">
+                  If you didn't request a password reset, please ignore this email or contact me (reply) if you have any concerns.
+                </p>
+                <p style="margin: 24px 0 0; font-size: 16px; color: #000">
+                  Stay secure!
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

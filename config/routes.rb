@@ -1,18 +1,24 @@
 Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
-  authenticate :user, ->(user) { user.admin? } do
+  constraints ->(request) { AuthConstraint.admin?(request) } do
     mount MissionControl::Jobs::Engine, at: "/jobs"
     mount PgHero::Engine, at: "/pghero"
   end
-
-  devise_for :users, controllers: {omniauth_callbacks: "omniauth_callbacks"}
 
   use_doorkeeper do
     controllers applications: "oauth/applications"
   end
 
   root to: "home#show"
+
+  resource :session, only: %i[new create destroy]
+  resources :passwords, param: :token, only: %i[new create edit update]
+  resources :registrations, only: %i[new create]
+
+  get "auth/airtable/callback", to: "omniauth_callbacks#airtable"
+  get "auth/airtable", as: :connect_airtable
+  get "auth/failure", to: "sessions#omniauth_failure"
 
   namespace :api do
     get :me, to: "credentials#me"
@@ -88,7 +94,7 @@ Rails.application.routes.draw do
 
   resources :yearly_brew, only: %i[index show]
   resources :stats, only: [:index]
-  resources :customers, only: %i[index ]
+  resources :customers, only: %i[index]
   resources :updates, except: %i[destroy] do
     get :feed, on: :collection
   end

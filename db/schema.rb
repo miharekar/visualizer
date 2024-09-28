@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_24_092548) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_27_122718) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
-  enable_extension "plpgsql"
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -168,6 +168,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_24_092548) do
     t.string "airtable_id"
     t.index ["airtable_id"], name: "index_roasters_on_airtable_id"
     t.index ["user_id", "name"], name: "index_roasters_on_user_id_and_name", unique: true
+  end
+
+  create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -364,10 +373,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_24_092548) do
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "remember_created_at", precision: nil
+    t.string "password_digest", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "skin"
@@ -392,7 +398,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_24_092548) do
     t.string "decent_token"
     t.boolean "coffee_management_enabled"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
@@ -407,6 +412,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_24_092548) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "roasters", "users"
+  add_foreign_key "sessions", "users"
   add_foreign_key "shared_shots", "shots"
   add_foreign_key "shared_shots", "users"
   add_foreign_key "shot_informations", "shots"

@@ -34,7 +34,7 @@
             <%= f.label :grinder_setting, class: "standard-label" %>
             <%= f.text_field :grinder_setting, class: "mt-1 standard-input" %>
           </div>
-          <% if current_user.coffee_management_enabled? %>
+          <% if Current.user.coffee_management_enabled? %>
             <div class="col-span-6">
               <%= turbo_frame_tag "coffee_bag_fields", src: coffee_bag_form_shots_path(coffee_bag: @shot.coffee_bag) %>
             </div>
@@ -70,11 +70,11 @@
             <%= f.text_field :drink_ey, class: "mt-1 standard-input", data: { ey_calculator_target: "ey" } %>
           </div>
         </div>
-        <% if current_user.premium? %>
-          <% if current_user.metadata_fields.any? %>
+        <% if Current.user.premium? %>
+          <% if Current.user.metadata_fields.any? %>
             <%= f.fields_for :metadata do |mf| %>
               <div class="grid grid-cols-6 gap-6">
-                <% current_user.metadata_fields.each do |field| %>
+                <% Current.user.metadata_fields.each do |field| %>
                   <div class="col-span-6 sm:col-span-3">
                     <%= mf.label field, class: "standard-label" %>
                     <%= mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input" %>
@@ -85,7 +85,7 @@
           <% else %>
             <p class="text-neutral-700 dark:text-neutral-300">
               You don't have any custom fields yet.
-              <%= link_to "Add some", edit_profile_path(current_user), class: "font-bold standard-link" %>!
+              <%= link_to "Add some", edit_profile_path(Current.user), class: "font-bold standard-link" %>!
             </p>
           <% end %>
         <% else %>
@@ -114,7 +114,7 @@
             </div>
           </div>
         </div>
-        <% if current_user.premium? %>
+        <% if Current.user.premium? %>
           <div>
             <%= f.label :private_notes, "Private notes", class: "standard-label" %>
             <div class="mt-1">

@@ -1,6 +1,6 @@
-<% owner = current_user && shot.user == current_user %>
+<% owner = Current.user && shot.user == Current.user %>
 <% show_start_time = owner || !shot.user&.hide_shot_times? %>
-<% show_name = name && shot.user && shot.user.public? && shot.user != current_user %>
+<% show_name = name && shot.user && shot.user.public? && shot.user != Current.user %>
 <% bean_weight = shot.bean_weight.to_f %>
 <% drink_weight = shot.drink_weight.to_f %>
 <% ratio = drink_weight / bean_weight %>
@@ -50,7 +50,7 @@
       <%= shot.bean_brand %>
     <% end %>
     <% if shot.bean_type.present? %>
-      <% if owner && current_user.coffee_management_enabled? && shot.coffee_bag %>
+      <% if owner && Current.user.coffee_management_enabled? && shot.coffee_bag %>
         <%= link_to shot.bean_type, edit_roaster_coffee_bag_path(shot.coffee_bag.roaster, shot.coffee_bag), class: "standard-link" %>
       <% else %>
         <%= shot.bean_type %>
