@@ -1,6 +1,6 @@
 module Oauth
   class ApplicationsController < Doorkeeper::ApplicationsController
-    before_action :require_authentication # use before_action instead if on Rails 5.1+
+    before_action :require_authentication
 
     def index
       @applications = Current.user.oauth_applications

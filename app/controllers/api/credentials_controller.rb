@@ -4,10 +4,10 @@ module Api
 
     def me
       render json: {
-        id: current_user.id,
-        name: current_user.display_name,
-        public: current_user.public?,
-        avatar_url: current_user.avatar.attached? ? url_for(current_user.avatar) : current_user.gravatar_url
+        id: Current.user.id,
+        name: Current.user.display_name,
+        public: Current.user.public?,
+        avatar_url: Current.user.avatar.attached? ? url_for(Current.user.avatar) : Current.user.gravatar_url
       }
     end
   end

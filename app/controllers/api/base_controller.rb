@@ -4,8 +4,23 @@ module Api
 
     private
 
-    def verify_basic_user
-      head :unauthorized unless current_user
+    def resume_session
+      find_session_by_cookie || start_session_from_doorkeeper || start_session_from_basic
+    end
+
+    def start_session_from_doorkeeper
+      return unless valid_doorkeeper_token?
+      return unless user = User.find_by(id: doorkeeper_token.resource_owner_id)
+
+      start_new_session_for(user)
+    end
+
+    def start_session_from_basic
+      authenticate_with_http_basic do |email, password|
+        next unless user = User.authenticate_by(email:, password:)
+
+        start_new_session_for(user)
+      end
     end
 
     def verify_read_access
@@ -20,20 +35,8 @@ module Api
       doorkeeper_token ? doorkeeper_authorize!(:write) : verify_basic_user
     end
 
-    def current_user
-      @current_user ||= doorkeeper_token ? user_from_doorkeeper : user_from_basic
-    end
-
-    def user_from_doorkeeper
-      return unless valid_doorkeeper_token?
-
-      User.find(doorkeeper_token.resource_owner_id)
-    end
-
-    def user_from_basic
-      authenticate_with_http_basic do |email, password|
-        User.authenticate_by(email:, password:)
-      end
+    def verify_basic_user
+      head :unauthorized unless Current.user
     end
   end
 end

@@ -90,7 +90,7 @@ Rails.application.routes.draw do
 
   resources :yearly_brew, only: %i[index show]
   resources :stats, only: [:index]
-  resources :customers, only: %i[index ]
+  resources :customers, only: %i[index]
   resources :updates, except: %i[destroy] do
     get :feed, on: :collection
   end
