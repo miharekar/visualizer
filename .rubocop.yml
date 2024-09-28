@@ -29,6 +29,8 @@ Layout/SpaceInsideArrayLiteralBrackets:
   EnforcedStyle: no_space
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: true
 Performance/AncestorsInclude:
   Enabled: true
 Performance/ArraySemiInfiniteRangeSlice:

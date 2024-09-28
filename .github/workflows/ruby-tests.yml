@@ -1,10 +1,29 @@
 name: Ruby Tests
 on: workflow_call
 jobs:
-  test:
-    name: Test
+  checks:
+    name: Checks
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.5
+          bundler-cache: true
 
+      - name: Scan for common Rails security vulnerabilities using static analysis
+        run: bin/brakeman --no-pager
+
+      - name: Scan for security vulnerabilities in JavaScript dependencies
+        run: bin/importmap audit
+
+      - name: Lint code for consistent style
+        run: bin/rubocop -f github
+
+  unit_tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
     env:
       PGHOST: 127.0.0.1
       PGUSER: postgres
@@ -36,20 +55,11 @@ jobs:
           ruby-version: 3.3.5
           bundler-cache: true
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
-
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
-
       - name: Install postgres headers
         run: sudo apt-get install libpq-dev
 
       - name: Setup database
         run: bin/rails db:test:prepare
 
-      - name: Unit Tests
+      - name: Run unit tests
         run: bin/rails test
