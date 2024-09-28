@@ -84,7 +84,7 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     annotaterb (4.12.0)
-    appsignal (4.1.0)
+    appsignal (4.1.1)
       logger
       rack
     ast (2.4.2)
@@ -417,7 +417,7 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
-    sorbet-runtime (0.5.11585)
+    sorbet-runtime (0.5.11589)
     stackprof (0.2.26)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
