@@ -362,7 +362,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.3.7)
+    rexml (3.3.8)
     rubocop (1.66.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -410,6 +410,11 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
+    solid_cable (3.0.2)
+      actioncable (>= 7.2)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
     solid_queue (1.0.0)
       activejob (>= 7.1)
       activerecord (>= 7.1)
@@ -508,6 +513,7 @@ DEPENDENCIES
   ruby-lsp
   singed
   slim
+  solid_cable
   solid_queue
   stackprof
   stimulus-rails
