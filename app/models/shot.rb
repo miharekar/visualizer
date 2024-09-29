@@ -108,6 +108,8 @@ end
 # Indexes
 #
 #  index_shots_on_airtable_id    (airtable_id)
+#  index_shots_on_bean_brand     (bean_brand) USING gin
+#  index_shots_on_bean_type      (bean_type) USING gin
 #  index_shots_on_coffee_bag_id  (coffee_bag_id)
 #  index_shots_on_created_at     (created_at)
 #  index_shots_on_sha            (sha)

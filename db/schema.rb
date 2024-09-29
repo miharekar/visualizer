@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_09_29_075127) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_29_081659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
   enable_extension "pgcrypto"
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -229,6 +230,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_29_075127) do
     t.boolean "public"
     t.uuid "coffee_bag_id"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
+    t.index ["bean_brand"], name: "index_shots_on_bean_brand", opclass: :gin_trgm_ops, using: :gin
+    t.index ["bean_type"], name: "index_shots_on_bean_type", opclass: :gin_trgm_ops, using: :gin
     t.index ["coffee_bag_id"], name: "index_shots_on_coffee_bag_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"
