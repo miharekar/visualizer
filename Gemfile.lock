@@ -351,10 +351,6 @@ GEM
       logger
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    redis (5.3.0)
-      redis-client (>= 0.22.0)
-    redis-client (0.22.2)
-      connection_pool
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
@@ -415,6 +411,10 @@ GEM
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
+    solid_cache (1.0.6)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
     solid_queue (1.0.0)
       activejob (>= 7.1)
       activerecord (>= 7.1)
@@ -467,7 +467,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
-  arm64-darwin-23
+  arm64-darwin
   x86_64-linux
 
 DEPENDENCIES
@@ -507,13 +507,13 @@ DEPENDENCIES
   puma
   rack-mini-profiler
   rails (>= 8.0.0.beta1)
-  redis
   responders
   rubocop-rails-omakase
   ruby-lsp
   singed
   slim
   solid_cable
+  solid_cache
   solid_queue
   stackprof
   stimulus-rails

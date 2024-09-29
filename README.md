@@ -34,8 +34,7 @@ If you want to create OAuth applications please [contact me](mailto:miha@visuali
 
 - Ruby (Check [.ruby-version](.ruby-version) for specific version)
   - Bundler (`gem install bundler`)
-- Postgres (>= 12)
-- Redis (>= 6)
+- Postgres (>= 14)
 
 ## Setup
 
