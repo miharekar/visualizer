@@ -4,12 +4,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.3.5"
 
 gem "active_link_to"
+gem "appsignal"
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
 gem "bootsnap", require: false
 gem "cloudinary"
 gem "csv"
 gem "doorkeeper"
+gem "freezolite"
 gem "image_processing"
 gem "importmap-rails"
 gem "kramdown"
@@ -21,8 +23,11 @@ gem "omniauth-airtable"
 gem "omniauth-rails_csrf_protection"
 gem "pagy"
 gem "pg"
+gem "pghero"
 gem "pg_lock"
+gem "postmark-rails"
 gem "propshaft"
+gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
 gem "rails", ">= 8.0.0.beta1"
 gem "responders"
@@ -31,26 +36,18 @@ gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
 gem "stimulus-rails"
-gem "thruster"
-
-gem "inline_svg"
 gem "stripe"
 gem "tailwindcss-rails"
+gem "thruster"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
-
-gem "appsignal"
-gem "freezolite"
-gem "pghero"
-gem "pg_query"
-gem "postmark-rails"
-gem "rack-mini-profiler"
-gem "stackprof"
 
 group :development, :test do
   gem "debug", require: "debug/prelude"
   gem "factory_bot_rails"
+  gem "rack-mini-profiler"
   gem "singed"
+  gem "stackprof"
 end
 
 group :development do

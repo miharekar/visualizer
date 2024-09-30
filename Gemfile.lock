@@ -167,15 +167,6 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (4.28.2-aarch64-linux)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.28.2-arm64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.28.2-x86_64-linux)
-      bigdecimal
-      rake (>= 13)
     hashdiff (1.1.1)
     hashie (5.0.0)
     i18n (1.14.6)
@@ -281,8 +272,6 @@ GEM
       racc
     pg (1.5.8)
     pg_lock (1.0.0)
-    pg_query (5.1.0)
-      google-protobuf (>= 3.22.3)
     pghero (3.6.0)
       activerecord (>= 6.1)
     postmark (1.25.1)
@@ -291,7 +280,7 @@ GEM
       actionmailer (>= 3.0.0)
       postmark (>= 1.21.3, < 2.0)
     prism (1.0.0)
-    propshaft (1.0.0)
+    propshaft (1.0.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
@@ -347,7 +336,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rbs (3.5.3)
+    rbs (3.6.0)
       logger
     rdoc (6.7.0)
       psych (>= 4.0.0)
@@ -500,7 +489,6 @@ DEPENDENCIES
   pagy
   pg
   pg_lock
-  pg_query
   pghero
   postmark-rails
   propshaft
@@ -529,4 +517,4 @@ RUBY VERSION
    ruby 3.3.5p100
 
 BUNDLED WITH
-   2.5.18
+   2.5.20
