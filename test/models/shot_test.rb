@@ -28,7 +28,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 24.793, shot.duration
     assert_equal Parsers::DecentTcl::DATA_LABELS.sort, shot.information.data.keys.sort
     assert_equal 101, shot.information.data["espresso_pressure"].size
-    assert_equal 16, shot.information.extra.keys.size
+    assert_equal 17, shot.information.extra.keys.size
     assert_equal "38.8", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
     assert_equal "2.1", shot.grinder_setting
@@ -44,6 +44,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
     assert_equal "MimojaCafe", shot.information.extra["skin"]
+    assert_equal "1234", shot.information.extra["sn"]
     # FileUtils.cp(shot.information.tcl_profile, "#{path}.tcl")
     assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     # File.write("#{path}.json", shot.information.json_profile)
@@ -106,7 +107,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 26.999, shot.duration
     assert_equal Parsers::DecentTcl::DATA_LABELS.sort, shot.information.data.keys.sort
     assert_equal 110, shot.information.data["espresso_pressure"].size
-    assert_equal 18, shot.information.extra.keys.size
+    assert_equal 19, shot.information.extra.keys.size
     assert_equal 46, shot.information.profile_fields.keys.size
     assert_equal "42.6", shot.drink_weight
     assert_equal "EK43 with SSP HU", shot.grinder_model
@@ -123,6 +124,7 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Miha Rekar", shot.information.extra["my_name"]
     assert_equal "Miha Rekar", shot.barista
     assert_equal "MimojaCafe", shot.information.extra["skin"]
+    assert_equal "4567", shot.information.extra["sn"]
     assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json_profile"), shot.information.json_profile
     assert_equal File.read("#{path}.csv"), shot.information.csv_profile

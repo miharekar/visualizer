@@ -367,6 +367,7 @@ settings {
 	seconds_to_display_done_steam 300
 	settings_1_page settings_1
 	settings_profile_type settings_2c
+	sn 1234
 	shot_weight_percentage_stop 79
 	should_save_history 1
 	show_mixtemp_during_espresso 0

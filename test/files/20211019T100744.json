@@ -2228,7 +2228,8 @@
         "machine_name": "pretty decent",
         "steam_highflow_start": "70",
         "after_flow_complete_delay": "5",
-        "drink_weight": "42.6"
+        "drink_weight": "42.6",
+        "sn": "4567"
       },
       "machine_state": {}
     }
