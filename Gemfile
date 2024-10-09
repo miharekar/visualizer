@@ -38,7 +38,6 @@ gem "solid_queue"
 gem "stimulus-rails"
 gem "stripe"
 gem "tailwindcss-rails"
-gem "thruster"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 

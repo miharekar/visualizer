@@ -10,4 +10,3 @@ options:
   parallel: true
   postgresql: true
   prepare: false
-  thruster: true
