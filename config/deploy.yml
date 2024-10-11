@@ -2,16 +2,16 @@
 service: visualizer
 
 # Name of the container image.
-image: miharekar/visualizer
+image: mrfoto/visualizer
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
-  # job:
-  #   hosts:
-  #     - 192.168.0.1
-  #   cmd: bin/jobs
+    - hvapp
+  job:
+    hosts:
+      - hvapp
+    cmd: bin/jobs
 
 proxy:
   ssl: true
@@ -19,8 +19,7 @@ proxy:
 
 # Credentials for your image host.
 registry:
-  server: ghcr.io
-  username: miharekar
+  username: mrfoto
   password:
     - KAMAL_REGISTRY_PASSWORD
 
@@ -66,24 +65,16 @@ builder:
 
 # Use accessory services (secrets come from .kamal/secrets).
 #
-# accessories:
-#   db:
-#     image: mysql:8.0
-#     host: 192.168.0.2
-#     port: 3306
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: redis:7.0
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data
+accessories:
+  postgres:
+    image: postgres:17
+    host: hvdb
+    port: 5432
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+    files:
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+      - infrastructure/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+    directories:
+      - data:/var/lib/postgresql/data
