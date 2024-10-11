@@ -12,11 +12,14 @@ console_command = "/rails/bin/rails console"
   release_command = "./bin/rails db:prepare"
 
 [processes]
-  app = "./bin/rails server"
+  app = "./bin/thrust ./bin/rails server"
   queue = "./bin/jobs"
 
+[env]
+  HTTP_PORT = 8080
+
 [http_service]
-  internal_port = 3000
+  internal_port = 8080
   force_https = true
   auto_stop_machines = false
   auto_start_machines = true
@@ -31,7 +34,7 @@ console_command = "/rails/bin/rails console"
 
 [checks]
   [checks.status]
-    port = 3000
+    port = 8080
     type = "http"
     interval = "10s"
     timeout = "2s"
