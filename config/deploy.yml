@@ -8,10 +8,10 @@ image: mrfoto/visualizer
 servers:
   web:
     - hvapp
-  job:
-    hosts:
-      - hvapp
-    cmd: bin/jobs
+  # job:
+  #   hosts:
+  #     - hvapp
+  #   cmd: bin/jobs
 
 proxy:
   ssl: true
