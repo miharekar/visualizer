@@ -28,34 +28,36 @@ builder:
   arch: arm64
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
-#
-# env:
-#   clear:
-#     DB_HOST: 192.168.0.2
-#   secret:
-#     - RAILS_MASTER_KEY
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
+  clear:
+    # Set number of cores available to the application on each server (default: 1).
+    WEB_CONCURRENCY: 2
+
+    # Match this to any external database server to configure Active Record correctly
+    DB_HOST: hvdb
+
+    # Log everything from Rails
+    # RAILS_LOG_LEVEL: debug
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
-#
-# aliases:
-#   shell: app exec --interactive --reuse "bash"
-
-# Use a different ssh user than root
-#
-# ssh:
-#   user: app
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
 
 # Use a persistent storage volume.
-#
-# volumes:
-#   - "app_storage:/app/storage"
+volumes:
+  - "visualizer_storage:/app/storage"
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
-#
-# asset_path: /app/public/assets
+asset_path: /rails/public/assets
 
 # Configure rolling deploys by setting a wait time between batches of restarts.
 #
@@ -75,6 +77,6 @@ accessories:
         - POSTGRES_PASSWORD
     files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-      - infrastructure/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - infrastructure/postgres/postgresql.conf:/data/postgresql.conf
     directories:
       - data:/var/lib/postgresql/data

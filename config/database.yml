@@ -53,7 +53,7 @@ production:
     database: visualizer_production
     username: visualizer
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: 10.0.0.50
+    host: hvdb
   cache:
     <<: *sqlite
     database: storage/production_cache.sqlite3
