@@ -42,6 +42,8 @@ gem "thruster"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
 
+gem "kamal"
+
 group :development, :test do
   gem "debug", require: "debug/prelude"
   gem "factory_bot_rails"
