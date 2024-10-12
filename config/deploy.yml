@@ -8,10 +8,10 @@ image: mrfoto/visualizer
 servers:
   web:
     - hvapp
-  # job:
-  #   hosts:
-  #     - hvapp
-  #   cmd: bin/jobs
+  job:
+    hosts:
+      - hvapp
+    cmd: bin/jobs
 
 proxy:
   ssl: true
@@ -86,3 +86,5 @@ accessories:
       - infrastructure/postgres/postgresql.conf:/data/postgresql.conf # comment this out for the initial boot
     directories:
       - data:/var/lib/postgresql/data
+    options:
+      shm-size: 3g
