@@ -16,7 +16,6 @@ servers:
 proxy:
   ssl: true
   hosts:
-    - kamal.visualizer.coffee
     - visualizer.coffee
     - www.visualizer.coffee
 
