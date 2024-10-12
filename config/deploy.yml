@@ -86,3 +86,22 @@ accessories:
       - data:/var/lib/postgresql/data
     options:
       shm-size: 3g
+
+  pg_backup:
+    image: eeshugerman/postgres-backup-s3:17
+    host: hvdb
+    env:
+      clear:
+        SCHEDULE: "@daily"
+        BACKUP_KEEP_DAYS: 7
+        S3_REGION: fsn1
+        S3_BUCKET: visualizer-pg-backup
+        S3_ENDPOINT: https://fsn1.your-objectstorage.com
+        S3_PREFIX: postgres-backups
+        POSTGRES_HOST: visualizer-postgres
+        POSTGRES_USER: visualizer
+        POSTGRES_DATABASE: visualizer_production
+      secret:
+        - POSTGRES_PASSWORD
+        - S3_ACCESS_KEY_ID
+        - S3_SECRET_ACCESS_KEY
