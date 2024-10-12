@@ -51,7 +51,7 @@ aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
-  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+  dbc: accessory exec postgres --interactive --reuse "psql -U visualizer -d visualizer_production"
 
 # Use a persistent storage volume.
 volumes:
