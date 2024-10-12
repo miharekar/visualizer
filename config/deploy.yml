@@ -15,7 +15,10 @@ servers:
 
 proxy:
   ssl: true
-  host: kamal.visualizer.coffee
+  hosts:
+    - kamal.visualizer.coffee
+    - visualizer.coffee
+    - www.visualizer.coffee
 
 # Credentials for your image host.
 registry:
