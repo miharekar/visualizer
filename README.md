@@ -1,5 +1,7 @@
 # [Visualizer](https://visualizer.coffee/)
 
+[![Visualizer Status](https://uptime.betterstack.com/status-badges/v3/monitor/wxvy.svg)](https://status.visualizer.coffee/)
+
 ![Ruby Tests](https://github.com/miharekar/visualizer/actions/workflows/main.yml/badge.svg)
 
 Visualizer was designed to work seamlessly with [Decent espresso machines](https://decentespresso.com/). Recently, it has expanded its compatibility to support [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/[), [Pressensor](https://pressensor.com/) and [Beanconqueror](https://beanconqueror.com/). This provides a streamlined experience that caters to a diverse range of coffee enthusiasts, accommodating their preferred devices.
