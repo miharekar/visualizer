@@ -105,3 +105,47 @@ accessories:
         - POSTGRES_PASSWORD
         - S3_ACCESS_KEY_ID
         - S3_SECRET_ACCESS_KEY
+
+  prometheus:
+    image: prom/prometheus:v3.0.0-beta.0
+    host: hvdb
+    port: "127.0.0.1:9090:9090"
+    directories:
+      - prometheus_data:/prometheus
+    files:
+      - infrastructure/prometheus/config.yml:/etc/prometheus/prometheus.yml
+    options:
+      user: 0
+    cmd: --config.file=/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    host: hvdb
+    port: "127.0.0.1:3100:3000"
+    env:
+      clear:
+        GF_SECURITY_ADMIN_PASSWORD: pass
+    directories:
+      - grafana_data:/var/lib/grafana
+    options:
+      user: 0
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    hosts:
+      - hvdb
+      - hvapp
+    port: 9100
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    hosts:
+      - hvdb
+      - hvapp
+    port: 9200
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    cmd: --port=9200
