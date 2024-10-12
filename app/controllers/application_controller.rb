@@ -1,11 +1,16 @@
 class ApplicationController < ActionController::Base
   include Authentication
 
+  before_action :profiling
   before_action :set_timezone
   before_action :set_skin
   before_action :tag_request
 
   private
+
+  def profiling
+    Rack::MiniProfiler.authorize_request if Current.user&.admin?
+  end
 
   def signed_in_root_path(_resource_or_scope)
     shots_path
