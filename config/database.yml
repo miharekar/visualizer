@@ -33,7 +33,15 @@ _sqlite: &sqlite
 development:
   primary:
     <<: *postgres
+    <% if ENV["POSTGRES_PASSWORD"].present? %>
+    database: visualizer_production
+    username: visualizer
+    password: <%= ENV["POSTGRES_PASSWORD"] %>
+    host: localhost
+    port: 15432
+    <% else %>
     database: visualizer_development
+    <% end %>
   cache:
     <<: *sqlite
     database: storage/cache.sqlite3

@@ -11,6 +11,10 @@ class ShotChart
     prepare_chart_data
   end
 
+  def has_data?
+    shot_chart.present? || temperature_chart.present?
+  end
+
   memo_wise def shot_chart
     for_highcharts(@processed_shot_data.sort.reject { |key, _v| key.include?("temperature") })
   end
