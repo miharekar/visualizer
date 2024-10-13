@@ -90,7 +90,7 @@ module Parsers
     end
 
     def set_coffee_bag(shot)
-      if shot.user.coffee_management_enabled?
+      if shot.user.coffee_management_enabled? && extra["bean_brand"].present? && extra["bean_type"].present?
         roaster = Roaster.for_user_by_name(shot.user, extra["bean_brand"])
         shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], extra["roast_date"], roast_level: extra["roast_level"])
         set_coffee_bag_attributes(shot)
