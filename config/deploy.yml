@@ -88,7 +88,7 @@ accessories:
       shm-size: 3g
 
   pg_backup:
-    image: eeshugerman/postgres-backup-s3:17
+    image: mrfoto/postgres-backup-s3:latest
     host: hvdb
     env:
       clear:
@@ -105,6 +105,8 @@ accessories:
         - POSTGRES_PASSWORD
         - S3_ACCESS_KEY_ID
         - S3_SECRET_ACCESS_KEY
+    options:
+      network: ipv6-network
 
   prometheus:
     image: prom/prometheus:v3.0.0-beta.0
