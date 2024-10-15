@@ -95,9 +95,9 @@ accessories:
         SCHEDULE: "@daily"
         BACKUP_KEEP_DAYS: 7
         S3_REGION: fsn1
-        S3_BUCKET: visualizer-pg-backup
+        S3_BUCKET: pg-backups
         S3_ENDPOINT: https://fsn1.your-objectstorage.com
-        S3_PREFIX: postgres-backups
+        S3_PREFIX: visualizer
         POSTGRES_HOST: visualizer-postgres
         POSTGRES_USER: visualizer
         POSTGRES_DATABASE: visualizer_production
