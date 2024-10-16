@@ -3,17 +3,19 @@
   <head>
     <title><%= content_for?(:html_title) ? yield(:html_title) : "Visualizer" %></title>
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color">
     <meta content="#171717" media="(prefers-color-scheme: dark)" name="theme-color">
-    <%= yield :head %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <link href="/apple-touch-icon.png?v=4" rel="apple-touch-icon" sizes="180x180">
-    <link href="/favicon-32x32.png?v=4" rel="icon" sizes="32x32" type="image/png">
-    <link href="/favicon-16x16.png?v=4" rel="icon" sizes="16x16" type="image/png">
-    <link href="/site.webmanifest?v=4" rel="manifest">
-    <link color="#000000" href="/safari-pinned-tab.svg?v=4" rel="mask-icon">
-    <link href="/favicon.ico?v=4" rel="shortcut icon">
+    <%= yield :head %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <link color="#000000" href="/safari-pinned-tab.svg" rel="mask-icon">
+    <link href="/favicon.ico" rel="shortcut icon">
     <%= stylesheet_link_tag "tailwind", "hljs", "fonts", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
