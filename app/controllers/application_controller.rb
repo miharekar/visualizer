@@ -7,10 +7,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def signed_in_root_path(_resource_or_scope)
-    shots_path
-  end
-
   def set_timezone
     zone = Current.user&.timezone.presence || cookies["browser.timezone"].presence || "UTC"
     @timezone = ActiveSupport::TimeZone.new(zone)
