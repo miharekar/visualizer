@@ -1,10 +1,7 @@
-# Name of your application. Used to uniquely configure containers.
 service: visualizer
 
-# Name of the container image.
 image: mrfoto/visualizer
 
-# Deploy to these servers.
 servers:
   web:
     - hvapp
@@ -19,55 +16,34 @@ proxy:
     - visualizer.coffee
     - www.visualizer.coffee
 
-# Credentials for your image host.
 registry:
   username: mrfoto
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-# Configure builder setup.
 builder:
   arch: arm64
 
-# Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD
   clear:
-    # Set number of cores available to the application on each server (default: 1).
     WEB_CONCURRENCY: 2
-
-    # Match this to any external database server to configure Active Record correctly
-    DB_HOST: hvdb
-
-    # Log everything from Rails
+    POSTGRES_HOST: 10.0.0.50
     # RAILS_LOG_LEVEL: debug
 
-# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
-# "bin/kamal logs -r job" will tail logs from the first server in the job section.
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: accessory exec postgres --interactive --reuse "psql -U visualizer -d visualizer_production"
 
-# Use a persistent storage volume.
 volumes:
   - "visualizer_storage:/rails/storage"
 
-# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
-# hitting 404 on in-flight requests. Combines all files from new and old
-# version inside the asset_path.
 asset_path: /rails/public/assets
 
-# Configure rolling deploys by setting a wait time between batches of restarts.
-#
-# boot:
-#   limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
-#   wait: 2
-
-# Use accessory services (secrets come from .kamal/secrets).
 accessories:
   postgres:
     image: postgres:17
