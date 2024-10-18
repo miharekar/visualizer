@@ -12,7 +12,7 @@ pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn
 
 # use bin/importmap update to update the local ones below
 pin "el-transition" # @0.0.7
-pin "match-sorter" # @6.3.4
+pin "match-sorter" # @7.0.0
 pin "remove-accents" # @0.5.0
 pin "stimulus-autocomplete" # @3.1.0
 
