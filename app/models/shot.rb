@@ -63,6 +63,10 @@ class Shot < ApplicationRecord
     ScreenshotTakerJob.perform_later(self)
   end
 
+  def iso8601_roast_date
+    Time.zone.parse(roast_date).iso8601 if roast_date.present?
+  end
+
   private
 
   def daily_limit

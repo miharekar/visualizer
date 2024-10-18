@@ -23,7 +23,7 @@ module Api
 
     def show
       with_shot do |shot|
-        render json: shot.to_api_json(with_data: !params[:essentials].presence)
+        render json: shot.to_api_json(with_data: !params[:essentials].presence, standard_format: params[:standard_format].presence)
       end
     end
     alias_method :download, :show
@@ -45,11 +45,11 @@ module Api
     def shared
       if Current.user.present?
         distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
-        render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(with_data: params[:with_data].presence) }
+        render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence) }
       else
         shared = SharedShot.find_by(code: params[:code].to_s.upcase)
         if shared
-          render json: shared.shot.to_api_json(with_data: params[:with_data].presence)
+          render json: shared.shot.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence)
         else
           render json: {error: "Shared shot not found"}, status: :not_found
         end
