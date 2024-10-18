@@ -126,6 +126,7 @@ end
 #  beta                      :boolean
 #  chart_settings            :jsonb
 #  coffee_management_enabled :boolean
+#  date_format               :string
 #  decent_email              :string
 #  decent_token              :string
 #  developer                 :boolean

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_12_083219) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_18_095832) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -401,6 +401,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_12_083219) do
     t.string "decent_email"
     t.string "decent_token"
     t.boolean "coffee_management_enabled"
+    t.string "date_format"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
