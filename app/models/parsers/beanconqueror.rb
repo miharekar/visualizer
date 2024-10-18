@@ -15,7 +15,11 @@ module Parsers
     end
 
     def existing_shot(user)
-      Shot.find_by(id: json["visualizerId"], user:) if json["visualizerId"].present?
+      if json["visualizerId"].present?
+        Shot.find_by(id: json["visualizerId"], user:)
+      elsif json.dig("meta", "visualizer", "shot_id").present?
+        Shot.find_by(id: json.dig("meta", "visualizer", "shot_id"), user:)
+      end
     end
 
     def set_coffee_bag_attributes(shot)

@@ -314,17 +314,6 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Harvest 1", shot.coffee_bag.harvest_time
     assert_equal "99", shot.coffee_bag.quality_score
   end
-
-  test "extracts real beanconqueror file with id to an existing shot" do
-    user =create(:user)
-    create(:shot, id: "00000244-0bad-4ddd-ac8f-fe7b29e10313", user:)
-    shot = new_shot("test/files/beanconqueror_real_with_id.json", user:)
-    assert shot.valid?
-    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
-    shot.save
-    assert_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
-  end
-
   test "extracts real beanconqueror file with id to an existing shot and overwrites the information" do
     user = create(:user)
     shot = new_shot("test/files/beanconqueror_real.json", user:)
@@ -385,6 +374,34 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
     shot.save
     assert_not_equal "00000244-0bad-4ddd-ac8f-fe7b29e10313", shot.id
+  end
+
+  test "extracts real beanconqueror file with standard id to an existing shot and overwrites the information" do
+    user =create(:user)
+    create(:shot, id: "2a8479ed-6487-446e-b16b-de1c137e0cc0", user:, bean_brand: "test")
+    shot = new_shot("test/files/beanconqueror_real_with_id_standard.json", user:)
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_equal "2a8479ed-6487-446e-b16b-de1c137e0cc0", shot.id
+    assert_equal "onoma new", shot.bean_brand
+  end
+
+  test "extracts real beanconqueror file with standard id to a new shot when existing belongs to a different user" do
+    create(:shot, id: "2a8479ed-6487-446e-b16b-de1c137e0cc0", user: create(:user))
+    shot = new_shot("test/files/beanconqueror_real_with_id_standard.json", user: create(:user))
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_not_equal "2a8479ed-6487-446e-b16b-de1c137e0cc0", shot.id
+  end
+
+  test "extracts real beanconqueror file with standard id to a new shot when existing shot doesn't exist" do
+    shot = new_shot("test/files/beanconqueror_real_with_id_standard.json", user: create(:user))
+    assert shot.valid?
+    assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
+    shot.save
+    assert_not_equal "2a8479ed-6487-446e-b16b-de1c137e0cc0", shot.id
   end
 
   test "extracts real beanconqueror file to a new shot when no id" do
