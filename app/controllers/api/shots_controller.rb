@@ -23,7 +23,7 @@ module Api
 
     def show
       with_shot do |shot|
-        render json: shot_json(shot, with_data: !params[:essentials].presence)
+        render json: shot.to_api_json(with_data: !params[:essentials].presence)
       end
     end
     alias_method :download, :show
@@ -45,11 +45,11 @@ module Api
     def shared
       if Current.user.present?
         distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
-        render json: Shot.where(id: distinct_shots).map { |s| shot_json(s, with_data: params[:with_data].presence) }
+        render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(with_data: params[:with_data].presence) }
       else
         shared = SharedShot.find_by(code: params[:code].to_s.upcase)
         if shared
-          render json: shot_json(shared.shot, with_data: params[:with_data].presence)
+          render json: shared.shot.to_api_json(with_data: params[:with_data].presence)
         else
           render json: {error: "Shared shot not found"}, status: :not_found
         end
@@ -85,28 +85,6 @@ module Api
       else
         render json: {error: "Shot not found"}, status: :not_found
       end
-    end
-
-    def shot_json(shot, with_data: false)
-      return {} unless shot
-
-      allowed_attrs = %w[id profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista]
-      allowed_attrs += %w[start_time] unless shot.user&.hide_shot_times
-      allowed_attrs += %w[metadata] if shot.user&.premium?
-      json = shot.attributes.slice(*allowed_attrs)
-      if with_data
-        if shot.information&.has_chart_data?
-          json[:timeframe] = shot.information&.timeframe
-          json[:data] = shot.information&.data
-        else
-          json[:brewdata] = shot.information&.brewdata
-        end
-      end
-      json[:duration] = shot.duration
-      json[:user_name] = shot.user.display_name if shot.user&.public?
-      json[:image_preview] = shot.screenshot_url if shot.screenshot?
-      json[:profile_url] = api_shot_profile_url(shot) if shot.information&.tcl_profile_fields.present?
-      json
     end
   end
 end

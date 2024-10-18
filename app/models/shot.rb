@@ -1,6 +1,7 @@
 class Shot < ApplicationRecord
   include ShotPresenter
   include Airtablable
+  include Jsonable
 
   DAILY_LIMIT = 50
   LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
