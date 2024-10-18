@@ -60,7 +60,7 @@
       (<%= shot.roast_level %>)
     <% end %>
     <% if shot.roast_date.present? %>
-      on <%= shot.roast_date %>
+      on <%= shot.parsed_roast_date.to_fs(:long) %>
     <% end %>
   </div>
   <div>

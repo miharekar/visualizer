@@ -31,6 +31,10 @@
             <%= f.select :temperature_unit, ["Celsius", "Fahrenheit"], {}, class: "mt-1 standard-input" %>
           </div>
           <div class="col-span-3 sm:col-span-2">
+            <%= f.label :date_format, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.select :date_format, User::DATE_FORMATS.keys, {}, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-3 sm:col-span-2">
             <%= f.label :skin, class: "block text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
             <%= f.select :skin, ["Light", "Dark", "System"], {}, class: "mt-1 standard-input" %>
           </div>
