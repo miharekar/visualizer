@@ -1,7 +1,7 @@
 information_type,elapsed,pressure,current_total_shot_weight,flow_in,flow_out,water_temperature_boiler,water_temperature_in,water_temperature_basket,metatype,metadata,comment
 meta,,,,,,,,,Name,Profitec/Victoria Arduino dual spring setup,text
 meta,,,,,,,,,Date,2023-03-24T09:38:52Z,ISO8601 formatted date
-meta,,,,,,,,,Roasting Date,2020-11-18,ISO8601 formatted date
+meta,,,,,,,,,Roasting Date,2020-11-18T00:00:00Z,ISO8601 formatted date
 meta,,,,,,,,,Roastery,Kavekalmar,text
 meta,,,,,,,,,Beans,Brasil Cerrado Mineiro,text
 meta,,,,,,,,,Roast Color,dark,text

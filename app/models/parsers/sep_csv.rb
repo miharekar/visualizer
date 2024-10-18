@@ -52,7 +52,7 @@ module Parsers
       elsif row["metatype"] == "Date"
         @start_time = Time.zone.iso8601(row["metadata"])
       elsif row["metatype"] == "Roasting Date"
-        @extra["roast_date"] = Date.parse(row["metadata"]).strftime("%Y-%m-%d")
+        @extra["roast_date"] = row["metadata"]
       else
         value = [@extra["espresso_notes"], "#{row["metatype"]}: #{row["metadata"]}"].compact.join("\n")
         @extra["espresso_notes"] = value

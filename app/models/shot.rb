@@ -2,6 +2,7 @@ class Shot < ApplicationRecord
   include ShotPresenter
   include Airtablable
   include Jsonable
+  include DateParseable
 
   DAILY_LIMIT = 50
   LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
@@ -44,7 +45,7 @@ class Shot < ApplicationRecord
   def refresh_coffee_bag_fields
     self.bean_brand = coffee_bag&.roaster&.name
     self.bean_type = coffee_bag&.name
-    self.roast_date = coffee_bag&.roast_date&.to_fs(:long)
+    self.roast_date = coffee_bag&.roast_date&.strftime(user.date_format_string)
     self.roast_level = coffee_bag&.roast_level
   end
 
@@ -63,8 +64,12 @@ class Shot < ApplicationRecord
     ScreenshotTakerJob.perform_later(self)
   end
 
-  def iso8601_roast_date
-    Time.zone.parse(roast_date).iso8601 if roast_date.present?
+  def parsed_roast_date
+    parse_date(roast_date, user.date_format_string)
+  end
+
+  def iso8601_roast_date_time
+    parsed_roast_date&.strftime("%Y-%m-%dT%H:%M:%SZ")
   end
 
   private

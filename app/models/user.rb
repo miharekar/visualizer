@@ -5,6 +5,11 @@ class User < ApplicationRecord
   has_secure_password
 
   EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter].freeze
+  DATE_FORMATS = {
+    "dd.mm.yyyy" => "%d.%m.%Y",
+    "mm.dd.yyyy" => "%m.%d.%Y",
+    "yyyy.mm.dd" => "%Y.%m.%d"
+  }.freeze
 
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
@@ -95,6 +100,14 @@ class User < ApplicationRecord
   def unsubscribe_token_for(notification)
     token_definition = self.class.token_definitions[:unsubscribe]
     token_definition.message_verifier.generate({id:, notification:}, purpose: token_definition.full_purpose)
+  end
+
+  def date_format
+    super.presence || "dd.mm.yyyy"
+  end
+
+  def date_format_string
+    DATE_FORMATS[date_format]
   end
 
   private

@@ -42,7 +42,7 @@ module Parsers
       @extra["bean_brand"] = brewdata.dig("bean", "roaster")
       @extra["bean_type"] = brewdata.dig("bean", "name")
       @extra["roast_level"] = brewdata.dig("bean", "roast")
-      @extra["roast_date"] = Date.parse(brewdata.dig("bean", "roastingDate")).strftime("%Y-%m-%d") rescue nil
+      @extra["roast_date"] = brewdata.dig("bean", "roastingDate")
       @extra["grinder_model"] = brewdata.dig("mill", "name")
       @extra["grinder_setting"] = brewdata.dig("brew", "grind_size")
       @extra["drink_weight"] = brewdata.dig("brew", "brew_beverage_quantity")

@@ -23,7 +23,7 @@ module Jsonable
         "roaster" => bean_brand,
         "name" => bean_type,
         "roast" => roast_level,
-        "roastingDate" => iso8601_roast_date
+        "roastingDate" => iso8601_roast_date_time
       }.compact,
       "mill" => {"name" => grinder_model}.compact,
       "brew" => {

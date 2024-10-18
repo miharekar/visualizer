@@ -43,16 +43,16 @@ module Parsers
       parse
 
       shot = existing_shot(user) || Shot.find_or_initialize_by(user:, sha:)
-
-      shot.profile_title = profile_title
       shot.start_time = start_time
-      shot.public = user.public
-      set_information(shot)
-      set_coffee_bag(shot)
 
       if shot.valid?
-        extract_fields_from_extra(shot)
+        shot.public = user.public
+        shot.profile_title = profile_title
         shot.duration = calculate_duration
+        extract_fields_from_extra(shot)
+        set_information(shot)
+        set_coffee_bag(shot)
+        shot.roast_date = shot.parsed_roast_date&.strftime(user.date_format_string)
         shot.information.save if shot.information.persisted?
       elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
@@ -92,7 +92,7 @@ module Parsers
     def set_coffee_bag(shot)
       if shot.user.coffee_management_enabled? && extra["bean_brand"].present? && extra["bean_type"].present?
         roaster = Roaster.for_user_by_name(shot.user, extra["bean_brand"])
-        shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], extra["roast_date"], roast_level: extra["roast_level"])
+        shot.coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roaster, extra["bean_type"], shot.parsed_roast_date, roast_level: extra["roast_level"])
         set_coffee_bag_attributes(shot)
       else
         shot.coffee_bag = nil

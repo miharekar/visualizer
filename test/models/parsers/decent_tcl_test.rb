@@ -114,4 +114,26 @@ class Parsers::DecentTclTest < ActiveSupport::TestCase
     assert_equal File.read("#{path}.tcl"), shot.information.tcl_profile
     assert_equal File.read("#{path}.json"), shot.information.json_profile
   end
+
+  test "extracts roast date based on users date format" do
+    user = create(:user, :with_coffee_management)
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    assert_equal "11.09.2021", shot.roast_date
+    assert_equal Date.new(2021, 9, 11), shot.parsed_roast_date
+
+    user.update!(date_format: "dd.mm.yyyy")
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    assert_equal "11.09.2021", shot.roast_date
+    assert_equal Date.new(2021, 9, 11), shot.parsed_roast_date
+
+    user.update!(date_format: "mm.dd.yyyy")
+    shot = new_shot("test/files/20210921T085910.shot", user:)
+    assert_equal "11.09.2021", shot.roast_date
+    assert_equal Date.new(2021, 11, 9), shot.parsed_roast_date
+
+    user.update!(date_format: "yyyy.mm.dd")
+    shot = new_shot("test/files/20210921T085910ymd.shot", user:)
+    assert_equal "2021.09.11", shot.roast_date
+    assert_equal Date.new(2021, 9, 11), shot.parsed_roast_date
+  end
 end

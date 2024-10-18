@@ -22,7 +22,7 @@ class Parsers::SepCsvTest < ActiveSupport::TestCase
     assert_equal "Herd", shot.bean_brand
     assert_equal "Kenya", shot.bean_type
     assert_equal "Medium", shot.roast_level
-    assert_equal "2021-12-17", shot.roast_date
+    assert_equal "17.12.2021", shot.roast_date
     assert_equal "Comandante Trailmaster", shot.grinder_model
     assert_equal "3 clicks", shot.grinder_setting
     assert_equal "15.2", shot.bean_weight
@@ -46,7 +46,7 @@ class Parsers::SepCsvTest < ActiveSupport::TestCase
     assert_equal "Kavekalmar", shot.bean_brand
     assert_equal "Brasil Cerrado Mineiro", shot.bean_type
     assert_equal "dark", shot.roast_level
-    assert_equal "2020-11-18", shot.roast_date
+    assert_equal "18.11.2020", shot.roast_date
     assert_equal "Eureka Atom Specialty", shot.grinder_model
     assert_equal "18.6", shot.bean_weight
     assert_equal "38.35", shot.drink_weight

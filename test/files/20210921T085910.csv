@@ -1,7 +1,7 @@
 information_type,elapsed,pressure,current_total_shot_weight,flow_in,flow_out,water_temperature_boiler,water_temperature_in,water_temperature_basket,metatype,metadata,comment
 meta,,,,,,,,,Name,JoeD's Easy blooming slow ramp to 7 bar,text
 meta,,,,,,,,,Date,2021-09-21T06:59:10Z,ISO8601 formatted date
-meta,,,,,,,,,Roasting Date,2021-09-11,ISO8601 formatted date
+meta,,,,,,,,,Roasting Date,2021-09-11T00:00:00Z,ISO8601 formatted date
 meta,,,,,,,,,Roastery,Banibeans,text
 meta,,,,,,,,,Beans,Ethiopia Shantawene,text
 meta,,,,,,,,,Description,With BPlus,text

@@ -17,7 +17,7 @@ class Parsers::BeanconquerorTest < ActiveSupport::TestCase
     assert_equal "Holm", shot.bean_type
     assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
-    assert_equal "2022-12-08", shot.roast_date
+    assert_equal "08.12.2022", shot.roast_date
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
@@ -32,7 +32,7 @@ class Parsers::BeanconquerorTest < ActiveSupport::TestCase
     assert_equal "Holm", shot.bean_type
     assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
-    assert_equal "2022-12-08", shot.roast_date
+    assert_equal "08.12.2022", shot.roast_date
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
@@ -171,7 +171,7 @@ class Parsers::BeanconquerorTest < ActiveSupport::TestCase
     assert_equal "Holm", shot.bean_type
     assert_equal "75", shot.bean_weight
     assert_equal "AMERICAN_ROAST", shot.roast_level
-    assert_equal "2022-12-08", shot.roast_date
+    assert_equal "08.12.2022", shot.roast_date
     assert_equal "Kinu M47", shot.grinder_model
     assert_equal "4", shot.grinder_setting
     assert_equal "0", shot.drink_weight
