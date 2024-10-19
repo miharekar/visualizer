@@ -30,8 +30,7 @@ class CoffeeBag < ApplicationRecord
   private
 
   def update_shots
-    update_shot_jobs = shots.map { |shot| RefreshCoffeeBagFieldsForShotJob.new(shot) }
-    ActiveJob.perform_all_later(update_shot_jobs)
+    RefreshCoffeeBagFieldsOnShotsJob.perform_later(self)
   end
 end
 

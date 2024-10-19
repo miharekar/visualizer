@@ -13,6 +13,7 @@ class User < ApplicationRecord
 
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
+  after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
 
   generates_token_for :unsubscribe
 
@@ -127,6 +128,10 @@ class User < ApplicationRecord
     return unless coffee_management_enabled?
 
     EnableCoffeeManagementJob.perform_later(self)
+  end
+
+  def update_date_format_on_shots
+    ActiveJob.perform_all_later(coffee_bags.pluck(:id).map { |id| RefreshCoffeeBagFieldsOnShotsJob.new(CoffeeBag.new(id:)) })
   end
 end
 

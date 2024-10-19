@@ -24,8 +24,7 @@ class Roaster < ApplicationRecord
   private
 
   def update_shots
-    update_shot_jobs = shots.map { |shot| RefreshCoffeeBagFieldsForShotJob.new(shot) }
-    ActiveJob.perform_all_later(update_shot_jobs)
+    ActiveJob.perform_all_later(coffee_bags.pluck(:id).map { |id| RefreshCoffeeBagFieldsOnShotsJob.new(CoffeeBag.new(id:)) })
   end
 end
 
