@@ -9,7 +9,7 @@ module Authentication
   private
 
   def authenticated?
-    Current.session.present?
+    resume_session
   end
 
   def require_authentication
@@ -17,11 +17,11 @@ module Authentication
   end
 
   def resume_session
-    find_session_by_cookie || find_devise_session
+    Current.session ||= find_session_by_cookie
   end
 
   def find_session_by_cookie
-    Current.session = Session.find_by(id: cookies.signed[:session_id])
+    Session.find_by(id: cookies.signed[:session_id])
   end
 
   def request_authentication
@@ -43,34 +43,5 @@ module Authentication
   def terminate_session
     Current.session.destroy
     cookies.delete(:session_id)
-  end
-
-  # Migrate Devise users over. Remove at some point.
-
-  def find_devise_session
-    return unless devise_info
-
-    clear_devise_info
-    start_new_session_for(devise_user) if devise_user
-  end
-
-  def devise_info
-    @devise_info ||= session["warden.user.user.key"].presence || cookies.signed["remember_user_token"].presence
-  end
-
-  def devise_user
-    @devise_user ||= begin
-      user_id = devise_info.dig(0, 0)
-      user_salt = devise_info.dig(1)
-      return if user_id.blank? || user_salt.blank?
-
-      user = User.find_by(id: user_id)
-      user if user&.password_digest[0, 29] == user_salt
-    end
-  end
-
-  def clear_devise_info
-    session.delete("warden.user.user.key")
-    cookies.delete("remember_user_token")
   end
 end
