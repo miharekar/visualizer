@@ -23,7 +23,7 @@ class PasswordsController < ApplicationController
   private
 
   def set_user_by_token
-    @user = User.find_by!(password_reset_token: params[:token])
+    @user = User.find_by_password_reset_token!(params[:token]) # rubocop:disable Rails/DynamicFindBy
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     redirect_to new_password_url, alert: "Password reset link is invalid or has expired."
   end
