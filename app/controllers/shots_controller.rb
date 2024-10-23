@@ -11,6 +11,8 @@ class ShotsController < ApplicationController
   before_action :load_users_shots, only: %i[index search]
   before_action :load_related_shots, only: %i[show edit]
 
+  def index; end
+
   def search
     render :index
   end
@@ -42,7 +44,7 @@ class ShotsController < ApplicationController
   def edit
     shots = Current.user.shots
     %i[grinder_model bean_brand bean_type].each do |method|
-      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).select(&:present?) }
+      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).compact_blank }
       instance_variable_set(:"@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
     end
   end
@@ -51,7 +53,7 @@ class ShotsController < ApplicationController
     files = Array(params[:files])
     shots = files.map { |file| Shot.from_file(Current.user, file.read) }
 
-    if shots.all? { |shot| shot.save }
+    if shots.all?(&:save)
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
@@ -60,7 +62,7 @@ class ShotsController < ApplicationController
         {heading: "Could not save the provided #{"file".pluralize(files.count)}", text: shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}
       end
     end
-  rescue => e
+  rescue StandardError => e
     flash[:alert] = "Something went wrong: #{e.message}"
   ensure
     if params.key?(:drag)
@@ -137,8 +139,8 @@ class ShotsController < ApplicationController
     FILTERS.select { |f| params[f].present? }.each do |filter|
       @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
     end
-    @shots = @shots.where("espresso_enjoyment >= ?", params[:min_enjoyment]) if params[:min_enjoyment].to_i.positive?
-    @shots = @shots.where("espresso_enjoyment <= ?", params[:max_enjoyment]) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+    @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
+    @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
     @shots = @shots.where(coffee_bag_id: params[:coffee_bag]) if params[:coffee_bag].present?
 
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])

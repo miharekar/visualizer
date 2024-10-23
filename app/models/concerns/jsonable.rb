@@ -1,7 +1,7 @@
 module Jsonable
   extend ActiveSupport::Concern
 
-  ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista]
+  ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista].freeze
   STANDARD_PARSERS = %w[beanconqueror].freeze
 
   def to_api_json(with_data: false, standard_format: false)
@@ -44,7 +44,7 @@ module Jsonable
     json = attributes.slice(*ALLOWED_ATTRIBUTES)
 
     if with_data
-      if information&.has_chart_data?
+      if information&.chart_data?
         json[:timeframe] = information&.timeframe
         json[:data] = information&.data
       else

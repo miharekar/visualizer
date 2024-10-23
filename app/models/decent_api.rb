@@ -1,5 +1,5 @@
 class DecentApi
-  BASE_URL = "https://decentespresso.com/support/api"
+  BASE_URL = "https://decentespresso.com/support/api".freeze
 
   attr_reader :email, :token
 

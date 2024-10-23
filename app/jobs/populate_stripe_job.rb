@@ -11,7 +11,7 @@ class PopulateStripeJob < ApplicationJob
   private
 
   def populate_customers
-    Stripe::Customer.list(limit: 100).auto_paging_each.with_object({}) do |stripe_customer|
+    Stripe::Customer.list(limit: 100).auto_paging_each do |stripe_customer|
       upsert_customer(stripe_customer)
     end
   end
@@ -43,10 +43,10 @@ class PopulateStripeJob < ApplicationJob
     subscription.customer = Customer.find_by(stripe_id: stripe_subscription.customer)
     subscription.status = stripe_subscription.status
     subscription.interval = stripe_subscription.plan.interval
-    subscription.started_at = Time.at(stripe_subscription.start_date)
-    subscription.ended_at = Time.at(stripe_subscription.ended_at) if stripe_subscription.ended_at
-    subscription.cancel_at = Time.at(stripe_subscription.cancel_at) if stripe_subscription.cancel_at
-    subscription.cancelled_at = Time.at(stripe_subscription.canceled_at) if stripe_subscription.canceled_at
+    subscription.started_at = Time.zone.at(stripe_subscription.start_date)
+    subscription.ended_at = Time.zone.at(stripe_subscription.ended_at) if stripe_subscription.ended_at
+    subscription.cancel_at = Time.zone.at(stripe_subscription.cancel_at) if stripe_subscription.cancel_at
+    subscription.cancelled_at = Time.zone.at(stripe_subscription.canceled_at) if stripe_subscription.canceled_at
     subscription.cancellation_details = stripe_subscription.cancellation_details
     subscription.save!
   rescue ActiveRecord::RecordInvalid => e

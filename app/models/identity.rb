@@ -5,7 +5,7 @@ class Identity < ApplicationRecord
   has_one :airtable_info, dependent: :destroy
 
   validates :uid, :provider, presence: true
-  validates :uid, uniqueness: {scope: :provider} # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validates :uid, uniqueness: {scope: :provider}
 
   scope :by_provider, ->(provider) { where(provider:) }
 
@@ -49,7 +49,7 @@ class Identity < ApplicationRecord
       OmniAuth::Strategies::Airtable.new(
         nil,
         Rails.application.credentials.dig(:airtable, :client_id),
-        Rails.application.credentials.dig(:airtable, :client_secret),
+        Rails.application.credentials.dig(:airtable, :client_secret)
       )
     else
       raise "Unknown provider: #{provider}"

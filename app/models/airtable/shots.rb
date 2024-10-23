@@ -1,8 +1,8 @@
 module Airtable
   class Shots < Base
     DB_TABLE_NAME = :shots
-    TABLE_NAME = "Shots"
-    TABLE_DESCRIPTION = "Shots from Visualizer"
+    TABLE_NAME = "Shots".freeze
+    TABLE_DESCRIPTION = "Shots from Visualizer".freeze
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
@@ -13,7 +13,7 @@ module Airtable
       "bean_notes" => {type: "richText"},
       "espresso_notes" => {type: "richText"},
       "private_notes" => {type: "richText"}
-    }
+    }.freeze
 
     private
 
@@ -53,7 +53,7 @@ module Airtable
       {fields: fields.compact}
     end
 
-    def local_record_attributes(shot, record)
+    def local_record_attributes(record)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:metadata] = user.metadata_fields.index_with { |f| record["fields"][f] }
       attributes

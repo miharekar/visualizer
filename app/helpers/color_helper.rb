@@ -5,6 +5,7 @@ module ColorHelper
 
   private
 
+  # rubocop:disable Naming/MethodParameterName
   def hsl_to_hex(h, s, l)
     h /= 360.0
     s /= 100.0
@@ -13,27 +14,28 @@ module ColorHelper
     if s.zero?
       r = g = b = l
     else
-      q = (l < 0.5) ? l * (1 + s) : l + s - l * s
-      p = 2 * l - q
-      r = hue_to_rgb(p, q, h + 1 / 3.0)
+      q = l < 0.5 ? l * (1 + s) : l + s - (l * s)
+      p = (2 * l) - q
+      r = hue_to_rgb(p, q, h + (1 / 3.0))
       g = hue_to_rgb(p, q, h)
-      b = hue_to_rgb(p, q, h - 1 / 3.0)
+      b = hue_to_rgb(p, q, h - (1 / 3.0))
     end
-    hex = [r, g, b].map { |c| sprintf "%02x", (c * 255).round }.join
-    "#" + hex.upcase
+    hex = [r, g, b].map { |c| format "%02x", (c * 255).round }.join
+    "##{hex.upcase}"
   end
 
   def hue_to_rgb(p, q, t)
     t += 1 if t.negative?
     t -= 1 if t > 1
     if t < 1 / 6.0
-      p + (q - p) * 6 * t
+      p + ((q - p) * 6 * t)
     elsif t < 1 / 2.0
       q
     elsif t < 2 / 3.0
-      p + (q - p) * (2 / 3.0 - t) * 6
+      p + ((q - p) * ((2 / 3.0) - t) * 6)
     else
       p
     end
   end
+  # rubocop:enable Naming/MethodParameterName
 end

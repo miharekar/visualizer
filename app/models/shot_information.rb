@@ -16,7 +16,7 @@ class ShotInformation < ApplicationRecord
     super || {}
   end
 
-  def has_chart_data?
+  def chart_data?
     !beanconqueror?
   end
 

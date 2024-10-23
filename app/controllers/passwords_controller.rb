@@ -1,18 +1,15 @@
 class PasswordsController < ApplicationController
   before_action :set_user_by_token, only: %i[edit update]
 
-  def new
-  end
+  def new; end
+
+  def edit; end
 
   def create
-    if user = User.find_by(email: params[:email])
-      PasswordsMailer.reset(user).deliver_later
-    end
+    user = User.find_by(email: params[:email])
+    PasswordsMailer.reset(user).deliver_later if user
 
     redirect_to new_session_url, notice: "Password reset instructions sent (if user with that email address exists)."
-  end
-
-  def edit
   end
 
   def update
@@ -24,8 +21,9 @@ class PasswordsController < ApplicationController
   end
 
   private
+
   def set_user_by_token
-    @user = User.find_by_password_reset_token!(params[:token])
+    @user = User.find_by!(password_reset_token: params[:token])
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     redirect_to new_password_url, alert: "Password reset link is invalid or has expired."
   end

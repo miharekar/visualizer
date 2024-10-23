@@ -9,7 +9,7 @@ class EnjoymentChart
   end
 
   def chart
-    shots.map { |shot|
+    shots.map do |shot|
       {
         x: shot.start_time.to_i * 1000,
         y: shot.espresso_enjoyment,
@@ -17,6 +17,6 @@ class EnjoymentChart
         url: shot_path(shot),
         title: "#{shot.espresso_enjoyment}: #{shot.profile_title} with #{shot.bean_brand} #{shot.bean_type}"
       }
-    }.reverse
+    end.reverse
   end
 end

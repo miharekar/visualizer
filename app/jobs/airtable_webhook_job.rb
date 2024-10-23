@@ -30,14 +30,14 @@ class AirtableWebhookJob < AirtableJob
 
   def get_record_timestamps
     @record_timestamps = {}
-    @relevant_tables = airtable_info.tables.to_h { |k, t| [t["id"], "Airtable::#{k.gsub(" ", "")}".constantize] }
+    @relevant_tables = airtable_info.tables.to_h { |k, t| [t["id"], "Airtable::#{k.delete(" ")}".constantize] }
     payloads.each do |payload|
       time = Time.iso8601(payload["timestamp"])
       payload["changedTablesById"].each do |table_id, table_payload|
         next unless relevant_tables.key?(table_id)
 
         @record_timestamps[table_id] ||= {}
-        table_payload["changedRecordsById"].keys.each do |record_id|
+        table_payload["changedRecordsById"].each_key do |record_id|
           @record_timestamps[table_id][record_id] ||= []
           @record_timestamps[table_id][record_id] << time
         end
@@ -62,7 +62,7 @@ class AirtableWebhookJob < AirtableJob
         next if relevant.empty?
 
         minutes = ((Time.current - relevant.min) / 60).ceil
-        timestamps = record_timestamps[table_id].transform_values { |v| v.max }
+        timestamps = record_timestamps[table_id].transform_values(&:max)
         relevant_tables[table_id].new(airtable_info.identity.user).download(minutes:, timestamps:)
       end
 

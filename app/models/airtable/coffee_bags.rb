@@ -1,14 +1,14 @@
 module Airtable
   class CoffeeBags < Base
     DB_TABLE_NAME = :coffee_bags
-    TABLE_NAME = "Coffee Bags"
-    TABLE_DESCRIPTION = "Coffee Bags from Visualizer"
+    TABLE_NAME = "Coffee Bags".freeze
+    TABLE_DESCRIPTION = "Coffee Bags from Visualizer".freeze
     STANDARD_FIELDS = %w[
       country elevation farm farmer harvest_time processing quality_score region roast_date roast_level variety
     ].index_by { |f| f.to_s.humanize }
     FIELD_OPTIONS = {
       "roast_date" => {type: "date", options: {dateFormat: {name: "local"}}}
-    }
+    }.freeze
 
     private
 
@@ -39,7 +39,7 @@ module Airtable
       {fields: fields.compact}
     end
 
-    def local_record_attributes(coffee_bag, record)
+    def local_record_attributes(record)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:name] = record["fields"]["Name"]
       attributes

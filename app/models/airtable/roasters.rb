@@ -1,14 +1,14 @@
 module Airtable
   class Roasters < Base
     DB_TABLE_NAME = :roasters
-    TABLE_NAME = "Roasters"
-    TABLE_DESCRIPTION = "Roasters from Visualizer"
+    TABLE_NAME = "Roasters".freeze
+    TABLE_DESCRIPTION = "Roasters from Visualizer".freeze
     STANDARD_FIELDS = %w[
       website
     ].index_by { |f| f.to_s.humanize }
     FIELD_OPTIONS = {
       "website" => {type: "url"}
-    }
+    }.freeze
 
     private
 
@@ -37,7 +37,7 @@ module Airtable
       {fields: fields.compact}
     end
 
-    def local_record_attributes(roaster, record)
+    def local_record_attributes(record)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:name] = record["fields"]["Name"]
       attributes

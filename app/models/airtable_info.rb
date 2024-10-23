@@ -12,7 +12,7 @@ class AirtableInfo < ApplicationRecord
   end
 
   def table_fields_for(table_name)
-    tables&.dig(table_name, "fields").index_by { |f| f["name"] } || {}
+    tables&.dig(table_name, "fields")&.index_by { |f| f["name"] } || {}
   end
 end
 

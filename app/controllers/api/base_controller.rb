@@ -10,14 +10,17 @@ module Api
 
     def start_session_from_doorkeeper
       return unless valid_doorkeeper_token?
-      return unless user = User.find_by(id: doorkeeper_token.resource_owner_id)
+
+      user = User.find_by(id: doorkeeper_token.resource_owner_id)
+      return unless user
 
       start_new_session_for(user)
     end
 
     def start_session_from_basic
       authenticate_with_http_basic do |email, password|
-        next unless user = User.authenticate_by(email:, password:)
+        user = User.authenticate_by(email:, password:)
+        next unless user
 
         start_new_session_for(user)
       end

@@ -28,13 +28,7 @@ class AirtableWebhookRefreshJobTest < ActiveJob::TestCase
 
       assert_raises(ActiveRecord::RecordNotFound) { @airtable_info.reload }
     end
-  end
 
-  [
-    {type: "NOT_FOUND", status: 404},
-    {type: "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND", status: 403},
-    {type: "CANNOT_REFRESH_DISABLED_WEBHOOK", status: 400}
-  ].each do |error_case|
     test "destroys airtable_info when #{error_case[:type]} error occurs and is returned in errors" do
       error_response = {errors: [{error: error_case[:type], message: "Error message"}]}.to_json
       stub_request(:post, @refresh_url).to_return(status: error_case[:status], body: error_response, headers: {})

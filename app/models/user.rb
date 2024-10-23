@@ -74,7 +74,7 @@ class User < ApplicationRecord
     premium_expires_at&.future? || supporter
   end
 
-  def has_airtable?
+  def has_airtable? # rubocop:disable Naming/PredicateName
     premium? && identities.by_provider(:airtable).exists?
   end
 
@@ -120,7 +120,7 @@ class User < ApplicationRecord
   end
 
   def reflect_public_to_shots
-    shots.update_all(public:)
+    shots.update_all(public:) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def update_coffee_management

@@ -4,8 +4,7 @@ class CoffeeBagsController < ApplicationController
   before_action :set_coffee_bag, only: %i[edit update destroy remove_image]
   before_action :load_coffee_bags, only: %i[index search]
 
-  def index
-  end
+  def index; end
 
   def search
     render :index
@@ -65,7 +64,7 @@ class CoffeeBagsController < ApplicationController
   def coffee_bag_params
     cb_params = params.require(:coffee_bag).permit(:name, :roaster_id, :roast_date, :roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score, :image)
     roaster = Current.user.roasters.find_by(id: cb_params[:roaster_id])
-    cb_params[:roaster_id] = @roaster.id unless roaster.present?
+    cb_params[:roaster_id] = @roaster.id if roaster.blank?
     cb_params
   end
 end

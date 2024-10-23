@@ -8,11 +8,12 @@ class DateParseableTest < ActiveSupport::TestCase
 
   User::DATE_FORMATS.each do |format_name, format_string|
     test "parses the date correctly with #{format_name} format" do
-      date = case format_name
-      when "dd.mm.yyyy" then "09.08.2023"
-      when "mm.dd.yyyy" then "08.09.2023"
-      when "yyyy.mm.dd" then "2023.08.09"
-      end
+      date_examples = {
+        "dd.mm.yyyy" => "09.08.2023",
+        "mm.dd.yyyy" => "08.09.2023",
+        "yyyy.mm.dd" => "2023.08.09"
+      }
+      date = date_examples[format_name]
 
       assert_equal Date.new(2023, 8, 9), @dummy_instance.parse_date(date, format_string)
     end

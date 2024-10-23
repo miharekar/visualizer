@@ -23,7 +23,7 @@ class ImportMapChecker
 
     Concurrent::Future.execute do
       current_url = line[/to: "(.*)"/, 1]
-      non_versioned_url = current_url.sub(/@[\d]+\//, "/")
+      non_versioned_url = current_url.sub(%r{@[\d]+/}, "/")
       current_version = URI(current_url)
       latest_version = URI(non_versioned_url)
 

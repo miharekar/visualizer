@@ -6,7 +6,7 @@ end
 
 def top_skins
   relevant = Shot.joins(:information).where(created_at: 2.months.ago..).pluck(:extra, :user_id)
-  users_with_skins = relevant.map { |e, u| [u, e["skin"]] }.uniq.select { |_, s| s.present? }
+  users_with_skins = relevant.map { |e, u| [u, e["skin"]] }.uniq.compact_blank
   total_users = users_with_skins.uniq { |us| us[0] }.size.to_f
   users_with_skins.pluck(1).tally.sort_by { |_s, c| c }.reverse.to_h.transform_values { |c| (c / total_users * 100).round(2) }
 end

@@ -22,8 +22,7 @@ class UpdatesController < ApplicationController
     @update = Update.new(published_at: Time.zone.today)
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @update = Update.new(update_params)

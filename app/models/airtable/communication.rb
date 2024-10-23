@@ -1,6 +1,6 @@
 module Airtable
   module Communication
-    API_URL = "https://api.airtable.com/v0"
+    API_URL = "https://api.airtable.com/v0".freeze
 
     attr_reader :airtable_info
 
@@ -21,7 +21,7 @@ module Airtable
           record = records.find_by(id: record_data["fields"]["ID"])
           next unless record
 
-          record.update_columns(airtable_id: record_data["id"])
+          record.update_columns(airtable_id: record_data["id"]) # rubocop:disable Rails/SkipsModelValidations
         end
       end
     end
@@ -35,7 +35,7 @@ module Airtable
         next unless local_record
 
         updated_at = timestamps[record["id"]].presence || request_time
-        attributes = local_record_attributes(local_record, record)
+        attributes = local_record_attributes(record)
         local_record.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
       end
     end
@@ -90,11 +90,9 @@ module Airtable
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         attrs = [uri, data, headers].compact
         response = http.public_send(method, *attrs)
-        if response.is_a?(Net::HTTPSuccess)
-          Oj.safe_load(response.body)
-        else
-          raise DataError.new(data:, response:)
-        end
+        raise DataError.new(data:, response:) unless response.is_a?(Net::HTTPSuccess)
+
+        Oj.safe_load(response.body)
       end
     end
   end

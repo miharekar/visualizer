@@ -75,7 +75,7 @@ module Parsers
       @datapoints = @datapoints.compact_blank
       relevant_keys = @datapoints.keys
       labels_map = DATA_LABELS_MAP.values_at(*relevant_keys)
-      @data = labels_map.index_with { |label| [] }
+      @data = labels_map.index_with { |_label| [] }
       most_data = @datapoints.max_by { |_k, v| v.size }.first
       time_step = (@datapoints[most_data].keys.last - @datapoints[most_data].keys.first) / @datapoints[most_data].keys.size
       first_timestamp = @datapoints.min_by { |_k, v| v.keys.first }[1].keys.first

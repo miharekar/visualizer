@@ -3,8 +3,7 @@ class RoastersController < ApplicationController
   before_action :set_roaster, only: %i[edit update destroy remove_image]
   before_action :load_roasters, only: %i[index search]
 
-  def index
-  end
+  def index; end
 
   def search
     render :index
@@ -14,8 +13,7 @@ class RoastersController < ApplicationController
     @roaster = Current.user.roasters.build
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @roaster = Current.user.roasters.build(roaster_params)

@@ -1,6 +1,6 @@
 class Customer < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
 
   def top_spender?
     amount >= 15000

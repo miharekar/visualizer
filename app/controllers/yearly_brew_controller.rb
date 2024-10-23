@@ -41,7 +41,7 @@ class YearlyBrewController < ApplicationController
     coffees = most_common(shots, %i[bean_brand bean_type espresso_enjoyment], exclude: {bean_brand: ["", "Unknown roaster"], bean_type: ["", "Unknown bean"], espresso_enjoyment: [nil, 0]})
     coffees = coffees.select { |c| c.shots_count > 1 }
     max = coffees.map(&:espresso_enjoyment).max
-    coffee = coffees.select { |c| c.espresso_enjoyment == max }.max_by { |c| c.shots_count }
+    coffee = coffees.select { |c| c.espresso_enjoyment == max }.max_by(&:shots_count)
     "#{coffee.bean_brand} #{coffee.bean_type} (#{coffee.shots_count} shots with #{coffee.espresso_enjoyment})" if coffee
   end
 

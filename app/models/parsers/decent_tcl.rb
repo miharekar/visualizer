@@ -52,7 +52,7 @@ module Parsers
       return if data.blank?
 
       method = "extract_#{name}"
-      data = @start_chars_to_ignore.include?(data.first) ? data.drop(1) : data
+      data = data.drop(1) if @start_chars_to_ignore.include?(data.first)
       __send__(method, data) if respond_to?(method, true)
     end
 
@@ -67,7 +67,7 @@ module Parsers
     def extract_profile(data)
       stop = "#{data.last.join(" ")}\n}"
       @profile_fields["json"] = Oj.safe_load(file[/profile (\{(.*)#{stop})/m, 1])
-    rescue
+    rescue StandardError
       nil
     end
 

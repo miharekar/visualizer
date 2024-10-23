@@ -3,8 +3,7 @@ class ProfilesController < ApplicationController
   before_action :set_profile
   before_action :set_authorized_applications
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @profile.update(profile_params)
@@ -60,7 +59,7 @@ class ProfilesController < ApplicationController
   private
 
   def set_profile
-    @profile = (params.key?(:id) && Current.user.admin?) ? User.find(params[:id]) : Current.user
+    @profile = params.key?(:id) && Current.user.admin? ? User.find(params[:id]) : Current.user
   end
 
   def set_authorized_applications
@@ -71,7 +70,7 @@ class ProfilesController < ApplicationController
     allowed_params = %i[avatar name timezone temperature_unit date_format skin public hide_shot_times]
     allowed_params << %i[github supporter developer] if Current.user.admin?
     allowed_params << %i[coffee_management_enabled] if Current.user.premium?
-    notification_settings = {unsubscribed_from: User::EMAIL_NOTIFICATIONS - params[:user][:email_notifications] || []}
+    notification_settings = {unsubscribed_from: (User::EMAIL_NOTIFICATIONS - params[:user][:email_notifications]) || []}
 
     params.require(:user).permit(allowed_params).merge(chart_settings).merge(notification_settings)
   end

@@ -25,7 +25,7 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert_equal "174.244", parsed_shot.timeframe.last
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], parsed_shot.data.keys.sort
     assert_equal 1748, parsed_shot.data["espresso_weight"].size
-    assert parsed_shot.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert(parsed_shot.data["espresso_flow_weight"].all? { |v| v >= 0 })
   end
 
   test "it parses long beanconqueror file with missing values correctly" do
@@ -39,7 +39,7 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert_equal "147.542", parsed_shot.timeframe.last
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], parsed_shot.data.keys.sort
     assert_equal 1366, parsed_shot.data["espresso_weight"].size
-    assert parsed_shot.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert(parsed_shot.data["espresso_flow_weight"].all? { |v| v >= 0 })
   end
 
   test "it parses correct weight from beanconqueror" do
@@ -53,7 +53,7 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert_equal "163.198", parsed_shot.timeframe.last
     assert_equal %w[espresso_flow espresso_flow_weight espresso_weight], parsed_shot.data.keys.sort
     assert_equal 1117, parsed_shot.data["espresso_weight"].size
-    assert parsed_shot.data["espresso_flow_weight"].all? { |v| v >= 0 }
+    assert(parsed_shot.data["espresso_flow_weight"].all? { |v| v >= 0 })
   end
 
   test "it parses beanconqueror temperature file correctly" do

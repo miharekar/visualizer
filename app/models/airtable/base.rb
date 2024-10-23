@@ -10,7 +10,7 @@ module Airtable
       prepare_related_tables
       set_identity
       @airtable_info = identity.airtable_info || create_airtable_info
-      set_table unless self.class == Base
+      set_table unless instance_of?(Base)
     end
 
     private

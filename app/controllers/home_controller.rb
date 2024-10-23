@@ -5,6 +5,5 @@ class HomeController < ApplicationController
     @last_update = @updates.shift
   end
 
-  def privacy
-  end
+  def privacy; end
 end

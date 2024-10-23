@@ -1,5 +1,5 @@
 module ShotPresenter
-  SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com"
+  SCREENSHOTS_URL = "https://visualizer-coffee-shots.s3.eu-central-1.amazonaws.com".freeze
 
   def screenshot_url
     "#{SCREENSHOTS_URL}/screenshots/#{id}.png" if screenshot?
@@ -17,10 +17,10 @@ module ShotPresenter
 
   def weight_and_ratio_info
     weight_parts = []
-    weight_parts << "#{bean_weight} g" if bean_weight_f > 0
-    weight_parts << "#{drink_weight} g" if drink_weight_f > 0
+    weight_parts << "#{bean_weight} g" if bean_weight_f.positive?
+    weight_parts << "#{drink_weight} g" if drink_weight_f.positive?
     weight_string = weight_parts.join(" : ")
-    ratio_string = "(1:#{weight_ratio.round(1)})" if bean_weight_f > 0 && drink_weight_f > 0 && weight_ratio > 0
+    ratio_string = "(1:#{weight_ratio.round(1)})" if bean_weight_f.positive? && drink_weight_f.positive? && weight_ratio.positive?
     [weight_string, ratio_string].compact.join(" ")
   end
 end

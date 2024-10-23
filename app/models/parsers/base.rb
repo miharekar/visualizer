@@ -7,7 +7,7 @@ module Parsers
     EXTRA_DATA_METHODS = %w[drink_weight grinder_model grinder_setting bean_brand bean_type roast_level roast_date drink_tds drink_ey espresso_enjoyment espresso_notes bean_notes].freeze
     EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight enable_fahrenheit my_name skin sn]).freeze
 
-    attr_reader :file, :json, :start_time, :data, :extra, :brewdata, :timeframe, :profile_title, :profile_fields, :json
+    attr_reader :file, :json, :start_time, :data, :extra, :brewdata, :timeframe, :profile_title, :profile_fields
 
     def self.parser_for(file)
       if file.start_with?("{")
@@ -75,7 +75,7 @@ module Parsers
       Digest::SHA256.base64digest(data.sort.to_json) if data.present?
     end
 
-    def existing_shot(user)
+    def existing_shot(_user)
       nil
     end
 
@@ -99,7 +99,7 @@ module Parsers
       end
     end
 
-    def set_coffee_bag_attributes(shot)
+    def set_coffee_bag_attributes(_shot)
       nil
     end
 

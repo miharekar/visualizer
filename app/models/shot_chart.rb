@@ -11,7 +11,7 @@ class ShotChart
     prepare_chart_data
   end
 
-  def has_data?
+  def data?
     shot_chart.present? || temperature_chart.present?
   end
 
@@ -55,7 +55,7 @@ class ShotChart
           valueSuffix: setting["suffix"]
         },
         opacity: setting["opacity"] || 1,
-        type: (setting["type"] == "spline") ? "spline" : "line"
+        type: setting["type"] == "spline" ? "spline" : "line"
       }
     end
   end

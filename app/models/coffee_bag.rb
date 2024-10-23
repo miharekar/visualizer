@@ -1,7 +1,7 @@
 class CoffeeBag < ApplicationRecord
   include Airtablable
 
-  DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score]
+  DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score].freeze
 
   after_save_commit :update_shots, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
 
@@ -17,7 +17,7 @@ class CoffeeBag < ApplicationRecord
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase) }
   scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
 
-  validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false}
+  validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
 
   def self.for_roaster_by_name_and_date(roaster, name, roast_date, **create_attrs)
     where(roaster:).filter_by_name(name).where(roast_date:).first || create(name:, roaster:, roast_date:, **create_attrs)

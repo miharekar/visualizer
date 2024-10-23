@@ -3,7 +3,7 @@ class ShotChartCompare < ShotChart
 
   attr_reader :parsed_comparison
 
-  SUFFIX = "_comparison"
+  SUFFIX = "_comparison".freeze
 
   def initialize(shot, comparison, user)
     @parsed_comparison = ParsedShot.new(comparison)

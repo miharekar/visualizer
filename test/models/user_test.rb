@@ -29,7 +29,7 @@ class UserTest < ActiveSupport::TestCase
     token = user.unsubscribe_token_for("test")
 
     assert user.reload.notify?("test")
-    assert_equal [], user.reload.unsubscribed_from
+    assert_empty user.reload.unsubscribed_from
 
     User.unsubscribe_by_token!(token)
     assert_not user.reload.notify?("test")

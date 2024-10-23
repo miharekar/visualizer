@@ -16,18 +16,18 @@ class EnableCoffeeManagementJob < ApplicationJob
     end
 
     ActiveRecord::Base.transaction do
-      Shot.upsert_all(upsert_attributes, returning: false)
+      Shot.upsert_all(upsert_attributes, returning: false) # rubocop:disable Rails/SkipsModelValidations
     end
     return if user.identities.by_provider(:airtable).empty?
 
-    AirtableUploadAllJob.perform_later(user, upsert_attributes.map { |attrs| attrs[:id] })
+    AirtableUploadAllJob.perform_later(user, upsert_attributes.pluck(:id))
   end
 
   private
 
   memo_wise def roasters
-    user.shots.distinct.pluck(:bean_brand).reject(&:blank?).to_h do |name|
-      [name, Roaster.for_user_by_name(user, name, skip_airtable_sync: true)]
+    user.shots.distinct.pluck(:bean_brand).compact_blank.index_with do |name|
+      Roaster.for_user_by_name(user, name, skip_airtable_sync: true)
     end
   end
 
