@@ -23,6 +23,10 @@ registry:
 
 builder:
   arch: arm64
+  cache:
+    type: registry
+    image: mrfoto/visualizer-build-cache
+    options: mode=max
 
 env:
   secret:

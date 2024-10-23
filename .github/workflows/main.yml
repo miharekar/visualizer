@@ -9,3 +9,8 @@ jobs:
     name: Ruby Tests
     uses: ./.github/workflows/ruby-tests.yml
     secrets: inherit
+  call-kamal:
+    name: Kamal
+    needs: call-ruby-tests
+    uses: ./.github/workflows/kamal.yml
+    secrets: inherit
