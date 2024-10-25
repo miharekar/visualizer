@@ -19,7 +19,7 @@ module Api
 
     def start_session_from_basic
       authenticate_with_http_basic do |email, password|
-        user = User.authenticate_by(email:, password:)
+        user = User.authenticate_by(email: email.downcase, password:)
         next unless user
 
         start_new_session_for(user)
