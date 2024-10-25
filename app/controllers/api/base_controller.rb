@@ -5,7 +5,7 @@ module Api
     private
 
     def resume_session
-      find_session_by_cookie || start_session_from_doorkeeper || start_session_from_basic
+      Current.session ||= find_session_by_cookie || start_session_from_doorkeeper || start_session_from_basic
     end
 
     def start_session_from_doorkeeper
