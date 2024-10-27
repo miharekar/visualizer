@@ -58,9 +58,9 @@ module Airtable
       api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", fields, method: :patch)
     end
 
-    def update_records(records, merge_on: ["ID"])
+    def update_records(records)
       records.each_slice(10).map do |batch|
-        data = {performUpsert: {fieldsToMergeOn: merge_on}, records: batch}
+        data = {performUpsert: {fieldsToMergeOn: ["ID"]}, records: batch}
         response = api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}", data, method: :patch)
         yield response if block_given?
       end

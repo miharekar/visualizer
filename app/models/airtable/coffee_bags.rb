@@ -28,6 +28,8 @@ module Airtable
     end
 
     def prepare_record(coffee_bag)
+      upload_roaster_to_airtable(coffee_bag) unless coffee_bag.roaster.airtable_id
+
       fields = {
         "Name" => coffee_bag.name,
         "Roaster" => [coffee_bag.roaster.airtable_id],
@@ -43,6 +45,11 @@ module Airtable
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:name] = record["fields"]["Name"]
       attributes
+    end
+
+    def upload_roaster_to_airtable(coffee_bag)
+      AirtableUploadRecordJob.perform_now(coffee_bag.roaster)
+      coffee_bag.roaster.reload
     end
   end
 end
