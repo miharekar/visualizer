@@ -57,43 +57,11 @@ Minitest/MultipleAssertions:
   Enabled: false
 Naming/AccessorMethodName:
   Enabled: false
-Performance/AncestorsInclude:
+Performance:
   Enabled: true
-Performance/ArraySemiInfiniteRangeSlice:
-  Enabled: true
-Performance/CaseWhenSplat:
-  Enabled: true
-Performance/Casecmp:
-  Enabled: true
-Performance/CollectionLiteralInLoop:
-  Enabled: true
-Performance/DeletePrefix:
-  Enabled: true
-Performance/DeleteSuffix:
-  Enabled: true
-Performance/IoReadlines:
-  Enabled: true
-Performance/MapCompact:
-  Enabled: true
-Performance/MethodObjectAsBlock:
-  Enabled: true
-Performance/OpenStruct:
-  Enabled: true
-Performance/RedundantBlockCall:
-  Enabled: true
-Performance/RedundantEqualityComparisonBlock:
-  Enabled: true
-Performance/SelectMap:
-  Enabled: true
-Performance/StringInclude:
-  Enabled: true
-Performance/Sum:
-  Enabled: true
-Performance/TimesMap:
+Rails:
   Enabled: true
 Rails/I18nLocaleTexts:
-  Enabled: false
-Rails/SaveBang:
   Enabled: false
 Style/Alias:
   EnforcedStyle: prefer_alias_method
