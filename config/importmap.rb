@@ -4,7 +4,6 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 
-# use rails importmap:check to check for major version changes
 pin "highcharts", to: "https://cdn.jsdelivr.net/npm/highcharts@11.4.7/es-modules/masters/highcharts.src.min.js"
 pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@11.4.7/es-modules/masters/modules/annotations.src.min.js"
 
