@@ -5,10 +5,10 @@
     </h1>
   </div>
 </div>
-<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+<div class="py-6 mx-auto max-w-7xl md:px-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
-    <div class="md:col-span-1">
-      <div class="px-4 sm:px-0">
+    <div class="px-4 sm:px-6 md:p-0 md:col-span-1">
+      <div>
         <% if @profile.public %>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             Your profile is <strong>PUBLIC</strong>.
@@ -39,7 +39,7 @@
       <% end %>
       <% if @authorized_applications.any? %>
         <hr class="my-6">
-        <div class="px-4 sm:px-0">
+        <div>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             You have <strong><%= pluralize(@authorized_applications.size, "application") %></strong> authorized via OAuth.
           </h3>
@@ -50,7 +50,7 @@
       <% end %>
       <% if @profile.decent_token.present? %>
         <hr class="my-6">
-        <div class="px-4 sm:px-0">
+        <div>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             Your profile is connected to Decent.
           </h3>
@@ -58,6 +58,7 @@
         </div>
       <% end %>
     </div>
+    <hr class="mx-4 mt-6 md:hidden sm:mx-6">
     <%= render "form" %>
   </div>
 </div>

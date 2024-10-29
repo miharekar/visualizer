@@ -5,18 +5,18 @@
     </h1>
   </div>
 </div>
-<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+<div class="py-6 mx-auto max-w-7xl md:px-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
-    <div class="md:col-span-1">
-      <div class="px-4 sm:px-0">
+    <div class="px-4 sm:px-6 md:p-0 md:col-span-1">
+      <div>
         <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
           You're editing shot made on
           <strong><%= @shot.start_time.in_time_zone(@timezone).to_formatted_s(:long) %></strong>.
         </h3>
       </div>
       <hr class="my-6">
-      <div class="px-4 sm:px-0">
-        <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+      <div>
+        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
           Copy values from another shot
         </h3>
         <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400" data-controller="related-shots">
@@ -24,7 +24,6 @@
             <option></option>
             <% @related_shots.each do |id, title, time| %>
               <% next if id == @shot.id %>
-
               <option value="<%= id %>">
                 <%= [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ") %>
               </option>
@@ -33,6 +32,7 @@
         </div>
       </div>
     </div>
+    <hr class="mx-4 mt-6 md:hidden sm:mx-6">
     <%= render "form" %>
   </div>
 </div>

@@ -8,7 +8,7 @@
             <% if has_error %>
               <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
             <% end %>
-            <%= f.label :name, class: "text-sm font-medium text-neutral-700 dark:text-neutral-300" %>
+            <%= f.label :name, class: "standard-label" %>
             <%= f.text_field :name, class: "#{extra_classes} mt-1 standard-input", autocomplete: "name" %>
             <% if has_error %>
               <p class="text-sm font-medium text-red-500">Name is required and has to be unique.</p>
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
-        <%= f.submit "Save", class: "submit-button py-2 px-4" %>
+        <%= f.submit "Save", class: "button-terracotta py-2 px-4" %>
       </div>
     </div>
   <% end %>
