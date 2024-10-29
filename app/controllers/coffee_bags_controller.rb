@@ -1,8 +1,9 @@
 class CoffeeBagsController < ApplicationController
   before_action :check_premium!
   before_action :set_roaster
-  before_action :set_coffee_bag, only: %i[edit update destroy remove_image]
+  before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image]
   before_action :load_coffee_bags, only: %i[index search]
+  before_action :load_roasters, only: %i[edit update duplicate]
 
   def index; end
 
@@ -14,9 +15,7 @@ class CoffeeBagsController < ApplicationController
     @coffee_bag = @roaster.coffee_bags.build
   end
 
-  def edit
-    @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
-  end
+  def edit; end
 
   def create
     @coffee_bag = @roaster.coffee_bags.build(coffee_bag_params)
@@ -31,8 +30,22 @@ class CoffeeBagsController < ApplicationController
     if @coffee_bag.update(coffee_bag_params)
       redirect_to roaster_coffee_bags_path(@coffee_bag.roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully updated."
     else
-      @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def duplicate
+    if params[:roast_date].blank?
+      flash.now[:alert] = "Please provide a roast date to duplicate this coffee bag."
+      render :edit, status: :unprocessable_entity
+    else
+      duplicate = @coffee_bag.duplicate(params[:roast_date])
+      if duplicate.save
+        redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully duplicated as #{duplicate.display_name}."
+      else
+        flash.now[:alert] = "Failed to duplicate coffee bag."
+        render :edit, status: :unprocessable_entity
+      end
     end
   end
 
@@ -59,6 +72,10 @@ class CoffeeBagsController < ApplicationController
   def load_coffee_bags
     @coffee_bags = @roaster.coffee_bags.order_by_roast_date
     @coffee_bags = @coffee_bags.where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
+  end
+
+  def load_roasters
+    @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
   end
 
   def coffee_bag_params

@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     resources :coffee_bags, except: [:show] do
       delete :remove_image, on: :member
       post :search, on: :collection
+      post :duplicate, on: :member
     end
     delete :remove_image, on: :member
     post :search, on: :collection

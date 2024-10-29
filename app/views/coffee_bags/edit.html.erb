@@ -5,18 +5,28 @@
     </h1>
   </div>
 </div>
-<div class="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+<div class="py-6 mx-auto max-w-7xl md:px-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
-    <div class="md:col-span-1">
-      <div class="px-4 sm:px-0">
-        <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
-          You made <%=  @coffee_bag.shots.count %> shots with <%= @coffee_bag.name %>
+    <div class="px-4 sm:px-6 md:p-0 md:col-span-1">
+      <div>
+        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+          You made <strong><%= link_to pluralize(@coffee_bag.shots.count, "shot"), shots_path(coffee_bag: @coffee_bag), class: "standard-link" %></strong> with <strong><%= @coffee_bag.name %></strong>.
         </h3>
-        <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-          <%= link_to "View shots", shots_path(coffee_bag: @coffee_bag), class: "standard-link" %> with this coffee bag.
-        </p>
+      </div>
+      <hr class="my-6">
+      <div>
+        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+          Duplicate this coffee bag with a different roast date
+        </h3>
+        <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400">
+          <%= form_with(url: duplicate_roaster_coffee_bag_path(@roaster, @coffee_bag), class: "flex flex-row items-center gap-2 md:flex-col lg:flex-row md:items-stretch lg:items-center") do |f| %>
+            <%= f.date_field :roast_date, class: "mt-0 standard-input" %>
+            <%= f.submit "Duplicate", class: "px-4 py-2 button-oxford-blue md:w-full lg:w-auto" %>
+          <% end %>
+        </div>
       </div>
     </div>
+    <hr class="mx-4 mt-6 md:hidden sm:mx-6">
     <%= render "form", coffee_bag: @coffee_bag %>
   </div>
 </div>

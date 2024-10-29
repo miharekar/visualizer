@@ -27,6 +27,10 @@ class CoffeeBag < ApplicationRecord
     roast_date.blank? ? name : "#{name} (#{roast_date.to_fs(:long)})"
   end
 
+  def duplicate(roast_date)
+    dup.tap { |d| d.roast_date = roast_date }
+  end
+
   private
 
   def update_shots
