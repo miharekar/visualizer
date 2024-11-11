@@ -57,7 +57,7 @@ module Parsers
 
     memo_wise def extremes
       brewdata["brewFlow"].filter_map do |_, values|
-        next if values.empty?
+        next if values.blank?
 
         [values.first, values.last].map { |v| Time.strptime(v["timestamp"], "%H:%M:%S.%L") }
       end
