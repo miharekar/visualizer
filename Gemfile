@@ -29,7 +29,7 @@ gem "postmark-rails"
 gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
-gem "rails", ">= 8.0.0.beta1"
+gem "rails"
 gem "responders"
 gem "slim"
 gem "solid_cable"
