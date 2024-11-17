@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.3.5"
 
 gem "active_link_to"
+gem "amazing_print"
 gem "appsignal"
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
@@ -30,6 +31,7 @@ gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
 gem "rails"
+gem "rails_semantic_logger"
 gem "responders"
 gem "slim"
 gem "solid_cable"

@@ -83,6 +83,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    amazing_print (1.6.0)
     annotaterb (4.13.0)
     appsignal (4.2.0)
       logger
@@ -349,6 +350,10 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails_semantic_logger (4.17.0)
+      rack
+      railties (>= 5.1)
+      semantic_logger (~> 4.16)
     railties (8.0.0)
       actionpack (= 8.0.0)
       activesupport (= 8.0.0)
@@ -409,6 +414,8 @@ GEM
       ffi (~> 1.12)
       logger
     securerandom (0.3.2)
+    semantic_logger (4.16.1)
+      concurrent-ruby (~> 1.0)
     singed (0.2.2)
       colorize
       stackprof (>= 0.2.13)
@@ -492,6 +499,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to
+  amazing_print
   annotaterb
   appsignal
   aws-sdk-s3
@@ -527,6 +535,7 @@ DEPENDENCIES
   puma
   rack-mini-profiler
   rails
+  rails_semantic_logger
   responders
   rubocop-rails-omakase
   ruby-lsp
