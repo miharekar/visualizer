@@ -24,6 +24,8 @@ class ShotChart
   end
 
   memo_wise def stages
+    return if parsed_shot.stage_indices.blank?
+
     @processed_shot_data.first.second.values_at(*parsed_shot.stage_indices).map { |d| {value: d.first} }
   end
 
