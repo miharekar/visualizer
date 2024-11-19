@@ -42,6 +42,10 @@ development:
     <% else %>
     database: visualizer_development
     <% end %>
+  queue:
+    <<: *sqlite
+    database: storage/queue.sqlite3
+    migrations_paths: db/queue_migrate
   cache:
     <<: *sqlite
     database: storage/cache.sqlite3
@@ -62,6 +66,10 @@ production:
     username: visualizer
     password: <%= ENV["POSTGRES_PASSWORD"] %>
     host: <%= ENV["POSTGRES_HOST"] %>
+  queue:
+    <<: *sqlite
+    database: storage/production_queue.sqlite3
+    migrations_paths: db/queue_migrate
   cache:
     <<: *sqlite
     database: storage/production_cache.sqlite3

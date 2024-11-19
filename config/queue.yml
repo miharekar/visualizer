@@ -4,7 +4,7 @@ default: &default
       batch_size: 500
   workers:
     - queues: [real_time, high, default, low]
-      threads: 10
+      threads: 5
 
 development:
   <<: *default
