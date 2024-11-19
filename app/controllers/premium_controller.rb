@@ -3,39 +3,40 @@ class PremiumController < ApplicationController
 
   def index
     @features = [
-      "Create custom fields for shot data tailored to your needs",
-      "Sync with Airtable",
+      "Create custom fields to track exactly what matters to you",
+      "Sync your shots, roasters, and coffee bags with Airtable",
       "Access your complete shot history",
-      "Explore the vast archive of public community shots",
+      "Browse through the community's public shot collection",
       "Upload over 50 shots per day",
-      "Personalize chart colors",
-      "Fine-tune the timing of the comparison shot",
-      "Attach images to shots for visual documentation and analysis",
-      "Keep private notes on shots for future reference",
-      "Show off your Premium status with a checkmark next to your name",
-      "Immediately find your past shots with Instant Filters",
-      "Manage your coffee bags and update all related shots at once"
-    ].shuffle + ["Directly support the development and maintenance of Visualizer"]
+      "Make charts your own with custom colors",
+      "Dig deep in your shot comparisons with precise timing control",
+      "Add photos to document your coffee journey",
+      "Keep private notes for your future self",
+      "Show off your Premium status with a shiny checkmark",
+      "Find past shots in a flash with Instant Filters",
+      "Track your coffee bags and update related shots in one go"
+    ].shuffle + ["Support Visualizer's development and keep the coffee flowing"]
+
     @qas = [
-      ["What's the biggest difference between free and premium?", "With premium, you can see all the shots you ever uploaded. On the free plan, you only see the ones made in the last month."]
+      ["What's the biggest difference between free and premium?", "Premium lets you see your complete shot history. Free users can only see their shots from the last month."]
     ] + [
-      ["How much does it cost?", "It costs €5 per month or €50 per year."],
-      ["Do you ever erase shot history for non-premium users?", "No, never. You simply lose visibility of the old shots, they're still there."],
-      ["If I decide to upgrade, will I be able to see all my past shots?", "Yes, absolutely. You'll be able to see all your shots, even the ones you uploaded before subscribing."],
-      ["Can I cancel at any time?", "Yes, you can cancel at any time. You will lose access to premium features when your subscription expires."],
-      ["What payment methods do you accept?", "I accept credit/debit cards via [Stripe](https://stripe.com/)."],
-      ["Can I use it for free?", "Yes, you can absolutely use it for free. The free plan is never going away."],
-      ["Do you have a free trial?", "Yes, you can try it for free for 7 days. If you decide to cancel at any time in those 7 days, you won't be charged anything."],
-      ["Do you have a refund policy?", "I don't have a specific refund policy. If you want a refund, please [contact me](mailto:miha@visualizer.coffee), and I'll be happy to help you out."],
-      ["Do you offer any discounts?", "I [offered discounts before](/changes/world-of-coffee) and might do it again in the future. No plans though. And you do get 2 months worth of discount when you pick the annual plan."],
-      ["Do you have a privacy policy?", "Yes, I have a privacy policy. You can read it [here](/privacy)."],
+      ["How much does it cost?", "€5 per month or €50 per year."],
+      ["Do you ever erase shot history for non-premium users?", "Never! Your shots stay safe - they're just hidden until you upgrade."],
+      ["If I decide to upgrade, will I be able to see all my past shots?", "Yep! Every single shot you've ever uploaded will be right there waiting for you."],
+      ["Can I cancel at any time?", "Of course! You'll keep premium features until your subscription ends."],
+      ["What payment methods do you accept?", "Credit and debit cards through [Stripe](https://stripe.com/)."],
+      ["Can I use it for free?", "Absolutely! The free plan is here to stay."],
+      ["Do you have a free trial?", "Yes! Try premium free for 7 days. Cancel anytime during the trial and you won't be charged."],
+      ["Do you have a refund policy?", "While I don't have a formal policy, just [drop me a line](mailto:miha@visualizer.coffee) if you need help with a refund."],
+      ["Do you offer any discounts?", "I keep things simple with one straightforward price! But you can save 2 months worth when you pick the annual plan."],
+      ["Do you have a privacy policy?", "Sure do! Read it [here](/privacy)."],
       ["Can I pay with Bitcoin/Ethereum/Dogecoin/…?", "No."],
-      ["Can I use it on multiple devices?", "Yes, you can use it on all your devices. You don't need to pay separately for each device."],
-      ["How did you decide on the price?", "It's a long story. Feel free to read the [post detailing the reasons](https://visualizer.coffee/changes/visualizer-v3)."],
-      ["What's that about contributing 1% of the subscription to removing CO₂ from the atmosphere?", "I'm a big fan of what Stripe is doing, so I wanted to contribute to their [Climate program](https://stripe.com/climate)."],
-      ["How do you make holy water?", "You boil the hell out of it."]
+      ["Can I use it on multiple devices?", "Yes! Use it anywhere you want - no extra charge."],
+      ["How did you decide on the price?", "That's quite a story! Read all about it in [this post](https://visualizer.coffee/changes/visualizer-v3)."],
+      ["What's that about contributing 1% of the subscription to removing CO₂ from the atmosphere?", "I love what Stripe is doing with their [Climate program](https://stripe.com/climate), so I'm pitching in to help."],
+      ["What's your favorite exercise?", "The daily grind."]
     ].shuffle + [
-      ["What if I have more questions?", "Please [contact me](mailto:miha@visualizer.coffee), and I'll be happy to help you out."]
+      ["What if I have more questions?", "Just [send me a message](mailto:miha@visualizer.coffee) - I'm here to help!"]
     ]
   end
 

@@ -1,10 +1,10 @@
 <div class="max-w-2xl pt-24 pb-12 mx-auto sm:pt-32 sm:pb-16">
   <div class="text-center">
-    <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 text sm:text-6xl">
-      Unleash the True Potential of Coffee
+    <h1 class="font-serif text-4xl font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100 text sm:text-6xl">
+      Master Every Shot, One Cup at a Time
     </h1>
     <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-      Join a thriving community of coffee enthusiasts. Upload, analyze, and perfect your espresso or filter coffee shots with advanced tools and insights.
+      Join thousands of coffee lovers who use Visualizer to track, analyze, and perfect their coffee. Whether you're pulling espresso or brewing filter coffee, we've got you covered.
     </p>
     <div class="flex items-center justify-center mt-10 gap-x-6">
       <% path = authenticated? ? shots_path : new_registration_path %>
@@ -20,10 +20,10 @@
 <div class="py-12 sm:py-16">
   <div class="px-6 mx-auto max-w-7xl lg:px-8">
     <div class="max-w-2xl mx-auto lg:text-center">
-      <h2 class="text-base font-semibold leading-7 text-terracotta-600 dark:text-terracotta-400">Coffee Analytics Reimagined</h2>
-      <p class="mt-4 font-serif text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-300">Improve Your Coffee</p>
+      <h2 class="text-base font-semibold leading-7 text-terracotta-600 text-balance dark:text-terracotta-400">Your Coffee Journey, Enhanced</h2>
+      <p class="mt-4 font-serif text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-300">Better Tools, Better Coffee</p>
       <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-        Visualizer.coffee provides cutting-edge tools and a supportive community to help you explore, refine, and savor your coffee like never before.
+        Whether you're a home enthusiast or a professional barista, Visualizer gives you the tools to understand your coffee better. Track your progress, experiment with confidence, and connect with coffee lovers worldwide.
       </p>
     </div>
     <div class="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
@@ -35,12 +35,14 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
               </svg>
             </div>
-            Universal Compatibility
+            Works With Your Setup
           </dt>
           <dd class="mt-2 text-base leading-7 text-neutral-600 dark:text-neutral-300">
-            Visualizer seamlessly integrates with <a href="https://decentespresso.com/" class="standard-link" target="_blank">Decent espresso machines</a>,
-            <a href="https://www.naked-portafilter.com/product-category/smart-espresso-profiler/" class="standard-link" target="_blank">Smart Espresso Profiler</a>, <a href="https://pressensor.com/" class="standard-link" target="_blank">Pressensor</a>, and <a href="https://beanconqueror.com/" class="standard-link" target="_blank">Beanconqueror</a>.
-            Experience a unified platform that caters to diverse coffee setups and preferences.
+            Visualizer plays nice with <a href="https://decentespresso.com/" class="standard-link" target="_blank">Decent espresso machines</a>,
+            <a href="https://beanconqueror.com/" class="standard-link" target="_blank">Beanconqueror</a>,
+            <a href="https://www.naked-portafilter.com/product-category/smart-espresso-profiler/" class="standard-link" target="_blank">Smart Espresso Profiler</a>,
+            <a href="https://pressensor.com/" class="standard-link" target="_blank">Pressensor</a>,
+            and many more devices and apps. The list keeps growing.
           </dd>
         </div>
         <div class="relative pl-16">
@@ -50,11 +52,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
               </svg>
             </div>
-            In-Depth Analytics
+            See Every Detail
           </dt>
           <dd class="mt-2 text-base leading-7 text-neutral-600 dark:text-neutral-300">
-            Unlock the full potential of your coffee with intuitive charts and powerful comparison tools.
-            <%= link_to "Premium", premium_index_path, class: "standard-link", target: "_blank" %> users gain access to advanced customization options and a wealth of community data to fuel their coffee mastery.
+            Track every detail of your coffee journey with beautiful, easy-to-read charts. Compare shots side by side, spot trends, and discover what makes your best cups special.
+            <%= link_to "Premium", premium_index_path, class: "standard-link", target: "_blank" %> users get even more tools to dive deeper.
           </dd>
         </div>
         <div class="relative pl-16">
@@ -67,8 +69,8 @@
             Vibrant Global Community
           </dt>
           <dd class="mt-2 text-base leading-7 text-neutral-600 dark:text-neutral-300">
-            Join a worldwide network of over <%= number_with_delimiter(@user_count) %> coffee enthusiasts who share shots daily.
-            Engage, learn, and collaborate in the pursuit of coffee perfection with like-minded individuals from around the globe.
+            Join over <%= number_with_delimiter(@user_count) %> coffee lovers sharing their coffee journey.
+            Learn from others' experiences, share your discoveries, and be part of a community that's passionate about great coffee.
           </dd>
         </div>
         <div class="relative pl-16">
