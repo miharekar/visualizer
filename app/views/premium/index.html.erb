@@ -3,13 +3,13 @@
     <div class="px-4 pt-16 mx-auto max-w-7xl sm:pt-24 sm:px-6 lg:px-8">
       <div class="pb-16 xl:flex xl:items-center xl:justify-between">
         <div>
-          <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-6xl">
-            <span class="text-neutral-900 dark:text-white">Get Premium for</span>
+          <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-6xl text-balance">
+            <span class="text-neutral-900 dark:text-white">Upgrade to Premium for just</span>
             <span class="text-terracotta-600 dark:text-terracotta-500">€5/month</span>
             <span class="text-neutral-900 dark:text-white">or</span>
             <span class="text-terracotta-600 dark:text-terracotta-500">€50/year</span>
           </h1>
-          <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Unlock the full potential of Visualizer with these features</p>
+          <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Take your coffee journey to the next level</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
           <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto xl:mt-0 hover:shadow-lg hover:shadow-terracotta-500/50" %>
@@ -17,8 +17,8 @@
       </div>
       <div class="pt-16 border-t border-neutral-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
-          <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Experience the ultimate Visualizer experience</p>
-          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Try it risk-free with a 7-day free trial. Cancel anytime.</p>
+          <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-white text-balance">Everything you need to perfect your coffee</p>
+          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Start your 7-day free trial today. No commitment, cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
@@ -53,15 +53,13 @@
           <div class="max-w-2xl mx-auto lg:mx-0 lg:max-w-lg">
             <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">Instant Filters</p>
             <p class="mt-6 text-lg leading-8 text-neutral-600">
-              Just bought a bag of beans you loved but haven't brewed in ages?
-              Scratching your head trying to recall the ideal grind size and brewing profile you used last time?
+              Remember that amazing coffee you made last month? With Instant Filters, your best shots are always just a few keystrokes away.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600">
-              Don't worry, <span class="font-semibold">Instant Filters</span> are here to help you out!
-              With just a couple of keystrokes, you can effortlessly bring up all the details from your previous brews, ensuring your next shot is not just a shot in the dark, but a surefire hit.
+              No more digging through old records or trying to remember what worked before. Just type and find exactly what you're looking for - whether it's a specific bean, roaster, grinder, or that perfect profile you want to recreate.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600">
-              With <span class="font-semibold">Instant Filters</span>, your espresso history transforms into an easy-to-navigate, friendly companion, guiding you to consistently craft exceptional shots, just the way you like them.
+              Turn your shot history into your personal coffee diary, helping you brew consistently amazing coffee, every single time.
             </p>
           </div>
           <div class="flex justify-center">
@@ -92,7 +90,8 @@
   <div class="bg-terracotta-50 dark:bg-terracotta-950">
     <div class="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
       <h2 class="text-3xl font-bold tracking-tight text-terracotta-600 dark:text-terracotta-100 sm:text-4xl">
-        <span class="block font-serif">Ready to dive in?</span>
+        <span class="block font-serif">Start Your Free Trial Today</span>
+        <span class="block mt-2 text-xl font-normal">7 days to explore everything Premium has to offer</span>
       </h2>
       <div class="flex mt-8 lg:mt-0 lg:flex-shrink-0">
         <div class="inline-flex rounded-md shadow">
