@@ -14,6 +14,8 @@ module Parsers
         json = parse_json(file)
         if json.key?("mill") || json.key?("brewFlow")
           Beanconqueror.new(file, json)
+        elsif json.key?("datapoints")
+          Gaggiuino.new(file, json)
         else
           DecentJson.new(file, json)
         end

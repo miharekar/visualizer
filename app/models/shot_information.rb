@@ -20,8 +20,10 @@ class ShotInformation < ApplicationRecord
     !beanconqueror?
   end
 
-  def beanconqueror?
-    parser_name == "beanconqueror"
+  %w[beanconqueror gaggiuino].each do |parser|
+    define_method(:"#{parser}?") do
+      parser_name == parser
+    end
   end
 
   def parser_name

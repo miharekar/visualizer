@@ -30,7 +30,9 @@ module Api
 
     def profile
       with_shot do |shot|
-        if params[:format] == "csv"
+        if shot.information&.gaggiuino?
+          send_data shot.information&.profile_fields, filename: "#{shot.profile_title} from Visualizer.json", type: "application/json", disposition: "attachment"
+        elsif params[:format] == "csv"
           send_data shot.information&.csv_profile, filename: "#{shot.profile_title} from Visualizer.csv", type: "text/csv", disposition: "attachment"
         elsif params[:format] == "json" && shot.information&.json_profile_fields.present?
           render json: shot.information&.json_profile

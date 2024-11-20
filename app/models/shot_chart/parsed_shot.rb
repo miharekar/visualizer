@@ -68,18 +68,27 @@ class ShotChart
 
     def detect_stages_from_data
       indices = []
-      data.select { |label, _| label.end_with?("_goal") }.each_value do |d|
-        next if d.blank?
+      diff_threshold = 0.05
 
-        d = d.map(&:to_f)
-        d.each.with_index do |a, i|
-          next if i < 5
+      loop do
+        indices = []
+        data.select { |label, _| label.end_with?("_goal") }.each_value do |d|
+          next if d.blank?
 
-          b = d[i - 1]
-          c = d[i - 2]
-          diff2 = ((a - b) - (b - c))
-          indices << i if diff2.abs > 0.1
+          d = d.map(&:to_f)
+          d.each.with_index do |a, i|
+            next if i < 5
+
+            b = d[i - 1]
+            c = d[i - 2]
+            diff2 = ((a - b) - (b - c))
+            indices << i if diff2.abs > diff_threshold
+          end
         end
+
+        break if indices.size <= shot.duration / 2
+
+        diff_threshold += 0.05
       end
 
       if indices.any?
