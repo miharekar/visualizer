@@ -17,9 +17,17 @@ class StripeWebhookHandler
   private
 
   def invoice_payment_succeeded
-    return unless event.data.object.subscription && user
+    update_premium_expiry(event.data.object.subscription)
+  end
 
-    subscription = Stripe::Subscription.retrieve(event.data.object.subscription)
+  def customer_subscription_updated
+    update_premium_expiry(event.data.object.id)
+  end
+
+  def update_premium_expiry(subscription_id)
+    return unless subscription_id && user
+
+    subscription = Stripe::Subscription.retrieve(subscription_id)
     user.update(premium_expires_at: Time.zone.at(subscription.current_period_end) + 1.day)
   end
 
