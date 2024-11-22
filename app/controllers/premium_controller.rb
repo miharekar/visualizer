@@ -61,7 +61,7 @@ class PremiumController < ApplicationController
         session_params = session_params.merge(
           customer_email: Current.user.email,
           tax_id_collection: {enabled: true},
-          subscription_data: {trial_period_days: 7}
+          subscription_data: {trial_period_days: 37}
         )
       end
 
