@@ -28,11 +28,11 @@ class PremiumController < ApplicationController
       ["Can I use it for free?", "Absolutely! The free plan is here to stay."],
       ["Do you have a free trial?", "Yes! Try premium free for 37 days. Cancel anytime during the trial and you won't be charged."],
       ["Do you have a refund policy?", "While I don't have a formal policy, just [drop me a line](mailto:miha@visualizer.coffee) if you need help with a refund."],
-      ["Do you offer any discounts?", "I keep things simple with one straightforward price! But you can save 2 months worth when you pick the annual plan."],
+      ["Do you offer any discounts?", "[No](/updates/black-friday). I keep things simple with one straightforward price! But you can save 2 months worth when you pick the annual plan."],
       ["Do you have a privacy policy?", "Sure do! Read it [here](/privacy)."],
       ["Can I pay with Bitcoin/Ethereum/Dogecoin/…?", "No."],
       ["Can I use it on multiple devices?", "Yes! Use it anywhere you want - no extra charge."],
-      ["How did you decide on the price?", "That's quite a story! Read all about it in [this post](https://visualizer.coffee/changes/visualizer-v3)."],
+      ["How did you decide on the price?", "That's quite a story! Read all about it in [this post](/updates/visualizer-v3)."],
       ["What's that about contributing 1% of the subscription to removing CO₂ from the atmosphere?", "I love what Stripe is doing with their [Climate program](https://stripe.com/climate), so I'm pitching in to help."],
       ["What's your favorite exercise?", "The daily grind."]
     ].shuffle + [
