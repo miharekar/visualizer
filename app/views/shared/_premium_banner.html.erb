@@ -5,12 +5,12 @@
         <% if defined?(count) %>
           <span class="sm:hidden"><strong class="font-semibold"><%= number_to_human(count) %> shots are hidden</strong></span>
           <span class="hidden sm:inline-block md:hidden"><strong class="font-semibold"><%= number_to_human(count) %> shots are hidden</strong></span>
-          <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold"><%= number_to_human(count) %> old shots are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
-          <span class="hidden lg:inline-block"><strong class="font-semibold"><%= number_to_human(count) %> shots uploaded over a month ago are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
+          <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold"><%= number_to_human(count) %> old shots are hidden.</strong> Subscribe to see them. 37-day free trial.</span>
+          <span class="hidden lg:inline-block"><strong class="font-semibold"><%= number_to_human(count) %> shots uploaded over a month ago are hidden.</strong> Subscribe to see them. 37-day free trial.</span>
         <% else %>
           <span class="md:hidden"><strong class="font-semibold">Old shots are hidden</strong></span>
-          <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold">Old shots are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
-          <span class="hidden lg:inline-block"><strong class="font-semibold">Shots uploaded over a month ago are hidden.</strong> Subscribe to see them. 7-day free trial.</span>
+          <span class="hidden md:inline-block lg:hidden"><strong class="font-semibold">Old shots are hidden.</strong> Subscribe to see them. 37-day free trial.</span>
+          <span class="hidden lg:inline-block"><strong class="font-semibold">Shots uploaded over a month ago are hidden.</strong> Subscribe to see them. 37-day free trial.</span>
         <% end %>
       </p>
       <%= link_to premium_index_path, class: "flex-none rounded-full bg-terracotta-600 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-terracotta-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-800" do %>
