@@ -1,6 +1,8 @@
 class AirtableUploadAllJob < AirtableJob
   def perform(user, shot_ids = nil)
     identity = user.identities.find_by(provider: "airtable")
+    return unless identity
+
     if identity.valid_token?
       if user.coffee_management_enabled?
         Airtable::Roasters.new(user).upload_multiple(user.roasters.where(airtable_id: nil))
