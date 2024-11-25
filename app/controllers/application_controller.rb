@@ -22,12 +22,10 @@ class ApplicationController < ActionController::Base
   end
 
   def check_admin!
-    require_authentication
     redirect_to shots_path unless Current.user.admin?
   end
 
   def check_premium!
-    require_authentication
     redirect_to premium_index_path, alert: "You must be a premium user to access this feature." unless Current.user.premium?
   end
 end

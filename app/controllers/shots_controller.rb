@@ -3,8 +3,8 @@ class ShotsController < ApplicationController
 
   FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
-  before_action :check_premium!, only: :coffee_bag_form
   before_action :require_authentication, except: %i[show compare share beanconqueror]
+  before_action :check_premium!, only: :coffee_bag_form
   before_action :load_shot, only: %i[show compare remove_image]
   before_action :create_shared_shot, only: %i[share beanconqueror]
   before_action :load_users_shot, only: %i[edit update destroy]

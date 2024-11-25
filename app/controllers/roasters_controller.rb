@@ -1,4 +1,5 @@
 class RoastersController < ApplicationController
+  before_action :require_authentication
   before_action :check_premium!
   before_action :set_roaster, only: %i[edit update destroy remove_image]
   before_action :load_roasters, only: %i[index search]

@@ -1,4 +1,5 @@
 class CoffeeBagsController < ApplicationController
+  before_action :require_authentication
   before_action :check_premium!
   before_action :set_roaster
   before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image]

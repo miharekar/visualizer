@@ -1,4 +1,5 @@
 class StatsController < ApplicationController
+  before_action :require_authentication
   before_action :check_admin!
 
   def index
