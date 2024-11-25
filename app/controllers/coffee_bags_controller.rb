@@ -60,6 +60,18 @@ class CoffeeBagsController < ApplicationController
     render turbo_stream: turbo_stream.remove("coffee-bag-image")
   end
 
+  def scrape_info
+    Rails.logger.info "Scraping coffee bag info for #{params[:url]} by #{Current.user.id}"
+    scraper = CoffeeBagScraper.new
+    info = scraper.get_info(params[:url])
+
+    if info
+      render json: info
+    else
+      render json: {error: "Could not extract information from URL"}, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_roaster
@@ -80,7 +92,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def coffee_bag_params
-    cb_params = params.require(:coffee_bag).permit(:name, :roaster_id, :roast_date, :roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score, :image)
+    cb_params = params.require(:coffee_bag).permit(:name, :url, :roaster_id, :roast_date, :roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score, :image)
     roaster = Current.user.roasters.find_by(id: cb_params[:roaster_id])
     cb_params[:roaster_id] = @roaster.id if roaster.blank?
     cb_params

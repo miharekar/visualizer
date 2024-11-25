@@ -59,6 +59,7 @@ Rails.application.routes.draw do
       delete :remove_image, on: :member
       post :search, on: :collection
       post :duplicate, on: :member
+      post :scrape_info, on: :collection
     end
     delete :remove_image, on: :member
     post :search, on: :collection

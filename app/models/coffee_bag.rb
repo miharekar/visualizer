@@ -54,6 +54,7 @@ end
 #  region        :string
 #  roast_date    :date
 #  roast_level   :string
+#  url           :string
 #  variety       :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
