@@ -3,7 +3,7 @@ class YearlyBrew
 
   attr_reader :shots_this_year, :shots_past_year
 
-  def initialize(user, year: 2023)
+  def initialize(user, year: 2024)
     @shots_this_year = user.shots.where("extract(year from start_time) = ?", year)
     @shots_past_year = user.shots.where("extract(year from start_time) = ?", year - 1)
   end
