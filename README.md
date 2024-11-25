@@ -56,3 +56,13 @@ If you want to create OAuth applications please [contact me](mailto:miha@visuali
   ```shell
   $ ./bin/rails test
   ```
+
+## Star History
+
+<a href="https://star-history.com/#miharekar/visualizer&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=miharekar/visualizer&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=miharekar/visualizer&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=miharekar/visualizer&type=Date" />
+ </picture>
+</a>
