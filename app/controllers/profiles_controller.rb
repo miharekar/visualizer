@@ -46,6 +46,8 @@ class ProfilesController < ApplicationController
 
   def decent_serial_numbers
     @serial_numbers = DecentApi.new(@profile.decent_email, @profile.decent_token).serial_numbers
+  rescue StandardError
+    @serial_numbers = []
   end
 
   def disconnect_airtable

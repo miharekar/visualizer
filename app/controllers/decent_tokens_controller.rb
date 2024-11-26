@@ -11,5 +11,7 @@ class DecentTokensController < ApplicationController
       Current.user.update(decent_email: params[:email], decent_token:)
       redirect_to shots_path, notice: "Decent token saved"
     end
+  rescue StandardError => e
+    redirect_to new_decent_token_path, alert: {heading: "Something went wrong", text: e.message}
   end
 end
