@@ -10,7 +10,12 @@
     <div class="px-4 sm:px-6 md:p-0 md:col-span-1">
       <div>
         <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
-          You made <strong><%= link_to pluralize(@coffee_bag.shots.count, "shot"), shots_path(coffee_bag: @coffee_bag), class: "standard-link" %></strong> with <strong><%= @coffee_bag.name %></strong>.
+          You made
+          <strong><%= link_to pluralize(@coffee_bag.shots.count, "shot"), shots_path(coffee_bag: @coffee_bag), class: "standard-link" %></strong>
+          with
+          <strong><%= @coffee_bag.name %></strong>
+          by
+          <strong><%= link_to @roaster.name, roaster_coffee_bags_path(@roaster), class: "standard-link" %></strong>.
         </h3>
       </div>
       <hr class="my-6">
