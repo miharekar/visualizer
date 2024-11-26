@@ -1,5 +1,6 @@
 class CoffeeBag < ApplicationRecord
   include Airtablable
+  include Squishable
 
   DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score].freeze
 
@@ -14,8 +15,10 @@ class CoffeeBag < ApplicationRecord
     attachable.variant :display, resize_to_limit: [1000, 500]
   end
 
-  scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase) }
+  scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
   scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
+
+  squishes :country, :elevation, :farm, :farmer, :harvest_time, :name, :processing, :quality_score, :region, :roast_level, :url, :variety
 
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
 
