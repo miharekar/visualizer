@@ -14,7 +14,8 @@ class PremiumController < ApplicationController
       "Keep private notes for your future self",
       "Show off your Premium status with a shiny checkmark",
       "Find past shots in a flash with Instant Filters",
-      "Track your coffee bags and update related shots in one go"
+      "Track your coffee bags and update related shots in one go",
+      "Fetch coffee bag details with AI by just pasting a link with information"
     ].shuffle + ["Support Visualizer's development and keep the coffee flowing"]
 
     @qas = [
