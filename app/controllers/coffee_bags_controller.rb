@@ -62,8 +62,7 @@ class CoffeeBagsController < ApplicationController
 
   def scrape_info
     Rails.logger.info "Scraping coffee bag info for #{params[:url]} by #{Current.user.id}"
-    scraper = CoffeeBagScraper.new
-    info = scraper.get_info(params[:url])
+    info = CoffeeBagScraper.new.get_info(params[:url])
 
     if info
       render json: info
