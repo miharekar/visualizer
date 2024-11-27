@@ -9,7 +9,11 @@ export default class extends Controller {
 
     try {
       this.loaderTarget.classList.remove("hidden")
-      this.urlTarget.disabled = true
+
+      this.element.querySelectorAll('input, select, textarea, button').forEach(el => {
+        el.disabled = true
+        el.classList.add("opacity-50", "cursor-wait")
+      })
 
       const response = await fetch(this.urlTarget.dataset.scrapeUrl, {
         method: 'POST',
@@ -28,7 +32,11 @@ export default class extends Controller {
       console.error('Error fetching coffee info:', error)
     } finally {
       this.loaderTarget.classList.add("hidden")
-      this.urlTarget.disabled = false
+
+      this.element.querySelectorAll('input, select, textarea, button').forEach(el => {
+        el.disabled = false
+        el.classList.remove("opacity-50", "cursor-wait")
+      })
     }
   }
 

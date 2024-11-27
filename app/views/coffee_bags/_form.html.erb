@@ -13,8 +13,8 @@
                     action: "change->coffee-bag-scraper#fetch"
                   } %>
           </div>
-          <div data-coffee-bag-scraper-target="loader" class="hidden col-span-6 mx-auto sm:col-span-2 sm:mt-5">
-            <%= inline_svg_tag "logo-loading.svg", class: "logo-loading size-12 sm:size-10 stroke-neutral-600 text-neutral-600 dark:text-neutral-400 dark:stroke-neutral-400" %>
+          <div data-coffee-bag-scraper-target="loader" class="col-span-6 mx-auto sm:col-span-2 sm:mt-5">
+            <%= inline_svg_tag "logo-loading.svg", class: "hidden logo-loading size-12 sm:size-10 stroke-neutral-800 text-neutral-800 dark:text-neutral-300 dark:stroke-neutral-300" %>
           </div>
           <div class="col-span-6 sm:col-span-4">
             <% has_error = f.object.errors.any? { |e| e.attribute == :name } %>
