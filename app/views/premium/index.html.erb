@@ -46,6 +46,35 @@
       </div>
     </div>
   </div>
+  <div class="py-16 overflow-hidden bg-white dark:bg-black sm:py-24" id="coffee-bag-ai">
+    <div class="px-6 mx-auto max-w-7xl lg:px-8">
+      <div class="grid max-w-2xl grid-cols-1 mx-auto gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+        <div class="lg:ml-auto lg:pl-4 lg:pt-4">
+          <div class="lg:max-w-lg">
+            <span class="px-3 py-1 text-sm font-semibold leading-6 rounded-full text-terracotta-600 bg-terracotta-600/10 ring-1 ring-inset ring-terracotta-600/10">New</span>
+            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-4xl">Smart Coffee Import</p>
+            <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+              Adding information to coffee bags just got easier. No more searching for and copy-pasting information field by field.
+            </p>
+            <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+              Just paste the URL of your coffee, and watch as Visualizer automatically extracts all the details - origin, process, variety, altitude, and more. You keep full control over what gets saved.
+            </p>
+            <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+              Less time managing coffee data means more time enjoying your coffee.
+            </p>
+            <div class="mt-8">
+              <%= form_with( data:{turbo:"false"}) do |f| %>
+                <%= f.submit "Try it now!", class: "cursor-pointer inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-start justify-end lg:order-first">
+          <img src="https://visualizer-coffee.s3.eu-central-1.amazonaws.com/changelog/coffee_bag_scraping.gif" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem]" width="719" height="800">
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="py-16 overflow-hidden bg-white dark:bg-black sm:py-24" id="instant-filters">
     <div class="mx-auto max-w-7xl md:px-6 lg:px-8">
       <div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
