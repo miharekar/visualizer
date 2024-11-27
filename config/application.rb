@@ -28,8 +28,15 @@ module Visualizer
 
     config.active_storage.analyzers = []
     config.exceptions_app = routes
-
-    config.log_tags = {request_id: :request_id, ip: :remote_ip}
+    config.log_tags = {
+      evt: {name: "http.request.handled"},
+      http: lambda { |request|
+        http_headers = request.headers.to_h.select { |key, _value| key.start_with?("HTTP_") }.transform_keys { |key| key.sub(/^HTTP_/, "").downcase }
+        @sensitive_data_filter ||= ActiveSupport::ParameterFilter.new(Rails.configuration.filter_parameters)
+        @sensitive_data_filter.filter(headers: http_headers, ip: request.remote_ip, request_id: request.request_id, url: request.original_url, referer: request.referer, useragent: request.user_agent)
+      },
+      network: ->(request) { {bytes_written: request.content_length} }
+    }
     config.logger = ActiveSupport::TaggedLogging.logger($stdout)
   end
 end
