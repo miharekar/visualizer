@@ -95,7 +95,7 @@ input[type="color"]::-moz-color-swatch {
 }
 
 a:hover .logo-steam path {
-  animation: moveSteam 1s linear 0s infinite;
+  animation: moveSteam 1s linear 1s infinite;
 }
 
 .logo-steam path {
