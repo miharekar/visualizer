@@ -3,13 +3,13 @@
     <div class="grid grid-cols-12 gap-3">
       <% CommunityController::FILTERS.each do |filter, options| %>
         <% if options[:autocomplete] %>
-          <div class="col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: filter) %>" data-autocomplete-selected-class="bg-opacity-25 bg-terracotta-300" data-controller="autocomplete">
+          <div class="col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: filter) %>" data-autocomplete-selected-class="bg-terracotta-300/25" data-controller="autocomplete">
             <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "standard-label" %>
             <% if options[:target] %>
               <%= f.hidden_field options[:target], value: params[options[:target]], data: { autocomplete_target: "hidden" } %>
             <% end %>
             <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
-            <ul class="absolute z-10 mt-2 overflow-y-auto bg-white rounded-md shadow-lg list-group ring-1 ring-black ring-opacity-5 max-h-96" data-autocomplete-target="results"></ul>
+            <ul class="absolute z-10 mt-2 overflow-y-auto bg-white rounded-md shadow-lg list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
           </div>
         <% else %>
           <div class="col-span-6 md:col-span-3">

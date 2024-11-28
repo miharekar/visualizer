@@ -1,6 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+
+@theme {
+  --font-sans: "Inter var", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Ragazzi", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --color-terracotta-50: oklch(96.23% 0.016 32.01);
+  --color-terracotta-100: oklch(92.42% 0.034 26.81);
+  --color-terracotta-200: oklch(84.94% 0.07 28.49);
+  --color-terracotta-300: oklch(77.93% 0.109 28.8);
+  --color-terracotta-400: oklch(71.53% 0.148 30.64);
+  --color-terracotta-500: oklch(66.02% 0.186 31.04);
+  --color-terracotta-600: oklch(58.98% 0.214 31.63);
+  --color-terracotta-700: oklch(47.82% 0.171 31.71);
+  --color-terracotta-800: oklch(35.98% 0.124 31.8);
+  --color-terracotta-900: oklch(23.15% 0.072 32.58);
+  --color-terracotta-950: oklch(16.11% 0.041 33.73);
+
+  --color-oxford-blue-50: oklch(95.45% 0.008 228.85);
+  --color-oxford-blue-100: oklch(91.61% 0.014 233.76);
+  --color-oxford-blue-200: oklch(82.14% 0.028 234.05);
+  --color-oxford-blue-300: oklch(73.44% 0.042 234.48);
+  --color-oxford-blue-400: oklch(63.65% 0.058 236.32);
+  --color-oxford-blue-500: oklch(54.03% 0.055 236.46);
+  --color-oxford-blue-600: oklch(45.98% 0.046 237.81);
+  --color-oxford-blue-700: oklch(38.49% 0.037 235.76);
+  --color-oxford-blue-800: oklch(29.18% 0.026 235.18);
+  --color-oxford-blue-900: oklch(20.43% 0.015 239.49);
+  --color-oxford-blue-950: oklch(14.58% 0.008 227.73);
+}
+
+@layer base {
+  .prose pre {
+    background-color: #2e3440;
+  }
+}
+
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
 
 .standard-link {
   @apply underline hover:no-underline;
@@ -11,15 +50,15 @@
 }
 
 .standard-input {
-  @apply rounded-md shadow-inner-sm sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
+  @apply rounded-md inset-shadow-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
 }
 
 .button-terracotta {
-  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
+  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
 }
 
 .button-oxford-blue {
-  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-oxford-blue-600 hover:bg-oxford-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-oxford-blue-500 dark:ring-offset-black;
+  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-oxford-blue-600 hover:bg-oxford-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-oxford-blue-500 dark:ring-offset-black;
 }
 
 .shot-range {
