@@ -1,5 +1,5 @@
 <% cache coffee_bag do %>
-  <div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 rounded shadow dark:shadow-none dark:border dark:border-neutral-800 dark:text-neutral-200">
+  <div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 rounded shadow dark:shadow-none dark:border dark:border-neutral-700 dark:text-neutral-200">
     <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
       <%= link_to shots_path(coffee_bag: coffee_bag) do %>
         <span class="absolute inset-x-0 bottom-0 z-10 -top-px"></span>
@@ -30,8 +30,8 @@
         </div>
       </div>
     </div>
-    <div class="border-y border-neutral-200 dark:border-neutral-800">
-      <div class="flex divide-x divide-neutral-200 dark:divide-neutral-800">
+    <div class="border-y border-neutral-200 dark:border-neutral-700">
+      <div class="flex divide-x divide-neutral-200 dark:divide-neutral-700">
         <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
           <%= link_to edit_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
             <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
