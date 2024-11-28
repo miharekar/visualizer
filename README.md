@@ -6,7 +6,7 @@
 
 Visualizer was designed to work seamlessly with [Decent espresso machines](https://decentespresso.com/). Recently, it has expanded its compatibility to support [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/[), [Pressensor](https://pressensor.com/) and [Beanconqueror](https://beanconqueror.com/). This provides a streamlined experience that caters to a diverse range of coffee enthusiasts, accommodating their preferred devices.
 
-Read all about it on [visualizer.coffee](https://visualizer.coffee/), and feel free to [join the forum](https://decentforum.com/tag/visualizer).
+Read all about it on [visualizer.coffee](https://visualizer.coffee/).
 
 Application monitoring is sponsored by [AppSignal](https://appsignal.com/visualizer/admin/api_keys).
 
