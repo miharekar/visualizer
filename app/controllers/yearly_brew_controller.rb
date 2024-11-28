@@ -2,7 +2,7 @@ class YearlyBrewController < ApplicationController
   before_action :require_authentication, except: [:show]
 
   def index
-    year = params[:year].to_i || 2023
+    year = (params[:year].presence || 2023).to_i
     @yearly_brew = YearlyBrew.new(Current.user, year:)
   end
 

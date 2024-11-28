@@ -57,6 +57,17 @@ class YearlyBrew
     "#{Date::DAYNAMES[day.extract.to_i]} (#{day.shots_count})" if day
   end
 
+  memo_wise def shots_per_day_of_week(year = :current)
+    shots(year)
+      .group("EXTRACT(DOW FROM start_time)")
+      .select("EXTRACT(DOW FROM start_time) as day, COUNT(*) as shots_count")
+      .order("day")
+      .map do |day|
+        "#{Date::DAYNAMES[day.day.to_i]}: #{day.shots_count}"
+      end
+      .rotate(1)
+  end
+
   private
 
   def shots(year)

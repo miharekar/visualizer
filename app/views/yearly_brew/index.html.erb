@@ -28,6 +28,7 @@
         <%= render partial: "yearly_brew/stat", locals: { icon: :clock, title: "Minutes spent brewing coffee", stat: @yearly_brew.time_brewed, diff: (@yearly_brew.time_brewed.to_f - @yearly_brew.time_brewed(:past).to_f).round(2) } %>
         <%= render partial: "yearly_brew/stat", locals: { icon: :calendar_days, title: "Month with the most shots", stat: @yearly_brew.month_with_most_shots, diff: @yearly_brew.month_with_most_shots(:past) } %>
         <%= render partial: "yearly_brew/stat", locals: { icon: :calendar, title: "Day with the most shots", stat: @yearly_brew.day_with_most_shots, diff: @yearly_brew.day_with_most_shots(:past) } %>
+        <%= render partial: "yearly_brew/stat", locals: { icon: :list, title: "Shots per day of week", stat: @yearly_brew.shots_per_day_of_week.map { |day| day.split(": ").join("\n")}.join("  |  ") } %>
       </dl>
       <% if Current.user.public? %>
         <div class="flex justify-center">
