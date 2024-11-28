@@ -290,7 +290,6 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     ostruct (0.6.1)
-    pagy (9.3.1)
     parallel (1.26.3)
     parser (3.3.6.0)
       ast (~> 2.4.1)
@@ -370,7 +369,7 @@ GEM
     rdoc (6.8.1)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
-    reline (0.5.11)
+    reline (0.5.12)
       io-console (~> 0.5)
     require-hooks (0.2.2)
     responders (3.1.1)
@@ -529,7 +528,6 @@ DEPENDENCIES
   oj
   omniauth-airtable
   omniauth-rails_csrf_protection
-  pagy
   pg
   pg_lock
   pghero

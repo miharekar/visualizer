@@ -19,6 +19,25 @@ module Api
       json_response = response.parsed_body
       assert_equal 5, json_response["data"].length
       assert_includes json_response, "paging"
+      assert_equal %w[count page limit pages], json_response["paging"].keys
+      assert_equal 5, json_response["paging"]["count"]
+      assert_equal 1, json_response["paging"]["page"]
+      assert_equal 10, json_response["paging"]["limit"]
+      assert_equal 1, json_response["paging"]["pages"]
+
+      shot_data = json_response["data"].first
+      assert_equal %w[clock id], shot_data.keys
+
+      get api_shots_url(items: 2, page: 3), headers: auth_headers(user), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal 1, json_response["data"].length
+
+      assert_equal 5, json_response["paging"]["count"]
+      assert_equal 3, json_response["paging"]["page"]
+      assert_equal 2, json_response["paging"]["limit"]
+      assert_equal 3, json_response["paging"]["pages"]
 
       shot_data = json_response["data"].first
       assert_equal %w[clock id], shot_data.keys

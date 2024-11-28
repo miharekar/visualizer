@@ -1,23 +1,19 @@
 module Api
   class ShotsController < Api::BaseController
-    include Pagy::Backend
+    include Paginatable
 
     before_action :verify_upload_access, only: %i[upload]
     before_action :verify_write_access, only: %i[destroy]
 
     def index
-      limit = params[:items].presence.to_i
-      limit = 10 if limit.zero?
-      limit = 100 if limit.to_i > 100
-
       shots = Current.user.present? ? Current.user.shots : Shot.visible
       shots = shots.non_premium unless Current.user&.premium?
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
-
-      pagy, shots = pagy(shots, limit:)
+      shots, paging = paginate(shots)
       data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
-      render json: {data:, paging: pagy_metadata(pagy)}
-    rescue Pagy::VariableError
+      render json: {data:, paging:}
+    rescue StandardError => e
+      Appsignal.report_error(e)
       render json: {error: "Could not paginate"}, status: :unprocessable_entity
     end
 
