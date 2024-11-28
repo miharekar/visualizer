@@ -1,6 +1,6 @@
 service: visualizer
 
-image: mrfoto/visualizer
+image: miharekar/visualizer
 
 servers:
   web:
@@ -17,16 +17,13 @@ proxy:
     - www.visualizer.coffee
 
 registry:
-  username: mrfoto
+  server: ghcr.io
+  username: miharekar
   password:
     - KAMAL_REGISTRY_PASSWORD
 
 builder:
   arch: arm64
-  cache:
-    type: registry
-    image: mrfoto/visualizer-build-cache
-    options: mode=max
 
 env:
   secret:
