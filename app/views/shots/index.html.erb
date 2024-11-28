@@ -34,9 +34,6 @@
   <%= render "upload_form", show_form: @shots.none? %>
   <% if @shots.any? %>
     <%= render "filters" %>
-    <div id="shots_live_stream">
-      <%= turbo_stream_from Current.user, :shots %>
-    </div>
     <div data-controller="modal">
       <%= render "shared/modal" %>
       <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none dark:divide-neutral-800 dark:border-neutral-800" data-controller="check-images">
@@ -54,3 +51,4 @@
     </div>
   <% end %>
 </div>
+<%= turbo_stream_from Current.user, :shots, id: "shots_live_stream" %>
