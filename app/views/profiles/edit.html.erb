@@ -26,7 +26,7 @@
         <% end %>
       </div>
       <% if Current.user.has_airtable? %>
-        <hr class="my-6">
+        <hr class="my-6 text-neutral-200 dark:text-neutral-700">
         <div class="px-4 sm:px-0" data-controller="modal">
           <%= render "shared/modal" %>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
@@ -38,7 +38,7 @@
         </div>
       <% end %>
       <% if @authorized_applications.any? %>
-        <hr class="my-6">
+        <hr class="my-6 text-neutral-200 dark:text-neutral-700">
         <div>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             You have <strong><%= pluralize(@authorized_applications.size, "application") %></strong> authorized via OAuth.
@@ -49,7 +49,7 @@
         </div>
       <% end %>
       <% if @profile.decent_token.present? %>
-        <hr class="my-6">
+        <hr class="my-6 text-neutral-200 dark:text-neutral-700">
         <div>
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             Your profile is connected to Decent.
@@ -58,7 +58,7 @@
         </div>
       <% end %>
     </div>
-    <hr class="mx-4 mt-6 md:hidden sm:mx-6">
+    <hr class="mx-4 mt-6 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
     <%= render "form" %>
   </div>
 </div>

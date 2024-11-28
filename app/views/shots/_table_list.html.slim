@@ -2,9 +2,9 @@
   .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
     .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
       - if shots.any?
-        .shadow.overflow-hidden.border-b.border-neutral-200.dark:border-neutral-800.sm:rounded-lg data-controller="modal"
+        .shadow.overflow-hidden.border-b.border-neutral-200.dark:border-neutral-700.sm:rounded-lg data-controller="modal"
           = render "shared/modal"
-          table.min-w-full.divide-y.divide-neutral-200.dark:divide-neutral-800 data-controller="shot"
+          table.min-w-full.divide-y.divide-neutral-200.dark:divide-neutral-700 data-controller="shot"
             thead.bg-neutral-50.dark:bg-neutral-700
               tr
                 th.px-6.py-3.text-left.text-xs.font-medium.text-neutral-500.uppercase.tracking-wider
@@ -12,7 +12,7 @@
                 th.px-6.py-3.text-left.text-xs.font-medium.text-neutral-500.uppercase.tracking-wider
                   | Info
                 th.px-6.py-3
-            tbody#shots-table.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-800
+            tbody#shots-table.bg-white.dark:bg-neutral-900.divide-y.divide-neutral-200.dark:divide-neutral-700
               - shots.each do |shot|
                 = render partial: "shots/table_row_shot", locals: {shot: shot, include_person: include_person}
         = render partial: "shared/cursor_loader", locals: { cursor: cursor, path: cursor_path }

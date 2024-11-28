@@ -18,7 +18,7 @@
           <strong><%= link_to @roaster.name, roaster_coffee_bags_path(@roaster), class: "standard-link" %></strong>.
         </h3>
       </div>
-      <hr class="my-6">
+      <hr class="my-6 text-neutral-200 dark:text-neutral-700">
       <div>
         <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
           Duplicate this coffee bag with a different roast date
@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <hr class="mx-4 mt-6 md:hidden sm:mx-6">
+    <hr class="mx-4 mt-6 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
     <%= render "form", coffee_bag: @coffee_bag %>
   </div>
 </div>

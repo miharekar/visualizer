@@ -85,7 +85,7 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.6.0)
     annotaterb (4.13.0)
-    appsignal (4.2.3)
+    appsignal (4.3.0)
       logger
       rack
     ast (2.4.2)
@@ -169,7 +169,7 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.1.2)
     hashie (5.0.0)
-    hotwire-spark (0.1.4)
+    hotwire-spark (0.1.7)
       listen
       rails (>= 8.0.0)
       zeitwerk
@@ -457,9 +457,9 @@ GEM
     tailwindcss-rails (3.0.0)
       railties (>= 7.0.0)
       tailwindcss-ruby
-    tailwindcss-ruby (3.4.17-aarch64-linux)
-    tailwindcss-ruby (3.4.17-arm64-darwin)
-    tailwindcss-ruby (3.4.17-x86_64-linux)
+    tailwindcss-ruby (4.0.0.beta.8-aarch64-linux)
+    tailwindcss-ruby (4.0.0.beta.8-arm64-darwin)
+    tailwindcss-ruby (4.0.0.beta.8-x86_64-linux)
     temple (0.10.3)
     thor (1.3.2)
     thruster (0.1.9-aarch64-linux)
@@ -547,6 +547,7 @@ DEPENDENCIES
   stimulus-rails
   stripe
   tailwindcss-rails
+  tailwindcss-ruby (~> 4.0.0.beta.8)
   thruster
   tickly!
   turbo-rails

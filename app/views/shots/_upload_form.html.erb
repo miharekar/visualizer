@@ -11,7 +11,7 @@
     <div class="mt-5 md:mt-0 md:col-span-2">
       <%= form_with(url: { action: :create }, multipart: true, id: "shot-upload-form") do |f| %>
         <div class="overflow-hidden rounded-md">
-          <div class="p-4 bg-white shadow-inner-lg dark:bg-neutral-900">
+          <div class="p-4 bg-white inset-shadow-sm dark:bg-neutral-900">
             <div id="loader" class="justify-center hidden px-6 py-10 border-2 border-dashed rounded-md border-neutral-300 dark:border-neutral-600">
               <%= inline_svg_tag "logo-loading.svg", class: "logo-loading mx-auto w-auto h-14 stroke-neutral-500 text-neutral-500 dark:text-neutral-400 dark:stroke-neutral-400" %>
             </div>

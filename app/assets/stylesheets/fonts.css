@@ -5,6 +5,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Ragazzi";
   src: url("/Ragazzi-LightItalic.woff2") format("woff2");

@@ -1,6 +1,6 @@
 <% cache roaster do %>
   <%= tag.div id: dom_id(roaster) do %>
-    <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-800 dark:text-neutral-200">
+    <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
       <div class="relative flex w-full p-4 overflow-hidden cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
         <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40" data-check-images-target="container">
           <% if roaster.image.attached? && roaster.image.variable? %>
@@ -41,8 +41,8 @@
           </div>
         </div>
       </div>
-      <div class="flex border-l border-neutral-200 dark:border-neutral-800">
-        <div class="flex flex-col w-full -mt-px divide-y divide-neutral-200 dark:divide-neutral-800">
+      <div class="flex border-l border-neutral-200 dark:border-neutral-700">
+        <div class="flex flex-col w-full -mt-px divide-y divide-neutral-200 dark:divide-neutral-700">
           <div class="relative flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
             <%= link_to edit_roaster_path(roaster), class: "flex items-center p-4 text-sm border border-transparent gap-x-3" do %>
               <span class="absolute inset-x-0 bottom-0 -top-px"></span>
