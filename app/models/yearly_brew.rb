@@ -35,8 +35,16 @@ class YearlyBrew
     shots(year).where.not(espresso_enjoyment: [nil, 0]).average(:espresso_enjoyment).to_f.round(2)
   end
 
-  memo_wise def time_brewed(year = :current)
-    (shots(year).sum(:duration) / 60).round(2)
+  memo_wise def time_brewed(year = :current, human: false)
+    total_seconds = shots(year).sum(:duration)
+    if human
+      hours = (total_seconds / 3600).floor
+      minutes = ((total_seconds % 3600) / 60).floor
+      seconds = (total_seconds % 60).round
+      [hours, minutes, seconds]
+    else
+      (total_seconds / 60.0).round(2)
+    end
   end
 
   memo_wise def amount_beans_used(year = :current)

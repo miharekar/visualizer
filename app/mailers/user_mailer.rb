@@ -3,7 +3,7 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     @yearly_brew = YearlyBrew.new(@user)
 
-    mail to: @user.email, subject: "Bean There, Brewed That: Your Year in Coffee"
+    mail to: @user.email, subject: "Bean Counting 2024: Your Year on Visualizer"
   end
 
   def black_friday
