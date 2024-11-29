@@ -57,6 +57,8 @@ Minitest/MultipleAssertions:
   Enabled: false
 Naming/AccessorMethodName:
   Enabled: false
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
 Performance:
   Enabled: true
 Rails:

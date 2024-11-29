@@ -32,13 +32,13 @@ class ShotChart
 
     def conductance_derivative_chart(conductance_data)
       derivative = []
-      conductance_data.each_cons(2) do |(t1, v1), (t2, v2)|
-        v = if v1.nil? || v2.nil?
+      conductance_data.each_cons(2) do |(t_1, v_1), (t_2, v_2)|
+        v = if v_1.nil? || v_2.nil?
           nil
         else
-          ((v2 - v1) / ((t2 - t1) / 1000)) * 10
+          ((v_2 - v_1) / ((t_2 - t_1) / 1000)) * 10
         end
-        derivative << [t1, v]
+        derivative << [t_1, v]
       end
 
       smoothed = []

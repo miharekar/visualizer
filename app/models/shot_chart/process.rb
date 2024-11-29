@@ -12,12 +12,12 @@ class ShotChart
         next if DATA_LABELS_TO_IGNORE.include?(label)
         next if !data.respond_to?(:map) || data.blank?
 
-        times10 = label == "espresso_water_dispensed"
+        times_10 = label == "espresso_water_dispensed"
         temperature_label = label.include?("temperature")
         data = data.map.with_index do |v, i|
           t = i < timeframe_count ? timeframe[i] : timeframe_last + ((i - timeframe_count + 1) * timeframe_diff)
           v = v.to_f
-          v *= 10 if times10
+          v *= 10 if times_10
           if temperature_label
             if to_fahrenheit && !parsed_shot.fahrenheit?
               v = (v * 9 / 5) + 32

@@ -81,8 +81,8 @@ class ShotChart
 
             b = d[i - 1]
             c = d[i - 2]
-            diff2 = ((a - b) - (b - c))
-            indices << i if diff2.abs > diff_threshold
+            diff_2 = ((a - b) - (b - c))
+            indices << i if diff_2.abs > diff_threshold
           end
         end
 

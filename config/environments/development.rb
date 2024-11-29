@@ -30,7 +30,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   # config.active_storage.service = :local
-  config.active_storage.service = :local_s3
+  config.active_storage.service = :local_amazon
 
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
