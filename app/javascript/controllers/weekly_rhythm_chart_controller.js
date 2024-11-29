@@ -7,7 +7,12 @@ export default class extends ChartController {
         type: 'column',
       },
       xAxis: {
-        categories: data.map(d => d[0][0])
+        categories: data.map(d => d[0]),
+        labels: {
+          formatter: function () {
+            return this.value[0]
+          }
+        }
       },
       yAxis: {
         visible: false,
@@ -15,7 +20,7 @@ export default class extends ChartController {
       },
       tooltip: {
         headerFormat: '',
-        pointFormat: '{point.y} shots'
+        pointFormat: '{point.category}: {point.y} shots'
       },
       plotOptions: {
         column: {
