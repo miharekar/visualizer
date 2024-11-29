@@ -3,7 +3,7 @@ class YearlyBrewController < ApplicationController
 
   def index
     year = (params[:year].presence || 2023).to_i
-    @yearly_brew = YearlyBrew.new(Current.user, year:)
+    @yearly_brew = YearlyBrew.new(Current.user, year)
     render template: "yearly_brew/index_#{year}"
   end
 
@@ -12,7 +12,7 @@ class YearlyBrewController < ApplicationController
     @user = User.visible.find_by(slug: params[:slug])
 
     if @user
-      @yearly_brew = YearlyBrew.new(@user, year:)
+      @yearly_brew = YearlyBrew.new(@user, year)
       render template: "yearly_brew/show_#{year}"
     else
       flash[:alert] = "Yearly Brew not found"

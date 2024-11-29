@@ -1,5 +1,5 @@
 <% content_for(:html_title) { "Visualizer | Bean Counting 2024: Your Year on Visualizer" } %>
-<div class="flex flex-col items-center px-4 mx-auto my-24 sm:my-32 gap-y-24 sm:gap-y-32 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
+<div class="flex flex-col items-center px-4 mx-auto my-24 gap-y-24 sm:gap-y-32 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
   <div class="px-6 bg-white lg:px-8">
     <div class="max-w-2xl mx-auto text-center">
       <p class="font-semibold text-terracotta-600 text-base/7">Your Year on Visualizer</p>
@@ -46,56 +46,12 @@
           <% end %>
         </p>
         <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-          <p class="text-lg font-semibold tracking-tight text-white text-balance">Time dedicated to brewing</p>
-          <p class="mt-2 text-base/7 text-terracotta-100">Every second well spent perfecting your craft and creating moments of coffee excellence throughout the year.</p>
+          <p class="text-lg font-semibold tracking-tight text-white text-balance">Time spent brewing</p>
+          <p class="mt-2 text-base/7 text-terracotta-100">Every second dedicated to perfecting your craft and creating moments of coffee excellence throughout the year.</p>
         </div>
       </div>
     </div>
-    <%
-    stats = [
-      {
-        title: "Best Rated Coffee",
-        stat: @yearly_brew.best_rated_coffee,
-        description: "Your highest-rated coffee of the year. A true gem that stood out among all your brews."
-      },
-      {
-        title: "Most Brewed Coffee",
-        stat: @yearly_brew.most_brewed_coffee,
-        description: "Your go-to coffee this year. Sometimes you find something that just works perfectly."
-      },
-      {
-        title: "Most Used Profile",
-        stat: @yearly_brew.most_used_profile,
-        description: "Your favorite recipe for consistently great shots. A trusted companion in your coffee journey."
-      },
-      {
-        title: "Average Enjoyment",
-        stat: @yearly_brew.average_enjoyment,
-        description: "The average rating of your shots this year. A testament to your consistency and skill in brewing great coffee."
-      },
-      {
-        title: "Coffee Brewed",
-        stat: "#{@yearly_brew.amount_brewed} kg",
-        description: "The total amount of coffee you've transformed into delicious espresso this year. That's a lot of beans!"
-      },
-      {
-        title: "Time Spent Brewing",
-        stat: "#{@yearly_brew.time_brewed} minutes",
-        description: "Time well spent perfecting your craft. Every minute dedicated to creating the perfect cup."
-      },
-      {
-        title: "Busiest Month",
-        stat: @yearly_brew.month_with_most_shots,
-        description: "Your most active month for coffee brewing. When your espresso machine barely got a break!"
-      },
-      {
-        title: "Most Active Day",
-        stat: @yearly_brew.day_with_most_shots,
-        description: "Your peak coffee day of the year. Must have been quite the caffeine-fueled adventure!"
-      }
-    ]
-  %>
-    <%= render "yearly_brew/bento_box_2024", stats: stats %>
+    <%= render "yearly_brew/bento_box_2024" %>
     <% if Current.user.public? %>
       <div class="flex justify-center">
         <%= link_to yearly_brew_path(Current.user.slug, 2024), class: "inline-flex items-center gap-x-2 rounded-md bg-terracotta-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-terracotta-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-600" do %>

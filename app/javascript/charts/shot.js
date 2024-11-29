@@ -358,7 +358,7 @@ const comparisonAdjust = (range) => {
 
 document.addEventListener("turbo:load", () => {
   Highcharts.charts.forEach((chart) => {
-    if (isObject(chart)) {
+    if (isObject(chart) && chart.renderTo && !chart.renderTo.hasAttribute("data-controller")) {
       chart.destroy()
     }
   })

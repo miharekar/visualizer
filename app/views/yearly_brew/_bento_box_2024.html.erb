@@ -1,32 +1,33 @@
-<div class="grid grid-cols-1 gap-4 mt-10 sm:mt-16 lg:grid-cols-6 lg:grid-rows-3">
-  <% stats.each_with_index do |stat, index| %>
-    <%
-      # Calculate position-based classes
-      is_first_row = index < 3
-      is_last_row = index >= 5
-      is_first_in_row = [0, 3, 5].include?(index)
-      is_last_in_row = [2, 4, 7].include?(index)
-      is_middle_row = index == 3 || index == 4
-
-      col_span = is_middle_row ? "lg:col-span-3" : "lg:col-span-2"
-
-      rounded_corners = []
-      rounded_corners << "max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" if index == 0
-      rounded_corners << "lg:rounded-tr-[2rem]" if index == 2
-      rounded_corners << "lg:rounded-bl-[2rem]" if index == 5
-      rounded_corners << "max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" if index == 7
-      rounded = rounded_corners.join(" ")
-    %>
-    <div class="relative <%= col_span %>">
-      <div class="absolute inset-px rounded-lg bg-white <%= rounded %>"></div>
-      <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] <%= rounded.gsub(/(\[|\])/, '\\\1') %>">
-        <div class="p-10 pt-4">
-          <h3 class="font-semibold text-terracotta-600 text-sm/4"><%= stat[:title] %></h3>
-          <p class="mt-2 text-lg font-medium tracking-tight text-gray-950"><%= stat[:stat] %></p>
-          <p class="max-w-lg mt-2 text-gray-600 text-sm/6"><%= stat[:description] %></p>
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-6">
+  <% bento_box_stats_2024(@yearly_brew).each_with_index do |(box, content), index| %>
+    <% position = bento_box_position_classes_2024(index) %>
+    <div class="relative <%= position[:col_span] %>">
+      <div class="absolute inset-px rounded-lg bg-white <%= position[:rounded_corners] %>"></div>
+      <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] <%= position[:rounded_corners].gsub(/(\[|\])/, '\\\1') %>">
+        <div class="px-8 pt-8 pb-8 sm:px-10 sm:py-10">
+          <h3 class="font-semibold text-base/7 text-terracotta-600"><%= content[:title] %></h3>
+          <p class="mt-2 text-lg font-medium tracking-tight text-gray-950">
+            <% if box == :weekly_rhythm %>
+              <div id="weekly-rhythm-chart" class="h-48" data-controller="weekly-rhythm-chart" data-chart-data="<%= content[:stat] %>"></div>
+            <% elsif box == :monthly_enjoyment %>
+              <div id="monthly-enjoyment-chart" class="h-48" data-controller="monthly-enjoyment-chart" data-chart-data="<%= content[:stat] %>"></div>
+            <% elsif box == :best_rated_coffee %>
+              <%= content[:stat].bean_brand %> <%= content[:stat].bean_type %>
+            <% else %>
+              <%= content[:stat] %>
+            <% end %>
+          </p>
+          <p class="max-w-lg mt-2 text-gray-600 text-sm/6">
+            <% if box == :best_rated_coffee %>
+              A true gem that stood out among all brews.
+              Made <%= pluralize(@yearly_brew.best_rated_coffee.shots_count, "shot") %> with an enjoyment score of <%= @yearly_brew.best_rated_coffee.espresso_enjoyment %>.
+            <% else %>
+              <%= content[:description] %>
+            <% end %>
+          </p>
         </div>
       </div>
-      <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 <%= rounded %>"></div>
+      <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 <%= position[:rounded_corners] %>"></div>
     </div>
   <% end %>
 </div>

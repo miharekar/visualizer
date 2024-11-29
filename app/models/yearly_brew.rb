@@ -3,7 +3,7 @@ class YearlyBrew
 
   attr_reader :shots_this_year, :shots_past_year
 
-  def initialize(user, year: 2024)
+  def initialize(user, year)
     @shots_this_year = user.shots.where("extract(year from start_time) = ?", year)
     @shots_past_year = user.shots.where("extract(year from start_time) = ?", year - 1)
   end
@@ -15,10 +15,8 @@ class YearlyBrew
 
   memo_wise def best_rated_coffee(year = :current)
     coffees = most_common(shots(year), %i[bean_brand bean_type espresso_enjoyment], exclude: {bean_brand: ["", "Unknown roaster"], bean_type: ["", "Unknown bean"], espresso_enjoyment: [nil, 0]})
-    coffees = coffees.select { |c| c.shots_count > 1 }
     max = coffees.map(&:espresso_enjoyment).max
-    coffee = coffees.select { |c| c.espresso_enjoyment == max }.max_by(&:shots_count)
-    "#{coffee.bean_brand} #{coffee.bean_type} (#{coffee.shots_count} shots with #{coffee.espresso_enjoyment})" if coffee
+    coffees.select { |c| c.espresso_enjoyment == max }.max_by(&:shots_count)
   end
 
   memo_wise def most_brewed_coffee(year = :current)
@@ -70,10 +68,20 @@ class YearlyBrew
       .group("EXTRACT(DOW FROM start_time)")
       .select("EXTRACT(DOW FROM start_time) as day, COUNT(*) as shots_count")
       .order("day")
-      .map do |day|
-        "#{Date::DAYNAMES[day.day.to_i]}: #{day.shots_count}"
-      end
+      .map { |day| [Date::DAYNAMES[day.day.to_i], day.shots_count] }
       .rotate(1)
+  end
+
+  memo_wise def monthly_enjoyments(year = :current)
+    monthly_data = shots(year)
+      .where.not(espresso_enjoyment: [nil, 0])
+      .group("EXTRACT(MONTH FROM start_time)")
+      .select("EXTRACT(MONTH FROM start_time) as month, AVG(espresso_enjoyment) as avg_enjoyment")
+      .to_h { |r| [r.month.to_i, r.avg_enjoyment] }
+
+    (1..12).map do |month|
+      [Date::MONTHNAMES[month], monthly_data[month].to_f.round(2)]
+    end
   end
 
   private

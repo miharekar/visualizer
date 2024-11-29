@@ -18,8 +18,10 @@
     <h2 class="font-serif text-2xl font-semibold leading-6 text-neutral-900 dark:text-neutral-100">Your Year on Visualizer</h2>
     <% if @yearly_brew.shots_this_year.any? %>
       <dl class="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2">
+        <% best_rated_coffee_2022 = "#{@yearly_brew.best_rated_coffee(:past).bean_brand} #{@yearly_brew.best_rated_coffee(:past).bean_type} (#{@yearly_brew.best_rated_coffee(:past).shots_count} shots with #{@yearly_brew.best_rated_coffee(:past).espresso_enjoyment})" if @yearly_brew.best_rated_coffee(:past) %>
+        <% best_rated_coffee_2023 = "#{@yearly_brew.best_rated_coffee.bean_brand} #{@yearly_brew.best_rated_coffee.bean_type} (#{@yearly_brew.best_rated_coffee.shots_count} shots with #{@yearly_brew.best_rated_coffee.espresso_enjoyment})" if @yearly_brew.best_rated_coffee %>
         <%= render partial: "yearly_brew/stat_2023", locals: { icon: :stack, title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :trophy, title: "Best rated coffee", stat: @yearly_brew.best_rated_coffee, diff: @yearly_brew.best_rated_coffee(:past) } %>
+        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :trophy, title: "Best rated coffee", stat: best_rated_coffee_2023, diff: best_rated_coffee_2022 } %>
         <%= render partial: "yearly_brew/stat_2023", locals: { icon: :heart, title: "Most brewed coffee", stat: @yearly_brew.most_brewed_coffee, diff: @yearly_brew.most_brewed_coffee(:past) } %>
         <%= render partial: "yearly_brew/stat_2023", locals: { icon: :book, title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
         <%= render partial: "yearly_brew/stat_2023", locals: { icon: :chart, title: "Average enjoyment", stat: @yearly_brew.average_enjoyment, diff: (@yearly_brew.average_enjoyment.to_f - @yearly_brew.average_enjoyment(:past).to_f).round(2) } %>
