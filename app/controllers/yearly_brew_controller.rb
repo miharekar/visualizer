@@ -9,20 +9,19 @@ class YearlyBrewController < ApplicationController
 
   def show
     year = (params[:year].presence || 2023).to_i
-    @user = User.visible.find_by(slug: params[:id])
+    @user = User.visible.find_by(slug: params[:slug])
 
     if @user
       @yearly_brew = YearlyBrew.new(@user, year:)
+      render template: "yearly_brew/show_#{year}"
     else
-      flash.now[:alert] = "Yearly Brew not found"
+      flash[:alert] = "Yearly Brew not found"
       if Current.user
         redirect_to action: :index
       else
         redirect_to root_path
       end
     end
-
-    render template: "yearly_brew/show_#{year}"
   end
 
   private
