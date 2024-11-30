@@ -8,7 +8,7 @@ Visualizer was designed to work seamlessly with [Decent espresso machines](https
 
 Read all about it on [visualizer.coffee](https://visualizer.coffee/).
 
-Application monitoring is sponsored by [AppSignal](https://appsignal.com/visualizer/admin/api_keys).
+Application monitoring is sponsored by [AppSignal](https://appsignal.com/).
 
 ## Getting help
 
