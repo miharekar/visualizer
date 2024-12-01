@@ -1,11 +1,19 @@
 class YearlyBrew
   prepend MemoWise
 
-  attr_reader :shots_this_year, :shots_past_year
+  attr_reader :user, :year
 
   def initialize(user, year)
-    @shots_this_year = user.shots.where("extract(year from start_time) = ?", year)
-    @shots_past_year = user.shots.where("extract(year from start_time) = ?", year - 1)
+    @user = user
+    @year = year
+  end
+
+  memo_wise def shots_this_year
+    user.shots.where("extract(year from start_time) = ?", year)
+  end
+
+  memo_wise def shots_past_year
+    user.shots.where("extract(year from start_time) = ?", year - 1)
   end
 
   memo_wise def favorite_roaster(year = :current)

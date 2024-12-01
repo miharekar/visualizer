@@ -1,0 +1,72 @@
+<div class="flex flex-col max-w-2xl gap-8 mx-auto lg:mx-0 lg:max-w-none lg:flex-row lg:items-end">
+  <div class="flex flex-col-reverse justify-between p-8 gap-x-16 gap-y-8 rounded-2xl bg-terracotta-50 dark:bg-terracotta-900 sm:w-3/4 sm:max-w-md sm:flex-row-reverse sm:items-end lg:w-72 lg:max-w-none lg:flex-none lg:flex-col lg:items-start">
+    <p class="flex-none text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+      <%= @yearly_brew.shots_this_year.count %>
+    </p>
+    <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
+      <p class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 text-balance">Shots Fired</p>
+      <p class="mt-2 text-neutral-600 dark:text-neutral-300 text-base/7">
+        From morning motivation to afternoon perfection, here's your shot count for the year.
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-col-reverse justify-between p-8 bg-neutral-900 dark:bg-neutral-700 gap-x-16 gap-y-8 rounded-2xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-sm lg:flex-auto lg:flex-col lg:items-start lg:gap-y-44">
+    <p class="flex-none text-3xl font-bold tracking-tight text-white">
+      <%= @yearly_brew.amount_beans_used %> kg
+    </p>
+    <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
+      <p class="text-lg font-semibold tracking-tight text-white text-balance">Coffee beans transformed into delicious shots</p>
+      <p class="mt-2 text-neutral-400 dark:text-neutral-300 text-base/7">
+        Each gram carefully measured and extracted to create your perfect cup of coffee.
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-col-reverse justify-between p-8 gap-x-16 gap-y-8 rounded-2xl bg-terracotta-600 dark:bg-terracotta-700 sm:w-11/12 sm:max-w-xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-none lg:flex-auto lg:flex-col lg:items-start lg:gap-y-28">
+    <p class="flex-none text-3xl font-bold tracking-tight text-white">
+      <% hours, minutes, seconds = @yearly_brew.time_brewed(human: true) %>
+      <% if hours > 0 %>
+        <%= hours %> h <%= minutes %> min <%= seconds %> s
+      <% else %>
+        <%= minutes %> min <%= seconds %> s
+      <% end %>
+    </p>
+    <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
+      <p class="text-lg font-semibold tracking-tight text-white text-balance">Time spent brewing</p>
+      <p class="mt-2 text-base/7 text-terracotta-100">
+        Your dedication to the daily grind adds up. Time flies when you're having fun!
+      </p>
+    </div>
+  </div>
+</div>
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-6">
+  <% bento_box_stats_2024(@yearly_brew).each_with_index do |(box, content), index| %>
+    <% position = bento_box_position_classes_2024(index) %>
+    <div class="relative <%= position[:col_span] %>">
+      <div class="absolute inset-px rounded-lg bg-white dark:bg-neutral-900 <%= position[:rounded_corners] %>"></div>
+      <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] <%= position[:rounded_corners].gsub(/(\[|\])/, '\\\1') %>">
+        <div class="px-8 pt-8 pb-8 sm:px-10 sm:py-10">
+          <h3 class="font-semibold text-base/7 text-terracotta-600 dark:text-terracotta-500"><%= content[:title] %></h3>
+          <p class="mt-2 text-lg font-medium tracking-tight text-neutral-900 dark:text-neutral-100">
+            <% if box == :weekly_rhythm %>
+              <div id="weekly-rhythm-chart" class="h-48" data-controller="weekly-rhythm-chart" data-chart-data="<%= content[:stat] %>"></div>
+            <% elsif box == :monthly_enjoyment %>
+              <div id="monthly-enjoyment-chart" class="h-48" data-controller="monthly-enjoyment-chart" data-chart-data="<%= content[:stat] %>"></div>
+            <% elsif box == :best_rated_coffee %>
+              <%= content[:stat].bean_brand %> <%= content[:stat].bean_type %>
+            <% else %>
+              <%= content[:stat] %>
+            <% end %>
+          </p>
+          <p class="max-w-lg mt-2 text-neutral-600 dark:text-neutral-400 text-sm/6">
+            <% if box == :best_rated_coffee %>
+              The superstar of your coffee lineup! Made <%= pluralize(@yearly_brew.best_rated_coffee.shots_count, "memorable shot") %> with an enjoyment score of <%= @yearly_brew.best_rated_coffee.espresso_enjoyment %>. Now that's bean love! ✨
+            <% else %>
+              <%= content[:description] %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+      <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 dark:ring-white/10 <%= position[:rounded_corners] %>"></div>
+    </div>
+  <% end %>
+</div>

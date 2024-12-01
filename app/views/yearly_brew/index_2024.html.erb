@@ -17,41 +17,7 @@
     </div>
   </div>
   <% if @yearly_brew.shots_this_year.any? %>
-    <div class="flex flex-col max-w-2xl gap-8 mx-auto lg:mx-0 lg:max-w-none lg:flex-row lg:items-end">
-      <div class="flex flex-col-reverse justify-between p-8 gap-x-16 gap-y-8 rounded-2xl bg-terracotta-50 dark:bg-terracotta-900 sm:w-3/4 sm:max-w-md sm:flex-row-reverse sm:items-end lg:w-72 lg:max-w-none lg:flex-none lg:flex-col lg:items-start">
-        <p class="flex-none text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-          <%= @yearly_brew.shots_this_year.count %>
-        </p>
-        <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-          <p class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 text-balance">Shots pulled this year</p>
-          <p class="mt-2 text-neutral-600 dark:text-neutral-300 text-base/7">Every shot tells a story of your coffee journey, from morning rituals to evening experiments.</p>
-        </div>
-      </div>
-      <div class="flex flex-col-reverse justify-between p-8 bg-neutral-900 dark:bg-neutral-700 gap-x-16 gap-y-8 rounded-2xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-sm lg:flex-auto lg:flex-col lg:items-start lg:gap-y-44">
-        <p class="flex-none text-3xl font-bold tracking-tight text-white">
-          <%= @yearly_brew.amount_beans_used %> kg
-        </p>
-        <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-          <p class="text-lg font-semibold tracking-tight text-white text-balance">Coffee beans transformed into delicious shots</p>
-          <p class="mt-2 text-neutral-400 dark:text-neutral-300 text-base/7">Each gram carefully measured and extracted to create your perfect cup of coffee.</p>
-        </div>
-      </div>
-      <div class="flex flex-col-reverse justify-between p-8 gap-x-16 gap-y-8 rounded-2xl bg-terracotta-600 dark:bg-terracotta-700 sm:w-11/12 sm:max-w-xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-none lg:flex-auto lg:flex-col lg:items-start lg:gap-y-28">
-        <p class="flex-none text-3xl font-bold tracking-tight text-white">
-          <% hours, minutes, seconds = @yearly_brew.time_brewed(human: true) %>
-          <% if hours > 0 %>
-            <%= hours %> h <%= minutes %> min <%= seconds %> s
-          <% else %>
-            <%= minutes %> min <%= seconds %> s
-          <% end %>
-        </p>
-        <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-          <p class="text-lg font-semibold tracking-tight text-white text-balance">Time spent brewing</p>
-          <p class="mt-2 text-base/7 text-terracotta-100">Every second dedicated to perfecting your craft and creating moments of coffee excellence throughout the year.</p>
-        </div>
-      </div>
-    </div>
-    <%= render "yearly_brew/bento_box_2024" %>
+    <%= render "yearly_brew/stats_2024" %>
     <% if Current.user.public? %>
       <div class="flex justify-center">
         <%= link_to yearly_brew_path(Current.user.slug, 2024), class: "inline-flex items-center gap-x-2 rounded-md bg-terracotta-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-terracotta-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta-600" do %>
@@ -64,9 +30,9 @@
     <% else %>
       <div class="flex flex-col items-center gap-y-4 max-w-prose">
         <p class="text-center">
-          Want to share your coffee journey with friends and fellow enthusiasts?
+          Want to share your coffee journey? It's brew-tiful to share with friends!
           <br>
-          <%= link_to "Make your profile public", edit_profiles_path, class: "text-terracotta-600 dark:text-terracotta-500 standard-link" %> to get a shareable link to your Bean Counting!
+          <%= link_to "Make your profile public", edit_profiles_path, class: "text-terracotta-600 dark:text-terracotta-500 standard-link" %> to get your own shareable Bean Counting page!
         </p>
       </div>
     <% end %>

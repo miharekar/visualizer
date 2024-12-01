@@ -8,17 +8,17 @@
       <dl class="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2">
         <% best_rated_coffee_2022 = "#{@yearly_brew.best_rated_coffee(:past).bean_brand} #{@yearly_brew.best_rated_coffee(:past).bean_type} (#{@yearly_brew.best_rated_coffee(:past).shots_count} shots with #{@yearly_brew.best_rated_coffee(:past).espresso_enjoyment})" if @yearly_brew.best_rated_coffee(:past) %>
         <% best_rated_coffee_2023 = "#{@yearly_brew.best_rated_coffee.bean_brand} #{@yearly_brew.best_rated_coffee.bean_type} (#{@yearly_brew.best_rated_coffee.shots_count} shots with #{@yearly_brew.best_rated_coffee.espresso_enjoyment})" if @yearly_brew.best_rated_coffee %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :stack, title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :fire, title: "Favorite roaster", stat: @yearly_brew.favorite_roaster, diff: @yearly_brew.favorite_roaster(:past) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :trophy, title: "Best rated coffee", stat: best_rated_coffee_2023, diff: best_rated_coffee_2022 } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :heart, title: "Most brewed coffee", stat: @yearly_brew.most_brewed_coffee, diff: @yearly_brew.most_brewed_coffee(:past) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :book, title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :chart, title: "Average enjoyment", stat: @yearly_brew.average_enjoyment, diff: (@yearly_brew.average_enjoyment.to_f - @yearly_brew.average_enjoyment(:past).to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :scale, title: "Kg of coffee used", stat: @yearly_brew.amount_beans_used, diff: (@yearly_brew.amount_beans_used.to_f - @yearly_brew.amount_beans_used(:past).to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :beaker, title: "Kg of coffee brewed", stat: @yearly_brew.amount_brewed, diff: (@yearly_brew.amount_brewed.to_f - @yearly_brew.amount_brewed(:past).to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :clock, title: "Minutes spent brewing coffee", stat: @yearly_brew.time_brewed, diff: (@yearly_brew.time_brewed.to_f - @yearly_brew.time_brewed(:past).to_f).round(2) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :calendar_days, title: "Month with the most shots", stat: @yearly_brew.month_with_most_shots, diff: @yearly_brew.month_with_most_shots(:past) } %>
-        <%= render partial: "yearly_brew/stat_2023", locals: { icon: :calendar, title: "Day with the most shots", stat: @yearly_brew.day_with_most_shots, diff: @yearly_brew.day_with_most_shots(:past) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :stack, title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :fire, title: "Favorite roaster", stat: @yearly_brew.favorite_roaster, diff: @yearly_brew.favorite_roaster(:past) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :trophy, title: "Best rated coffee", stat: best_rated_coffee_2023, diff: best_rated_coffee_2022 } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :heart, title: "Most brewed coffee", stat: @yearly_brew.most_brewed_coffee, diff: @yearly_brew.most_brewed_coffee(:past) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :book, title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :chart, title: "Average enjoyment", stat: @yearly_brew.average_enjoyment, diff: (@yearly_brew.average_enjoyment.to_f - @yearly_brew.average_enjoyment(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :scale, title: "Kg of coffee used", stat: @yearly_brew.amount_beans_used, diff: (@yearly_brew.amount_beans_used.to_f - @yearly_brew.amount_beans_used(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :beaker, title: "Kg of coffee brewed", stat: @yearly_brew.amount_brewed, diff: (@yearly_brew.amount_brewed.to_f - @yearly_brew.amount_brewed(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :clock, title: "Minutes spent brewing coffee", stat: @yearly_brew.time_brewed, diff: (@yearly_brew.time_brewed.to_f - @yearly_brew.time_brewed(:past).to_f).round(2) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :calendar_days, title: "Month with the most shots", stat: @yearly_brew.month_with_most_shots, diff: @yearly_brew.month_with_most_shots(:past) } %>
+        <%= render partial: "yearly_brew/stats_2023", locals: { icon: :calendar, title: "Day with the most shots", stat: @yearly_brew.day_with_most_shots, diff: @yearly_brew.day_with_most_shots(:past) } %>
       </dl>
     <% end %>
     <% if authenticated? %>

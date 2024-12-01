@@ -2,43 +2,43 @@ module YearlyBrewHelper
   def bento_box_stats_2024(yearly_brew)
     {
       most_brewed_coffee: {
-        title: "Most Brewed Coffee",
+        title: "Your Go-To Bean",
         stat: yearly_brew.most_brewed_coffee,
-        description: "The coffee that made frequent appearances this year. A testament to finding that perfect match."
+        description: "When you find The One, you stick with it. This coffee kept you coming back for more."
       },
       most_used_profile: {
-        title: "Most Used Profile",
+        title: "Favorite Recipe",
         stat: yearly_brew.most_used_profile,
-        description: "The recipe that delivered consistently great results. A reliable companion in the coffee journey."
+        description: "If it ain't broke, don't fix it. Your trusted path to coffee happiness."
       },
       best_rated_coffee: {
-        title: "Best Rated Coffee",
+        title: "Crown Jewel",
         stat: yearly_brew.best_rated_coffee
       },
       weekly_rhythm: {
-        title: "Weekly Rhythm",
+        title: "Weekly Grind",
         stat: yearly_brew.shots_per_day_of_week.to_json,
-        description: "Coffee brewing patterns throughout the week. A glimpse into when the brewing magic happens most."
+        description: "Some days need more coffee than others. Here's your week in shots."
       },
       monthly_enjoyment: {
-        title: "Monthly Enjoyment",
+        title: "Month by Month",
         stat: yearly_brew.monthly_enjoyments.to_json,
-        description: "Coffee satisfaction levels tracked month by month."
+        description: "Your coffee satisfaction journey through the seasons."
       },
       busiest_month: {
-        title: "Busiest Month",
+        title: "Peak Coffee Season",
         stat: yearly_brew.month_with_most_shots,
-        description: "Peak coffee brewing activity. When the coffee scale barely got a break!"
+        description: "When your grinder worked overtime and your tamper knew no rest."
       },
       most_active_day: {
-        title: "Busiest Day",
+        title: "Power Day",
         stat: yearly_brew.day_with_most_shots,
-        description: "The weekday when coffee flows most freely. Looks like someone's got a favorite brewing day!"
+        description: "The day when your coffee game is strongest. Coincidence? I think not!"
       },
       coffee_brewed: {
-        title: "Coffee Brewed",
+        title: "Liquid Gold",
         stat: "#{yearly_brew.amount_brewed} kg",
-        description: "Total amount of delicious coffee brewed this year. Impressive!"
+        description: "The total amount of coffee in your cup. That's a lot of caffeine!"
       }
     }
   end
