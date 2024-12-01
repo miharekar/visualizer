@@ -6,7 +6,7 @@
     <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
       <p class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 text-balance">Shots Fired</p>
       <p class="mt-2 text-neutral-600 dark:text-neutral-300 text-base/7">
-        From morning motivation to afternoon perfection, here's your shot count for the year.
+        From morning motivation to afternoon perfection, here's <%= possessive(personal) %> shot count for the year.
       </p>
     </div>
   </div>
@@ -17,7 +17,7 @@
     <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
       <p class="text-lg font-semibold tracking-tight text-white text-balance">Coffee beans transformed into delicious shots</p>
       <p class="mt-2 text-neutral-400 dark:text-neutral-300 text-base/7">
-        Each gram carefully measured and extracted to create your perfect cup of coffee.
+        Each gram carefully measured and extracted to create <%= possessive(personal) %> perfect cup of coffee.
       </p>
     </div>
   </div>
@@ -33,13 +33,13 @@
     <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
       <p class="text-lg font-semibold tracking-tight text-white text-balance">Time spent brewing</p>
       <p class="mt-2 text-base/7 text-terracotta-100">
-        Your dedication to the daily grind adds up. Time flies when you're having fun!
+        Precious moments spent in pursuit of coffee perfection. Worth every second!
       </p>
     </div>
   </div>
 </div>
 <div class="grid grid-cols-1 gap-4 lg:grid-cols-6">
-  <% bento_box_stats_2024(@yearly_brew).each_with_index do |(box, content), index| %>
+  <% bento_box_stats_2024(@yearly_brew, personal:).each_with_index do |(box, content), index| %>
     <% position = bento_box_position_classes_2024(index) %>
     <div class="relative <%= position[:col_span] %>">
       <div class="absolute inset-px rounded-lg bg-white dark:bg-neutral-900 <%= position[:rounded_corners] %>"></div>
@@ -59,7 +59,7 @@
           </p>
           <p class="max-w-lg mt-2 text-neutral-600 dark:text-neutral-400 text-sm/6">
             <% if box == :best_rated_coffee %>
-              The superstar of your coffee lineup! Made <%= pluralize(@yearly_brew.best_rated_coffee.shots_count, "memorable shot") %> with an enjoyment score of <%= @yearly_brew.best_rated_coffee.espresso_enjoyment %>. Now that's bean love! ✨
+              The superstar of <%= possessive(personal) %> coffee lineup! Made <%= pluralize(@yearly_brew.best_rated_coffee.shots_count, "memorable shot") %> with an enjoyment score of <%= @yearly_brew.best_rated_coffee.espresso_enjoyment %>. Now that's bean love! ✨
             <% else %>
               <%= content[:description] %>
             <% end %>
