@@ -5,17 +5,20 @@
 <% end %>
 <div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel">
   <div class="flex flex-col gap-2 px-4 sm:flex-row sm:px-0 sm:justify-between">
-    <div>
-      <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-x-clip" id="shots-count">
+    <div class="flex-shrink min-w-0">
+      <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
         <% if @shots_count.to_i > 0 %>
           Your <%= pluralize(@shots_count, "Shot") %>
         <% else %>
-          No Shots 😢
+          No Shots
+        <% end %>
+        <% if params[:coffee_bag].present? %>
+          with <%= CoffeeBag.find(params[:coffee_bag]).display_name %>
         <% end %>
       </h1>
     </div>
     <% if @shots.any? %>
-      <div class="flex justify-between">
+      <div class="flex justify-between flex-shrink-0">
         <button class="flex items-center px-3 py-2 text-sm font-semibold bg-white rounded-md shadow-sm sm:ml-auto text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20" data-action="panel#toggleUploadForm">
           <svg class="-ml-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />

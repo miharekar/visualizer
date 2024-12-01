@@ -21,6 +21,9 @@
   <% if @shots_count.to_i > 0 %>
     Your <%= pluralize(@shots_count, "Shot") %>
   <% else %>
-    No Shots 😢
+    No Shots
+  <% end %>
+  <% if params[:coffee_bag].present? %>
+    with <%= CoffeeBag.find(params[:coffee_bag]).display_name %>
   <% end %>
 <% end %>

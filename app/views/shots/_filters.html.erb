@@ -2,6 +2,7 @@
   <div class="hidden px-4 sm:px-0 sm:block" data-panel-target="instantFilters">
     <%= form_with(url: search_shots_path, data: {controller: "search", search_target: "form"}) do |f| %>
       <%= f.hidden_field :fresh_search, value: 1  %>
+      <%= f.hidden_field :coffee_bag, value: params[:coffee_bag] %>
       <div class="grid grid-cols-12 gap-3">
         <% ShotsController::FILTERS.each do |filter| %>
           <div class="col-span-6 md:col-span-3">
