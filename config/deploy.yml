@@ -39,6 +39,8 @@ aliases:
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: accessory exec postgres --interactive --reuse "psql -U visualizer -d visualizer_production"
+  pull-postgres: server exec docker pull postgres:17
+  pull-postgres-backup: server exec docker pull mrfoto/postgres-backup-s3:latest
 
 volumes:
   - "visualizer_storage:/rails/storage"
