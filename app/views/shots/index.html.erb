@@ -6,8 +6,12 @@
 <div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel">
   <div class="flex flex-col gap-2 px-4 sm:flex-row sm:px-0 sm:justify-between">
     <div>
-      <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-clip">
-        Your <span id="shots-count"><%= pluralize(@shots_count, "Shot") %></span>
+      <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100 overflow-x-clip" id="shots-count">
+        <% if @shots_count.to_i > 0 %>
+          Your <%= pluralize(@shots_count, "Shot") %>
+        <% else %>
+          No Shots 😢
+        <% end %>
       </h1>
     </div>
     <% if @shots.any? %>
@@ -43,7 +47,7 @@
     <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(before: @cursor, format: :turbo_stream) } %>
   <% else %>
     <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
-      <% if @premium_count.to_i > 1 %>
+      <% if @premium_count.to_i > 0 %>
         Consider <%= link_to("upgrading", premium_index_path, class: "standard-link text-terracotta-600") %> to see your old shots.
       <% else %>
         No shots yet 😢

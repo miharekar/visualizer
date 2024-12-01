@@ -134,7 +134,6 @@ class ShotsController < ApplicationController
       @premium_count = @shots.premium.count
       @shots = @shots.non_premium
     end
-    @shots_count = @shots.count
 
     FILTERS.select { |f| params[f].present? }.each do |filter|
       @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
@@ -142,6 +141,7 @@ class ShotsController < ApplicationController
     @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
     @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
     @shots = @shots.where(coffee_bag_id: params[:coffee_bag]) if params[:coffee_bag].present?
+    @shots_count = @shots.count
 
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
   end
