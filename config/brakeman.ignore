@@ -1,6 +1,29 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "2f4e57011c40ce2b3faaccb5c0ca7117e8077b84db24cf48c22515a879a31951",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/shots_controller.rb",
+      "line": 135,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Current.user.shots.with_attached_image.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ShotsController",
+        "method": "load_users_shots"
+      },
+      "user_input": "filter",
+      "confidence": "Weak",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "6f1976616ae794e8cc2c3f2d3ccef69616d22f73bccf676bf7d6c697d81dbecb",
@@ -15,7 +38,7 @@
           "type": "controller",
           "class": "CoffeeBagsController",
           "method": "index",
-          "line": 8,
+          "line": 10,
           "file": "app/controllers/coffee_bags_controller.rb",
           "rendered": {
             "name": "coffee_bags/index",
@@ -35,29 +58,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "8595506247d4480106c5544a6358843d3171757dae3a6917496b5387c6def9b4",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/shots_controller.rb",
-      "line": 138,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Current.user.shots.with_attached_image.non_premium.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ShotsController",
-        "method": "load_users_shots"
-      },
-      "user_input": "filter",
-      "confidence": "Weak",
-      "cwe_id": [
-        89
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "b46998b567544219ac42f8f6e5623be212338529332e60f1aaee7886698d188a",
@@ -72,7 +72,7 @@
           "type": "controller",
           "class": "RoastersController",
           "method": "index",
-          "line": 7,
+          "line": 8,
           "file": "app/controllers/roasters_controller.rb",
           "rendered": {
             "name": "roasters/index",
@@ -98,7 +98,7 @@
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/shots_controller.rb",
-      "line": 39,
+      "line": 41,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code}\", :allow_other_host => true)",
       "render_path": null,
@@ -138,6 +138,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-09-27 23:29:35 +0200",
-  "brakeman_version": "6.2.1"
+  "updated": "2024-12-01 10:41:51 +0100",
+  "brakeman_version": "6.2.2"
 }

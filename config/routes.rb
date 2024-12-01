@@ -94,7 +94,7 @@ Rails.application.routes.draw do
 
   resources :decent_tokens, only: %i[new create]
 
-  slug_constraint = ->(r) { r.params[:x].present? && !r.params[:x].match?(/^2\d{3}$/) }
+  slug_constraint = ->(r) { r.params[:x].present? && YearlyBrewController::WHITELISTED_YEARS.map(&:to_s).exclude?(r.params[:x]) }
   get "yearly_brew", to: redirect("/yearly_brew/2023"), as: :yearly_brew_redirect
   get "yearly_brew/:x", to: redirect { |params| "/yearly_brew/#{params[:x]}/2023" }, constraints: slug_constraint
   get "yearly_brew(/:year)", to: "yearly_brew#index", as: :yearly_brew_index
