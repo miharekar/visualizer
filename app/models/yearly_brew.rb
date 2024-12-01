@@ -54,11 +54,11 @@ class YearlyBrew
   end
 
   memo_wise def amount_beans_used(year = :current)
-    (shots(year).sum { |s| s.bean_weight.to_f } / 1000).round(3)
+    (shots(year).sum { |s| s.bean_weight.to_f } / 1000).round(2)
   end
 
   memo_wise def amount_brewed(year = :current)
-    (shots(year).sum { |s| s.drink_weight.to_f } / 1000).round(3)
+    (shots(year).sum { |s| s.drink_weight.to_f } / 1000).round(2)
   end
 
   memo_wise def month_with_most_shots(year = :current)
