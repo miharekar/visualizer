@@ -3,10 +3,11 @@ import { enter, leave } from "el-transition"
 
 export default class extends Controller {
   static targets = ["notification"]
+  static values = { timeout: { type: Number, default: 10000 } }
 
   connect() {
     enter(this.element)
-    this.timeout = setTimeout(() => this.hideNotification(), 10000)
+    this.timeout = setTimeout(() => this.hideNotification(), this.timeoutValue)
   }
 
   close(event) {

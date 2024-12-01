@@ -16,6 +16,11 @@ export default class extends Controller {
       "dark:bg-green-700",
       "dark:hover:bg-green-700"
     )
+
+    const notificationsContainer = document.getElementById("notifications-container")
+    const successNotification = document.getElementById("clipboard-success")
+    notificationsContainer.insertAdjacentHTML("beforeend", successNotification.innerHTML)
+
     setTimeout(() => {
       this.resetState()
     }, 2000)
