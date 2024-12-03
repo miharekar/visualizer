@@ -73,9 +73,9 @@ accessories:
       clear:
         SCHEDULE: "@daily"
         BACKUP_KEEP_DAYS: 7
-        S3_REGION: fsn1
+        S3_REGION: auto
         S3_BUCKET: pg-backups
-        S3_ENDPOINT: https://fsn1.your-objectstorage.com
+        S3_ENDPOINT: https://42818cc952b31ef348852ae6e9da2520.eu.r2.cloudflarestorage.com
         S3_PREFIX: visualizer
         POSTGRES_HOST: visualizer-postgres
         POSTGRES_USER: visualizer
