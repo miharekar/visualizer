@@ -41,16 +41,14 @@ module Api
     end
 
     def shared
-      if Current.user.present?
+      shared = SharedShot.find_by(code: params[:code].to_s.upcase)
+      if shared
+        render json: shared.shot.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence)
+      elsif Current.user.present?
         distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
         render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence) }
       else
-        shared = SharedShot.find_by(code: params[:code].to_s.upcase)
-        if shared
-          render json: shared.shot.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence)
-        else
-          render json: {error: "Shared shot not found"}, status: :not_found
-        end
+        render json: {error: "Shared shot not found"}, status: :not_found
       end
     end
 

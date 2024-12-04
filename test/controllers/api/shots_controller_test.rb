@@ -86,6 +86,55 @@ module Api
       assert_equal 5, json_response["data"].length
     end
 
+    test "shared returns all shared shots for authenticated user" do
+      shot_1 = create(:shot, user:)
+      shot_2 = create(:shot, user: public_user)
+      create(:shared_shot, shot: shot_1, user:)
+      create(:shared_shot, shot: shot_2, user:)
+
+      get shared_api_shots_url, headers: auth_headers(user), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal 2, json_response.length
+
+      shot_ids = json_response.pluck("id")
+      assert_includes shot_ids, shot_1.id
+      assert_includes shot_ids, shot_2.id
+    end
+
+    test "shared returns specific shot for authenticated user with valid code" do
+      create(:shared_shot, user:)
+
+      shot = create(:shot, user: public_user)
+      create(:shared_shot, shot:, code: "TEST")
+
+      get shared_api_shots_url(code: "TEST"), headers: auth_headers(user), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal shot.id, json_response["id"]
+    end
+
+    test "shared returns shot for unauthenticated user with valid code" do
+      shot = create(:shot, user:)
+      create(:shared_shot, shot:, code: "TEST")
+
+      get shared_api_shots_url(code: "TEST"), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal shot.id, json_response["id"]
+    end
+
+    test "shared returns not found for unauthenticated user with invalid code" do
+      get shared_api_shots_url(code: "INVALID"), as: :json
+      assert_response :not_found
+
+      json_response = response.parsed_body
+      assert_equal "Shared shot not found", json_response["error"]
+    end
+
     private
 
     def auth_headers(user)
