@@ -65,7 +65,8 @@ class Shot < ApplicationRecord
   end
 
   def parsed_roast_date
-    parse_date(roast_date, user.date_format_string)
+    date_format_string = user&.date_format_string || User::DATE_FORMATS["dd.mm.yyyy"]
+    parse_date(roast_date, date_format_string)
   end
 
   def iso8601_roast_date_time
