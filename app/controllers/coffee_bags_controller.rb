@@ -75,10 +75,14 @@ class CoffeeBagsController < ApplicationController
 
   def set_roaster
     @roaster = Current.user.roasters.find(params[:roaster_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to roasters_path, alert: "Roaster not found"
   end
 
   def set_coffee_bag
     @coffee_bag = @roaster.coffee_bags.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to roaster_coffee_bags_path(@roaster), alert: "Coffee bag not found"
   end
 
   def load_coffee_bags

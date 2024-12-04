@@ -47,6 +47,8 @@ class RoastersController < ApplicationController
 
   def set_roaster
     @roaster = Current.user.roasters.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to roasters_path, alert: "Roaster not found"
   end
 
   def load_roasters
