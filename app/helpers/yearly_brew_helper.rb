@@ -21,7 +21,7 @@ module YearlyBrewHelper
         description: "Some days need more coffee than others. Here's #{possessive(personal)} week in shots."
       },
       monthly_enjoyment: {
-        title: "Month by Month",
+        title: "Month by Month Enjoyment",
         stat: yearly_brew.monthly_enjoyments.to_json,
         description: "#{possessive(personal).capitalize} coffee satisfaction journey through the seasons."
       },
