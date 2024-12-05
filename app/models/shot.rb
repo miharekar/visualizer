@@ -96,7 +96,6 @@ end
 #  public             :boolean
 #  roast_date         :string
 #  roast_level        :string
-#  s3_etag            :string
 #  sha                :string
 #  start_time         :datetime
 #  created_at         :datetime         not null

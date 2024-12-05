@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_25_205841) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_05_115746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -223,7 +223,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_25_205841) do
     t.string "sha"
     t.string "roast_level"
     t.text "bean_notes"
-    t.string "s3_etag"
     t.string "barista"
     t.text "private_notes"
     t.float "duration"
