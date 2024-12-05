@@ -18,7 +18,6 @@ class ShotsController < ApplicationController
   end
 
   def show
-    @shot.ensure_screenshot
     @chart = ShotChart.new(@shot, Current.user) if @shot.information
     return if Current.user.nil?
 

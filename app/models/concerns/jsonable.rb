@@ -69,7 +69,6 @@ module Jsonable
     attributes[:start_time] = start_time unless user&.hide_shot_times
     attributes[:user_name] = user.display_name if user&.public?
     attributes[:metadata] = metadata.presence if user&.premium?
-    attributes[:image_preview] = screenshot_url if screenshot?
     attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.tcl_profile_fields.present?
 
     attributes.compact

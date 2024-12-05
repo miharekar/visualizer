@@ -8,7 +8,6 @@ class Shot < ApplicationRecord
   LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
-  after_create :ensure_screenshot
 
   belongs_to :user, optional: true, touch: true
   belongs_to :coffee_bag, optional: true
@@ -52,16 +51,6 @@ class Shot < ApplicationRecord
   def related_shots(limit: 5)
     query = self.class.where(user:).where.not(id:).limit(limit)
     query.where(start_time: start_time..).order(:start_time) + [self] + query.where(start_time: ..start_time).order(start_time: :desc)
-  end
-
-  def screenshot?
-    s3_etag.present?
-  end
-
-  def ensure_screenshot
-    return if screenshot? || Rails.env.local?
-
-    ScreenshotTakerJob.perform_later(self)
   end
 
   def parsed_roast_date

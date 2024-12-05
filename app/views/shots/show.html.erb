@@ -3,7 +3,6 @@
   <% description = render "meta_description", shot: @shot %>
   <meta name="description" content="<%= description %>">
   <meta property="og:title" content="<%= @shot.profile_title %>">
-  <% if @shot.screenshot? %><meta property="og:image" content="<%= @shot.screenshot_url %>"><% end %>
   <meta property="og:url" content="https://visualizer.coffee/shots/<%= @shot.id %>">
   <meta property="og:description" content="<%= description %>">
 <% end %>
