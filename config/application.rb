@@ -30,5 +30,6 @@ module Visualizer
     config.exceptions_app = routes
     config.log_tags = {request_id: :request_id, ip: :remote_ip}
     config.logger = ActiveSupport::TaggedLogging.logger($stdout)
+    config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end
