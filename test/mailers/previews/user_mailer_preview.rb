@@ -1,6 +1,6 @@
 class UserMailerPreview < ActionMailer::Preview
   def yearly_brew
-    user = User.order("RANDOM()").first
+    user = User.admin
     UserMailer.with(user:).yearly_brew
   end
 

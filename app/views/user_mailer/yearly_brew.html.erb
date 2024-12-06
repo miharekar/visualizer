@@ -1,5 +1,5 @@
 <%= content_for :title, "Bean Counting 2024: Your Year on Visualizer" %>
-<%= content_for :preheader, "Welcome to a special look back at Your Year on Visualizer." %>
+<%= content_for :preheader, "Welcome to your personal coffee chronicle of the year." %>
 <tr>
   <td class="sm-px-0" style="width: 100%; padding-left: 24px; padding-right: 24px; text-align: left">
     <table style="width: 100%;" cellpadding="0" cellspacing="0">
@@ -12,26 +12,18 @@
                   Bean Counting 2024
                 </h1>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                  Welcome to a special look back at Your Year on Visualizer.
-                  It's a tale about the beans you've fallen in love with, the brews you've perfected, and those cozy, caffeinated moments that have brightened your days.
-                  This is <strong>your</strong> coffee story, narrated one delightful sip at a time.
+                  It's Bean Counting time again!
+                  Let's look at what you've been brewing this year.
+                  I've tallied up all your shots and sips - well, the ones you've shared with me anyway. 😅
                 </p>
-                <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                  This isn't just a bunch of numbers; it's a flavorful journey through your year.
-                  From the first morning cup to that late-night espresso, let's reminisce over how your coffee game has evolved and celebrate your journey in the world of coffee.
-                </p>
-                <h2 style="margin: 0 0 24px; font-size: 24px; line-height: 24px; color: #000">
-                  Your Year on Visualizer
-                </h2>
                 <% if @yearly_brew.shots_this_year.any? %>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
                     <%= render partial: "yearly_brew_stat", locals: { title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>
                     <%= render partial: "yearly_brew_stat", locals: { title: "Favorite roaster", stat: @yearly_brew.favorite_roaster, diff: @yearly_brew.favorite_roaster(:past) } %>
-                    <%= render partial: "yearly_brew_stat", locals: { title: "Most used profile", stat: @yearly_brew.most_used_profile, diff: @yearly_brew.most_used_profile(:past) } %>
                     <%= render partial: "yearly_brew_stat", locals: { title: "Kg of coffee used", stat: @yearly_brew.amount_beans_used, diff: (@yearly_brew.amount_beans_used.to_f - @yearly_brew.amount_beans_used(:past).to_f).round(2) } %>
                   </p>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                    But this is just a tiny taste! <strong>See all your stats on <%= link_to "Visualizer Yearly Brew", yearly_brew_index_url, class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %></strong> and feel free to share it far and wide. 🥳
+                    But this is just a small taste! <strong>See all your stats on <%= link_to "Visualizer Bean Counting 2024", yearly_brew_index_url(year: 2024), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %></strong> and feel free to share it far and wide. 🥳
                   </p>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
                     P.S.: There are still a couple of days left to upload a shot or two and make your stats even more impressive. 😉
@@ -39,50 +31,37 @@
                 <% else %>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
                     You haven't uploaded any shots this year. 😔
+                    Hopefully, you'll have some to look back on next year! I can't wait to see your coffee journey unfold.
                   </p>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                    But there are still a couple of days left to upload a shot or two so even you will have something to see on <%= link_to "Visualizer Yearly Brew", yearly_brew_index_url, class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>.
+                    But there are still a couple of days left to upload a shot or two so even you will have something to see on <%= link_to "Visualizer Yearly Brew", yearly_brew_index_url(year: 2024), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>.
                   </p>
                 <% end %>
                 <h2 style="margin: 0 0 24px; font-size: 24px; line-height: 24px; color: #000">
-                  Visualizer v4
+                  AI and Black Friday
                 </h2>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                  In case you missed it, Visualizer has undergone an exciting upgrade with Visualizer V4!
-                  From a new logo to infinite loading everywhere, Instant Filters, and tons more, V4 aims to make your coffee data tracking and analysis even more enjoyable. 🚀
+                  I've recently introduced AI-powered coffee bag information extraction! If you're using Coffee Management,
+                  you can now paste a URL of a coffee you want to add, and Visualizer will automatically fetch all the relevant information.
+                  Check out the <a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://visualizer.coffee/updates/ai-comes-to-visualizer">full announcement</a> to see it in action. 🤖
                 </p>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                  To dive into all the details and discover what's new, check out the <a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://visualizer.coffee/updates/visualizer-v4" >full update post</a>.
+                  I've also made two important decisions about Visualizer's future: no more discounts ever, and no price increases for the foreseeable future.
+                  The way I <em>celebrated</em> Black Friday is by giving every existing subscriber an extra free month and everyone who signs up until the end of the year gets a 37-day free trial instead of the usual 7.
+                  Read more about this and other updates in the <a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://visualizer.coffee/updates/black-friday">Black Friday post</a>. 💪
                 </p>
                 <h2 style="margin: 0 0 24px; font-size: 24px; line-height: 24px; color: #000">
-                  Emails
-                </h2>
-                <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                  This is the first time I'm sending out a newsletter to all Visualizer users.
-                  I hope you don't mind me reaching out to you this way, but if you do, you can <a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://visualizer.coffee/profiles/edit">unsubscribe from future emails in your profile</a>. 🙏
-                </p>
-                <h2 style="margin: 0 0 24px; font-size: 24px; line-height: 24px; color: #000">
-                  Happy holidays!
+                  One More Shot Before 2024
                 </h2>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000;">
-                  As we wrap up this year, I can't help but feel incredibly grateful for your participation in the Visualizer community.
-                  Your shared shots and passion for coffee have been a source of inspiration, making the platform a vibrant and engaging space for coffee enthusiasts.
-                  Your contributions have helped shape Visualizer into what it is today, and for that, I am sincerely thankful. 🥰
+                  Another year of shots, discoveries, and coffee moments comes to an end. Thank you for being part of this journey - your uploads, feedback, and enthusiasm make Visualizer what it is. It's amazing to see how this little project has grown into such a vibrant community of coffee lovers.
                 </p>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000;">
-                  As a small token of my appreciation, and to add a little extra joy to your coffee
-                  experiences, I've arranged a special deal with my <strong>favorite roaster</strong>,
-                  <a href="https://banibeans.si/" class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline">Banibeans</a>. Use the code
-                  <code style="border-radius: 4px; background-color: #e5e5e5; padding-left: 4px; padding-right: 4px; color: #262626">VISUALIZER10</code> in
-                  <a href="https://banibeans.si/pages/shop" class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline;">the shop</a>
-                  to enjoy a 10% discount on your purchase. ✨
+                  Speaking of coffee - my friend <a href="https://banibeans.si/" class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline">Banibeans</a> is still offering Visualizer users a special 10% discount with code <code style="border-radius: 4px; background-color: #e5e5e5; padding-left: 4px; padding-right: 4px; color: #262626">VISUALIZER10</code>.
+                  Perfect timing if you're looking to start 2025 with some amazing beans or if you're looking for a last second gift for a fellow coffee enthusiast! ✨
                 </p>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000;">
-                  Whether you're decorating the Christmas tree, lighting the menorah, raising an aluminum pole, or celebrating in your own special way, I wish you happiness and cheer. 🎄
-                </p>
-                <p style="margin: 0 0 24px; font-size: 16px; color: #000;">
-                  Here's to a new year filled with health, happiness, and, of course, fantastic coffee.
-                  Both me and Visualizer are looking forward to all your shots in the upcoming year! ☕
+                  Whatever and however you're celebrating these days, I wish you wonderful holidays filled with great coffee and even better company. Here's to another year of perfect shots and shared discoveries! ☕
                 </p>
                 <p style="margin: 0 0 24px; font-size: 16px; color: #000;">
                   Miha
