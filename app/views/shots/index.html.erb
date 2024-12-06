@@ -13,7 +13,7 @@
           No Shots
         <% end %>
         <% if params[:coffee_bag].present? %>
-          with <%= CoffeeBag.find(params[:coffee_bag]).display_name %>
+          with <%= CoffeeBag.find_by(id: params[:coffee_bag])&.display_name %>
         <% end %>
       </h1>
     </div>

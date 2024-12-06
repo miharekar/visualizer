@@ -40,6 +40,7 @@
 </div>
 <div class="grid grid-cols-1 gap-4 lg:grid-cols-6">
   <% bento_box_stats_2024(@yearly_brew, personal:).each_with_index do |(box, content), index| %>
+    <% next if content[:stat].blank? %>
     <% position = bento_box_position_classes_2024(index) %>
     <div class="relative <%= position[:col_span] %>">
       <div class="absolute inset-px rounded-lg bg-white dark:bg-neutral-900 <%= position[:rounded_corners] %>"></div>

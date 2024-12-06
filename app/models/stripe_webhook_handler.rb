@@ -40,8 +40,8 @@ class StripeWebhookHandler
   end
 
   def find_by_email
-    Appsignal.set_message("Customer #{event.data.object.customer_email} did not have a Stripe customer ID attached!")
     user = User.find_by(email: event.data.object.customer_email)
+    Appsignal.set_message("No user found for #{event.data.object.customer} or #{event.data.object.customer_email}!")
     user&.update(stripe_customer_id: event.data.object.customer)
     user
   end

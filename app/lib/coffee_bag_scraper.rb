@@ -11,15 +11,20 @@ class CoffeeBagScraper
 
   private
 
-  def page_content(url)
-    uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == "https"
-    response = http.get(uri.request_uri)
-    raise "Failed to fetch page: #{response.code} #{response.message}" unless response.is_a?(Net::HTTPSuccess)
+  def page_content(url, limit = 5)
+    raise ArgumentError, "Too many HTTP redirects" if limit.zero?
 
-    doc = Nokogiri::HTML(response.body)
-    doc.search("script, style, svg, img").remove
-    doc.text.squish
+    response = Net::HTTP.get_response(URI(url))
+    case response
+    when Net::HTTPSuccess
+      doc = Nokogiri::HTML(response.body)
+      doc.search("script, style, svg, img").remove
+      doc.text.squish
+    when Net::HTTPRedirection
+      location = response["location"]
+      page_content(location, limit - 1)
+    else
+      raise "Failed to fetch page: #{response.code} #{response.message}"
+    end
   end
 end

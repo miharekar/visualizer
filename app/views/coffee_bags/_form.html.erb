@@ -88,7 +88,7 @@
           <div class="col-span-6 sm:col-span-4">
             <div data-controller="image-form">
               <%= f.label :image, "Image", class: "standard-label" %>
-              <% if @coffee_bag.image.attached? && @coffee_bag.image.variable? %>
+              <% if @coffee_bag.image.attached? && @coffee_bag.image.persisted? && @coffee_bag.image.variable? %>
                 <div id="coffee-bag-image">
                   <%= image_tag @coffee_bag.image.variant(:thumb), class: "rounded-lg mt-1" %>
                   <div class="flex mt-1 mb-4 text-sm text-red-600 hover:text-red-800 dark:text-red-700 dark:hover:text-red-600">
