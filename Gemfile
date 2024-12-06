@@ -33,7 +33,7 @@ gem "rails"
 gem "rails_semantic_logger"
 gem "responders"
 gem "slim"
-gem "solid_cable", "3.0.2" # https://github.com/rails/solid_cable/pull/50
+gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
 gem "sqlite3"
