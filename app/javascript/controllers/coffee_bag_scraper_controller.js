@@ -3,7 +3,11 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["url", "loader"]
 
-  async fetch() {
+  async fetch(event) {
+    if (event.type === "click") {
+      event.preventDefault()
+    }
+
     const url = this.urlTarget.value
     if (!url) return
 
@@ -24,12 +28,23 @@ export default class extends Controller {
         body: JSON.stringify({ url })
       })
 
-      if (!response.ok) throw new Error('Failed to fetch coffee info')
-
       const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch coffee info')
+      }
+
       this.populateFields(data)
     } catch (error) {
-      console.error('Error fetching coffee info:', error)
+      const template = document.getElementById("scraper-error-template")
+      const notificationHtml = template.innerHTML
+      const updatedNotification = notificationHtml.replace(
+        'Something went wrong',
+        error.message
+      )
+
+      const notificationsContainer = document.getElementById("notifications-container")
+      notificationsContainer.insertAdjacentHTML("beforeend", updatedNotification)
     } finally {
       this.loaderTarget.classList.add("hidden")
 
@@ -42,7 +57,8 @@ export default class extends Controller {
 
   populateFields(data) {
     const fields = [
-      'name', 'roast_level', 'country', 'region', 'farm', 'farmer', 'variety', 'elevation', 'processing', 'harvest_time', 'quality_score', 'tasting_notes'
+      'name', 'roast_level', 'country', 'region', 'farm', 'farmer', 'variety',
+      'elevation', 'processing', 'harvest_time', 'quality_score', 'tasting_notes'
     ]
 
     fields.forEach(field => {

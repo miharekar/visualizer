@@ -64,10 +64,11 @@ class CoffeeBagsController < ApplicationController
     Rails.logger.info "Scraping coffee bag info for #{params[:url]} by #{Current.user.id}"
     info = CoffeeBagScraper.new.get_info(params[:url])
 
-    if info
+    if info && info[:error].blank?
       render json: info
     else
-      render json: {error: "Could not extract information from URL"}, status: :unprocessable_entity
+      error = info[:error].presence || "Could not extract information from URL"
+      render json: {error:}, status: :unprocessable_entity
     end
   end
 

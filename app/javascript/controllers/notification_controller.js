@@ -6,8 +6,10 @@ export default class extends Controller {
   static values = { timeout: { type: Number, default: 10000 } }
 
   connect() {
-    enter(this.element)
-    this.timeout = setTimeout(() => this.hideNotification(), this.timeoutValue)
+    if (!this.parentHidden()) {
+      enter(this.element)
+      this.timeout = setTimeout(() => this.hideNotification(), this.timeoutValue)
+    }
   }
 
   close(event) {
@@ -20,5 +22,9 @@ export default class extends Controller {
     leave(this.element).then(() => {
       this.element.remove()
     })
+  }
+
+  parentHidden() {
+    return this.element.parentElement.classList.contains('hidden')
   }
 }

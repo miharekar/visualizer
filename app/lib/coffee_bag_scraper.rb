@@ -6,7 +6,7 @@ class CoffeeBagScraper
     JSON.parse(response["content"][0]["text"]).compact_blank
   rescue StandardError => e
     Appsignal.report_error(e)
-    nil
+    {error: e.message}
   end
 
   private
