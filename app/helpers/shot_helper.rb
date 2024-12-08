@@ -4,7 +4,7 @@ module ShotHelper
     return if value.blank? || value == "0" || value == "UNKNOWN"
 
     tag.tr do
-      concat tag.td(key)
+      concat tag.td(key, class: "whitespace-nowrap")
       concat tag.td(value)
     end
   end
