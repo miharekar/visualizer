@@ -42,7 +42,7 @@ export default class extends Controller {
 
   populateFields(data) {
     const fields = [
-      'name', 'roast_level', 'country', 'region', 'farm', 'farmer', 'variety', 'elevation', 'processing', 'harvest_time', 'quality_score'
+      'name', 'roast_level', 'country', 'region', 'farm', 'farmer', 'variety', 'elevation', 'processing', 'harvest_time', 'quality_score', 'tasting_notes'
     ]
 
     fields.forEach(field => {

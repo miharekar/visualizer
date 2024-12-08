@@ -65,6 +65,7 @@ module Parsers
       assert_equal "Processing 1", shot.coffee_bag.processing
       assert_equal "Harvest 1", shot.coffee_bag.harvest_time
       assert_equal "99", shot.coffee_bag.quality_score
+      assert_equal "Schokolade, Haselnuss, Rund", shot.coffee_bag.tasting_notes
     end
     test "extracts real beanconqueror file with id to an existing shot and overwrites the information" do
       user = create(:user)

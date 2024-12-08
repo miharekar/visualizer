@@ -33,7 +33,8 @@ module Parsers
         elevation: bean_information&.dig("elevation"),
         processing: bean_information&.dig("processing"),
         harvest_time: bean_information&.dig("harvest_time"),
-        quality_score: brewdata.dig("bean", "cupping_points")
+        quality_score: brewdata.dig("bean", "cupping_points"),
+        tasting_notes: brewdata.dig("bean", "aromatics")
       }
       shot.coffee_bag.update(attributes)
     end

@@ -18,6 +18,7 @@ Parse the content above and extract the following attributes about the coffee:
 - processing
 - harvest_time
 - quality_score
+- tasting_notes
 
 Guidelines:
 1. Extract the information as accurately as possible from the HTML content.
@@ -39,8 +40,11 @@ After extraction, format your output as a JSON object. Include all specified att
     "elevation": "1900m",
     "processing": "Washed",
     "harvest_time": "October-December",
-    "quality_score": "88"
+    "quality_score": "88",
+    "tasting_notes": "Plum, strawberry, dark chocolate"
   }
 </example_output>
 
-Ensure your JSON is properly formatted. Do not include any text or formatting outside of the JSON object in your final output.
+Ensure your JSON is properly formatted.
+Do not include any text or formatting outside of the JSON object in your final output.
+If you can't find any information, return an empty JSON object.

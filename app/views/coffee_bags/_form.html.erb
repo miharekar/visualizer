@@ -85,7 +85,11 @@
             <%= f.label :quality_score, class: "standard-label" %>
             <%= f.text_field :quality_score, class: "mt-1 standard-input" %>
           </div>
-          <div class="col-span-6 sm:col-span-4">
+          <div class="col-span-6">
+            <%= f.label :tasting_notes, class: "standard-label" %>
+            <%= f.text_field :tasting_notes, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6">
             <div data-controller="image-form">
               <%= f.label :image, "Image", class: "standard-label" %>
               <% if @coffee_bag.image.attached? && @coffee_bag.image.persisted? && @coffee_bag.image.variable? %>

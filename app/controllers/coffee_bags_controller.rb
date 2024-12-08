@@ -95,7 +95,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def coffee_bag_params
-    cb_params = params.require(:coffee_bag).permit(:name, :url, :roaster_id, :roast_date, :roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score, :image)
+    cb_params = params.require(:coffee_bag).permit(:name, :url, :roaster_id, :roast_date, :roast_level, :country, :region, :farm, :farmer, :variety, :elevation, :processing, :harvest_time, :quality_score, :tasting_notes, :image)
     roaster = Current.user.roasters.find_by(id: cb_params[:roaster_id])
     cb_params[:roaster_id] = @roaster.id if roaster.blank?
     cb_params
