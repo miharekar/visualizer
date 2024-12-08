@@ -6,16 +6,16 @@
           <div class="col-span-6">
             <%= f.label :url, "Web page with information", class: "standard-label" %>
             <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400">
-              <div class="flex flex-row items-center gap-2 md:flex-col lg:flex-row md:items-stretch lg:items-center">
+              <div class="flex flex-row items-center gap-2">
                 <%= f.text_field :url, class: "mt-0 standard-input", data: {coffee_bag_scraper_target: "url",scrape_url: scrape_info_roaster_coffee_bags_path(@roaster),action: "change->coffee-bag-scraper#fetch"} %>
-                <button type="button" class="px-4 py-2 button-terracotta md:w-full lg:w-auto whitespace-nowrap" data-action="coffee-bag-scraper#fetch">
+                <button type="button" class="px-4 py-2 button-terracotta whitespace-nowrap" data-action="coffee-bag-scraper#fetch">
                   Get info
                 </button>
+                <div data-coffee-bag-scraper-target="loader" class="hidden col-span-6 mx-auto">
+                  <%= inline_svg_tag "logo-loading.svg", class: "logo-loading size-10 stroke-neutral-800 text-neutral-800 dark:text-neutral-300 dark:stroke-neutral-300" %>
+                </div>
               </div>
             </div>
-          </div>
-          <div data-coffee-bag-scraper-target="loader" class="hidden col-span-6 mx-auto sm:col-span-2 sm:mt-5">
-            <%= inline_svg_tag "logo-loading.svg", class: "logo-loading size-12 sm:size-10 stroke-neutral-800 text-neutral-800 dark:text-neutral-300 dark:stroke-neutral-300" %>
           </div>
           <div class="col-span-6 sm:col-span-4">
             <% has_error = f.object.errors.any? { |e| e.attribute == :name } %>
