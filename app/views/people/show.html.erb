@@ -1,8 +1,6 @@
 <% content_for(:html_title) { "Visualizer | #{@user.name}" } %>
 <% content_for(:head) { auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss) } %>
-<% if @premium_count.to_i > 1 %>
-  <%= render "shared/premium_banner", count: @premium_count %>
-<% end %>
+<%= render "shared/premium_banner", count: @premium_count %>
 <div class="flex flex-col mx-auto mt-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8">
   <div class="px-4 sm:px-0">
     <h1 class="flex items-baseline gap-x-2">

@@ -18,7 +18,7 @@
       <div class="pt-16 border-t border-neutral-200 xl:grid xl:grid-cols-3 xl:gap-x-8">
         <div>
           <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 dark:text-white text-balance">Everything you need to perfect your coffee</p>
-          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Start your 37-day free trial today. No commitment, cancel anytime.</p>
+          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Start your <%= free_trial_days %>-day free trial today. No commitment, cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
@@ -120,7 +120,7 @@
     <div class="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:flex lg:items-center lg:justify-between lg:py-24 lg:px-8">
       <h2 class="text-3xl font-bold tracking-tight text-terracotta-600 dark:text-terracotta-100 sm:text-4xl">
         <span class="block font-serif">Start Your Free Trial Today</span>
-        <span class="block mt-2 text-xl font-normal">37 days to explore everything Premium has to offer</span>
+        <span class="block mt-2 text-xl font-normal"><%= free_trial_days %> days to explore everything Premium has to offer</span>
       </h2>
       <div class="flex mt-8 lg:mt-0 lg:flex-shrink-0">
         <div class="inline-flex rounded-md shadow">

@@ -27,7 +27,7 @@ class PremiumController < ApplicationController
       ["Can I cancel at any time?", "Of course! You'll keep premium features until your subscription ends."],
       ["What payment methods do you accept?", "Credit and debit cards through [Stripe](https://stripe.com/)."],
       ["Can I use it for free?", "Absolutely! The free plan is here to stay."],
-      ["Do you have a free trial?", "Yes! Try premium free for 37 days. Cancel anytime during the trial and you won't be charged."],
+      ["Do you have a free trial?", "Yes! Try premium free for #{helpers.free_trial_days} days. Cancel anytime during the trial and you won't be charged."],
       ["Do you have a refund policy?", "While I don't have a formal policy, just [drop me a line](mailto:miha@visualizer.coffee) if you need help with a refund."],
       ["Do you offer any discounts?", "[No](/updates/black-friday). I keep things simple with one straightforward price! But you can save 2 months worth when you pick the annual plan."],
       ["Do you have a privacy policy?", "Sure do! Read it [here](/privacy)."],
@@ -62,7 +62,7 @@ class PremiumController < ApplicationController
         session_params = session_params.merge(
           customer_email: Current.user.email,
           tax_id_collection: {enabled: true},
-          subscription_data: {trial_period_days: 37}
+          subscription_data: {trial_period_days: helpers.free_trial_days}
         )
       end
 

@@ -37,4 +37,8 @@ module ApplicationHelper
 
     blob.url(expires_in: 1.week, disposition: :inline)
   end
+
+  def free_trial_days
+    Time.zone.today.year == 2024 ? 37 : 7
+  end
 end
