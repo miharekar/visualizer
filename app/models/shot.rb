@@ -13,6 +13,8 @@ class Shot < ApplicationRecord
   belongs_to :coffee_bag, optional: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy, inverse_of: :shot
   has_many :shared_shots, dependent: :destroy
+  has_many :shot_tags, dependent: :destroy
+  has_many :tags, through: :shot_tags
 
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500]
