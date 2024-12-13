@@ -88,7 +88,7 @@
     </div>
     <div class="flex border-l border-neutral-200 dark:border-neutral-800">
       <div class="flex flex-col w-full -mt-px divide-y divide-neutral-200 dark:divide-neutral-800">
-        <div class="relative flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+        <div class="relative flex grow dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
           <%= link_to edit_shot_path(shot), class: "flex items-center p-4 text-sm border border-transparent gap-x-3" do %>
             <span class="absolute inset-x-0 bottom-0 -top-px"></span>
             <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -97,10 +97,10 @@
             Edit
           <% end %>
         </div>
-        <div class="relative flex flex-1 dark:hover:bg-red-900/25 hover:bg-red-100/25">
-          <%= link_to shot_path(shot), class: "flex items-center p-4 text-sm border border-transparent gap-x-3", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do %>
+        <div class="relative flex hover:bg-red-500/10">
+          <%= link_to shot_path(shot), class: "flex items-center px-4 py-3 text-sm border border-transparent gap-x-3 text-neutral-400 dark:text-neutral-500", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do %>
             <span class="absolute inset-x-0 bottom-0 -top-px"></span>
-            <svg class="w-4 h-4 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+            <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
               <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
             </svg>
             Delete
