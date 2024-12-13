@@ -7,10 +7,16 @@ end
 #
 # Table name: shot_tags
 #
-#  shot_id :bigint           not null
-#  tag_id  :bigint           not null
+#  shot_id :uuid             not null
+#  tag_id  :uuid             not null
 #
 # Indexes
 #
-#  index_shot_tags_on_tag_id_and_shot_id  (tag_id,shot_id) UNIQUE
+#  index_shot_tags_on_shot_id  (shot_id)
+#  index_shot_tags_on_tag_id   (tag_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (shot_id => shots.id)
+#  fk_rails_...  (tag_id => tags.id)
 #
