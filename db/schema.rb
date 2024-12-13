@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_08_084540) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -204,6 +204,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_08_084540) do
     t.index ["shot_id"], name: "index_shot_informations_on_shot_id"
   end
 
+  create_table "shot_tags", id: false, force: :cascade do |t|
+    t.bigint "shot_id", null: false
+    t.bigint "tag_id", null: false
+    t.index ["tag_id", "shot_id"], name: "index_shot_tags_on_tag_id_and_shot_id", unique: true
+  end
+
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "start_time", precision: nil
     t.datetime "created_at", null: false
@@ -255,6 +261,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_08_084540) do
     t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id"
   end
 
+  create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "slug"], name: "index_tags_on_user_id_and_slug", unique: true
+    t.index ["user_id"], name: "index_tags_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "password_digest", default: "", null: false
@@ -304,4 +320,5 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_08_084540) do
   add_foreign_key "shots", "coffee_bags"
   add_foreign_key "shots", "users"
   add_foreign_key "subscriptions", "customers"
+  add_foreign_key "tags", "users"
 end
