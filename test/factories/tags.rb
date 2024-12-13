@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :tag do
-    name { "MyString" }
-    slug { "MyString" }
-    user { nil }
+    name { "Best" }
+    user
   end
 end
