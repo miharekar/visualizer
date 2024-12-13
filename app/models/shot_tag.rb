@@ -1,6 +1,8 @@
 class ShotTag < ApplicationRecord
   belongs_to :shot
   belongs_to :tag
+
+  validates :shot_id, uniqueness: {scope: :tag_id}
 end
 
 # == Schema Information
@@ -12,8 +14,9 @@ end
 #
 # Indexes
 #
-#  index_shot_tags_on_shot_id  (shot_id)
-#  index_shot_tags_on_tag_id   (tag_id)
+#  index_shot_tags_on_shot_id             (shot_id)
+#  index_shot_tags_on_tag_id              (tag_id)
+#  index_shot_tags_on_tag_id_and_shot_id  (tag_id,shot_id) UNIQUE
 #
 # Foreign Keys
 #

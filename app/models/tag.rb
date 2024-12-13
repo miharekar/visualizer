@@ -1,6 +1,7 @@
 class Tag < ApplicationRecord
   include Sluggable
   slug_from :name
+  slug_scope_to :user_id
 
   belongs_to :user
   has_many :shot_tags, dependent: :destroy
