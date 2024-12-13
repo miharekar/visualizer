@@ -205,9 +205,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
   end
 
   create_table "shot_tags", id: false, force: :cascade do |t|
-    t.bigint "shot_id", null: false
-    t.bigint "tag_id", null: false
-    t.index ["tag_id", "shot_id"], name: "index_shot_tags_on_tag_id_and_shot_id", unique: true
+    t.uuid "shot_id", null: false
+    t.uuid "tag_id", null: false
+    t.index ["shot_id"], name: "index_shot_tags_on_shot_id"
+    t.index ["tag_id"], name: "index_shot_tags_on_tag_id"
   end
 
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -317,6 +318,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
   add_foreign_key "shared_shots", "shots"
   add_foreign_key "shared_shots", "users"
   add_foreign_key "shot_informations", "shots"
+  add_foreign_key "shot_tags", "shots"
+  add_foreign_key "shot_tags", "tags"
   add_foreign_key "shots", "coffee_bags"
   add_foreign_key "shots", "users"
   add_foreign_key "subscriptions", "customers"

@@ -128,6 +128,7 @@ class ShotsController < ApplicationController
 
   def load_users_shots
     @shots = Current.user.shots.with_attached_image
+    @shots = @shots.joins(:tags).where(tags: {slug: params[:tag]}) if params[:tag].present?
 
     if Current.user.premium?
       FILTERS.select { params[it].present? }.each do |filter|
