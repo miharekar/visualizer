@@ -128,7 +128,6 @@ class ShotsController < ApplicationController
 
   def load_users_shots
     @shots = Current.user.shots.with_attached_image
-    @shots = @shots.joins(:tags).where(tags: {slug: params[:tag]}) if params[:tag].present?
 
     if Current.user.premium?
       FILTERS.select { params[it].present? }.each do |filter|
@@ -137,6 +136,7 @@ class ShotsController < ApplicationController
       @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
       @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
       @shots = @shots.where(coffee_bag_id: params[:coffee_bag]) if params[:coffee_bag].present?
+      @shots = @shots.joins(:tags).where(tags: {slug: params[:tag]}) if params[:tag].present?
     else
       @premium_count = @shots.premium.count
       @shots = @shots.non_premium

@@ -208,6 +208,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
     t.uuid "shot_id", null: false
     t.uuid "tag_id", null: false
     t.index ["shot_id"], name: "index_shot_tags_on_shot_id"
+    t.index ["tag_id", "shot_id"], name: "index_shot_tags_on_tag_id_and_shot_id", unique: true
     t.index ["tag_id"], name: "index_shot_tags_on_tag_id"
   end
 
