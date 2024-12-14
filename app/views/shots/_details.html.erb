@@ -46,112 +46,117 @@
 </div>
 <div class="mt-2 text-base text-neutral-600 dark:text-neutral-400">
   <div>
-    <% if shot.bean_brand.present? %>
-      <%= shot.bean_brand %>
+    <% if shot.bean_brand.present? || shot.bean_type.present? %>
+      <div>
+        <% if shot.bean_brand.present? %>
+          <%= shot.bean_brand %>
+        <% end %>
+        <% if shot.bean_type.present? %>
+          <% if owner && Current.user.coffee_management_enabled? && shot.coffee_bag %>
+            <%= link_to shot.bean_type, edit_roaster_coffee_bag_path(shot.coffee_bag.roaster, shot.coffee_bag), class: "standard-link" %>
+          <% else %>
+            <%= shot.bean_type %>
+          <% end %>
+        <% end %>
+        <% if shot.roast_level.present? %>
+          (<%= shot.roast_level %>)
+        <% end %>
+        <% if shot.roast_date.present? %>
+          on <%= shot.parsed_roast_date&.to_fs(:long) %>
+        <% end %>
+      </div>
     <% end %>
-    <% if shot.bean_type.present? %>
-      <% if owner && Current.user.coffee_management_enabled? && shot.coffee_bag %>
-        <%= link_to shot.bean_type, edit_roaster_coffee_bag_path(shot.coffee_bag.roaster, shot.coffee_bag), class: "standard-link" %>
-      <% else %>
-        <%= shot.bean_type %>
+    <div class="flex flex-wrap items-center gap-x-1">
+      <% if bean_weight > 0 %>
+        <span><%= shot.bean_weight %>g</span>
       <% end %>
-    <% end %>
-    <% if shot.roast_level.present? %>
-      (<%= shot.roast_level %>)
-    <% end %>
-    <% if shot.roast_date.present? %>
-      on <%= shot.parsed_roast_date&.to_fs(:long) %>
-    <% end %>
-  </div>
-  <div>
-    <% if bean_weight > 0 %>
-      <%= shot.bean_weight %> g
-    <% end %>
-    <% if bean_weight > 0 && drink_weight > 0 %>
-      :
-    <% end %>
-    <% if drink_weight > 0 %>
-      <%= shot.drink_weight %> g
-    <% end %>
-    <% if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite? %>
-      (1 : <%= ratio.round(1) %>)
-    <% end %>
-    <% if bean_weight > 0 || drink_weight > 0 %>
-      in
-    <% end %>
-    <%= shot.duration.round(1) %> s
-  </div>
-  <div>
-    <% if shot.grinder_model.present? %>
-      <%= shot.grinder_model %>
-    <% end %>
-    <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
-      @ <%= shot.grinder_setting %>
-    <% end %>
-  </div>
-  <div>
-    <% if tds > 0 %>
-      TDS <%= tds %> %
-    <% end %>
-    <% if ey > 0 %>
-      EY <%= ey %> %
-    <% end %>
-  </div>
-  <% if shot.barista.present? %>
-    <div>
-      By <%= shot.barista %>
+      <% if bean_weight > 0 && drink_weight > 0 %>
+        <span>&rarr;</span>
+      <% end %>
+      <% if drink_weight > 0 %>
+        <span><%= shot.drink_weight %>g</span>
+        <% if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite? %>
+          <span>(1:<%= ratio.round(1) %>)</span>
+        <% end %>
+      <% end %>
+      <span>in <%= shot.duration.round(1) %>s</span>
     </div>
-  <% end %>
-  <div class="mt-2 prose prose-neutral dark:prose-invert">
-    <table>
-      <% if shot.metadata.present? %>
-        <% shot.user.metadata_fields.each do |key| %>
-          <%= metadata_pair(key, shot.metadata[key]) %>
+    <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
+      <div class="flex flex-wrap items-center gap-x-1">
+        <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
+          <span><%= shot.grinder_setting %></span>
         <% end %>
-      <% end %>
-      <% if shot.coffee_bag %>
-        <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
-          <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+        <% if shot.grinder_model.present? %>
+          <span class="truncate">on <%= shot.grinder_model %></span>
         <% end %>
-      <% end %>
-      <% if shot.information&.brewdata.present? %>
-        <% shot.information.brewdata.each do |group, values| %>
-          <% next if group == "brewFlow" || !values.is_a?(Hash) %>
-          <% values.each do |key, value| %>
-            <% if value.is_a?(Hash) %>
-              <% value.each do |k, v| %>
-                <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
-              <% end %>
-            <% elsif value.is_a?(Array) %>
-              <% value.each do |item| %>
-                <% item.each do |k, v| %>
+      </div>
+    <% end %>
+    <% if tds > 0 || ey > 0 %>
+      <div class="flex items-center gap-x-2">
+        <% if tds > 0 %>
+          <span>TDS: <%= tds %>%</span>
+        <% end %>
+        <% if ey > 0 %>
+          <span>EY: <%= ey %>%</span>
+        <% end %>
+      </div>
+    <% end %>
+    <% if shot.barista.present? %>
+      <div>
+        By <%= shot.barista %>
+      </div>
+    <% end %>
+    <div class="mt-2 prose prose-neutral dark:prose-invert">
+      <table>
+        <% if shot.metadata.present? %>
+          <% shot.user.metadata_fields.each do |key| %>
+            <%= metadata_pair(key, shot.metadata[key]) %>
+          <% end %>
+        <% end %>
+        <% if shot.coffee_bag %>
+          <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+            <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+          <% end %>
+        <% end %>
+        <% if shot.information&.brewdata.present? %>
+          <% shot.information.brewdata.each do |group, values| %>
+            <% next if group == "brewFlow" || !values.is_a?(Hash) %>
+            <% values.each do |key, value| %>
+              <% if value.is_a?(Hash) %>
+                <% value.each do |k, v| %>
                   <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
                 <% end %>
+              <% elsif value.is_a?(Array) %>
+                <% value.each do |item| %>
+                  <% item.each do |k, v| %>
+                    <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <%= metadata_pair(key.underscore.humanize, value) %>
               <% end %>
-            <% else %>
-              <%= metadata_pair(key.underscore.humanize, value) %>
             <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </table>
+      </table>
+    </div>
+    <% if shot.bean_notes.present? %>
+      <div class="mt-2">
+        <div class="font-medium text-neutral-900 dark:text-neutral-100">Bean notes:</div>
+        <%= markdown_text_from(shot.bean_notes) %>
+      </div>
+    <% end %>
+    <% if shot.espresso_notes.present? %>
+      <div class="mt-2">
+        <div class="font-medium text-neutral-900 dark:text-neutral-100">Notes:</div>
+        <%= markdown_text_from(shot.espresso_notes) %>
+      </div>
+    <% end %>
+    <% if owner && shot.private_notes.present? %>
+      <div class="mt-2">
+        <div class="font-medium text-neutral-900 dark:text-neutral-100">Private notes:</div>
+        <%= markdown_text_from(shot.private_notes) %>
+      </div>
+    <% end %>
   </div>
-  <% if shot.bean_notes.present? %>
-    <div class="mt-2">
-      <div class="font-medium text-neutral-900 dark:text-neutral-100">Bean notes:</div>
-      <%= markdown_text_from(shot.bean_notes) %>
-    </div>
-  <% end %>
-  <% if shot.espresso_notes.present? %>
-    <div class="mt-2">
-      <div class="font-medium text-neutral-900 dark:text-neutral-100">Notes:</div>
-      <%= markdown_text_from(shot.espresso_notes) %>
-    </div>
-  <% end %>
-  <% if owner && shot.private_notes.present? %>
-    <div class="mt-2">
-      <div class="font-medium text-neutral-900 dark:text-neutral-100">Private notes:</div>
-      <%= markdown_text_from(shot.private_notes) %>
-    </div>
-  <% end %>
 </div>
