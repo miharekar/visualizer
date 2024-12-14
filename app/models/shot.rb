@@ -5,7 +5,7 @@ class Shot < ApplicationRecord
   include DateParseable
 
   DAILY_LIMIT = 50
-  LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
+  LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting roast_level roast_date].freeze
 
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
 
