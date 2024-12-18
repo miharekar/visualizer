@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.3.5"
+ruby "3.4.0-rc1"
 
 gem "active_link_to"
 gem "amazing_print"
@@ -12,7 +12,6 @@ gem "bootsnap", require: false
 gem "cloudinary"
 gem "csv"
 gem "doorkeeper"
-gem "freezolite"
 gem "image_processing"
 gem "importmap-rails"
 gem "kramdown"

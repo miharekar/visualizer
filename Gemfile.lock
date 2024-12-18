@@ -85,12 +85,12 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.6.0)
     annotaterb (4.13.0)
-    appsignal (4.2.1)
+    appsignal (4.2.3)
       logger
       rack
     ast (2.4.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.1023.0)
+    aws-partitions (1.1024.0)
     aws-sdk-core (3.214.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -108,7 +108,6 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
-    bcrypt_pbkdf (1.1.1-arm64-darwin)
     benchmark (0.4.0)
     benchmark-ips (2.14.0)
     bigdecimal (3.1.8)
@@ -132,7 +131,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.0)
+    csv (3.3.1)
     date (3.4.1)
     debug (1.9.2)
       irb (~> 1.10)
@@ -141,7 +140,7 @@ GEM
       rails (>= 3.0.0)
     doorkeeper (5.8.1)
       railties (>= 5)
-    dotenv (3.1.6)
+    dotenv (3.1.7)
     drb (2.2.1)
     ed25519 (1.3.0)
     erubi (1.13.0)
@@ -158,15 +157,11 @@ GEM
       logger
     faraday-follow_redirects (0.3.0)
       faraday (>= 1, < 3)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
+    faraday-multipart (1.1.0)
+      multipart-post (~> 2.0)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    ffi (1.17.0-aarch64-linux-gnu)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
-    freezolite (0.5.0)
-      require-hooks (~> 0.2)
+    ffi (1.17.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -187,7 +182,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.8.0)
-    irb (1.14.2)
+    irb (1.14.3)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
@@ -228,6 +223,7 @@ GEM
     memo_wise (1.10.0)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.8)
     minitest (5.25.4)
     mission_control-jobs (1.0.1)
       actioncable (>= 7.1)
@@ -245,7 +241,7 @@ GEM
     multipart-post (2.4.1)
     net-http (0.6.0)
       uri
-    net-imap (0.5.1)
+    net-imap (0.5.2)
       date
       net-protocol
     net-pop (0.1.2)
@@ -257,14 +253,10 @@ GEM
     net-sftp (4.0.0)
       net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
-      net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.17.2-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.17.2-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.17.2-x86_64-linux)
+    nokogiri (1.17.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -273,7 +265,7 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    oj (3.16.7)
+    oj (3.16.8)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     omniauth (2.1.2)
@@ -309,7 +301,7 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.2.1)
+    psych (5.2.2)
       date
       stringio
     public_suffix (6.0.1)
@@ -367,16 +359,15 @@ GEM
     rake (13.2.1)
     rbs (3.7.0)
       logger
-    rdoc (6.9.0)
+    rdoc (6.10.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.3)
-    reline (0.5.12)
+    reline (0.6.0)
       io-console (~> 0.5)
-    require-hooks (0.2.2)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.3.9)
+    rexml (3.4.0)
     rubocop (1.69.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -414,7 +405,7 @@ GEM
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
-    securerandom (0.4.0)
+    securerandom (0.4.1)
     semantic_logger (4.16.1)
       concurrent-ruby (~> 1.0)
     singed (0.2.2)
@@ -426,7 +417,7 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
-    solid_cable (3.0.4)
+    solid_cable (3.0.5)
       actioncable (>= 7.2)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -442,10 +433,9 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
-    sorbet-runtime (0.5.11694)
-    sqlite3 (2.4.1-aarch64-linux-gnu)
-    sqlite3 (2.4.1-arm64-darwin)
-    sqlite3 (2.4.1-x86_64-linux-gnu)
+    sorbet-runtime (0.5.11704)
+    sqlite3 (2.4.1)
+      mini_portile2 (~> 2.8.0)
     sshkit (1.23.2)
       base64
       net-scp (>= 1.1.2)
@@ -469,7 +459,7 @@ GEM
     thruster (0.1.9-arm64-darwin)
     thruster (0.1.9-x86_64-linux)
     tilt (2.4.0)
-    timeout (0.4.2)
+    timeout (0.4.3)
     turbo-rails (2.0.11)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -516,7 +506,6 @@ DEPENDENCIES
   dockerfile-rails
   doorkeeper
   factory_bot_rails
-  freezolite
   image_processing
   importmap-rails
   inline_svg
@@ -558,7 +547,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.3.5p100
+   ruby 3.4.0.rc1
 
 BUNDLED WITH
-   2.5.23
+   2.6.1
