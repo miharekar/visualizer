@@ -36,7 +36,7 @@ class ShotChart
 
       @timeframe = []
       relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 } & DATA_LABELS_MAP.keys
-      @data = DATA_LABELS_MAP.values_at(*relevant_keys).index_with { |_label| [] }
+      @data = DATA_LABELS_MAP.values_at(*relevant_keys).index_with { [] }
       brew_flow.each_value do |data|
         data.each do |d|
           d["unix_timestamp"] = Time.strptime(d["timestamp"], "%H:%M:%S.%L").to_f

@@ -54,11 +54,11 @@ class YearlyBrew
   end
 
   memo_wise def amount_beans_used(year = :current)
-    (shots(year).sum { |s| s.bean_weight.to_f } / 1000).round(2)
+    (shots(year).sum { it.bean_weight.to_f } / 1000).round(2)
   end
 
   memo_wise def amount_brewed(year = :current)
-    (shots(year).sum { |s| s.drink_weight.to_f } / 1000).round(2)
+    (shots(year).sum { it.drink_weight.to_f } / 1000).round(2)
   end
 
   memo_wise def month_with_most_shots(year = :current)
@@ -76,7 +76,7 @@ class YearlyBrew
       .group("EXTRACT(DOW FROM start_time)")
       .select("EXTRACT(DOW FROM start_time) as day, COUNT(*) as shots_count")
       .order("day")
-      .map { |day| [Date::DAYNAMES[day.day.to_i], day.shots_count] }
+      .map { [Date::DAYNAMES[it.day.to_i], it.shots_count] }
       .rotate(1)
   end
 

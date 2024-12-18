@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/miharekar/tickly.git
-  revision: 277b63c371e5a7f9d2a2a1410087ff6f21906cae
+  revision: a4eaa0462acb6433d63eb64d8414beab91023054
   specs:
     tickly (2.1.7)
 

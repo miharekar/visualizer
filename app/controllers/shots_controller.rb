@@ -130,7 +130,7 @@ class ShotsController < ApplicationController
     @shots = Current.user.shots.with_attached_image
 
     if Current.user.premium?
-      FILTERS.select { |f| params[f].present? }.each do |filter|
+      FILTERS.select { params[it].present? }.each do |filter|
         @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
       end
       @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
@@ -146,7 +146,7 @@ class ShotsController < ApplicationController
   end
 
   def load_related_shots
-    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { |s| s[2] }.reverse
+    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { it[2] }.reverse
   end
 
   def create_shared_shot

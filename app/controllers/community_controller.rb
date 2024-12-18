@@ -74,7 +74,7 @@ class CommunityController < ApplicationController
     return [] if values.blank?
 
     if filter == :user
-      values.select { |u| u.display_name =~ rquery }
+      values.select { it.display_name =~ rquery }
     else
       values.grep(rquery)
     end

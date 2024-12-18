@@ -6,7 +6,7 @@ module Airtable
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
-    ].index_by { |f| f.to_s.humanize }
+    ].index_by { it.to_s.humanize }
     FIELD_OPTIONS = {
       "espresso_enjoyment" => {type: "number", options: {precision: 0}},
       "duration" => {type: "duration", options: {durationFormat: "h:mm:ss.SS"}},

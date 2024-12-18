@@ -60,7 +60,7 @@ module Parsers
       brewdata["brewFlow"].filter_map do |_, values|
         next if values.blank?
 
-        [values.first, values.last].map { |v| Time.strptime(v["timestamp"], "%H:%M:%S.%L") }
+        [values.first, values.last].map { Time.strptime(it["timestamp"], "%H:%M:%S.%L") }
       end
     end
   end
