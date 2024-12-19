@@ -66,7 +66,7 @@ module Parsers
 
     def extract_profile(data)
       stop = "#{data.last.join(" ")}\n}"
-      @profile_fields["json"] = Oj.safe_load(file[/profile (\{(.*)#{stop})/m, 1])
+      @profile_fields["json"] = JSON.parse(file[/profile (\{(.*)#{stop})/m, 1])
     rescue StandardError
       nil
     end

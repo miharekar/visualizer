@@ -29,7 +29,7 @@ module Airtable
       body = response.try(:body)
       return {} unless body
 
-      Oj.safe_load(body)
+      JSON.parse(body)
     end
   end
 end

@@ -88,9 +88,9 @@ module Parsers
       assert_equal "4", shot.information.brewdata["brew"]["grind_size"]
       assert_equal 75, shot.information.brewdata["brew"]["grind_weight"]
 
-      updated = Oj.load(File.read("test/files/beanconqueror_real_with_id.json"))
+      updated = JSON.parse(File.read("test/files/beanconqueror_real_with_id.json"))
       updated["visualizerId"] = shot.id
-      shot = Shot.from_file(user, Oj.dump(updated))
+      shot = Shot.from_file(user, JSON.generate(updated))
       assert shot.valid?
       assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
       shot.save

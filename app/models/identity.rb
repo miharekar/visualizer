@@ -23,7 +23,7 @@ class Identity < ApplicationRecord
       AirtableUploadAllJob.set(wait: 2.minutes).perform_later(user) if airtable?
     end
   rescue OAuth2::Error => e
-    if Oj.safe_load(e.body)["error"] == "invalid_grant"
+    if JSON.parse(e.body)["error"] == "invalid_grant"
       Appsignal.report_error(e) do |transaction|
         transaction.set_tags(user_id:)
       end

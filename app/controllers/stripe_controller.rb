@@ -4,7 +4,7 @@ class StripeController < ApplicationController
   def create
     StripeWebhookHandler.new(request).handle
     head :ok
-  rescue Oj::ParseError, Stripe::SignatureVerificationError
+  rescue JSON::ParserError, Stripe::SignatureVerificationError
     head :bad_request
   end
 end

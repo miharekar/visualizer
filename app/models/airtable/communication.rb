@@ -92,7 +92,7 @@ module Airtable
         response = http.public_send(method, *attrs)
         raise DataError.new(data:, response:) unless response.is_a?(Net::HTTPSuccess)
 
-        Oj.safe_load(response.body)
+        JSON.parse(response.body)
       end
     end
   end

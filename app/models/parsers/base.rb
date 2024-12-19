@@ -29,7 +29,9 @@ module Parsers
     end
 
     def self.parse_json(file)
-      Oj.safe_load(file)
+      JSON.parse(file)
+    rescue JSON::ParserError
+      JSON.parse(file.delete("\n"))
     end
 
     def initialize(file, json = nil)
