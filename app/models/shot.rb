@@ -48,7 +48,7 @@ class Shot < ApplicationRecord
     self.roast_level = coffee_bag&.roast_level
   end
 
-  def related_shots(limit: 5)
+  def related_shots(limit: 15)
     query = self.class.where(user:).where.not(id:).limit(limit)
     query.where(start_time: start_time..).order(:start_time) + [self] + query.where(start_time: ..start_time).order(start_time: :desc)
   end
