@@ -58,6 +58,7 @@ group :development do
   gem "benchmark-ips"
   gem "brakeman", require: false
   gem "dockerfile-rails"
+  gem "hotwire-spark"
   gem "letter_opener"
   gem "rubocop-rails-omakase", require: false
   gem "ruby-lsp"
