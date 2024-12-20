@@ -90,7 +90,7 @@ GEM
       rack
     ast (2.4.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.1025.0)
+    aws-partitions (1.1026.0)
     aws-sdk-core (3.214.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -440,7 +440,7 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
-    sorbet-runtime (0.5.11704)
+    sorbet-runtime (0.5.11707)
     sqlite3 (2.4.1)
       mini_portile2 (~> 2.8.0)
     sshkit (1.23.2)

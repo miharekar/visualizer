@@ -28,10 +28,18 @@ module Parsers
       end
     end
 
-    def self.parse_json(file)
+    def self.parse_json(file, retrying: false)
       JSON.parse(file)
     rescue JSON::ParserError
-      JSON.parse(file.delete("\n"))
+      if retrying
+        s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.current.iso8601}.json")
+        Appsignal.set_message("JSON parsing failed for #{s3_response.etag}")
+        raise
+      else
+        file = file.delete("\n")
+        retrying = true
+        retry
+      end
     end
 
     def initialize(file, json = nil)
