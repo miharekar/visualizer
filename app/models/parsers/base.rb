@@ -36,7 +36,7 @@ module Parsers
         Appsignal.set_message("JSON parsing failed for #{s3_response.etag}")
         raise
       else
-        file = file.delete("\n")
+        file = file.gsub(/[\u0000-\u001F\u007F-\u009F]/, "")
         retrying = true
         retry
       end

@@ -98,6 +98,13 @@ module Parsers
       assert_equal 237, shot.information.timeframe.size
     end
 
+    test "handles even more even more invalid profile string" do
+      shot = new_shot("test/files/invalid_profile_3.json")
+      assert shot.valid?
+      assert_equal "Flow profile for milky drinks", shot.profile_title
+      assert_equal 105, shot.information.timeframe.size
+    end
+
     test "handles invalid settings" do
       shot = new_shot("test/files/invalid_settings.json")
       assert shot.valid?
