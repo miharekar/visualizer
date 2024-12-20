@@ -6,7 +6,7 @@ class PremiumController < ApplicationController
       "Create custom fields to track exactly what matters to you",
       "Sync your shots, roasters, and coffee bags with Airtable",
       "Access your complete shot history",
-      "Browse through the community's public shot collection",
+      "Tag your shots to add an extra layer of organization",
       "Upload over 50 shots per day",
       "Make charts your own with custom colors",
       "Dig deep in your shot comparisons with precise timing control",
