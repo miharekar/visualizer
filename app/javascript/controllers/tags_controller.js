@@ -75,6 +75,6 @@ export default class extends Controller {
   }
 
   get tags() {
-    return this.dataTarget.value.split(",") || []
+    return this.dataTarget.value.split(",").filter(tag => tag.length > 0)
   }
 }
