@@ -66,5 +66,6 @@ group :development do
 end
 
 group :test do
+  gem "retest"
   gem "webmock"
 end

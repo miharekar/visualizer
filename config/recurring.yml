@@ -10,6 +10,9 @@ duplicate_stripe_subscriptions_job:
 populate_stripe_job:
   class: PopulateStripeJob
   schedule: "@daily"
+tag_cleaner_job:
+  class: TagCleanerJob
+  schedule: "@daily"
 airtable_webhook_refresh_all_job:
   class: AirtableWebhookRefreshAllJob
   schedule: "0 0 */6 * *"
