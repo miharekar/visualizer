@@ -136,7 +136,7 @@ class ShotsController < ApplicationController
       @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
       @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
       @shots = @shots.where(coffee_bag_id: params[:coffee_bag]) if params[:coffee_bag].present?
-      @shots = @shots.joins(:tags).where(tags: {slug: params[:tag]}) if params[:tag].present?
+      @shots = @shots.where(id: ShotTag.joins(:tag).where(tag: {slug: params[:tag]}).select(:shot_id)) if params[:tag].present?
     else
       @premium_count = @shots.premium.count
       @shots = @shots.non_premium
@@ -159,7 +159,7 @@ class ShotsController < ApplicationController
 
   def update_shot_params
     allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, *Parsers::Base::EXTRA_DATA_METHODS]
-    allowed << {metadata: Current.user.metadata_fields} if Current.user.premium?
+    allowed << [:tag_list, {metadata: Current.user.metadata_fields}] if Current.user.premium?
     allowed << :coffee_bag_id if Current.user.coffee_management_enabled?
     params.require(:shot).permit(allowed)
   end

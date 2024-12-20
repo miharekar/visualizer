@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_many :access_tokens, class_name: "Doorkeeper::AccessToken", foreign_key: :resource_owner_id, dependent: :destroy # rubocop:disable Rails/InverseOf
   has_many :roasters, dependent: :destroy
   has_many :coffee_bags, through: :roasters
+  has_many :tags, dependent: :destroy
   has_one :customer, dependent: :nullify
 
   has_one_attached :avatar, service: :cloudinary
