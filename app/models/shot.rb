@@ -23,7 +23,7 @@ class Shot < ApplicationRecord
 
   scope :visible, -> { where(public: true) }
   scope :visible_or_owned_by_id, ->(user_id) { user_id ? visible.or(where(user_id:)) : visible }
-  scope :for_list, -> { select(LIST_ATTRIBUTES).includes(coffee_bag: :roaster) }
+  scope :for_list, -> { select(LIST_ATTRIBUTES).includes(:tags, coffee_bag: :roaster) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
@@ -62,6 +62,16 @@ class Shot < ApplicationRecord
 
   def iso8601_roast_date_time
     parsed_roast_date&.strftime("%Y-%m-%dT%H:%M:%SZ")
+  end
+
+  def tag_list=(value)
+    return unless user.premium?
+
+    self.tags = value.split(",").map { |t| t.squish.gsub(/[^\w\s-]/, "").downcase }.compact_blank.uniq.map { |name| user.tags.find_or_create_by(name:) }
+  end
+
+  def tag_list
+    tags.pluck(:name).join(",")
   end
 
   private
