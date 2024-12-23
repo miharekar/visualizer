@@ -24,7 +24,6 @@ end
 #
 # Indexes
 #
-#  index_tags_on_user_id           (user_id)
 #  index_tags_on_user_id_and_slug  (user_id,slug) UNIQUE
 #
 # Foreign Keys

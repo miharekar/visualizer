@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_23_092212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -209,7 +209,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
     t.uuid "tag_id", null: false
     t.index ["shot_id"], name: "index_shot_tags_on_shot_id"
     t.index ["tag_id", "shot_id"], name: "index_shot_tags_on_tag_id_and_shot_id", unique: true
-    t.index ["tag_id"], name: "index_shot_tags_on_tag_id"
   end
 
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -270,7 +269,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_13_111131) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id", "slug"], name: "index_tags_on_user_id_and_slug", unique: true
-    t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

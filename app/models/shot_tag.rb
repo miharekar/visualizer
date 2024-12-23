@@ -15,7 +15,6 @@ end
 # Indexes
 #
 #  index_shot_tags_on_shot_id             (shot_id)
-#  index_shot_tags_on_tag_id              (tag_id)
 #  index_shot_tags_on_tag_id_and_shot_id  (tag_id,shot_id) UNIQUE
 #
 # Foreign Keys
