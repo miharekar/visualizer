@@ -169,7 +169,7 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.1.2)
     hashie (5.0.0)
-    hotwire-spark (0.1.8)
+    hotwire-spark (0.1.9)
       listen
       rails (>= 8.0.0)
       zeitwerk
@@ -248,7 +248,7 @@ GEM
     multipart-post (2.4.1)
     net-http (0.6.0)
       uri
-    net-imap (0.5.3)
+    net-imap (0.5.4)
       date
       net-protocol
     net-pop (0.1.2)
@@ -302,7 +302,7 @@ GEM
     postmark-rails (0.22.1)
       actionmailer (>= 3.0.0)
       postmark (>= 1.21.3, < 2.0)
-    prism (1.2.0)
+    prism (1.3.0)
     propshaft (1.1.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
