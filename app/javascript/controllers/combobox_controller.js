@@ -28,6 +28,7 @@ export default class extends Controller {
     this.listTarget.scrollIntoView({ block: "nearest" })
     this.markAllAsInactive()
     this.active = this.selected
+    if (!this.allowCustomValue) { this.inputTarget.value = "" }
     this.filter()
   }
 
@@ -68,12 +69,7 @@ export default class extends Controller {
   }
 
   toggle(event) {
-    if (this.shown) {
-      this.hide(event)
-    } else {
-      this.inputTarget.value = ""
-      this.show()
-    }
+    this.shown ? this.hide(event) : this.show()
   }
 
   filter() {
