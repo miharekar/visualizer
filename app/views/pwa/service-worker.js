@@ -1,26 +1,23 @@
 self.addEventListener("push", async (event) => {
   const data = await event.data.json()
   event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: data.icon,
-      data: data.data
-    })
+    self.registration.showNotification(data.title, { body: data.body, data: data.data })
   )
 })
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close()
-
-  const targetPath = event.notification.data?.path || "/"
-  event.waitUntil(
-    clients.matchAll({ type: 'window' }).then(windowClients => {
-      for (let client of windowClients) {
-        if (client.path === targetPath && 'focus' in client) {
-          return client.focus()
-        }
-      }
-      return clients.openWindow(targetPath)
-    })
-  )
+  const url = new URL(event.notification.data?.path || "/", self.location.origin).href
+  event.waitUntil(openURL(url))
 })
+
+async function openURL(url) {
+  const clients = await self.clients.matchAll({ type: "window" })
+  const focused = clients.find((client) => client.focused)
+
+  if (focused) {
+    await focused.navigate(url)
+  } else {
+    await self.clients.openWindow(url)
+  }
+}
