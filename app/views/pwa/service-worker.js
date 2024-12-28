@@ -12,15 +12,15 @@ self.addEventListener("push", async (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close()
 
-  const targetUrl = event.notification.data?.url || "/"
+  const targetPath = event.notification.data?.path || "/"
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then(windowClients => {
       for (let client of windowClients) {
-        if (client.url === targetUrl && 'focus' in client) {
+        if (client.path === targetPath && 'focus' in client) {
           return client.focus()
         }
       }
-      return clients.openWindow(targetUrl)
+      return clients.openWindow(targetPath)
     })
   )
 })

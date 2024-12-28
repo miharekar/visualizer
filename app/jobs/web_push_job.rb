@@ -4,14 +4,9 @@ class WebPushJob < ApplicationJob
 
   queue_as :default
 
-  def perform(push_subscription, title:, body:, url: "/")
+  def perform(push_subscription, title:, body:, path: "/")
     WebPush.payload_send(
-      message: {
-        title:,
-        body:,
-        icon: ICON_PATH,
-        data: {url:}
-      }.to_json,
+      message: {title:, body:, icon: ICON_PATH, data: {path:}}.to_json,
       endpoint: push_subscription.endpoint,
       p256dh: push_subscription.p256dh_key,
       auth: push_subscription.auth_key,
@@ -21,5 +16,7 @@ class WebPushJob < ApplicationJob
         private_key: Rails.application.credentials.webpush.private_key
       }
     )
+  rescue WebPush::ExpiredSubscription
+    push_subscription.destroy
   end
 end

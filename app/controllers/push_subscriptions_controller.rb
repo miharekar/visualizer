@@ -2,9 +2,9 @@ class PushSubscriptionsController < ApplicationController
   def create
     subscription = Current.user.push_subscriptions.find_by(push_subscription_params)
     if subscription
-      subscription.touch # rubocop:disable Rails/SkipsModelValidations
+      subscription.update!(user_agent: request.user_agent)
     else
-      Current.user.push_subscriptions.create!(push_subscription_params)
+      Current.user.push_subscriptions.create!(push_subscription_params.merge(user_agent: request.user_agent))
     end
 
     head :ok
@@ -13,6 +13,6 @@ class PushSubscriptionsController < ApplicationController
   private
 
   def push_subscription_params
-    params.require(:push_subscription).permit(:endpoint, :p256dh_key, :auth_key).merge(user_agent: request.user_agent)
+    params.require(:push_subscription).permit(:endpoint, :p256dh_key, :auth_key)
   end
 end

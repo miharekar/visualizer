@@ -7,7 +7,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color">
     <meta content="#171717" media="(prefers-color-scheme: dark)" name="theme-color">
-    <%= tag.meta name: "vapid-public-key", content: Rails.application.credentials.webpush.public_key %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>

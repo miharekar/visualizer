@@ -32,6 +32,7 @@ class Shot < ApplicationRecord
   validate :daily_limit, on: :create
 
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend
+  after_create_commit :send_web_push_notification
 
   def self.from_file(user, file_content)
     return Shot.new(user:) if file_content.blank?
@@ -81,6 +82,12 @@ class Shot < ApplicationRecord
     return if self.class.where(user_id:).where("start_time > NOW() - INTERVAL '1 day'").count < DAILY_LIMIT
 
     errors.add(:base, :over_daily_limit, message: "You've reached your daily limit of #{DAILY_LIMIT} shots. Please consider upgrading to a premium account.")
+  end
+
+  def send_web_push_notification
+    user&.push_subscriptions&.each do |push_subscription|
+      WebPushJob.perform_later(push_subscription, title: "New Shot", body: "See your new #{profile_title} shot 👀", path: "/shots/#{id}")
+    end
   end
 end
 

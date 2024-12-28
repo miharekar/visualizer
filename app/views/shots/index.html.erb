@@ -4,7 +4,7 @@
 <% if Current.user && Current.user.shots.where("extract(year from start_time) = ?", 2024).exists? %>
   <%= render "yearly_brew_promo" %>
 <% end %>
-<div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel push">
+<div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel push" data-push-vapid-key-value="<%= Rails.application.credentials.webpush.public_key.tr("_-", "/+") %>">
   <div class="flex flex-col gap-2 px-4 sm:flex-row sm:px-0 sm:justify-between">
     <div class="flex-shrink min-w-0">
       <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
