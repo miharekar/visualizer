@@ -1,24 +1,37 @@
 self.addEventListener("push", async (event) => {
-  const { title, options } = await event.data.json()
-  event.waitUntil(self.registration.showNotification(title, options))
+  const data = await event.data.json()
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: data.icon,
+      data: data.data,
+      actions: [
+        {
+          action: "edit_shot",
+          title: "Edit Shot",
+        }
+      ],
+    })
+  )
 })
 
-self.addEventListener("notificationclick", function (event) {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close()
-  event.waitUntil(
-    clients.matchAll({ type: "window" }).then((clientList) => {
-      for (let i = 0; i < clientList.length; i++) {
-        let client = clientList[i]
-        let clientPath = (new URL(client.url)).pathname
 
-        if (clientPath == event.notification.data.path && "focus" in client) {
+  const baseUrl = event.notification.data?.url
+  let targetUrl = "/"
+  if (baseUrl) {
+    targetUrl = event.action === "edit_shot" ? `${baseUrl}/edit` : baseUrl
+  }
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url === targetUrl && 'focus' in client) {
           return client.focus()
         }
       }
-
-      if (clients.openWindow) {
-        return clients.openWindow(event.notification.data.path)
-      }
+      return clients.openWindow(targetUrl)
     })
   )
 })
