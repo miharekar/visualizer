@@ -94,6 +94,8 @@ Rails.application.routes.draw do
 
   resources :decent_tokens, only: %i[new create]
 
+  resources :push_subscriptions, only: %i[create]
+
   slug_constraint = ->(r) { r.params[:x].present? && YearlyBrewController::WHITELISTED_YEARS.map(&:to_s).exclude?(r.params[:x]) }
   get "yearly_brew", to: redirect("/yearly_brew/2023"), as: :yearly_brew_redirect
   get "yearly_brew/:x", to: redirect { |params| "/yearly_brew/#{params[:x]}/2023" }, constraints: slug_constraint

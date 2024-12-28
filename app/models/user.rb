@@ -27,6 +27,7 @@ class User < ApplicationRecord
   has_many :roasters, dependent: :destroy
   has_many :coffee_bags, through: :roasters
   has_many :tags, dependent: :destroy
+  has_many :push_subscriptions, dependent: :destroy
   has_one :customer, dependent: :nullify
 
   has_one_attached :avatar, service: :cloudinary
