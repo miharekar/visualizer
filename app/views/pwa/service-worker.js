@@ -4,13 +4,7 @@ self.addEventListener("push", async (event) => {
     self.registration.showNotification(data.title, {
       body: data.body,
       icon: data.icon,
-      data: data.data,
-      actions: [
-        {
-          action: "edit_shot",
-          title: "Edit Shot",
-        }
-      ],
+      data: data.data
     })
   )
 })
@@ -18,12 +12,7 @@ self.addEventListener("push", async (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close()
 
-  const baseUrl = event.notification.data?.url
-  let targetUrl = "/"
-  if (baseUrl) {
-    targetUrl = event.action === "edit_shot" ? `${baseUrl}/edit` : baseUrl
-  }
-
+  const targetUrl = event.notification.data?.url || "/"
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then(windowClients => {
       for (let client of windowClients) {

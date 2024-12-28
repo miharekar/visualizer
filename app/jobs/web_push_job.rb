@@ -4,13 +4,13 @@ class WebPushJob < ApplicationJob
 
   queue_as :default
 
-  def perform(push_subscription, title:, body:)
+  def perform(push_subscription, title:, body:, url: "/")
     WebPush.payload_send(
       message: {
         title:,
         body:,
         icon: ICON_PATH,
-        data: {url: "/shots/123"}
+        data: {url:}
       }.to_json,
       endpoint: push_subscription.endpoint,
       p256dh: push_subscription.p256dh_key,
