@@ -16,7 +16,14 @@ async function openURL(url) {
   const focused = clients.find((client) => client.focused)
 
   if (focused) {
-    await focused.navigate(url)
+    try {
+      const navigated = await focused.navigate(url)
+      if (!navigated) {
+        await self.clients.openWindow(url)
+      }
+    } catch (e) {
+      await self.clients.openWindow(url)
+    }
   } else {
     await self.clients.openWindow(url)
   }
