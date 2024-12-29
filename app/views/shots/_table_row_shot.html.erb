@@ -6,7 +6,7 @@
 <% tds = shot.drink_tds.to_f %>
 <% ey = shot.drink_ey.to_f %>
 <tr class="cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800" id="<%= dom_id(shot) %>" data-action="click->shot#view" data-url="<%= shot_path(shot) %>">
-  <td class="px-1 py-4 sm:px-4">
+  <td class="pl-4 py-4">
     <div class="flex items-center">
       <% if shot.espresso_enjoyment.to_i > 0 %>
         <div class="w-8 h-8 mr-2 rounded-full shrink-0 sm:mr-4" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
@@ -44,7 +44,7 @@
       </div>
     </div>
   </td>
-  <td class="px-1 py-4 sm:px-4">
+  <td class="p-2 py-4">
     <div class="flex flex-col">
       <span class="text-sm text-neutral-500 dark:text-neutral-400">
         <% if shot.bean_brand.present? %>
@@ -93,12 +93,11 @@
       </div>
     </div>
   </td>
-  <td class="px-1 py-4 sm:px-4">
+  <td class="pr-4 py-4">
     <div class="flex flex-col lg:flex-row">
       <div class="grow"></div>
       <span>
         <a class="inline-flex items-center px-4 py-2 text-sm font-medium bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= shot_path(shot) %>">
-          <%# Heroicon name: eye %>
           <svg class="w-4 h-4 -ml-1 -mr-1 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
