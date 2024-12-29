@@ -4,7 +4,7 @@ import { pageIsTurboPreview } from "helpers/turbo_helpers"
 
 export default class extends Controller {
   static values = { vapidKey: String }
-  static targets = ["bell"]
+  static targets = ["bell", "statusHeading", "statusDescription"]
 
   async connect() {
     if (!pageIsTurboPreview()) {
@@ -12,6 +12,7 @@ export default class extends Controller {
       if (this.#allowed && !enabled) {
         this.bellTarget.classList.remove("hidden")
       }
+      if (this.hasStatusHeadingTarget) { this.updateStatus(enabled) }
     }
   }
 
@@ -57,6 +58,7 @@ export default class extends Controller {
       .then(subscription => {
         this.#syncPushSubscription(subscription)
         this.bellTarget.classList.add("hidden")
+        if (this.hasStatusHeadingTarget) { this.updateStatus(true) }
       })
   }
 
@@ -74,6 +76,7 @@ export default class extends Controller {
       this.#subscribe(registration)
     } else {
       alert("You need to allow push notifications to enable this feature.")
+      if (this.hasStatusHeadingTarget) { this.updateStatus(false) }
     }
   }
 
@@ -84,5 +87,21 @@ export default class extends Controller {
   #extractJsonPayloadAsString(subscription) {
     const { endpoint, keys: { p256dh, auth } } = subscription.toJSON()
     return JSON.stringify({ push_subscription: { endpoint, p256dh_key: p256dh, auth_key: auth } })
+  }
+
+  async updateStatus(enabled) {
+    if (!this.#allowed) {
+      this.statusHeadingTarget.textContent = "Push notifications are not supported"
+      this.statusDescriptionTarget.textContent = "Your browser doesn't support push notifications."
+    } else if (Notification.permission === "denied") {
+      this.statusHeadingTarget.textContent = "Push notifications are blocked"
+      this.statusDescriptionTarget.textContent = "You have blocked push notifications. Please update your browser settings to enable them."
+    } else if (enabled) {
+      this.statusHeadingTarget.textContent = "Push notifications are enabled"
+      this.statusDescriptionTarget.textContent = "You will receive notifications when shots are uploaded."
+    } else {
+      this.statusHeadingTarget.textContent = "Push notifications are disabled"
+      this.statusDescriptionTarget.textContent = "Enable to receive a push notification when a shot is uploaded."
+    }
   }
 }
