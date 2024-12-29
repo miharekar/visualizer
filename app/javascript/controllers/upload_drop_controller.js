@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["overlay"]
+  static outlets = ["upload"]
 
   connect() {
     this.bindEvents()
@@ -12,7 +13,7 @@ export default class extends Controller {
   }
 
   bindEvents() {
-    ;["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       document.addEventListener(eventName, this.preventDefaults, false)
     })
 
@@ -22,7 +23,7 @@ export default class extends Controller {
   }
 
   unbindEvents() {
-    ;["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       document.removeEventListener(eventName, this.preventDefaults, false)
     })
 
@@ -52,14 +53,6 @@ export default class extends Controller {
 
   handleDrop(e) {
     this.hideOverlay(e)
-
-    const uploadDropArea = document.getElementById("drop-area")
-    if (uploadDropArea) {
-      const dropEvent = new DragEvent("drop", {
-        dataTransfer: e.dataTransfer,
-        bubbles: true
-      })
-      uploadDropArea.dispatchEvent(dropEvent)
-    }
+    this.uploadOutlet.handleDrop(e)
   }
 }

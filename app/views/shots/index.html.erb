@@ -4,7 +4,7 @@
 <% if Current.user && Current.user.shots.where("extract(year from start_time) = ?", 2024).exists? %>
   <%= render "yearly_brew_promo" %>
 <% end %>
-<div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel upload-drop">
+<div class="flex flex-col mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form">
   <div data-upload-drop-target="overlay" class="hidden fixed inset-0 bg-oxford-blue-600/30 backdrop-blur-sm z-50 items-center justify-center">
     <div class="text-center">
       <h3 class="text-2xl font-medium text-white mb-2">
