@@ -19,7 +19,10 @@ export default class extends Controller {
     if (this.#allowed) {
       const registration = await this.#serviceWorkerRegistration || await this.#registerServiceWorker()
       switch (Notification.permission) {
-        case "denied": { break }
+        case "denied": {
+          alert("Push notifications are blocked. Please update your browser settings to enable notifications.")
+          break
+        }
         case "granted": { this.#subscribe(registration); break }
         case "default": { this.#requestPermissionAndSubscribe(registration) }
       }
@@ -52,9 +55,8 @@ export default class extends Controller {
     registration.pushManager
       .subscribe({ userVisibleOnly: true, applicationServerKey: this.#vapidPublicKey })
       .then(subscription => {
-
         this.#syncPushSubscription(subscription)
-        this.dispatch("ready")
+        this.bellTarget.classList.remove("hidden")
       })
   }
 
@@ -68,7 +70,11 @@ export default class extends Controller {
 
   async #requestPermissionAndSubscribe(registration) {
     const permission = await Notification.requestPermission()
-    if (permission === "granted") this.#subscribe(registration)
+    if (permission === "granted") {
+      this.#subscribe(registration)
+    } else {
+      alert("You need to allow push notifications to enable this feature.")
+    }
   }
 
   get #vapidPublicKey() {
