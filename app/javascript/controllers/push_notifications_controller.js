@@ -56,7 +56,7 @@ export default class extends Controller {
       .subscribe({ userVisibleOnly: true, applicationServerKey: this.#vapidPublicKey })
       .then(subscription => {
         this.#syncPushSubscription(subscription)
-        this.bellTarget.classList.remove("hidden")
+        this.bellTarget.classList.add("hidden")
       })
   }
 
