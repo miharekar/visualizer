@@ -25,6 +25,8 @@ export default class extends Controller {
   }
 
   async handleDrop(e) {
+    if (!e.dataTransfer.files.length) return
+
     this.dropAreaTarget.classList.add("hidden")
     this.loaderTarget.classList.remove("hidden")
 
