@@ -10,23 +10,6 @@ document.addEventListener("turbo:load", function () {
     const form = document.getElementById("shot-upload-form")
     const token = document.getElementsByName("csrf-token")[0].content
 
-    const preventDefaults = (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-
-    const highlight = (e) => {
-      dropArea.classList.add("bg-green-50", "dark:bg-green-900")
-      dropArea.classList.add("border-green-300")
-      dropArea.classList.remove("border-neutral-300")
-    }
-
-    const unhighlight = (e) => {
-      dropArea.classList.remove("bg-green-50", "dark:bg-green-900")
-      dropArea.classList.remove("border-green-300")
-      dropArea.classList.add("border-neutral-300")
-    }
-
     const handleDrop = (e) => {
       dropArea.classList.add("hidden")
       loader.classList.remove("hidden")
@@ -51,22 +34,13 @@ document.addEventListener("turbo:load", function () {
           }
         },
         false
-      )
-      ;[...e.dataTransfer.files].forEach((file) => {
+      );
+
+      [...e.dataTransfer.files].forEach((file) => {
         formData.append("files[]", file)
       })
       xhr.send(formData)
     }
-
-    ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-      dropArea.addEventListener(eventName, preventDefaults, false)
-    })
-    ;["dragenter", "dragover"].forEach((eventName) => {
-      dropArea.addEventListener(eventName, highlight, false)
-    })
-    ;["dragleave", "drop"].forEach((eventName) => {
-      dropArea.addEventListener(eventName, unhighlight, false)
-    })
 
     const files = document.getElementById("files")
     if (files) {
