@@ -26,13 +26,13 @@
               <span data-character-counter-target="counter">0</span>/250 characters.
             </p>
           </div>
-          <div>
+          <div class="col-span-6">
             <%= form.label :image, "Image", class: "standard-label" %>
             <% if @update.image.attached? && @update.image.variable? %>
               <%= image_tag @update.image.variant(:social), class: "mt-1" %>
             <% end %>
             <div class="mt-1">
-              <%= form.file_field :image %>
+              <%= form.file_field :image, class: "standard-file-input" %>
             </div>
           </div>
         </div>

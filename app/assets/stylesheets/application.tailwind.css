@@ -52,6 +52,10 @@
   @apply rounded-md inset-shadow-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
 }
 
+.standard-file-input {
+  @apply cursor-pointer file:cursor-pointer file:mr-2 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-medium file:bg-oxford-blue-50 file:text-oxford-blue-700 hover:file:bg-oxford-blue-100 dark:file:bg-oxford-blue-900/10 dark:file:text-oxford-blue-400 dark:hover:file:bg-oxford-blue-900/20 text-sm text-neutral-700 dark:text-neutral-300 rounded-md block w-full dark:bg-neutral-800 focus:outline-none ;
+}
+
 .button-terracotta {
   @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
 }
