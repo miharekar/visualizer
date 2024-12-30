@@ -1,5 +1,5 @@
 <% cache coffee_bag do %>
-  <div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 rounded shadow dark:shadow-none dark:border dark:border-neutral-700 dark:text-neutral-200">
+  <div id="<%= dom_id coffee_bag %>" class="flex flex-col rounded shadow col-span-1 dark:shadow-none dark:border dark:border-neutral-700 dark:text-neutral-200">
     <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
       <%= link_to shots_path(coffee_bag: coffee_bag) do %>
         <span class="absolute inset-x-0 bottom-0 z-10 -top-px"></span>

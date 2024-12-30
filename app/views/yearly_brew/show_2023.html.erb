@@ -5,7 +5,7 @@
   </h1>
   <div class="flex flex-col w-full gap-y-4 max-w-prose">
     <% if @yearly_brew.shots_this_year.any? %>
-      <dl class="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2">
+      <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
         <% best_rated_coffee_2022 = "#{@yearly_brew.best_rated_coffee(:past).bean_brand} #{@yearly_brew.best_rated_coffee(:past).bean_type} (#{@yearly_brew.best_rated_coffee(:past).shots_count} shots with #{@yearly_brew.best_rated_coffee(:past).espresso_enjoyment})" if @yearly_brew.best_rated_coffee(:past) %>
         <% best_rated_coffee_2023 = "#{@yearly_brew.best_rated_coffee.bean_brand} #{@yearly_brew.best_rated_coffee.bean_type} (#{@yearly_brew.best_rated_coffee.shots_count} shots with #{@yearly_brew.best_rated_coffee.espresso_enjoyment})" if @yearly_brew.best_rated_coffee %>
         <%= render partial: "yearly_brew/stats_2023", locals: { icon: :stack, title: "Total shots this year", stat: @yearly_brew.shots_this_year.count, diff: @yearly_brew.shots_this_year.count - @yearly_brew.shots_past_year.count } %>

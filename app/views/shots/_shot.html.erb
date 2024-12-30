@@ -25,7 +25,7 @@
                 <% end %>
               </span>
             </div>
-            <div class="flex flex-col space-y-1 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
+            <div class="flex flex-col text-sm space-y-1 md:text-base text-neutral-500 dark:text-neutral-400">
               <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
                 <div class="flex items-center gap-x-2">
                   <% if shot.drink_tds_f > 0 %>
@@ -45,7 +45,7 @@
             </div>
           </div>
         </div>
-        <div class="flex flex-col space-y-1 text-sm grow md:text-base text-neutral-500 dark:text-neutral-400 basis-1/2">
+        <div class="flex flex-col text-sm space-y-1 grow md:text-base text-neutral-500 dark:text-neutral-400 basis-1/2">
           <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
             <div class="flex flex-wrap items-center gap-x-1">
               <% if shot.bean_weight_f > 0 %>

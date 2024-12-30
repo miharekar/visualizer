@@ -1,5 +1,5 @@
 <div class="mr-3">
-  <a class="inline-flex px-4 py-2 text-sm bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= api_shot_profile_path(@shot, format: :csv) %>" title="Download CSV profile" target="_blank">
+  <a class="inline-flex px-4 py-2 text-sm bg-white border cursor-pointer rounded-md shadow-sm border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= api_shot_profile_path(@shot, format: :csv) %>" title="Download CSV profile" target="_blank">
     <svg class="w-4 h-4 -ml-1 -mr-1 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
       <path fill-rule="evenodd" d="M15 11a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6ZM7.25 7.5a.5.5 0 0 0-.5-.5H3a.5.5 0 0 0-.5.5V8a.5.5 0 0 0 .5.5h3.75a.5.5 0 0 0 .5-.5v-.5Zm1.5 3a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 .5.5v.5a.5.5 0 0 1-.5.5H9.25a.5.5 0 0 1-.5-.5v-.5ZM13.5 8v-.5A.5.5 0 0 0 13 7H9.25a.5.5 0 0 0-.5.5V8a.5.5 0 0 0 .5.5H13a.5.5 0 0 0 .5-.5Zm-6.75 3.5a.5.5 0 0 0 .5-.5v-.5a.5.5 0 0 0-.5-.5H3a.5.5 0 0 0-.5.5v.5a.5.5 0 0 0 .5.5h3.75Z" clip-rule="evenodd" />
     </svg>
@@ -7,7 +7,7 @@
 </div>
 <% if @shot.information&.tcl_profile_fields.present? %>
   <div class="mr-3">
-    <a class="inline-flex px-4 py-2 text-sm bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= api_shot_profile_path(@shot) %>" title="Download this profile" target="_blank">
+    <a class="inline-flex px-4 py-2 text-sm bg-white border cursor-pointer rounded-md shadow-sm border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= api_shot_profile_path(@shot) %>" title="Download this profile" target="_blank">
       <svg class="w-4 h-4 -ml-1 -mr-1 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
         <path d="M8.75 2.75a.75.75 0 0 0-1.5 0v5.69L5.03 6.22a.75.75 0 0 0-1.06 1.06l3.5 3.5a.75.75 0 0 0 1.06 0l3.5-3.5a.75.75 0 0 0-1.06-1.06L8.75 8.44V2.75Z" />
         <path d="M3.5 9.75a.75.75 0 0 0-1.5 0v1.5A2.75 2.75 0 0 0 4.75 14h6.5A2.75 2.75 0 0 0 14 11.25v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .69-.56 1.25-1.25 1.25h-6.5c-.69 0-1.25-.56-1.25-1.25v-1.5Z" />
@@ -21,7 +21,7 @@
           <div class="absolute inset-0 opacity-75 bg-neutral-500" data-action="click->share-shot#hide"></div>
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-        <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl dark:bg-neutral-900 sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" data-transition-enter="ease-out duration-300" data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100" data-transition-leave="ease-in duration-200" data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100" data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-share-shot-target="toggleable">
+        <div class="inline-block overflow-hidden text-left align-bottom bg-white rounded-lg shadow-xl transition-all transform dark:bg-neutral-900 sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" data-transition-enter="ease-out duration-300" data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100" data-transition-leave="ease-in duration-200" data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100" data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-share-shot-target="toggleable">
           <div class="px-4 pt-5 pb-4 bg-white dark:bg-neutral-900 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
               <div class="flex items-center justify-center w-12 h-12 mx-auto rounded-full shrink-0 bg-terracotta-100 dark:bg-terracotta-900 sm:mx-0 sm:h-10 sm:w-10">
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <button class="inline-flex px-4 py-2 text-sm bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" title="Share this Shot" data-action="share-shot#show">
+    <button class="inline-flex px-4 py-2 text-sm bg-white border cursor-pointer rounded-md shadow-sm border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" title="Share this Shot" data-action="share-shot#show">
       <svg class="w-4 h-4 -ml-1 -mr-1 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
         <path d="M7.25 10.25a.75.75 0 0 0 1.5 0V4.56l2.22 2.22a.75.75 0 1 0 1.06-1.06l-3.5-3.5a.75.75 0 0 0-1.06 0l-3.5 3.5a.75.75 0 0 0 1.06 1.06l2.22-2.22v5.69Z" />
         <path d="M3.5 9.75a.75.75 0 0 0-1.5 0v1.5A2.75 2.75 0 0 0 4.75 14h6.5A2.75 2.75 0 0 0 14 11.25v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .69-.56 1.25-1.25 1.25h-6.5c-.69 0-1.25-.56-1.25-1.25v-1.5Z" />
@@ -69,7 +69,7 @@
   </div>
 <% elsif @shot.information&.beanconqueror? %>
   <div class="mr-3">
-    <a class="inline-flex px-4 py-2 text-sm bg-white border rounded-md shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= beanconqueror_shot_path(@shot) %>" title="Open this shot in Beanconqueror" target="_blank">
+    <a class="inline-flex px-4 py-2 text-sm bg-white border cursor-pointer rounded-md shadow-sm border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" href="<%= beanconqueror_shot_path(@shot) %>" title="Open this shot in Beanconqueror" target="_blank">
       <%= inline_svg_tag "beanconqueror_logo_bw.svg", class: "w-4 h-4 -ml-1 -mr-1 text-neutral-500 dark:text-neutral-300" %>
     </a>
   </div>

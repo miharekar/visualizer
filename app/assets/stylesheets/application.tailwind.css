@@ -45,27 +45,27 @@
 }
 
 .standard-label {
-  @apply block sm:text-sm font-medium text-neutral-700 dark:text-neutral-300;
+  @apply block font-medium sm:text-sm text-neutral-700 dark:text-neutral-300;
 }
 
 .standard-input {
-  @apply rounded-md inset-shadow-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 block w-full focus:shadow-none;
+  @apply block w-full font-medium bg-white border rounded-md inset-shadow-xs sm:text-sm text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:shadow-none;
 }
 
 .standard-file-input {
-  @apply cursor-pointer file:cursor-pointer file:mr-2 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-medium file:bg-oxford-blue-50 file:text-oxford-blue-700 hover:file:bg-oxford-blue-100 dark:file:bg-oxford-blue-900/10 dark:file:text-oxford-blue-400 dark:hover:file:bg-oxford-blue-900/20 text-sm text-neutral-700 dark:text-neutral-300 rounded-md block w-full dark:bg-neutral-800 focus:outline-none ;
+  @apply block w-full text-sm rounded-md cursor-pointer file:cursor-pointer file:mr-2 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-medium file:bg-oxford-blue-50 file:text-oxford-blue-700 hover:file:bg-oxford-blue-100 dark:file:bg-oxford-blue-900/10 dark:file:text-oxford-blue-400 dark:hover:file:bg-oxford-blue-900/20 text-neutral-700 dark:text-neutral-300 dark:bg-neutral-800 focus:outline-none ;
 }
 
 .button-terracotta {
-  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-terracotta-600 hover:bg-terracotta-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
+  @apply inline-flex justify-center font-medium text-white border border-transparent rounded-md cursor-pointer sm:text-sm bg-terracotta-600 hover:bg-terracotta-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
 }
 
 .button-oxford-blue {
-  @apply cursor-pointer inline-flex justify-center border border-transparent sm:text-sm font-medium rounded-md text-white bg-oxford-blue-600 hover:bg-oxford-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-oxford-blue-500 dark:ring-offset-black;
+  @apply inline-flex justify-center font-medium text-white border border-transparent rounded-md cursor-pointer sm:text-sm bg-oxford-blue-600 hover:bg-oxford-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-oxford-blue-500 dark:ring-offset-black;
 }
 
 .button-white {
-  @apply cursor-pointer items-center px-3 py-2 text-sm font-semibold bg-white rounded-md shadow-sm text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 active:shadow-none active:bg-neutral-100 dark:active:bg-white/30;
+  @apply items-center px-3 py-2 text-sm font-semibold bg-white rounded-md shadow-sm cursor-pointer text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 active:shadow-none active:bg-neutral-100 dark:active:bg-white/30;
 }
 
 .shot-range {

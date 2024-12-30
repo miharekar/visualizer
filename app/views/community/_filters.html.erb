@@ -9,7 +9,7 @@
               <%= f.hidden_field options[:target], value: params[options[:target]], data: { autocomplete_target: "hidden" } %>
             <% end %>
             <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
-            <ul class="absolute z-10 mt-2 overflow-y-auto bg-white rounded-md shadow-lg list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
+            <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
           </div>
         <% else %>
           <div class="col-span-6 md:col-span-3">
