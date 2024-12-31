@@ -85,7 +85,7 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.6.0)
     annotaterb (4.13.0)
-    appsignal (4.3.1)
+    appsignal (4.3.2)
       logger
       rack
     ast (2.4.2)
@@ -114,7 +114,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    brakeman (6.2.2)
+    brakeman (7.0.0)
       racc
     builder (3.3.0)
     childprocess (5.1.0)
@@ -161,7 +161,9 @@ GEM
       multipart-post (~> 2.0)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    ffi (1.17.0)
+    ffi (1.17.1-aarch64-linux-gnu)
+    ffi (1.17.1-arm64-darwin)
+    ffi (1.17.1-x86_64-linux-gnu)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
