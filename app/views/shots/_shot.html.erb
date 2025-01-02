@@ -1,3 +1,4 @@
+<% @timezone ||= ActiveSupport::TimeZone.new(shot.user&.timezone.presence || "UTC") %>
 <%= tag.div id: dom_id(shot) do %>
   <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
     <div class="relative flex p-4 cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
@@ -11,7 +12,7 @@
       <div class="flex flex-col justify-between md:flex-row md:gap-x-8 grow gap-y-1 md:gap-y-0">
         <div class="flex flex-col justify-between basis-1/2">
           <div class="flex flex-col space-y-1">
-            <%= time_tag(shot.start_time.in_time_zone(@timezone), class: "text-sm md:text-base text-neutral-500 dark:text-neutral-400") %>
+            <%= local_datetime_tag shot.start_time, style: :datetime, class: "text-sm md:text-base text-neutral-500 dark:text-neutral-400" %>
             <div class="flex items-center mb-1 gap-x-2">
               <% if shot.espresso_enjoyment.to_i > 0 %>
                 <span class="inline-flex text-sm md:text-base items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">

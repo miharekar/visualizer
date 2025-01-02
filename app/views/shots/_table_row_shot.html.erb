@@ -21,7 +21,7 @@
         </div>
         <% if show_start_time %>
           <div class="text-sm text-neutral-500 dark:text-neutral-400">
-            <%= shot.start_time.in_time_zone(@timezone).to_formatted_s(:long) %>
+            <%= local_datetime_tag shot.start_time, style: :datetime %>
           </div>
         <% end %>
         <% if include_person %>
