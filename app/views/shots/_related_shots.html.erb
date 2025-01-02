@@ -1,6 +1,7 @@
 <div class="flex-1" data-controller="related-shots">
   <select class="mt-0 standard-input" data-action="related-shots#goTo">
-    <% related_shots.each do |id, title, time| %>
+    <% related_shots.each do |id, title, bean_type, time| %>
+      <% title = "#{bean_type} (#{title})" if bean_type.present? %>
       <% if id == shot.id %>
         <option value="<%= shot_path(id) %>" selected="selected">Go to another shot</option>
       <% else %>

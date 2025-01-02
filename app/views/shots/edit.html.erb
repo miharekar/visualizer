@@ -22,9 +22,10 @@
         <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400" data-controller="related-shots">
           <select class="mt-0 standard-input" data-action="related-shots#copyFrom">
             <option></option>
-            <% @related_shots.each do |id, title, time| %>
+            <% @related_shots.each do |id, title, bean_type, time| %>
               <% next if id == @shot.id %>
               <option value="<%= id %>">
+                <% title = "#{bean_type} (#{title})" if bean_type.present? %>
                 <%= [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ") %>
               </option>
             <% end %>

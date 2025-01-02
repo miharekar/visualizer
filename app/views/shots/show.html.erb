@@ -18,8 +18,9 @@
           <div class="flex-1 mb-1 <%= width_class %>">
             <select class="standard-input" data-action="related-shots#compare">
               <option>With one of your recent shots</option>
-              <% @compare_shots.each do |id, title, time| %>
+              <% @compare_shots.each do |id, title, bean_type, time| %>
                 <option value="<%= id %>">
+                  <% title = "#{bean_type} (#{title})" if bean_type.present? %>
                   <%= [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ") %>
                 </option>
               <% end %>

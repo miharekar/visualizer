@@ -21,7 +21,7 @@ class ShotsController < ApplicationController
     @chart = ShotChart.new(@shot, Current.user) if @shot.information
     return if Current.user.nil?
 
-    @compare_shots = Current.user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :start_time)
+    @compare_shots = Current.user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :bean_type, :start_time)
   end
 
   def compare
@@ -147,7 +147,7 @@ class ShotsController < ApplicationController
   end
 
   def load_related_shots
-    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :start_time).sort_by { it[2] }.reverse
+    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).sort_by { it[3] }.reverse
   end
 
   def create_shared_shot
