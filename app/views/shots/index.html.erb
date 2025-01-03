@@ -31,7 +31,7 @@
     </div>
     <% if @shots.any? %>
       <div class="flex justify-between flex-shrink-0">
-        <div class="flex gap-2" data-controller="push-notifications" data-push-notifications-vapid-key-value="<%= Rails.application.credentials.webpush.public_key.tr("_-", "/+") %>">
+        <div class="flex gap-2" data-controller="push-notifications" data-push-notifications-vapid-key-value="<%= Rails.application.credentials.webpush&.public_key&.tr("_-", "/+") %>">
           <button class="flex hidden button-white" data-action="click->push-notifications#attemptToSubscribe" data-push-notifications-target="bell">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
               <path d="M4.214 3.227a.75.75 0 0 0-1.156-.955 8.97 8.97 0 0 0-1.856 3.825.75.75 0 0 0 1.466.316 7.47 7.47 0 0 1 1.546-3.186ZM16.942 2.272a.75.75 0 0 0-1.157.955 7.47 7.47 0 0 1 1.547 3.186.75.75 0 0 0 1.466-.316 8.971 8.971 0 0 0-1.856-3.825Z" />
