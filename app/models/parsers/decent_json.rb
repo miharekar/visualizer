@@ -29,7 +29,7 @@ module Parsers
 
       @data["espresso_state_change"] = json["state_change"]
 
-      settings = json.dig("app", "data", "settings")
+      settings = json.dig("app", "data", "settings").presence || {}
       EXTRA_DATA_CAPTURE.each do |key|
         @extra[key] = settings[key]
       end
