@@ -30,6 +30,9 @@ Rails.application.routes.draw do
         post :upload
       end
     end
+    resources :roasters, only: %i[index show] do
+      resources :coffee_bags, only: %i[index show]
+    end
   end
 
   get :heartbeat, to: "heartbeat#show"

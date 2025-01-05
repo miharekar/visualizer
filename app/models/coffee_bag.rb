@@ -34,6 +34,12 @@ class CoffeeBag < ApplicationRecord
     dup.tap { |d| d.roast_date = roast_date }
   end
 
+  def to_api_json
+    attributes.slice(*%w[id name roast_date roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes]).tap do |json|
+      json["image_url"] = image&.url if image.attached?
+    end
+  end
+
   private
 
   def update_shots

@@ -22,6 +22,8 @@ Layout/EmptyLineAfterGuardClause:
   Enabled: true
 Layout/EmptyLines:
   Enabled: true
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
 Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal

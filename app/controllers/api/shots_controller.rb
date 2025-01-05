@@ -1,7 +1,5 @@
 module Api
   class ShotsController < Api::BaseController
-    include Paginatable
-
     before_action :verify_upload_access, only: %i[upload]
     before_action :verify_write_access, only: %i[destroy]
 
@@ -10,7 +8,7 @@ module Api
       shots = shots.non_premium unless Current.user&.premium?
       shots = shots.by_start_time.select(:id, :start_time, :user_id)
       shots, paging = paginate(shots)
-      data = shots.map { |s| {clock: s.start_time.to_i, id: s.id} }
+      data = shots.map { {clock: it.start_time.to_i, id: it.id} }
       render json: {data:, paging:}
     rescue StandardError => e
       Appsignal.report_error(e)
