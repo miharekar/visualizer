@@ -38,6 +38,9 @@ If you want to create OAuth applications please [contact me](mailto:miha@visuali
   - Bundler (`gem install bundler`)
 - Postgres (>= 14)
 
+No other services are required though Cloudinary and S3 are expected in `config/storage.yml`.
+Feel free to override them for development purposes.
+
 ## Setup
 
 - Install Ruby gems
