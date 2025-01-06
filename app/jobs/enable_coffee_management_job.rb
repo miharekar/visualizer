@@ -36,8 +36,8 @@ class EnableCoffeeManagementJob < ApplicationJob
       .pluck(:bean_brand, :bean_type, :roast_date, :roast_level)
       .reject { |bean_brand, bean_type, _, _| bean_brand.blank? || bean_type.blank? }
       .to_h do |bean_brand, bean_type, roast_date, roast_level|
-        roast_date = parse_date(roast_date, user.date_format_string)
-        coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roasters[bean_brand], bean_type, roast_date, roast_level:, skip_airtable_sync: true)
+        parsed_roast_date = parse_date(roast_date, user.date_format_string)
+        coffee_bag = CoffeeBag.for_roaster_by_name_and_date(roasters[bean_brand], bean_type, parsed_roast_date, roast_level:, skip_airtable_sync: true)
 
         ["#{bean_brand}_#{bean_type}_#{roast_date}", coffee_bag]
       end
