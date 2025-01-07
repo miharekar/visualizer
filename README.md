@@ -4,7 +4,7 @@
 
 ![Ruby Tests](https://github.com/miharekar/visualizer/actions/workflows/main.yml/badge.svg)
 
-Visualizer was designed to work seamlessly with [Decent espresso machines](https://decentespresso.com/). Recently, it has expanded its compatibility to support [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/[), [Pressensor](https://pressensor.com/) and [Beanconqueror](https://beanconqueror.com/). This provides a streamlined experience that caters to a diverse range of coffee enthusiasts, accommodating their preferred devices.
+Visualizer plays nice with [Decent espresso machines](https://decentespresso.com/), [Beanconqueror](https://beanconqueror.com/), [Gaggiuino](https://gaggiuino.github.io/), [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/), [Pressensor](https://pressensor.com/), and many more devices. The list keeps growing.
 
 Read all about it on [visualizer.coffee](https://visualizer.coffee/).
 
