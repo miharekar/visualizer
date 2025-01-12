@@ -9,7 +9,7 @@ module Api
     end
 
     def show
-      roaster = Current.user.roasters.find_by(id: params[:id])
+      roaster = Current.user.roasters.find(params[:id])
       render json: roaster.to_api_json
     end
   end

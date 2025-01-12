@@ -10,14 +10,14 @@ module Api
     end
 
     def show
-      coffee_bag = @roaster.coffee_bags.find_by(id: params[:id])
+      coffee_bag = @roaster.coffee_bags.find(params[:id])
       render json: coffee_bag.to_api_json
     end
 
     private
 
     def find_roaster
-      @roaster = Current.user.roasters.find_by(id: params[:roaster_id])
+      @roaster = Current.user.roasters.find(params[:roaster_id])
     end
   end
 end
