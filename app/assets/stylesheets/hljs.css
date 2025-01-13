@@ -1,4 +1,4 @@
-/* https://raw.githubusercontent.com/highlightjs/highlight.js/main/src/styles/nord.css */
+/* https://github.com/highlightjs/highlight.js/blob/main/src/styles/nord.css */
 
 .hljs {
   background: #2e3440;
@@ -56,7 +56,7 @@
 }
 
 .hljs-title.hljs-function,
-.hljs-function > .hljs-title {
+.hljs-function>.hljs-title {
   color: #88c0d0;
 }
 
@@ -189,7 +189,7 @@
   color: #d08770;
 }
 
-.language-aspectj > .hljs-title {
+.language-aspectj>.hljs-title {
   color: #88c0d0;
 }
 
