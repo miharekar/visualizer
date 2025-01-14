@@ -15,7 +15,7 @@ class WebPushJob < ApplicationJob
         private_key: Rails.application.credentials.webpush.private_key
       }
     )
-  rescue WebPush::ExpiredSubscription
+  rescue WebPush::ExpiredSubscription, WebPush::PushServiceError
     push_subscription.destroy
   end
 end
