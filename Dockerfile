@@ -13,7 +13,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 libvips imagemagick sqlite3 openssh-client lsb-release && \
+  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick sqlite3 openssh-client lsb-release && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Add PostgreSQL repository and install PostgreSQL 17 client
