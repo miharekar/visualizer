@@ -4,8 +4,8 @@ shared_shot_cleanup_job:
 fill_autocomplete_values_job:
   class: FillAutocompleteValuesJob
   schedule: "@hourly"
-duplicate_stripe_subscriptions_job:
-  class: DuplicateStripeSubscriptionsJob
+duplicate_lemon_squeezy_subscriptions_job:
+  class: DuplicateLemonSqueezySubscriptionsJob
   schedule: "@daily"
 tag_cleaner_job:
   class: TagCleanerJob
