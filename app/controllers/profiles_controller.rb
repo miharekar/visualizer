@@ -74,7 +74,7 @@ class ProfilesController < ApplicationController
     allowed_params << %i[coffee_management_enabled] if Current.user.premium?
     notification_settings = {unsubscribed_from: (User::EMAIL_NOTIFICATIONS - params[:user][:email_notifications]) || []}
 
-    params.require(:user).permit(allowed_params).merge(chart_settings).merge(notification_settings)
+    params.expect(user: allowed_params).merge(chart_settings).merge(notification_settings)
   end
 
   def chart_settings

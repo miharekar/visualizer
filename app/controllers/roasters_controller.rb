@@ -58,6 +58,6 @@ class RoastersController < ApplicationController
   end
 
   def roaster_params
-    params.require(:roaster).permit(:name, :website, :image)
+    params.expect(roaster: %i[name website image])
   end
 end

@@ -13,6 +13,6 @@ class PushSubscriptionsController < ApplicationController
   private
 
   def push_subscription_params
-    params.require(:push_subscription).permit(:endpoint, :p256dh_key, :auth_key)
+    params.expect(push_subscription: %i[endpoint p256dh_key auth_key])
   end
 end

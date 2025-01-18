@@ -50,6 +50,6 @@ class UpdatesController < ApplicationController
   end
 
   def update_params
-    params.require(:update).permit(:title, :body, :published_at, :image, :excerpt)
+    params.expect(update: %i[title body published_at image excerpt])
   end
 end
