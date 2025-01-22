@@ -472,9 +472,9 @@ GEM
     tailwindcss-rails (3.2.0)
       railties (>= 7.0.0)
       tailwindcss-ruby
-    tailwindcss-ruby (4.0.0.beta.9-aarch64-linux-gnu)
-    tailwindcss-ruby (4.0.0.beta.9-arm64-darwin)
-    tailwindcss-ruby (4.0.0.beta.9-x86_64-linux-gnu)
+    tailwindcss-ruby (4.0.0.beta.10-aarch64-linux-gnu)
+    tailwindcss-ruby (4.0.0.beta.10-arm64-darwin)
+    tailwindcss-ruby (4.0.0.beta.10-x86_64-linux-gnu)
     temple (0.10.3)
     thor (1.3.2)
     thruster (0.1.10-aarch64-linux)
@@ -578,7 +578,7 @@ DEPENDENCIES
   stimulus-rails
   stripe
   tailwindcss-rails
-  tailwindcss-ruby (~> 4.0.0.beta.8)
+  tailwindcss-ruby (~> 4.0.0.beta.10)
   thruster
   tickly!
   turbo-rails
