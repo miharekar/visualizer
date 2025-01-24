@@ -7,9 +7,6 @@ fill_autocomplete_values_job:
 duplicate_stripe_subscriptions_job:
   class: DuplicateStripeSubscriptionsJob
   schedule: "@daily"
-populate_stripe_job:
-  class: PopulateStripeJob
-  schedule: "@daily"
 tag_cleaner_job:
   class: TagCleanerJob
   schedule: "@daily"

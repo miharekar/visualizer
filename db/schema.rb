@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_17_141217) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_17_193538) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -89,19 +89,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_17_141217) do
     t.string "tasting_notes"
     t.index ["airtable_id"], name: "index_coffee_bags_on_airtable_id"
     t.index ["roaster_id"], name: "index_coffee_bags_on_roaster_id"
-  end
-
-  create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id"
-    t.string "stripe_id"
-    t.string "name"
-    t.string "email"
-    t.integer "amount"
-    t.jsonb "address"
-    t.jsonb "payments"
-    t.jsonb "refunds"
-    t.index ["stripe_id"], name: "index_customers_on_stripe_id"
-    t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
   create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -259,20 +246,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_17_141217) do
     t.index ["user_id"], name: "index_shots_on_user_id"
   end
 
-  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "customer_id", null: false
-    t.string "stripe_id"
-    t.string "status"
-    t.string "interval"
-    t.datetime "started_at"
-    t.datetime "ended_at"
-    t.datetime "cancel_at"
-    t.datetime "cancelled_at"
-    t.jsonb "cancellation_details"
-    t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
-    t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id"
-  end
-
   create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -319,7 +292,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_17_141217) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "airtable_infos", "identities"
   add_foreign_key "coffee_bags", "roasters"
-  add_foreign_key "customers", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
@@ -335,6 +307,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_17_141217) do
   add_foreign_key "shot_tags", "tags"
   add_foreign_key "shots", "coffee_bags"
   add_foreign_key "shots", "users"
-  add_foreign_key "subscriptions", "customers"
   add_foreign_key "tags", "users"
 end
