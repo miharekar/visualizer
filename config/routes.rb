@@ -37,7 +37,7 @@ Rails.application.routes.draw do
 
   get :heartbeat, to: "heartbeat#show"
   get :privacy, to: "home#privacy"
-  post :stripe, to: "stripe#create"
+  post :stripe, to: "webhook#stripe"
   post "emails/unsubscribe"
 
   resources :people, only: %i[show] do
@@ -106,7 +106,6 @@ Rails.application.routes.draw do
   get "yearly_brew/:slug(/:year)", to: "yearly_brew#show", as: :yearly_brew
 
   resources :stats, only: [:index]
-  resources :customers, only: %i[index]
   resources :updates, except: %i[destroy] do
     get :feed, on: :collection
   end
