@@ -39,6 +39,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
+  validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
 
   normalizes :email, with: ->(e) { e.strip.downcase }
 
@@ -167,10 +168,12 @@ end
 #  unsubscribed_from         :jsonb
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  lemon_squeezy_customer_id :string
 #  stripe_customer_id        :string
 #
 # Indexes
 #
-#  index_users_on_email  (email) UNIQUE
-#  index_users_on_slug   (slug) UNIQUE
+#  index_users_on_email                      (email) UNIQUE
+#  index_users_on_lemon_squeezy_customer_id  (lemon_squeezy_customer_id) UNIQUE
+#  index_users_on_slug                       (slug) UNIQUE
 #

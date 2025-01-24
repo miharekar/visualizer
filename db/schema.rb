@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_27_102544) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_17_141217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -309,7 +309,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_102544) do
     t.string "decent_token"
     t.boolean "coffee_management_enabled"
     t.string "date_format"
+    t.string "lemon_squeezy_customer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["lemon_squeezy_customer_id"], name: "index_users_on_lemon_squeezy_customer_id", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
