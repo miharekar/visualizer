@@ -55,6 +55,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "actual_db_schema"
   gem "annotaterb"
   gem "benchmark-ips"
   gem "brakeman", require: false

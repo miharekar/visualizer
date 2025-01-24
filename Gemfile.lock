@@ -81,6 +81,10 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    actual_db_schema (0.8.1)
+      activerecord
+      activesupport
+      csv
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.7.2)
@@ -535,6 +539,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to
+  actual_db_schema
   amazing_print
   annotaterb
   appsignal
