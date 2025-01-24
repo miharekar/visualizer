@@ -56,6 +56,10 @@
   @apply block w-full text-sm rounded-md cursor-pointer file:cursor-pointer file:mr-2 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-medium file:bg-oxford-blue-50 file:text-oxford-blue-700 hover:file:bg-oxford-blue-100 dark:file:bg-oxford-blue-900/10 dark:file:text-oxford-blue-400 dark:hover:file:bg-oxford-blue-900/20 text-neutral-700 dark:text-neutral-300 dark:bg-neutral-800 focus:outline-none ;
 }
 
+.standard-checkbox {
+  @apply focus:ring-0 focus:ring-offset-0 size-4 text-neutral-700 border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 rounded;
+}
+
 .button-terracotta {
   @apply inline-flex justify-center font-medium text-white border border-transparent rounded-md cursor-pointer sm:text-sm bg-terracotta-600 hover:bg-terracotta-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
 }
