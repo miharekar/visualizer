@@ -29,11 +29,33 @@ class LemonSqueezy
     make_request(:get, "/subscriptions", params:)
   end
 
+  def all_subscriptions
+    paginate("/subscriptions")
+  end
+
+  def all_customers
+    paginate("/customers")
+  end
+
   def create_checkout(data: nil)
     make_request(:post, "/checkouts", data:)
   end
 
   private
+
+  def paginate(path, results = [], current_page = 1, page_size = 100)
+    response = make_request(:get, path, params: {
+      page: {number: current_page, size: page_size}
+    })
+
+    new_results = results + response["data"]
+
+    if current_page >= response.dig("meta", "page", "lastPage")
+      new_results
+    else
+      paginate(path, new_results, current_page + 1, page_size)
+    end
+  end
 
   def make_request(method, path, data: nil, params: {})
     uri = URI.parse("#{BASE_URL}#{path}")
