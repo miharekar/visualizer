@@ -1,7 +1,7 @@
 <% @timezone ||= ActiveSupport::TimeZone.new(shot.user&.timezone.presence || "UTC") %>
 <%= tag.div id: dom_id(shot), class: "group" do %>
   <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
-    <div class="relative flex p-4 cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25  has-checked:bg-terracotta-100/50 has-checked:dark:bg-terracotta-700/50">
+    <div class="relative flex p-4 cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25  has-checked:bg-oxford-blue-50 has-checked:dark:bg-oxford-blue-800">
       <div class="absolute top-3 right-3 z-10 group-data-comparing:[&:not(:has(input:checked))]:hidden">
         <%= check_box_tag "compare_shots[]", shot.id, id: "compare_shots_#{shot.id}", class: "standard-checkbox !size-5", data: { shot_compare_target: "checkbox", action: "change->shot-compare#select" } %>
       </div>

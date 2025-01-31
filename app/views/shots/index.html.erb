@@ -58,9 +58,10 @@
   <%= render "upload_form", show_form: @shots.none? %>
   <% if @shots.any? %>
     <%= render "filters" %>
-    <div data-controller="modal" class="mt-3 sm:mt-6">
+    <div data-controller="modal shot-compare" class="mt-3 sm:mt-6">
       <%= render "shared/modal" %>
-      <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images shot-compare">
+      <%= render "comparison_banner" %>
+      <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
         <%= render @shots %>
       </div>
     </div>
