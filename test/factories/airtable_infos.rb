@@ -32,7 +32,8 @@ FactoryBot.define do
               {"name" => "Espresso notes", "type" => "richText"},
               {"name" => "Private notes", "type" => "richText"},
               {"name" => "Portafilter basket", "type" => "singleLineText"},
-              {"name" => "Bean variety", "type" => "singleLineText"}
+              {"name" => "Bean variety", "type" => "singleLineText"},
+              {"name" => "Tags", "type" => "multipleSelects", "options" => {"choices" => []}}
             ]
           },
           "Roasters" => {

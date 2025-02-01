@@ -93,5 +93,66 @@ module Airtable
       error = assert_raise(StandardError) { Airtable::Shots.new(user) }
       assert_equal "Airtable identity not found for User##{user.id}", error.message
     end
+
+    test "it downloads tags from airtable" do
+      stub_request(:get, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}?filterByFormula=DATETIME_DIFF%28NOW%28%29%2C+LAST_MODIFIED_TIME%28%29%2C+%27minutes%27%29+%3C+60")
+        .to_return(
+          status: 200,
+          body: {
+            records: [{
+              id: @shot.airtable_id,
+              fields: {
+                "Tags" => ["Light Roast", "Ethiopia"],
+                "ID" => @shot.id
+              }
+            }]
+          }.to_json
+        )
+
+      assert_equal 0, @shot.tags.count
+      Airtable::Shots.new(@user).download
+      @shot.reload
+
+      assert_equal ["ethiopia", "light roast"], @shot.tags.order(:name).pluck(:name)
+    end
+
+    test "it uploads tags to airtable" do
+      Shot.find(@shot.id).update(tag_list: "best,TaGs")
+      assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default")
+
+      stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
+        .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"}) do |request|
+          body = JSON.parse(request.body)
+          assert_equal %w[best tags], body["fields"]["Tags"]
+          assert body["typecast"]
+        end.to_return(status: 200, body: {id: @shot.airtable_id}.to_json)
+
+      perform_enqueued_jobs
+      assert_requested(stub)
+    end
+
+    test "it removes tags when they are removed from airtable" do
+      @shot.update!(tag_list: "Light Roast, Ethiopia")
+      assert_equal ["ethiopia", "light roast"], @shot.tags.order(:name).pluck(:name)
+
+      stub_request(:get, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}?filterByFormula=DATETIME_DIFF%28NOW%28%29%2C+LAST_MODIFIED_TIME%28%29%2C+%27minutes%27%29+%3C+60")
+        .to_return(
+          status: 200,
+          body: {
+            records: [{
+              id: @shot.airtable_id,
+              fields: {
+                "Tags" => ["Light Roast"],
+                "ID" => @shot.id
+              }
+            }]
+          }.to_json
+        )
+
+      Airtable::Shots.new(@user).download
+      @shot.reload
+
+      assert_equal ["light roast"], @shot.tags.pluck(:name)
+    end
   end
 end
