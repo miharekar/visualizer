@@ -37,10 +37,10 @@ module Airtable
       {fields: fields.compact}
     end
 
-    def local_record_attributes(record)
+    def update_local_record(roaster, record, updated_at)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:name] = record["fields"]["Name"]
-      attributes
+      roaster.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
     end
   end
 end

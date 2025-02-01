@@ -15,8 +15,8 @@ module Airtable
     def upload_multiple(records)
       return unless records.exists?
 
-      prepared_records = records.with_attached_image.map { |record| prepare_record(record) }
-      update_records(prepared_records) do |response|
+      data = records.with_attached_image.map { |record| prepare_record(record) }
+      update_records(data) do |response|
         response["records"].each do |record_data|
           record = records.find_by(id: record_data["fields"]["ID"])
           next unless record
@@ -35,8 +35,7 @@ module Airtable
         next unless local_record
 
         updated_at = timestamps[record["id"]].presence || request_time
-        attributes = local_record_attributes(record)
-        local_record.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
+        update_local_record(local_record, record, updated_at)
       end
     end
 
@@ -54,13 +53,17 @@ module Airtable
 
     private
 
-    def update_record(record_id, fields)
-      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", fields, method: :patch)
+    def update_record(record_id, data)
+      data = data.except(:id)
+      api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{record_id}", data, method: :patch)
     end
 
-    def update_records(records)
-      records.each_slice(10).map do |batch|
-        data = {performUpsert: {fieldsToMergeOn: ["ID"]}, records: batch}
+    def update_records(data_array)
+      has_typecast = data_array.any? { |data| data.key?(:typecast) }
+      data_array.each_slice(10).map do |batch|
+        records = has_typecast ? batch.map { |data| data.except(:typecast) } : batch
+        data = {performUpsert: {fieldsToMergeOn: ["ID"]}, records:}
+        data[:typecast] = true if has_typecast
         response = api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}", data, method: :patch)
         yield response if block_given?
       end
