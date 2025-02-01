@@ -60,7 +60,7 @@ module Airtable
     def update_local_record(shot, record, updated_at)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:metadata] = user.metadata_fields.index_with { |f| record["fields"][f] }
-      shot.tag_list = record["fields"]["Tags"].join(",")
+      shot.tag_list = Array(record["fields"]["Tags"]).join(",")
       shot.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
     end
   end
