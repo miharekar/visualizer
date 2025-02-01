@@ -79,4 +79,4 @@ Rails.application.configure do
   config.hosts << /.+\.test/
   config.hosts << /.+\.platypus-koi.ts.net/
 end
-Rails.application.routes.default_url_options = {host: "visualizer.test", protocol: "https"}
+Rails.application.routes.default_url_options = {host: "mbp.platypus-koi.ts.net", protocol: "https"}
