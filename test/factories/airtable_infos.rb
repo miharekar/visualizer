@@ -14,6 +14,7 @@ FactoryBot.define do
               {"name" => "URL", "type" => "url"},
               {"name" => "Start time", "type" => "dateTime", "options" => {"timeZone" => "client", "dateFormat" => {"name" => "local"}, "timeFormat" => {"name" => "24hour"}}},
               {"name" => "Image", "type" => "multipleAttachments"},
+              {"name" => "Coffee Bag", "type" => "multipleRecordLinks", "options" => {"linkedTableId" => "tblCoffeeBags"}},
               {"name" => "Espresso enjoyment", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Profile title", "type" => "singleLineText"},
               {"name" => "Duration", "type" => "duration", "options" => {"durationFormat" => "h:mm:ss.SS"}},
@@ -36,8 +37,30 @@ FactoryBot.define do
               {"name" => "Tags", "type" => "multipleSelects", "options" => {"choices" => []}}
             ]
           },
+          "Coffee Bags" => {
+            "id" => "tblCoffeeBags",
+            "fields" => [
+              {"name" => "ID", "type" => "singleLineText"},
+              {"name" => "URL", "type" => "url"},
+              {"name" => "Image", "type" => "multipleAttachments"},
+              {"name" => "Name", "type" => "singleLineText"},
+              {"name" => "Roaster", "type" => "multipleRecordLinks", "options" => {"linkedTableId" => "tblRoasters"}},
+              {"name" => "Country", "type" => "singleLineText"},
+              {"name" => "Elevation", "type" => "singleLineText"},
+              {"name" => "Farm", "type" => "singleLineText"},
+              {"name" => "Farmer", "type" => "singleLineText"},
+              {"name" => "Harvest time", "type" => "singleLineText"},
+              {"name" => "Processing", "type" => "singleLineText"},
+              {"name" => "Quality score", "type" => "singleLineText"},
+              {"name" => "Region", "type" => "singleLineText"},
+              {"name" => "Roast date", "type" => "date", "options" => {"dateFormat" => {"name" => "local"}}},
+              {"name" => "Roast level", "type" => "singleLineText"},
+              {"name" => "Variety", "type" => "singleLineText"},
+              {"name" => "Tasting notes", "type" => "singleLineText"}
+            ]
+          },
           "Roasters" => {
-            "id" => "tbl1234567891",
+            "id" => "tblRoasters",
             "fields" => [
               {"name" => "ID", "type" => "singleLineText"},
               {"name" => "URL", "type" => "url"},

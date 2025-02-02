@@ -44,6 +44,9 @@ module Airtable
     def update_local_record(coffee_bag, record, updated_at)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] }
       attributes[:name] = record["fields"]["Name"]
+      roaster_airtable_id = Array(record["fields"]["Roaster"]).first
+      roaster = user.roasters.find_by(airtable_id: roaster_airtable_id)
+      attributes[:roaster_id] = roaster.id if roaster_airtable_id.present? && roaster.present?
       coffee_bag.update!(attributes.merge(skip_airtable_sync: true, updated_at:))
     end
 
