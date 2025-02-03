@@ -1,0 +1,10 @@
+<% if Current.user&.premium? %>
+  <div class="flex items-center gap-x-6 px-3 xs: py-2.5 sm:px-3.5 sm:before:flex-1 bg-terracotta-50 dark:bg-terracotta-950">
+    <div class="flex items-center justify-between flex-1 gap-x-4 gap-y-2 sm:flex-auto sm:justify-center">
+      <p class="text-sm leading-6 text-neutral-900 dark:text-neutral-100">
+        <strong class="font-semibold">Lemon Squeezy surprised me with <%= link_to "the migration", "/updates/new-year-new-changes", class: "text-terracotta-600 dark:text-terracotta-500 hover:underline" %> out of the blue.</strong> If you were charged twice, please contact me at <%= mail_to "miha@visualizer.coffee", nil, class: "text-terracotta-600 dark:text-terracotta-500 hover:underline" %>. Sorry for the trouble and thank you for your patience! 🙏
+      </p>
+    </div>
+    <div class="justify-end flex-1 hidden sm:flex"></div>
+  </div>
+<% end %>
