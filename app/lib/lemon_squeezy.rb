@@ -37,7 +37,7 @@ class LemonSqueezy
     paginate("/customers")
   end
 
-  def create_checkout(data: nil)
+  def create_checkout(data)
     make_request(:post, "/checkouts", data:)
   end
 
