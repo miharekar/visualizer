@@ -48,9 +48,7 @@ gem "kamal"
 group :development, :test do
   gem "debug", require: "debug/prelude"
   gem "factory_bot_rails"
-  gem "rack-mini-profiler"
-  gem "singed"
-  gem "stackprof"
+  gem "vernier"
 end
 
 group :development do

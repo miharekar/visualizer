@@ -128,7 +128,6 @@ GEM
       faraday-follow_redirects (~> 0.3.0)
       faraday-multipart (~> 1.0, >= 1.0.4)
       ostruct
-    colorize (1.1.0)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.0)
     crack (1.0.0)
@@ -330,8 +329,6 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.9)
-    rack-mini-profiler (3.3.1)
-      rack (>= 1.2.0)
     rack-protection (4.1.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -438,9 +435,6 @@ GEM
     securerandom (0.4.1)
     semantic_logger (4.16.1)
       concurrent-ruby (~> 1.0)
-    singed (0.2.2)
-      colorize
-      stackprof (>= 0.2.13)
     slim (5.2.1)
       temple (~> 0.10.0)
       tilt (>= 2.1.0)
@@ -473,7 +467,6 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    stackprof (0.2.27)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     string-similarity (2.1.0)
@@ -512,6 +505,7 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.2)
     useragent (0.16.11)
+    vernier (1.5.0)
     version_gem (1.1.4)
     web-console (4.2.1)
       actionview (>= 6.0.0)
@@ -571,26 +565,24 @@ DEPENDENCIES
   postmark-rails
   propshaft
   puma
-  rack-mini-profiler
   rails
   rails_semantic_logger
   responders
   retest
   rubocop-rails-omakase
   ruby-lsp
-  singed
   slim
   solid_cable
   solid_cache
   solid_queue
   sqlite3
-  stackprof
   stimulus-rails
   tailwindcss-rails
   tailwindcss-ruby
   thruster
   tickly!
   turbo-rails
+  vernier
   web-console
   web-push
   webmock

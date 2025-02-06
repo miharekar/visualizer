@@ -32,7 +32,6 @@ env:
   clear:
     WEB_CONCURRENCY: 2
     POSTGRES_HOST: 10.0.0.50
-    # RAILS_LOG_LEVEL: debug
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
