@@ -15,7 +15,7 @@ class LemonSqueezy
   end
 
   def create_checkout(data)
-    Client.new("/checkouts", method: :post, data:).make_request(:post, "/checkouts", data:)
+    Client.new("/checkouts", method: :post, data:).make_request
   end
 
   def get_customer(id)
