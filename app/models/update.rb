@@ -5,7 +5,7 @@ class Update < ApplicationRecord
   slug_from :title
 
   has_one_attached :image do |attachable|
-    attachable.variant :social, resize_to_limit: [800, 500]
+    attachable.variant :social, resize_to_limit: [800, 500], format: :jpeg, saver: {strip: true}
   end
 end
 

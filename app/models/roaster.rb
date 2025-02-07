@@ -9,7 +9,7 @@ class Roaster < ApplicationRecord
   has_many :shots, through: :coffee_bags
 
   has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_limit: [200, 200]
+    attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
   end
 
   scope :filter_by_name, ->(name) { where("LOWER(roasters.name) = ?", name.downcase.squish) }

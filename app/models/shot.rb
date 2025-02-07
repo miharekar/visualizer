@@ -17,8 +17,8 @@ class Shot < ApplicationRecord
   has_many :tags, through: :shot_tags
 
   has_one_attached :image do |attachable|
-    attachable.variant :display, resize_to_limit: [1000, 500]
-    attachable.variant :thumb, resize_to_limit: [200, 200]
+    attachable.variant :display, resize_to_limit: [1000, 500], format: :jpeg, saver: {strip: true}
+    attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
   end
 
   scope :visible, -> { where(public: true) }
