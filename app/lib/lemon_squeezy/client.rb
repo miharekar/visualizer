@@ -1,7 +1,16 @@
 class LemonSqueezy
-  class Client
-    prepend MemoWise
+  class SignatureVerificationError < StandardError; end
 
+  class APIError < StandardError
+    attr_reader :code
+
+    def initialize(message, code)
+      @code = code
+      super(message)
+    end
+  end
+
+  class Client
     BASE_URL = "https://api.lemonsqueezy.com/v1".freeze
 
     attr_reader :api_key, :uri, :request_class, :data, :params

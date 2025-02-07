@@ -3,17 +3,6 @@ require "json"
 require "uri"
 
 class LemonSqueezy
-  class SignatureVerificationError < StandardError; end
-
-  class APIError < StandardError
-    attr_reader :code
-
-    def initialize(message, code)
-      @code = code
-      super(message)
-    end
-  end
-
   def create_checkout(data)
     Client.new("/checkouts", method: :post, data:).make_request
   end
