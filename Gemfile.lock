@@ -96,11 +96,12 @@ GEM
       rack
     ast (2.4.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.1047.0)
-    aws-sdk-core (3.218.0)
+    aws-partitions (1.1048.0)
+    aws-sdk-core (3.218.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
+      base64
       jmespath (~> 1, >= 1.6.1)
     aws-sdk-kms (1.98.0)
       aws-sdk-core (~> 3, >= 3.216.0)
@@ -199,7 +200,7 @@ GEM
     json (2.9.1)
     jwt (2.10.1)
       base64
-    kamal (2.5.1)
+    kamal (2.5.2)
       activesupport (>= 7.0)
       base64 (~> 0.2)
       bcrypt_pbkdf (~> 1.0)
@@ -254,7 +255,7 @@ GEM
     multipart-post (2.4.1)
     net-http (0.6.0)
       uri
-    net-imap (0.5.5)
+    net-imap (0.5.6)
       date
       net-protocol
     net-pop (0.1.2)
@@ -459,7 +460,7 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
-    sorbet-runtime (0.5.11810)
+    sorbet-runtime (0.5.11812)
     sqlite3 (2.5.0-aarch64-linux-gnu)
     sqlite3 (2.5.0-arm64-darwin)
     sqlite3 (2.5.0-x86_64-linux-gnu)
