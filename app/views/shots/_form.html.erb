@@ -89,9 +89,9 @@
             </p>
           <% end %>
         <% else %>
-          <p class="text-terracotta-600">
-            Add private notes, custom fields, and images to your shots by
-            <%= link_to "upgrading to Premium", premium_index_path, class: "font-bold standard-link" %>.
+          <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            Add custom fields, private notes, and images to your shots by
+            <%= link_to "upgrading to Premium", premium_index_path, class: "standard-link" %>.
           </p>
         <% end %>
         <% if Current.user.premium? %>
