@@ -38,8 +38,6 @@ aliases:
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: accessory exec postgres --interactive --reuse "psql -U visualizer -d visualizer_production"
-  pull-postgres: server exec docker pull postgres:17
-  pull-postgres-backup: server exec docker pull mrfoto/postgres-backup-s3:latest
 
 volumes:
   - "visualizer_storage:/rails/storage"
@@ -48,7 +46,7 @@ asset_path: /rails/public/assets
 
 accessories:
   postgres:
-    image: postgres:17
+    image: postgres:17.3
     host: hvdb
     port: 5432
     env:
@@ -66,7 +64,7 @@ accessories:
       shm-size: 3g
 
   pg_backup:
-    image: mrfoto/postgres-backup-s3:latest
+    image: mrfoto/postgres-backup-s3:17.3
     host: hvdb
     env:
       clear:
