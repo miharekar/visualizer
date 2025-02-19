@@ -42,6 +42,7 @@ module Airtable
       assert_equal "17.0", @shot.bean_weight
       assert_equal 80, @shot.espresso_enjoyment
       assert_equal({"Bean variety" => "Catuai", "Portafilter basket" => "Decent"}, @shot.metadata)
+      assert_no_enqueued_jobs only: AirtableUploadRecordJob
     end
 
     test "it downloads coffee bag relationship from airtable when coffee management is enabled" do
@@ -63,7 +64,9 @@ module Airtable
         )
 
       assert_nil @shot.coffee_bag_id
-      Airtable::Shots.new(@user).download
+      assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default") do
+        Airtable::Shots.new(@user).download
+      end
       assert_equal coffee_bag.id, @shot.reload.coffee_bag_id
     end
 
@@ -87,8 +90,40 @@ module Airtable
         )
 
       assert_equal coffee_bag.id, @shot.coffee_bag_id
-      Airtable::Shots.new(@user).download
+      assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default") do
+        Airtable::Shots.new(@user).download
+      end
       assert_nil @shot.reload.coffee_bag_id
+    end
+
+    test "it does not enqueue upload job when coffee bag data is not changed" do
+      roaster = create(:roaster, user: @user)
+      coffee_bag = create(:coffee_bag, roaster:, airtable_id: "recBag1")
+      @shot.update(coffee_bag:)
+
+      stub_request(:get, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}?filterByFormula=DATETIME_DIFF%28NOW%28%29%2C+LAST_MODIFIED_TIME%28%29%2C+%27minutes%27%29+%3C+60")
+        .to_return(
+          status: 200,
+          body: {
+            records: [{
+              id: @shot.airtable_id,
+              fields: {
+                "ID" => @shot.id,
+                "Bean brand" => "Old Brand",
+                "Bean type" => "Old Type",
+                "Coffee Bag" => ["recBag1"]
+              }
+            }]
+          }.to_json
+        )
+
+      assert_no_enqueued_jobs(only: AirtableUploadRecordJob) do
+        Airtable::Shots.new(@user).download
+      end
+      @shot.reload
+      assert_equal coffee_bag.id, @shot.coffee_bag_id
+      assert_equal "Old Brand", @shot.bean_brand
+      assert_equal "Old Type", @shot.bean_type
     end
 
     test "it uploads changes to airtable after shot save" do
