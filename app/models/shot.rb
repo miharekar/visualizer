@@ -49,7 +49,6 @@ class Shot < ApplicationRecord
     self.bean_type = coffee_bag&.name
     self.roast_date = coffee_bag&.roast_date&.strftime(user.date_format_string)
     self.roast_level = coffee_bag&.roast_level
-    self.skip_airtable_sync = false
   end
 
   def related_shots(limit: 15)
