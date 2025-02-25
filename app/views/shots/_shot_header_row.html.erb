@@ -20,9 +20,11 @@
           </div>
         </h1>
         <div class="grow min-w-2"></div>
-        <div class="flex items-center mt-3 lg:mt-0">
-          <%= render "share" %>
-          <%= render "related_shots", related_shots: @related_shots, shot: @shot if @related_shots.present? %>
+        <div class="lg:max-w-1/2">
+          <div class="flex items-center mt-3 lg:mt-0">
+            <%= render "share" %>
+            <%= render "related_shots", related_shots: @related_shots, shot: @shot if @related_shots.present? %>
+          </div>
         </div>
       </div>
     <% else %>
