@@ -33,8 +33,6 @@
 /config/credentials/production.key
 
 # Dev assets
-.env
-.env.development
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
