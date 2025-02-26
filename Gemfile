@@ -58,6 +58,7 @@ group :development do
   gem "brakeman", require: false
   gem "hotwire-spark"
   gem "letter_opener"
+  gem "rubocop-minitest", require: false
   gem "rubocop-rails-omakase", require: false
   gem "ruby-lsp"
   gem "web-console"
