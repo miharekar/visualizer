@@ -83,3 +83,12 @@ accessories:
         - S3_SECRET_ACCESS_KEY
     options:
       network: ipv6-network
+
+  dozzle:
+    image: amir20/dozzle:latest
+    hosts:
+      - hvapp
+      - hvdb
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    port: "127.0.0.1:3200:8080"
