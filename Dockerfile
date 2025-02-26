@@ -13,13 +13,11 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick sqlite3 openssh-client lsb-release && \
+  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick sqlite3 openssh-client lsb-release postgresql-common && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Add PostgreSQL repository and install PostgreSQL 17 client
-RUN install -d /usr/share/postgresql-common/pgdg && \
-  curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
-  sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   apt-get update -qq && \
   apt-get install --no-install-recommends -y postgresql-client-17 libpq-dev && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
