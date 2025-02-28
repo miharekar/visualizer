@@ -27,6 +27,7 @@ gem "postmark-rails"
 gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
+gem "rack-cors"
 gem "rails"
 gem "rails_semantic_logger"
 gem "responders"
