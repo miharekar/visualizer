@@ -1,7 +1,10 @@
 module Api
   class ShotsController < Api::BaseController
+    attr_reader :file_content
+
     before_action :verify_upload_access, only: %i[upload]
     before_action :verify_write_access, only: %i[destroy]
+    before_action :extract_file_content, only: %i[upload]
 
     def index
       shots = Current.user.present? ? Current.user.shots : Shot.visible
@@ -51,7 +54,7 @@ module Api
     end
 
     def upload
-      shot = Shot.from_file(Current.user, params[:file].read)
+      shot = Shot.from_file(Current.user, file_content)
       if shot&.save
         render json: {id: shot.id}
       else
@@ -79,6 +82,18 @@ module Api
       else
         render json: {error: "Shot not found"}, status: :not_found
       end
+    end
+
+    def extract_file_content
+      @file_content = case request.content_type
+      when /multipart\/form-data/
+        params[:file]&.read
+      when /application\/json/
+        request.raw_post
+      end
+      return if file_content.present?
+
+      render json: {error: "No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object."}, status: :unprocessable_entity
     end
   end
 end

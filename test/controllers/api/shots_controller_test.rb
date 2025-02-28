@@ -135,6 +135,54 @@ module Api
       assert_equal "Shared shot not found", json_response["error"]
     end
 
+    test "upload accepts multipart/form-data with file parameter" do
+      file_content = Rails.root.join("test/files/beanconqueror.json").read
+      file = Tempfile.new(["sample_shot", ".json"])
+      file.write(file_content)
+      file.rewind
+
+      post upload_api_shots_url, headers: auth_headers(user), params: {file: fixture_file_upload(file.path, "application/json")}
+
+      assert_response :success
+      json_response = response.parsed_body
+      assert json_response["id"].present?
+
+      # Verify the shot was created
+      shot = Shot.find(json_response["id"])
+      assert_equal user.id, shot.user_id
+    end
+
+    test "upload accepts JSON POST with raw body" do
+      file_content = JSON.parse(Rails.root.join("test/files/beanconqueror.json").read)
+
+      post upload_api_shots_url, headers: auth_headers(user), params: file_content, as: :json
+
+      assert_response :success
+      json_response = response.parsed_body
+      assert json_response["id"].present?
+
+      # Verify the shot was created
+      shot = Shot.find(json_response["id"])
+      assert_equal user.id, shot.user_id
+    end
+
+    test "upload returns error when no file content is provided" do
+      post upload_api_shots_url, headers: auth_headers(user)
+
+      assert_response :unprocessable_entity
+      json_response = response.parsed_body
+      assert_equal "No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object.", json_response["error"]
+    end
+
+    test "upload returns error when file content is invalid" do
+      post upload_api_shots_url, headers: auth_headers(user), params: "{ invalid json content", as: :json
+
+      assert_response :unprocessable_entity
+      json_response = response.parsed_body
+      assert json_response["error"].present?
+      assert_includes json_response["error"], "Could not save the provided file"
+    end
+
     private
 
     def auth_headers(user)
