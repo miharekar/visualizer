@@ -1,6 +1,6 @@
 class ShotPolicy < ApplicationPolicy
   def owner_or_admin?
-    user.id == record.user_id || user.admin?
+    user && (user.id == record.user_id || user.admin?)
   end
 
   def index?
