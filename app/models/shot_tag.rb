@@ -1,4 +1,6 @@
 class ShotTag < ApplicationRecord
+  self.primary_key = %i[shot_id tag_id]
+
   belongs_to :shot
   belongs_to :tag
 
