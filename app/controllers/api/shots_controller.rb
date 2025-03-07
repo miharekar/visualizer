@@ -13,7 +13,7 @@ module Api
       shots, paging = paginate(shots)
       data = shots.map { {clock: it.start_time.to_i, id: it.id} }
       render json: {data:, paging:}
-    rescue StandardError => e
+    rescue ActiveRecord::ActiveRecordError => e
       Appsignal.report_error(e)
       render json: {error: "Could not paginate"}, status: :unprocessable_entity
     end
@@ -64,6 +64,7 @@ module Api
 
     def destroy
       shot = Current.user.shots.find_by(id: params[:id])
+      authorize shot
       if shot
         shot.destroy!
         render json: {success: true}

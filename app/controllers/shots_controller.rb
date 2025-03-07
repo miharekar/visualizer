@@ -41,6 +41,7 @@ class ShotsController < ApplicationController
   end
 
   def edit
+    authorize @shot
     shots = Current.user.shots
     %i[grinder_model bean_brand bean_type].each do |method|
       unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).compact_blank }
@@ -72,6 +73,7 @@ class ShotsController < ApplicationController
   end
 
   def update
+    authorize @shot
     @shot.update(update_shot_params)
     if params[:shot][:image].present? && Current.user.premium?
       if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
@@ -85,6 +87,7 @@ class ShotsController < ApplicationController
   end
 
   def destroy
+    authorize @shot
     @shot.destroy!
 
     respond_to do |format|
