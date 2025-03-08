@@ -1,10 +1,9 @@
 <% content_for(:html_title) { "Visualizer | #{@shot.profile_title}" } %>
 <% content_for(:head) do %>
-  <% description = render "meta_description", shot: @shot %>
-  <meta name="description" content="<%= description %>">
+  <meta name="description" content="<%= meta_description(@shot) %>">
   <meta property="og:title" content="<%= @shot.profile_title %>">
   <meta property="og:url" content="https://visualizer.coffee/shots/<%= @shot.id %>">
-  <meta property="og:description" content="<%= description %>">
+  <meta property="og:description" content="<%= meta_description(@shot) %>">
 <% end %>
 <%= render "shot_header_row" %>
 <% width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3" %>
