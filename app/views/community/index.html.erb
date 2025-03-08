@@ -15,5 +15,18 @@
     </div>
   </div>
   <%= render "filters" %>
-  <%= render "shots/table_list", shots: @shots, include_person: true, cursor: @cursor, cursor_path: community_index_path(params.permit(*CommunityController::FILTERS, :min_enjoyment, :max_enjoyment).merge(commit: "Search", before: @cursor, format: :turbo_stream)) %>
+  <% if @shots.any? %>
+    <div data-controller="modal shot-compare" class="mt-3 sm:mt-6">
+      <%= render "shared/modal" %>
+      <%= render "shots/comparison_banner" %>
+      <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
+        <%= render @shots %>
+      </div>
+    </div>
+    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: community_index_path(params.permit(*CommunityController::FILTERS, :user_id, :min_enjoyment, :max_enjoyment).merge(commit: "Search", before: @cursor, format: :turbo_stream)) } %>
+  <% else %>
+    <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
+      No shots found 🤷‍♂️
+    </div>
+  <% end %>
 </div>

@@ -23,8 +23,9 @@
 </div>
 <div class="flex flex-col mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
   <% if @shots.any? %>
-    <div data-controller="modal">
+    <div data-controller="modal shot-compare">
       <%= render "shared/modal" %>
+      <%= render "shots/comparison_banner" %>
       <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
         <%= render @shots %>
       </div>
