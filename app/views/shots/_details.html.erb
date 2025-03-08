@@ -21,7 +21,7 @@
     <a class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100" href="<%= shot_path(shot) %>">
       <%= shot.profile_title %>
     </a>
-    <div class="mt-2 text-base text-neutral-600 dark:text-neutral-400">
+    <div class="mt-1 text-base text-neutral-600 dark:text-neutral-400">
       <% if show_name %>
         <div class="flex gap-x-1 items-center">
           <div>
@@ -39,10 +39,15 @@
       <% if show_start_time %>
         <%= local_datetime_tag shot.start_time, style: :datetime %>
       <% end %>
+      <% if shot.barista.present? %>
+        <div>
+          By <%= shot.barista %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
-<div class="mt-2 text-base text-neutral-600 dark:text-neutral-400">
+<div class="mt-1 text-base text-neutral-600 dark:text-neutral-400">
   <div>
     <% if shot.bean_brand.present? || shot.bean_type.present? %>
       <div>
@@ -97,11 +102,6 @@
         <% if ey > 0 %>
           <span>EY: <%= ey %>%</span>
         <% end %>
-      </div>
-    <% end %>
-    <% if shot.barista.present? %>
-      <div>
-        By <%= shot.barista %>
       </div>
     <% end %>
     <div class="mt-2 max-w-prose">

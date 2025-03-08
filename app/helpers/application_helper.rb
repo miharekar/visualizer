@@ -43,6 +43,6 @@ module ApplicationHelper
   end
 
   def local_datetime_tag(datetime, style: :datetime, **attributes)
-    tag.time(**attributes, datetime: datetime.iso8601, data: {local_time_target: style})
+    tag.time(datetime: datetime.iso8601, data: {local_time_target: style})
   end
 end
