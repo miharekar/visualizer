@@ -25,6 +25,16 @@ export default class extends Controller {
     this.toggleBanner()
   }
 
+  deselect(event) {
+    this.isChecked = false
+    this.baseId = null
+    this.checkboxTargets.forEach(checkbox => {
+      checkbox.checked = false
+      this.toggleComparing(checkbox.closest(".group"))
+    })
+    this.toggleBanner()
+  }
+
   view(event) {
     if (this.isChecked) {
       event.preventDefault()
