@@ -1,13 +1,13 @@
-<% content_for(:html_title) { "Visualizer | #{@user.name}" } %>
+<% content_for(:html_title) { "Visualizer | #{@user.display_name}" } %>
 <% content_for(:head) { auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss) } %>
 <%= render "shared/premium_banner", count: @premium_count %>
 <div class="bg-white shadow dark:bg-neutral-900">
   <div class="flex items-center justify-between px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
     <h1 class="flex text-2xl font-bold leading-tight sm:text-3xl text-neutral-900 dark:text-neutral-100">
       <div class="flex gap-x-2">
-        <img class="w-8 h-8 rounded" src="<%= avatar_url(@user, 80) %>">
+        <img class="size-8 rounded" src="<%= avatar_url(@user, 80) %>">
         <span class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-          Shots by <%= link_to "#{@user.name}", person_path(@user.slug), class: "underline hover:text-neutral-500" %>
+          Shots by <%= link_to "#{@user.display_name}", person_path(@user.slug), class: "underline hover:text-neutral-500" %>
         </span>
         <% if @user.premium? %>
           <%= link_to premium_index_path do %>

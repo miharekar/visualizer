@@ -23,13 +23,13 @@
     </a>
     <div class="mt-2 text-base text-neutral-600 dark:text-neutral-400">
       <% if show_name %>
-        <div class="flex items-center">
+        <div class="flex gap-x-1 items-center">
           <div>
-            Shot by <%= shot.user.name %>
+            <%= shot.user.display_name %>
           </div>
           <% if shot.user.premium? %>
             <%= link_to premium_index_path do %>
-              <svg class="w-4 h-4 ml-1 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg class="size-4 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
               </svg>
             <% end %>
@@ -37,9 +37,7 @@
         </div>
       <% end %>
       <% if show_start_time %>
-        <div>
-          <%= local_datetime_tag shot.start_time, style: :datetime %>
-        </div>
+        <%= local_datetime_tag shot.start_time, style: :datetime %>
       <% end %>
     </div>
   </div>
