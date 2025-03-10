@@ -6,6 +6,7 @@ module Airtable
       @user = create(:user, :with_airtable, :with_coffee_management)
       @identity = @user.identities.first
       @shot = create(:shot, :with_airtable, user: @user, airtable_id: "rec1")
+      perform_enqueued_jobs
     end
 
     test "it can delete a record" do
