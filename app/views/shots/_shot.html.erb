@@ -1,3 +1,4 @@
+<% Current.session = shot.user.sessions.first if defined?(user_override) && Current.session.nil? %>
 <% @timezone ||= ActiveSupport::TimeZone.new(shot.user&.timezone.presence || "UTC") %>
 <%= tag.div id: dom_id(shot), class: "group" do %>
   <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">

@@ -31,7 +31,7 @@ class Shot < ApplicationRecord
   validates :start_time, :sha, :user, presence: true
   validate :daily_limit, on: :create
 
-  broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend
+  broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
   after_create_commit :send_web_push_notification
 
   def self.from_file(user, file_content)
