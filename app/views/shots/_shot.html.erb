@@ -1,4 +1,5 @@
-<% Current.session = shot.user.sessions.first if defined?(user_override) && Current.session.nil? %>
+<% current_user = defined?(user_override) && Current.user.nil? ? shot.user : Current.user %>
+<% shot_policy = ShotPolicy.new(current_user, shot) %>
 <% @timezone ||= ActiveSupport::TimeZone.new(shot.user&.timezone.presence || "UTC") %>
 <%= tag.div id: dom_id(shot), class: "group" do %>
   <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
@@ -32,7 +33,7 @@
               </span>
             </div>
             <div class="flex flex-col text-sm space-y-1 md:text-base text-neutral-500 dark:text-neutral-400">
-              <% if Current.user != shot.user %>
+              <% if current_user != shot.user %>
                 <div class="flex gap-x-1 items-center">
                   <div>
                     <%= shot.user.display_name %>
@@ -108,10 +109,10 @@
         </div>
       </div>
     </div>
-    <% if policy(shot).edit? || policy(shot).destroy? %>
+    <% if shot_policy.edit? || shot_policy.destroy? %>
       <div class="flex border-l border-neutral-200 dark:border-neutral-700 group-data-comparing:pointer-events-none group-data-comparing:opacity-30">
         <div class="flex flex-col w-full -mt-px divide-y divide-neutral-200 dark:divide-neutral-700">
-          <% if policy(shot).edit? %>
+          <% if shot_policy.edit? %>
             <div class="relative flex grow dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
               <%= link_to edit_shot_path(shot), class: "flex items-center p-4 text-sm border border-transparent gap-x-3" do %>
                 <span class="absolute inset-x-0 bottom-0 -top-px"></span>
@@ -122,7 +123,7 @@
               <% end %>
             </div>
           <% end %>
-          <% if policy(shot).destroy? %>
+          <% if shot_policy.destroy? %>
             <div class="relative flex hover:bg-red-500/10">
               <%= link_to shot_path(shot), class: "flex items-center px-4 py-3 text-sm border border-transparent gap-x-3 text-neutral-400 dark:text-neutral-500", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do %>
                 <span class="absolute inset-x-0 bottom-0 -top-px"></span>
