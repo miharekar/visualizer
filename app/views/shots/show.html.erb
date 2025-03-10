@@ -7,7 +7,7 @@
 <% end %>
 <%= render "shot_header_row" %>
 <% width_class = @shot.image.attached? ? "md:w-full" : "md:w-2/3" %>
-<div class="px-2 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+<div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
     <div class="<%= @shot.image.attached? ? "md:w-1/2" : "md:w-full" %>">
       <%= render "details", shot: @shot, name: false %>
@@ -42,11 +42,11 @@
 </div>
 <% if @chart %>
   <% if @chart.data? %>
-    <div class="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div id="shot-chart"></div>
     </div>
     <% if @chart.temperature_chart.present? %>
-      <div class="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div id="temperature-chart"></div>
       </div>
     <% end %>

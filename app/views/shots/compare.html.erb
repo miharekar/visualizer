@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto py-6 px-2 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
     <div class="flex-1">
       <%= render "details", shot: @shot, name: true %>
@@ -10,7 +10,7 @@
 </div>
 <% if @chart %>
   <% if Current.user&.premium? %>
-    <div class="max-w-7xl mx-auto py-6 px-2 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <div class="text-center text-lg text-neutral-900 dark:text-neutral-100">
         Adjust comparison timing
       </div>
@@ -31,10 +31,10 @@
       </div>
     </div>
   <% end %>
-  <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
     <div id="shot-chart"></div>
   </div>
-  <div class="max-w-7xl mx-auto pb-8 px-2 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto pb-8 sm:px-6 lg:px-8">
     <div id="temperature-chart"></div>
   </div>
   <script>
