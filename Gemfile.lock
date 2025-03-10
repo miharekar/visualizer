@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/hotwired/turbo-rails.git
+  revision: 94767d3a84f470c2d0aec8c3f9e2e7c784bc8de7
+  specs:
+    turbo-rails (2.0.13)
+      actionpack (>= 7.1.0)
+      railties (>= 7.1.0)
+
+GIT
   remote: https://github.com/miharekar/tickly.git
   revision: a4eaa0462acb6433d63eb64d8414beab91023054
   specs:
@@ -509,9 +517,6 @@ GEM
       tty-screen (~> 0.8)
       wisper (~> 2.0)
     tty-screen (0.8.2)
-    turbo-rails (2.0.13)
-      actionpack (>= 7.1.0)
-      railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -598,7 +603,7 @@ DEPENDENCIES
   tailwindcss-ruby
   thruster
   tickly!
-  turbo-rails
+  turbo-rails!
   vernier
   web-console
   web-push

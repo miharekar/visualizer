@@ -42,7 +42,7 @@ gem "tailwindcss-rails"
 gem "tailwindcss-ruby"
 gem "thruster"
 gem "tickly", github: "miharekar/tickly"
-gem "turbo-rails"
+gem "turbo-rails", github: "hotwired/turbo-rails"
 gem "web-push"
 
 gem "kamal"
