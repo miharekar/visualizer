@@ -9,9 +9,9 @@ module Api
     def index
       shots = Current.user.present? ? Current.user.shots : Shot.visible
       shots = shots.non_premium unless Current.user&.premium?
-      shots = shots.by_start_time.select(:id, :start_time, :user_id)
+      shots = shots.by_start_time.select(:id, :start_time, :user_id, :updated_at)
       shots, paging = paginate(shots)
-      data = shots.map { {clock: it.start_time.to_i, id: it.id} }
+      data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
       render json: {data:, paging:}
     rescue ActiveRecord::ActiveRecordError => e
       Appsignal.report_error(e)
@@ -20,7 +20,7 @@ module Api
 
     def show
       with_shot do |shot|
-        render json: shot.to_api_json(with_data: !params[:essentials].presence, standard_format: params[:standard_format].presence)
+        render json: shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
       end
     end
     alias_method :download, :show
@@ -44,10 +44,10 @@ module Api
     def shared
       shared = SharedShot.find_by(code: params[:code].to_s.upcase)
       if shared
-        render json: shared.shot.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence)
+        render json: shared.shot.to_api_json(format: params[:format], include_information: params[:with_data].presence)
       elsif Current.user.present?
         distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
-        render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(with_data: params[:with_data].presence, standard_format: params[:standard_format].presence) }
+        render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(format: params[:format], include_information: params[:with_data].presence) }
       else
         render json: {error: "Shared shot not found"}, status: :not_found
       end

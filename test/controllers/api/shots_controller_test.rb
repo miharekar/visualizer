@@ -26,7 +26,7 @@ module Api
       assert_equal 1, json_response["paging"]["pages"]
 
       shot_data = json_response["data"].first
-      assert_equal %w[clock id], shot_data.keys
+      assert_equal %w[clock id updated_at], shot_data.keys
 
       get api_shots_url(items: 2, page: 3), headers: auth_headers(user), as: :json
       assert_response :success
@@ -40,7 +40,7 @@ module Api
       assert_equal 3, json_response["paging"]["pages"]
 
       shot_data = json_response["data"].first
-      assert_equal %w[clock id], shot_data.keys
+      assert_equal %w[clock id updated_at], shot_data.keys
     end
 
     test "index respects limit parameter" do
@@ -84,6 +84,61 @@ module Api
 
       json_response = response.parsed_body
       assert_equal 5, json_response["data"].length
+    end
+
+    test "show returns shot data" do
+      shot = FactoryBot.create(:shot, user:)
+
+      get api_shot_url(shot), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal shot.id, json_response["id"]
+      expected_keys = %w[
+        barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds drink_weight duration
+        espresso_enjoyment espresso_notes grinder_model grinder_setting id profile_title roast_date roast_level
+        start_time tags updated_at user_id
+      ]
+      assert_equal expected_keys.sort, json_response.keys.sort
+      assert_equal shot.updated_at.to_i, json_response["updated_at"]
+    end
+
+    test "show returns shot data in beanconqueror format" do
+      shot = FactoryBot.create(:shot, user:)
+
+      get api_shot_url(shot), params: {format: "beanconqueror"}, as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal shot.id, json_response.dig("meta", "visualizer", "shot_id")
+      expected_keys = %w[bean brew meta mill preparation]
+      assert_equal expected_keys.sort, json_response.keys.sort
+      assert_equal shot.updated_at.to_i, json_response.dig("meta", "visualizer", "updated_at")
+    end
+
+    test "show returns shot data in decent format for unknown format" do
+      shot = FactoryBot.create(:shot, user:)
+
+      get api_shot_url(shot), params: {format: "unknown"}, as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal shot.id, json_response["id"]
+      expected_keys = %w[
+        barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds drink_weight duration
+        espresso_enjoyment espresso_notes grinder_model grinder_setting id profile_title roast_date roast_level
+        start_time tags updated_at user_id
+      ]
+      assert_equal expected_keys.sort, json_response.keys.sort
+      assert_equal shot.updated_at.to_i, json_response["updated_at"]
+    end
+
+    test "show returns 404 for non-existent shot" do
+      get api_shot_url(id: "nonexistent"), as: :json
+      assert_response :not_found
+
+      json_response = response.parsed_body
+      assert_equal "Shot not found", json_response["error"]
     end
 
     test "shared returns all shared shots for authenticated user" do
@@ -137,7 +192,7 @@ module Api
 
     test "upload accepts multipart/form-data with file parameter" do
       file_content = Rails.root.join("test/files/beanconqueror.json").read
-      file = Tempfile.new(["sample_shot", ".json"])
+      file = Tempfile.new(["sample_shot.json"])
       file.write(file_content)
       file.rewind
 
