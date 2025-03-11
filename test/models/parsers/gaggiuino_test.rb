@@ -22,6 +22,7 @@ module Parsers
       assert_in_delta(42.2, shot.duration)
       assert_equal Parsers::Gaggiuino::DATA_LABELS_MAP.values.sort, shot.information.data.keys.sort
       assert_equal 279, shot.information.data["espresso_pressure"].size
+      assert_in_delta(0.74, shot.information.data["espresso_water_dispensed"][42])
     end
   end
 end

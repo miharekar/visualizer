@@ -28,7 +28,11 @@ module Parsers
 
       json["datapoints"].each do |point|
         @timeframe << (point["timeInShot"] / 1000.0)
-        DATA_LABELS_MAP.each { |key, label| @data[label] << point[key] }
+        DATA_LABELS_MAP.each do |key, label|
+          value = point[key]
+          value = value / 10.0 if key == "waterPumped"
+          @data[label] << value
+        end
       end
     end
 
