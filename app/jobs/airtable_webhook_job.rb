@@ -10,16 +10,20 @@ class AirtableWebhookJob < AirtableJob
     @last_transaction = airtable_info.last_transaction.to_i
 
     get_payloads
-    return if payloads.empty?
+    return update_last_cursor if payloads.empty?
 
     get_record_timestamps
-    return if record_timestamps.empty?
+    return update_last_cursor if record_timestamps.empty?
 
     get_relevant_timestamps
     download_updates
   end
 
   private
+
+  def update_last_cursor
+    airtable_info.update!(last_cursor: webhook_payloads["cursor"])
+  end
 
   def get_payloads
     @webhook_payloads = Airtable::Base.new(airtable_info.identity.user).webhook_payloads(cursor: airtable_info.last_cursor.to_i)
