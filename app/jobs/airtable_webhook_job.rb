@@ -23,6 +23,7 @@ class AirtableWebhookJob < AirtableJob
 
   def update_last_cursor
     airtable_info.update!(last_cursor: webhook_payloads["cursor"])
+    self.class.perform_later(airtable_info) if webhook_payloads["mightHaveMore"]
   end
 
   def get_payloads
