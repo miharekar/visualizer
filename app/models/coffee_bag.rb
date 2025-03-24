@@ -15,13 +15,13 @@ class CoffeeBag < ApplicationRecord
     attachable.variant :display, resize_to_limit: [1000, 500], format: :jpeg, saver: {strip: true}
   end
 
+  validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
+
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
   scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
   scope :for_user, ->(user) { joins(:roaster).where(roasters: {user:}) }
 
   squishes :country, :elevation, :farm, :farmer, :harvest_time, :name, :processing, :quality_score, :region, :roast_level, :url, :variety, :tasting_notes
-
-  validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
 
   def self.for_roaster_by_name_and_date(roaster, name, roast_date, **create_attrs)
     where(roaster:).filter_by_name(name).where(roast_date:).first || create(name:, roaster:, roast_date:, **create_attrs)

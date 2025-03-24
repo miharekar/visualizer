@@ -11,12 +11,6 @@ class User < ApplicationRecord
     "yyyy.mm.dd" => "%Y.%m.%d"
   }.freeze
 
-  after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
-  after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
-  after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
-
-  generates_token_for :unsubscribe
-
   has_many :sessions, dependent: :destroy
   has_many :shots, dependent: :nullify
   has_many :shared_shots, dependent: :nullify
@@ -32,14 +26,20 @@ class User < ApplicationRecord
 
   has_one_attached :avatar, service: :cloudinary
 
-  scope :visible, -> { where(public: true) }
-  scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
-  scope :order_by_name, -> { order("LOWER(name)") }
-
   validates :email, presence: true, uniqueness: true
   validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
+
+  after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
+  after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
+  after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
+
+  generates_token_for :unsubscribe
+
+  scope :visible, -> { where(public: true) }
+  scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
+  scope :order_by_name, -> { order("LOWER(name)") }
 
   normalizes :email, with: ->(e) { e.strip.downcase }
 

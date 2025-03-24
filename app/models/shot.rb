@@ -7,8 +7,6 @@ class Shot < ApplicationRecord
   DAILY_LIMIT = 50
   LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting roast_level roast_date].freeze
 
-  before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
-
   belongs_to :user, optional: true, touch: true
   belongs_to :coffee_bag, optional: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy, inverse_of: :shot
@@ -21,18 +19,19 @@ class Shot < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
   end
 
+  validates :start_time, :sha, :user, presence: true
+  validate :daily_limit, on: :create
+
+  before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
+  broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
+  after_create_commit :send_web_push_notification
+
   scope :visible, -> { where(public: true) }
   scope :visible_or_owned_by_id, ->(user_id) { user_id ? visible.or(where(user_id:)) : visible }
   scope :for_list, -> { select(LIST_ATTRIBUTES).includes(:tags, coffee_bag: :roaster) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
-
-  validates :start_time, :sha, :user, presence: true
-  validate :daily_limit, on: :create
-
-  broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
-  after_create_commit :send_web_push_notification
 
   def self.from_file(user, file_content)
     return Shot.new(user:) if file_content.blank?

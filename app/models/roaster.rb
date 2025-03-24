@@ -12,13 +12,13 @@ class Roaster < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
   end
 
+  validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
+
   scope :filter_by_name, ->(name) { where("LOWER(roasters.name) = ?", name.downcase.squish) }
   scope :order_by_name, -> { order("LOWER(roasters.name)") }
   scope :with_at_least_one_coffee_bag, -> { joins(:coffee_bags).group(:id) }
 
   squishes :name, :website
-
-  validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
 
   def self.for_user_by_name(user, name, **create_attrs)
     where(user:).filter_by_name(name).first || create(name:, user:, **create_attrs)
