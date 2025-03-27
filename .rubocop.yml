@@ -29,6 +29,8 @@ Layout/ClassStructure:
       - has_one
       - has_many
       - has_and_belongs_to_many
+      - has_one_attached
+      - has_many_attached
     validations:
       - validates
       - validate
@@ -45,6 +47,7 @@ Layout/ClassStructure:
       - after_commit
       - after_create_commit
       - after_update_commit
+      - after_save_commit
       - after_destroy_commit
       - around_create
     other_macros:

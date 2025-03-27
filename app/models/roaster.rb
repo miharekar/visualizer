@@ -2,8 +2,6 @@ class Roaster < ApplicationRecord
   include Airtablable
   include Squishable
 
-  after_save_commit :update_shots, if: -> { saved_change_to_name? }
-
   belongs_to :user
   has_many :coffee_bags, dependent: :destroy
   has_many :shots, through: :coffee_bags
@@ -13,6 +11,8 @@ class Roaster < ApplicationRecord
   end
 
   validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
+
+  after_save_commit :update_shots, if: -> { saved_change_to_name? }
 
   scope :filter_by_name, ->(name) { where("LOWER(roasters.name) = ?", name.downcase.squish) }
   scope :order_by_name, -> { order("LOWER(roasters.name)") }

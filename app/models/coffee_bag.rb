@@ -4,11 +4,9 @@ class CoffeeBag < ApplicationRecord
 
   DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes].freeze
 
-  after_save_commit :update_shots, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
-
   belongs_to :roaster, touch: true
+  has_one :user, through: :roaster
   has_many :shots, dependent: :nullify
-  delegate :user, to: :roaster
 
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
@@ -16,6 +14,8 @@ class CoffeeBag < ApplicationRecord
   end
 
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
+
+  after_save_commit :update_shots, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
 
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
   scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
