@@ -14,7 +14,6 @@ AllCops:
     - db/migrate/*
     - bin/*
     - lib/misc/snippets.rb
-
 Bundler/OrderedGems:
   Enabled: true
 Layout/ClassStructure:
