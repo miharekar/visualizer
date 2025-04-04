@@ -1,8 +1,8 @@
 <% owner = Current.user && shot.user == Current.user %>
 <% show_start_time = owner || !shot.user&.hide_shot_times? %>
 <% show_name = name && shot.user && shot.user.public? && shot.user != Current.user %>
-<% bean_weight = shot.bean_weight.to_f %>
-<% drink_weight = shot.drink_weight.to_f %>
+<% bean_weight = shot.bean_weight_f %>
+<% drink_weight = shot.drink_weight_f %>
 <% ratio = drink_weight / bean_weight %>
 <% tds = shot.drink_tds.to_f %>
 <% ey = shot.drink_ey.to_f %>
@@ -71,13 +71,13 @@
     <% end %>
     <div class="flex flex-wrap items-center gap-x-1">
       <% if bean_weight > 0 %>
-        <span><%= shot.bean_weight %>g</span>
+        <span><%= bean_weight %>g</span>
       <% end %>
       <% if bean_weight > 0 && drink_weight > 0 %>
         <span>&rarr;</span>
       <% end %>
       <% if drink_weight > 0 %>
-        <span><%= shot.drink_weight %>g</span>
+        <span><%= drink_weight %>g</span>
         <% if bean_weight > 0 && drink_weight > 0 && ratio > 0 && ratio.finite? %>
           <span>(1:<%= ratio.round(1) %>)</span>
         <% end %>

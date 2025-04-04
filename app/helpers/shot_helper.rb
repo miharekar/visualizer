@@ -17,13 +17,13 @@ module ShotHelper
       parts << bean_info
     end
 
-    bean_weight = shot.bean_weight.to_f
-    drink_weight = shot.drink_weight.to_f
+    bean_weight = shot.bean_weight_f
+    drink_weight = shot.drink_weight_f
     ratio = drink_weight / bean_weight if bean_weight.positive? && drink_weight.positive?
 
     weights = []
-    weights << "#{shot.bean_weight}g" if bean_weight.positive?
-    weights << "#{shot.drink_weight}g" if drink_weight.positive?
+    weights << "#{bean_weight}g" if bean_weight.positive?
+    weights << "#{drink_weight}g" if drink_weight.positive?
     if weights.any?
       weight_part = weights.join(":")
       weight_part << " (1:#{ratio.round(1)})" if ratio&.positive? && ratio&.finite?

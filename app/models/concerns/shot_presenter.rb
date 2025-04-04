@@ -1,7 +1,7 @@
 module ShotPresenter
   %i[bean_weight drink_weight drink_tds drink_ey].each do |attribute|
     define_method(:"#{attribute}_f") do
-      public_send(attribute).to_f
+      public_send(attribute).to_f.truncate(4)
     end
   end
 
