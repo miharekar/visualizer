@@ -26,7 +26,7 @@ class ShotChart
             end
           end
           v = nil if v.negative?
-          [t.to_f * 1000, v.truncate(4)]
+          [t.to_f * 1000, v&.truncate(4)]
         end
         [[label, label_suffix].join, data]
       end.to_h
