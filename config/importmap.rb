@@ -4,8 +4,8 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 
-pin "highcharts", to: "https://cdn.jsdelivr.net/npm/highcharts@12.1.2/es-modules/masters/highcharts.src.min.js"
-pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@12.1.2/es-modules/masters/modules/annotations.src.min.js"
+pin "highcharts", to: "https://cdn.jsdelivr.net/npm/highcharts@12.2.0/esm/highcharts.js"
+pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@12.2.0/esm/modules/annotations.js"
 
 pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js
 
