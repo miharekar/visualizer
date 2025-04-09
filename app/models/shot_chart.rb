@@ -46,12 +46,18 @@ class ShotChart
       setting = chart_settings.for_label(label)
       next if setting.blank?
 
+      if setting["comparison"]
+        dash_style = setting["dashed"] ? "DashDot" : "ShortDot"
+      else
+        dash_style = setting["dashed"] ? "Dash" : "Solid"
+      end
+
       {
         name: setting["title"],
         data: d,
         color: setting["color"],
         visible: !setting["hidden"],
-        dashStyle: setting["dashed"] ? "Dash" : "Solid",
+        dashStyle: dash_style,
         tooltip: {
           valueDecimals: 2,
           valueSuffix: setting["suffix"]
