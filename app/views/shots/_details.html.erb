@@ -64,8 +64,8 @@
         <% if shot.roast_level.present? %>
           (<%= shot.roast_level %>)
         <% end %>
-        <% if shot.roast_date.present? %>
-          on <%= shot.parsed_roast_date&.to_fs(:long) %>
+        <% if shot.roast_date.present? && shot.parsed_roast_date %>
+          on <%= shot.parsed_roast_date.to_fs(:long) %>
           (<%= time_ago_in_words(shot.parsed_roast_date) %> ago)
         <% end %>
       </div>
