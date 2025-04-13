@@ -12,7 +12,7 @@
     end
   end
 %>
-<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8"  data-controller="turnstile" data-turnstile-site-key-value="<%= Rails.application.credentials.dig(:cloudflare, :site_key) %>">
   <div class="w-full max-w-md space-y-8">
     <div>
       <%= inline_svg_tag "logo.svg", class: "w-auto h-16 mx-auto fill-current text-neutral-900 dark:text-neutral-200" %>
@@ -20,7 +20,7 @@
         Sign up for a new account
       </h2>
     </div>
-    <%= form_with(url: registrations_url, class: "mt-8 space-y-6") do |f| %>
+    <%= form_with(url: registrations_url, class: "mt-8 space-y-6", data: {turnstile_target: "form"}) do |f| %>
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
           <%= f.email_field :email, value: @user.email, autofocus: true, placeholder: "Email address#{extra_email_placeholder}", autocomplete: "email", class: "#{extra_email_classes} appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-t-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm" %>
@@ -32,6 +32,7 @@
           <%= f.password_field :password_confirmation, placeholder: "Password confirmation", autocomplete: "new-password", class: "#{extra_password_classes} appearance-none rounded-none relative block w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-b-md focus:outline-none focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:z-10 sm:text-sm" %>
         </div>
       </div>
+      <div class="flex justify-center" data-turnstile-target="container"></div>
       <div>
         <button class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md group bg-terracotta-600 hover:bg-terracotta-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" type="submit">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">

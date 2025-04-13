@@ -1,4 +1,6 @@
 class RegistrationsController < ApplicationController
+  include Turnstile
+
   def new
     @user = User.new
   end
@@ -6,7 +8,7 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if @user.save
+    if verify_turnstile && @user.save
       start_new_session_for(@user)
       redirect_to root_path, notice: "Welcome to the Visualizer!"
     else
