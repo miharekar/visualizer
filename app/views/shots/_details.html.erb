@@ -66,6 +66,7 @@
         <% end %>
         <% if shot.roast_date.present? %>
           on <%= shot.parsed_roast_date&.to_fs(:long) %>
+          (<%= time_ago_in_words(shot.parsed_roast_date) %> ago)
         <% end %>
       </div>
     <% end %>
