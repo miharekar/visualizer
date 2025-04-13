@@ -25,7 +25,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar, service: :cloudinary
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true, format: {with: /@/, message: "must be valid"}
   validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
