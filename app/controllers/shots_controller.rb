@@ -108,7 +108,7 @@ class ShotsController < ApplicationController
 
   def coffee_bag_form
     @coffee_bag = CoffeeBag.find_by(id: params[:coffee_bag])
-    @roasters = Current.user.roasters.order_by_name.with_at_least_one_coffee_bag
+    @roasters = Current.user.roasters.order_by_name
     @roaster = params.key?(:roaster_id) ? Current.user.roasters.find_by(id: params[:roaster_id]) : @coffee_bag&.roaster
     @coffee_bags = @roaster&.coffee_bags&.order_by_roast_date
 
