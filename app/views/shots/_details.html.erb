@@ -67,7 +67,7 @@
         <% if shot.roast_date.present? && shot.parsed_roast_date %>
           on <%= shot.parsed_roast_date.to_fs(:long) %>
           <% if show_start_time %>
-            (<%= distance_of_time_in_words(shot.parsed_roast_date, shot.start_time) %> after roast)
+            (<%= pluralize((shot.start_time.to_date - shot.parsed_roast_date.to_date).to_i, "day") %> after roast)
           <% end %>
         <% end %>
       </div>
