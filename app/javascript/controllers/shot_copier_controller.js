@@ -1,0 +1,99 @@
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  async from(event) {
+    const shotId = event.currentTarget.value
+    if (!shotId) return
+
+    try {
+      const response = await fetch(`/api/shots/${shotId}?essentials=true`)
+      if (!response.ok) throw new Error("Failed to fetch shot data")
+      const data = await response.json()
+      this.fillFormFields(data)
+    } catch (error) {
+      console.error("Error copying shot data:", error)
+      alert("Error copying shot data. Something went wrong. See console for details.")
+    }
+  }
+
+  fillFormFields(data) {
+    const fields = ["barista", "grinder_model", "grinder_setting", "bean_brand", "bean_type", "roast_date", "roast_level", "espresso_notes", "bean_notes"]
+    fields.forEach(field => this.setFieldValue(`shot[${field}]`, data[field]))
+
+    if (data.metadata) {
+      Object.entries(data.metadata).forEach(([key, value]) => {
+        this.setFieldValue(`shot[metadata][${key}]`, value)
+      })
+    }
+
+    if (data.tags) {
+      const tagValue = data.tags.join(",")
+      this.updateField(document.getElementById('tag_list'), tagValue, true)
+      this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
+    }
+  }
+
+  updateField(field, newValue, isTags = false) {
+    const currentValue = field.value || ''
+
+    if (field.dataset.previousValue === undefined) {
+      field.dataset.previousValue = currentValue
+    }
+
+    const originalValue = field.dataset.previousValue
+    if (currentValue != newValue) {
+      field.value = newValue
+
+
+      if (isTags) {
+        document.getElementById('tags_input').classList.add("!bg-oxford-blue-50")
+      } else {
+        field.classList.add("!bg-oxford-blue-50")
+      }
+
+      const label = isTags ? document.querySelector(`label[for="tags_input"]`) : document.querySelector(`label[for="${field.id}"]`)
+      const actionName = isTags ? "rollbackTags" : "rollback"
+      if (label && !label.querySelector(`[data-action*="${actionName}"]`)) {
+        const originalText = label.innerHTML
+        label.innerHTML = `<div class="flex justify-between items-center"><span>${originalText}</span><span class="cursor-pointer font-light standard-link ml-2" data-action="click->shot-copier#${actionName}" title="${originalValue}">Revert</span></div>`
+      }
+    }
+  }
+
+  setFieldValue = (name, value) => {
+    const field = document.querySelector(`[name="${name}"]`)
+    if (!field) return
+
+    this.updateField(field, value || '', false)
+  }
+
+  rollback(event) {
+    const label = event.target.closest("label")
+    const el = document.getElementById(label.getAttribute("for"))
+
+    this.handleRollback(el, label)
+  }
+
+  rollbackTags(event) {
+    const label = event.target.closest("label")
+    document.getElementById('tags_input').classList.remove("!bg-oxford-blue-50")
+
+    this.handleRollback(document.getElementById('tag_list'), label, () => {
+      this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
+    })
+  }
+
+  handleRollback(field, label, renderCallback = null) {
+    if (field && field.dataset.previousValue !== undefined) {
+      field.value = field.dataset.previousValue
+      field.classList.remove("!bg-oxford-blue-50")
+      delete field.dataset.previousValue
+
+      label.innerHTML = label.querySelector('div > span').innerHTML
+
+      if (renderCallback) {
+        renderCallback()
+      }
+    }
+  }
+}
