@@ -46,6 +46,12 @@ export default class extends Controller {
     this.preventClick = true
   }
 
+  backgroundClick(event) {
+    if (event.target && !event.target.closest('button')) {
+      this.hide()
+    }
+  }
+
   keydown(event) {
     if (this.modalShown) {
       if (event.keyCode == 27) {
