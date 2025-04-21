@@ -31,6 +31,14 @@ export default class extends Controller {
       this.updateField(document.getElementById('tag_list'), tagValue, true)
       this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
     }
+
+    if (data.coffee_bag_id && data.roaster_id) {
+      const frame = document.getElementById("coffee_bag_fields")
+      if (frame) {
+        frame.src = `/shots/coffee_bag_form?coffee_bag=${data.coffee_bag_id}`
+        frame.reload()
+      }
+    }
   }
 
   updateField(field, newValue, isTags = false) {
