@@ -66,6 +66,37 @@ export default class extends Controller {
 
   setFieldValue = (name, value) => {
     const field = document.querySelector(`[name="${name}"]`)
-    if (field) field.value = value || ""
+    if (!field) return
+
+    const currentValue = field.value || ''
+    const newValue = value || ''
+
+    if (currentValue != newValue) {
+      if (field.dataset.previousValue === undefined) {
+        field.dataset.previousValue = currentValue
+      }
+
+      field.value = newValue
+      field.classList.add("!bg-oxford-blue-50")
+
+      const label = document.querySelector(`label[for="${field.id}"]`)
+
+      if (label && !label.querySelector('[data-action*="related-shots#rollback"]')) {
+        const originalText = label.innerHTML
+        label.innerHTML = `<div class="flex justify-between items-center"><span>${originalText}</span><span class="cursor-pointer font-light standard-link ml-2" data-action="click->related-shots#rollback" title="${currentValue}">Revert</span></div>`
+      }
+    }
+  }
+
+  rollback(event) {
+    const label = event.target.closest("label")
+    const el = document.getElementById(label.getAttribute("for"))
+
+    if (el && el.dataset.previousValue !== undefined) {
+      el.value = el.dataset.previousValue
+      el.classList.remove("!bg-oxford-blue-50")
+      delete el.dataset.previousValue
+      label.innerHTML = label.querySelector('div > span').innerHTML
+    }
   }
 }
