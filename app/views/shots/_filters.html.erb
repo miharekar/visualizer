@@ -15,7 +15,7 @@
           <%= f.label :min_enjoyment, class: "standard-label" %>
           <div class="flex items-center mt-1" data-controller="range">
             <% min = params[:min_enjoyment].presence || 0 %>
-            <div class="size-8 rounded-full" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
+            <div class="rounded-full size-8" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
               <div class="py-1 text-center text-white" data-range-target="text">
                 <%= min %>
               </div>
@@ -27,7 +27,7 @@
           <%= f.label :max_enjoyment, class: "standard-label" %>
           <div class="flex items-center mt-1" data-controller="range">
             <% max = params[:max_enjoyment].presence || 100 %>
-            <div class="size-8 rounded-full" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
+            <div class="rounded-full size-8" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
               <div class="py-1 text-center text-white" data-range-target="text">
                 <%= max %>
               </div>

@@ -3,7 +3,7 @@
     <dt>
       <% if defined?(icon) %>
         <div class="absolute p-3 rounded-md bg-terracotta-500">
-          <svg class="size-6 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <svg class="text-white size-6 dark:text-black" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <% case icon %>
             <% when :stack %>
               <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
@@ -44,14 +44,14 @@
         <% if diff.respond_to?(:positive?) %>
           <% if diff.positive? %>
             <p class="flex items-baseline ml-2 text-sm font-semibold text-green-600">
-              <svg class="self-center flex-shrink-0 size-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+              <svg class="self-center flex-shrink-0 text-green-500 size-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
               </svg>
               <%= diff %>
             </p>
           <% elsif diff.negative? %>
             <p class="flex items-baseline ml-2 text-sm font-semibold text-red-600">
-              <svg class="self-center flex-shrink-0 size-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+              <svg class="self-center flex-shrink-0 text-red-500 size-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
               </svg>
               <%= -diff %>

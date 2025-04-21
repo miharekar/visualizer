@@ -26,10 +26,10 @@
             <div>
               <button type="button" class="relative flex items-center max-w-xs text-sm bg-white rounded focus:outline-none focus:ring-2 focus:ring-terracotta-500 focus:ring-offset-2 dark:ring-offset-black" data-action="click->menu#transform click@window->menu#hide" data-menu-target="button">
                 <span class="absolute -inset-1.5"></span>
-                <img class="size-8 rounded" src="<%= avatar_url(Current.user, 64) %>">
+                <img class="rounded size-8" src="<%= avatar_url(Current.user, 64) %>">
               </button>
               <% if update_count > 0 %>
-                <span class="absolute top-0 right-0 inline-block size-3 rounded-full transform translate-x-1/2 -translate-y-1/2 bg-terracotta-600"></span>
+                <span class="absolute top-0 right-0 inline-block rounded-full size-3 transform translate-x-1/2 -translate-y-1/2 bg-terracotta-600"></span>
               <% end %>
             </div>
             <div class="absolute right-0 z-40 hidden w-56 mt-2 bg-white shadow-lg origin-top-right divide-y rounded-md divide-neutral-100 dark:divide-neutral-700 dark:bg-neutral-950 ring-1 ring-black/5 focus:outline-none" data-menu-target="transformable" data-transition-enter="transition ease-out duration-200" data-transition-enter-end="transform opacity-100 scale-100" data-transition-enter-start="transform opacity-0 scale-95" data-transition-leave="transition ease-in duration-75" data-transition-leave-end="transform opacity-0 scale-95" data-transition-leave-start="transform opacity-100 scale-100">
@@ -62,7 +62,7 @@
                   <div class="flex">
                     <div class="text-sm grow text-neutral-700 dark:text-neutral-200">Updates</div>
                     <% if update_count > 0 %>
-                      <div class="size-5 rounded-full bg-terracotta-600">
+                      <div class="rounded-full size-5 bg-terracotta-600">
                         <div class="text-sm text-center text-white dark:text-black"><%= update_count %></div>
                       </div>
                     <% end %>
@@ -122,7 +122,7 @@
             <div class="flex items-center">
               <div class="grow">Updates</div>
               <% if update_count > 0 %>
-                <div class="size-5 rounded-full bg-terracotta-600">
+                <div class="rounded-full size-5 bg-terracotta-600">
                   <div class="text-sm text-center text-white">
                     <%= update_count %>
                   </div>

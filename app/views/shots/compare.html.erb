@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+<div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
     <div class="flex-1">
       <%= render "details", shot: @shot, name: true %>
@@ -10,13 +10,13 @@
 </div>
 <% if @chart %>
   <% if Current.user&.premium? %>
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <div class="text-center text-lg text-neutral-900 dark:text-neutral-100">
+    <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
         Adjust comparison timing
       </div>
       <div class="flex">
-        <div class="flex flex-col grow mr-2 mt-2">
-          <input id="compare-range" class="shot-range pt-2 flex-1 dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>">
+        <div class="flex flex-col mt-2 mr-2 grow">
+          <input id="compare-range" class="flex-1 pt-2 shot-range dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>">
           <div class="flex pt-2">
             <div class="text-neutral-600 dark:text-neutral-400">
               -<%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
@@ -27,14 +27,14 @@
             </div>
           </div>
         </div>
-        <button id="compare-range-reset" class="items-center px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm font-medium text-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900">Reset</button>
+        <button id="compare-range-reset" class="items-center px-4 py-2 text-sm font-medium bg-white border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900">Reset</button>
       </div>
     </div>
   <% end %>
-  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
     <div id="shot-chart"></div>
   </div>
-  <div class="max-w-7xl mx-auto pb-8 sm:px-6 lg:px-8">
+  <div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
     <div id="temperature-chart"></div>
   </div>
   <script>

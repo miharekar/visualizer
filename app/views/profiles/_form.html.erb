@@ -6,7 +6,7 @@
           <div class="col-span-3 sm:col-span-2">
             <label class="standard-label">Avatar</label>
             <div class="flex items-center mt-2" data-controller="image-form">
-              <img class="w-12 h-12 rounded" src="<%= avatar_url(@profile, 96) %>">
+              <img class="rounded size-12" src="<%= avatar_url(@profile, 96) %>">
               <%= f.label :avatar, "Change", data: {image_form_target: "label"}, class: "cursor-pointer ml-3 bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" %>
               <%= f.file_field :avatar, data: {action: "input->image-form#update"}, class: "hidden" %>
             </div>

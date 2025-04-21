@@ -101,14 +101,14 @@ input[type="range"].shot-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   bottom: 8px;
   cursor: -webkit-grab;
-  @apply relative h-5 w-5 bg-white dark:bg-neutral-800 border-2 border-solid border-neutral-700 dark:border-neutral-300 rounded-full;
+  @apply relative size-5 bg-white dark:bg-neutral-800 border-2 border-solid border-neutral-700 dark:border-neutral-300 rounded-full;
 }
 
 input[type="range"].shot-range::-moz-range-thumb {
   -moz-appearance: none;
   bottom: 8px;
   cursor: -moz-grab;
-  @apply relative h-5 w-5 bg-white dark:bg-neutral-800 border-2 border-solid border-neutral-700 dark:border-neutral-300 rounded-full;
+  @apply relative size-5 bg-white dark:bg-neutral-800 border-2 border-solid border-neutral-700 dark:border-neutral-300 rounded-full;
 }
 
 input[type="range"].shot-range::-webkit-slider-thumb:active {

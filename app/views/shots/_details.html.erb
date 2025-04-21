@@ -10,7 +10,7 @@
 <div class="flex">
   <div class="shrink-0">
     <% if has_enjoyment %>
-      <div class="flex items-center justify-center w-12 h-12 rounded-full" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+      <div class="flex items-center justify-center rounded-full size-12" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
         <div class="py-1 text-center text-white">
           <%= shot.espresso_enjoyment %>
         </div>
@@ -23,7 +23,7 @@
     </a>
     <div class="mt-1 text-base text-neutral-600 dark:text-neutral-400">
       <% if show_name %>
-        <div class="flex gap-x-1 items-center">
+        <div class="flex items-center gap-x-1">
           <div>
             <%= shot.user.display_name %>
           </div>
