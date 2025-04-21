@@ -90,14 +90,14 @@
           <% end %>
         <% else %>
           <p class="text-sm text-neutral-500 dark:text-neutral-400">
-            Add custom fields, private notes, and images to your shots by
+            Add tags, custom fields, private notes, and images to your shots by
             <%= link_to "upgrading to Premium", premium_index_path, class: "standard-link" %>.
           </p>
         <% end %>
         <% if Current.user.premium? %>
           <div data-controller="tags" id="tags_controller">
             <%= label_tag :tags_input, "Tags", class: "standard-label" %>
-            <div class="flex flex-wrap mt-1 gap-1" data-tags-target="display">
+            <div class="flex flex-wrap gap-1 mt-1" data-tags-target="display">
             </div>
             <div class="mt-2">
               <input type="text" name="tags_input" id="tags_input" class="standard-input" placeholder="Add tags..." data-tags-target="input" data-action="keydown->tags#inputTag" autocomplete="on">

@@ -26,7 +26,7 @@ export default class extends Controller {
       })
     }
 
-    if (data.tags) {
+    if (data.tags && document.getElementById('tag_list')) {
       const tagValue = data.tags.join(",")
       this.updateField(document.getElementById('tag_list'), tagValue, true)
       this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
