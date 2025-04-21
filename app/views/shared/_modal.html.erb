@@ -1,20 +1,19 @@
 <div class="relative z-50 hidden" data-modal-target="toggleable" data-action="keydown@window->modal#keydown">
-  <div class="fixed inset-0 overflow-y-auto">
-    <div class="flex items-end justify-center px-4 pt-4 pb-20 text-center min-h-dvh sm:block sm:p-0">
-      <div class="fixed inset-0 transition-opacity" data-transition-enter="ease-out duration-300" data-transition-enter-start="opacity-0" data-transition-enter-end="opacity-100" data-transition-leave="ease-in duration-200" data-transition-leave-start="opacity-100" data-transition-leave-end="opacity-0" data-modal-target="toggleable">
-        <div class="absolute inset-0 opacity-75 bg-neutral-500" data-action="click->modal#hide"></div>
-      </div>
-      <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-      <div class="inline-block overflow-hidden text-left align-bottom bg-white rounded-lg shadow-xl transition-all transform dark:bg-neutral-900 sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" data-transition-enter="ease-out duration-300" data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100" data-transition-leave="ease-in duration-200" data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100" data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-modal-target="toggleable">
-        <div class="px-4 pt-5 pb-4 bg-white dark:bg-neutral-900 sm:p-6 sm:pb-4">
+  <div class="fixed inset-0 transition-opacity" data-transition-enter="ease-out duration-300" data-transition-enter-start="opacity-0" data-transition-enter-end="opacity-100" data-transition-leave="ease-in duration-200" data-transition-leave-start="opacity-100" data-transition-leave-end="opacity-0" data-modal-target="toggleable">
+    <div class="fixed inset-0 bg-neutral-500/75" data-action="click->modal#hide"></div>
+  </div>
+  <div class="fixed inset-0 z-50 w-screen overflow-y-auto">
+    <div class="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
+      <div class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-neutral-900 sm:my-8 sm:w-full sm:max-w-lg" data-transition-enter="ease-out duration-300" data-transition-enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-transition-enter-end="opacity-100 translate-y-0 sm:scale-100" data-transition-leave="ease-in duration-200" data-transition-leave-start="opacity-100 translate-y-0 sm:scale-100" data-transition-leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" data-modal-target="toggleable">
+        <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div class="sm:flex sm:items-start">
-            <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full shrink-0 dark:bg-red-900 sm:mx-0 sm:h-10 sm:w-10">
-              <svg class="size-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex items-center justify-center mx-auto bg-red-100 rounded-full size-12 shrink-0 dark:bg-red-900 sm:mx-0 sm:size-10">
+              <svg class="text-red-600 size-6 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
               </svg>
             </div>
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 id="modal-headline" class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100" data-modal-target="headline"></h3>
+              <h3 id="modal-headline" class="text-lg font-semibold text-neutral-900 dark:text-neutral-100" data-modal-target="headline"></h3>
               <div class="mt-2">
                 <p class="text-sm text-neutral-500 dark:text-neutral-400" data-modal-target="text"></p>
               </div>
@@ -22,9 +21,9 @@
           </div>
         </div>
         <div class="px-4 py-3 bg-neutral-50 dark:bg-neutral-800 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button type="button" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" data-action="click->modal#performClick" data-modal-target="button">
+          <button type="button" class="inline-flex justify-center w-full px-3 py-2 text-sm font-semibold text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto" data-action="click->modal#performClick" data-modal-target="button">
           </button>
-          <button type="button" class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium bg-white border rounded-md shadow-sm border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" data-action="click->modal#hide">
+          <button type="button" class="inline-flex justify-center w-full px-3 py-2 mt-3 text-sm font-semibold bg-white rounded-md shadow-sm dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 ring-1 ring-inset ring-neutral-300 dark:ring-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 sm:mt-0 sm:w-auto" data-action="click->modal#hide">
             Cancel
           </button>
         </div>

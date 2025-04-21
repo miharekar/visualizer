@@ -39,7 +39,6 @@ gem "solid_queue"
 gem "sqlite3"
 gem "stimulus-rails"
 gem "tailwindcss-rails"
-gem "tailwindcss-ruby", "4.1.3"
 gem "thruster"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails", github: "hotwired/turbo-rails"
@@ -58,7 +57,6 @@ group :development do
   gem "annotaterb"
   gem "benchmark-ips"
   gem "brakeman", require: false
-  gem "hotwire-spark"
   gem "letter_opener"
   gem "rubocop-minitest", require: false
   gem "rubocop-rails-omakase", require: false

@@ -185,10 +185,6 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.1.2)
     hashie (5.0.0)
-    hotwire-spark (0.1.13)
-      listen
-      rails (>= 7.0.0)
-      zeitwerk
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     image_processing (1.14.0)
@@ -499,9 +495,9 @@ GEM
     tailwindcss-rails (4.2.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.3-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.3-arm64-darwin)
-    tailwindcss-ruby (4.1.3-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.4-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.4-arm64-darwin)
+    tailwindcss-ruby (4.1.4-x86_64-linux-gnu)
     temple (0.10.3)
     thor (1.3.2)
     thruster (0.1.12-aarch64-linux)
@@ -569,7 +565,6 @@ DEPENDENCIES
   debug
   doorkeeper
   factory_bot_rails
-  hotwire-spark
   image_processing
   importmap-rails
   inline_svg
@@ -603,7 +598,6 @@ DEPENDENCIES
   sqlite3
   stimulus-rails
   tailwindcss-rails
-  tailwindcss-ruby (= 4.1.3)
   thruster
   tickly!
   turbo-rails!
