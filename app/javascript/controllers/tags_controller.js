@@ -14,9 +14,7 @@ export default class extends Controller {
 
     if (event.code === "Enter" || event.code === "Comma") {
       event.preventDefault()
-      const value = this.inputTarget.value
-        .trim()                 // Remove leading/trailing whitespace
-        .replace(/[^\w\s-]/g, '') // Only allow letters, numbers, spaces, and hyphens
+      const value = this.inputTarget.value.trim().replace(/[^\w\s-]/g, "")
 
       if (value) {
         this.tags = value

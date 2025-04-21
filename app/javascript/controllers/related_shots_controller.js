@@ -57,6 +57,11 @@ export default class extends Controller {
         this.setFieldValue(`shot[metadata][${key}]`, value)
       })
     }
+
+    if (data.tags) {
+      document.getElementById('tag_list').value = data.tags.join(",")
+      this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
+    }
   }
 
   setFieldValue = (name, value) => {
