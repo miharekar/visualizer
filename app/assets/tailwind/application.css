@@ -9,29 +9,31 @@
   --font-sans: "Inter var", ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-serif: "Ragazzi", ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
 
-  --color-terracotta-50: oklch(96.23% 0.016 32.01);
-  --color-terracotta-100: oklch(92.42% 0.034 26.81);
-  --color-terracotta-200: oklch(84.94% 0.07 28.49);
-  --color-terracotta-300: oklch(77.93% 0.109 28.8);
-  --color-terracotta-400: oklch(71.53% 0.148 30.64);
+  /* https://www.tints.dev/terracotta/EE5B45 */
+  --color-terracotta-50: oklch(98.13% 0.008 27.23);
+  --color-terracotta-100: oklch(95.16% 0.021 24.79);
+  --color-terracotta-200: oklch(89.61% 0.046 28.03);
+  --color-terracotta-300: oklch(83.17% 0.079 28.57);
+  --color-terracotta-400: oklch(75.52% 0.124 29.37);
   --color-terracotta-500: oklch(66.02% 0.186 31.04);
-  --color-terracotta-600: oklch(58.98% 0.214 31.63);
-  --color-terracotta-700: oklch(47.82% 0.171 31.71);
-  --color-terracotta-800: oklch(35.98% 0.124 31.8);
-  --color-terracotta-900: oklch(23.15% 0.072 32.58);
-  --color-terracotta-950: oklch(16.11% 0.041 33.73);
+  --color-terracotta-600: oklch(61.76% 0.217 31.6);
+  --color-terracotta-700: oklch(56.25% 0.204 31.62);
+  --color-terracotta-800: oklch(48.84% 0.175 31.6);
+  --color-terracotta-900: oklch(38.14% 0.133 31.71);
+  --color-terracotta-950: oklch(32.89% 0.112 31.73);
 
-  --color-oxford-blue-50: oklch(95.45% 0.008 228.85);
-  --color-oxford-blue-100: oklch(91.61% 0.014 233.76);
-  --color-oxford-blue-200: oklch(82.14% 0.028 234.05);
-  --color-oxford-blue-300: oklch(73.44% 0.042 234.48);
-  --color-oxford-blue-400: oklch(63.65% 0.058 236.32);
+  /* https://tints.dev/oxfordblue/4F748B */
+  --color-oxford-blue-50: oklch(96.87% 0.005 247.88);
+  --color-oxford-blue-100: oklch(93.89% 0.009 232.37);
+  --color-oxford-blue-200: oklch(86.85% 0.021 238.7);
+  --color-oxford-blue-300: oklch(79.1% 0.033 233.43);
+  --color-oxford-blue-400: oklch(68.71% 0.049 234.78);
   --color-oxford-blue-500: oklch(54.03% 0.055 236.46);
-  --color-oxford-blue-600: oklch(45.98% 0.046 237.81);
-  --color-oxford-blue-700: oklch(38.49% 0.037 235.76);
-  --color-oxford-blue-800: oklch(29.18% 0.026 235.18);
-  --color-oxford-blue-900: oklch(20.43% 0.015 239.49);
-  --color-oxford-blue-950: oklch(14.58% 0.008 227.73);
+  --color-oxford-blue-600: oklch(50.68% 0.051 236.28);
+  --color-oxford-blue-700: oklch(45.98% 0.046 237.81);
+  --color-oxford-blue-800: oklch(39.28% 0.038 237.6);
+  --color-oxford-blue-900: oklch(31.46% 0.029 234.7);
+  --color-oxford-blue-950: oklch(27.26% 0.023 235.76);
 }
 
 @layer base {

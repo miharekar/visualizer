@@ -54,9 +54,9 @@ export default class extends Controller {
 
 
       if (isTags) {
-        document.getElementById('tags_input').classList.add("!bg-oxford-blue-50")
+        document.getElementById('tags_input').classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
       } else {
-        field.classList.add("!bg-oxford-blue-50")
+        field.classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
       }
 
       const label = isTags ? document.querySelector(`label[for="tags_input"]`) : document.querySelector(`label[for="${field.id}"]`)
@@ -84,7 +84,7 @@ export default class extends Controller {
 
   rollbackTags(event) {
     const label = event.target.closest("label")
-    document.getElementById('tags_input').classList.remove("!bg-oxford-blue-50")
+    document.getElementById('tags_input').classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
 
     this.handleRollback(document.getElementById('tag_list'), label, () => {
       this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
@@ -94,7 +94,7 @@ export default class extends Controller {
   handleRollback(field, label, renderCallback = null) {
     if (field && field.dataset.previousValue !== undefined) {
       field.value = field.dataset.previousValue
-      field.classList.remove("!bg-oxford-blue-50")
+      field.classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
       delete field.dataset.previousValue
 
       label.innerHTML = label.querySelector('div > span').innerHTML
