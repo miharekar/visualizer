@@ -10,7 +10,7 @@ pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@12.2.
 pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js
 
 # use bin/importmap update to update the local ones below
-pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.11
+pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
 pin "el-transition" # @0.0.7
 pin "match-sorter" # @8.0.0
 pin "remove-accents" # @0.5.0
