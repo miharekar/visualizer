@@ -100,7 +100,7 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.7.2)
     annotaterb (4.14.0)
-    appsignal (4.5.9)
+    appsignal (4.5.10)
       logger
       rack (>= 2.0.0)
     ast (2.4.3)
