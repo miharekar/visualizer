@@ -12,7 +12,7 @@ pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn
 # use bin/importmap update to update the local ones below
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
 pin "el-transition" # @0.0.7
-pin "match-sorter" # @8.0.0
+pin "match-sorter" # @8.0.1
 pin "remove-accents" # @0.5.0
 pin "stimulus-autocomplete" # @3.1.0
 

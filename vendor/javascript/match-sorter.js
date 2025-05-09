@@ -1,19 +1,19 @@
-// match-sorter@8.0.0 downloaded from https://ga.jspm.io/npm:match-sorter@8.0.0/dist/match-sorter.esm.js
+// match-sorter@8.0.1 downloaded from https://ga.jspm.io/npm:match-sorter@8.0.1/dist/match-sorter.esm.js
 
-import e from"remove-accents";
+import n from"remove-accents";
 /**
  * @name match-sorter
  * @license MIT license.
  * @copyright (c) 2020 Kent C. Dodds
  * @author Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)
- */const t={CASE_SENSITIVE_EQUAL:7,EQUAL:6,STARTS_WITH:5,WORD_STARTS_WITH:4,CONTAINS:3,ACRONYM:2,MATCHES:1,NO_MATCH:0};const defaultBaseSortFn=(e,t)=>String(e.rankedValue).localeCompare(String(t.rankedValue))
+ */const t={CASE_SENSITIVE_EQUAL:7,EQUAL:6,STARTS_WITH:5,WORD_STARTS_WITH:4,CONTAINS:3,ACRONYM:2,MATCHES:1,NO_MATCH:0};const e=(n,t)=>String(n.rankedValue).localeCompare(String(t.rankedValue))
 /**
  * Takes an array of items and a value and returns a new array with the items that match the given value
  * @param {Array} items - the items to sort
  * @param {String} value - the value to use for ranking
  * @param {Object} options - Some options to configure the sorter
  * @return {Array} - the new sorted array
- */;function matchSorter(e,n,r){r===void 0&&(r={});const{keys:o,threshold:s=t.MATCHES,baseSort:a=defaultBaseSortFn,sorter:l=(e=>e.sort(((e,t)=>sortRankedValues(e,t,a))))}=r;const i=e.reduce(reduceItemsToRanked,[]);return l(i).map((e=>{let{item:t}=e;return t}));function reduceItemsToRanked(e,t,a){const l=getHighestRanking(t,o,n,r);const{rank:i,keyThreshold:c=s}=l;i>=c&&e.push({...l,item:t,index:a});return e}}matchSorter.rankings=t;
+ */;function r(n,r,s){s===void 0&&(s={});const{keys:l,threshold:c=t.MATCHES,baseSort:u=e,sorter:a=n=>n.sort(((n,t)=>i(n,t,u)))}=s;const f=n.reduce(h,[]);return a(f).map((n=>{let{item:t}=n;return t}));function h(n,t,e){const i=o(t,l,r,s);const{rank:u,keyThreshold:a=c}=i;u>=a&&n.push({...i,item:t,index:e});return n}}r.rankings=t;
 /**
  * Gets the highest ranking for value for the given item based on its values for the given keys
  * @param {*} item - the item to rank
@@ -21,20 +21,20 @@ import e from"remove-accents";
  * @param {String} value - the value to rank against
  * @param {Object} options - options to control the ranking
  * @return {{rank: Number, keyIndex: Number, keyThreshold: Number}} - the highest ranking
- */function getHighestRanking(e,n,r,o){if(!n){const t=e;return{rankedValue:t,rank:getMatchRanking(t,r,o),keyIndex:-1,keyThreshold:o.threshold}}const s=getAllValuesToRank(e,n);return s.reduce(((e,n,s)=>{let{rank:a,rankedValue:l,keyIndex:i,keyThreshold:c}=e;let{itemValue:u,attributes:g}=n;let h=getMatchRanking(u,r,o);let k=l;const{minRanking:f,maxRanking:d,threshold:T}=g;h<f&&h>=t.MATCHES?h=f:h>d&&(h=d);if(h>a){a=h;i=s;c=T;k=u}return{rankedValue:k,rank:a,keyIndex:i,keyThreshold:c}}),{rankedValue:e,rank:t.NO_MATCH,keyIndex:-1,keyThreshold:o.threshold})}
+ */function o(n,e,r,o){if(!e){const t=n;return{rankedValue:t,rank:s(t,r,o),keyIndex:-1,keyThreshold:o.threshold}}const l=h(n,e);return l.reduce(((n,e,l)=>{let{rank:c,rankedValue:i,keyIndex:u,keyThreshold:a}=n;let{itemValue:f,attributes:h}=e;let k=s(f,r,o);let T=i;const{minRanking:d,maxRanking:A,threshold:y}=h;k<d&&k>=t.MATCHES?k=d:k>A&&(k=A);if(k>c){c=k;u=l;a=y;T=f}return{rankedValue:T,rank:c,keyIndex:u,keyThreshold:a}}),{rankedValue:n,rank:t.NO_MATCH,keyIndex:-1,keyThreshold:o.threshold})}
 /**
  * Gives a rankings score based on how well the two strings match.
  * @param {String} testString - the string to test against
  * @param {String} stringToRank - the string to rank
  * @param {Object} options - options for the match (like keepDiacritics for comparison)
  * @returns {Number} the ranking for how well stringToRank matches testString
- */function getMatchRanking(e,n,r){e=prepareValueForComparison(e,r);n=prepareValueForComparison(n,r);if(n.length>e.length)return t.NO_MATCH;if(e===n)return t.CASE_SENSITIVE_EQUAL;e=e.toLowerCase();n=n.toLowerCase();return e===n?t.EQUAL:e.startsWith(n)?t.STARTS_WITH:e.includes(` ${n}`)?t.WORD_STARTS_WITH:e.includes(n)?t.CONTAINS:n.length===1?t.NO_MATCH:getAcronym(e).includes(n)?t.ACRONYM:getClosenessRanking(e,n)}
+ */function s(n,e,r){n=u(n,r);e=u(e,r);if(e.length>n.length)return t.NO_MATCH;if(n===e)return t.CASE_SENSITIVE_EQUAL;n=n.toLowerCase();e=e.toLowerCase();return n===e?t.EQUAL:n.startsWith(e)?t.STARTS_WITH:n.includes(` ${e}`)?t.WORD_STARTS_WITH:n.includes(e)?t.CONTAINS:e.length===1?t.NO_MATCH:l(n).includes(e)?t.ACRONYM:c(n,e)}
 /**
  * Generates an acronym for a string.
  *
  * @param {String} string the string for which to produce the acronym
  * @returns {String} the acronym
- */function getAcronym(e){let t="";const n=e.split(" ");n.forEach((e=>{const n=e.split("-");n.forEach((e=>{t+=e.substr(0,1)}))}));return t}
+ */function l(n){let t="";const e=n.split(" ");e.forEach((n=>{const e=n.split("-");e.forEach((n=>{t+=n.substr(0,1)}))}));return t}
 /**
  * Returns a score based on how spread apart the
  * characters from the stringToRank are within the testString.
@@ -44,41 +44,41 @@ import e from"remove-accents";
  * @param {String} stringToRank - the string to rank
  * @returns {Number} the number between rankings.MATCHES and
  * rankings.MATCHES + 1 for how well stringToRank matches testString
- */function getClosenessRanking(e,n){let r=0;let o=0;function findMatchingCharacter(e,t,n){for(let o=n,s=t.length;o<s;o++){const n=t[o];if(n===e){r+=1;return o+1}}return-1}function getRanking(e){const o=1/e;const s=r/n.length;const a=t.MATCHES+s*o;return a}const s=findMatchingCharacter(n[0],e,0);if(s<0)return t.NO_MATCH;o=s;for(let r=1,s=n.length;r<s;r++){const s=n[r];o=findMatchingCharacter(s,e,o);const a=o>-1;if(!a)return t.NO_MATCH}const a=o-s;return getRanking(a)}
+ */function c(n,e){let r=0;let o=0;function s(n,t,e){for(let o=e,s=t.length;o<s;o++){const e=t[o];if(e===n){r+=1;return o+1}}return-1}function l(n){const o=1/n;const s=r/e.length;const l=t.MATCHES+s*o;return l}const c=s(e[0],n,0);if(c<0)return t.NO_MATCH;o=c;for(let r=1,l=e.length;r<l;r++){const l=e[r];o=s(l,n,o);const c=o>-1;if(!c)return t.NO_MATCH}const i=o-c;return l(i)}
 /**
  * Sorts items that have a rank, index, and keyIndex
  * @param {Object} a - the first item to sort
  * @param {Object} b - the second item to sort
  * @return {Number} -1 if a should come first, 1 if b should come first, 0 if equal
- */function sortRankedValues(e,t,n){const r=-1;const o=1;const{rank:s,keyIndex:a}=e;const{rank:l,keyIndex:i}=t;const c=s===l;return c?a===i?n(e,t):a<i?r:o:s>l?r:o}
+ */function i(n,t,e){const r=-1;const o=1;const{rank:s,keyIndex:l}=n;const{rank:c,keyIndex:i}=t;const u=s===c;return u?l===i?e(n,t):l<i?r:o:s>c?r:o}
 /**
  * Prepares value for comparison by stringifying it, removing diacritics (if specified)
  * @param {String} value - the value to clean
  * @param {Object} options - {keepDiacritics: whether to remove diacritics}
  * @return {String} the prepared value
- */function prepareValueForComparison(t,n){let{keepDiacritics:r}=n;t=`${t}`;r||(t=e(t));return t}
+ */function u(t,e){let{keepDiacritics:r}=e;t=`${t}`;r||(t=n(t));return t}
 /**
  * Gets value for key in item at arbitrarily nested keypath
  * @param {Object} item - the item
  * @param {Object|Function} key - the potentially nested keypath or property callback
  * @return {Array} - an array containing the value(s) at the nested keypath
- */function getItemValues(e,t){typeof t==="object"&&(t=t.key);let n;if(typeof t==="function")n=t(e);else if(e==null)n=null;else if(Object.hasOwnProperty.call(e,t))n=e[t];else{if(t.includes("."))return getNestedValues(t,e);n=null}return n==null?[]:Array.isArray(n)?n:[String(n)]}
+ */function a(n,t){typeof t==="object"&&(t=t.key);let e;if(typeof t==="function")e=t(n);else if(n==null)e=null;else if(Object.hasOwnProperty.call(n,t))e=n[t];else{if(t.includes("."))return f(t,n);e=null}return e==null?[]:Array.isArray(e)?e:[String(e)]}
 /**
  * Given path: "foo.bar.baz"
  * And item: {foo: {bar: {baz: 'buzz'}}}
  *   -> 'buzz'
  * @param path a dot-separated set of keys
  * @param item the item to get the value from
- */function getNestedValues(e,t){const n=e.split(".");let r=[t];for(let e=0,t=n.length;e<t;e++){const t=n[e];let o=[];for(let e=0,n=r.length;e<n;e++){const n=r[e];if(n!=null)if(Object.hasOwnProperty.call(n,t)){const e=n[t];e!=null&&o.push(e)}else t==="*"&&(o=o.concat(n))}r=o}if(Array.isArray(r[0])){const e=[];return e.concat(...r)}return r}
+ */function f(n,t){const e=n.split(".");let r=[t];for(let n=0,t=e.length;n<t;n++){const t=e[n];let o=[];for(let n=0,e=r.length;n<e;n++){const e=r[n];if(e!=null)if(Object.hasOwnProperty.call(e,t)){const n=e[t];n!=null&&o.push(n)}else t==="*"&&(o=o.concat(e))}r=o}if(Array.isArray(r[0])){const n=[];return n.concat(...r)}return r}
 /**
  * Gets all the values for the given keys in the given item and returns an array of those values
  * @param item - the item from which the values will be retrieved
  * @param keys - the keys to use to retrieve the values
  * @return objects with {itemValue, attributes}
- */function getAllValuesToRank(e,t){const n=[];for(let r=0,o=t.length;r<o;r++){const o=t[r];const s=getKeyAttributes(o);const a=getItemValues(e,o);for(let e=0,t=a.length;e<t;e++)n.push({itemValue:a[e],attributes:s})}return n}const n={maxRanking:Infinity,minRanking:-Infinity};
+ */function h(n,t){const e=[];for(let r=0,o=t.length;r<o;r++){const o=t[r];const s=T(o);const l=a(n,o);for(let n=0,t=l.length;n<t;n++)e.push({itemValue:l[n],attributes:s})}return e}const k={maxRanking:Infinity,minRanking:-Infinity};
 /**
  * Gets all the attributes for the given key
  * @param key - the key from which the attributes will be retrieved
  * @return object containing the key's attributes
- */function getKeyAttributes(e){return typeof e==="string"?n:{...n,...e}}export{defaultBaseSortFn,matchSorter,t as rankings};
+ */function T(n){return typeof n==="string"?k:{...k,...n}}export{e as defaultBaseSortFn,r as matchSorter,t as rankings};
 
