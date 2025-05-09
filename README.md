@@ -34,38 +34,8 @@ If you want to create OAuth applications please [contact me](mailto:miha@visuali
 
 ## Dependencies
 
-- Ruby (Check [.ruby-version](.ruby-version) for specific version)
-  - Bundler (`gem install bundler`)
+- Ruby (Check [.mise.toml](.mise.toml) for specific version)
 - Postgres (>= 14)
 
 No other services are required though Cloudinary and S3 are expected in `config/storage.yml`.
 Feel free to override them for development purposes.
-
-## Setup
-
-- Install Ruby gems
-  ```shell
-  $ bundle install
-  ```
-- Setup database
-  ```shell
-  $ ./bin/rails db:setup
-  ```
-- Running the server
-  ```shell
-  $ ./bin/dev
-  ```
-- Running the tests
-  ```shell
-  $ ./bin/rails test
-  ```
-
-## Star History
-
-<a href="https://star-history.com/#miharekar/visualizer&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=miharekar/visualizer&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=miharekar/visualizer&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=miharekar/visualizer&type=Date" />
- </picture>
-</a>
