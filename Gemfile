@@ -44,11 +44,8 @@ gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails", github: "hotwired/turbo-rails"
 gem "web-push"
 
-gem "kamal"
-
 group :development, :test do
   gem "debug", require: "debug/prelude"
-  gem "factory_bot_rails"
   gem "vernier"
 end
 
@@ -57,6 +54,7 @@ group :development do
   gem "annotaterb"
   gem "benchmark-ips"
   gem "brakeman", require: false
+  gem "kamal"
   gem "letter_opener"
   gem "rubocop-minitest", require: false
   gem "rubocop-rails-omakase", require: false
@@ -65,6 +63,7 @@ group :development do
 end
 
 group :test do
+  gem "factory_bot_rails"
   gem "retest"
   gem "webmock"
 end
