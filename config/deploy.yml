@@ -46,7 +46,7 @@ asset_path: /rails/public/assets
 
 accessories:
   postgres:
-    image: postgres:17.4
+    image: postgres:17.5
     host: hvdb
     port: 5432
     env:
@@ -64,7 +64,7 @@ accessories:
       shm-size: 3g
 
   pg_backup:
-    image: mrfoto/postgres-backup-s3:17.4
+    image: mrfoto/postgres-backup-s3:17.5
     host: hvdb
     env:
       clear:
@@ -85,7 +85,7 @@ accessories:
       network: ipv6-network
 
   dozzle:
-    image: amir20/dozzle:latest
+    image: amir20/dozzle:v8.12
     hosts:
       - hvapp
       - hvdb
