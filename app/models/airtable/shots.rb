@@ -48,7 +48,11 @@ module Airtable
         "Tags" => shot.tags.pluck(:name)
       }
 
-      fields["Coffee Bag"] = [shot.coffee_bag&.airtable_id].compact if user.coffee_management_enabled?
+      if user.coffee_management_enabled? && shot.coffee_bag.present?
+        upload_coffee_bag_to_airtable(shot) unless shot.coffee_bag.airtable_id
+        fields["Coffee Bag"] = [shot.coffee_bag.airtable_id]
+      end
+
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
       user.metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
@@ -69,6 +73,11 @@ module Airtable
         shot.skip_airtable_sync = false if shot.coffee_bag_id_changed?
       end
       shot.save!
+    end
+
+    def upload_coffee_bag_to_airtable(shot)
+      AirtableUploadRecordJob.perform_now(shot.coffee_bag)
+      shot.coffee_bag.reload
     end
   end
 end
