@@ -23,7 +23,7 @@ export default class extends Controller {
 
   show() {
     if (!this.modalShown) {
-      this.toggleableTargets.forEach((element) => {
+      this.toggleableTargets.forEach(element => {
         enter(element)
       })
     }
@@ -32,7 +32,7 @@ export default class extends Controller {
 
   hide() {
     if (this.modalShown) {
-      this.toggleableTargets.forEach((element) => {
+      this.toggleableTargets.forEach(element => {
         leave(element)
       })
     }
@@ -47,7 +47,7 @@ export default class extends Controller {
   }
 
   backgroundClick(event) {
-    if (event.target && !event.target.closest('button')) {
+    if (event.target && !event.target.closest("button")) {
       this.hide()
     }
   }

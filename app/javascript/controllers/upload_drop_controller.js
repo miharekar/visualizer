@@ -13,7 +13,7 @@ export default class extends Controller {
   }
 
   bindEvents() {
-    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    ;["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       document.addEventListener(eventName, this.preventDefaults, false)
     })
 
@@ -23,7 +23,7 @@ export default class extends Controller {
   }
 
   unbindEvents() {
-    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    ;["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
       document.removeEventListener(eventName, this.preventDefaults, false)
     })
 

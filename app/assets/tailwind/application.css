@@ -6,8 +6,8 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Inter var", ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif: "Ragazzi", ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: "Inter var", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Ragazzi", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
   /* https://www.tints.dev/terracotta/EE5B45 */
   --color-terracotta-50: oklch(98.13% 0.008 27.23);
@@ -164,39 +164,39 @@ a:hover .logo-steam path {
   }
 }
 
-.logo-loading .bars>path:nth-child(1) {
+.logo-loading .bars > path:nth-child(1) {
   animation: moveBars 0.5s ease-in-out -1.35s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(2) {
+.logo-loading .bars > path:nth-child(2) {
   animation: moveBars 0.5s ease-in-out -1.2s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(3) {
+.logo-loading .bars > path:nth-child(3) {
   animation: moveBars 0.5s ease-in-out -1.05s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(4) {
+.logo-loading .bars > path:nth-child(4) {
   animation: moveBars 0.5s ease-in-out -0.9s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(5) {
+.logo-loading .bars > path:nth-child(5) {
   animation: moveBars 0.5s ease-in-out -0.75s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(6) {
+.logo-loading .bars > path:nth-child(6) {
   animation: moveBars 0.5s ease-in-out -0.6s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(7) {
+.logo-loading .bars > path:nth-child(7) {
   animation: moveBars 0.5s ease-in-out -0.45s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(8) {
+.logo-loading .bars > path:nth-child(8) {
   animation: moveBars 0.5s ease-in-out -0.3s infinite alternate;
 }
 
-.logo-loading .bars>path:nth-child(9) {
+.logo-loading .bars > path:nth-child(9) {
   animation: moveBars 0.5s ease-in-out -0.15s infinite alternate;
 }
 

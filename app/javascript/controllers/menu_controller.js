@@ -9,7 +9,7 @@ export default class extends Controller {
   }
 
   toggle() {
-    this.toggleableTargets.forEach((element) => {
+    this.toggleableTargets.forEach(element => {
       element.classList.toggle("hidden")
     })
   }

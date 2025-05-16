@@ -38,8 +38,8 @@
 :active_admin: false
 :command:
 :debug: false
-:hide_default_column_types: ''
-:hide_limit_column_types: ''
+:hide_default_column_types: ""
+:hide_limit_column_types: ""
 :ignore_columns:
 :ignore_routes:
 :models: true
@@ -52,7 +52,7 @@
 :classes_default_to_s: []
 :additional_file_patterns: []
 :model_dir:
-- app/models
+  - app/models
 :require: []
 :root_dir:
-- ''
+  - ""

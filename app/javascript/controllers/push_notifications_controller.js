@@ -12,20 +12,27 @@ export default class extends Controller {
       if (this.#allowed && !enabled) {
         this.bellTarget.classList.remove("hidden")
       }
-      if (this.hasStatusHeadingTarget) { this.updateStatus(enabled) }
+      if (this.hasStatusHeadingTarget) {
+        this.updateStatus(enabled)
+      }
     }
   }
 
   async attemptToSubscribe() {
     if (this.#allowed) {
-      const registration = await this.#serviceWorkerRegistration || await this.#registerServiceWorker()
+      const registration = (await this.#serviceWorkerRegistration) || (await this.#registerServiceWorker())
       switch (Notification.permission) {
         case "denied": {
           alert("Push notifications are blocked. Please update your browser settings to enable notifications.")
           break
         }
-        case "granted": { this.#subscribe(registration); break }
-        case "default": { this.#requestPermissionAndSubscribe(registration) }
+        case "granted": {
+          this.#subscribe(registration)
+          break
+        }
+        case "default": {
+          this.#requestPermissionAndSubscribe(registration)
+        }
       }
     }
   }
@@ -53,13 +60,13 @@ export default class extends Controller {
   }
 
   async #subscribe(registration) {
-    registration.pushManager
-      .subscribe({ userVisibleOnly: true, applicationServerKey: this.#vapidPublicKey })
-      .then(subscription => {
-        this.#syncPushSubscription(subscription)
-        this.bellTarget.classList.add("hidden")
-        if (this.hasStatusHeadingTarget) { this.updateStatus(true) }
-      })
+    registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: this.#vapidPublicKey }).then(subscription => {
+      this.#syncPushSubscription(subscription)
+      this.bellTarget.classList.add("hidden")
+      if (this.hasStatusHeadingTarget) {
+        this.updateStatus(true)
+      }
+    })
   }
 
   async #syncPushSubscription(subscription) {
@@ -76,7 +83,9 @@ export default class extends Controller {
       this.#subscribe(registration)
     } else {
       alert("You need to allow push notifications to enable this feature.")
-      if (this.hasStatusHeadingTarget) { this.updateStatus(false) }
+      if (this.hasStatusHeadingTarget) {
+        this.updateStatus(false)
+      }
     }
   }
 
@@ -85,7 +94,10 @@ export default class extends Controller {
   }
 
   #extractJsonPayloadAsString(subscription) {
-    const { endpoint, keys: { p256dh, auth } } = subscription.toJSON()
+    const {
+      endpoint,
+      keys: { p256dh, auth }
+    } = subscription.toJSON()
     return JSON.stringify({ push_subscription: { endpoint, p256dh_key: p256dh, auth_key: auth } })
   }
 

@@ -26,10 +26,10 @@ export default class extends Controller {
       })
     }
 
-    if (data.tags && document.getElementById('tag_list')) {
+    if (data.tags && document.getElementById("tag_list")) {
       const tagValue = data.tags.join(",")
-      this.updateField(document.getElementById('tag_list'), tagValue, true)
-      this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
+      this.updateField(document.getElementById("tag_list"), tagValue, true)
+      this.application.getControllerForElementAndIdentifier(document.getElementById("tags_controller"), "tags").renderTags()
     }
 
     if (data.coffee_bag_id && data.roaster_id) {
@@ -42,7 +42,7 @@ export default class extends Controller {
   }
 
   updateField(field, newValue, isTags = false) {
-    const currentValue = field.value || ''
+    const currentValue = field.value || ""
 
     if (field.dataset.previousValue === undefined) {
       field.dataset.previousValue = currentValue
@@ -52,9 +52,8 @@ export default class extends Controller {
     if (currentValue != newValue) {
       field.value = newValue
 
-
       if (isTags) {
-        document.getElementById('tags_input').classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
+        document.getElementById("tags_input").classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
       } else {
         field.classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
       }
@@ -72,7 +71,7 @@ export default class extends Controller {
     const field = document.querySelector(`[name="${name}"]`)
     if (!field) return
 
-    this.updateField(field, value || '', false)
+    this.updateField(field, value || "", false)
   }
 
   rollback(event) {
@@ -84,10 +83,10 @@ export default class extends Controller {
 
   rollbackTags(event) {
     const label = event.target.closest("label")
-    document.getElementById('tags_input').classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
+    document.getElementById("tags_input").classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
 
-    this.handleRollback(document.getElementById('tag_list'), label, () => {
-      this.application.getControllerForElementAndIdentifier(document.getElementById('tags_controller'), "tags").renderTags()
+    this.handleRollback(document.getElementById("tag_list"), label, () => {
+      this.application.getControllerForElementAndIdentifier(document.getElementById("tags_controller"), "tags").renderTags()
     })
   }
 
@@ -97,7 +96,7 @@ export default class extends Controller {
       field.classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
       delete field.dataset.previousValue
 
-      label.innerHTML = label.querySelector('div > span').innerHTML
+      label.innerHTML = label.querySelector("div > span").innerHTML
 
       if (renderCallback) {
         renderCallback()

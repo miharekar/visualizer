@@ -30,8 +30,8 @@ export default class extends Controller {
     this.dropAreaTarget.classList.add("hidden")
     this.loaderTarget.classList.remove("hidden")
 
-    const formData = new FormData();
-    [...e.dataTransfer.files].forEach((file) => {
+    const formData = new FormData()
+    ;[...e.dataTransfer.files].forEach(file => {
       formData.append("files[]", file)
     })
 

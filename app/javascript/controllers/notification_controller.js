@@ -25,6 +25,6 @@ export default class extends Controller {
   }
 
   parentHidden() {
-    return this.element.parentElement.classList.contains('hidden')
+    return this.element.parentElement.classList.contains("hidden")
   }
 }

@@ -2,8 +2,8 @@ import { Controller } from "@hotwired/stimulus"
 import { enter, leave } from "el-transition"
 
 export default class extends Controller {
-  static targets = ["toggleable", "code"];
-  static values = { url: String };
+  static targets = ["toggleable", "code"]
+  static values = { url: String }
 
   initialize() {
     this.modalShown = false
@@ -13,7 +13,7 @@ export default class extends Controller {
   show() {
     if (!this.modalShown) {
       this.getCode()
-      this.toggleableTargets.forEach((element) => {
+      this.toggleableTargets.forEach(element => {
         enter(element)
       })
     }
@@ -22,8 +22,8 @@ export default class extends Controller {
 
   getCode() {
     if (this.code.length == 0) {
-      fetch(this.urlValue).then((response) => {
-        response.json().then((data) => {
+      fetch(this.urlValue).then(response => {
+        response.json().then(data => {
           this.code = data.code
           this.codeTarget.innerText = this.code
         })
@@ -33,7 +33,7 @@ export default class extends Controller {
 
   hide() {
     if (this.modalShown) {
-      this.toggleableTargets.forEach((element) => {
+      this.toggleableTargets.forEach(element => {
         leave(element)
       })
     }
@@ -41,7 +41,7 @@ export default class extends Controller {
   }
 
   backgroundClick(event) {
-    if (event.target && !event.target.closest('button')) {
+    if (event.target && !event.target.closest("button")) {
       this.hide()
     }
   }

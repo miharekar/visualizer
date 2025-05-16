@@ -27,7 +27,7 @@ export default class extends Controller {
   removeTag(event) {
     event.preventDefault()
     const tagElement = event.currentTarget.parentElement
-    const tagText = tagElement.querySelector('span').textContent.trim()
+    const tagText = tagElement.querySelector("span").textContent.trim()
 
     if (tagText) {
       const tags = this.tags
@@ -44,7 +44,7 @@ export default class extends Controller {
     this.displayTarget.innerHTML = ""
     const sortedTags = [...this.tags].sort((a, b) => a.localeCompare(b))
     sortedTags.forEach(tag => {
-      this.displayTarget.insertAdjacentHTML('beforeend', this.tagTemplate(tag))
+      this.displayTarget.insertAdjacentHTML("beforeend", this.tagTemplate(tag))
     })
   }
 

@@ -60,17 +60,17 @@ export default class extends Controller {
 
   toggleComparing(shotRow) {
     if (this.isChecked) {
-      shotRow.setAttribute('data-comparing', true)
+      shotRow.setAttribute("data-comparing", true)
     } else {
-      shotRow.removeAttribute('data-comparing')
+      shotRow.removeAttribute("data-comparing")
     }
   }
 
   toggleBanner() {
     if (this.isChecked) {
-      this.bannerTarget.classList.remove('hidden')
+      this.bannerTarget.classList.remove("hidden")
     } else {
-      this.bannerTarget.classList.add('hidden')
+      this.bannerTarget.classList.add("hidden")
     }
   }
 }

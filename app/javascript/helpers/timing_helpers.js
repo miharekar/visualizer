@@ -4,7 +4,7 @@ export function throttle(fn, delay = 1000) {
   return (...args) => {
     if (!timeoutId) {
       fn(...args)
-      timeoutId = setTimeout(() => timeoutId = null, delay)
+      timeoutId = setTimeout(() => (timeoutId = null), delay)
     }
   }
 }

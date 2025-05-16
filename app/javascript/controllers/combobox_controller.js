@@ -28,7 +28,9 @@ export default class extends Controller {
     this.listTarget.scrollIntoView({ block: "nearest" })
     this.markAllAsInactive()
     this.active = this.selected
-    if (!this.allowCustomValue) { this.inputTarget.value = "" }
+    if (!this.allowCustomValue) {
+      this.inputTarget.value = ""
+    }
     this.filter()
   }
 
@@ -76,9 +78,7 @@ export default class extends Controller {
     this.show()
     const sortedMatches = matchSorter(this.allItems, this.inputTarget.value, { keys: [item => item.dataset.name] })
 
-    const matchesHtml = sortedMatches
-      .map(el => this.listTarget.appendChild(el).outerHTML)
-      .join("")
+    const matchesHtml = sortedMatches.map(el => this.listTarget.appendChild(el).outerHTML).join("")
 
     this.listTarget.innerHTML = matchesHtml
 
@@ -141,7 +141,7 @@ export default class extends Controller {
   }
 
   markAllAsInactive() {
-    this.listTarget.querySelectorAll("li").forEach((el) => {
+    this.listTarget.querySelectorAll("li").forEach(el => {
       el.classList.add(...this.inactiveClassesValue)
       el.classList.remove(...this.activeClassesValue)
     })
@@ -170,7 +170,9 @@ export default class extends Controller {
   }
 
   markAllAsUnselected() {
-    this.listTarget.querySelectorAll("li").forEach((el) => { el.classList.remove(this.selectedClassValue) })
+    this.listTarget.querySelectorAll("li").forEach(el => {
+      el.classList.remove(this.selectedClassValue)
+    })
     this.allItems.forEach(item => {
       item.classList[item.dataset.id === this.selected?.dataset.id ? "add" : "remove"](this.selectedClassValue)
     })
