@@ -1,2 +1,3 @@
-appsignal_logger = Appsignal::Logger.new("rails", format: Appsignal::Logger::LOGFMT)
-SemanticLogger.add_appender(logger: appsignal_logger, formatter: :logfmt)
+appsignal_logger = Appsignal::Logger.new("rails")
+Rails.logger.broadcast_to(appsignal_logger)
+Rails.logger = ActiveSupport::TaggedLogging.new(appsignal_logger)

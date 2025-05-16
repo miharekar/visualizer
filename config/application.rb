@@ -26,8 +26,7 @@ module Visualizer
 
     config.active_storage.analyzers = []
     config.exceptions_app = routes
-    config.log_tags = {request_id: :request_id, ip: :remote_ip}
-    config.logger = ActiveSupport::TaggedLogging.logger($stdout)
+    config.log_tags = %i[request_id remote_ip]
     config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end

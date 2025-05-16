@@ -4,7 +4,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.4.4"
 
 gem "active_link_to"
-gem "amazing_print"
 gem "appsignal"
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
@@ -30,7 +29,6 @@ gem "puma"
 gem "pundit"
 gem "rack-cors"
 gem "rails"
-gem "rails_semantic_logger"
 gem "responders"
 gem "slim"
 gem "solid_cable"
