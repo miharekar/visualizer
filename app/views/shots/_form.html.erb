@@ -95,14 +95,9 @@
           </p>
         <% end %>
         <% if Current.user.premium? %>
-          <div data-controller="tags" id="tags_controller">
-            <%= label_tag :tags_input, "Tags", class: "standard-label" %>
-            <div class="flex flex-wrap mt-1 gap-1" data-tags-target="display">
-            </div>
-            <div class="mt-2">
-              <input type="text" name="tags_input" id="tags_input" class="standard-input" placeholder="Add tags..." data-tags-target="input" data-action="keydown->tags#inputTag" autocomplete="on">
-            </div>
-            <%= f.hidden_field :tag_list, id: "tag_list", data: { tags_target: "data" } %>
+          <div data-controller="tags" data-tags-user-tags-value="<%= Current.user.tags.pluck(:name) %>">
+            <%= f.label :tag_list, "Tags", class: "standard-label" %>
+            <%= f.text_field :tag_list, class: "mt-1 standard-input", placeholder: "Add tags...", data: { tags_target: "input" } %>
             <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
               Type a comma or press enter to create a tag.
             </div>

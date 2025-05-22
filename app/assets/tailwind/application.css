@@ -207,3 +207,78 @@ a:hover .logo-steam path {
     stroke-dashoffset: 52px;
   }
 }
+
+.tagify {
+  @apply relative flex flex-wrap items-start px-3 py-2;
+}
+
+.tagify + input,
+.tagify + textarea {
+  @apply absolute -left-[9999px] w-px h-px opacity-0 overflow-hidden pointer-events-none;
+}
+
+.tagify__tag {
+  @apply inline-flex items-center relative cursor-default m-0.5 rounded-sm z-10 px-2 py-1 bg-oxford-blue-100 text-oxford-blue-700 hover:bg-oxford-blue-200 dark:bg-oxford-blue-700 dark:text-oxford-blue-100 dark:hover:bg-oxford-blue-600;
+}
+
+.tagify__tag > div {
+  @apply flex-grow whitespace-nowrap;
+}
+
+.tagify__tag__removeBtn {
+  @apply order-last self-center inline-flex items-center justify-center rounded-full cursor-pointer w-4 h-4 ml-1.5 text-oxford-blue-500 hover:text-white hover:bg-oxford-blue-400 dark:text-oxford-blue-300 dark:hover:text-white dark:hover:bg-oxford-blue-500 overflow-hidden;
+}
+
+.tagify__tag__removeBtn::after {
+  content: "×";
+  @apply text-xs leading-none font-semibold;
+}
+
+.tagify__input {
+  @apply flex-grow inline-block min-w-[100px] relative whitespace-pre-wrap align-baseline m-0.5 px-1 py-1 focus:outline-none focus:ring-0;
+}
+
+.tagify__input::before {
+  content: attr(data-placeholder);
+  @apply absolute left-1 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400 pointer-events-none opacity-0;
+}
+
+.tagify__input:empty::before {
+  @apply opacity-100;
+}
+
+.tagify.standard-input.tagify--focus {
+  @apply ring-1 ring-oxford-blue-500 dark:ring-offset-black outline-hidden border-oxford-blue-500 shadow-none;
+}
+
+.tagify__dropdown {
+  @apply absolute z-[9999] -translate-y-px;
+}
+
+.tagify__dropdown[placement="top"] {
+  @apply -translate-y-full mt-0;
+}
+
+.tagify__dropdown__wrapper {
+  @apply rounded-t-none rounded-b-md bg-white dark:bg-neutral-800 border-oxford-blue-500 border-x-2 border-t-0 border-b-2 shadow-lg text-neutral-700 dark:text-neutral-300;
+}
+
+.tagify__dropdown[placement="top"] .tagify__dropdown__wrapper {
+  @apply border-t-2 border-b-0 rounded-t-md rounded-b-none;
+}
+
+.tagify__dropdown__item {
+  @apply rounded px-2 py-1.5 cursor-pointer max-h-[60px];
+}
+
+.tagify__dropdown__item--active {
+  @apply bg-oxford-blue-100 dark:bg-oxford-blue-900;
+}
+
+.tagify__dropdown__item--hidden {
+  @apply pt-0 pb-0 mx-px pointer-events-none max-h-0 transition-all duration-300;
+}
+
+.tagify__dropdown:has(.tagify__dropdown__item--selected) .tagify__dropdown__item {
+  @apply indent-4;
+}
