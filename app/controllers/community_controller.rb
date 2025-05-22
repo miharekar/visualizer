@@ -28,6 +28,8 @@ class CommunityController < ApplicationController
   end
 
   def autocomplete
+    return head :not_found if params[:filter].blank?
+
     @filter = params[:filter].to_sym
     @values = values_for_query(@filter, params[:q])
     render layout: false
