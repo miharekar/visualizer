@@ -95,7 +95,7 @@
           </p>
         <% end %>
         <% if Current.user.premium? %>
-          <div data-controller="tags" data-tags-user-tags-value="<%= Current.user.tags.pluck(:name) %>">
+          <div id="tags_controller" data-controller="tags" data-tags-user-tags-value="<%= Current.user.tags.pluck(:name) %>">
             <%= f.label :tag_list, "Tags", class: "standard-label" %>
             <%= f.text_field :tag_list, class: "mt-1 standard-input", placeholder: "Add tags...", data: { tags_target: "input" } %>
             <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">

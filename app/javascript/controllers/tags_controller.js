@@ -15,4 +15,8 @@ export default class extends Controller {
       originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(",")
     })
   }
+
+  disconnect() {
+    this.tagify.destroy()
+  }
 }

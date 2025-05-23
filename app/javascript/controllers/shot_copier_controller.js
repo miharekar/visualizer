@@ -26,10 +26,10 @@ export default class extends Controller {
       })
     }
 
-    if (data.tags && document.getElementById("tag_list")) {
-      const tagValue = data.tags.join(",")
-      this.updateField(document.getElementById("tag_list"), tagValue, true)
-      this.application.getControllerForElementAndIdentifier(document.getElementById("tags_controller"), "tags").renderTags()
+    if (data.tags && document.getElementById("tags_controller")) {
+      const tagsController = this.application.getControllerForElementAndIdentifier(document.getElementById("tags_controller"), "tags")
+      tagsController.tagify.removeAllTags()
+      tagsController.tagify.addTags(data.tags)
     }
 
     if (data.coffee_bag_id && data.roaster_id) {
