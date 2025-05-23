@@ -36,7 +36,18 @@
           </div>
           <% if Current.user.coffee_management_enabled? %>
             <div class="col-span-6">
-              <%= turbo_frame_tag "coffee_bag_fields", src: coffee_bag_form_shots_path(coffee_bag: @shot.coffee_bag) %>
+              <%= turbo_frame_tag "coffee_bag_fields", src: coffee_bag_form_shots_path(coffee_bag: @shot.coffee_bag) do %>
+                <div class="grid grid-cols-6 gap-6">
+                  <div class="col-span-6 sm:col-span-3">
+                    <%= label_tag :roaster_dummy, "Roaster", class: "standard-label" %>
+                    <%= f.text_field :roaster_dummy, class: "mt-1 standard-input" %>
+                  </div>
+                  <div class="col-span-6 sm:col-span-3">
+                    <%= f.label :coffee_bag_dummy, "Coffee bag", class: "standard-label" %>
+                    <%= f.text_field :coffee_bag_dummy, class: "mt-1 standard-input" %>
+                  </div>
+                </div>
+              <% end %>
             </div>
           <% else %>
             <div class="col-span-6 sm:col-span-3">
