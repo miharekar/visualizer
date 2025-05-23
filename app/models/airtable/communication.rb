@@ -24,6 +24,10 @@ module Airtable
           record.update_columns(airtable_id: record_data["id"]) # rubocop:disable Rails/SkipsModelValidations
         end
       end
+    rescue Airtable::DataError => e
+      raise unless e.matches_error_type?("ROW_DOES_NOT_EXIST")
+
+      AirtableCleanupJob.perform_later(user, e.messages.filter_map { |m| m[/rec\S*/, 0] })
     end
 
     def download(minutes: 60, timestamps: {})

@@ -15,6 +15,10 @@ module Airtable
       Array(types).intersect?(airtable_error_types)
     end
 
+    def messages
+      airtable_errors.pluck("message")
+    end
+
     private
 
     memo_wise def airtable_error_types
