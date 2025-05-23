@@ -209,7 +209,7 @@ a:hover .logo-steam path {
 }
 
 .tagify {
-  @apply relative flex flex-wrap items-start px-3 py-2;
+  @apply relative flex flex-wrap items-center p-1;
 }
 
 .tagify + input,
@@ -218,7 +218,7 @@ a:hover .logo-steam path {
 }
 
 .tagify__tag {
-  @apply inline-flex items-center relative cursor-default m-0.5 rounded-sm z-10 px-2 py-1 bg-oxford-blue-100 text-oxford-blue-700 hover:bg-oxford-blue-200 dark:bg-oxford-blue-700 dark:text-oxford-blue-100 dark:hover:bg-oxford-blue-600;
+  @apply inline-flex items-center relative cursor-default m-0.5 z-10 px-2 py-1 text-xs font-medium rounded-md bg-oxford-blue-50 text-oxford-blue-600 hover:bg-neutral-200/75 dark:bg-oxford-blue-400/5 dark:text-oxford-blue-300 dark:ring-1 dark:ring-inset dark:ring-oxford-blue-400/10 dark:hover:bg-neutral-700/75;
 }
 
 .tagify__tag > div {
@@ -260,19 +260,15 @@ a:hover .logo-steam path {
 }
 
 .tagify__dropdown__wrapper {
-  @apply rounded-t-none rounded-b-md bg-white dark:bg-neutral-800 border-oxford-blue-500 border-x-2 border-t-0 border-b-2 shadow-lg text-neutral-700 dark:text-neutral-300;
-}
-
-.tagify__dropdown[placement="top"] .tagify__dropdown__wrapper {
-  @apply border-t-2 border-b-0 rounded-t-md rounded-b-none;
+  @apply text-base sm:text-sm py-1 bg-white dark:bg-neutral-800 shadow-lg rounded-md border border-neutral-300 dark:border-neutral-600 max-h-60 overflow-auto ring-1 ring-black/5 focus:outline-none;
 }
 
 .tagify__dropdown__item {
-  @apply rounded px-2 py-1.5 cursor-pointer max-h-[60px];
+  @apply text-neutral-700 dark:text-neutral-200 py-2 pl-3 pr-9 cursor-default select-none;
 }
 
 .tagify__dropdown__item--active {
-  @apply bg-oxford-blue-100 dark:bg-oxford-blue-900;
+  @apply bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white;
 }
 
 .tagify__dropdown__item--hidden {

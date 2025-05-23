@@ -71,7 +71,7 @@ class Shot < ApplicationRecord
   end
 
   def tag_list
-    tags.pluck(:name).join(",")
+    tags.pluck(:name).sort.join(",")
   end
 
   private
