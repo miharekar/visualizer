@@ -30,7 +30,7 @@ module Parsers
         @timeframe << (point["timeInShot"] / 1000.0)
         DATA_LABELS_MAP.each do |key, label|
           value = point[key]
-          value = value / 10.0 if key == "waterPumped"
+          value = value / 10.0 if value && key == "waterPumped"
           @data[label] << value
         end
       end
