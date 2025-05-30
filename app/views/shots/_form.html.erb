@@ -100,9 +100,9 @@
             </p>
           <% end %>
         <% else %>
-          <p class="text-sm text-neutral-500 dark:text-neutral-400">
-            Add tags, custom fields, private notes, and images to your shots by
-            <%= link_to "upgrading to Premium", premium_index_path, class: "standard-link" %>.
+          <p class="text-sm p-3 rounded-md bg-terracotta-100/50 dark:bg-terracotta-800/10">
+            Easily manage your coffee bags, add tags, custom fields, private notes, photos, and more by
+            <%= link_to "upgrading to Premium", premium_index_path, class: "standard-link font-semibold" %>.
           </p>
         <% end %>
         <% if Current.user.premium? %>
