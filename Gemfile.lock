@@ -525,7 +525,7 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.3)
     useragent (0.16.11)
-    vernier (1.7.1)
+    vernier (1.8.0)
     version_gem (1.1.8)
     web-console (4.2.1)
       actionview (>= 6.0.0)
