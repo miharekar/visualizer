@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/hotwired/turbo-rails.git
-  revision: cb47713ab2abc0692e36215cb7e60d48461ae654
-  specs:
-    turbo-rails (2.0.13)
-      actionpack (>= 7.1.0)
-      railties (>= 7.1.0)
-
-GIT
   remote: https://github.com/miharekar/tickly.git
   revision: a4eaa0462acb6433d63eb64d8414beab91023054
   specs:
@@ -98,28 +90,28 @@ GEM
       prism
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    annotaterb (4.14.0)
+    annotaterb (4.15.0)
     appsignal (4.5.14)
       logger
       rack (>= 2.0.0)
     ast (2.4.3)
-    aws-eventstream (1.3.2)
-    aws-partitions (1.1108.0)
-    aws-sdk-core (3.224.1)
+    aws-eventstream (1.4.0)
+    aws-partitions (1.1110.0)
+    aws-sdk-core (3.225.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.101.0)
-      aws-sdk-core (~> 3, >= 3.216.0)
+    aws-sdk-kms (1.102.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.188.0)
-      aws-sdk-core (~> 3, >= 3.224.1)
+    aws-sdk-s3 (1.189.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sigv4 (1.11.0)
+    aws-sigv4 (1.12.0)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
     bcrypt (3.1.20)
@@ -127,7 +119,7 @@ GEM
     bcrypt_pbkdf (1.1.1-arm64-darwin)
     benchmark (0.4.1)
     benchmark-ips (2.14.0)
-    bigdecimal (3.2.0)
+    bigdecimal (3.2.1)
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
@@ -147,7 +139,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.4)
+    csv (3.3.5)
     date (3.4.1)
     debug (1.10.0)
       irb (~> 1.10)
@@ -161,7 +153,7 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
-    factory_bot (6.5.1)
+    factory_bot (6.5.3)
       activesupport (>= 6.1.0)
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
@@ -290,7 +282,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
-    oauth2 (2.0.11)
+    oauth2 (2.0.12)
       faraday (>= 0.17.3, < 4.0)
       jwt (>= 1.0, < 4.0)
       logger (~> 1.2)
@@ -429,7 +421,7 @@ GEM
     rubocop-ast (1.44.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
-    rubocop-minitest (0.38.0)
+    rubocop-minitest (0.38.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
@@ -447,7 +439,7 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
-    ruby-lsp (0.23.23)
+    ruby-lsp (0.23.24)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
@@ -479,7 +471,7 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
-    sorbet-runtime (0.5.12135)
+    sorbet-runtime (0.5.12149)
     sqlite3 (2.6.0-aarch64-linux-gnu)
     sqlite3 (2.6.0-arm64-darwin)
     sqlite3 (2.6.0-x86_64-linux-gnu)
@@ -518,6 +510,9 @@ GEM
       tty-screen (~> 0.8)
       wisper (~> 2.0)
     tty-screen (0.8.2)
+    turbo-rails (2.0.16)
+      actionpack (>= 7.1.0)
+      railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -525,7 +520,7 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.3)
     useragent (0.16.11)
-    vernier (1.7.1)
+    vernier (1.8.0)
     version_gem (1.1.8)
     web-console (4.2.1)
       actionview (>= 6.0.0)
@@ -601,7 +596,7 @@ DEPENDENCIES
   tailwindcss-rails
   thruster
   tickly!
-  turbo-rails!
+  turbo-rails
   vernier
   web-console
   web-push

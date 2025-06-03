@@ -39,7 +39,7 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 gem "thruster"
 gem "tickly", github: "miharekar/tickly"
-gem "turbo-rails", github: "hotwired/turbo-rails"
+gem "turbo-rails"
 gem "web-push"
 
 group :development, :test do
