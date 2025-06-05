@@ -3,6 +3,7 @@ module CursorPaginatable
     relation = relation.where(by => ..before) if before.present?
     relation = relation.order(by => direction).limit(items + 1).to_a
     cursor = relation.pop.public_send(by) if relation.size > items
+    cursor = cursor.strftime("%Y-%m-%dT%H:%M:%S.%6N%:z") if cursor.respond_to?(:strftime)
 
     [relation, cursor]
   end
