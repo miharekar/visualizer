@@ -24,13 +24,7 @@ Please read the [Contribution Guidelines](CONTRIBUTING.md) first 😊
 
 There is an API available. If something you would like is not there, please open a new [Issue](https://github.com/miharekar/visualizer/issues/) detailing your wishes.
 
-You can read [the source code](/app/controllers/api) or [the API documentation](https://documenter.getpostman.com/view/2402164/UVC2HUik) provided by [@eriklenaerts](https://github.com/eriklenaerts).
-
-Authenticatication is possible via [OAuth 2.0 authorization code flow](https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/) with `read`, `upload`, and `write` scopes.
-The difference between `upload` and `write` is that `upload` is **only** for uploading shots, and `write` is for everything. This enables you to have a "low danger" scope, so that even if a token is stolen, the worst that can happen is that the attacker can upload shots. But they won't be able to delete them.
-All endpoints return JSON.
-
-If you want to create OAuth applications please [contact me](mailto:miha@visualizer.coffee).
+You can read [the source code](/app/controllers/api) or [the LLM-generated API documentation](https://apidocs.visualizer.coffee).
 
 ## Dependencies
 
