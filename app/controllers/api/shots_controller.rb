@@ -9,7 +9,8 @@ module Api
     def index
       shots = Current.user.present? ? Current.user.shots : Shot.visible
       shots = shots.non_premium unless Current.user&.premium?
-      shots = shots.by_start_time.select(:id, :start_time, :user_id, :updated_at)
+      shots = params[:sort] == "updated_at" ? shots.order(updated_at: :desc) : shots.by_start_time
+      shots = shots.select(:id, :start_time, :user_id, :updated_at)
       shots, paging = paginate(shots)
       data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
       render json: {data:, paging:}
