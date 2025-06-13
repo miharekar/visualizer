@@ -41,7 +41,7 @@
           <div class="col-span-3">
             <div class="flex items-start">
               <div class="flex items-center h-5">
-                <%= f.check_box :public, class: "standard-checkbox" %>
+                <%= f.check_box :public, class: "standard-checkbox size-4 cursor-pointer" %>
               </div>
               <div class="ml-3 text-sm">
                 <%= f.label :public, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
@@ -52,7 +52,7 @@
             </div>
             <div class="flex items-start mt-1">
               <div class="flex items-center h-5">
-                <%= f.check_box :hide_shot_times, class: "standard-checkbox" %>
+                <%= f.check_box :hide_shot_times, class: "standard-checkbox size-4 cursor-pointer" %>
               </div>
               <div class="ml-3 text-sm">
                 <%= f.label :hide_shot_times, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
@@ -64,7 +64,7 @@
             <% if @profile.premium? %>
               <div class="flex items-start mt-1">
                 <div class="flex items-center h-5">
-                  <%= f.check_box :coffee_management_enabled, class: "standard-checkbox" %>
+                  <%= f.check_box :coffee_management_enabled, class: "standard-checkbox size-4 cursor-pointer" %>
                 </div>
                 <div class="ml-3 text-sm">
                   <%= f.label :coffee_management_enabled, "Coffee Management", class: "font-medium text-neutral-700 dark:text-neutral-300" %>
@@ -121,7 +121,7 @@
                   <div class="flex-1 ml-8">
                     <div class="flex mt-3">
                       <div class="flex items-center h-5">
-                        <%= f.check_box "#{label}-dashed", class: "standard-checkbox", checked: chart_settings.for_label(label)["dashed"] %>
+                        <%= f.check_box "#{label}-dashed", class: "standard-checkbox size-4 cursor-pointer", checked: chart_settings.for_label(label)["dashed"] %>
                       </div>
                       <div class="ml-3 text-sm">
                         <%= f.label "#{label}-dashed", "Dashed", class: "text-neutral-700 dark:text-neutral-300" %>
@@ -131,7 +131,7 @@
                   <div class="flex-1">
                     <div class="flex mt-3">
                       <div class="flex items-center h-5">
-                        <%= f.check_box "#{label}-hidden", class: "standard-checkbox", checked: chart_settings.for_label(label)["hidden"] %>
+                        <%= f.check_box "#{label}-hidden", class: "standard-checkbox size-4 cursor-pointer", checked: chart_settings.for_label(label)["hidden"] %>
                       </div>
                       <div class="ml-3 text-sm">
                         <%= f.label "#{label}-hidden", "Hidden", class: "text-neutral-700 dark:text-neutral-300" %>
@@ -148,7 +148,7 @@
               <%= f.collection_check_boxes(:email_notifications, User::EMAIL_NOTIFICATIONS.map{ |en| [en.humanize, en]}, :last, :first) do |cb| %>
                 <div class="flex items-start">
                   <div class="flex items-center h-5">
-                    <%= cb.check_box class: "standard-checkbox", checked: @profile.notify?(cb.value) %>
+                    <%= cb.check_box class: "standard-checkbox size-4 cursor-pointer", checked: @profile.notify?(cb.value) %>
                   </div>
                   <div class="ml-3 text-sm">
                     <%= cb.label class: "font-medium text-neutral-700 dark:text-neutral-300" %>
@@ -162,7 +162,7 @@
               <h3 class="mb-4 font-medium text-neutral-700 dark:text-neutral-300">Admin Area</h3>
               <div class="flex items-start">
                 <div class="flex items-center h-5">
-                  <%= f.check_box :supporter, class: "standard-checkbox" %>
+                  <%= f.check_box :supporter, class: "standard-checkbox size-4 cursor-pointer" %>
                 </div>
                 <div class="ml-3 text-sm">
                   <%= f.label :supporter, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
@@ -170,7 +170,7 @@
               </div>
               <div class="flex items-start mt-1">
                 <div class="flex items-center h-5">
-                  <%= f.check_box :developer, class: "standard-checkbox" %>
+                  <%= f.check_box :developer, class: "standard-checkbox size-4 cursor-pointer" %>
                 </div>
                 <div class="ml-3 text-sm">
                   <%= f.label :developer, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
