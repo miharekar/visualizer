@@ -1,33 +1,12 @@
-# PostgreSQL. Versions 9.3 and up are supported.
-#
-# Install the pg driver:
-#   gem install pg
-# On macOS with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On macOS with MacPorts:
-#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
-# On Windows:
-#   gem install pg
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
-#
-# Configure Using Gemfile
-# gem "pg"
-#
 postgres: &postgres
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 }.to_i + (Rails.configuration.active_record.global_executor_concurrency || 4).to_i %>
-  # Do not forget to set DB connections with the formula:
-  # max_connections = web_processes * number_of_threads_per_web_process + web_processes * global_executor_concurrency + background_processes * number_of_threads_per_background_process + background_processes * global_executor_concurrency
-  # For example, if you have 4 web processes, 1 background, 5 threads per web process, 5 threads per background process, and 4 global executors, then:
-  # max_connections = 4 * 5 + 4 * 4 + 1 * 5 + 1 * 4 = 45
+  # https://island94.org/2024/09/secret-to-rails-database-connection-pool-size
+  pool: 100
 
 _sqlite: &sqlite
   adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+  pool: 100
   timeout: 5000
 
 development:
