@@ -7,7 +7,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/shots_controller.rb",
-      "line": 135,
+      "line": 137,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Current.user.shots.with_attached_image.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
       "render_path": null,
@@ -26,13 +26,13 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "6f1976616ae794e8cc2c3f2d3ccef69616d22f73bccf676bf7d6c697d81dbecb",
+      "fingerprint": "2f8f3a1ff2c925a3991e85be74ed99c97bb498cf893a54b7cf6dce0cd5e798ab",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/coffee_bags/index.html.erb",
       "line": 30,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.roasters.find(params[:roaster_id]).coffee_bags.order_by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), {})",
+      "code": "render(action => Current.user.roasters.find(params[:roaster_id]).coffee_bags.order_by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.roasters.find(params[:roaster_id]).coffee_bags.order_by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
       "render_path": [
         {
           "type": "controller",
@@ -60,13 +60,13 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "b46998b567544219ac42f8f6e5623be212338529332e60f1aaee7886698d188a",
+      "fingerprint": "7dbe88465a426e64c7776585bed1b7c608cd90a7a475e8d8796c9154411b9322",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/roasters/index.html.erb",
       "line": 34,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.roasters.order_by_name.includes(:coffee_bags).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), {})",
+      "code": "render(action => Current.user.roasters.order_by_name.includes(:coffee_bags).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.roasters.order_by_name.includes(:coffee_bags).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
       "render_path": [
         {
           "type": "controller",
@@ -98,7 +98,7 @@
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/shots_controller.rb",
-      "line": 41,
+      "line": 40,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code}\", :allow_other_host => true)",
       "render_path": null,
@@ -121,7 +121,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/community_controller.rb",
-      "line": 55,
+      "line": 57,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Shot.visible_or_owned_by_id(Current.user.id).includes(:user).where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
       "render_path": null,
@@ -138,6 +138,5 @@
       "note": ""
     }
   ],
-  "updated": "2024-12-01 10:41:51 +0100",
-  "brakeman_version": "6.2.2"
+  "brakeman_version": "7.1.0"
 }
