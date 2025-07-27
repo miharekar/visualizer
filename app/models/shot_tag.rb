@@ -11,8 +11,8 @@ end
 #
 # Table name: shot_tags
 #
-#  shot_id :uuid             not null
-#  tag_id  :uuid             not null
+#  shot_id :uuid             not null, primary key
+#  tag_id  :uuid             not null, primary key
 #
 # Indexes
 #
