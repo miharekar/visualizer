@@ -7,6 +7,7 @@ class AirtableInfo < ApplicationRecord
 
   def update_tables(table_name, **attributes)
     new_tables = tables.dup
+    attributes = attributes.deep_stringify_keys
     new_tables[table_name] = new_tables[table_name]&.merge(attributes) || attributes
     update!(tables: new_tables)
   end
