@@ -8,42 +8,26 @@ module Parsers
       "tt" => "espresso_temperature_goal",
       "ct" => "espresso_temperature_mix",
       "v"  => "espresso_weight",
-      "ev" => "espresso_flow_weight",
+      "ev" => "espresso_flow_weight"
     }.freeze
 
     def parse
       @start_time = Time.at(json["timestamp"]).utc
-      @profile_title = profile_label
-      @profile_fields = profile_data
+      @profile_title = has_profile? ? json.dig("profile", "label") : json["profile"]
+      @profile_fields = has_profile? ? json["profile"] : {"label" => json["profile"]}
       prepare_data
       set_extra
     end
 
     private
 
-    def profile_label
-      if json["profile"].is_a?(Hash)
-        json.dig("profile", "label")
-      else
-        json["profile"]
-      end
-    end
-
-    def profile_data
-      if json["profile"].is_a?(Hash)
-        json["profile"]
-      else
-        { "label" => json["profile"] }
-      end
+    def has_profile?
+      json["profile"].is_a?(Hash)
     end
 
     def prepare_data
       @timeframe = []
       DATA_LABELS_MAP.each_value { |label| @data[label] = [] }
-
-      # Initialize missing keys that CSV export expects
-      @data["espresso_weight"] = []
-      @data["espresso_flow_weight"] = []
 
       json["samples"].each do |point|
         @timeframe << (point["t"] / 1000.0)
@@ -56,8 +40,7 @@ module Parsers
     end
 
     def set_extra
-      last_sample = json["samples"].last
-      @extra["drink_weight"] = last_sample["ev"] if last_sample && last_sample["ev"]
+      @extra["drink_weight"] = json["samples"].last["ev"]
     end
   end
 end
