@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_17_193538) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_27_112152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -55,6 +55,35 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_17_193538) do
     t.integer "last_cursor"
     t.jsonb "tables"
     t.index ["identity_id"], name: "index_airtable_infos_on_identity_id"
+  end
+
+  create_table "canonical_coffee_bags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "canonical_roaster_id", null: false
+    t.string "name"
+    t.string "url"
+    t.string "country"
+    t.string "region"
+    t.string "elevation"
+    t.string "farmer"
+    t.string "harvest_time"
+    t.string "processing"
+    t.string "roast_level"
+    t.string "variety"
+    t.string "tasting_notes"
+    t.string "loffee_labs_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["canonical_roaster_id"], name: "index_canonical_coffee_bags_on_canonical_roaster_id"
+  end
+
+  create_table "canonical_roasters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "website"
+    t.string "country"
+    t.string "address"
+    t.string "loffee_labs_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "changes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -291,6 +320,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_17_193538) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "airtable_infos", "identities"
+  add_foreign_key "canonical_coffee_bags", "canonical_roasters"
   add_foreign_key "coffee_bags", "roasters"
   add_foreign_key "identities", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
