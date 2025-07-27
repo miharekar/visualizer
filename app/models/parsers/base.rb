@@ -16,6 +16,8 @@ module Parsers
           Beanconqueror.new(file, json)
         elsif json.key?("datapoints")
           Gaggiuino.new(file, json)
+        elsif json.key?("samples")
+          Gaggimate.new(file, json)
         else
           DecentJson.new(file, json)
         end
