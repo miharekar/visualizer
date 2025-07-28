@@ -312,7 +312,9 @@ GEM
       racc
     pastel (0.8.0)
       tty-color (~> 0.5)
-    pg (1.5.9)
+    pg (1.6.0-aarch64-linux)
+    pg (1.6.0-arm64-darwin)
+    pg (1.6.0-x86_64-linux)
     pg_lock (1.0.0)
     pghero (3.7.0)
       activerecord (>= 7.1)
