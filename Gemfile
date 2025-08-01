@@ -51,6 +51,7 @@ group :development do
   gem "annotaterb"
   gem "benchmark-ips"
   gem "brakeman", require: false
+  gem "herb"
   gem "hotwire-spark"
   gem "kamal"
   gem "letter_opener"
