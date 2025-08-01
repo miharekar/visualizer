@@ -74,6 +74,10 @@ class Shot < ApplicationRecord
     tags.pluck(:name).sort.join(",")
   end
 
+  def canonical_coffee_bag
+    @canonical_coffee_bag ||= CanonicalCoffeeBag.find_for(bean_brand, bean_type)
+  end
+
   private
 
   def daily_limit

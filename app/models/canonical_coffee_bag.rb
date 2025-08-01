@@ -1,5 +1,17 @@
 class CanonicalCoffeeBag < ApplicationRecord
+  DISPLAY_ATTRIBUTES = %i[roast_level country region farmer variety elevation processing harvest_time tasting_notes].freeze
+
   belongs_to :canonical_roaster
+
+  def self.find_for(roaster, coffee_bag)
+    return unless roaster.present? && coffee_bag.present?
+
+    query = joins(:canonical_roaster)
+    query = query.where("unaccent(canonical_roasters.name) ILIKE unaccent(?)", "%#{roaster}%")
+    query = query.where("unaccent(canonical_coffee_bags.name) ILIKE unaccent(?)", "%#{coffee_bag}%")
+    query.limit(2).load
+    query.first if query.one?
+  end
 end
 
 # == Schema Information
