@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_01_153421) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_02_163118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -266,9 +266,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_01_153421) do
     t.string "airtable_id"
     t.boolean "public"
     t.uuid "coffee_bag_id"
+    t.uuid "canonical_coffee_bag_id"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
     t.index ["bean_brand"], name: "index_shots_on_bean_brand", opclass: :gin_trgm_ops, using: :gin
     t.index ["bean_type"], name: "index_shots_on_bean_type", opclass: :gin_trgm_ops, using: :gin
+    t.index ["canonical_coffee_bag_id"], name: "index_shots_on_canonical_coffee_bag_id"
     t.index ["coffee_bag_id"], name: "index_shots_on_coffee_bag_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"
@@ -336,6 +338,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_01_153421) do
   add_foreign_key "shot_informations", "shots"
   add_foreign_key "shot_tags", "shots"
   add_foreign_key "shot_tags", "tags"
+  add_foreign_key "shots", "canonical_coffee_bags"
   add_foreign_key "shots", "coffee_bags"
   add_foreign_key "shots", "users"
   add_foreign_key "tags", "users"
