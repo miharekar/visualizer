@@ -1,12 +1,12 @@
 <div class="md:col-span-2" id="<%= dom_id(@shot) %>">
   <%= form_with(model: @shot) do |f| %>
     <div class="md:shadow sm:rounded-md sm:overflow-hidden">
-      <div class="flex flex-col px-4 py-5 bg-white gap-y-6 dark:bg-neutral-800 sm:p-6">
+      <div class="flex flex-col px-4 py-5 bg-white gap-y-6 dark:bg-neutral-800 sm:p-6" data-controller="canonical-selector">
         <div class="grid grid-cols-6 gap-6" data-controller="ey-calculator">
           <div class="col-span-6">
             <%= f.label :espresso_enjoyment, class: "standard-label" %>
             <div class="flex items-center mt-1" data-controller="range">
-              <%= f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none text-center shot-number rounded-full h-8 w-20 text-center dark:bg-neutral-800", data: { action: "input->range#update", range_target: "number" } %>
+              <%= f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none shot-number rounded-full h-8 w-20 text-center dark:bg-neutral-800", data: { action: "input->range#update", range_target: "number" } %>
               <%= f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update", range_target: "range" } %>
             </div>
           </div>
@@ -50,13 +50,19 @@
               <% end %>
             </div>
           <% else %>
+            <div class="col-span-6" data-controller="autocomplete" data-canonical-selector-target="autocomplete"  data-autocomplete-url-value="<%= autocomplete_canonical_coffee_bags_path %>" data-autocomplete-min-length-value="4" data-autocomplete-selected-class="bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white">
+              <%= f.label :canonical_coffee_bag, "Search Loffee Labs Bean Base", class: "standard-label" %>
+              <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id" } %>
+              <%= f.search_field :canonical_coffee_bag_search, value: "#{@shot.canonical_coffee_bag&.name}", class: "mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
+              <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
+            </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :bean_brand, class: "standard-label" %>
-              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_brand]", hidden_input_name: "_bean_brand", selected: @shot.bean_brand, collection: @bean_brands, name_method: :itself, id_method: :itself, allow_custom: true} %>
+              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_brand]", hidden_input_name: "_bean_brand", selected: @shot.bean_brand, collection: @bean_brands, name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "roaster"} } %>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :bean_type, class: "standard-label" %>
-              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_type]", hidden_input_name: "_bean_type", selected: @shot.bean_type, collection: @bean_types, name_method: :itself, id_method: :itself, allow_custom: true} %>
+              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_type]", hidden_input_name: "_bean_type", selected: @shot.bean_type, collection: @bean_types, name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "coffeeBag"} } %>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :roast_date, class: "standard-label" %>
