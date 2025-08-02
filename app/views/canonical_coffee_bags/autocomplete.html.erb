@@ -1,0 +1,7 @@
+<div class="py-1 bg-white dark:bg-neutral-900">
+  <% @coffee_bags.each do |coffee_bag| %>
+    <li class="px-4 py-2 text-sm" role="option" data-autocomplete-value="<%= coffee_bag.id %>" data-roaster="<%= coffee_bag.canonical_roaster.name %>" data-coffee-bag="<%= coffee_bag.name %>">
+      <%= coffee_bag.name %> (<%= coffee_bag.canonical_roaster.name %>)
+    </li>
+  <% end %>
+</div>
