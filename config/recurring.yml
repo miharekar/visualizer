@@ -1,3 +1,7 @@
+solid_queue_cleanup_job:
+  queue: low
+  command: "SolidQueue::Job.clear_finished_in_batches"
+  schedule: "@daily"
 shared_shot_cleanup_job:
   class: SharedShotCleanupJob
   schedule: "@hourly"
@@ -13,7 +17,6 @@ tag_cleaner_job:
 airtable_webhook_refresh_all_job:
   class: AirtableWebhookRefreshAllJob
   schedule: "0 0 */6 * *"
-solid_queue_cleanup_job:
-  queue: low
-  command: "SolidQueue::Job.clear_finished_in_batches"
+loffee_labs_importer_job:
+  class: LoffeeLabsImporterJob
   schedule: "@daily"

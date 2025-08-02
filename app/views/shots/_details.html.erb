@@ -122,6 +122,12 @@
             <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
           <% end %>
         <% end %>
+        <% if shot.canonical_coffee_bag %>
+          <% CanonicalCoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+            <%= metadata_pair(attribute.to_s.underscore.humanize, shot.canonical_coffee_bag.send(attribute)) %>
+          <% end %>
+          <%= metadata_pair("URL", link_to(shot.canonical_coffee_bag.url, shot.canonical_coffee_bag.url)) %>
+        <% end %>
         <% if shot.information&.brewdata.present? %>
           <% shot.information.brewdata.each do |group, values| %>
             <% next if group == "brewFlow" || !values.is_a?(Hash) %>
