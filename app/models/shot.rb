@@ -9,6 +9,7 @@ class Shot < ApplicationRecord
 
   belongs_to :user, optional: true, touch: true
   belongs_to :coffee_bag, optional: true
+  belongs_to :canonical_coffee_bag, optional: true
   has_one :information, class_name: "ShotInformation", dependent: :destroy, inverse_of: :shot
   has_many :shared_shots, dependent: :destroy
   has_many :shot_tags, dependent: :destroy
@@ -22,7 +23,7 @@ class Shot < ApplicationRecord
   validates :start_time, :sha, :user, presence: true
   validate :daily_limit, on: :create
 
-  before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? }
+  before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? || canonical_coffee_bag_id_changed? }
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
   after_create_commit :send_web_push_notification
 
@@ -44,10 +45,15 @@ class Shot < ApplicationRecord
   end
 
   def refresh_coffee_bag_fields
-    self.bean_brand = coffee_bag&.roaster&.name
-    self.bean_type = coffee_bag&.name
-    self.roast_date = coffee_bag&.roast_date&.strftime(user.date_format_string)
-    self.roast_level = coffee_bag&.roast_level
+    if coffee_bag
+      self.bean_brand = coffee_bag&.roaster&.name
+      self.bean_type = coffee_bag&.name
+      self.roast_date = coffee_bag&.roast_date&.strftime(user.date_format_string)
+      self.roast_level = coffee_bag&.roast_level
+    elsif canonical_coffee_bag
+      self.bean_brand = canonical_coffee_bag&.canonical_roaster&.name
+      self.bean_type = canonical_coffee_bag&.name
+    end
   end
 
   def related_shots(limit: 15)
@@ -74,10 +80,6 @@ class Shot < ApplicationRecord
     tags.pluck(:name).sort.join(",")
   end
 
-  def canonical_coffee_bag
-    @canonical_coffee_bag ||= CanonicalCoffeeBag.find_for(bean_brand, bean_type)
-  end
-
   private
 
   def daily_limit
@@ -98,47 +100,50 @@ end
 #
 # Table name: shots
 #
-#  id                 :uuid             not null, primary key
-#  barista            :string
-#  bean_brand         :string
-#  bean_notes         :text
-#  bean_type          :string
-#  bean_weight        :string
-#  drink_ey           :string
-#  drink_tds          :string
-#  drink_weight       :string
-#  duration           :float
-#  espresso_enjoyment :integer
-#  espresso_notes     :text
-#  grinder_model      :string
-#  grinder_setting    :string
-#  metadata           :jsonb
-#  private_notes      :text
-#  profile_title      :string
-#  public             :boolean
-#  roast_date         :string
-#  roast_level        :string
-#  sha                :string
-#  start_time         :datetime
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  airtable_id        :string
-#  coffee_bag_id      :uuid
-#  user_id            :uuid
+#  id                      :uuid             not null, primary key
+#  barista                 :string
+#  bean_brand              :string
+#  bean_notes              :text
+#  bean_type               :string
+#  bean_weight             :string
+#  drink_ey                :string
+#  drink_tds               :string
+#  drink_weight            :string
+#  duration                :float
+#  espresso_enjoyment      :integer
+#  espresso_notes          :text
+#  grinder_model           :string
+#  grinder_setting         :string
+#  metadata                :jsonb
+#  private_notes           :text
+#  profile_title           :string
+#  public                  :boolean
+#  roast_date              :string
+#  roast_level             :string
+#  sha                     :string
+#  start_time              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  airtable_id             :string
+#  canonical_coffee_bag_id :uuid
+#  coffee_bag_id           :uuid
+#  user_id                 :uuid
 #
 # Indexes
 #
-#  index_shots_on_airtable_id    (airtable_id)
-#  index_shots_on_bean_brand     (bean_brand) USING gin
-#  index_shots_on_bean_type      (bean_type) USING gin
-#  index_shots_on_coffee_bag_id  (coffee_bag_id)
-#  index_shots_on_created_at     (created_at)
-#  index_shots_on_sha            (sha)
-#  index_shots_on_start_time     (start_time)
-#  index_shots_on_user_id        (user_id)
+#  index_shots_on_airtable_id              (airtable_id)
+#  index_shots_on_bean_brand               (bean_brand) USING gin
+#  index_shots_on_bean_type                (bean_type) USING gin
+#  index_shots_on_canonical_coffee_bag_id  (canonical_coffee_bag_id)
+#  index_shots_on_coffee_bag_id            (coffee_bag_id)
+#  index_shots_on_created_at               (created_at)
+#  index_shots_on_sha                      (sha)
+#  index_shots_on_start_time               (start_time)
+#  index_shots_on_user_id                  (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (canonical_coffee_bag_id => canonical_coffee_bags.id)
 #  fk_rails_...  (coffee_bag_id => coffee_bags.id)
 #  fk_rails_...  (user_id => users.id)
 #
