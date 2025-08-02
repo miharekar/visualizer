@@ -68,6 +68,10 @@ Rails.application.routes.draw do
     post :search, on: :collection
   end
 
+  resources :canonical_coffee_bags, only: [] do
+    get :autocomplete, on: :collection
+  end
+
   resources :community, only: [:index] do
     collection do
       get :autocomplete
