@@ -51,7 +51,7 @@
 }
 
 .standard-input {
-  @apply block w-full font-medium bg-white border rounded-md inset-shadow-xs sm:text-sm text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:shadow-none;
+  @apply block w-full font-medium bg-white border rounded-md inset-shadow-xs sm:text-sm text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:shadow-none disabled:opacity-50;
 }
 
 .standard-file-input {
