@@ -1,26 +1,29 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "autocomplete", "roaster", "coffeeBag", "id"]
+  static targets = ["roaster", "coffeeBag", "id"]
 
   connect() {
-    this.autocompleteTarget.addEventListener("change", this.toggleInputs.bind(this))
-    this.autocompleteTarget.addEventListener("autocomplete.change", this.autocompleted.bind(this))
-
     this.toggleInputs()
+
+    this.observer = new MutationObserver(() => this.toggleInputs())
+    this.observer.observe(this.idTarget, { attributes: true, attributeFilter: ["value"] })
   }
 
-  autocompleted(event) {
-    this.roasterTarget.value = event.detail.selected.dataset.roaster
-    this.coffeeBagTarget.value = event.detail.selected.dataset.coffeeBag
-    this.toggleInputs()
+  disconnect() {
+    this.observer?.disconnect()
+  }
+
+  autocompleted({ detail }) {
+    const { roaster, coffeeBag } = detail.selected.dataset
+    this.roasterTarget.value = roaster
+    this.coffeeBagTarget.value = coffeeBag
   }
 
   toggleInputs() {
-    const disabled = !!this.idTarget.value
-    for (const el of [this.roasterTarget, this.coffeeBagTarget]) {
-      el.disabled = disabled
-      el.classList.toggle("cursor-not-allowed", disabled)
-    }
+    const disabled = Boolean(this.idTarget.value)
+    this.roasterTarget.disabled = this.coffeeBagTarget.disabled = disabled
+    this.roasterTarget.classList.toggle("cursor-not-allowed", disabled)
+    this.coffeeBagTarget.classList.toggle("cursor-not-allowed", disabled)
   }
 }
