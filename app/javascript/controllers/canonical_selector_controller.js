@@ -1,13 +1,18 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "autocomplete", "roaster", "coffeeBag", "id"]
+  static targets = ["autocomplete", "roaster", "coffeeBag", "id"]
 
   connect() {
-    this.autocompleteTarget.addEventListener("change", this.toggleInputs.bind(this))
-    this.autocompleteTarget.addEventListener("autocomplete.change", this.autocompleted.bind(this))
-
     this.toggleInputs()
+
+    this.autocompleteTarget.addEventListener("autocomplete.change", this.autocompleted.bind(this))
+    this.observer = new MutationObserver(() => this.toggleInputs())
+    this.observer.observe(this.idTarget, { attributes: true, attributeFilter: ["value"] })
+  }
+
+  disconnect() {
+    this.observer?.disconnect()
   }
 
   autocompleted(event) {
@@ -17,10 +22,9 @@ export default class extends Controller {
   }
 
   toggleInputs() {
-    const disabled = !!this.idTarget.value
-    for (const el of [this.roasterTarget, this.coffeeBagTarget]) {
-      el.disabled = disabled
-      el.classList.toggle("cursor-not-allowed", disabled)
-    }
+    const disabled = Boolean(this.idTarget.value)
+    this.roasterTarget.disabled = this.coffeeBagTarget.disabled = disabled
+    this.roasterTarget.classList.toggle("cursor-not-allowed", disabled)
+    this.coffeeBagTarget.classList.toggle("cursor-not-allowed", disabled)
   }
 }
