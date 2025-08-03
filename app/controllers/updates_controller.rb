@@ -7,7 +7,8 @@ class UpdatesController < ApplicationController
 
   def index
     Current.user&.update(last_read_change: Time.current)
-    @updates, @cursor = paginate_with_cursor(Update, items: 3, by: :published_at, before: params[:before])
+    items = params[:all].present? ? 9999 : 3
+    @updates, @cursor = paginate_with_cursor(Update, items:, by: :published_at, before: params[:before])
   end
 
   def feed
