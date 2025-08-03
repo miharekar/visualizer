@@ -1,11 +1,15 @@
 class CanonicalCoffeeBag < ApplicationRecord
+  MIN_TERM_LENGTH = 3
   DISPLAY_ATTRIBUTES = %i[name roast_level country region farmer variety elevation processing harvest_time tasting_notes].freeze
 
   belongs_to :canonical_roaster
 
   def self.search(term)
-    scope = joins(:canonical_roaster)
-    term.squish.split.each do |word|
+    words = term.squish.split.reject { |w| w.length < MIN_TERM_LENGTH }
+    return none if words.empty?
+
+    scope = includes(:canonical_roaster).references(:canonical_roaster)
+    words.each do |word|
       scope = scope.where("unaccent(canonical_roasters.name) ILIKE unaccent(?)", "%#{word}%")
         .or(scope.where("unaccent(canonical_coffee_bags.name) ILIKE unaccent(?)", "%#{word}%"))
     end
