@@ -24,7 +24,8 @@ class LoffeeLabsImporterJob < ApplicationJob
   private
 
   def import_roasters
-    CSV.foreach("storage/roasters.csv", headers: true) do |row|
+    url = Rails.application.credentials.dig(:loffee_labs, :roasters_url)
+    CSV.parse(SimpleDownloader.new(url).body, headers: true).each do |row|
       name = row["roaster"]&.squish
       next if name.blank?
 
@@ -34,14 +35,8 @@ class LoffeeLabsImporterJob < ApplicationJob
   end
 
   def import_beans
-    uri = URI("https://www.loffeelabs.com/wp-json/beanbase/v1/beans?api_key=#{Rails.application.credentials.dig(:loffee_labs, :api_key)}")
-    req = Net::HTTP::Get.new(uri)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    response = http.request(req)
-    return unless response.is_a?(Net::HTTPSuccess)
-
-    JSON.parse(response.body)["data"].each do |bean|
+    url = "https://www.loffeelabs.com/wp-json/beanbase/v1/beans?api_key=#{Rails.application.credentials.dig(:loffee_labs, :api_key)}"
+    JSON.parse(SimpleDownloader.new(url).body)["data"].each do |bean|
       roaster_name = bean["roaster"]&.squish
       next if roaster_name.blank?
 
