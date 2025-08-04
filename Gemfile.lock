@@ -180,9 +180,9 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.2.0)
     hashie (5.0.0)
-    herb (0.4.2-aarch64-linux-gnu)
-    herb (0.4.2-arm64-darwin)
-    herb (0.4.2-x86_64-linux-gnu)
+    herb (0.4.3-aarch64-linux-gnu)
+    herb (0.4.3-arm64-darwin)
+    herb (0.4.3-x86_64-linux-gnu)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
