@@ -1,0 +1,33 @@
+class OpenAi
+  API_ENDPOINT = "https://api.openai.com/v1/responses".freeze
+  API_KEY = Rails.application.credentials.open_ai.api_key
+  MODEL = "gpt-5-nano".freeze
+  PROMPT_ID = "pmpt_6895a7ef261c81979e303c72bfc4e522050671dff051834a".freeze
+
+  def message(content, attempt: 1)
+    uri = URI(API_ENDPOINT)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request["Authorization"] = "Bearer #{API_KEY}"
+    request["Content-Type"] = "application/json"
+    request.body = {
+      model: MODEL,
+      prompt: {id: PROMPT_ID},
+      max_output_tokens: 500,
+      reasoning: {effort: "minimal"},
+      input: content
+    }.to_json
+
+    response = http.request(request)
+    raise "Failed to get response from OpenAI: #{response.code} #{response.message}" unless response.is_a?(Net::HTTPSuccess)
+
+    model_response = JSON.parse(response.body)
+    model_response["output"].filter_map { |o| o["content"] }.first.first["text"]
+  rescue StandardError
+    raise if attempt >= 3 || response&.code != "529"
+
+    attempt += 1
+    retry
+  end
+end

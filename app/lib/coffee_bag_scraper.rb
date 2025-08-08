@@ -1,9 +1,8 @@
 class CoffeeBagScraper
   def get_info(url)
     scraped_content = page_content(url)
-    prompt = ERB.new(Rails.root.join("app/lib/templates/coffee_extraction_prompt.text.erb").read).result_with_hash(scraped_content:)
-    response = Claude.new.message(prompt)
-    JSON.parse(response["content"][0]["text"]).compact_blank
+    response = OpenAi.new.message(scraped_content)
+    JSON.parse(response).compact_blank
   rescue StandardError => e
     Appsignal.report_error(e)
     {error: e.message}
