@@ -75,7 +75,7 @@ class YearlyBrew
     shots(year)
       .group("EXTRACT(DOW FROM start_time)")
       .select("EXTRACT(DOW FROM start_time) as day, COUNT(*) as shots_count")
-      .order("day")
+      .order(:day)
       .map { [Date::DAYNAMES[it.day.to_i], it.shots_count] }
       .rotate(1)
   end
