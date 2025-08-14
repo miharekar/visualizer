@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-const uuidV4Regex = /shots\/([A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$)/i
+const uuidV4Regex = /shots\/([A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12})/i
 
 export default class extends Controller {
   async from(event) {
@@ -60,6 +60,11 @@ export default class extends Controller {
         frame.src = `/shots/coffee_bag_form?coffee_bag=${data.coffee_bag_id}`
         frame.reload()
       }
+    }
+
+    if (document.getElementById("shot_canonical_coffee_bag_search")) {
+      document.getElementById("shot_canonical_coffee_bag_search").value = ""
+      document.getElementById("shot_canonical_coffee_bag_id").value = ""
     }
   }
 

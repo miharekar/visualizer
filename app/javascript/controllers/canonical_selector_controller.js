@@ -4,8 +4,9 @@ export default class extends Controller {
   static targets = ["autocomplete", "roaster", "coffeeBag", "id"]
 
   connect() {
-    this.toggleInputs()
+    if (!this.hasIdTarget) return
 
+    this.toggleInputs()
     this.autocompleteTarget.addEventListener("autocomplete.change", this.autocompleted.bind(this))
     this.observer = new MutationObserver(() => this.toggleInputs())
     this.observer.observe(this.idTarget, { attributes: true, attributeFilter: ["value"] })
