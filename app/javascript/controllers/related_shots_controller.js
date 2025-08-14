@@ -24,12 +24,12 @@ export default class extends Controller {
     if (uuidMatch) {
       input.value = ""
       input.placeholder = "With any shot via its URL"
-      input.classList.remove("focus:placeholder-red-500", "focus:ring-red-500", "focus:border-red-500")
+      input.classList.remove("focus:placeholder-red-500!", "focus:ring-red-500!", "focus:border-red-500!")
       Turbo.visit("/shots/" + this.shotIdValue + "/compare/" + uuidMatch.pop())
     } else {
       input.value = ""
       input.placeholder = "Please enter a valid shot URL"
-      input.classList.add("focus:placeholder-red-500", "focus:ring-red-500", "focus:border-red-500")
+      input.classList.add("focus:placeholder-red-500!", "focus:ring-red-500!", "focus:border-red-500!")
     }
   }
 }

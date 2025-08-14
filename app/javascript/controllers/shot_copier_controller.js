@@ -1,10 +1,32 @@
 import { Controller } from "@hotwired/stimulus"
 
+const uuidV4Regex = /shots\/([A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$)/i
+
 export default class extends Controller {
   async from(event) {
     const shotId = event.currentTarget.value
     if (!shotId) return
 
+    this.copyFrom(shotId)
+  }
+
+  async fromUrl(event) {
+    const input = event.currentTarget
+    const url = input.value
+    const uuidMatch = url.match(uuidV4Regex)
+
+    if (uuidMatch) {
+      input.placeholder = "From any shot via its URL"
+      input.classList.remove("focus:placeholder-red-500!", "focus:ring-red-500!", "focus:border-red-500!")
+      this.copyFrom(uuidMatch.pop())
+    } else {
+      input.value = ""
+      input.placeholder = "Please enter a valid shot URL"
+      input.classList.add("focus:placeholder-red-500!", "focus:ring-red-500!", "focus:border-red-500!")
+    }
+  }
+
+  async copyFrom(shotId) {
     try {
       const response = await fetch(`/api/shots/${shotId}?essentials=true`)
       if (!response.ok) throw new Error("Failed to fetch shot data")

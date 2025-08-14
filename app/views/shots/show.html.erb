@@ -14,7 +14,7 @@
       <h3 class="mt-3 text-l dark:text-neutral-300">Compare</h3>
       <div class="flex flex-col mt-3" data-controller="related-shots" data-related-shots-shot-id-value="<%= @shot.id %>">
         <% if @compare_shots.present? %>
-          <div class="flex-1 mb-1 <%= width_class %>">
+          <div class="flex-1 mb-2 <%= width_class %>">
             <select class="standard-input" data-action="related-shots#compare">
               <option>With one of your recent shots</option>
               <% @compare_shots.each do |id, title, bean_type, time| %>
@@ -27,7 +27,7 @@
           </div>
         <% end %>
         <div class="flex-1 <%= width_class %>">
-          <input class="mt-1 standard-input" type="text" data-action="related-shots#urlCompare" placeholder="With any shot via its URL">
+          <input class="standard-input" type="text" data-action="related-shots#urlCompare" placeholder="With any shot via its URL">
         </div>
       </div>
     </div>
