@@ -58,7 +58,7 @@ class Shot < ApplicationRecord
 
   def related_shots(limit: 15)
     query = self.class.where(user:).where.not(id:).limit(limit)
-    query = query.non_premium unless user.premium?
+    query = query.non_premium unless Current.user&.premium?
     query.where(start_time: start_time..).order(:start_time) + [self] + query.where(start_time: ..start_time).order(start_time: :desc)
   end
 
