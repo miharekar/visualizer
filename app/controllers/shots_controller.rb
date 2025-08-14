@@ -19,9 +19,6 @@ class ShotsController < ApplicationController
 
   def show
     @chart = ShotChart.new(@shot, Current.user) if @shot.information
-    return if Current.user.nil?
-
-    @compare_shots = Current.user.shots.where.not(id: @shot.id).by_start_time.limit(10).pluck(:id, :profile_title, :bean_type, :start_time)
   end
 
   def compare
