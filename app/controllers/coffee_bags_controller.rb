@@ -23,7 +23,7 @@ class CoffeeBagsController < ApplicationController
     if @coffee_bag.save
       redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -31,21 +31,21 @@ class CoffeeBagsController < ApplicationController
     if @coffee_bag.update(coffee_bag_params)
       redirect_to roaster_coffee_bags_path(@coffee_bag.roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
   def duplicate
     if params[:roast_date].blank?
       flash.now[:alert] = "Please provide a roast date to duplicate this coffee bag."
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     else
       duplicate = @coffee_bag.duplicate(params[:roast_date])
       if duplicate.save
         redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully duplicated as #{duplicate.display_name}."
       else
         flash.now[:alert] = "Failed to duplicate coffee bag."
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
   end
@@ -68,7 +68,7 @@ class CoffeeBagsController < ApplicationController
       render json: info
     else
       error = info[:error].presence || "Could not extract information from URL"
-      render json: {error:}, status: :unprocessable_entity
+      render json: {error:}, status: :unprocessable_content
     end
   end
 

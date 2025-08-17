@@ -224,7 +224,7 @@ module Api
     test "upload returns error when no file content is provided" do
       post upload_api_shots_url, headers: auth_headers(user)
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
       json_response = response.parsed_body
       assert_equal "No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object.", json_response["error"]
     end
@@ -232,7 +232,7 @@ module Api
     test "upload returns error when file content is invalid" do
       post upload_api_shots_url, headers: auth_headers(user), params: "{ invalid json content", as: :json
 
-      assert_response :unprocessable_entity
+      assert_response :unprocessable_content
       json_response = response.parsed_body
       assert json_response["error"].present?
       assert_includes json_response["error"], "Could not save the provided file"

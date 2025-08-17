@@ -16,7 +16,7 @@ module Api
       render json: {data:, paging:}
     rescue ActiveRecord::ActiveRecordError => e
       Appsignal.report_error(e)
-      render json: {error: "Could not paginate"}, status: :unprocessable_entity
+      render json: {error: "Could not paginate"}, status: :unprocessable_content
     end
 
     def show
@@ -39,7 +39,7 @@ module Api
         elsif shot.information&.tcl_profile_fields.present?
           send_data shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
         else
-          render json: {error: "Shot does not have a profile"}, status: :unprocessable_entity
+          render json: {error: "Shot does not have a profile"}, status: :unprocessable_content
         end
       end
     end
@@ -61,7 +61,7 @@ module Api
       if shot&.save
         render json: {id: shot.id}
       else
-        render json: {error: "Could not save the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_entity
+        render json: {error: "Could not save the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_content
       end
     end
 
@@ -97,7 +97,7 @@ module Api
       end
       return if file_content.present?
 
-      render json: {error: "No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object."}, status: :unprocessable_entity
+      render json: {error: "No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object."}, status: :unprocessable_content
     end
   end
 end

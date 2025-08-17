@@ -21,7 +21,7 @@ class RoastersController < ApplicationController
     if @roaster.save
       redirect_to roasters_path(format: :html), notice: "Roaster was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class RoastersController < ApplicationController
     if @roaster.update(roaster_params)
       redirect_to roasters_path(format: :html), notice: "Roaster was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

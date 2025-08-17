@@ -32,7 +32,7 @@ class UpdatesController < ApplicationController
     if @update.save
       redirect_to updates_path(format: :html)
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -40,7 +40,7 @@ class UpdatesController < ApplicationController
     if @update.update(update_params)
       redirect_to update_path(@update.slug)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

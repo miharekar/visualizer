@@ -12,7 +12,7 @@ class RegistrationsController < ApplicationController
       start_new_session_for(@user)
       redirect_to root_path, notice: "Welcome to the Visualizer!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
