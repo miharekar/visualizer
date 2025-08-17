@@ -16,7 +16,8 @@ class ApplicationController < ActionController::Base
 
   def set_timezone
     zone = Current.user&.timezone.presence || cookies["browser.timezone"].presence
-    @timezone = ActiveSupport::TimeZone.new(zone) || ActiveSupport::TimeZone.new("UTC")
+    @timezone = ActiveSupport::TimeZone.new(zone) if zone
+    @timezone ||= ActiveSupport::TimeZone.new("UTC")
   end
 
   def set_skin
