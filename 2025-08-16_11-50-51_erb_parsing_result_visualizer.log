@@ -1,0 +1,93 @@
+--- METADATA -------------------------------------------------------------------
+Herb Version: herb gem v0.4.3, libprism v1.4.0, libherb v0.4.3 (Ruby C native extension)
+Reported at: 2025-08-16T11:50:51
+
+--- PROJECT --------------------------------------------------------------------
+Path: /Users/miharekar/Development/Personal/visualizer
+Glob: /Users/miharekar/Development/Personal/visualizer**/*.html.erb
+
+--- PROCESSED FILES ------------------------------------------------------------
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/canonical_coffee_bags/autocomplete.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/coffee_bags/_coffee_bag.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/coffee_bags/_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/coffee_bags/edit.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/coffee_bags/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/coffee_bags/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/community/_filters.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/community/_instant_filters_promo.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/community/autocomplete.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/community/banner.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/community/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/decent_tokens/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/errors/internal_server_error.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/errors/not_found.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/home/privacy.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/home/show.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/layouts/application.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/layouts/doorkeeper/admin.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/layouts/doorkeeper/application.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/layouts/mailer.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/notifications/_notification.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/passwords/edit.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/passwords/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/passwords_mailer/reset.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/people/show.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/premium/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/profiles/_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/profiles/decent_serial_numbers.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/profiles/edit.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/registrations/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/roasters/_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/roasters/_roaster.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/roasters/edit.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/roasters/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/roasters/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/sessions/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_combobox.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_cursor_loader.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_footer.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_header.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_migration_banner.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_modal.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_notifications.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shared/_premium_banner.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_comparison_banner.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_details.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_filters.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_related_shots.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_share.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_shot.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_shot_header_row.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_tags.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/_upload_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/coffee_bag_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/compare.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/edit.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/shots/show.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/stats/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/updates/_form.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/updates/_update.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/updates/edit.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/updates/index.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/updates/new.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/updates/show.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/user_mailer/_yearly_brew_stat.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/user_mailer/black_friday.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/user_mailer/yearly_brew.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/yearly_brew/_stats_2023.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/yearly_brew/_stats_2024.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/yearly_brew/index_2023.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/yearly_brew/index_2024.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/yearly_brew/show_2023.html.erb successfully
+✅ Parsed /Users/miharekar/Development/Personal/visualizer/app/views/yearly_brew/show_2024.html.erb successfully
+
+--- SUMMARY --------------------------------------------------------------------
+Total files: 75
+✅ Successful: 75 (100.0%)
+❌ Failed: 0 (0.0%)
+⚠️ Parse errors: 0 (0.0%)
+⏱️ Timed out: 0 (0.0%)
+
+⏱️ Total time: 394.19ms

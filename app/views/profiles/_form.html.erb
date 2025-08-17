@@ -6,7 +6,7 @@
           <div class="col-span-3 sm:col-span-2">
             <label class="standard-label">Avatar</label>
             <div class="flex items-center mt-2" data-controller="image-form">
-              <img class="rounded size-12" src="<%= avatar_url(@profile, 96) %>">
+              <img alt="avatar" class="rounded size-12" src="<%= avatar_url(@profile, 96) %>">
               <%= f.label :avatar, "Change", data: {image_form_target: "label"}, class: "cursor-pointer ml-3 bg-white dark:bg-neutral-800 py-2 px-3 border border-neutral-300 dark:border-neutral-600 rounded-md shadow-sm text-sm leading-4 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500" %>
               <%= f.file_field :avatar, data: {action: "input->image-form#update"}, class: "hidden" %>
             </div>
@@ -96,7 +96,7 @@
                 <button class="px-3 py-2 ml-2 text-sm font-medium bg-white border cursor-pointer leading-4 rounded-md shadow-sm dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black" data-action="click->metadata-fields#add">
                   Add
                 </button>
-                <a class="hidden" data-turbo-method="post" data-metadata-fields-target="link"></a>
+                <a href="#" class="hidden" data-turbo-method="post" data-metadata-fields-target="link"></a>
               </div>
               <p class="text-sm text-neutral-500 dark:text-neutral-400">Add custom fields to your shots like "Portafilter basket" or "Bean variety".</p>
               <p class="text-sm text-neutral-500 dark:text-neutral-400">Only letters, numbers, spaces and underscores are allowed.</p>

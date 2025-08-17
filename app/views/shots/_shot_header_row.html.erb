@@ -35,7 +35,7 @@
               <%= render Notification.new(type: :default, heading: "URL copied to clipboard", timeout: 3000) %>
             </div>
             <div class="flex mr-3" data-controller="clipboard">
-              <input class="hidden" size="1" type="text" value="<%= request.url %>" readonly="readonly" data-clipboard-target="source">
+              <input class="hidden" size="1" type="text" value="<%= request.url %>" readonly data-clipboard-target="source">
               <a class="inline-flex px-4 py-2 text-sm bg-white border cursor-pointer rounded-md shadow-sm border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900" data-action="clipboard#copy" href="#" title="Copy URL to clipboard" data-clipboard-target="container">
                 <svg class="-ml-1 -mr-1 size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="copy">
                   <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
