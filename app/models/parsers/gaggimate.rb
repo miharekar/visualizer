@@ -8,7 +8,7 @@ module Parsers
       "tt" => "espresso_temperature_goal",
       "ct" => "espresso_temperature_mix",
       "v"  => "espresso_weight",
-      "ev" => "espresso_flow_weight"
+      "vf" => "espresso_flow_weight"
     }.freeze
 
     def parse
@@ -31,16 +31,21 @@ module Parsers
 
       json["samples"].each do |point|
         @timeframe << (point["t"] / 1000.0)
+        if point["v"] == 0
+        	point["v"] = point["ev"]
+    	end
+        if point["vf"] == 0
+        	point["vf"] = point["pf"]
+    	end
         DATA_LABELS_MAP.each do |key, label|
           value = point[key]
-          value = value / 10.0 if value && key == "ev"
           @data[label] << value
         end
       end
     end
 
     def set_extra
-      @extra["drink_weight"] = json["samples"].last["ev"]
+      @extra["drink_weight"] = json["samples"].last["v"]
     end
   end
 end
