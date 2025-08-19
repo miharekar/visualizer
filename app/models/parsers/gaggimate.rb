@@ -31,12 +31,8 @@ module Parsers
 
       json["samples"].each do |point|
         @timeframe << (point["t"] / 1000.0)
-        if point["v"] == 0
-        	point["v"] = point["ev"]
-    	end
-        if point["vf"] == 0
-        	point["vf"] = point["pf"]
-    	end
+        point["v"] = point["ev"] if point["v"] == 0 # Fill measured weight with estimated weight if no scale was connected
+        point["vf"] = point["pf"] if point["vf"] == 0 # Fill measured flow with estimated flow if no scale was connected
         DATA_LABELS_MAP.each do |key, label|
           value = point[key]
           @data[label] << value
