@@ -6,10 +6,9 @@ module Parsers
       "tp" => "espresso_pressure_goal",
       "tf" => "espresso_flow_goal",
       "tt" => "espresso_temperature_goal",
-      "ct" => "espresso_temperature_mix",
-      "v"  => "espresso_weight",
-      "vf" => "espresso_flow_weight"
-    }.freeze
+      "ct" => "espresso_temperature_mix"
+    }
+    EXTRA_LABELS = %w[espresso_weight espresso_flow_weight]
 
     def parse
       @start_time = Time.at(json["timestamp"]).utc
@@ -27,21 +26,18 @@ module Parsers
 
     def prepare_data
       @timeframe = []
-      DATA_LABELS_MAP.each_value { |label| @data[label] = [] }
+      (DATA_LABELS_MAP.values + EXTRA_LABELS).each { |label| @data[label] = [] }
 
       json["samples"].each do |point|
         @timeframe << (point["t"] / 1000.0)
-        point["v"] = point["ev"] if point["v"] == 0 # Fill measured weight with estimated weight if no scale was connected
-        point["vf"] = point["pf"] if point["vf"] == 0 # Fill measured flow with estimated flow if no scale was connected
-        DATA_LABELS_MAP.each do |key, label|
-          value = point[key]
-          @data[label] << value
-        end
+        DATA_LABELS_MAP.each { |key, label| @data[label] << point[key] }
+        @data["espresso_weight"] << (point["v"] == 0 ? point["ev"] : point["v"])
+        @data["espresso_flow_weight"] << (point["vf"] == 0 ? point["pf"] : point["vf"])
       end
     end
 
     def set_extra
-      @extra["drink_weight"] = json["samples"].last["v"]
+      @extra["drink_weight"] = @data["espresso_weight"].last
     end
   end
 end

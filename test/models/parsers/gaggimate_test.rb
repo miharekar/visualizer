@@ -20,10 +20,11 @@ module Parsers
       assert_in_delta(0.88, shot.information.timeframe.first)
       assert_in_delta(22.823, shot.information.timeframe.last)
       assert_in_delta(22.823, shot.duration)
-      expected_keys = Parsers::Gaggimate::DATA_LABELS_MAP.values
+      expected_keys = Parsers::Gaggimate::DATA_LABELS_MAP.values + Parsers::Gaggimate::EXTRA_LABELS
       assert_equal expected_keys.sort, shot.information.data.keys.sort
       assert_equal 213, shot.information.data["espresso_pressure"].size
       assert_in_delta(9.916, shot.information.data["espresso_flow"][2])
+      assert_in_delta(9.916, shot.information.data["espresso_flow_weight"][2])
       assert_equal "81.73", shot.drink_weight
     end
 
@@ -35,10 +36,11 @@ module Parsers
       assert_equal "2025-07-26 14:08:25", shot.start_time.to_fs(:db)
       assert_operator shot.information.timeframe.size, :>, 0
       assert_in_delta(0.866, shot.information.timeframe.first)
-      expected_keys = Parsers::Gaggimate::DATA_LABELS_MAP.values
+      expected_keys = Parsers::Gaggimate::DATA_LABELS_MAP.values + Parsers::Gaggimate::EXTRA_LABELS
       assert_equal expected_keys.sort, shot.information.data.keys.sort
       assert_equal shot.information.timeframe.size, shot.information.data["espresso_pressure"].size
       assert_equal "238.54", shot.drink_weight
+      assert_in_delta(10.048, shot.information.data["espresso_flow_weight"][2])
     end
 
     test "validates v1 data consistency" do
@@ -57,16 +59,10 @@ module Parsers
       end
     end
 
-    test "validates ev scaling" do
-      shot = new_shot("test/files/gaggimate-v1.json")
-      original_ev = 0 # from JSON first sample (ev field)
-      expected_scaled = original_ev / 10.0
-      assert_in_delta(expected_scaled, shot.information.data["espresso_flow_weight"][0])
-
-      # Test a non-zero ev value from later in the shot
-      # From the JSON, sample at index 7 has ev: 4.2
-      expected_scaled_later = 4.2 / 10.0
-      assert_in_delta(expected_scaled_later, shot.information.data["espresso_flow_weight"][7])
+    test "validate using v for flow weight" do
+      shot = new_shot("test/files/gaggimate2.json")
+      assert_in_delta(0, shot.information.data["espresso_flow_weight"][2])
+      assert_equal "36.79", shot.drink_weight
     end
   end
 end
