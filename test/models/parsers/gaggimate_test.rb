@@ -40,7 +40,7 @@ module Parsers
       assert_equal expected_keys.sort, shot.information.data.keys.sort
       assert_equal shot.information.timeframe.size, shot.information.data["espresso_pressure"].size
       assert_equal "238.54", shot.drink_weight
-      assert_in_delta(10.048, shot.information.data["espresso_flow_weight"][2])
+      assert_in_delta(10.146, shot.information.data["espresso_flow_weight"][0])
     end
 
     test "validates v1 data consistency" do
@@ -61,7 +61,8 @@ module Parsers
 
     test "validate using v for flow weight" do
       shot = new_shot("test/files/gaggimate2.json")
-      assert_in_delta(0, shot.information.data["espresso_flow_weight"][2])
+      assert_in_delta(0, shot.information.data["espresso_flow_weight"][0])
+      assert_in_delta(0.833, shot.information.data["espresso_flow_weight"][40])
       assert_equal "36.79", shot.drink_weight
     end
   end

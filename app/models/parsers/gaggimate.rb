@@ -28,11 +28,13 @@ module Parsers
       @timeframe = []
       (DATA_LABELS_MAP.values + EXTRA_LABELS).each { |label| @data[label] = [] }
 
+      has_scale = json["samples"].any? { |point| point["v"].to_i != 0 }
+      measured_flow = json["samples"].any? { |point| point["vf"].to_i != 0 }
       json["samples"].each do |point|
         @timeframe << (point["t"] / 1000.0)
         DATA_LABELS_MAP.each { |key, label| @data[label] << point[key] }
-        @data["espresso_weight"] << (point["v"] == 0 ? point["ev"] : point["v"])
-        @data["espresso_flow_weight"] << (point["vf"] == 0 ? point["pf"] : point["vf"])
+        @data["espresso_weight"] << (has_scale ? point["v"] : point["ev"])
+        @data["espresso_flow_weight"] << (measured_flow ? point["vf"] : point["pf"])
       end
     end
 
