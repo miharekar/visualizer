@@ -34,6 +34,7 @@ class PremiumController < ApplicationController
       ["Can I pay with Bitcoin/Ethereum/Dogecoin/…?", "No."],
       ["Can I use it on multiple devices?", "Yes! Use it anywhere you want - no extra charge."],
       ["How did you decide on the price?", "That's quite a story! Read all about it in [this post](/updates/visualizer-v3)."],
+      ["What's that about contributing 1% of the subscription to removing CO₂ from the atmosphere?", "I love what Stripe is doing with their [Climate program](https://stripe.com/climate), so I'm pitching in to help."],
       ["What's your favorite exercise?", "The daily grind."]
     ].shuffle + [
       ["What if I have more questions?", "Just [send me a message](mailto:miha@visualizer.coffee) - I'm here to help!"]
@@ -44,54 +45,54 @@ class PremiumController < ApplicationController
     if Current.user.premium_expires_at&.future?
       redirect_to shots_path, flash: {premium: "You're already a premium user. Thank you for your support!"}
     else
-      data = {
-        data: {
-          type: "checkouts",
-          attributes: {
-            checkout_data: {
-              email: Current.user.email,
-              custom: {user_id: Current.user.id}
-            },
-            product_options: {
-              redirect_url: success_premium_index_url
-            },
-            checkout_options: {
-              skip_trial: Current.user.premium_expires_at.present?
-            }
-          },
-          relationships: {
-            variant: {
-              data: {
-                type: "variants",
-                id: Rails.application.credentials.lemon_squeezy.yearly_price_id.to_s
-              }
-            },
-            store: {
-              data: {
-                type: "stores",
-                id: Rails.application.credentials.lemon_squeezy.store_id.to_s
-              }
-            }
-          }
-        }
+      price_id = Stripe::Price.list(active: true, recurring: {interval: "month"}).first.id
+      session_params = {
+        success_url: "#{success_premium_index_url}?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: cancel_premium_index_url,
+        mode: "subscription",
+        metadata: {user_id: Current.user.id},
+        line_items: [{quantity: 1, price: price_id}],
+        managed_payments: {enabled: true}
       }
 
-      checkout = LemonSqueezy.new.create_checkout(data)
-      redirect_to checkout.dig("data", "attributes", "url"), allow_other_host: true
+      if Current.user.stripe_customer_id.present?
+        session_params[:customer] = Current.user.stripe_customer_id
+      else
+        session_params = session_params.merge(
+          customer_email: Current.user.email,
+          subscription_data: {trial_period_days: helpers.free_trial_days}
+        )
+      end
+
+      session = Stripe::Checkout::Session.create(session_params)
+      redirect_to session.url, allow_other_host: true
     end
   end
 
   def manage
-    if Current.user.lemon_squeezy_customer_id.blank?
-      redirect_to shots_path, flash: {alert: "You don't have a Premium subscription. Please subscribe first."}
+    if Current.user.premium_expires_at&.future?
+      if Current.user.lemon_squeezy_customer_id.present?
+        customer = LemonSqueezy.new.get_customer(Current.user.lemon_squeezy_customer_id)
+        redirect_to customer.dig("data", "attributes", "urls", "customer_portal"), allow_other_host: true
+      elsif Current.user.stripe_customer_id.present?
+        session = Stripe::BillingPortal::Session.create(
+          customer: Current.user.stripe_customer_id,
+          return_url: shots_url
+        )
+        redirect_to session.url, allow_other_host: true
+      end
     else
-      customer = LemonSqueezy.new.get_customer(Current.user.lemon_squeezy_customer_id)
-      redirect_to customer.dig("data", "attributes", "urls", "customer_portal"), allow_other_host: true
+      redirect_to shots_path, flash: {alert: "You don't have a Premium subscription. Please subscribe first."}
     end
   end
 
   def success
     flash[:notice] = "Subscribing was successful"
+    redirect_to shots_path
+  end
+
+  def cancel
+    flash[:alert] = "Subscribing was cancelled."
     redirect_to shots_path
   end
 end
