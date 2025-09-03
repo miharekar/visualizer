@@ -3,6 +3,7 @@ class Roaster < ApplicationRecord
   include Squishable
 
   belongs_to :user
+  belongs_to :canonical_roaster, optional: true
   has_many :coffee_bags, dependent: :destroy
   has_many :shots, through: :coffee_bags
 

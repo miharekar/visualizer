@@ -5,6 +5,7 @@ class CoffeeBag < ApplicationRecord
   DISPLAY_ATTRIBUTES = %i[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes].freeze
 
   belongs_to :roaster, touch: true
+  belongs_to :canonical_coffee_bag, optional: true
   has_one :user, through: :roaster
   has_many :shots, dependent: :nullify
 

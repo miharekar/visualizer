@@ -3,6 +3,7 @@ class CanonicalCoffeeBag < ApplicationRecord
   DISPLAY_ATTRIBUTES = %i[name roast_level country region farmer variety elevation processing harvest_time tasting_notes].freeze
 
   belongs_to :canonical_roaster
+  has_many :coffee_bags, dependent: :nullify
 
   def self.search(term)
     words = term.squish.split.reject { |w| w.length < MIN_TERM_LENGTH }

@@ -7,7 +7,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/shots_controller.rb",
-      "line": 137,
+      "line": 134,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Current.user.shots.with_attached_image.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
       "render_path": null,
@@ -58,47 +58,13 @@
       "note": ""
     },
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "7dbe88465a426e64c7776585bed1b7c608cd90a7a475e8d8796c9154411b9322",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/roasters/index.html.erb",
-      "line": 34,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.roasters.order_by_name.includes(:coffee_bags).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.roasters.order_by_name.includes(:coffee_bags).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "RoastersController",
-          "method": "index",
-          "line": 8,
-          "file": "app/controllers/roasters_controller.rb",
-          "rendered": {
-            "name": "roasters/index",
-            "file": "app/views/roasters/index.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "roasters/index"
-      },
-      "user_input": "params[:coffee]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "cd14a1e7f78573fa1c46fcb458fa998025ffa91237c084f230e9e0549794b24b",
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/shots_controller.rb",
-      "line": 40,
+      "line": 37,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code}\", :allow_other_host => true)",
       "render_path": null,

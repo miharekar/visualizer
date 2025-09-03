@@ -1,5 +1,6 @@
 class CanonicalRoaster < ApplicationRecord
   has_many :canonical_coffee_bags, dependent: :destroy
+  has_many :roasters, dependent: :nullify
 end
 
 # == Schema Information
