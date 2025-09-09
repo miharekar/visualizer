@@ -131,6 +131,9 @@ GEM
     brakeman (7.1.0)
       racc
     builder (3.3.0)
+    bundler-audit (0.9.2)
+      bundler (>= 1.2.0, < 3)
+      thor (~> 1.0)
     childprocess (5.1.0)
       logger (~> 1.5)
     cloudinary (2.4.0)
@@ -559,6 +562,7 @@ DEPENDENCIES
   benchmark-ips
   bootsnap
   brakeman
+  bundler-audit
   cloudinary
   csv
   debug

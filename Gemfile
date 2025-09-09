@@ -42,6 +42,7 @@ gem "turbo-rails"
 gem "web-push"
 
 group :development, :test do
+  gem "bundler-audit"
   gem "debug", require: "debug/prelude"
   gem "vernier"
 end
