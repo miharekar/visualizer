@@ -10,6 +10,10 @@ pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@12.4.
 pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js
 
 # use bin/importmap update to update the local ones below
+pin "@appsignal/javascript", to: "@appsignal--javascript.js" # @1.6.0
+pin "https" # @2.1.0
+pin "tslib" # @2.8.1
+pin "@appsignal/stimulus", to: "@appsignal--stimulus.js" # @1.0.20
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
 pin "el-transition" # @0.0.7
 pin "match-sorter" # @8.1.0
