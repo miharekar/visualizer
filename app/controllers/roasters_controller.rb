@@ -58,6 +58,6 @@ class RoastersController < ApplicationController
   end
 
   def roaster_params
-    params.expect(roaster: %i[name website image])
+    params.expect(roaster: %i[name website image canonical_roaster_id])
   end
 end
