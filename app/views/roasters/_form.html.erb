@@ -1,22 +1,24 @@
 <div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@roaster) %>">
   <%= form_with(model: @roaster) do |f| %>
-    <div class="shadow sm:rounded-md sm:overflow-hidden">
+    <div class="shadow sm:rounded-md sm:overflow-hidden" data-controller="canonical-selector">
       <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-3 gap-6">
-          <div class="col-span-3 sm:col-span-2">
+          <div class="col-span-3 sm:col-span-2" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_roasters_canonical_index_path %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white">
             <% has_error = f.object.errors.any? { |e| e.attribute == :name } %>
             <% if has_error %>
               <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
             <% end %>
             <%= f.label :name, class: "standard-label" %>
-            <%= f.text_field :name, class: "#{extra_classes} mt-1 standard-input", autocomplete: "name" %>
+            <%= f.hidden_field :canonical_roaster_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id" } %>
+            <%= f.search_field :name, class: "#{extra_classes} mt-1 standard-input", data: { autocomplete_target: "input" } %>
+            <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
             <% if has_error %>
               <p class="text-sm font-medium text-red-500">Name is required and has to be unique.</p>
             <% end %>
           </div>
           <div class="col-span-3 sm:col-span-2">
             <%= f.label :website, class: "standard-label" %>
-            <%= f.text_field :website, class: "mt-1 standard-input" %>
+            <%= f.text_field :website, class: "mt-1 standard-input", data: {canonical_selector_target: "roasterWebsite"} %>
           </div>
           <div class="col-span-3 sm:col-span-2">
             <div data-controller="image-form">

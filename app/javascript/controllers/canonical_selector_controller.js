@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["autocomplete", "roaster", "coffeeBag", "id"]
+  static targets = ["autocomplete", "id", "roaster", "coffeeBag", "roasterWebsite"]
 
   connect() {
     if (!this.hasIdTarget) return
@@ -17,15 +17,26 @@ export default class extends Controller {
   }
 
   autocompleted(event) {
-    this.roasterTarget.value = event.detail.selected.dataset.roaster
-    this.coffeeBagTarget.value = event.detail.selected.dataset.coffeeBag
+    const { roaster = "", coffeeBag = "", roasterWebsite = "" } = event.detail?.selected?.dataset || {}
+
+    if (this.hasRoasterTarget) this.roasterTarget.value = roaster
+    if (this.hasCoffeeBagTarget) this.coffeeBagTarget.value = coffeeBag
+    if (this.hasRoasterWebsiteTarget) this.roasterWebsiteTarget.value = roasterWebsite
+
     this.toggleInputs()
   }
 
   toggleInputs() {
-    const disabled = Boolean(this.idTarget.value)
-    this.roasterTarget.disabled = this.coffeeBagTarget.disabled = disabled
-    this.roasterTarget.classList.toggle("cursor-not-allowed", disabled)
-    this.coffeeBagTarget.classList.toggle("cursor-not-allowed", disabled)
+    const disabled = !!this.idTarget?.value
+
+    if (this.hasRoasterTarget) {
+      this.roasterTarget.disabled = disabled
+      this.roasterTarget.classList.toggle("cursor-not-allowed", disabled)
+    }
+
+    if (this.hasCoffeeBagTarget) {
+      this.coffeeBagTarget.disabled = disabled
+      this.coffeeBagTarget.classList.toggle("cursor-not-allowed", disabled)
+    }
   }
 }

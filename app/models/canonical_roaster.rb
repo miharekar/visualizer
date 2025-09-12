@@ -1,6 +1,17 @@
 class CanonicalRoaster < ApplicationRecord
   has_many :canonical_coffee_bags, dependent: :destroy
   has_many :roasters, dependent: :nullify
+
+  def self.search(term)
+    words = term.squish.split
+    return none if words.empty?
+
+    scope = all
+    words.each do |word|
+      scope = scope.where("unaccent(canonical_roasters.name) ILIKE unaccent(?)", "%#{word}%")
+    end
+    scope
+  end
 end
 
 # == Schema Information
