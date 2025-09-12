@@ -23,7 +23,7 @@
                 </tr>
               <% end %>
               <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
-                <%= metadata_pair(attribute.to_s.underscore.humanize, coffee_bag.send(attribute)) %>
+                <%= metadata_pair(attribute.underscore.humanize, coffee_bag.send(attribute)) %>
               <% end %>
             </table>
           </div>

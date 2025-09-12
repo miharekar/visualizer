@@ -1,6 +1,6 @@
 class CanonicalCoffeeBag < ApplicationRecord
   MIN_TERM_LENGTH = 3
-  DISPLAY_ATTRIBUTES = %i[name roast_level country region farmer variety elevation processing harvest_time tasting_notes].freeze
+  DISPLAY_ATTRIBUTES = %w[name roast_level country region farmer variety elevation processing harvest_time tasting_notes].freeze
 
   belongs_to :canonical_roaster
   has_many :coffee_bags, dependent: :nullify
