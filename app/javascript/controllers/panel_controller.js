@@ -6,7 +6,7 @@ export default class extends Controller {
   toggleUploadForm() {
     if (this.uploadFormTarget.classList.contains("hidden")) {
       this.uploadFormTarget.classList.remove("hidden")
-      this.instantFiltersTarget.classList.add("hidden")
+      if (this.hasInstantFiltersTarget) this.instantFiltersTarget.classList.add("hidden")
     } else {
       this.uploadFormTarget.classList.add("hidden")
     }
@@ -14,7 +14,7 @@ export default class extends Controller {
 
   toggleInstantFilters() {
     if (this.instantFiltersTarget.classList.contains("hidden")) {
-      this.instantFiltersTarget.classList.remove("hidden")
+      if (this.hasInstantFiltersTarget) this.instantFiltersTarget.classList.remove("hidden")
       this.uploadFormTarget.classList.add("hidden")
     } else {
       this.instantFiltersTarget.classList.add("hidden")
