@@ -50,6 +50,7 @@ class Shot < ApplicationRecord
       self.bean_type = coffee_bag&.name
       self.roast_date = coffee_bag&.roast_date&.strftime(user.date_format_string)
       self.roast_level = coffee_bag&.roast_level
+      self.canonical_coffee_bag_id = coffee_bag&.canonical_coffee_bag_id
     elsif canonical_coffee_bag
       self.bean_brand = canonical_coffee_bag&.canonical_roaster&.name
       self.bean_type = canonical_coffee_bag&.name

@@ -58,6 +58,40 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "ca9e86b18f63f329dafd9b3d13330f80a0a196f41f6e673c09a41f6c1260a245",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/roasters/index.html.erb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").joins(:coffee_bags).where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "RoastersController",
+          "method": "index",
+          "line": 8,
+          "file": "app/controllers/roasters_controller.rb",
+          "rendered": {
+            "name": "roasters/index",
+            "file": "app/views/roasters/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "roasters/index"
+      },
+      "user_input": "params[:coffee]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Redirect",
       "warning_code": 18,
       "fingerprint": "cd14a1e7f78573fa1c46fcb458fa998025ffa91237c084f230e9e0549794b24b",
