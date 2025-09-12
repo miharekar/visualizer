@@ -119,12 +119,11 @@
         <% end %>
         <% if shot.coffee_bag %>
           <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
-            <%= metadata_pair(attribute.to_s.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+            <%= metadata_pair(attribute.underscore.humanize, shot.coffee_bag.send(attribute)) %>
           <% end %>
-        <% end %>
-        <% if shot.canonical_coffee_bag %>
+        <% elsif shot.canonical_coffee_bag %>
           <% CanonicalCoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
-            <%= metadata_pair(attribute.to_s.underscore.humanize, shot.canonical_coffee_bag.send(attribute)) %>
+            <%= metadata_pair(attribute.underscore.humanize, shot.canonical_coffee_bag.send(attribute)) %>
           <% end %>
           <%= metadata_pair("URL", link_to(shot.canonical_coffee_bag.url, shot.canonical_coffee_bag.url)) %>
         <% end %>
