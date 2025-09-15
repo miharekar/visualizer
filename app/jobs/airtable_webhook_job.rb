@@ -68,7 +68,7 @@ class AirtableWebhookJob < AirtableJob
 
         minutes = ((Time.current - relevant.min) / 60).ceil
         timestamps = record_timestamps[table_id].transform_values(&:max)
-        relevant_tables[table_id].new(airtable_info.identity.user).download(minutes:, timestamps:)
+        relevant_tables[table_id].new(airtable_info.identity.user).download_multiple(minutes:, timestamps:)
       end
 
       raise LastTransactionMismatchError if airtable_info.reload.last_transaction.to_i != last_transaction

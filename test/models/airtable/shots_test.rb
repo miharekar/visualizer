@@ -31,7 +31,7 @@ module Airtable
       assert_nil @shot.espresso_enjoyment
       assert_empty(@shot.metadata)
 
-      records = Airtable::Shots.new(@user).download
+      records = Airtable::Shots.new(@user).download_multiple
       assert_equal 4, records.count
       assert_equal 1, @user.shots.count
 
@@ -66,7 +66,7 @@ module Airtable
 
       assert_nil @shot.coffee_bag_id
       assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default") do
-        Airtable::Shots.new(@user).download
+        Airtable::Shots.new(@user).download_multiple
       end
       assert_equal coffee_bag.id, @shot.reload.coffee_bag_id
     end
@@ -92,7 +92,7 @@ module Airtable
 
       assert_equal coffee_bag.id, @shot.coffee_bag_id
       assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default") do
-        Airtable::Shots.new(@user).download
+        Airtable::Shots.new(@user).download_multiple
       end
       assert_nil @shot.reload.coffee_bag_id
     end
@@ -119,7 +119,7 @@ module Airtable
         )
 
       assert_no_enqueued_jobs(only: AirtableUploadRecordJob) do
-        Airtable::Shots.new(@user).download
+        Airtable::Shots.new(@user).download_multiple
       end
       @shot.reload
       assert_equal coffee_bag.id, @shot.coffee_bag_id
@@ -193,7 +193,7 @@ module Airtable
         )
 
       assert_equal 0, @shot.tags.count
-      Airtable::Shots.new(@user).download
+      Airtable::Shots.new(@user).download_multiple
       @shot.reload
 
       assert_equal ["ethiopia", "light roast"], @shot.tags.order(:name).pluck(:name)
@@ -232,7 +232,7 @@ module Airtable
           }.to_json
         )
 
-      Airtable::Shots.new(@user).download
+      Airtable::Shots.new(@user).download_multiple
       @shot.reload
 
       assert_equal ["light roast"], @shot.tags.pluck(:name)

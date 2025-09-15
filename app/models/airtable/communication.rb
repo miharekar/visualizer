@@ -30,7 +30,11 @@ module Airtable
       AirtableCleanupJob.perform_later(user, e.messages.filter_map { |m| m[/rec\S*/, 0] })
     end
 
-    def download(minutes: 60, timestamps: {})
+    def download(airtable_id)
+      get_record(airtable_id)
+    end
+
+    def download_multiple(minutes: 60, timestamps: {})
       request_time = Time.current
       records = get_records(minutes:)
       local_records = user.public_send(self.class::DB_TABLE_NAME).where(airtable_id: records.pluck("id")).index_by(&:airtable_id)
@@ -71,6 +75,11 @@ module Airtable
         response = api_request("/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}", data, method: :patch)
         yield response if block_given?
       end
+    end
+
+    def get_record(airtable_id)
+      url = "/#{airtable_info.base_id}/#{airtable_info.tables[self.class::TABLE_NAME]["id"]}/#{airtable_id}"
+      api_request(url, method: :get)
     end
 
     def get_records(minutes: 60)
