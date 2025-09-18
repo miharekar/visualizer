@@ -10,4 +10,14 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     mail to: @user.email, subject: "A Different Kind of Black Friday on Visualizer"
   end
+
+  def cancelled_after_trial
+    @user = params[:user]
+    mail to: @user.email, subject: "Visualizer Premium Feedback"
+  end
+
+  def cancelled_premium
+    @user = params[:user]
+    mail to: @user.email, subject: "Visualizer Premium Feedback"
+  end
 end

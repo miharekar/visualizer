@@ -20,3 +20,6 @@ airtable_webhook_refresh_all_job:
 loffee_labs_importer_job:
   class: LoffeeLabsImporterJob
   schedule: "@daily"
+premium_feedback_job:
+  class: PremiumFeedbackJob
+  schedule: "@daily"

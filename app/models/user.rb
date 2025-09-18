@@ -96,6 +96,10 @@ class User < ApplicationRecord
     super.presence || []
   end
 
+  def communication
+    super.presence || []
+  end
+
   def notify?(notification)
     unsubscribed_from.exclude?(notification.to_s)
   end
@@ -146,6 +150,7 @@ end
 #  beta                      :boolean
 #  chart_settings            :jsonb
 #  coffee_management_enabled :boolean
+#  communication             :jsonb
 #  date_format               :string
 #  decent_email              :string
 #  decent_token              :string

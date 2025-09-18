@@ -4,8 +4,10 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user:).yearly_brew
   end
 
-  def black_friday
-    user = User.order("RANDOM()").first
-    UserMailer.with(user:).black_friday
+  %i[black_friday cancelled_after_trial cancelled_premium].each do |method|
+    define_method(method) do
+      user = User.order("RANDOM()").first
+      UserMailer.with(user:).public_send(method)
+    end
   end
 end
