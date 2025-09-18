@@ -53,32 +53,35 @@ end
 #
 # Table name: coffee_bags
 #
-#  id            :uuid             not null, primary key
-#  country       :string
-#  elevation     :string
-#  farm          :string
-#  farmer        :string
-#  harvest_time  :string
-#  name          :string
-#  processing    :string
-#  quality_score :string
-#  region        :string
-#  roast_date    :date
-#  roast_level   :string
-#  tasting_notes :string
-#  url           :string
-#  variety       :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  airtable_id   :string
-#  roaster_id    :uuid             not null
+#  id                      :uuid             not null, primary key
+#  country                 :string
+#  elevation               :string
+#  farm                    :string
+#  farmer                  :string
+#  harvest_time            :string
+#  name                    :string
+#  processing              :string
+#  quality_score           :string
+#  region                  :string
+#  roast_date              :date
+#  roast_level             :string
+#  tasting_notes           :string
+#  url                     :string
+#  variety                 :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  airtable_id             :string
+#  canonical_coffee_bag_id :uuid
+#  roaster_id              :uuid             not null
 #
 # Indexes
 #
-#  index_coffee_bags_on_airtable_id  (airtable_id)
-#  index_coffee_bags_on_roaster_id   (roaster_id)
+#  index_coffee_bags_on_airtable_id              (airtable_id)
+#  index_coffee_bags_on_canonical_coffee_bag_id  (canonical_coffee_bag_id)
+#  index_coffee_bags_on_roaster_id               (roaster_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (canonical_coffee_bag_id => canonical_coffee_bags.id)
 #  fk_rails_...  (roaster_id => roasters.id)
 #

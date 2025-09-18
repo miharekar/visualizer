@@ -4,7 +4,6 @@ inherit_gem:
 plugins:
   - rubocop-performance
   - rubocop-rails
-  - rubocop-minitest
 AllCops:
   NewCops: enable
   DisabledByDefault: false
@@ -113,12 +112,6 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Enabled: false
 Metrics/PerceivedComplexity:
-  Enabled: false
-Minitest/AssertPredicate:
-  Enabled: false
-Minitest/EmptyLineBeforeAssertionMethods:
-  Enabled: false
-Minitest/MultipleAssertions:
   Enabled: false
 Naming/AccessorMethodName:
   Enabled: false

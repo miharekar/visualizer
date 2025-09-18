@@ -211,7 +211,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.13.2)
+    json (2.14.0)
     jwt (3.1.2)
       base64
     kamal (2.7.0)
@@ -433,10 +433,6 @@ GEM
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
-    rubocop-minitest (0.38.2)
-      lint_roller (~> 1.1)
-      rubocop (>= 1.75.0, < 2.0)
-      rubocop-ast (>= 1.38.0, < 2.0)
     rubocop-performance (1.26.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
@@ -592,7 +588,6 @@ DEPENDENCIES
   rails (~> 8.1.0.beta1)
   responders
   retest
-  rubocop-minitest
   rubocop-rails-omakase
   ruby-lsp
   solid_cable

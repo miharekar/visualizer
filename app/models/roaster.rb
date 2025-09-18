@@ -41,20 +41,23 @@ end
 #
 # Table name: roasters
 #
-#  id          :uuid             not null, primary key
-#  name        :string
-#  website     :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  airtable_id :string
-#  user_id     :uuid             not null
+#  id                   :uuid             not null, primary key
+#  name                 :string
+#  website              :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  airtable_id          :string
+#  canonical_roaster_id :uuid
+#  user_id              :uuid             not null
 #
 # Indexes
 #
-#  index_roasters_on_airtable_id       (airtable_id)
-#  index_roasters_on_user_id_and_name  (user_id,name) UNIQUE
+#  index_roasters_on_airtable_id           (airtable_id)
+#  index_roasters_on_canonical_roaster_id  (canonical_roaster_id)
+#  index_roasters_on_user_id_and_name      (user_id,name) UNIQUE
 #
 # Foreign Keys
 #
+#  fk_rails_...  (canonical_roaster_id => canonical_roasters.id)
 #  fk_rails_...  (user_id => users.id)
 #

@@ -56,7 +56,6 @@ group :development do
   gem "hotwire-spark"
   gem "kamal"
   gem "letter_opener"
-  gem "rubocop-minitest", require: false
   gem "rubocop-rails-omakase", require: false
   gem "ruby-lsp"
   gem "web-console"
