@@ -12,7 +12,7 @@ class PremiumFeedbackJob < ApplicationJob
       user.save!
     end
 
-    User.where(premium_expires_at: ..Time.zone.today).find_each do |user|
+    User.where(premium_expires_at: ..1.day.ago).find_each do |user|
       next if (user.communication & EMAILS).any?
 
       UserMailer.with(user:).cancelled_premium.deliver_later
