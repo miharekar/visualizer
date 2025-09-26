@@ -96,7 +96,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def coffee_bag_params
-    cb_params = params.expect(coffee_bag: %i[name url roaster_id canonical_coffee_bag_id roast_date roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes image])
+    cb_params = params.expect(coffee_bag: %i[name url roaster_id canonical_coffee_bag_id roast_date image] + CoffeeBag::DISPLAY_ATTRIBUTES)
     roaster = Current.user.roasters.find_by(id: cb_params[:roaster_id])
     cb_params[:roaster_id] = @roaster.id if roaster.blank?
     cb_params

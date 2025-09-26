@@ -2,7 +2,7 @@ class CoffeeBag < ApplicationRecord
   include Airtablable
   include Squishable
 
-  DISPLAY_ATTRIBUTES = %w[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes].freeze
+  DISPLAY_ATTRIBUTES = %w[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes place_of_purchase].freeze
 
   belongs_to :roaster, touch: true
   belongs_to :canonical_coffee_bag, optional: true
@@ -60,6 +60,7 @@ end
 #  farmer                  :string
 #  harvest_time            :string
 #  name                    :string
+#  place_of_purchase       :string
 #  processing              :string
 #  quality_score           :string
 #  region                  :string
