@@ -186,9 +186,9 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.2.1)
     hashie (5.0.0)
-    herb (0.7.3-aarch64-linux-gnu)
-    herb (0.7.3-arm64-darwin)
-    herb (0.7.3-x86_64-linux-gnu)
+    herb (0.7.4-aarch64-linux-gnu)
+    herb (0.7.4-arm64-darwin)
+    herb (0.7.4-x86_64-linux-gnu)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -406,6 +406,9 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
+    reactionview (0.1.2)
+      actionview (>= 7.0)
+      herb (>= 0.7.0, < 1.0.0)
     regexp_parser (2.11.3)
     reline (0.6.2)
       io-console (~> 0.5)
@@ -419,7 +422,7 @@ GEM
       tty-option (~> 0.1)
       tty-prompt (~> 0.1)
     rexml (3.4.4)
-    rubocop (1.81.0)
+    rubocop (1.81.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -512,7 +515,7 @@ GEM
       tty-screen (~> 0.8)
       wisper (~> 2.0)
     tty-screen (0.8.2)
-    turbo-rails (2.0.16)
+    turbo-rails (2.0.17)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
@@ -586,6 +589,7 @@ DEPENDENCIES
   pundit
   rack-cors
   rails (~> 8.1.0.beta1)
+  reactionview
   responders
   retest
   rubocop-rails-omakase
