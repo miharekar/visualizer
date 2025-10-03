@@ -45,6 +45,7 @@ production:
     username: visualizer
     password: <%= ENV["POSTGRES_PASSWORD"] %>
     host: <%= ENV["POSTGRES_HOST"] %>
+    port: <%= ENV["POSTGRES_PORT"] %>
   queue:
     <<: *sqlite
     database: storage/production_queue.sqlite3

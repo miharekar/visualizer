@@ -32,6 +32,7 @@ env:
   clear:
     WEB_CONCURRENCY: 2
     POSTGRES_HOST: 10.0.0.50
+    POSTGRES_PORT: 5440
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
@@ -46,24 +47,6 @@ volumes:
 asset_path: /rails/public/assets
 
 accessories:
-  postgres:
-    image: postgres:17.5
-    host: hvdb
-    port: 5432
-    env:
-      clear:
-        POSTGRES_USER: "visualizer"
-        POSTGRES_DB: "visualizer_production"
-      secret:
-        - POSTGRES_PASSWORD
-    files:
-      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-      - infrastructure/postgres/postgresql.conf:/data/postgresql.conf # comment this out for the initial boot
-    directories:
-      - data:/var/lib/postgresql/data
-    options:
-      shm-size: 3g
-
   postgres18:
     image: postgres:18
     host: hvdb
@@ -74,16 +57,13 @@ accessories:
         POSTGRES_DB: "visualizer_production"
       secret:
         - POSTGRES_PASSWORD
-    files:
-      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-      - infrastructure/postgres/postgresql.conf:/data/postgresql.conf # comment this out for the initial boot
     directories:
       - data:/var/lib/postgresql
     options:
       shm-size: 3g
 
   pg_backup:
-    image: mrfoto/postgres-backup-s3:17.5
+    image: mrfoto/postgres-backup-s3:18.0
     host: hvdb
     env:
       clear:
@@ -93,7 +73,7 @@ accessories:
         S3_BUCKET: pg-backups
         S3_ENDPOINT: https://42818cc952b31ef348852ae6e9da2520.eu.r2.cloudflarestorage.com
         S3_PREFIX: visualizer
-        POSTGRES_HOST: visualizer-postgres
+        POSTGRES_HOST: visualizer-postgres18
         POSTGRES_USER: visualizer
         POSTGRES_DATABASE: visualizer_production
       secret:
