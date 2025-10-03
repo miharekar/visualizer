@@ -56,7 +56,8 @@ FactoryBot.define do
               {"name" => "Roast date", "type" => "date", "options" => {"dateFormat" => {"name" => "local"}}},
               {"name" => "Roast level", "type" => "singleLineText"},
               {"name" => "Variety", "type" => "singleLineText"},
-              {"name" => "Tasting notes", "type" => "singleLineText"}
+              {"name" => "Tasting notes", "type" => "singleLineText"},
+              {"name" => "Archived at", "type" => "dateTime", "options" => {"timeZone" => "utc", "dateFormat" => {"name" => "local"}, "timeFormat" => {"name" => "24hour"}}}
             ]
           },
           "Roasters" => {

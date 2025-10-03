@@ -4,10 +4,11 @@ module Airtable
     TABLE_NAME = "Coffee Bags".freeze
     TABLE_DESCRIPTION = "Coffee Bags from Visualizer".freeze
     STANDARD_FIELDS = %w[
-      country elevation farm farmer harvest_time processing quality_score region roast_date roast_level variety tasting_notes
+      country elevation farm farmer harvest_time processing quality_score region roast_date roast_level variety tasting_notes archived_at
     ].index_by { |f| f.to_s.humanize }
     FIELD_OPTIONS = {
-      "roast_date" => {type: "date", options: {dateFormat: {name: "local"}}}
+      "roast_date" => {type: "date", options: {dateFormat: {name: "local"}}},
+      "archived_at" => {type: "dateTime", options: {timeZone: "utc", dateFormat: {name: "local"}, timeFormat: {name: "24hour"}}}
     }.freeze
 
     private
