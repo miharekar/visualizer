@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "coffee_bag_fields" do %>
-  <% tag.div class: "grid grid-cols-6 gap-6", data: { controller: "coffee-bag-fields", coffee_bag_form_shots_path: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } do %>
+  <%= tag.div class: "grid grid-cols-6 gap-6", data: { controller: "coffee-bag-fields", coffee_bag_form_shots_path: coffee_bag_form_shots_path(coffee_bag: @coffee_bag) } do %>
     <div class="col-span-6 sm:col-span-3">
       <div class="flex justify-between">
         <%= label_tag :roaster, nil, class: "standard-label" %>

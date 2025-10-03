@@ -4,7 +4,7 @@ module Api
     before_action :find_roaster
 
     def index
-      coffee_bags = @roaster.coffee_bags.order_by_roast_date
+      coffee_bags = @roaster.coffee_bags.active_first.by_roast_date
       coffee_bags, paging = paginate(coffee_bags)
       render json: {data: coffee_bags.map { {id: it.id, name: it.name} }, paging:}
     end

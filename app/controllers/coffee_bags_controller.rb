@@ -97,7 +97,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def load_coffee_bags
-    @coffee_bags = @roaster.coffee_bags.order_by_roast_date
+    @coffee_bags = @roaster.coffee_bags.active_first.by_roast_date
     @coffee_bags = @coffee_bags.where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
   end
 

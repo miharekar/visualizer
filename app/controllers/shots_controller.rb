@@ -107,7 +107,7 @@ class ShotsController < ApplicationController
     @coffee_bag = CoffeeBag.find_by(id: params[:coffee_bag])
     @roasters = Current.user.roasters.order_by_name
     @roaster = params.key?(:roaster_id) ? Current.user.roasters.find_by(id: params[:roaster_id]) : @coffee_bag&.roaster
-    @coffee_bags = @roaster&.coffee_bags&.order_by_roast_date
+    @coffee_bags = @roaster&.coffee_bags&.active&.by_roast_date
 
     render layout: false
   end

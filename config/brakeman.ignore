@@ -26,13 +26,13 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "2f8f3a1ff2c925a3991e85be74ed99c97bb498cf893a54b7cf6dce0cd5e798ab",
+      "fingerprint": "750ec6dc5f15a5cc064a4306c3031c0a6f2af1e399b3750a539e7f3e45b0f22d",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/coffee_bags/index.html.erb",
-      "line": 30,
+      "line": 38,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.roasters.find(params[:roaster_id]).coffee_bags.order_by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.roasters.find(params[:roaster_id]).coffee_bags.order_by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
+      "code": "render(action => Current.user.roasters.find(params[:roaster_id]).coffee_bags.active_first.by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.roasters.find(params[:roaster_id]).coffee_bags.active_first.by_roast_date.where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
       "render_path": [
         {
           "type": "controller",

@@ -17,6 +17,7 @@ export default class extends Controller {
     this.selected = this.listTarget.querySelector(`.${this.selectedClassValue}`) || this.active
     this.allItems = Array.from(this.listTarget.querySelectorAll("li"))
     this.listTarget.innerHTML = ""
+    this.initialValue = this.inputTarget.value
   }
 
   show() {
@@ -47,6 +48,8 @@ export default class extends Controller {
     } else {
       if (this.selected) {
         this.inputTarget.value = this.selected.dataset.name
+      } else if (this.initialValue) {
+        this.inputTarget.value = this.initialValue
       } else {
         this.inputTarget.value = ""
       }

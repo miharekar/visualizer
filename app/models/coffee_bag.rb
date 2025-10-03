@@ -19,7 +19,9 @@ class CoffeeBag < ApplicationRecord
   after_save_commit :update_shots, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
 
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
-  scope :order_by_roast_date, -> { order("roast_date DESC NULLS LAST") }
+  scope :active, -> { where(archived_at: nil) }
+  scope :active_first, -> { order(Arel.sql("archived_at IS NOT NULL")) }
+  scope :by_roast_date, -> { order("roast_date DESC NULLS LAST") }
   scope :for_user, ->(user) { joins(:roaster).where(roasters: {user:}) }
 
   squishes :country, :elevation, :farm, :farmer, :harvest_time, :name, :processing, :quality_score, :region, :roast_level, :url, :variety, :tasting_notes
@@ -37,7 +39,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   def to_api_json
-    attributes.slice(*%w[id name roast_date roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes url]).tap do |json|
+    attributes.slice(*%w[id name roast_date roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes url archived_at]).tap do |json|
       json["image_url"] = image&.url if image.attached?
     end
   end
