@@ -39,7 +39,7 @@ module Airtable
       }
       STANDARD_FIELDS.each { |name, attribute| fields[name] = coffee_bag.public_send(attribute) }
       fields["Image"] = [{url: coffee_bag.image.url(disposition: "attachment"), filename: coffee_bag.image.filename.to_s}] if coffee_bag.image.attached?
-      {fields: fields.compact}
+      {fields:}
     end
 
     def update_local_record(coffee_bag, record, updated_at)
