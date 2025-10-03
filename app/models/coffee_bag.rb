@@ -42,6 +42,10 @@ class CoffeeBag < ApplicationRecord
     end
   end
 
+  def archived?
+    archived_at.present?
+  end
+
   private
 
   def update_shots
@@ -54,6 +58,7 @@ end
 # Table name: coffee_bags
 #
 #  id                      :uuid             not null, primary key
+#  archived_at             :datetime
 #  country                 :string
 #  elevation               :string
 #  farm                    :string

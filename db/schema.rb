@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_26_090251) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_03_111653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -100,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_26_090251) do
 
   create_table "coffee_bags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "airtable_id"
+    t.datetime "archived_at"
     t.uuid "canonical_coffee_bag_id"
     t.string "country"
     t.datetime "created_at", null: false

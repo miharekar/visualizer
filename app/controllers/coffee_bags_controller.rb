@@ -2,7 +2,7 @@ class CoffeeBagsController < ApplicationController
   before_action :require_authentication
   before_action :check_premium!
   before_action :set_roaster
-  before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image]
+  before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image archive restore]
   before_action :load_coffee_bags, only: %i[index search]
   before_action :load_roasters, only: %i[edit update duplicate]
 
@@ -21,7 +21,7 @@ class CoffeeBagsController < ApplicationController
   def create
     @coffee_bag = @roaster.coffee_bags.build(coffee_bag_params)
     if @coffee_bag.save
-      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully created."
+      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was created."
     else
       render :new, status: :unprocessable_content
     end
@@ -29,7 +29,7 @@ class CoffeeBagsController < ApplicationController
 
   def update
     if @coffee_bag.update(coffee_bag_params)
-      redirect_to roaster_coffee_bags_path(@coffee_bag.roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully updated."
+      redirect_to roaster_coffee_bags_path(@coffee_bag.roaster, format: :html), notice: "#{@coffee_bag.display_name} was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -42,7 +42,7 @@ class CoffeeBagsController < ApplicationController
     else
       duplicate = @coffee_bag.duplicate(params[:roast_date])
       if duplicate.save
-        redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully duplicated as #{duplicate.display_name}."
+        redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was duplicated as #{duplicate.display_name}."
       else
         flash.now[:alert] = "Failed to duplicate coffee bag."
         render :edit, status: :unprocessable_content
@@ -52,7 +52,7 @@ class CoffeeBagsController < ApplicationController
 
   def destroy
     @coffee_bag.destroy!
-    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was successfully deleted."
+    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was deleted."
   end
 
   def remove_image
@@ -70,6 +70,16 @@ class CoffeeBagsController < ApplicationController
       error = info[:error].presence || "Could not extract information from URL"
       render json: {error:}, status: :unprocessable_content
     end
+  end
+
+  def archive
+    @coffee_bag.update(archived_at: Time.current)
+    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was archived."
+  end
+
+  def restore
+    @coffee_bag.update(archived_at: nil)
+    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was restored."
   end
 
   private
