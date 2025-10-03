@@ -38,6 +38,7 @@ aliases:
   shell: app exec --interactive --reuse "bash"
   logs: app logs -f
   dbc: accessory exec postgres --interactive --reuse "psql -U visualizer -d visualizer_production"
+  dbc18: accessory exec postgres18 --interactive --reuse "psql -U visualizer -d visualizer_production"
 
 volumes:
   - "visualizer_storage:/rails/storage"
@@ -63,6 +64,24 @@ accessories:
     options:
       shm-size: 3g
 
+  postgres18:
+    image: postgres:18
+    host: hvdb
+    port: 5440:5432
+    env:
+      clear:
+        POSTGRES_USER: "visualizer"
+        POSTGRES_DB: "visualizer_production"
+      secret:
+        - POSTGRES_PASSWORD
+    files:
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+      - infrastructure/postgres/postgresql.conf:/data/postgresql.conf # comment this out for the initial boot
+    directories:
+      - data:/var/lib/postgresql
+    options:
+      shm-size: 3g
+
   pg_backup:
     image: mrfoto/postgres-backup-s3:17.5
     host: hvdb
@@ -85,7 +104,7 @@ accessories:
       network: ipv6-network
 
   dozzle:
-    image: amir20/dozzle:v8.12
+    image: amir20/dozzle:v8.14
     hosts:
       - hvapp
       - hvdb
