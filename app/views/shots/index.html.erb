@@ -15,7 +15,7 @@
   </div>
   <div class="flex flex-col px-4 gap-2 sm:flex-row sm:px-0 sm:justify-between">
     <div class="flex-shrink min-w-0">
-      <h1 class="pr-2 font-serif text-4xl font-bold tracking-tight truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
+      <h1 class="pr-2 font-serif lining-nums text-4xl font-bold tracking-tight truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
         <% if @shots_count.to_i > 0 %>
           <% word = params[:tag].present? ? "#{Tag.find_by(slug: params[:tag])&.name} Shot" : "Shot" %>
           Your <%= pluralize(@shots_count, word) %>
