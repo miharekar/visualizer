@@ -23,7 +23,9 @@ class User < ApplicationRecord
   has_many :tags, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
 
-  has_one_attached :avatar, service: :cloudinary
+  has_one_attached :avatar do |attachable|
+    attachable.variant :thumb, resize_to_limit: [96, 96], format: :jpeg, saver: {strip: true}
+  end
 
   validates :email, presence: true, uniqueness: true, format: {with: /\A.*@.*\z/, message: "must be valid"}
   validates :password, length: {minimum: 8}, if: :password_digest_changed?

@@ -13,7 +13,11 @@ module ApplicationHelper
   end
 
   def avatar_url(user, size)
-    user.avatar.attached? ? url_for(user.avatar) : "#{user.gravatar_url}?s=#{size}&d=mp"
+    if user.avatar.attached?
+      rails_representation_url(user.avatar.variant(:thumb))
+    else
+      "#{user.gravatar_url}?s=#{size}&d=mp"
+    end
   end
 
   def update_count
