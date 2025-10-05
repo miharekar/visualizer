@@ -13,11 +13,6 @@ local_amazon:
   region: <%= Rails.application.credentials.dig(:aws, :region) %>
   bucket: visualizer-coffee-development
 
-cloudinary:
-  service: Cloudinary
-  upload_preset: avatar
-  secure: true
-
 amazon:
   service: S3
   access_key_id: <%= ENV["AWS_ACCESS_KEY"] %>

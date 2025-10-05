@@ -8,7 +8,6 @@ gem "appsignal"
 gem "aws-sdk-s3", require: false
 gem "bcrypt"
 gem "bootsnap", require: false
-gem "cloudinary"
 gem "csv"
 gem "doorkeeper"
 gem "image_processing"

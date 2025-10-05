@@ -31,5 +31,5 @@ You can read [the source code](/app/controllers/api) or [the LLM-generated API d
 - Ruby (Check [.mise.toml](.mise.toml) for specific version)
 - Postgres (>= 14)
 
-No other services are required though Cloudinary and S3 are expected in `config/storage.yml`.
-Feel free to override them for development purposes.
+No other services are required though S3 is expected in `config/storage.yml`.
+Feel free to override it for development purposes.
