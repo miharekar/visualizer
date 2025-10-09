@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_03_111653) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -322,9 +322,23 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_03_111653) do
     t.string "timezone"
     t.jsonb "unsubscribed_from"
     t.datetime "updated_at", null: false
+    t.string "webauthn_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["lemon_squeezy_customer_id"], name: "index_users_on_lemon_squeezy_customer_id", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
+  end
+
+  create_table "webauthn_credentials", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "external_id", null: false
+    t.datetime "last_used_at"
+    t.string "nickname"
+    t.string "public_key", null: false
+    t.integer "sign_count", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["external_id"], name: "index_webauthn_credentials_on_external_id", unique: true
+    t.index ["user_id"], name: "index_webauthn_credentials_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -351,4 +365,5 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_03_111653) do
   add_foreign_key "shots", "coffee_bags"
   add_foreign_key "shots", "users"
   add_foreign_key "tags", "users"
+  add_foreign_key "webauthn_credentials", "users"
 end

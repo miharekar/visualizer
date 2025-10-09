@@ -77,5 +77,7 @@ Rails.application.configure do
   config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.hosts << /.+\.platypus-koi.ts.net/
+
+  config.webauthn_origin = "http://visualizer.localhost:3000"
 end
 Rails.application.routes.default_url_options = {host: "mbp.platypus-koi.ts.net", protocol: "https"}

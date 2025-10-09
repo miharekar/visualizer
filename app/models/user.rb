@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :coffee_bags, through: :roasters
   has_many :tags, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
+  has_many :webauthn_credentials, dependent: :destroy
 
   has_one_attached :avatar do |attachable|
     attachable.variant :thumb, resize_to_limit: [96, 96], format: :jpeg, saver: {strip: true}
@@ -32,6 +33,7 @@ class User < ApplicationRecord
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
 
+  after_initialize :set_webauthn_id
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
   after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
@@ -121,10 +123,12 @@ class User < ApplicationRecord
 
   private
 
-  def generate_slug
-    return unless public?
+  def set_webauthn_id
+    self.webauthn_id ||= WebAuthn.generate_user_id
+  end
 
-    super
+  def generate_slug
+    super if public?
   end
 
   def reflect_public_to_shots
@@ -176,6 +180,7 @@ end
 #  updated_at                :datetime         not null
 #  lemon_squeezy_customer_id :string
 #  stripe_customer_id        :string
+#  webauthn_id               :string
 #
 # Indexes
 #

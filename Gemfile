@@ -38,6 +38,7 @@ gem "tailwindcss-rails"
 gem "thruster"
 gem "tickly", github: "miharekar/tickly"
 gem "turbo-rails"
+gem "webauthn"
 gem "web-push"
 
 group :development, :test do
