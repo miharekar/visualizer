@@ -15,7 +15,11 @@ Rails.application.routes.draw do
   resource :session, only: %i[new create destroy]
 
   resources :passkeys, only: %i[create destroy] do
-    post :options, on: :collection
+    collection do
+      post :options
+      post :sign_in
+      post :callback
+    end
   end
 
   resources :passwords, param: :token, only: %i[new create edit update]

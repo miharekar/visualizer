@@ -27,4 +27,21 @@ class PasskeysController < ApplicationController
       format.html { redirect_to edit_profile_path }
     end
   end
+
+  def sign_in
+    opts = WebAuthn::Credential.options_for_get
+    session[:webauthn_challenge] = opts.challenge
+    render json: opts
+  end
+
+  def callback
+    assertion = WebAuthn::Credential.from_get(params.to_unsafe_h)
+    credential = WebauthnCredential.find_by!(external_id: assertion.id)
+    assertion.verify(session.delete(:webauthn_challenge), public_key: credential.public_key, sign_count: credential.sign_count)
+    credential.update!(sign_count: assertion.sign_count, last_used_at: Time.current)
+    start_new_session_for(credential.user)
+    render json: {redirect_to: after_authentication_url}
+  rescue ActiveRecord::RecordNotFound, WebAuthn::Error => e
+    head :unauthorized
+  end
 end

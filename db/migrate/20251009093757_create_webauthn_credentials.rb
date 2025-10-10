@@ -5,6 +5,7 @@ class CreateWebauthnCredentials < ActiveRecord::Migration[8.1]
       t.string :external_id, null: false
       t.string :public_key, null: false
       t.string :nickname
+      t.integer :sign_count, default: 0, null: false
       t.datetime :last_used_at
 
       t.timestamps

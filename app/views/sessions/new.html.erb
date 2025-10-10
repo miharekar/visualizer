@@ -35,3 +35,7 @@
     <% end %>
   </div>
 </div>
+<div data-controller="passkeys" data-passkeys-autologin-value="true"></div>
+<div id="passkey-error" class="hidden">
+  <%= render Notification.new(type: :alert, heading: "Error signing in with passkey", text: "Something went wrong", timeout: 3000) %>
+</div>
