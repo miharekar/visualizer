@@ -13,6 +13,11 @@ Rails.application.routes.draw do
   root to: "home#show"
 
   resource :session, only: %i[new create destroy]
+
+  resources :passkeys, only: %i[create destroy] do
+    post :options, on: :collection
+  end
+
   resources :passwords, param: :token, only: %i[new create edit update]
   resources :registrations, only: %i[new create]
 

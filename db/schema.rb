@@ -334,7 +334,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.datetime "last_used_at"
     t.string "nickname"
     t.string "public_key", null: false
-    t.integer "sign_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
     t.index ["external_id"], name: "index_webauthn_credentials_on_external_id", unique: true

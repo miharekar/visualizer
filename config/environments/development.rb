@@ -78,6 +78,6 @@ Rails.application.configure do
 
   config.hosts << /.+\.platypus-koi.ts.net/
 
-  config.webauthn_origin = "http://visualizer.localhost:3000"
+  config.webauthn_origin = "http://localhost:3000"
 end
 Rails.application.routes.default_url_options = {host: "mbp.platypus-koi.ts.net", protocol: "https"}

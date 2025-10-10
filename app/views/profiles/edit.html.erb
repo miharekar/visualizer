@@ -37,6 +37,50 @@
           <p class="text-sm text-neutral-600 dark:text-neutral-400" data-push-notifications-target="statusDescription"></p>
         </div>
       </div>
+      <div class="py-6" data-controller="passkeys">
+        <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">Passkeys</h3>
+        <% if Current.user.webauthn_credentials.any? %>
+          <div class="mt-4">
+            <div class="space-y-2">
+              <% !Current.user.webauthn_credentials.order(:created_at).each do |credential| %>
+                <div id="<%= dom_id(credential) %>" class="flex items-center justify-between py-2 px-3 bg-neutral-50 dark:bg-neutral-800 rounded-md">
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                      <%= credential.nickname.presence || "Unnamed Passkey" %>
+                    </p>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+                      Created <%= time_ago_in_words(credential.created_at) %> ago
+                      <% if credential.last_used_at %>
+                        • Last used <%= time_ago_in_words(credential.last_used_at) %> ago
+                      <% end %>
+                    </p>
+                  </div>
+                  <div class="ml-4 flex-shrink-0">
+                    <%= link_to "Delete", passkey_path(credential),
+                        class: "text-sm text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300",
+                        data: {turbo_method: :delete,turbo_confirm: "Are you sure you want to delete this passkey? You won't be able to use it to sign in anymore."}
+                    %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+          <div class="mt-4">
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">
+              You don't have any passkeys registered yet. Register one to enable passwordless authentication.
+            </p>
+          </div>
+        <% end %>
+        <div class="mt-4 flex items-center gap-2">
+          <button class="button-white" data-passkeys-target="button" data-action="click->passkeys#register">
+            Register a passkey
+          </button>
+        </div>
+        <div id="passkey-success" class="hidden">
+          <%= render Notification.new(type: :default, heading: "Passkey registered successfully", timeout: 3000) %>
+        </div>
+      </div>
       <% if Current.user.has_airtable? %>
         <div class="py-6">
           <%= render "shared/modal" %>
