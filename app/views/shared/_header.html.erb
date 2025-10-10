@@ -40,7 +40,7 @@
                 </p>
               </div>
               <div class="py-1">
-                <%= link_to "Edit Profile", edit_profiles_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
+                <%= link_to "Edit Profile", edit_profile_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% if Current.user.lemon_squeezy_customer_id.present? %>
                   <%= link_to "Manage Subscription", manage_premium_index_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
@@ -116,7 +116,7 @@
     </div>
     <div class="pb-3 border-t border-neutral-200 dark:border-neutral-700">
       <div class="mt-3 gap-y-1">
-        <%= active_link_to "Edit Profile", edit_profiles_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/50", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
+        <%= active_link_to "Edit Profile", edit_profile_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/50", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
         <% if authenticated? %>
           <%= active_link_to updates_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium", active: :exclusive, class_active: "border-terracotta-500 bg-terracotta-50/50 text-terracotta-700 dark:text-terracotta-100 dark:bg-terracotta-900/50", class_inactive: "border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" do %>
             <div class="flex items-center">

@@ -89,15 +89,12 @@ Rails.application.routes.draw do
   end
   get "/search", to: redirect("/community")
 
-  resources :profiles, only: %i[edit update] do
+  resource :profile, only: %i[edit update] do
     get :reset_chart_settings
     get :decent_serial_numbers
-    collection do
-      get :edit
-      post :add_metadata_field
-      delete :remove_metadata_field
-      delete :disconnect_airtable
-    end
+    post :add_metadata_field
+    delete :remove_metadata_field
+    delete :disconnect_airtable
   end
 
   resources :premium, only: %i[index create] do

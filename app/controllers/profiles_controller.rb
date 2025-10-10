@@ -20,7 +20,7 @@ class ProfilesController < ApplicationController
   def reset_chart_settings
     @profile.update(chart_settings: nil)
     flash[:notice] = "Chart settings were reset to default."
-    redirect_to edit_profile_path(@profile)
+    redirect_to edit_profile_path
   end
 
   def add_metadata_field
@@ -28,9 +28,9 @@ class ProfilesController < ApplicationController
     if field.present?
       fields = @profile.metadata_fields + [field]
       @profile.update(metadata_fields: fields.uniq)
-      redirect_to edit_profile_path(@profile), notice: "#{field} added to custom fields."
+      redirect_to edit_profile_path, notice: "#{field} added to custom fields."
     else
-      redirect_to edit_profile_path(@profile), alert: "Field name cannot be blank."
+      redirect_to edit_profile_path, alert: "Field name cannot be blank."
     end
   end
 
@@ -38,9 +38,9 @@ class ProfilesController < ApplicationController
     if @profile.metadata_fields.include?(params[:field])
       fields = @profile.metadata_fields - [params[:field]]
       @profile.update(metadata_fields: fields.uniq)
-      redirect_to edit_profile_path(@profile), notice: "#{params[:field]} removed from custom fields."
+      redirect_to edit_profile_path, notice: "#{params[:field]} removed from custom fields."
     else
-      redirect_to edit_profile_path(@profile), alert: "#{params[:field]} not found in custom fields."
+      redirect_to edit_profile_path, alert: "#{params[:field]} not found in custom fields."
     end
   end
 
@@ -55,13 +55,13 @@ class ProfilesController < ApplicationController
     return unless airtables.exists?
 
     airtables.destroy_all
-    redirect_to edit_profile_path(@profile), notice: "Airtable disconnected."
+    redirect_to edit_profile_path, notice: "Airtable disconnected."
   end
 
   private
 
   def set_profile
-    @profile = params.key?(:id) && Current.user.admin? ? User.find(params[:id]) : Current.user
+    @profile = Current.user
   end
 
   def set_authorized_applications

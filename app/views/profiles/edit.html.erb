@@ -44,7 +44,7 @@
             You are connected to Airtable.
           </h3>
           <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-            If you want to disconnect or reset your Airtable connection, you can <%= link_to "do so here", disconnect_airtable_profiles_path, class: "standard-link",  data: {turbo_method: :delete, action: "click->modal#confirm", title: "Disconnect Airtable", text: "Are you sure you want to disconnect your Airtable account? Your data will NOT be deleted from Airtable or Visualizer. You will be able to reconnect at any time to resume syncing."} %>.
+            If you want to disconnect or reset your Airtable connection, you can <%= link_to "do so here", disconnect_airtable_profile_path, class: "standard-link",  data: {turbo_method: :delete, action: "click->modal#confirm", title: "Disconnect Airtable", text: "Are you sure you want to disconnect your Airtable account? Your data will NOT be deleted from Airtable or Visualizer. You will be able to reconnect at any time to resume syncing."} %>.
           </p>
         </div>
       <% end %>
@@ -63,7 +63,7 @@
           <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
             Your profile is connected to Decent.
           </h3>
-          <%= turbo_frame_tag "decent_serial_numbers", src: profile_decent_serial_numbers_path(@profile) %>
+          <%= turbo_frame_tag "decent_serial_numbers", src: decent_serial_numbers_profile_path %>
         </div>
       <% end %>
     </div>
