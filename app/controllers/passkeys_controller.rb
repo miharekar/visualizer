@@ -41,7 +41,7 @@ class PasskeysController < ApplicationController
     credential.update!(sign_count: assertion.sign_count, last_used_at: Time.current)
     start_new_session_for(credential.user)
     render json: {redirect_to: after_authentication_url}
-  rescue ActiveRecord::RecordNotFound, WebAuthn::Error => e
+  rescue ActiveRecord::RecordNotFound, WebAuthn::Error
     head :unauthorized
   end
 end
