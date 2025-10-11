@@ -55,7 +55,7 @@ group :development do
   gem "hotwire-spark"
   gem "kamal"
   gem "letter_opener"
-  gem "reactionview"
+  gem "reactionview", "0.1.2"
   gem "rubocop-rails-omakase", require: false
   gem "ruby-lsp"
   gem "web-console"

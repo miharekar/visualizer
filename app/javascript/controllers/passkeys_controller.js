@@ -6,7 +6,7 @@ export default class extends Controller {
   async connect() {
     if (this.autologinValue && (await this.conditionalAvailable())) {
       try {
-        await this.signIn()
+        await this.signIn({ mediation: "conditional" })
       } catch {}
     }
   }
@@ -26,10 +26,14 @@ export default class extends Controller {
     c.insertAdjacentHTML("beforeend", tpl.innerHTML)
   }
 
-  async signIn() {
+  async buttonSignIn() {
+    await this.signIn({ mediation: "required" })
+  }
+
+  async signIn({ mediation }) {
     const opts = await this.postJSON("/passkeys/sign_in", {})
     const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(opts)
-    const cred = await navigator.credentials.get({ publicKey, mediation: "conditional" })
+    const cred = await navigator.credentials.get({ publicKey, mediation })
     if (!cred) return
 
     try {

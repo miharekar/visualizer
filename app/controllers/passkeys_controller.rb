@@ -1,8 +1,9 @@
 class PasskeysController < ApplicationController
   def options
     options = WebAuthn::Credential.options_for_create(
-      user: {id: Current.user.webauthn_id, name: Current.user.email, display_name: Current.user.email},
+      user: {id: Current.user.webauthn_id, name: Current.user.email, display_name: Current.user.display_name},
       exclude: Current.user.webauthn_credentials.pluck(:external_id),
+      authenticator_selection: {user_verification: "required"}
     )
     session[:webauthn_challenge] = options.challenge
     render json: options
@@ -10,7 +11,7 @@ class PasskeysController < ApplicationController
 
   def create
     credential = WebAuthn::Credential.from_create(params.to_unsafe_h)
-    credential.verify(session.delete(:webauthn_challenge))
+    credential.verify(session.delete(:webauthn_challenge), user_verification: true)
     Current.session.user.webauthn_credentials.create!(external_id: credential.id, public_key: credential.public_key, nickname: params[:nickname].presence)
 
     head :created
