@@ -51,11 +51,12 @@ group :development do
   gem "annotaterb"
   gem "benchmark-ips"
   gem "brakeman", require: false
+  gem "bundler-audit"
   gem "herb"
   gem "hotwire-spark"
   gem "kamal"
   gem "letter_opener"
-  gem "reactionview", "0.1.2"
+  gem "reactionview"
   gem "rubocop-rails-omakase", require: false
   gem "ruby-lsp"
   gem "web-console"
