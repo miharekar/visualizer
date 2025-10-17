@@ -52,9 +52,9 @@
       </div>
     <% end %>
     <script>
-      window.shotData = <%== @chart.shot_chart.to_json %>;
-      window.temperatureData = <%== @chart.temperature_chart.to_json %>;
-      window.shotStages = <%== @chart.stages.to_json %>;
+      window.shotData = <%= raw @chart.shot_chart.to_json %>;
+      window.temperatureData = <%= raw @chart.temperature_chart.to_json %>;
+      window.shotStages = <%= raw @chart.stages.to_json %>;
     </script>
   <% else %>
     <div class="p-4 rounded-md bg-yellow-50">
