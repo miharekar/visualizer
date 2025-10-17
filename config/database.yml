@@ -1,8 +1,8 @@
 postgres: &postgres
   adapter: postgresql
   encoding: unicode
-  # https://island94.org/2024/09/secret-to-rails-database-connection-pool-size
-  pool: 100
+  host: localhost
+  pool: 100 # https://island94.org/2024/09/secret-to-rails-database-connection-pool-size
 
 _sqlite: &sqlite
   adapter: sqlite3
@@ -16,7 +16,6 @@ development:
     database: visualizer_production
     username: visualizer
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: localhost
     port: 15432
     <% else %>
     database: visualizer_development
