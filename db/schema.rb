@@ -12,13 +12,14 @@
 
 ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "dblink"
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
   enable_extension "unaccent"
 
-  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_attachments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "blob_id", null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -28,7 +29,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_blobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "byte_size", null: false
     t.string "checksum"
     t.string "content_type"
@@ -40,7 +41,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
@@ -87,7 +88,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.string "website"
   end
 
-  create_table "changes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "changes", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
     t.string "excerpt"
@@ -139,7 +140,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
-  create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "oauth_access_grants", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "application_id", null: false
     t.datetime "created_at", null: false
     t.integer "expires_in", null: false
@@ -153,7 +154,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
-  create_table "oauth_access_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "oauth_access_tokens", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "application_id", null: false
     t.datetime "created_at", null: false
     t.integer "expires_in"
@@ -169,7 +170,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
 
-  create_table "oauth_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "oauth_applications", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -217,7 +218,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "shared_shots", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "code", null: false
     t.datetime "created_at", null: false
     t.uuid "shot_id", null: false
@@ -228,7 +229,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["user_id"], name: "index_shared_shots_on_user_id"
   end
 
-  create_table "shot_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "shot_informations", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "brewdata"
     t.jsonb "data"
     t.jsonb "extra"
@@ -245,7 +246,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["tag_id", "shot_id"], name: "index_shot_tags_on_tag_id_and_shot_id", unique: true
   end
 
-  create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "shots", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "airtable_id"
     t.string "barista"
     t.string "bean_brand"
@@ -293,7 +294,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_09_093757) do
     t.index ["user_id", "slug"], name: "index_tags_on_user_id_and_slug", unique: true
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "admin"
     t.boolean "beta"
     t.jsonb "chart_settings"
