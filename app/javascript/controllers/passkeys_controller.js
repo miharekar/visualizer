@@ -33,7 +33,17 @@ export default class extends Controller {
   async signIn({ mediation }) {
     const opts = await this.postJSON("/passkeys/sign_in", {})
     const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(opts)
-    const cred = await navigator.credentials.get({ publicKey, mediation })
+
+    if (this.getAbortController) this.getAbortController.abort()
+    this.getAbortController = new AbortController()
+
+    let cred
+    try {
+      cred = await navigator.credentials.get({ publicKey, mediation, signal: this.getAbortController.signal })
+    } catch (err) {
+      if (err?.name === "AbortError") return
+      throw err
+    }
     if (!cred) return
 
     try {
