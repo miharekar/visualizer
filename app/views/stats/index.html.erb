@@ -14,6 +14,6 @@
   </div>
 </div>
 <script>
-  window.uploadedChartData = <%= @shot_charts.to_json.html_safe %>;
-  window.userChartData = <%= @user_charts.to_json.html_safe %>;
+  window.uploadedChartData = <%= raw @shot_charts.to_json %>;
+  window.userChartData = <%= raw @user_charts.to_json %>;
 </script>
