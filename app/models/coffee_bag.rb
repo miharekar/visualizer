@@ -58,6 +58,7 @@ end
 # == Schema Information
 #
 # Table name: coffee_bags
+# Database name: primary
 #
 #  id                      :uuid             not null, primary key
 #  archived_at             :datetime

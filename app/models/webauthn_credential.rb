@@ -9,6 +9,7 @@ end
 # == Schema Information
 #
 # Table name: webauthn_credentials
+# Database name: primary
 #
 #  id           :uuid             not null, primary key
 #  last_used_at :datetime

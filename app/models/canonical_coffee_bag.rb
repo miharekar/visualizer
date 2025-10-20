@@ -21,6 +21,7 @@ end
 # == Schema Information
 #
 # Table name: canonical_coffee_bags
+# Database name: primary
 #
 #  id                   :uuid             not null, primary key
 #  country              :string

@@ -22,6 +22,7 @@ end
 # == Schema Information
 #
 # Table name: shared_shots
+# Database name: primary
 #
 #  id         :uuid             not null, primary key
 #  code       :string           not null

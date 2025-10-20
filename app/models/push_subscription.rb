@@ -5,6 +5,7 @@ end
 # == Schema Information
 #
 # Table name: push_subscriptions
+# Database name: primary
 #
 #  id         :uuid             not null, primary key
 #  auth_key   :string

@@ -10,6 +10,7 @@ end
 # == Schema Information
 #
 # Table name: shot_tags
+# Database name: primary
 #
 #  shot_id :uuid             not null, primary key
 #  tag_id  :uuid             not null, primary key

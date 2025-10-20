@@ -101,6 +101,7 @@ end
 # == Schema Information
 #
 # Table name: shots
+# Database name: primary
 #
 #  id                      :uuid             not null, primary key
 #  barista                 :string

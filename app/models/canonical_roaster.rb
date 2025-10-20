@@ -17,6 +17,7 @@ end
 # == Schema Information
 #
 # Table name: canonical_roasters
+# Database name: primary
 #
 #  id             :uuid             not null, primary key
 #  address        :string

@@ -20,6 +20,7 @@ end
 # == Schema Information
 #
 # Table name: airtable_infos
+# Database name: primary
 #
 #  id               :uuid             not null, primary key
 #  last_cursor      :integer

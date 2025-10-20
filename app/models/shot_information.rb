@@ -38,6 +38,7 @@ end
 # == Schema Information
 #
 # Table name: shot_informations
+# Database name: primary
 #
 #  id             :uuid             not null, primary key
 #  brewdata       :jsonb

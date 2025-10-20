@@ -12,6 +12,7 @@ end
 # == Schema Information
 #
 # Table name: changes
+# Database name: primary
 #
 #  id           :uuid             not null, primary key
 #  body         :text

@@ -14,6 +14,7 @@ end
 # == Schema Information
 #
 # Table name: tags
+# Database name: primary
 #
 #  id         :uuid             not null, primary key
 #  name       :string           not null

@@ -60,6 +60,7 @@ end
 # == Schema Information
 #
 # Table name: identities
+# Database name: primary
 #
 #  id            :uuid             not null, primary key
 #  blob          :jsonb
