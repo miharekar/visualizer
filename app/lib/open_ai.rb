@@ -2,7 +2,7 @@ class OpenAi
   API_ENDPOINT = "https://api.openai.com/v1/responses".freeze
   API_KEY = Rails.application.credentials.open_ai.api_key
   MODEL = "gpt-5-nano".freeze
-  PROMPT_ID = "pmpt_6895a7ef261c81979e303c72bfc4e522050671dff051834a".freeze
+  PROMPT_ID = Rails.application.credentials.open_ai.prompt_id
 
   def message(content, attempt: 1)
     uri = URI(API_ENDPOINT)
