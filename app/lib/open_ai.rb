@@ -1,8 +1,7 @@
 class OpenAi
   API_ENDPOINT = "https://api.openai.com/v1/responses".freeze
-  API_KEY = Rails.application.credentials.open_ai.api_key
-  MODEL = "gpt-5-nano".freeze
-  PROMPT_ID = "pmpt_6895a7ef261c81979e303c72bfc4e522050671dff051834a".freeze
+  API_KEY = ENV["OPEN_AI_API_KEY"] || Rails.application.credentials.dig(:open_ai, :api_key)
+  CONFIG = YAML.load_file(Rails.root.join("config", "openai_prompt.yml")).deep_symbolize_keys.freeze
 
   def message(content, attempt: 1)
     uri = URI(API_ENDPOINT)
@@ -11,13 +10,14 @@ class OpenAi
     request = Net::HTTP::Post.new(uri.request_uri)
     request["Authorization"] = "Bearer #{API_KEY}"
     request["Content-Type"] = "application/json"
-    request.body = {
-      model: MODEL,
-      prompt: {id: PROMPT_ID},
-      max_output_tokens: 500,
-      reasoning: {effort: "minimal"},
-      input: content
-    }.to_json
+
+    request_body = {
+      model: CONFIG[:model],
+      input: CONFIG[:prompt] % {scraped_content: content},
+      max_output_tokens: CONFIG[:max_output_tokens],
+      reasoning: {effort: CONFIG[:reasoning_effort]}
+    }
+    request.body = request_body.to_json
 
     response = http.request(request)
     raise "Failed to get response from OpenAI: #{response.code} #{response.message}" unless response.is_a?(Net::HTTPSuccess)
