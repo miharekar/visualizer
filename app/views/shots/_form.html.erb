@@ -28,7 +28,7 @@
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :grinder_model, class: "standard-label" %>
-            <%= render partial: "shared/combobox", locals: { input_name: "shot[grinder_model]", hidden_input_name: "_grinder_model", selected: @shot.grinder_model, collection: @grinder_models, name_method: :itself, id_method: :itself, allow_custom: true} %>
+            <%= render partial: "shared/combobox", locals: { input_name: "shot[grinder_model]", hidden_input_name: "_grinder_model", selected: @shot.grinder_model, collection: DropdownValue.visible.for(@shot.user, 'grinder_model').pluck(:value), name_method: :itself, id_method: :itself, allow_custom: true} %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :grinder_setting, class: "standard-label" %>
@@ -58,11 +58,11 @@
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :bean_brand, class: "standard-label" %>
-              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_brand]", hidden_input_name: "_bean_brand", selected: @shot.bean_brand, collection: @bean_brands, name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "roaster"} } %>
+              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_brand]", hidden_input_name: "_bean_brand", selected: @shot.bean_brand, collection: DropdownValue.visible.for(@shot.user, 'bean_brand').pluck(:value), name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "roaster"} } %>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :bean_type, class: "standard-label" %>
-              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_type]", hidden_input_name: "_bean_type", selected: @shot.bean_type, collection: @bean_types, name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "coffeeBag"} } %>
+              <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_type]", hidden_input_name: "_bean_type", selected: @shot.bean_type, collection: DropdownValue.visible.for(@shot.user, 'bean_type').pluck(:value), name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "coffeeBag"} } %>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= f.label :roast_date, class: "standard-label" %>
