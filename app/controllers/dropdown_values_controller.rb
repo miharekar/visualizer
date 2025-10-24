@@ -1,4 +1,6 @@
 class DropdownValuesController < ApplicationController
+  before_action :require_authentication
+
   def index
     @kind = params[:kind].presence_in(DropdownValue::VALID_KINDS) || DropdownValue::VALID_KINDS.first
     @dropdown_values = DropdownValue.for(Current.user, @kind).order(Arel.sql("hidden_at IS NOT NULL"), :value)
