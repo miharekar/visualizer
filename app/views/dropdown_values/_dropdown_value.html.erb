@@ -1,0 +1,12 @@
+<li id="<%= dom_id(dropdown_value) %>" class="px-3 py-2 flex items-center justify-between odd:bg-neutral-100/50 even:bg-white dark:odd:bg-neutral-800/80 dark:even:bg-neutral-800">
+  <div class="min-w-0">
+    <p class="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate<% if dropdown_value.hidden_at? %> opacity-50 line-through<% end %>">
+      <%= dropdown_value.value %>
+    </p>
+  </div>
+  <div class="ml-4 shrink-0">
+    <%= button_to dropdown_value_path(dropdown_value), method: :patch, class: "px-2 py-1 w-15 items-center justify-center button-white" do %>
+      <%= dropdown_value.hidden_at? ? "Show" : "Hide" %>
+    <% end %>
+  </div>
+</li>

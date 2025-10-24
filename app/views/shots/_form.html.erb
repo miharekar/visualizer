@@ -27,7 +27,10 @@
             <%= f.text_field :drink_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "drinkWeight" } %>
           </div>
           <div class="col-span-6 sm:col-span-3">
-            <%= f.label :grinder_model, class: "standard-label" %>
+            <div class="flex justify-between">
+              <%= f.label :grinder_model, class: "standard-label" %>
+              <%= link_to "Manage", dropdown_values_path(kind: "grinder_model"), class: "text-sm standard-link text-neutral-500 dark:text-neutral-400" %>
+            </div>
             <%= render partial: "shared/combobox", locals: { input_name: "shot[grinder_model]", hidden_input_name: "_grinder_model", selected: @shot.grinder_model, collection: DropdownValue.visible.for(@shot.user, 'grinder_model').pluck(:value), name_method: :itself, id_method: :itself, allow_custom: true} %>
           </div>
           <div class="col-span-6 sm:col-span-3">
@@ -57,11 +60,17 @@
               <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
             </div>
             <div class="col-span-6 sm:col-span-3">
-              <%= f.label :bean_brand, class: "standard-label" %>
+              <div class="flex justify-between">
+                <%= f.label :bean_brand, class: "standard-label" %>
+                <%= link_to "Manage", dropdown_values_path(kind: "bean_brand"), class: "text-sm standard-link text-neutral-500 dark:text-neutral-400" %>
+              </div>
               <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_brand]", hidden_input_name: "_bean_brand", selected: @shot.bean_brand, collection: DropdownValue.visible.for(@shot.user, 'bean_brand').pluck(:value), name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "roaster"} } %>
             </div>
             <div class="col-span-6 sm:col-span-3">
-              <%= f.label :bean_type, class: "standard-label" %>
+              <div class="flex justify-between">
+                <%= f.label :bean_type, class: "standard-label" %>
+                <%= link_to "Manage", dropdown_values_path(kind: "bean_type"), class: "text-sm standard-link text-neutral-500 dark:text-neutral-400" %>
+              </div>
               <%= render partial: "shared/combobox", locals: { input_name: "shot[bean_type]", hidden_input_name: "_bean_type", selected: @shot.bean_type, collection: DropdownValue.visible.for(@shot.user, 'bean_type').pluck(:value), name_method: :itself, id_method: :itself, allow_custom: true, input_data: {canonical_selector_target: "coffeeBag"} } %>
             </div>
             <div class="col-span-6 sm:col-span-3">

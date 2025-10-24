@@ -7,6 +7,10 @@ class DropdownValue < ApplicationRecord
 
   scope :for, ->(user, kind) { where(user:, kind:) }
   scope :visible, -> { where(hidden_at: nil) }
+
+  def toggle!
+    update!(hidden_at: hidden_at? ? nil : Time.current)
+  end
 end
 
 # == Schema Information
