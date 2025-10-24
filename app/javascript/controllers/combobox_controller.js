@@ -6,7 +6,7 @@ export default class extends Controller {
 
   static values = {
     allowCustom: { type: Boolean, default: false },
-    activeClasses: { type: Array, default: ["bg-oxford-blue-400", "dark:bg-oxford-blue-700", "text-white"] },
+    activeClasses: { type: Array, default: ["bg-oxford-blue-100", "dark:bg-oxford-blue-600"] },
     inactiveClasses: { type: Array, default: ["text-neutral-700", "dark:text-neutral-300"] },
     hiddenClass: { type: String, default: "hidden" },
     selectedClass: { type: String, default: "is-selected" }
