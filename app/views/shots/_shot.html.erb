@@ -53,7 +53,9 @@
                   By <%= shot.barista %>
                 </div>
               <% end %>
-              <%= render "shots/tags", shot: shot, truncate: true %>
+              <% if shot.tags.any? %>
+                <%= render "shots/tags", shot: shot, truncate: true %>
+              <% end %>
             </div>
           </div>
         </div>
