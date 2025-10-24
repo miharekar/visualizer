@@ -7,13 +7,13 @@
       </h1>
     </div>
     <div class="flex gap-2">
-      <%= link_to edit_roaster_path(@roaster.id), class: "button-white flex sm:ml-auto" do %>
+      <%= link_to edit_roaster_path(@roaster.id), class: "px-3 py-2 items-center button-white flex sm:ml-auto" do %>
         <svg class="sm:-ml-1 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
           <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
         </svg>
         <span class="hidden sm:block text-nowrap ml-1">Edit Roaster</span>
       <% end %>
-      <%= link_to new_roaster_coffee_bag_path, class: "button-white flex sm:ml-auto" do %>
+      <%= link_to new_roaster_coffee_bag_path, class: "px-3 py-2 items-center button-white flex sm:ml-auto" do %>
         <svg class="sm:-ml-1 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" >
           <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
         </svg>
@@ -42,7 +42,7 @@
     <div class="pt-12 text-center text-neutral-500">
       No coffee bags yet 😢
       <div class="mt-4">
-        <%= link_to new_roaster_coffee_bag_path, class: "button-white inline-flex" do %>
+        <%= link_to new_roaster_coffee_bag_path, class: "px-3 py-2 items-center button-white inline-flex" do %>
           <svg class="-ml-1.5 size-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
           </svg>
