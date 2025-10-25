@@ -10,7 +10,7 @@ export default class extends Controller {
     if (!pageIsTurboPreview()) {
       const enabled = await this.isEnabled()
       if (this.#allowed && !enabled) {
-        this.bellTarget.classList.remove("hidden")
+        this.bellTarget.classList.remove("hidden!")
       }
       if (this.hasStatusHeadingTarget) {
         this.updateStatus(enabled)
@@ -62,7 +62,7 @@ export default class extends Controller {
   async #subscribe(registration) {
     registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: this.#vapidPublicKey }).then(subscription => {
       this.#syncPushSubscription(subscription)
-      this.bellTarget.classList.add("hidden")
+      this.bellTarget.classList.add("hidden!")
       if (this.hasStatusHeadingTarget) {
         this.updateStatus(true)
       }

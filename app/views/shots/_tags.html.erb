@@ -1,15 +1,13 @@
-<% if shot.tags.any? %>
-  <div class="flex flex-wrap items-center gap-1">
-    <% shot.tags.sort_by(&:name).each do |tag| %>
-      <%= link_to shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment, :coffee_bag).reject { |_, v| v.blank? }.merge(tag: tag.slug)), class: "relative z-10 pointer-events-auto" do %>
-        <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-oxford-blue-50 text-oxford-blue-600 dark:bg-oxford-blue-400/5 dark:text-oxford-blue-300 dark:ring-1 dark:ring-inset dark:ring-oxford-blue-400/10 group hover:bg-neutral-200/75 dark:hover:bg-neutral-700/75">
-          <% if truncate && tag.name.length > 15 %>
-            <%= tag.name.truncate(15, omission: "…") %>
-          <% else %>
-            <%= tag.name %>
-          <% end %>
-        </span>
-      <% end %>
+<div class="flex flex-wrap items-center gap-1">
+  <% shot.tags.sort_by(&:name).each do |tag| %>
+    <%= link_to shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment, :coffee_bag).reject { |_, v| v.blank? }.merge(tag: tag.slug)), class: "relative z-10 pointer-events-auto" do %>
+      <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-oxford-blue-50 text-oxford-blue-600 dark:bg-oxford-blue-400/5 dark:text-oxford-blue-300 dark:ring-1 dark:ring-inset dark:ring-oxford-blue-400/10 group hover:bg-neutral-200/75 dark:hover:bg-neutral-700/75">
+        <% if truncate && tag.name.length > 15 %>
+          <%= tag.name.truncate(15, omission: "…") %>
+        <% else %>
+          <%= tag.name %>
+        <% end %>
+      </span>
     <% end %>
-  </div>
-<% end %>
+  <% end %>
+</div>

@@ -39,11 +39,6 @@ class ShotsController < ApplicationController
 
   def edit
     authorize @shot
-    shots = Current.user.shots
-    %i[grinder_model bean_brand bean_type].each do |method|
-      unique_values = Rails.cache.fetch("#{shots.cache_key_with_version}/#{method}") { shots.distinct.pluck(method).compact_blank }
-      instance_variable_set(:"@#{method.to_s.pluralize}", unique_values.sort_by(&:downcase))
-    end
   end
 
   def create

@@ -25,6 +25,7 @@ class Shot < ApplicationRecord
 
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? || canonical_coffee_bag_id_changed? }
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
+  after_commit :populate_dropdown_values
   after_create_commit :send_web_push_notification
 
   scope :visible, -> { where(public: true) }
@@ -92,9 +93,13 @@ class Shot < ApplicationRecord
   end
 
   def send_web_push_notification
-    user&.push_subscriptions&.each do |push_subscription|
+    user.push_subscriptions&.each do |push_subscription|
       WebPushJob.perform_later(push_subscription, title: "New Shot", body: "See your new #{profile_title} shot 👀", path: "/shots/#{id}")
     end
+  end
+
+  def populate_dropdown_values
+    PopulateDropdownValuesJob.perform_later(user:)
   end
 end
 

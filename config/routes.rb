@@ -106,6 +106,8 @@ Rails.application.routes.draw do
     delete :disconnect_airtable
   end
 
+  resources :dropdown_values, only: %i[index update]
+
   resources :premium, only: %i[index create] do
     collection do
       get :manage

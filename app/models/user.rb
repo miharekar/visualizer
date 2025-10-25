@@ -23,6 +23,7 @@ class User < ApplicationRecord
   has_many :tags, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
   has_many :webauthn_credentials, dependent: :destroy
+  has_many :dropdown_values, dependent: :destroy
 
   has_one_attached :avatar do |attachable|
     attachable.variant :thumb, resize_to_limit: [96, 96], format: :jpeg, saver: {strip: true}
