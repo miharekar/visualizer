@@ -23,7 +23,7 @@ module Airtablable
   end
 
   def cleanup_airtable
-    return if airtable_id.blank? || !user.has_airtable?
+    return if airtable_id.blank? || !user&.has_airtable?
 
     AirtableDeleteRecordJob.perform_later(self.class.airtable_class, user, airtable_id)
   end
