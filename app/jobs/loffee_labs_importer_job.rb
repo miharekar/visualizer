@@ -1,4 +1,6 @@
 class LoffeeLabsImporterJob < ApplicationJob
+  retry_on TypeError, wait: :polynomially_longer
+
   queue_as :low
 
   ROASTER_CSV_MAPPING = {name: "roaster", website: "link", country: "country", address: "locality"}.freeze
