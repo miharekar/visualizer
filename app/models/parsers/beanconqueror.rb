@@ -5,6 +5,7 @@ module Parsers
       @profile_title = json.dig("preparation", "name").presence || "Beanconqueror"
       @brewdata = json
       set_extra
+      set_drink_weight
       fake_timeframe
     end
 
@@ -46,10 +47,14 @@ module Parsers
       @extra["roast_date"] = brewdata.dig("bean", "roastingDate")
       @extra["grinder_model"] = brewdata.dig("mill", "name")
       @extra["grinder_setting"] = brewdata.dig("brew", "grind_size")
-      @extra["drink_weight"] = brewdata.dig("brew", "brew_beverage_quantity")
       @extra["bean_weight"] = brewdata.dig("brew", "grind_weight")
       @extra["drink_tds"] = brewdata.dig("brew", "tds")
       @extra["drink_ey"] = brewdata.dig("brew", "ey")
+    end
+
+    def set_drink_weight
+      weight = brewdata.dig("brew", "brew_beverage_quantity")
+      @extra["drink_weight"] = weight.to_f.nonzero? ? weight : brewdata.dig("brew", "brew_quantity")
     end
 
     def fake_timeframe

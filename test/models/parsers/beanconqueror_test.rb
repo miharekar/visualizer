@@ -21,7 +21,7 @@ module Parsers
       assert_equal "08.12.2022", shot.roast_date
       assert_equal "Kinu M47", shot.grinder_model
       assert_equal "4", shot.grinder_setting
-      assert_equal "0", shot.drink_weight
+      assert_equal "1200", shot.drink_weight
       assert_equal "Parsers::Beanconqueror", shot.information.brewdata["parser"]
     end
 
@@ -36,7 +36,7 @@ module Parsers
       assert_equal "08.12.2022", shot.roast_date
       assert_equal "Kinu M47", shot.grinder_model
       assert_equal "4", shot.grinder_setting
-      assert_equal "0", shot.drink_weight
+      assert_equal "1200", shot.drink_weight
       assert_in_delta(35.047, shot.duration)
       assert_equal "3", shot.drink_tds
       assert_equal "4", shot.drink_ey
@@ -176,7 +176,7 @@ module Parsers
       assert_equal "08.12.2022", shot.roast_date
       assert_equal "Kinu M47", shot.grinder_model
       assert_equal "4", shot.grinder_setting
-      assert_equal "0", shot.drink_weight
+      assert_equal "1200", shot.drink_weight
       assert_in_delta(174.244, shot.duration)
       assert_equal %w[pressureFlow realtimeFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
       assert_equal 1748, shot.information.brewdata["brewFlow"]["realtimeFlow"].size
