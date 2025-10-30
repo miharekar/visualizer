@@ -33,6 +33,7 @@ env:
     WEB_CONCURRENCY: 2
     POSTGRES_HOST: 10.0.0.50
     POSTGRES_PORT: 5440
+    RUBYOPT: "--enable-frozen-string-literal"
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"

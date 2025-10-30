@@ -1,3 +1,3 @@
-web: RUBY_DEBUG_SESSION_NAME=rails bin/rails s -p 3000
+web: RUBYOPT="--enable-frozen-string-literal" RUBY_DEBUG_SESSION_NAME=rails bin/rails s -p 3000
 css: bin/rails tailwindcss:watch
-solid_queue: OBJC_DISABLE_INITIALIZE_FORK_SAFETY=1 RUBY_DEBUG_SESSION_NAME=solidq bin/jobs
+solid_queue: RUBYOPT="--enable-frozen-string-literal" OBJC_DISABLE_INITIALIZE_FORK_SAFETY=1 RUBY_DEBUG_SESSION_NAME=solidq bin/jobs
