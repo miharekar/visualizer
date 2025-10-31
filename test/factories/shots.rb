@@ -3,6 +3,7 @@ FactoryBot.define do
     user
     sha { SecureRandom.hex(20) }
     start_time { Time.current }
+    public { false }
 
     trait :with_airtable do
       skip_airtable_sync { true }

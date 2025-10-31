@@ -2,6 +2,12 @@ FactoryBot.define do
   factory :user do
     sequence(:email) { "person#{_1}@example.com" }
     password { "password" }
+    hide_shot_times { false }
+    admin { false }
+    beta { false }
+    supporter { false }
+    developer { false }
+    coffee_management_enabled { false }
 
     trait :admin do
       admin { true }

@@ -4,11 +4,11 @@ class Update < ApplicationRecord
   include Sluggable
   slug_from :title
 
-  validates :slug, uniqueness: true
-
   has_one_attached :image do |attachable|
     attachable.variant :social, resize_to_limit: [800, 500], format: :jpeg, saver: {strip: true}
   end
+
+  validates :slug, uniqueness: true
 end
 
 # == Schema Information
