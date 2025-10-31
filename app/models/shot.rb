@@ -125,11 +125,11 @@ end
 #  metadata                :jsonb
 #  private_notes           :text
 #  profile_title           :string
-#  public                  :boolean
+#  public                  :boolean          not null
 #  roast_date              :string
 #  roast_level             :string
-#  sha                     :string
-#  start_time              :datetime
+#  sha                     :string           not null
+#  start_time              :datetime         not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  airtable_id             :string

@@ -154,27 +154,27 @@ end
 # Database name: primary
 #
 #  id                        :uuid             not null, primary key
-#  admin                     :boolean
-#  beta                      :boolean
+#  admin                     :boolean          not null
+#  beta                      :boolean          not null
 #  chart_settings            :jsonb
-#  coffee_management_enabled :boolean
+#  coffee_management_enabled :boolean          not null
 #  communication             :jsonb
 #  date_format               :string
 #  decent_email              :string
 #  decent_token              :string
-#  developer                 :boolean
+#  developer                 :boolean          not null
 #  email                     :string           default(""), not null
 #  github                    :string
-#  hide_shot_times           :boolean
+#  hide_shot_times           :boolean          not null
 #  last_read_change          :datetime
 #  metadata_fields           :jsonb
 #  name                      :string
 #  password_digest           :string           default(""), not null
 #  premium_expires_at        :datetime
-#  public                    :boolean          default(FALSE)
+#  public                    :boolean          default(FALSE), not null
 #  skin                      :string
 #  slug                      :string
-#  supporter                 :boolean
+#  supporter                 :boolean          not null
 #  temperature_unit          :string
 #  timezone                  :string
 #  unsubscribed_from         :jsonb

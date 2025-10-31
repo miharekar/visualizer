@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_31_071053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -108,7 +108,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
     t.string "farm"
     t.string "farmer"
     t.string "harvest_time"
-    t.string "name"
+    t.string "name", null: false
     t.string "place_of_purchase"
     t.string "processing"
     t.string "quality_score"
@@ -128,22 +128,21 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
   create_table "dropdown_values", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "hidden_at", precision: nil
-    t.string "kind"
+    t.string "kind", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
-    t.string "value"
+    t.string "value", null: false
     t.index ["user_id", "kind", "value"], name: "index_dropdown_values_on_user_id_and_kind_and_value", unique: true
-    t.index ["user_id"], name: "index_dropdown_values_on_user_id"
   end
 
   create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "blob"
     t.datetime "created_at", null: false
     t.datetime "expires_at"
-    t.string "provider"
+    t.string "provider", null: false
     t.string "refresh_token"
     t.string "token"
-    t.string "uid"
+    t.string "uid", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
     t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
@@ -210,7 +209,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
     t.string "airtable_id"
     t.uuid "canonical_roaster_id"
     t.datetime "created_at", null: false
-    t.string "name"
+    t.string "name", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
     t.string "website"
@@ -277,11 +276,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
     t.jsonb "metadata"
     t.text "private_notes"
     t.string "profile_title"
-    t.boolean "public"
+    t.boolean "public", null: false
     t.string "roast_date"
     t.string "roast_level"
-    t.string "sha"
-    t.datetime "start_time", precision: nil
+    t.string "sha", null: false
+    t.datetime "start_time", precision: nil, null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
@@ -305,30 +304,30 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "admin"
-    t.boolean "beta"
+    t.boolean "admin", null: false
+    t.boolean "beta", null: false
     t.jsonb "chart_settings"
-    t.boolean "coffee_management_enabled"
+    t.boolean "coffee_management_enabled", null: false
     t.jsonb "communication"
     t.datetime "created_at", null: false
     t.string "date_format"
     t.string "decent_email"
     t.string "decent_token"
-    t.boolean "developer"
+    t.boolean "developer", null: false
     t.string "email", default: "", null: false
     t.string "github"
-    t.boolean "hide_shot_times"
+    t.boolean "hide_shot_times", null: false
     t.datetime "last_read_change"
     t.string "lemon_squeezy_customer_id"
     t.jsonb "metadata_fields"
     t.string "name"
     t.string "password_digest", default: "", null: false
     t.datetime "premium_expires_at"
-    t.boolean "public", default: false
+    t.boolean "public", default: false, null: false
     t.string "skin"
     t.string "slug"
     t.string "stripe_customer_id"
-    t.boolean "supporter"
+    t.boolean "supporter", null: false
     t.string "temperature_unit"
     t.string "timezone"
     t.jsonb "unsubscribed_from"
@@ -343,7 +342,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_24_100351) do
     t.datetime "created_at", null: false
     t.string "external_id", null: false
     t.datetime "last_used_at"
-    t.string "nickname"
+    t.string "nickname", null: false
     t.string "public_key", null: false
     t.integer "sign_count", default: 0, null: false
     t.datetime "updated_at", null: false

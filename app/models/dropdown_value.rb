@@ -20,15 +20,14 @@ end
 #
 #  id         :uuid             not null, primary key
 #  hidden_at  :datetime
-#  kind       :string
-#  value      :string
+#  kind       :string           not null
+#  value      :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  user_id    :uuid             not null
 #
 # Indexes
 #
-#  index_dropdown_values_on_user_id                     (user_id)
 #  index_dropdown_values_on_user_id_and_kind_and_value  (user_id,kind,value) UNIQUE
 #
 # Foreign Keys

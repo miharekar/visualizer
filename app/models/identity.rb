@@ -65,10 +65,10 @@ end
 #  id            :uuid             not null, primary key
 #  blob          :jsonb
 #  expires_at    :datetime
-#  provider      :string
+#  provider      :string           not null
 #  refresh_token :string
 #  token         :string
-#  uid           :string
+#  uid           :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  user_id       :uuid             not null

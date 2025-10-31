@@ -13,7 +13,7 @@ end
 #
 #  id           :uuid             not null, primary key
 #  last_used_at :datetime
-#  nickname     :string
+#  nickname     :string           not null
 #  public_key   :string           not null
 #  sign_count   :integer          default(0), not null
 #  created_at   :datetime         not null
