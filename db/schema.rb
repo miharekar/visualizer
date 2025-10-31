@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_31_071053) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_31_091339) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -276,7 +276,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_071053) do
     t.jsonb "metadata"
     t.text "private_notes"
     t.string "profile_title"
-    t.boolean "public", null: false
+    t.boolean "public", default: false, null: false
     t.string "roast_date"
     t.string "roast_level"
     t.string "sha", null: false
@@ -304,19 +304,19 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_071053) do
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "admin", null: false
-    t.boolean "beta", null: false
+    t.boolean "admin", default: false, null: false
+    t.boolean "beta", default: false, null: false
     t.jsonb "chart_settings"
-    t.boolean "coffee_management_enabled", null: false
+    t.boolean "coffee_management_enabled", default: false, null: false
     t.jsonb "communication"
     t.datetime "created_at", null: false
     t.string "date_format"
     t.string "decent_email"
     t.string "decent_token"
-    t.boolean "developer", null: false
+    t.boolean "developer", default: false, null: false
     t.string "email", default: "", null: false
     t.string "github"
-    t.boolean "hide_shot_times", null: false
+    t.boolean "hide_shot_times", default: false, null: false
     t.datetime "last_read_change"
     t.string "lemon_squeezy_customer_id"
     t.jsonb "metadata_fields"
@@ -327,7 +327,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_071053) do
     t.string "skin"
     t.string "slug"
     t.string "stripe_customer_id"
-    t.boolean "supporter", null: false
+    t.boolean "supporter", default: false, null: false
     t.string "temperature_unit"
     t.string "timezone"
     t.jsonb "unsubscribed_from"

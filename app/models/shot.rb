@@ -125,7 +125,7 @@ end
 #  metadata                :jsonb
 #  private_notes           :text
 #  profile_title           :string
-#  public                  :boolean          not null
+#  public                  :boolean          default(FALSE), not null
 #  roast_date              :string
 #  roast_level             :string
 #  sha                     :string           not null
