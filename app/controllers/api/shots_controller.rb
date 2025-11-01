@@ -11,7 +11,7 @@ module Api
       shots = shots.non_premium unless Current.user&.premium?
       shots = params[:sort] == "updated_at" ? shots.order(updated_at: :desc) : shots.by_start_time
       shots = shots.select(:id, :start_time, :user_id, :updated_at)
-      shots, paging = paginate(shots)
+      shots, paging = paginate(shots, with_counts: Current.user.present?)
       data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
       render json: {data:, paging:}
     rescue ActiveRecord::ActiveRecordError => e
