@@ -5,7 +5,7 @@ module ShotHelper
 
     tag.tr do
       concat tag.td(key, class: "whitespace-nowrap")
-      concat tag.td(value)
+      concat tag.td(value, class: "wrap-anywhere")
     end
   end
 
