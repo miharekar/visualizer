@@ -12,7 +12,7 @@ class EnableCoffeeManagementJob < ApplicationJob
       coffee_bag = coffee_bags["#{shot.bean_brand}_#{shot.bean_type}_#{shot.roast_date}"]
       next unless coffee_bag
 
-      {id: shot.id, coffee_bag_id: coffee_bag.id, bean_brand: roasters[shot.bean_brand].name, bean_type: coffee_bag.name}
+      {id: shot.id, sha: shot.sha, start_time: shot.start_time, coffee_bag_id: coffee_bag.id, bean_brand: roasters[shot.bean_brand].name, bean_type: coffee_bag.name}
     end
 
     ActiveRecord::Base.transaction do
