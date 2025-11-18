@@ -16,7 +16,7 @@ class PasskeysController < ApplicationController
 
     head :created
   rescue WebAuthn::Error => e
-    render json: {error: e.message}, status: :unprocessable_entity
+    render json: {error: e.message}, status: :unprocessable_content
   end
 
   def destroy
