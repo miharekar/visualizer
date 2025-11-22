@@ -83,7 +83,7 @@
                 <% @profile.metadata_fields.each do |field| %>
                   <span class="inline-flex items-center rounded-full pr-1 text-sm text-neutral-700 bg-neutral-100 py-0.5 pl-2.5">
                     <%= field %>
-                    <%= link_to remove_metadata_field_profile_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} custom field? This will remove the data from all the shots that have it filled in!"}, class: "ml-1 inline-flex size-4 flex-shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
+                    <%= link_to remove_metadata_field_profile_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} custom field? This will remove the data from all the shots that have it filled in!"}, class: "ml-1 inline-flex size-4 shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
                       <svg class="size-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
                         <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
                       </svg>
