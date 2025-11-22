@@ -93,7 +93,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def load_coffee_bags
-    @coffee_bags = Current.user.coffee_bags.active_first.by_roast_date
+    @coffee_bags = Current.user.coffee_bags.active_first.by_roast_date.includes(:roaster).with_attached_image
     @coffee_bags = @coffee_bags.where(roaster_id: params[:roaster_id]) if params[:roaster_id].present?
     @coffee_bags = @coffee_bags.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
     @coffee_bags = @coffee_bags.where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
