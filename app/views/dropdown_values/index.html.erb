@@ -9,15 +9,15 @@
     </div>
   </div>
   <% if @dropdown_kinds.size > 1 %>
-  <div class="border-b border-neutral-200 dark:border-white/10">
-    <nav class="-mb-px flex space-x-8">
-      <% @dropdown_kinds.each do |kind, title| %>
-        <a href="<%= dropdown_values_path(kind:) %>" class="border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap <%= @kind == kind ? active_classes : inactive_classes %>">
-          <%= title %>
-        </a>
-      <% end %>
-    </nav>
-  </div>
+    <div class="border-b border-neutral-200 dark:border-white/10">
+      <nav class="-mb-px flex space-x-8">
+        <% @dropdown_kinds.each do |kind, title| %>
+          <a href="<%= dropdown_values_path(kind:) %>" class="border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap <%= @kind == kind ? active_classes : inactive_classes %>">
+            <%= title %>
+          </a>
+        <% end %>
+      </nav>
+    </div>
   <% end %>
   <div class="mt-3 overflow-hidden sm:rounded-md ring-1 ring-neutral-200 dark:ring-neutral-700">
     <ul role="list" class="divide-y divide-neutral-200 dark:divide-neutral-700">

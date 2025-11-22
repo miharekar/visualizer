@@ -19,6 +19,11 @@
           <strong><%= @roaster.name %></strong>.
         </h3>
       </div>
+      <hr class="my-6 text-neutral-200 dark:text-neutral-700">
+      <div data-controller="modal">
+        <%= render "shared/modal" %>
+        <%= button_to "Delete #{@roaster.name}", roaster_path(@roaster), method: :delete, class: "button-oxford-blue w-full py-2 px-4", data: {action: "click->modal#confirm", title: "Delete #{@roaster.name}", text: "Are you sure you want to permanently delete #{@roaster.name} roaster with #{pluralize(@roaster.coffee_bags.count, "coffee bag")}? This action cannot be undone."} %>
+      </div>
     </div>
     <hr class="mx-4 mt-6 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
     <%= render "form", roaster: @roaster %>

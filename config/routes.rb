@@ -79,9 +79,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roasters, except: [:show] do
+  resources :roasters, except: %i[index show] do
     delete :remove_image, on: :member
-    post :search, on: :collection
   end
 
   resources :canonical, only: [] do
