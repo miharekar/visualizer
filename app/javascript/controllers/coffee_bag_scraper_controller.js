@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["url", "loader"]
+  static targets = ["canonicalId", "url", "loader"]
 
   async fetch(event) {
     if (event.type === "click") {
@@ -34,6 +34,7 @@ export default class extends Controller {
         throw new Error(data.error || "Failed to fetch coffee info")
       }
 
+      this.canonicalIdTarget.value = null
       this.populateFields(data)
     } catch (error) {
       const template = document.getElementById("scraper-error-template")
