@@ -1,5 +1,5 @@
-<% cache coffee_bag do %>
-  <div id="<%= dom_id coffee_bag %>" class="flex flex-col rounded col-span-1 dark:text-neutral-200 dark:border-neutral-700 <%= coffee_bag.archived? ? 'opacity-40 border-x border-t border-neutral-200' : 'shadow dark:shadow-none dark:border-x dark:border-t' %>">
+<div id="<%= dom_id coffee_bag %>" class="flex flex-col rounded col-span-1 dark:text-neutral-200 dark:border-neutral-700 <%= coffee_bag.archived? ? 'opacity-40 border-x border-t border-neutral-200' : 'shadow dark:shadow-none dark:border-x dark:border-t' %>">
+  <% cache coffee_bag do %>
     <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
       <%= link_to shots_path(coffee_bag: coffee_bag) do %>
         <span class="absolute inset-x-0 bottom-0 z-10 -top-px"></span>
@@ -23,6 +23,10 @@
           </h3>
           <div class="mt-2 prose prose-neutral dark:prose-invert">
             <table>
+              <tr class="relative z-20">
+                <td>Roaster</td>
+                <td><%= link_to coffee_bag.roaster.name, edit_roaster_path(coffee_bag.roaster) %></td>
+              </tr>
               <% if coffee_bag.roast_date.present? %>
                 <tr>
                   <td>Roasted on</td>
@@ -37,45 +41,46 @@
         </div>
       </div>
     </div>
-    <div class="border-y border-neutral-200 dark:border-neutral-700">
-      <div class="flex divide-x divide-neutral-200 dark:divide-neutral-700">
-        <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
-          <%= link_to edit_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
-            <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
-            </svg>
-            Edit
-          <% end %>
-        </div>
-        <% if coffee_bag.archived? %>
-          <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
-            <%= button_to restore_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "cursor-pointer inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
-              <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.025-.273Z" clip-rule="evenodd" />
-              </svg>
-              Restore
-            <% end %>
-          </div>
-        <% else %>
-          <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
-            <%= button_to archive_roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "cursor-pointer inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
-              <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H3Z" />
-                <path fill-rule="evenodd" d="M3 6h10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm3 2.75A.75.75 0 0 1 6.75 8h2.5a.75.75 0 0 1 0 1.5h-2.5A.75.75 0 0 1 6 8.75Z" clip-rule="evenodd" />
-              </svg>
-              Archive
-            <% end %>
-          </div>
+  <% end %>
+  <% search_params = {roaster: params[:roaster], coffee: params[:coffee]}.compact_blank %>
+  <div class="border-y border-neutral-200 dark:border-neutral-700">
+    <div class="flex divide-x divide-neutral-200 dark:divide-neutral-700">
+      <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+        <%= link_to edit_coffee_bag_path(coffee_bag), class: "inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
+          <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+          </svg>
+          Edit
         <% end %>
-        <div class="flex flex-1 hover:bg-red-100/25 dark:hover:bg-red-900/25">
-          <%= link_to roaster_coffee_bag_path(coffee_bag.roaster, coffee_bag), class: "inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{coffee_bag.name}", text: "Are you sure you want to permanently delete #{coffee_bag.display_name} bag?"} do %>
-            <svg class="size-4 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-              <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+      </div>
+      <% if coffee_bag.archived? %>
+        <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+          <%= button_to restore_coffee_bag_path(coffee_bag, **search_params), class: "cursor-pointer inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
+            <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.025-.273Z" clip-rule="evenodd" />
             </svg>
-            Delete
+            Restore
           <% end %>
         </div>
+      <% else %>
+        <div class="flex flex-1 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+          <%= button_to archive_coffee_bag_path(coffee_bag, **search_params), class: "cursor-pointer inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3" do %>
+            <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H3Z" />
+              <path fill-rule="evenodd" d="M3 6h10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm3 2.75A.75.75 0 0 1 6.75 8h2.5a.75.75 0 0 1 0 1.5h-2.5A.75.75 0 0 1 6 8.75Z" clip-rule="evenodd" />
+            </svg>
+            Archive
+          <% end %>
+        </div>
+      <% end %>
+      <div class="flex flex-1 hover:bg-red-100/25 dark:hover:bg-red-900/25">
+        <%= link_to coffee_bag_path(coffee_bag, **search_params), class: "inline-flex items-center justify-center flex-1 p-4 text-sm border border-transparent gap-x-3", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{coffee_bag.name}", text: "Are you sure you want to permanently delete #{coffee_bag.display_name} bag?"} do %>
+          <svg class="size-4 text-neutral-500 dark:text-neutral-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+          </svg>
+          Delete
+        <% end %>
       </div>
     </div>
   </div>
-<% end %>
+</div>

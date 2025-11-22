@@ -1,5 +1,5 @@
 <div class="md:col-span-2" id="<%= dom_id(@coffee_bag) %>">
-  <%= form_with(model: [@roaster, @coffee_bag], data: { controller: "coffee-bag-scraper canonical-selector" }) do |f| %>
+  <%= form_with(model: @coffee_bag, data: { controller: "coffee-bag-scraper canonical-selector" }) do |f| %>
     <div class="md:shadow sm:rounded-md sm:overflow-hidden">
       <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6">
@@ -7,7 +7,7 @@
             <%= f.label :url, "Web page with information", class: "standard-label" %>
             <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400">
               <div class="flex flex-row items-center gap-2">
-                <%= f.text_field :url, class: "mt-0 standard-input", data: {coffee_bag_scraper_target: "url", scrape_url: scrape_info_roaster_coffee_bags_path(@roaster),action: "change->coffee-bag-scraper#fetch"} %>
+                <%= f.text_field :url, class: "mt-0 standard-input", data: {coffee_bag_scraper_target: "url", scrape_url: scrape_info_coffee_bags_path,action: "change->coffee-bag-scraper#fetch"} %>
                 <button type="button" class="px-4 py-2 button-terracotta whitespace-nowrap" data-action="coffee-bag-scraper#fetch">
                   Get info
                 </button>
@@ -24,9 +24,10 @@
             <% end %>
             <%= f.label :name, class: "standard-label" %>
             <div class="relative">
-              <% if @roaster.canonical_roaster_id %>
-                <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(roaster_id: @roaster.canonical_roaster_id) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white">
-                  <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id" } %>
+              <% if @coffee_bag&.roaster&.canonical_roaster_id %>
+                <!--TODO: auto update roaster-->
+                <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(roaster_id: @coffee_bag.roaster.canonical_roaster_id) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white">
+                  <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id", coffee_bag_scraper_target: "canonicalId" } %>
                   <%= f.search_field :name, class: "#{extra_classes} ps-10 mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
                   <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
                   <div class="<%= "hidden" unless coffee_bag.canonical_coffee_bag_id %> pointer-events-none absolute inset-y-0 left-2 flex items-center" data-canonical-selector-target="verified">
@@ -51,12 +52,10 @@
               </p>
             <% end %>
           </div>
-          <% if @coffee_bag.persisted? %>
-            <div class="col-span-6 sm:col-span-3">
-              <%= f.label :roaster, class: "standard-label" %>
-              <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters} %>
-            </div>
-          <% end %>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :roaster, class: "standard-label" %>
+            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters} %>
+          </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :roast_date, class: "standard-label" %>
             <%= f.date_field :roast_date, class: "mt-1 standard-input" %>
@@ -119,7 +118,7 @@
                     <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    <%= link_to "Remove Image", [:remove_image, @roaster, @coffee_bag], data: { turbo_method: :delete }, class: "standard-link text-sm" %>
+                    <%= link_to "Remove Image", remove_image_coffee_bag_path(@coffee_bag), data: { turbo_method: :delete }, class: "standard-link text-sm" %>
                   </div>
                 </div>
               <% end %>

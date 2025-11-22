@@ -1,10 +1,9 @@
 class CoffeeBagsController < ApplicationController
   before_action :require_authentication
   before_action :check_premium!
-  before_action :set_roaster
   before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image archive restore]
   before_action :load_coffee_bags, only: %i[index search]
-  before_action :load_roasters, only: %i[edit update duplicate]
+  before_action :load_roasters, only: %i[new edit]
 
   def index; end
 
@@ -13,23 +12,24 @@ class CoffeeBagsController < ApplicationController
   end
 
   def new
-    @coffee_bag = @roaster.coffee_bags.build
+    @coffee_bag = Current.user.coffee_bags.build(roaster_id: params[:roaster_id])
   end
 
   def edit; end
 
   def create
-    @coffee_bag = @roaster.coffee_bags.build(coffee_bag_params)
+    @coffee_bag = Current.user.coffee_bags.build(coffee_bag_params)
     if @coffee_bag.save
-      redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was created."
+      redirect_to coffee_bags_path(format: :html), notice: "#{@coffee_bag.display_name} was created."
     else
+      load_roasters
       render :new, status: :unprocessable_content
     end
   end
 
   def update
     if @coffee_bag.update(coffee_bag_params)
-      redirect_to roaster_coffee_bags_path(@coffee_bag.roaster, format: :html), notice: "#{@coffee_bag.display_name} was updated."
+      redirect_to coffee_bags_path(format: :html), notice: "#{@coffee_bag.display_name} was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -38,21 +38,18 @@ class CoffeeBagsController < ApplicationController
   def duplicate
     if params[:roast_date].blank?
       flash.now[:alert] = "Please provide a roast date to duplicate this coffee bag."
+      load_roasters
       render :edit, status: :unprocessable_content
     else
       duplicate = @coffee_bag.duplicate(params[:roast_date])
       if duplicate.save
-        redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was duplicated as #{duplicate.display_name}."
+        redirect_to coffee_bags_path(format: :html), notice: "#{@coffee_bag.display_name} was duplicated as #{duplicate.display_name}."
       else
         flash.now[:alert] = "Failed to duplicate coffee bag."
+        load_roasters
         render :edit, status: :unprocessable_content
       end
     end
-  end
-
-  def destroy
-    @coffee_bag.destroy!
-    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was deleted."
   end
 
   def remove_image
@@ -72,32 +69,33 @@ class CoffeeBagsController < ApplicationController
     end
   end
 
+  def destroy
+    @coffee_bag.destroy!
+    redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was deleted."
+  end
+
   def archive
     @coffee_bag.update(archived_at: Time.current)
-    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was archived."
+    redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was archived."
   end
 
   def restore
     @coffee_bag.update(archived_at: nil)
-    redirect_to roaster_coffee_bags_path(@roaster, format: :html), notice: "#{@coffee_bag.display_name} was restored."
+    redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was restored."
   end
 
   private
 
-  def set_roaster
-    @roaster = Current.user.roasters.find(params[:roaster_id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to roasters_path, alert: "Roaster not found"
-  end
-
   def set_coffee_bag
-    @coffee_bag = @roaster.coffee_bags.find(params[:id])
+    @coffee_bag = Current.user.coffee_bags.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to roaster_coffee_bags_path(@roaster), alert: "Coffee bag not found"
+    redirect_to coffee_bags_path, alert: "Coffee bag not found"
   end
 
   def load_coffee_bags
-    @coffee_bags = @roaster.coffee_bags.active_first.by_roast_date
+    @coffee_bags = Current.user.coffee_bags.active_first.by_roast_date
+    @coffee_bags = @coffee_bags.where(roaster_id: params[:roaster_id]) if params[:roaster_id].present?
+    @coffee_bags = @coffee_bags.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
     @coffee_bags = @coffee_bags.where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
   end
 

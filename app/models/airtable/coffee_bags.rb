@@ -35,7 +35,7 @@ module Airtable
         "Name" => coffee_bag.name,
         "Roaster" => [coffee_bag.roaster.airtable_id],
         "ID" => coffee_bag.id,
-        "URL" => roaster_coffee_bags_url(coffee_bag.roaster_id)
+        "URL" => shots_url(coffee_bag:)
       }
       STANDARD_FIELDS.each { |name, attribute| fields[name] = coffee_bag.public_send(attribute) }
       fields["Image"] = [{url: coffee_bag.image.url(disposition: "attachment"), filename: coffee_bag.image.filename.to_s}] if coffee_bag.image.attached?

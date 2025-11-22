@@ -19,8 +19,8 @@
         <% if @shots_count.to_i > 0 %>
           <% word = params[:tag].present? ? "#{Tag.find_by(slug: params[:tag])&.name} Shot" : "Shot" %>
           Your <%= pluralize(@shots_count, word) %>
-          <% if params[:coffee_bag].present? %>
-            with <%= CoffeeBag.find_by(id: params[:coffee_bag])&.display_name %>
+          <% if @coffee_bag.present? %>
+            with <%= link_to @coffee_bag.display_name, edit_coffee_bag_path(@coffee_bag), class: "standard-link" %>
           <% end %>
         <% else %>
           No Shots

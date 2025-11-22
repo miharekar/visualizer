@@ -66,19 +66,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roasters, except: [:show] do
-    resources :coffee_bags, except: [:show] do
-      member do
-        delete :remove_image
-        post :archive
-        post :restore
-        post :duplicate
-      end
-      collection do
-        post :search
-        post :scrape_info
-      end
+  resources :coffee_bags, except: [:show] do
+    member do
+      delete :remove_image
+      post :archive
+      post :restore
+      post :duplicate
     end
+    collection do
+      post :search
+      post :scrape_info
+    end
+  end
+
+  resources :roasters, except: [:show] do
     delete :remove_image, on: :member
     post :search, on: :collection
   end

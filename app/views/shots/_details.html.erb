@@ -56,7 +56,7 @@
         <% end %>
         <% if shot.bean_type.present? %>
           <% if owner && Current.user.coffee_management_enabled? && shot.coffee_bag %>
-            <%= link_to shot.bean_type, edit_roaster_coffee_bag_path(shot.coffee_bag.roaster, shot.coffee_bag), class: "standard-link" %>
+            <%= link_to shot.bean_type, shots_path(coffee_bag: shot.coffee_bag), class: "standard-link" %>
           <% else %>
             <%= shot.bean_type %>
           <% end %>

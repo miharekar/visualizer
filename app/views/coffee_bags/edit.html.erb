@@ -1,7 +1,7 @@
 <div class="bg-white shadow dark:bg-neutral-900">
   <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <h1 class="text-3xl font-bold leading-tight text-neutral-900 dark:text-neutral-100">
-      Edit <%= @coffee_bag.name %> by <%= @roaster.name %>
+    <h1 class="font-serif lining-nums text-4xl font-bold leading-tight tracking-tight text-neutral-900 dark:text-neutral-100">
+      Edit <%= @coffee_bag.name %> by <%= @coffee_bag.roaster.name %>
     </h1>
   </div>
 </div>
@@ -15,7 +15,7 @@
           with
           <strong><%= @coffee_bag.name %></strong>
           by
-          <strong><%= link_to @roaster.name, roaster_coffee_bags_path(@roaster), class: "standard-link" %></strong>.
+          <strong><%= link_to @coffee_bag.roaster.name, edit_roaster_path(@coffee_bag.roaster), class: "standard-link" %></strong>.
         </h3>
       </div>
       <hr class="my-6 text-neutral-200 dark:text-neutral-700">
@@ -24,7 +24,7 @@
           Duplicate this coffee bag with a different roast date
         </h3>
         <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400">
-          <%= form_with(url: duplicate_roaster_coffee_bag_path(@roaster, @coffee_bag), class: "flex flex-row items-center gap-2 md:flex-col lg:flex-row md:items-stretch lg:items-center") do |f| %>
+          <%= form_with(url: duplicate_coffee_bag_path(@coffee_bag), class: "flex flex-row items-center gap-2 md:flex-col lg:flex-row md:items-stretch lg:items-center") do |f| %>
             <%= f.date_field :roast_date, class: "mt-0 standard-input" %>
             <%= f.submit "Duplicate", class: "px-4 py-2 button-oxford-blue md:w-full lg:w-auto" %>
           <% end %>

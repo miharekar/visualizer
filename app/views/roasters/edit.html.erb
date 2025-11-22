@@ -7,10 +7,20 @@
 </div>
 <div class="pt-6 mx-auto max-w-7xl md:py-6 md:px-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
-    <div class="md:col-span-1">
-      <div class="px-4 sm:px-0">
+    <div class="px-4 sm:px-6 md:p-0 md:col-span-1">
+      <div>
+        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+          You have
+          <strong><%= link_to pluralize(@roaster.coffee_bags.count, "coffee bag"), coffee_bags_path(roaster_id: @roaster.id), class: "standard-link" %></strong>
+          <% if @roaster.coffee_bags.archived.count > 0 %>
+            (<%= @roaster.coffee_bags.archived.count %> archived)
+          <% end %>
+          by
+          <strong><%= @roaster.name %></strong>.
+        </h3>
       </div>
     </div>
+    <hr class="mx-4 mt-6 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
     <%= render "form", roaster: @roaster %>
   </div>
 </div>

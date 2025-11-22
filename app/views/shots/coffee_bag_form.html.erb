@@ -11,7 +11,7 @@
       <div class="col-span-6 sm:col-span-3">
         <div class="flex justify-between">
           <%= label_tag :coffee_bag, nil, class: "standard-label" %>
-          <%= link_to "New", new_roaster_coffee_bag_path(roaster_id: @roaster.id), class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
+          <%= link_to "New", new_coffee_bag_path(roaster_id: @roaster.id), class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
         </div>
         <% selected_bag = @coffee_bag if @roaster == @coffee_bag&.roaster %>
         <%= render partial: "shared/combobox", locals: { input_name: :coffee_bag, hidden_input_name: "shot[coffee_bag_id]", selected: selected_bag, collection: @coffee_bags, name_method: :display_name} %>
@@ -22,7 +22,7 @@
         <div class="col-span-6 sm:col-span-3">
           <%= label_tag :coffee_bag, nil, class: "standard-label" %>
           <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            No bags for <%= @roaster.name %>. <%= link_to "Create one", new_roaster_coffee_bag_path(roaster_id: @roaster.id), class: "standard-link", data: { turbo_frame: "_top" } %> to link with this shot.
+            No bags for <%= @roaster.name %>. <%= link_to "Create one", new_coffee_bag_path(roaster_id: @roaster.id), class: "standard-link", data: { turbo_frame: "_top" } %> to link with this shot.
           </p>
         </div>
       <% end %>

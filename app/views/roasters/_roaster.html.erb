@@ -12,7 +12,7 @@
         <div class="flex flex-col justify-between overflow-hidden gap-y-2 md:gap-y-0 md:flex-row md:gap-x-8 grow">
           <div class="basis-1/4">
             <div class="font-semibold">
-              <%= link_to roaster_coffee_bags_path(roaster) do %>
+              <%= link_to coffee_bags_path(roaster_id: roaster.id) do %>
                 <span class="absolute inset-x-0 bottom-0 -top-px"></span>
                 <div>
                   <%= roaster.name %>
