@@ -79,5 +79,9 @@ Rails.application.configure do
   config.hosts << /.+\.platypus-koi.ts.net/
 
   config.webauthn_origin = "http://localhost:3000"
+
+  config.after_initialize do
+    Prosopite.rails_logger = true
+  end
 end
 Rails.application.routes.default_url_options = {host: "mbp.platypus-koi.ts.net", protocol: "https"}

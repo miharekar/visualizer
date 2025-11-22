@@ -46,7 +46,7 @@ class CommunityController < ApplicationController
   private
 
   def load_shots
-    @shots = Shot.visible_or_owned_by_id(Current.user&.id).includes(:user)
+    @shots = Shot.visible_or_owned_by_id(Current.user&.id).includes(:user).with_attached_image
     FILTERS.each do |filter, options|
       next if params[filter].blank?
 
