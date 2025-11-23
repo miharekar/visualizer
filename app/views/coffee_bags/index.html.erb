@@ -41,6 +41,7 @@
       <div id="coffee-bags"  class="max-w-2xl mx-auto grid grid-cols-1 gap-8 sm:mx-0 sm:max-w-none md:grid-cols-2 lg:grid-cols-3">
         <%= render @coffee_bags %>
       </div>
+      <%= render partial: "shared/offset_loader", locals: { offset: @offset, path: coffee_bags_path(params.permit(:roaster_id, :roaster, :coffee).merge(offset: @offset, format: :turbo_stream)) } %>
     </div>
   <% else %>
     <div class="pt-12 text-center text-neutral-500">

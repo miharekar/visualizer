@@ -7,5 +7,13 @@ module Paginatable
 
     [records, cursor]
   end
+
+  def paginate_with_offset(scope, items: 20, offset:)
+    records = scope.order(:id).limit(items + 1).offset(offset)
+    if records.size > items
+      new_offset = offset + items
+      records = records.first(items)
+    end
+    [records, new_offset]
   end
 end
