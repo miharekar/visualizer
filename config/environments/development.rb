@@ -82,6 +82,7 @@ Rails.application.configure do
 
   config.after_initialize do
     Prosopite.rails_logger = true
+    Prosopite.raise = true
   end
 end
 Rails.application.routes.default_url_options = {host: "mbp.platypus-koi.ts.net", protocol: "https"}

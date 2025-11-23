@@ -25,7 +25,6 @@ gem "pg_query"
 gem "postmark-rails"
 gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
-gem "prosopite"
 gem "puma"
 gem "pundit"
 gem "rack-cors"
@@ -45,6 +44,7 @@ gem "web-push"
 
 group :development, :test do
   gem "debug", require: "debug/prelude"
+  gem "prosopite"
   gem "vernier"
 end
 
