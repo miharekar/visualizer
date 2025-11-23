@@ -26,19 +26,19 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "bcc6c4c1a5027eeecd66bf8a71ff8c30cbdd33d7d534e8bd0c1b48065ac7cddc",
+      "fingerprint": "44b725f0971e792c144d52314770944107d904403a080f146e6be4ef31e595fb",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/coffee_bags/index.html.erb",
       "line": 42,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.coffee_bags.active_first.by_roast_date.where(:roaster_id => params[:roaster_id]).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.coffee_bags.active_first.by_roast_date.where(:roaster_id => params[:roaster_id]).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
+      "code": "render(action => Current.user.coffee_bags.active_first.by_roast_date.includes(:roaster).with_attached_image.where(:roaster_id => params[:roaster_id]).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.coffee_bags.active_first.by_roast_date.includes(:roaster).with_attached_image.where(:roaster_id => params[:roaster_id]).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
       "render_path": [
         {
           "type": "controller",
           "class": "CoffeeBagsController",
           "method": "index",
-          "line": 9,
+          "line": 11,
           "file": "app/controllers/coffee_bags_controller.rb",
           "rendered": {
             "name": "coffee_bags/index",
@@ -54,6 +54,29 @@
       "confidence": "Weak",
       "cwe_id": [
         22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "c1816b11400b65e3f2ead42e9bb2fc5fa723015bb633dc7b27ee90b1ae39e9db",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/community_controller.rb",
+      "line": 57,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Shot.visible_or_owned_by_id(Current.user.id).includes(:user).with_attached_image.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CommunityController",
+        "method": "load_shots"
+      },
+      "user_input": "filter",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
       ],
       "note": ""
     },
@@ -77,29 +100,6 @@
       "confidence": "Weak",
       "cwe_id": [
         601
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "fe637f8f81fbc31ae6a17975921d8378a5708db7c4ab829328261097a5b55157",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/community_controller.rb",
-      "line": 57,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Shot.visible_or_owned_by_id(Current.user.id).includes(:user).where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CommunityController",
-        "method": "load_shots"
-      },
-      "user_input": "filter",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
       ],
       "note": ""
     }
