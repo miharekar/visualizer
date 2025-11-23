@@ -84,6 +84,8 @@ Layout/EmptyLineAfterGuardClause:
   Enabled: true
 Layout/EmptyLines:
   Enabled: true
+Layout/ExtraSpacing:
+  Enabled: true
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 Layout/IndentationConsistency:

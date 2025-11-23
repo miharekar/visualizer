@@ -83,6 +83,9 @@ Rails.application.routes.draw do
     delete :remove_image, on: :member
   end
 
+  get "/roasters", to: redirect("/coffee_bags")
+  get "/roasters/*path", to: redirect("/coffee_bags")
+
   resources :canonical, only: [] do
     collection do
       get :autocomplete_roasters
