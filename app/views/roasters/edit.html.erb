@@ -22,7 +22,7 @@
       <hr class="my-6 text-neutral-200 dark:text-neutral-700">
       <div data-controller="modal">
         <%= render "shared/modal" %>
-        <%= button_to "Delete #{@roaster.name}", roaster_path(@roaster), method: :delete, class: "button-oxford-blue w-full py-2 px-4", data: {action: "click->modal#confirm", title: "Delete #{@roaster.name}", text: "Are you sure you want to permanently delete #{@roaster.name} roaster with #{pluralize(@roaster.coffee_bags.count, "coffee bag")}? This action cannot be undone."} %>
+        <%= button_to "Delete #{@roaster.name}", roaster_path(@roaster), method: :delete, class: "cursor-pointer inline-flex justify-center font-medium text-sm text-white border border-transparent bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 w-full py-2 px-4", data: {action: "click->modal#confirm", title: "Delete #{@roaster.name}", text: "Are you sure you want to permanently delete #{@roaster.name} roaster with #{pluralize(@roaster.coffee_bags.count, "coffee bag")}? This action cannot be undone."} %>
       </div>
     </div>
     <hr class="mx-4 mt-6 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
