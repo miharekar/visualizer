@@ -1,5 +1,5 @@
 class UpdatesController < ApplicationController
-  include CursorPaginatable
+  include Paginatable
 
   before_action :require_authentication, except: %i[index feed show]
   before_action :check_admin!, except: %i[index feed show]

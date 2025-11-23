@@ -1,5 +1,5 @@
 class ShotsController < ApplicationController
-  include CursorPaginatable
+  include Paginatable
 
   FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 

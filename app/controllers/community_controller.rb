@@ -1,5 +1,5 @@
 class CommunityController < ApplicationController
-  include CursorPaginatable
+  include Paginatable
 
   FILTERS = {
     profile_title: {autocomplete: true},

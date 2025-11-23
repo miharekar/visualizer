@@ -1,5 +1,5 @@
 class PeopleController < ApplicationController
-  include CursorPaginatable
+  include Paginatable
 
   def show
     @user = User.find_by(slug: params[:id])
