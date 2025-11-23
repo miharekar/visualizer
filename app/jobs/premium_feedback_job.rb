@@ -35,7 +35,7 @@ class PremiumFeedbackJob < ApplicationJob
         next unless trial_ends_at
 
         created_at = s.dig("attributes", "created_at")&.to_time
-        (trial_ends_at - created_at) <= 7.days
+        (trial_ends_at - created_at) <= 10.days
       end
       .index_by { |s| s.dig("attributes", "customer_id") }
   end
