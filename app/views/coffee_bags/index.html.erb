@@ -3,7 +3,7 @@
   <div class="flex flex-row justify-between gap-2">
     <div>
       <h1 class="pr-2 font-serif lining-nums text-4xl font-bold tracking-tight leading-tight text-neutral-900 dark:text-neutral-100">
-        Coffee Bags
+        Your <%= pluralize(Current.user.coffee_bags.count, "Coffee Bag") %>
       </h1>
     </div>
     <div class="flex gap-2">
