@@ -53,7 +53,10 @@
             <% end %>
           </div>
           <div class="col-span-6 sm:col-span-3">
-            <%= f.label :roaster, class: "standard-label" %>
+            <div class="flex justify-between">
+              <%= f.label :roaster, class: "standard-label" %>
+              <%= link_to "New", new_roaster_path, class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
+            </div>
             <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters} %>
           </div>
           <div class="col-span-6 sm:col-span-3">
