@@ -7,13 +7,15 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
-
-    if verify_turnstile && @user.save
-      start_new_session_for(@user)
-      redirect_to root_path, notice: "Welcome to the Visualizer!"
+    if verify_turnstile
+      if @user.save
+        start_new_session_for(@user)
+        return redirect_to root_path, notice: "Welcome to Visualizer!"
+      end
     else
-      render :new, status: :unprocessable_content
+      flash.now[:alert] = "Human verification failed - make sure you're not a robot!"
     end
+    render :new, status: :unprocessable_content
   end
 
   private
