@@ -12,7 +12,7 @@ class PremiumFeedbackJob < ApplicationJob
       user.save!
     end
 
-    User.where(premium_expires_at: ..1.day.ago).find_each do |user|
+    User.where(premium_expires_at: ..3.days.ago).find_each do |user|
       next if (user.communication & EMAILS).any?
 
       UserMailer.with(user:).cancelled_premium.deliver_later
@@ -33,9 +33,9 @@ class PremiumFeedbackJob < ApplicationJob
       .select do |s|
         trial_ends_at = s.dig("attributes", "trial_ends_at")&.to_time
         next unless trial_ends_at
+        next unless created_at > Time.zone.at(1756684800)
 
-        created_at = s.dig("attributes", "created_at")&.to_time
-        (trial_ends_at - created_at) <= 10.days
+        trial_ends_at < 3.days.ago
       end
       .index_by { |s| s.dig("attributes", "customer_id") }
   end
