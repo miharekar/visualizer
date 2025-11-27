@@ -1,6 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 import { enter, leave } from "el-transition"
 
+const KEY_ACTIONS = {
+  Escape(controller) {
+    controller.hide()
+  },
+  Enter(controller) {
+    controller.performClick()
+  }
+}
+
 export default class extends Controller {
   static targets = ["toggleable", "headline", "text", "button"]
 
@@ -23,18 +32,14 @@ export default class extends Controller {
 
   show() {
     if (!this.modalShown) {
-      this.toggleableTargets.forEach(element => {
-        enter(element)
-      })
+      this.toggleableTargets.forEach(element => enter(element))
     }
     this.modalShown = true
   }
 
   hide() {
     if (this.modalShown) {
-      this.toggleableTargets.forEach(element => {
-        leave(element)
-      })
+      this.toggleableTargets.forEach(element => leave(element))
     }
     this.modalShown = false
   }
@@ -53,14 +58,12 @@ export default class extends Controller {
   }
 
   keydown(event) {
-    if (this.modalShown) {
-      if (event.keyCode == 27) {
-        event.preventDefault()
-        this.hide()
-      } else if (event.keyCode == 13) {
-        event.preventDefault()
-        this.performClick()
-      }
-    }
+    if (!this.modalShown) return
+
+    const action = KEY_ACTIONS[event.key]
+    if (!action) return
+
+    event.preventDefault()
+    action(this)
   }
 }

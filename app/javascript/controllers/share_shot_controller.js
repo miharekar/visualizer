@@ -1,6 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 import { enter, leave } from "el-transition"
 
+const KEY_ACTIONS = {
+  Escape(controller) {
+    controller.hide()
+  },
+  Enter(controller) {
+    controller.hide()
+  }
+}
+
 export default class extends Controller {
   static targets = ["toggleable", "code"]
   static values = { url: String }
@@ -13,29 +22,25 @@ export default class extends Controller {
   show() {
     if (!this.modalShown) {
       this.getCode()
-      this.toggleableTargets.forEach(element => {
-        enter(element)
-      })
+      this.toggleableTargets.forEach(el => enter(el))
     }
     this.modalShown = true
   }
 
   getCode() {
-    if (this.code.length == 0) {
-      fetch(this.urlValue).then(response => {
-        response.json().then(data => {
+    if (this.code.length === 0) {
+      fetch(this.urlValue)
+        .then(r => r.json())
+        .then(data => {
           this.code = data.code
           this.codeTarget.innerText = this.code
         })
-      })
     }
   }
 
   hide() {
     if (this.modalShown) {
-      this.toggleableTargets.forEach(element => {
-        leave(element)
-      })
+      this.toggleableTargets.forEach(el => leave(el))
     }
     this.modalShown = false
   }
@@ -47,14 +52,12 @@ export default class extends Controller {
   }
 
   keydown(event) {
-    if (this.modalShown) {
-      if (event.keyCode == 27) {
-        event.preventDefault()
-        this.hide()
-      } else if (event.keyCode == 13) {
-        event.preventDefault()
-        this.delete()
-      }
-    }
+    if (!this.modalShown) return
+
+    const action = KEY_ACTIONS[event.key]
+    if (!action) return
+
+    event.preventDefault()
+    action(this)
   }
 }
