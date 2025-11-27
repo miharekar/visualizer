@@ -1,6 +1,7 @@
 class PremiumFeedbackJob < ApplicationJob
   prepend MemoWise
 
+  CUT_OFF_TIME = Time.zone.at(1756684800)
   EMAILS = %w[cancelled_premium cancelled_after_trial]
 
   def perform(*args)
@@ -33,7 +34,7 @@ class PremiumFeedbackJob < ApplicationJob
       .select do |s|
         trial_ends_at = s.dig("attributes", "trial_ends_at")&.to_time
         next unless trial_ends_at
-        next unless created_at > Time.zone.at(1756684800)
+        next unless s.dig("attributes", "created_at")&.to_time > CUT_OFF_TIME
 
         trial_ends_at < 3.days.ago
       end
