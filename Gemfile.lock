@@ -414,7 +414,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.9.5)
       logger
-    rdoc (6.16.0)
+    rdoc (6.16.1)
       erb
       psych (>= 4.0.0)
       tsort
@@ -615,7 +615,7 @@ DEPENDENCIES
   puma
   pundit
   rack-cors
-  rails (~> 8.1.0.beta1)
+  rails
   reactionview
   responders
   retest

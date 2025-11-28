@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_31_091339) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_28_105806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -109,6 +109,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_31_091339) do
     t.string "farmer"
     t.string "harvest_time"
     t.string "name", null: false
+    t.text "notes"
     t.string "place_of_purchase"
     t.string "processing"
     t.string "quality_score"

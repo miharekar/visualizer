@@ -69,6 +69,7 @@ end
 #  farmer                  :string
 #  harvest_time            :string
 #  name                    :string           not null
+#  notes                   :text
 #  place_of_purchase       :string
 #  processing              :string
 #  quality_score           :string

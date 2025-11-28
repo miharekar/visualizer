@@ -28,7 +28,7 @@ gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
 gem "pundit"
 gem "rack-cors"
-gem "rails", "~> 8.1.0.beta1"
+gem "rails"
 gem "responders"
 gem "solid_cable"
 gem "solid_cache"
