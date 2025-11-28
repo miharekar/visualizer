@@ -1,7 +1,7 @@
 <div class="md:col-span-2" id="<%= dom_id(@coffee_bag) %>">
   <%= form_with(model: @coffee_bag, data: { controller: "coffee-bag-scraper canonical-selector" }) do |f| %>
     <div class="md:shadow sm:rounded-md sm:overflow-hidden">
-      <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
+      <div class="flex flex-col px-4 py-5 bg-white gap-y-6 dark:bg-neutral-800 sm:p-6">
         <div class="grid grid-cols-6 gap-6">
           <div class="col-span-6">
             <%= f.label :url, "Web page with information", class: "standard-label" %>
@@ -111,23 +111,33 @@
             <%= f.label :place_of_purchase, class: "standard-label" %>
             <%= f.text_field :place_of_purchase, class: "mt-1 standard-input" %>
           </div>
-          <div class="col-span-6">
-            <div data-controller="image-form">
-              <%= f.label :image, "Image", class: "standard-label" %>
-              <% if @coffee_bag.image.attached? && @coffee_bag.image.persisted? && @coffee_bag.image.variable? %>
-                <div id="coffee-bag-image">
-                  <%= image_tag @coffee_bag.image.variant(:thumb), class: "rounded-lg mt-1" %>
-                  <div class="flex mt-1 mb-4 text-sm text-red-600 hover:text-red-800 dark:text-red-700 dark:hover:text-red-600">
-                    <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    <%= link_to "Remove Image", remove_image_coffee_bag_path(@coffee_bag), data: { turbo_method: :delete }, class: "standard-link text-sm" %>
-                  </div>
+        </div>
+        <div>
+          <%= f.label :notes, class: "standard-label" %>
+          <div class="mt-1">
+            <%= f.text_area :notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
+            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+              Supports
+              <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
+            </div>
+          </div>
+        </div>
+        <div>
+          <div data-controller="image-form">
+            <%= f.label :image, "Image", class: "standard-label" %>
+            <% if @coffee_bag.image.attached? && @coffee_bag.image.persisted? && @coffee_bag.image.variable? %>
+              <div id="coffee-bag-image">
+                <%= image_tag @coffee_bag.image.variant(:thumb), class: "rounded-lg mt-1" %>
+                <div class="flex mt-1 mb-4 text-sm text-red-600 hover:text-red-800 dark:text-red-700 dark:hover:text-red-600">
+                  <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <%= link_to "Remove Image", remove_image_coffee_bag_path(@coffee_bag), data: { turbo_method: :delete }, class: "standard-link text-sm" %>
                 </div>
-              <% end %>
-              <div class="mt-1">
-                <%= f.file_field :image, class: "standard-file-input" %>
               </div>
+            <% end %>
+            <div class="mt-1">
+              <%= f.file_field :image, class: "standard-file-input" %>
             </div>
           </div>
         </div>
