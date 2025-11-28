@@ -25,7 +25,7 @@ class CoffeeBag < ApplicationRecord
   scope :by_roast_date, -> { order("roast_date DESC NULLS LAST") }
   scope :for_user, ->(user) { joins(:roaster).where(roasters: {user:}) }
 
-  squishes :country, :elevation, :farm, :farmer, :harvest_time, :name, :processing, :quality_score, :region, :roast_level, :url, :variety, :tasting_notes
+  squishes(*%i[country elevation farm farmer harvest_time name processing quality_score region roast_level url variety tasting_notes place_of_purchase])
 
   def self.for_roaster_by_name_and_date(roaster, name, roast_date, **create_attrs)
     where(roaster:).filter_by_name(name).where(roast_date:).first || create(name:, roaster:, roast_date:, **create_attrs)
@@ -40,7 +40,8 @@ class CoffeeBag < ApplicationRecord
   end
 
   def to_api_json
-    attributes.slice(*%w[id name roast_date roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes url archived_at]).tap do |json|
+    attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id name roast_date url archived_at notes]
+    attributes.slice(*attribute_names).tap do |json|
       json["image_url"] = image&.url if image.attached?
     end
   end
