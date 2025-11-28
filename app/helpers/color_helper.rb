@@ -20,7 +20,7 @@ module ColorHelper
       g = hue_to_rgb(p, q, h)
       b = hue_to_rgb(p, q, h - (1 / 3.0))
     end
-    hex = [r, g, b].map { |c| format "%02x", (c * 255).round }.join
+    hex = [r, g, b].map { format "%02x", (it * 255).round }.join
     "##{hex.upcase}"
   end
 

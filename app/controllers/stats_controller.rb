@@ -39,6 +39,6 @@ class StatsController < ApplicationController
       .from("cumulative_counts")
       .select("day, cumulative_count")
       .order(:day)
-      .map { |row| [row.day.to_i * 1000, row.cumulative_count.to_i] }
+      .map { [it.day.to_i * 1000, it.cumulative_count.to_i] }
   end
 end

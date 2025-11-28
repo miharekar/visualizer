@@ -7,7 +7,7 @@ class FillAutocompleteValuesJob < ApplicationJob
 
       Rails.cache.write(
         "unique_values_for_#{filter}",
-        Shot.visible.distinct.where.not(filter => [nil, ""]).pluck(filter).filter_map { |s| s.strip.presence }.uniq(&:downcase).sort_by(&:downcase)
+        Shot.visible.distinct.where.not(filter => [nil, ""]).pluck(filter).filter_map { it.strip.presence }.uniq(&:downcase).sort_by(&:downcase)
       )
     end
   end

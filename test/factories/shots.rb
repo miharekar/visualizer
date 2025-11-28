@@ -7,7 +7,7 @@ FactoryBot.define do
 
     trait :with_airtable do
       skip_airtable_sync { true }
-      sequence(:airtable_id, 1000) { "rec#{_1}" }
+      sequence(:airtable_id, 1000) { "rec#{it}" }
     end
 
     trait :with_information do

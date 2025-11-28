@@ -1,4 +1,4 @@
-WebAuthn.configure do |config|
-  config.allowed_origins = [Rails.configuration.webauthn_origin]
-  config.rp_name = "Visualizer"
+WebAuthn.configure do
+  it.allowed_origins = [Rails.configuration.webauthn_origin]
+  it.rp_name = "Visualizer"
 end

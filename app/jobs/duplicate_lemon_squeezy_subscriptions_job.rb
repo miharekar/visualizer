@@ -13,9 +13,9 @@ class DuplicateLemonSqueezySubscriptionsJob < ApplicationJob
 
   def find_duplicate_subscriptions
     LemonSqueezy.new.all_subscriptions
-      .select { |sub| ACTIVE_STATUSES.include?(sub.dig("attributes", "status")) }
-      .group_by { |sub| sub.dig("attributes", "user_email") }
-      .transform_values { |subs| subs.map { |sub| sub["id"] } }
+      .select { ACTIVE_STATUSES.include?(it.dig("attributes", "status")) }
+      .group_by { it.dig("attributes", "user_email") }
+      .transform_values { it.map { it["id"] } }
       .select { |_email, ids| ids.size > 1 }
   end
 end

@@ -23,7 +23,7 @@ class OpenAi
     raise "Failed to get response from OpenAI: #{response.code} #{response.message}" unless response.is_a?(Net::HTTPSuccess)
 
     model_response = JSON.parse(response.body)
-    model_response["output"].filter_map { |o| o["content"] }.first.first["text"]
+    model_response["output"].filter_map { it["content"] }.first.first["text"]
   rescue StandardError
     raise if attempt >= 3 || response&.code != "529"
 

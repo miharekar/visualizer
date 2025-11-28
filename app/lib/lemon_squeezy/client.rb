@@ -72,11 +72,11 @@ class LemonSqueezy
     end
 
     def build_request
-      request_class.new(uri).tap do |req|
-        req["Accept"] = "application/vnd.api+json"
-        req["Content-Type"] = "application/vnd.api+json"
-        req["Authorization"] = "Bearer #{api_key}"
-        req.body = data.to_json if data.present?
+      request_class.new(uri).tap do
+        it["Accept"] = "application/vnd.api+json"
+        it["Content-Type"] = "application/vnd.api+json"
+        it["Authorization"] = "Bearer #{api_key}"
+        it.body = data.to_json if data.present?
       end
     end
 

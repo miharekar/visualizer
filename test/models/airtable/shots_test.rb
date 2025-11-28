@@ -204,8 +204,8 @@ module Airtable
       assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default")
 
       stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
-        .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"}) do |request|
-          body = JSON.parse(request.body)
+        .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"}) do
+          body = JSON.parse(it.body)
           assert_equal %w[best tags], body["fields"]["Tags"]
           assert body["typecast"]
         end.to_return(status: 200, body: {id: @shot.airtable_id}.to_json)

@@ -1,6 +1,6 @@
 if Rails.env.development?
-  ReActionView.configure do |config|
-    config.intercept_erb = false
-    config.debug_mode = true
+  ReActionView.configure do
+    it.intercept_erb = false
+    it.debug_mode = true
   end
 end

@@ -23,9 +23,9 @@ class PasskeysController < ApplicationController
     credential = Current.user.webauthn_credentials.find(params[:id])
     credential.destroy!
 
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(credential) }
-      format.html { redirect_to edit_profile_path }
+    respond_to do
+      it.turbo_stream { render turbo_stream: turbo_stream.remove(credential) }
+      it.html { redirect_to edit_profile_path }
     end
   end
 

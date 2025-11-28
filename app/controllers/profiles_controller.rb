@@ -10,9 +10,9 @@ class ProfilesController < ApplicationController
       flash[:notice] = "Profile successfully updated."
       redirect_to controller: "shots", action: :index, format: :html
     else
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@profile, partial: "form") }
-        format.html { render :edit }
+      respond_to do
+        it.turbo_stream { render turbo_stream: turbo_stream.replace(@profile, partial: "form") }
+        it.html { render :edit }
       end
     end
   end
@@ -80,12 +80,12 @@ class ProfilesController < ApplicationController
   def chart_settings
     return unless @profile.premium?
 
-    settings = ChartSettings::DEFAULT.keys.index_with do |label|
+    settings = ChartSettings::DEFAULT.keys.index_with do
       {
-        "color" => params["user"]["#{label}-color"],
-        "type" => params["user"]["#{label}-type"],
-        "dashed" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-dashed"]),
-        "hidden" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{label}-hidden"])
+        "color" => params["user"]["#{it}-color"],
+        "type" => params["user"]["#{it}-type"],
+        "dashed" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{it}-dashed"]),
+        "hidden" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{it}-hidden"])
       }
     end
 
