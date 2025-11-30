@@ -111,5 +111,8 @@
     </div>
     <hr class="mx-4 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
     <%= render "form" %>
+    <div id="passkey-error" class="hidden">
+      <%= render Notification.new(type: :alert, heading: "Error creating passkey", text: "Something went wrong", timeout: 3000) %>
+    </div>
   </div>
 </div>

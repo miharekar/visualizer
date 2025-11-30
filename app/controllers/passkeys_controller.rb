@@ -15,7 +15,7 @@ class PasskeysController < ApplicationController
     Current.session.user.webauthn_credentials.create!(external_id: credential.id, public_key: credential.public_key, nickname: params[:nickname].presence)
 
     head :created
-  rescue WebAuthn::Error => e
+  rescue WebAuthn::Error, ActiveRecord::RecordInvalid => e
     render json: {error: e.message}, status: :unprocessable_content
   end
 
