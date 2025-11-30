@@ -79,12 +79,20 @@ class CoffeeBagsController < ApplicationController
 
   def archive
     @coffee_bag.update(archived_at: Time.current)
-    redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was archived."
+
+    respond_to do
+      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
+      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was archived." }
+    end
   end
 
   def restore
     @coffee_bag.update(archived_at: nil)
-    redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was restored."
+
+    respond_to do
+      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
+      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was restored." }
+    end
   end
 
   private
