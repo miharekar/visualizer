@@ -2,9 +2,10 @@
 <% id_method = id_method || :id %>
 <% hidden_data = hidden_data || {} %>
 <% input_data = input_data || {} %>
+<% extra_text_field_classes = extra_text_field_classes || "" %>
 <% allow_custom = false unless allow_custom %>
 <div class="relative" data-controller="combobox"<% if allow_custom %> data-combobox-allow-custom-value="true"<% end %>>
-  <%= text_field_tag input_name, selected&.send(name_method), class: "mt-1 standard-input", autocomplete: "off", data: input_data.merge({ action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input"}) %>
+  <%= text_field_tag input_name, selected&.send(name_method), class: "mt-1 standard-input #{extra_text_field_classes}", autocomplete: "off", data: input_data.merge({ action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input"}) %>
   <%= hidden_field_tag hidden_input_name, selected&.send(id_method), data: hidden_data.merge({ combobox_target: "hiddenInput" }) %>
   <button type="button" class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none" data-action="click->combobox#toggle" tabindex="-1">
     <svg class="size-5 text-neutral-400" viewBox="0 0 20 20" fill="currentColor">

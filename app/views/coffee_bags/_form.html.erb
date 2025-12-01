@@ -18,9 +18,9 @@
             </div>
           </div>
           <div class="col-span-6 sm:col-span-4">
-            <% has_error = f.object.errors.any? { |e| e.attribute == :name } %>
-            <% if has_error %>
-              <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
+            <% name_errors = f.object.errors.select { |e| e.attribute == :name } %>
+            <% if name_errors.any? %>
+              <% name_extra_classes = "ring-1 ring-red-500 border-red-500" %>
             <% end %>
             <%= f.label :name, class: "standard-label" %>
             <div class="relative">
@@ -28,7 +28,7 @@
                 <!--TODO: auto update roaster-->
                 <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(roaster_id: @coffee_bag.roaster.canonical_roaster_id) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white">
                   <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id", coffee_bag_scraper_target: "canonicalId" } %>
-                  <%= f.search_field :name, class: "#{extra_classes} ps-10 mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
+                  <%= f.search_field :name, class: "#{name_extra_classes} ps-10 mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
                   <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
                   <div class="<%= "hidden" unless coffee_bag.canonical_coffee_bag_id %> pointer-events-none absolute inset-y-0 left-2 flex items-center" data-canonical-selector-target="verified">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -37,27 +37,40 @@
                   </div>
                 </div>
               <% else %>
-                <%= f.text_field :name, class: "#{extra_classes} mt-1 standard-input" %>
+                <%= f.text_field :name, class: "#{name_extra_classes} mt-1 standard-input" %>
               <% end %>
             </div>
-            <% if has_error %>
+            <% if name_errors.any? %>
               <p class="text-sm font-medium text-red-500">
-                <% if f.object.errors.any? { |e| e.type == :blank } %>
+                <% if name_errors.any? { |e| e.type == :blank } %>
                   Name is required.
-                <% elsif f.object.errors.any? { |e| e.type == :taken } %>
+                <% elsif name_errors.any? { |e| e.type == :taken } %>
                   Coffee bag with this name and roast date already exists on this roaster.
                 <% else %>
-                  <%= f.object.errors.first.message %>
+                  <%= name_errors.map(&:full_message).join(", ") %>
                 <% end %>
               </p>
             <% end %>
           </div>
           <div class="col-span-6 sm:col-span-3">
+            <% roaster_errors = f.object.errors.select { |e| e.attribute == :roaster } %>
+            <% if roaster_errors.any? %>
+              <% roaster_extra_classes = "ring-1 ring-red-500 border-red-500" %>
+            <% end %>
             <div class="flex justify-between">
               <%= f.label :roaster, class: "standard-label" %>
               <%= link_to "New", new_roaster_path, class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
             </div>
-            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters} %>
+            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters, extra_text_field_classes: roaster_extra_classes} %>
+            <% if roaster_errors.any? %>
+              <p class="text-sm font-medium text-red-500">
+                <% if roaster_errors.any? { |e| e.type == :blank } %>
+                  Roaster is required.
+                <% else %>
+                  <%= roaster_errors.map(&:full_message).join(", ") %>
+                <% end %>
+              </p>
+            <% end %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :roast_date, class: "standard-label" %>
