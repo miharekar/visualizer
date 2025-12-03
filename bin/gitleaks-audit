@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if ! which gitleaks > /dev/null 2>&1 ; then
+  echo "gitleaks is not installed, please install it first" 1>&2
+  exit 1
+fi
+
+mkdir -p tmp
+if ! gitleaks dir --redact=50 --report-path tmp/gitleaks-report.json ; then
+  echo "gitleaks found potential secrets, please check tmp/gitleaks-report.json" 1>&2
+  exit 1
+fi
+
+exit 0
