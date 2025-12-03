@@ -33,6 +33,7 @@ export default class extends Controller {
       const data = await response.json()
       this.fillFormFields(data)
     } catch (error) {
+      appsignal.sendError(error)
       console.error("Error copying shot data:", error)
       alert("Error copying shot data. Something went wrong. See console for details.")
     }

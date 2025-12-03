@@ -37,6 +37,7 @@ export default class extends Controller {
       this.canonicalIdTarget.value = null
       this.populateFields(data)
     } catch (error) {
+      appsignal.sendError(error)
       const template = document.getElementById("scraper-error-template")
       const notificationHtml = template.innerHTML
       const updatedNotification = notificationHtml.replace("Something went wrong", error.message)

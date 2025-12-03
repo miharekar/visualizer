@@ -25,6 +25,7 @@ export default class extends Controller {
     } catch (error) {
       if (error?.name === "AbortError") return
 
+      appsignal.sendError(error)
       console.error("Passkey registration failed", error)
       this.showNotification("passkey-error")
     }
@@ -55,6 +56,7 @@ export default class extends Controller {
     } catch (error) {
       if (error?.name === "AbortError") return
 
+      appsignal.sendError(error)
       console.error("Passkey sign-in failed", error)
       this.showNotification("passkey-error")
     }

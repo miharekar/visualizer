@@ -47,7 +47,8 @@ export default class extends Controller {
         const notificationsContainer = document.getElementById("notifications-container")
         notificationsContainer.insertAdjacentHTML("beforeend", this.errorTarget.innerHTML)
       }
-    } catch {
+    } catch (error) {
+      appsignal.sendError(error)
       const notificationsContainer = document.getElementById("notifications-container")
       notificationsContainer.insertAdjacentHTML("beforeend", this.errorTarget.innerHTML)
     } finally {
