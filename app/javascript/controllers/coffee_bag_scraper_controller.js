@@ -34,7 +34,9 @@ export default class extends Controller {
         throw new Error(data.error || "Failed to fetch coffee info")
       }
 
-      this.canonicalIdTarget.value = null
+      if (this.hasCanonicalIdTarget) {
+        this.canonicalIdTarget.value = null
+      }
       this.populateFields(data)
     } catch (error) {
       appsignal.sendError(error)
