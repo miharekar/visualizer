@@ -1,5 +1,5 @@
 class YearlyBrewController < ApplicationController
-  WHITELISTED_YEARS = [2023, 2024].freeze
+  WHITELISTED_YEARS = [2023, 2024, 2025].freeze
 
   attr_reader :year
 

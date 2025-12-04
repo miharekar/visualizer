@@ -44,7 +44,7 @@
     <% position = bento_box_position_classes_2024(index) %>
     <div class="relative <%= position[:col_span] %>">
       <div class="absolute inset-px rounded-lg bg-white dark:bg-neutral-900 <%= position[:rounded_corners] %>"></div>
-      <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] <%= position[:rounded_corners].gsub(/(\[|\])/, '\\\1') %>">
+      <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] <%= position[:rounded_corners].gsub(/(\[|\])/, '\\\1') %>">
         <div class="px-8 pt-8 pb-8 sm:py-10 sm:px-10">
           <h3 class="font-semibold text-base/7 text-terracotta-600 dark:text-terracotta-500"><%= content[:title] %></h3>
           <p class="mt-2 text-lg font-medium tracking-tight text-neutral-900 dark:text-neutral-100">
