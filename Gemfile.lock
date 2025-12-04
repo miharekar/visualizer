@@ -154,7 +154,7 @@ GEM
       reline (>= 0.3.8)
     doorkeeper (5.8.2)
       railties (>= 5)
-    dotenv (3.1.8)
+    dotenv (3.2.0)
     drb (2.2.3)
     ed25519 (1.4.0)
     erb (6.0.0)
@@ -216,7 +216,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.16.0)
+    json (2.17.1)
     jwt (3.1.2)
       base64
     kamal (2.9.0)
