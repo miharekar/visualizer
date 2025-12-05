@@ -1,8 +1,8 @@
 <% content_for(:html_title) { "Visualizer | Coffee Bags" } %>
-<div class="flex flex-col px-4 mx-auto my-6 gap-y-6 max-w-7xl sm:px-6 lg:px-8">
-  <div class="flex flex-row justify-between gap-2">
+<div class="flex flex-col gap-y-6 px-4 my-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex flex-row gap-2 justify-between">
     <div>
-      <h1 class="pr-2 font-serif lining-nums text-4xl font-bold tracking-tight leading-tight text-neutral-900 dark:text-neutral-100">
+      <h1 class="pr-2 font-serif text-4xl font-bold lining-nums tracking-tight leading-tight text-neutral-900 dark:text-neutral-100">
         Your <%= pluralize(Current.user.coffee_bags.count, "Coffee Bag") %>
       </h1>
     </div>
@@ -11,13 +11,13 @@
         <svg class="-ml-1.5 size-5" viewBox="0 0 20 20" fill="currentColor">
           <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
         </svg>
-        <span class="text-nowrap ml-1">New Roaster</span>
+        <span class="ml-1 text-nowrap">New Roaster</span>
       <% end %>
       <%= link_to new_coffee_bag_path(roaster_id: params[:roaster_id]), class: "px-3 py-2 items-center button-white flex sm:ml-auto" do %>
         <svg class="sm:-ml-1 size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" >
           <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
         </svg>
-        <span class="hidden sm:block text-nowrap ml-1">New Coffee Bag</span>
+        <span class="hidden ml-1 sm:block text-nowrap">New Coffee Bag</span>
       <% end %>
     </div>
   </div>
@@ -38,7 +38,7 @@
     </div>
     <div data-controller="modal">
       <%= render "shared/modal" %>
-      <div id="coffee-bags"  class="max-w-2xl mx-auto grid grid-cols-1 gap-8 sm:mx-0 sm:max-w-none md:grid-cols-2 lg:grid-cols-3">
+      <div id="coffee-bags"  class="grid grid-cols-1 gap-8 mx-auto max-w-2xl sm:mx-0 sm:max-w-none md:grid-cols-2 lg:grid-cols-3">
         <%= render @coffee_bags %>
       </div>
       <%= render partial: "shared/offset_loader", locals: { offset: @offset, path: coffee_bags_path(params.permit(:roaster_id, :roaster, :coffee).merge(offset: @offset, format: :turbo_stream)) } %>

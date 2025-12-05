@@ -21,7 +21,7 @@
   </head>
   <body class="flex flex-col h-full overflow-y-scroll <%= @skin %>" data-controller="local-time">
     <header><%= render "shared/header" %></header>
-    <main class="grow dark:bg-neutral-900 dark:text-white">
+    <main class="dark:text-white grow dark:bg-neutral-900">
       <%= render "shared/notifications" %>
       <%= yield %>
     </main>

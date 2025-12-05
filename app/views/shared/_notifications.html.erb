@@ -1,5 +1,5 @@
-<div data-controller="notifications-container" class="fixed inset-0 z-30 flex items-end px-4 py-6 pointer-events-none sm:items-start sm:p-6 sm:top-16">
-  <div id="notifications-container" class="flex flex-col items-center w-full gap-y-4 sm:items-end">
+<div data-controller="notifications-container" class="flex fixed inset-0 z-30 items-end py-6 px-4 pointer-events-none sm:top-16 sm:items-start sm:p-6">
+  <div id="notifications-container" class="flex flex-col gap-y-4 items-center w-full sm:items-end">
     <% flash.each do |type, message| %>
       <% if message.is_a?(Hash) %>
         <%= render "notifications/notification", notification: Notification.new(type: type, **message.symbolize_keys) %>

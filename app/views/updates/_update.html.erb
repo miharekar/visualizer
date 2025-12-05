@@ -1,13 +1,13 @@
 <%= tag.article id: dom_id(update) do %>
   <a href="<%= update_path(update.slug.presence || update.id) %>">
-    <h2 class="mb-4 font-serif text-4xl font-bold text-balance tracking-tight text-center sm:mb-6 sm:text-5xl text-neutral-900 dark:text-neutral-100">
+    <h2 class="mb-4 font-serif text-4xl font-bold tracking-tight text-center sm:mb-6 sm:text-5xl text-balance text-neutral-900 dark:text-neutral-100">
       <%= update.title %>
     </h2>
   </a>
   <div class="mx-auto max-w-prose">
     <div class="flex justify-between mb-2 text-xs">
       <time datetime="<%= update.published_at.iso8601 %>" class="flex text-neutral-400">
-        <span class="h-4 w-0.5 rounded-full bg-neutral-200 dark:bg-neutral-500"></span>
+        <span class="w-0.5 h-4 rounded-full bg-neutral-200 dark:bg-neutral-500"></span>
         <span class="ml-2"><%= update.published_at.strftime('%B %-d, %Y') %></span>
       </time>
       <%= link_to "Edit", edit_update_path(update) if Current.user&.admin %>
@@ -15,4 +15,4 @@
     <%= markdown_text_from(update.body) %>
   </div>
 <% end %>
-<hr class="w-48 mx-auto text-neutral-200 dark:text-neutral-700 last:hidden">
+<hr class="mx-auto w-48 last:hidden text-neutral-200 dark:text-neutral-700">

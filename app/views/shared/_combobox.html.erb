@@ -7,18 +7,18 @@
 <div class="relative" data-controller="combobox"<% if allow_custom %> data-combobox-allow-custom-value="true"<% end %>>
   <%= text_field_tag input_name, selected&.send(name_method), class: "mt-1 standard-input #{extra_text_field_classes}", autocomplete: "off", data: input_data.merge({ action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input"}) %>
   <%= hidden_field_tag hidden_input_name, selected&.send(id_method), data: hidden_data.merge({ combobox_target: "hiddenInput" }) %>
-  <button type="button" class="absolute inset-y-0 right-0 flex items-center px-2 rounded-r-md focus:outline-none" data-action="click->combobox#toggle" tabindex="-1">
+  <button type="button" class="flex absolute inset-y-0 right-0 items-center px-2 rounded-r-md focus:outline-none" data-action="click->combobox#toggle" tabindex="-1">
     <svg class="size-5 text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
       <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
     </svg>
   </button>
-  <ul class="absolute z-10 hidden w-full py-1 mt-1 overflow-auto text-base bg-white shadow-lg rounded-md dark:border dark:border-neutral-600 dark:bg-neutral-800 max-h-60 ring-1 ring-black/5 focus:outline-none sm:text-sm" data-combobox-target="list">
+  <ul class="hidden overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base bg-white rounded-md ring-1 shadow-lg sm:text-sm dark:border focus:outline-none ring-black/5 dark:border-neutral-600 dark:bg-neutral-800" data-combobox-target="list">
     <% collection.each do |item| %>
       <li class="text-neutral-700 dark:text-neutral-200 relative py-2 pl-3 cursor-default select-none pr-9 group<%= item == selected ? " is-selected" : "" %>" data-action="click->combobox#select mousemove->combobox#mouseMove mouseleave->combobox#markAllAsInactive" data-id="<%= CGI::escapeHTML(item&.send(id_method)) %>" data-name="<%= item&.send(name_method) %>">
         <span class="block truncate group-[.is-selected]:font-semibold">
           <%= item&.send(name_method) %>
         </span>
-        <span class="absolute inset-y-0 right-0 items-center pr-4 hidden group-[.is-selected]:flex text-oxford-blue-400">
+        <span class="hidden absolute inset-y-0 right-0 items-center pr-4 group-[.is-selected]:flex text-oxford-blue-400">
           <svg class="size-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
           </svg>

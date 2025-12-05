@@ -1,6 +1,6 @@
 <% if @premium_count.to_i > 1 %>
-  <div class="flex items-center gap-x-6 px-3 xs: py-2.5 sm:px-3.5 sm:before:flex-1 bg-oxford-blue-50 dark:bg-oxford-blue-950 ">
-    <div class="flex items-center justify-between flex-1 gap-x-4 gap-y-2 sm:flex-auto sm:justify-center">
+  <div class="flex gap-x-6 items-center py-2.5 px-3 sm:px-3.5 xs: bg-oxford-blue-50 sm:before:flex-1 dark:bg-oxford-blue-950">
+    <div class="flex flex-1 gap-y-2 gap-x-4 justify-between items-center sm:flex-auto sm:justify-center">
       <p class="text-sm leading-6 text-neutral-900 dark:text-neutral-100">
         <% if defined?(count) %>
           <span class="sm:hidden"><strong class="font-semibold"><%= number_to_human(count).downcase %> shots are hidden</strong></span>
@@ -17,6 +17,6 @@
         <span>Learn more &rarr;</span>
       <% end %>
     </div>
-    <div class="justify-end flex-1 hidden sm:flex"></div>
+    <div class="hidden flex-1 justify-end sm:flex"></div>
   </div>
 <% end %>

@@ -2,8 +2,8 @@
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= render "shared/premium_banner", count: @premium_count %>
 <%= render "shared/migration_banner" %>
-<div class="flex flex-col mx-auto my-6 max-w-7xl sm:px-6 lg:px-8" data-controller="panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form">
-  <div data-upload-drop-target="overlay" class="fixed inset-0 items-center justify-center hidden z-99 bg-oxford-blue-500/50 backdrop-blur-sm">
+<div class="flex flex-col my-6 mx-auto max-w-7xl sm:px-6 lg:px-8" data-controller="panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form">
+  <div data-upload-drop-target="overlay" class="hidden fixed inset-0 justify-center items-center z-99 bg-oxford-blue-500/50 backdrop-blur-sm">
     <div class="text-center">
       <h3 class="mb-2 text-2xl font-medium text-white">
         Drop anywhere to upload
@@ -13,9 +13,9 @@
       </p>
     </div>
   </div>
-  <div class="flex flex-col px-4 gap-2 sm:flex-row sm:px-0 sm:justify-between sm:items-center">
-    <div class="shrink min-w-0">
-      <h1 class="pr-2 font-serif lining-nums text-4xl font-bold tracking-tight leading-tight truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
+  <div class="flex flex-col gap-2 px-4 sm:flex-row sm:justify-between sm:items-center sm:px-0">
+    <div class="min-w-0 shrink">
+      <h1 class="pr-2 font-serif text-4xl font-bold lining-nums tracking-tight leading-tight truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
         <% if @shots_count.to_i > 0 %>
           <% word = params[:tag].present? ? "#{Tag.find_by(slug: params[:tag])&.name} Shot" : "Shot" %>
           Your <%= pluralize(@shots_count, word) %>
@@ -36,7 +36,7 @@
               <path fill-rule="evenodd" d="M10 2a6 6 0 0 0-6 6c0 1.887-.454 3.665-1.257 5.234a.75.75 0 0 0 .515 1.076 32.91 32.91 0 0 0 3.256.508 3.5 3.5 0 0 0 6.972 0 32.903 32.903 0 0 0 3.256-.508.75.75 0 0 0 .515-1.076A11.448 11.448 0 0 1 16 8a6 6 0 0 0-6-6Zm0 14.5a2 2 0 0 1-1.95-1.557 33.54 33.54 0 0 0 3.9 0A2 2 0 0 1 10 16.5Z" clip-rule="evenodd" />
             </svg>
           </button>
-          <button class="flex px-3 py-2 items-center button-white" data-action="panel#toggleUploadForm">
+          <button class="flex items-center py-2 px-3 button-white" data-action="panel#toggleUploadForm">
             <svg class="-ml-1.5 size-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
             </svg>
@@ -46,7 +46,7 @@
         <div>
           <% if Current.user.premium? %>
             <button type="button" class="flex px-3 py-2 items-center button-white sm:hidden! whitespace-nowrap" data-action="panel#toggleInstantFilters">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-ml-1.5 mr-1.5 size-5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="mr-1.5 -ml-1.5 size-5">
                 <path d="M10 3.75a2 2 0 10-4 0 2 2 0 004 0zM17.25 4.5a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM5 3.75a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 17a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM17.25 17a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM9 10a.75.75 0 01-.75.75h-5.5a.75.75 0 010-1.5h5.5A.75.75 0 019 10zM17.25 10.75a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM14 10a2 2 0 10-4 0 2 2 0 004 0zM10 16.25a2 2 0 10-4 0 2 2 0 004 0z" />
               </svg>
               Instant Filters
@@ -62,13 +62,13 @@
     <div data-controller="modal shot-compare" class="mt-3 sm:mt-6">
       <%= render "shared/modal" %>
       <%= render "comparison_banner" %>
-      <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
+      <div id="shots" class="flex flex-col divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
         <%= render @shots %>
       </div>
     </div>
     <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment, :coffee_bag, :tag).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
   <% else %>
-    <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
+    <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
       <% if @premium_count.to_i > 0 %>
         Consider <%= link_to("upgrading", premium_index_path, class: "standard-link text-terracotta-600") %> to see your old shots.
       <% else %>

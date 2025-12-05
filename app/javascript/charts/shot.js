@@ -246,7 +246,7 @@ function setupInCupAnnotations(chart) {
     labelOptions: { shape: "connector" }
   })
 
-  chart.renderer.text('<button id="remove-annotations" class="inline-flex px-2 py-1 text-xs font-medium bg-white border rounded cursor-pointer highcharts-no-tooltip border-neutral-300 dark:border-neutral-600 shadow-sm text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900">Hide annotations</span>', 50, 35, true).attr({ zIndex: 3 }).add()
+  chart.renderer.text('<button id="remove-annotations" class="inline-flex py-1 px-2 text-xs font-medium bg-white rounded border shadow-sm cursor-pointer highcharts-no-tooltip border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Hide annotations</span>', 50, 35, true).attr({ zIndex: 3 }).add()
   chart.annotationVisible = true
   document.getElementById("remove-annotations").addEventListener("click", function () {
     if (chart.annotationVisible) {

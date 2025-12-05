@@ -2,7 +2,7 @@
 <% content_for(:head) { auto_discovery_link_tag :rss, feed_person_url(@user, format: :rss) } %>
 <%= render "shared/premium_banner", count: @premium_count %>
 <div class="bg-white shadow dark:bg-neutral-900">
-  <div class="flex items-center justify-between px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex justify-between items-center py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
     <h1 class="flex text-2xl font-bold leading-tight sm:text-3xl text-neutral-900 dark:text-neutral-100">
       <div class="flex gap-x-2">
         <img class="rounded size-8" src="<%= avatar_url(@user, 80) %>" alt="avatar">
@@ -20,18 +20,18 @@
     </h1>
   </div>
 </div>
-<div class="flex flex-col mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
+<div class="flex flex-col my-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <% if @shots.any? %>
     <div data-controller="modal shot-compare">
       <%= render "shared/modal" %>
       <%= render "shots/comparison_banner" %>
-      <div id="shots" class="flex flex-col divide-y border-y sm:gap-y-4 sm:border-none sm:divide-none border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
+      <div id="shots" class="flex flex-col divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
         <%= render @shots %>
       </div>
     </div>
     <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: person_path(@user.slug, before: @cursor, format: :turbo_stream) } %>
   <% else %>
-    <div class="px-6 my-8 text-center text-neutral-500 sm:px-8">
+    <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
       <% if @premium_count.to_i > 0 %>
         Consider <%= link_to("upgrading", premium_index_path, class: "standard-link text-terracotta-600") %> to see old shots.
       <% else %>
