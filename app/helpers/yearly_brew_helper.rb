@@ -144,9 +144,9 @@ module YearlyBrewHelper
         description: "#{yearly_brew.managed_shots_ratio}% of all shots were linked to a bag."
       },
       {
-        label: "Purchased",
+        label: "Coffee bags used",
         value: yearly_brew.managed_coffee_bags_count,
-        description: "#{yearly_brew.coffee_bags_added} new coffee bags purchased this year."
+        description: "With #{yearly_brew.coffee_bags_added} bags purchased this year."
       },
       {
         label: "Archived",
@@ -154,13 +154,6 @@ module YearlyBrewHelper
         description: "Coffee bags finished and tucked away."
       }
     ]
-  end
-
-  def year_over_year_text(change, personal)
-    return "#{possessive(personal).capitalize} baseline year" if change.nil?
-    return "No change" if change.zero?
-
-    change.positive? ? "+#{change}% vs last year" : "#{change}% vs last year"
   end
 
   def delta_badge(change)
@@ -174,7 +167,7 @@ module YearlyBrewHelper
     parts = []
     parts << "#{hours}h" if hours.positive?
     parts << "#{minutes}m" if minutes.positive?
-    parts << "#{seconds}s" if seconds.positive? && parts.none?
+    parts << "#{seconds}s" if seconds.positive?
     parts = ["0s"] if parts.empty?
     parts.join(" ")
   end

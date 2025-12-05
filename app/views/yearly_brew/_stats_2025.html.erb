@@ -11,10 +11,10 @@
           Year in Review · 2025
         </div>
         <h2 class="font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl">
-          Daily Grind 2025
+          Daily Grind 2025<%= ": #{@yearly_brew.user.display_name}" unless personal %>
         </h2>
         <p class="text-base leading-7 sm:text-lg text-white/90">
-          Here’s what happened at the bar this year: the shots pulled, the beans that kept getting tapped, and the routines that stuck.
+          Here’s what happened at <%= personal ? "the bar" : "#{@yearly_brew.user.display_name.split.first.capitalize}'s bar" %> this year: the shots pulled, the beans that kept getting ground, and the routines that stuck.
         </p>
       </div>
       <div class="grid gap-4 w-full sm:grid-cols-2 lg:w-120">
@@ -63,7 +63,7 @@
         <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-300">Coffee management</p>
-            <p class="text-2xl font-semibold">Track your beans, unlock richer stats!</p>
+            <p class="text-2xl font-semibold">Tracked <%= possessive(personal) %> beans, got better stats!</p>
             <p class="mt-2 text-sm leading-6 text-neutral-600 dark:text-neutral-200">
               See which roasters and bags fueled <%= possessive(personal) %> brews this year.
             </p>
@@ -124,7 +124,7 @@
     <div class="space-y-1">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-400">Habits & streaks</p>
       <p class="text-xl font-semibold text-neutral-900 dark:text-neutral-50">How <%= possessive(personal) %> coffee ritual evolved</p>
-      <p class="text-sm text-neutral-600 dark:text-neutral-400">Momentum, cadence, and the times you reached for the portafilter.</p>
+      <p class="text-sm text-neutral-600 dark:text-neutral-400">Momentum, cadence, and all the times <%= personal ? "you" : "they" %> reached for the beans.</p>
     </div>
     <div class="flex flex-wrap gap-2 items-center text-sm text-neutral-600 dark:text-neutral-400">
       <span class="py-1 px-3 rounded-full bg-terracotta-100 text-terracotta-800 dark:bg-terracotta-900/50 dark:text-terracotta-200"><%= @yearly_brew.shots_count %> total shots</span>
