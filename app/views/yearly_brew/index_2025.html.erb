@@ -1,5 +1,5 @@
 <% content_for(:html_title) { "Visualizer | 2025 Year in Coffee" } %>
-<div class="flex flex-col items-center px-4 my-16 mx-auto max-w-6xl sm:px-6 lg:px-8 dark:text-neutral-200">
+<div class="flex flex-col items-center mx-auto max-w-6xl sm:px-6 sm:mt-6 lg:px-8 lg:mt-8 dark:text-neutral-200">
   <div class="space-y-10 w-full sm:space-y-12">
     <% if @yearly_brew.shots_this_year.any? %>
       <%= render "yearly_brew/stats_2025", personal: true %>
@@ -22,9 +22,9 @@
         </div>
       <% end %>
     <% else %>
-      <div class="overflow-hidden relative w-full via-rose-700 to-amber-300 rounded-3xl shadow-2xl bg-linear-to-br from-indigo-950 shadow-neutral-900/10">
+      <div class="overflow-hidden relative w-full via-rose-700 to-amber-300 shadow-2xl sm:rounded-3xl bg-linear-to-br from-indigo-950 shadow-neutral-900/10">
         <div class="absolute inset-0 opacity-50 pointer-events-none">
-          <div class="absolute top-6 -left-20 w-56 h-56 rounded-full bg-amber-200/30 dark:bg-amber-800/30 blur-3xl"></div>
+          <div class="absolute top-6 -left-20 w-56 h-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
           <div class="absolute bottom-0 right-6 w-64 h-64 rounded-full bg-sky-200/30 blur-3xl"></div>
         </div>
         <div class="relative py-10 px-6 sm:py-14 sm:px-12 lg:px-16">
@@ -46,43 +46,43 @@
       </div>
     <% end %>
   </div>
-  <div class="gap-y-3 mx-auto mt-16 prose">
-    <h2 class="font-serif text-3xl font-semibold text-neutral-900 dark:text-neutral-100">Thank you for the first 5 years! 🙏</h2>
-    <div class="gap-y-3 text-neutral-700 dark:text-neutral-300">
-      <p>
-        2025 has been an absolutely incredible year for Visualizer. There were so many changes and improvements that even I can barely keep track:
-        <a href="https://visualizer.coffee/updates/new-year-new-changes" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Push notifications</a>,
-        <a href="https://visualizer.coffee/updates/lemon-squeezy-migration" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">migration to Lemon Squeezy</a>,
-        <a href="https://visualizer.coffee/updates/on-migration-and-other-updates" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">quick shot compare</a>,
-        <a href="https://visualizer.coffee/updates/spring-smooth-sailing" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">support for Gaggiuino</a> and
-        <a href="https://visualizer.coffee/updates/loffee-labs-integration" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">GagiMate</a>,
-        <a href="https://visualizer.coffee/updates/tagging-ux-gets-an-upgrade" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">tagging improvements</a>,
-        <a href="https://visualizer.coffee/updates/loffee-labs-integration" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">integration with Loffee Labs</a>,
-        including on <a href="https://visualizer.coffee/updates/loffee-labs-meets-coffee-management" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Coffee Management</a>
-        which also got <a href="https://visualizer.coffee/updates/new-database-server-and-coffee-bag-archiving" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">bag archiving</a>
-        and a <a href="https://visualizer.coffee/updates/new-and-improved-coffee-bags-management" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">complete redesign</a>,
-        <a href="https://visualizer.coffee/updates/passkeys-come-to-visualizer" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Passkeys</a>,
-        <a href="https://visualizer.coffee/updates/manage-dropdown-values" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">managing dropdown values</a>, and so many more smaller improvements and bug fixes.
-      </p>
-      <p>
-        None of this would have been possible without you. Without users, especially without <%= link_to "premium users", premium_index_path %>, this project would have been long dead.
-        But because of you, it's been alive and kicking for <strong>over 5 years</strong>! I know it sounds cheesy at this point, but I honestly can't thank you enough.
-        Even in my wildest dreams I never expected this little fun side project to have over <strong>6,500 users</strong> and <strong>3.6 million uploaded shots</strong>.
-        Absolute insanity. 🤯
-      </p>
-      <p>
-        But here we are, five incredible years in.
-        The pace of growth and the constant flow of ideas have kept this project exciting in ways I never expected.
-        And I’m already looking forward to what the next years will bring.
-      </p>
-      <p>
-        Once again, my friend <a href="https://banibeans.si/" class="standard-link text-terracotta-600 dark:text-terracotta-400" target="_blank">Luka (Banibeans)</a> has a special offer for Visualizer users.
-        This year, when you use <code class="px-1 rounded text-neutral-800 bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100">VISUALIZER10</code>, you not only get a 10% discount, but he also promised he'll throw in an extra 100g of something very tasty.
-      </p>
-      <p>
-        And whether you're decorating a tree, lighting candles, raising an aluminum pole, or just catching your breath, I wish you wonderful holidays filled with great coffee and even better company. 🥂
-      </p>
-      <p>Miha</p>
-    </div>
+</div>
+<div class="flex flex-col items-center px-4 mx-auto mt-16 mb-6 max-w-6xl sm:px-6 lg:px-8 dark:text-neutral-200">
+  <h2 class="pb-6 font-serif text-3xl font-bold text-neutral-900 dark:text-neutral-100">Thank you for the first 5! 🙏</h2>
+  <div class="gap-y-3 text-neutral-700 prose prose-neutral dark:text-neutral-300 dark:prose-invert">
+    <p>
+      2025 has been an absolutely incredible year for Visualizer. There were so many changes and improvements that even I can barely keep track:
+      <a href="https://visualizer.coffee/updates/new-year-new-changes" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Push notifications</a>,
+      <a href="https://visualizer.coffee/updates/lemon-squeezy-migration" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">migration to Lemon Squeezy</a>,
+      <a href="https://visualizer.coffee/updates/on-migration-and-other-updates" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">quick shot compare</a>,
+      <a href="https://visualizer.coffee/updates/spring-smooth-sailing" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">support for Gaggiuino</a> and
+      <a href="https://visualizer.coffee/updates/loffee-labs-integration" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">GagiMate</a>,
+      <a href="https://visualizer.coffee/updates/tagging-ux-gets-an-upgrade" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">tagging improvements</a>,
+      <a href="https://visualizer.coffee/updates/loffee-labs-integration" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">integration with Loffee Labs</a>,
+      including on <a href="https://visualizer.coffee/updates/loffee-labs-meets-coffee-management" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Coffee Management</a>
+      which also got <a href="https://visualizer.coffee/updates/new-database-server-and-coffee-bag-archiving" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">bag archiving</a>
+      and a <a href="https://visualizer.coffee/updates/new-and-improved-coffee-bags-management" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">complete redesign</a>,
+      <a href="https://visualizer.coffee/updates/passkeys-come-to-visualizer" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Passkeys</a>,
+      <a href="https://visualizer.coffee/updates/manage-dropdown-values" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">managing dropdown values</a>, and so many more smaller improvements and bug fixes.
+    </p>
+    <p>
+      None of this would have been possible without you. Without users, especially without <%= link_to "premium users", premium_index_path, class: "standard-link text-terracotta-600 dark:text-terracotta-400" %>, this project would have been long dead.
+      But because of you, it's been alive and kicking for <strong>over 5 years</strong>! I know it sounds cheesy at this point, but I honestly can't thank you enough.
+      Even in my wildest dreams I never expected this little fun side project to have over <strong>6,500 users</strong> and <strong>3.6 million uploaded shots</strong>.
+      Absolute insanity. 🤯
+    </p>
+    <p>
+      But here we are, five incredible years in.
+      The pace of growth and the constant flow of ideas have kept this project exciting in ways I never expected.
+      And I’m already looking forward to what the next years will bring.
+    </p>
+    <p>
+      Once again, my friend <a href="https://banibeans.si/" class="standard-link text-terracotta-600 dark:text-terracotta-400" target="_blank">Luka (Banibeans)</a> has a special offer for Visualizer users.
+      This year, when you use <code class="px-1 rounded text-neutral-800 bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100">VISUALIZER10</code>, you not only get a 10% discount, but he also promised he'll throw in an extra 100g of something very tasty.
+    </p>
+    <p>
+      And whether you're decorating a tree, lighting candles, raising an aluminum pole, or just catching your breath, I wish you wonderful holidays filled with great coffee and even better company. 🥂
+    </p>
+    <p>Miha</p>
   </div>
 </div>

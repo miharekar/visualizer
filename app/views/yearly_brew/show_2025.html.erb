@@ -1,5 +1,5 @@
 <% content_for(:html_title) { "Visualizer | 2025 Year in Coffee of #{@user.display_name}" } %>
-<div class="flex flex-col items-center px-4 my-16 mx-auto max-w-6xl sm:px-6 lg:px-8 dark:text-neutral-200">
+<div class="flex flex-col items-center mx-auto max-w-6xl sm:px-6 sm:my-6 lg:px-8 lg:mt-8 dark:text-neutral-200">
   <% if @yearly_brew.shots_this_year.any? %>
     <div class="space-y-10 w-full sm:space-y-12">
       <%= render "yearly_brew/stats_2025", personal: false %>

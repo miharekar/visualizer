@@ -77,6 +77,7 @@ Rails.application.configure do
   config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.hosts << /.+\.platypus-koi.ts.net/
+  config.hosts << "mbp:3000"
 
   config.webauthn_origin = "http://localhost:3000"
 
