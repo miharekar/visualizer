@@ -23,12 +23,7 @@
   </div>
   <div class="flex flex-col-reverse gap-y-8 gap-x-16 justify-between p-8 rounded-2xl sm:flex-row-reverse sm:items-end sm:w-11/12 sm:max-w-xl lg:flex-col lg:flex-auto lg:gap-y-28 lg:items-start lg:w-full lg:max-w-none bg-terracotta-600 dark:bg-terracotta-700">
     <p class="flex-none text-3xl font-bold tracking-tight text-white">
-      <% hours, minutes, seconds = @yearly_brew.time_brewed(human: true) %>
-      <% if hours > 0 %>
-        <%= hours %> h <%= minutes %> min <%= seconds %> s
-      <% else %>
-        <%= minutes %> min <%= seconds %> s
-      <% end %>
+      <%= human_time(@yearly_brew.time_brewed(human: true)) %>
     </p>
     <div class="sm:w-80 lg:flex-none lg:w-auto sm:shrink">
       <p class="text-lg font-semibold tracking-tight text-white text-balance">Time spent brewing</p>

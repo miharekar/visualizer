@@ -9,21 +9,15 @@ class YearlyBrew
   end
 
   memo_wise def shots_this_year
-    user.shots.where("extract(year from start_time) = ?", year)
+    user.shots.where("extract(year from start_time) = ?", target_year(:current))
   end
 
   memo_wise def shots_past_year
-    user.shots.where("extract(year from start_time) = ?", year - 1)
+    user.shots.where("extract(year from start_time) = ?", target_year(:past))
   end
 
   memo_wise def shots_count(year = :current)
     shots(year).count
-  end
-
-  memo_wise def shots_change_percentage
-    return nil if shots_past_year.none?
-
-    (((shots_count - shots_past_year.count) / shots_past_year.count.to_f) * 100).round(1)
   end
 
   memo_wise def favorite_roaster(year = :current)
@@ -149,23 +143,12 @@ class YearlyBrew
     managed_shots(year).distinct.count(:coffee_bag_id)
   end
 
-  memo_wise def managed_roasters_count(year = :current)
-    managed_shots(year).joins(coffee_bag: :roaster).distinct.count("coffee_bags.roaster_id")
-  end
-
   memo_wise def coffee_bags_added(year = :current)
-    year_int = target_year(year)
-    user.coffee_bags.where("extract(year from coffee_bags.created_at) = ?", year_int).count
+    user.coffee_bags.where("extract(year from coffee_bags.created_at) = ?", target_year(year)).count
   end
 
   memo_wise def coffee_bags_archived(year = :current)
-    year_int = target_year(year)
-    user.coffee_bags.where("extract(year from coffee_bags.archived_at) = ?", year_int).count
-  end
-
-  memo_wise def roasters_added(year = :current)
-    year_int = target_year(year)
-    user.roasters.where("extract(year from roasters.created_at) = ?", year_int).count
+    user.coffee_bags.where("extract(year from coffee_bags.archived_at) = ?", target_year(year)).count
   end
 
   memo_wise def average_enjoyment_change
