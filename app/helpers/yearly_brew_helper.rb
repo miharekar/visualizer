@@ -167,7 +167,7 @@ module YearlyBrewHelper
     parts = []
     parts << "#{hours}h" if hours.positive?
     parts << "#{minutes}m" if minutes.positive?
-    parts << "#{seconds}s" if seconds.positive?
+    parts << "#{seconds}s" if seconds.positive? && parts.size < 2
     parts = ["0s"] if parts.empty?
     parts.join(" ")
   end
