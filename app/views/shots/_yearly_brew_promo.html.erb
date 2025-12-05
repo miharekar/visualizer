@@ -1,17 +1,19 @@
-<div class="overflow-hidden relative py-3 px-6 text-white via-rose-700 to-amber-300 shadow-2xl sm:px-8 isolate bg-linear-to-r from-indigo-950">
+<div class="overflow-hidden relative py-3 text-white via-rose-700 to-amber-300 shadow-2xl isolate bg-linear-to-r from-indigo-950">
   <div class="absolute -left-16 top-1/2 w-48 h-48 rounded-full -translate-y-1/2 bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
   <div class="absolute -right-10 top-1/2 w-48 h-48 rounded-full -translate-y-1/2 bg-sky-200/30 blur-3xl"></div>
-  <div class="flex relative flex-col gap-3 text-center sm:flex-row sm:justify-between sm:items-center sm:text-left">
-    <p class="text-sm leading-6">
-      <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex items-center gap-2" do %>
-        <span class="font-semibold">Daily Grind 2025</span>
-        <span aria-hidden="true" class="text-white/80">·</span>
-        <span class="text-white/90">Your Year in Coffee is here!</span>
+  <div class="px-6 mx-auto max-w-7xl lg:px-8">
+    <div class="flex relative flex-col gap-3 text-center sm:flex-row sm:justify-between sm:items-center sm:text-left">
+      <p class="text-sm leading-6">
+        <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex items-center gap-2" do %>
+          <span class="font-semibold">Daily Grind 2025</span>
+          <span aria-hidden="true" class="text-white/80">·</span>
+          <span class="text-white/90">Your Year in Coffee is here!</span>
+        <% end %>
+      </p>
+      <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur border border-white/30 hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto" do %>
+        View stats
+        <span aria-hidden="true">→</span>
       <% end %>
-    </p>
-    <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur border border-white/30 hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto" do %>
-      View stats
-      <span aria-hidden="true">→</span>
-    <% end %>
+    </div>
   </div>
 </div>
