@@ -1,6 +1,6 @@
 <div class="py-1 bg-white dark:bg-neutral-900">
   <% @roasters.each do |roaster| %>
-    <li class="px-4 py-2 text-sm" role="option" data-autocomplete-value="<%= roaster.id %>" data-roaster="<%= roaster.name %>" data-roaster-website="<%= roaster.website %>">
+    <li class="py-2 px-4 text-sm" role="option" data-autocomplete-value="<%= roaster.id %>" data-roaster="<%= roaster.name %>" data-roaster-website="<%= roaster.website %>">
       <%= roaster.name %>
     </li>
   <% end %>

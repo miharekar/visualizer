@@ -1,27 +1,27 @@
-<div class="flex flex-col max-w-2xl mx-auto gap-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-end">
-  <div class="flex flex-col-reverse justify-between p-8 gap-x-16 gap-y-8 rounded-2xl bg-terracotta-50 dark:bg-terracotta-900 sm:w-3/4 sm:max-w-md sm:flex-row-reverse sm:items-end lg:w-72 lg:max-w-none lg:flex-none lg:flex-col lg:items-start">
+<div class="flex flex-col gap-8 mx-auto max-w-2xl lg:flex-row lg:items-end lg:mx-0 lg:max-w-none">
+  <div class="flex flex-col-reverse gap-y-8 gap-x-16 justify-between p-8 rounded-2xl sm:flex-row-reverse sm:items-end sm:w-3/4 sm:max-w-md lg:flex-col lg:flex-none lg:items-start lg:w-72 lg:max-w-none bg-terracotta-50 dark:bg-terracotta-900">
     <p class="flex-none text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
       <%= @yearly_brew.shots_this_year.count %>
     </p>
-    <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
-      <p class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 text-balance">Shots Fired</p>
-      <p class="mt-2 text-neutral-600 dark:text-neutral-300 text-base/7">
+    <div class="sm:w-80 lg:flex-none lg:w-auto sm:shrink">
+      <p class="text-lg font-semibold tracking-tight text-neutral-900 text-balance dark:text-neutral-100">Shots Fired</p>
+      <p class="mt-2 text-neutral-600 text-base/7 dark:text-neutral-300">
         From morning motivation to afternoon perfection, here's <%= possessive(personal) %> shot count for the year.
       </p>
     </div>
   </div>
-  <div class="flex flex-col-reverse justify-between p-8 bg-neutral-900 dark:bg-neutral-700 gap-x-16 gap-y-8 rounded-2xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-sm lg:flex-auto lg:flex-col lg:items-start lg:gap-y-44">
+  <div class="flex flex-col-reverse gap-y-8 gap-x-16 justify-between p-8 rounded-2xl sm:flex-row-reverse sm:items-end lg:flex-col lg:flex-auto lg:gap-y-44 lg:items-start lg:w-full lg:max-w-sm bg-neutral-900 dark:bg-neutral-700">
     <p class="flex-none text-3xl font-bold tracking-tight text-white">
       <%= @yearly_brew.amount_beans_used %> kg
     </p>
-    <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
+    <div class="sm:w-80 lg:flex-none lg:w-auto sm:shrink">
       <p class="text-lg font-semibold tracking-tight text-white text-balance">Coffee beans transformed into delicious shots</p>
-      <p class="mt-2 text-neutral-400 dark:text-neutral-300 text-base/7">
+      <p class="mt-2 text-neutral-400 text-base/7 dark:text-neutral-300">
         Each gram carefully measured and extracted to create <%= possessive(personal) %> perfect cup of coffee.
       </p>
     </div>
   </div>
-  <div class="flex flex-col-reverse justify-between p-8 gap-x-16 gap-y-8 rounded-2xl bg-terracotta-600 dark:bg-terracotta-700 sm:w-11/12 sm:max-w-xl sm:flex-row-reverse sm:items-end lg:w-full lg:max-w-none lg:flex-auto lg:flex-col lg:items-start lg:gap-y-28">
+  <div class="flex flex-col-reverse gap-y-8 gap-x-16 justify-between p-8 rounded-2xl sm:flex-row-reverse sm:items-end sm:w-11/12 sm:max-w-xl lg:flex-col lg:flex-auto lg:gap-y-28 lg:items-start lg:w-full lg:max-w-none bg-terracotta-600 dark:bg-terracotta-700">
     <p class="flex-none text-3xl font-bold tracking-tight text-white">
       <% hours, minutes, seconds = @yearly_brew.time_brewed(human: true) %>
       <% if hours > 0 %>
@@ -30,7 +30,7 @@
         <%= minutes %> min <%= seconds %> s
       <% end %>
     </p>
-    <div class="sm:w-80 sm:shrink lg:w-auto lg:flex-none">
+    <div class="sm:w-80 lg:flex-none lg:w-auto sm:shrink">
       <p class="text-lg font-semibold tracking-tight text-white text-balance">Time spent brewing</p>
       <p class="mt-2 text-base/7 text-terracotta-100">
         Precious moments spent in pursuit of coffee perfection. Worth every second!
@@ -45,7 +45,7 @@
     <div class="relative <%= position[:col_span] %>">
       <div class="absolute inset-px rounded-lg bg-white dark:bg-neutral-900 <%= position[:rounded_corners] %>"></div>
       <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] <%= position[:rounded_corners].gsub(/(\[|\])/, '\\\1') %>">
-        <div class="px-8 pt-8 pb-8 sm:px-10 sm:py-10">
+        <div class="px-8 pt-8 pb-8 sm:py-10 sm:px-10">
           <h3 class="font-semibold text-base/7 text-terracotta-600 dark:text-terracotta-500"><%= content[:title] %></h3>
           <p class="mt-2 text-lg font-medium tracking-tight text-neutral-900 dark:text-neutral-100">
             <% if box == :weekly_rhythm %>
@@ -58,7 +58,7 @@
               <%= content[:stat] %>
             <% end %>
           </p>
-          <p class="max-w-lg mt-2 text-neutral-600 dark:text-neutral-400 text-sm/6">
+          <p class="mt-2 max-w-lg text-neutral-600 text-sm/6 dark:text-neutral-400">
             <% if box == :best_rated_coffee %>
               The superstar of <%= possessive(personal) %> coffee lineup! Made <%= pluralize(@yearly_brew.best_rated_coffee.shots_count, "memorable shot") %> with an enjoyment score of <%= @yearly_brew.best_rated_coffee.espresso_enjoyment %>. Now that's bean love! ✨
             <% else %>

@@ -1,9 +1,9 @@
-<div class="mt-5 md:mt-0 md:col-span-2" id="<%= dom_id(@roaster) %>">
+<div class="mt-5 md:col-span-2 md:mt-0" id="<%= dom_id(@roaster) %>">
   <%= form_with(model: @roaster) do |f| %>
-    <div class="shadow sm:rounded-md sm:overflow-hidden" data-controller="canonical-selector">
-      <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
+    <div class="shadow sm:overflow-hidden sm:rounded-md" data-controller="canonical-selector">
+      <div class="py-5 px-4 bg-white sm:p-6 dark:bg-neutral-800">
         <div class="grid grid-cols-3 gap-6">
-          <div class="col-span-3 sm:col-span-2" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_roasters_canonical_index_path %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="bg-oxford-blue-400 dark:bg-oxford-blue-700 text-white">
+          <div class="col-span-3 sm:col-span-2" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_roasters_canonical_index_path %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">
             <% has_error = f.object.errors.any? { |e| e.attribute == :name } %>
             <% if has_error %>
               <% extra_classes = "ring-1 ring-red-500 border-red-500" %>
@@ -11,7 +11,7 @@
             <%= f.label :name, class: "standard-label" %>
             <%= f.hidden_field :canonical_roaster_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id" } %>
             <%= f.search_field :name, class: "#{extra_classes} mt-1 standard-input", data: { autocomplete_target: "input" } %>
-            <ul class="absolute z-10 mt-2 overflow-y-auto bg-white shadow-lg rounded-md list-group ring-1 ring-black/5 max-h-96" data-autocomplete-target="results"></ul>
+            <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
             <% if has_error %>
               <p class="text-sm font-medium text-red-500">Name is required and has to be unique.</p>
             <% end %>
@@ -26,7 +26,7 @@
               <% if @roaster.image.attached? && @roaster.image.variable? %>
                 <div id="roaster-image">
                   <%= image_tag @roaster.image.variant(:thumb), class: "rounded-lg mt-1" %>
-                  <div class="flex mt-1 mb-4 text-sm text-red-600 hover:text-red-800 dark:text-red-700 dark:hover:text-red-600">
+                  <div class="flex mt-1 mb-4 text-sm text-red-600 dark:text-red-700 hover:text-red-800 dark:hover:text-red-600">
                     <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+      <div class="py-3 px-4 text-right sm:px-6 bg-neutral-50 dark:bg-neutral-700">
         <%= f.submit "Save", class: "button-terracotta py-2 px-4" %>
       </div>
     </div>

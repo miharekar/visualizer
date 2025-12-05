@@ -9,20 +9,20 @@
           Upload one or more .shot, .json, or .csv files from Decent, Beanconqueror, Smart Espresso Profiler, Pressensor, or other compatible sources.
         </p>
       </div>
-      <div class="mt-5 md:mt-0 md:col-span-2">
+      <div class="mt-5 md:col-span-2 md:mt-0">
         <%= form_with(url: { action: :create }, multipart: true, data: { upload_target: "form" }) do |f| %>
           <div class="overflow-hidden rounded-md">
             <div class="p-4 bg-white inset-shadow-sm dark:bg-neutral-900">
-              <div class="justify-center hidden px-6 py-10 border-2 border-dashed rounded-md border-neutral-300 dark:border-neutral-600" data-upload-target="loader">
+              <div class="hidden justify-center py-10 px-6 rounded-md border-2 border-dashed border-neutral-300 dark:border-neutral-600" data-upload-target="loader">
                 <%= inline_svg_tag "logo-loading.svg", class: "logo-loading mx-auto w-auto h-14 stroke-neutral-500 text-neutral-500 dark:text-neutral-400 dark:stroke-neutral-400" %>
               </div>
-              <div class="flex justify-center px-6 border-2 border-dashed rounded-md py-9 border-neutral-300 dark:border-neutral-600" data-upload-target="dropArea">
-                <div class="flex flex-col text-center gap-y-1">
+              <div class="flex justify-center py-9 px-6 rounded-md border-2 border-dashed border-neutral-300 dark:border-neutral-600" data-upload-target="dropArea">
+                <div class="flex flex-col gap-y-1 text-center">
                   <svg class="mx-auto size-10 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
                   <div class="flex flex-wrap justify-center text-sm text-neutral-600 dark:text-neutral-300">
-                    <label class="relative font-medium bg-white cursor-pointer rounded-md dark:bg-neutral-900 text-oxford-blue-600 dark:text-oxford-blue-400 hover:text-oxford-blue-500 dark:hover:text-oxford-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-oxford-blue-500" for="files">
+                    <label class="relative font-medium bg-white rounded-md cursor-pointer focus-within:ring-2 focus-within:ring-offset-2 focus-within:outline-none text-oxford-blue-600 dark:bg-neutral-900 dark:text-oxford-blue-400 dark:hover:text-oxford-blue-600 focus-within:ring-oxford-blue-500 hover:text-oxford-blue-500" for="files">
                       <span>Select your files</span>
                       <%= file_field_tag "files", multiple: true, name: "files[]", class: "hidden", data: { upload_target: "files" } %>
                     </label>

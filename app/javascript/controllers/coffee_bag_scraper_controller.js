@@ -82,7 +82,7 @@ export default class extends Controller {
       const label = document.querySelector(`label[for="${field.id}"]`)
       if (label && !label.querySelector(`[data-action*="rollback"]`)) {
         const originalText = label.innerHTML
-        label.innerHTML = `<div class="flex items-center justify-between"><span>${originalText}</span><span class="ml-2 font-light cursor-pointer standard-link" data-action="click->coffee-bag-scraper#rollback" title="${originalValue}">Revert</span></div>`
+        label.innerHTML = `<div class="flex justify-between items-center"><span>${originalText}</span><span class="ml-2 font-light cursor-pointer standard-link" data-action="click->coffee-bag-scraper#rollback" title="${originalValue}">Revert</span></div>`
       }
     }
   }

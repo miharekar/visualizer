@@ -2,26 +2,26 @@
 <% shot_policy = ShotPolicy.new(current_user, shot) %>
 <% @timezone ||= ActiveSupport::TimeZone.new(shot.user&.timezone.presence || "UTC") %>
 <%= tag.div id: dom_id(shot), class: "group" do %>
-  <div class="relative flex md:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
-    <div class="relative flex min-w-0 p-4 cursor-pointer grow sm:gap-x-8 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25 has-checked:bg-oxford-blue-50 has-checked:dark:bg-oxford-blue-800">
+  <div class="flex relative sm:shadow md:rounded dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
+    <div class="flex relative p-4 min-w-0 cursor-pointer sm:gap-x-8 grow has-checked:bg-oxford-blue-50 has-checked:dark:bg-oxford-blue-800 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
       <div class="absolute top-3 right-3 z-1 group-data-comparing:[&:not(:has(input:checked))]:hidden">
         <%= check_box_tag "compare_shots[]", shot.id, id: "compare_shots_#{shot.id}", class: "standard-checkbox size-5 cursor-copy", data: { shot_compare_target: "checkbox", action: "change->shot-compare#select" } %>
       </div>
-      <div class="flex-none hidden w-24 -my-4 -ml-4 lg:w-40" data-check-images-target="container">
+      <div class="hidden flex-none -my-4 -ml-4 w-24 lg:w-40" data-check-images-target="container">
         <% if shot.image.attached? && shot.image.variable? %>
           <div class="flex w-full h-full">
             <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center" %>
           </div>
         <% end %>
       </div>
-      <div class="flex flex-col justify-between overflow-hidden md:flex-row md:gap-x-8 grow gap-y-1 md:gap-y-0">
+      <div class="flex overflow-hidden flex-col gap-y-1 justify-between md:flex-row md:gap-y-0 md:gap-x-8 grow">
         <div class="flex flex-col justify-between basis-1/2">
           <div class="flex flex-col space-y-1">
-            <div class="flex flex-col text-sm space-y-1 md:text-base text-neutral-500 dark:text-neutral-400">
+            <div class="flex flex-col space-y-1 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
             </div>
-            <div class="flex items-center pr-6 mb-1 md:pr-0 gap-x-2">
+            <div class="flex gap-x-2 items-center pr-6 mb-1 md:pr-0">
               <% if shot.espresso_enjoyment.to_i > 0 %>
-                <span class="inline-flex text-sm md:text-base items-center rounded-md px-1.5 py-0.5 font-medium text-white" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+                <span class="inline-flex items-center py-0.5 px-1.5 text-sm font-medium text-white rounded-md md:text-base" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
                   <%= shot.espresso_enjoyment %>
                 </span>
               <% end %>
@@ -32,9 +32,9 @@
                 <% end %>
               </span>
             </div>
-            <div class="flex flex-col text-sm space-y-1 md:text-base text-neutral-500 dark:text-neutral-400">
+            <div class="flex flex-col space-y-1 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
               <% if current_user != shot.user %>
-                <div class="flex items-center gap-x-1">
+                <div class="flex gap-x-1 items-center">
                   <div>
                     <%= shot.user.display_name %>
                   </div>
@@ -59,7 +59,7 @@
             </div>
           </div>
         </div>
-        <div class="flex flex-col text-sm space-y-1 grow md:text-base text-neutral-500 dark:text-neutral-400 basis-1/2 md:pr-6 md:min-w-0">
+        <div class="flex flex-col space-y-1 text-sm md:pr-6 md:min-w-0 md:text-base grow text-neutral-500 basis-1/2 dark:text-neutral-400">
           <% if shot.bean_brand.present? || shot.bean_type.present? %>
             <div>
               <% if shot.bean_brand.present? %>
@@ -71,7 +71,7 @@
             </div>
           <% end %>
           <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-            <div class="flex flex-wrap items-center gap-x-1">
+            <div class="flex flex-wrap gap-x-1 items-center">
               <% if shot.bean_weight_f > 0 %>
                 <span><%= shot.bean_weight_f %>g</span>
               <% end %>
@@ -89,7 +89,7 @@
             </div>
           <% end %>
           <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
-            <div class="flex flex-wrap items-center overflow-hidden gap-x-1">
+            <div class="flex overflow-hidden flex-wrap gap-x-1 items-center">
               <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
                 <span class="truncate"><%= shot.grinder_setting %></span>
               <% end %>
@@ -99,7 +99,7 @@
             </div>
           <% end %>
           <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
-            <div class="flex items-center gap-x-2 flex-nowrap whitespace-nowrap">
+            <div class="flex flex-nowrap gap-x-2 items-center whitespace-nowrap">
               <% if shot.drink_tds_f > 0 %>
                 <span>TDS: <%= shot.drink_tds_f %>%</span>
               <% end %>
@@ -112,10 +112,10 @@
       </div>
     </div>
     <% if shot_policy.edit? || shot_policy.destroy? %>
-      <div class="flex border-l border-neutral-200 dark:border-neutral-700 group-data-comparing:pointer-events-none group-data-comparing:opacity-30">
-        <div class="flex flex-col w-full -mt-px divide-y divide-neutral-200 dark:divide-neutral-700">
+      <div class="flex border-l border-neutral-200 group-data-comparing:pointer-events-none group-data-comparing:opacity-30 dark:border-neutral-700">
+        <div class="flex flex-col -mt-px w-full divide-y divide-neutral-200 dark:divide-neutral-700">
           <% if shot_policy.edit? %>
-            <div class="relative flex grow dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+            <div class="flex relative grow dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
               <%= link_to edit_shot_path(shot), class: "flex items-center p-4 text-sm border border-transparent gap-x-3" do %>
                 <span class="absolute inset-x-0 bottom-0 -top-px"></span>
                 <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -126,7 +126,7 @@
             </div>
           <% end %>
           <% if shot_policy.destroy? %>
-            <div class="relative flex hover:bg-red-500/10">
+            <div class="flex relative hover:bg-red-500/10">
               <%= link_to shot_path(shot), class: "flex items-center px-4 py-3 text-sm border border-transparent gap-x-3 text-neutral-400 dark:text-neutral-500", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(@timezone).to_formatted_s(:long)}?"} do %>
                 <span class="absolute inset-x-0 bottom-0 -top-px"></span>
                 <svg class="size-4 text-neutral-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">

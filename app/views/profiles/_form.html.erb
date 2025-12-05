@@ -1,7 +1,7 @@
 <div class="md:col-span-2" id="<%= dom_id(@profile) %>">
   <%= form_with(model: @profile, url: profile_path) do |f| %>
-    <div class="md:shadow sm:rounded-md sm:overflow-hidden">
-      <div class="px-4 py-5 bg-white dark:bg-neutral-800 sm:p-6">
+    <div class="sm:overflow-hidden sm:rounded-md md:shadow">
+      <div class="py-5 px-4 bg-white sm:p-6 dark:bg-neutral-800">
         <div class="grid grid-cols-3 gap-6">
           <div class="col-span-3 sm:col-span-2">
             <label class="standard-label">Avatar</label>
@@ -79,9 +79,9 @@
             <div class="col-span-3 sm:col-span-2" data-controller="modal">
               <%= render "shared/modal" %>
               <h3 class="font-medium text-neutral-700 dark:text-neutral-300">Custom fields</h3>
-              <div class="flex flex-wrap mt-3 gap-1">
+              <div class="flex flex-wrap gap-1 mt-3">
                 <% @profile.metadata_fields.each do |field| %>
-                  <span class="inline-flex items-center rounded-full pr-1 text-sm text-neutral-700 bg-neutral-100 py-0.5 pl-2.5">
+                  <span class="inline-flex items-center py-0.5 pr-1 pl-2.5 text-sm rounded-full text-neutral-700 bg-neutral-100">
                     <%= field %>
                     <%= link_to remove_metadata_field_profile_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} custom field? This will remove the data from all the shots that have it filled in!"}, class: "ml-1 inline-flex size-4 shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
                       <svg class="size-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
@@ -91,9 +91,9 @@
                   </span>
                 <% end %>
               </div>
-              <div class="flex items-center w-full max-w-sm my-2" data-controller="metadata-fields" data-metadata-fields-url-value="<%= add_metadata_field_profile_path %>">
+              <div class="flex items-center my-2 w-full max-w-sm" data-controller="metadata-fields" data-metadata-fields-url-value="<%= add_metadata_field_profile_path %>">
                 <%= text_field_tag :field_name, {}, class: "grow standard-input", data: {metadata_fields_target: "input", action: "keydown.enter->metadata-fields#add"} %>
-                <button class="px-3 py-2 ml-2 text-sm font-medium bg-white border cursor-pointer leading-4 rounded-md shadow-sm dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black" data-action="click->metadata-fields#add">
+                <button class="py-2 px-3 ml-2 text-sm font-medium leading-4 bg-white rounded-md border shadow-sm cursor-pointer dark:ring-offset-black focus:ring-2 focus:ring-offset-2 focus:outline-none border-neutral-300 text-neutral-700 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50 focus:ring-terracotta-500" data-action="click->metadata-fields#add">
                   Add
                 </button>
                 <a href="#" class="hidden" data-turbo-method="post" data-metadata-fields-target="link"></a>
@@ -180,7 +180,7 @@
           <% end %>
         </div>
       </div>
-      <div class="px-4 py-3 text-right bg-neutral-50 dark:bg-neutral-700 sm:px-6">
+      <div class="py-3 px-4 text-right sm:px-6 bg-neutral-50 dark:bg-neutral-700">
         <%= f.submit "Save", class: "button-terracotta py-2 px-4" %>
       </div>
     </div>

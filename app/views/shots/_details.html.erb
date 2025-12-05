@@ -10,7 +10,7 @@
 <div class="flex">
   <div class="shrink-0">
     <% if has_enjoyment %>
-      <div class="flex items-center justify-center rounded-full size-12" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+      <div class="flex justify-center items-center rounded-full size-12" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
         <div class="py-1 text-center text-white">
           <%= shot.espresso_enjoyment %>
         </div>
@@ -23,7 +23,7 @@
     </a>
     <div class="mt-1 text-base text-neutral-600 dark:text-neutral-400">
       <% if show_name %>
-        <div class="flex items-center gap-x-1">
+        <div class="flex gap-x-1 items-center">
           <div>
             <%= shot.user.display_name %>
           </div>
@@ -71,7 +71,7 @@
       <% end %>
     </div>
   <% end %>
-  <div class="flex flex-wrap items-center gap-x-1">
+  <div class="flex flex-wrap gap-x-1 items-center">
     <% if bean_weight > 0 %>
       <span><%= bean_weight %>g</span>
     <% end %>
@@ -87,7 +87,7 @@
     <span>in <%= shot.duration.round(1) %>s</span>
   </div>
   <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
-    <div class="flex flex-wrap items-center gap-x-1">
+    <div class="flex flex-wrap gap-x-1 items-center">
       <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
         <span><%= shot.grinder_setting %></span>
       <% end %>
@@ -97,7 +97,7 @@
     </div>
   <% end %>
   <% if tds > 0 || ey > 0 %>
-    <div class="flex items-center gap-x-2">
+    <div class="flex gap-x-2 items-center">
       <% if tds > 0 %>
         <span>TDS: <%= tds %>%</span>
       <% end %>

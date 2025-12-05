@@ -1,12 +1,12 @@
 <% content_for(:html_title) { "Visualizer | Bean Counting 2024: Year in Coffee of #{@user.display_name}" } %>
-<div class="flex flex-col items-center px-4 mx-auto my-24 gap-y-24 sm:gap-y-32 max-w-7xl sm:px-6 lg:px-8 dark:text-neutral-200">
-  <div class="px-6 bg-white dark:bg-neutral-900 lg:px-8">
-    <div class="max-w-2xl mx-auto text-center">
-      <p class="font-semibold text-terracotta-600 dark:text-terracotta-500 text-base/7">Year in Coffee</p>
-      <h1 class="mt-2 font-serif text-5xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 text-balance sm:text-7xl">
+<div class="flex flex-col gap-y-24 items-center px-4 my-24 mx-auto max-w-7xl sm:gap-y-32 sm:px-6 lg:px-8 dark:text-neutral-200">
+  <div class="px-6 bg-white lg:px-8 dark:bg-neutral-900">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="font-semibold text-terracotta-600 text-base/7 dark:text-terracotta-500">Year in Coffee</p>
+      <h1 class="mt-2 font-serif text-5xl font-semibold tracking-tight sm:text-7xl text-neutral-900 text-balance dark:text-neutral-100">
         Bean Counting 2024: <%= @user.display_name %>
       </h1>
-      <p class="mt-8 text-lg font-medium text-neutral-500 dark:text-neutral-400 text-pretty sm:text-xl/8">
+      <p class="mt-8 text-lg font-medium text-neutral-500 text-pretty sm:text-xl/8 dark:text-neutral-400">
         <% if @yearly_brew.shots_this_year.any? %>
           This is <%= @user.display_name.split.first.capitalize %>'s personal coffee chronicle of the year.
           A data-driven journey through every bean they've ground, every shot they've pulled, and every sip they've savored.

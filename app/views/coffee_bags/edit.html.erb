@@ -1,13 +1,13 @@
 <div class="bg-white shadow dark:bg-neutral-900">
-  <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <h1 class="font-serif lining-nums text-4xl font-bold leading-tight tracking-tight text-neutral-900 dark:text-neutral-100">
+  <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <h1 class="font-serif text-4xl font-bold lining-nums tracking-tight leading-tight text-neutral-900 dark:text-neutral-100">
       Edit <%= @coffee_bag.name %> by <%= @coffee_bag.roaster.name %>
     </h1>
   </div>
 </div>
 <div class="pt-6 mx-auto max-w-7xl md:py-6 md:px-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
-    <div class="px-4 sm:px-6 md:p-0 md:col-span-1">
+    <div class="px-4 sm:px-6 md:col-span-1 md:p-0">
       <div>
         <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
           You made
@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <hr class="mx-4 mt-6 md:hidden sm:mx-6 text-neutral-200 dark:text-neutral-700">
+    <hr class="mx-4 mt-6 sm:mx-6 md:hidden text-neutral-200 dark:text-neutral-700">
     <%= render "form", coffee_bag: @coffee_bag %>
   </div>
 </div>
