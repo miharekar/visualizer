@@ -1,0 +1,16 @@
+<div class="relative isolate overflow-hidden bg-linear-to-r from-indigo-950 via-rose-700 to-amber-300 px-6 py-3 sm:px-8 shadow-2xl text-white">
+  <div class="absolute -left-16 top-1/2 h-48 w-48 -translate-y-1/2 rounded-full bg-amber-200/30 dark:bg-amber-800/30 blur-3xl"></div>
+  <div class="absolute -right-10 top-1/2 h-48 w-48 -translate-y-1/2 rounded-full bg-sky-200/30 blur-3xl"></div>
+  <div class="relative flex flex-wrap items-center gap-x-4 gap-y-3">
+    <p class="text-sm leading-6">
+      <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex items-center gap-2" do %>
+        <span class="font-semibold">Daily Grind 2025</span>
+        ·
+        <span class="text-white/90">Your Year in Coffee is here!</span>
+      <% end %>
+    </p>
+    <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-2 text-sm font-semibold text-white backdrop-blur border border-white/30 hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" do %>
+      View →
+    <% end %>
+  </div>
+</div>
