@@ -11,7 +11,7 @@
       <div>
         <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
           You're editing shot made on
-          <strong><%= @shot.start_time.in_time_zone(@timezone).to_formatted_s(:long) %></strong>.
+          <strong><%= @shot.start_time.in_time_zone(Current.timezone).to_formatted_s(:long) %></strong>.
         </h3>
       </div>
       <hr class="my-6 text-neutral-200 dark:text-neutral-700">
@@ -26,7 +26,7 @@
               <% next if id == @shot.id %>
               <option value="<%= id %>">
                 <% title = "#{bean_type} (#{title})" if bean_type.present? %>
-                <%= [title, time.in_time_zone(@timezone).to_formatted_s(:long)].join(" @ ") %>
+                <%= [title, time.in_time_zone(Current.timezone).to_formatted_s(:long)].join(" @ ") %>
               </option>
             <% end %>
           </select>

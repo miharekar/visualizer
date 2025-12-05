@@ -24,7 +24,7 @@
           </div>
           <div class="col-span-3 sm:col-span-2">
             <%= f.label :timezone, class: "standard-label" %>
-            <%= f.time_zone_select :timezone, nil, {default: "#{@timezone.name.split("/").last}"}, {class: "mt-1 standard-input"} %>
+            <%= f.time_zone_select :timezone, nil, {default: "#{Current.timezone.name.split("/").last}"}, {class: "mt-1 standard-input"} %>
           </div>
           <div class="col-span-3 sm:col-span-2">
             <%= f.label :temperature_unit, class: "standard-label" %>
