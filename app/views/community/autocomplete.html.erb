@@ -2,7 +2,7 @@
   <% if @filter == :user %>
     <% @values.each do |value| %>
       <li class="py-2 px-4 text-sm" role="option" data-autocomplete-value="<%= value.id %>">
-        <%= value.display_name %><% if Current.user&.id == value.id && !Current.user.public? %> (only visible to you)<% end %>
+        <%= value.display_name %><% if Current.user && Current.user.id == value.id && !Current.user.public? %> (only visible to you)<% end %>
       </li>
     <% end %>
   <% else %>

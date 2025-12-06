@@ -1,4 +1,6 @@
 <% current_user = defined?(user_override) && Current.user.nil? ? shot.user : Current.user %>
+<% owner = current_user && shot.user == current_user %>
+<% show_start_time = owner || !shot.user&.hide_shot_times? %>
 <% shot_policy = ShotPolicy.new(current_user, shot) %>
 <%= tag.div id: dom_id(shot), class: "group" do %>
   <div class="flex relative sm:shadow md:rounded dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
@@ -46,7 +48,9 @@
                   <% end %>
                 </div>
               <% end %>
-              <%= local_datetime_tag shot.start_time, style: :datetime %>
+              <% if show_start_time %>
+                <%= local_datetime_tag shot.start_time, style: :datetime %>
+              <% end %>
               <% if shot.barista.present? %>
                 <div>
                   By <%= shot.barista %>

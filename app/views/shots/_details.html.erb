@@ -64,7 +64,7 @@
         (<%= shot.roast_level %>)
       <% end %>
       <% if shot.roast_date.present? && shot.parsed_roast_date %>
-        on <%= shot.parsed_roast_date.to_fs(:long) %>
+        from <%= shot.parsed_roast_date.to_fs(:long) %>
         <% if show_start_time %>
           (<%= pluralize((shot.start_time.to_date - shot.parsed_roast_date.to_date).to_i, "day") %> after roast)
         <% end %>
