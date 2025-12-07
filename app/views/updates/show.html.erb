@@ -5,7 +5,7 @@
   <meta property="og:title" content="<%= @update.title %>">
   <% if @update.image.attached? %>
     <meta property="og:image" content="<%= public_image_url(@update.image.variant(:social)).html_safe %>">
-    <meta property="og:url" content="https://visualizer.coffee/updates/<%= @update.slug %>">
+    <meta property="og:url" content="/updates/<%= @update.slug %>">
     <meta property="og:description" content="<%= @update.excerpt %>">
   <% end %>
 <% end %>
