@@ -23,7 +23,7 @@
                     <%= render partial: "yearly_brew_stat", locals: { title: "Kg of coffee used", stat: @yearly_brew.amount_beans_used, diff: (@yearly_brew.amount_beans_used.to_f - @yearly_brew.amount_beans_used(:past).to_f).round(2) } %>
                   </p>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                    But this is just a small taste! <strong>See all your stats on <%= link_to "Visualizer Bean Counting 2024", yearly_brew_index_url(year: 2024), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %></strong> and feel free to share it far and wide. 🥳
+                    But this is just a small taste! <strong>See all your stats on <%= link_to "Visualizer Bean Counting 2024", personal_yearly_brew_url(year: 2024), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %></strong> and feel free to share it far and wide. 🥳
                   </p>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
                     P.S.: There are still a couple of days left to upload a shot or two and make your stats even more impressive. 😉
@@ -34,7 +34,7 @@
                     Hopefully, you'll have some to look back on next year! I can't wait to see your coffee journey unfold.
                   </p>
                   <p style="margin: 0 0 24px; font-size: 16px; color: #000">
-                    But there are still a couple of days left to upload a shot or two so even you will have something to see on <%= link_to "Visualizer Yearly Brew", yearly_brew_index_url(year: 2024), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>.
+                    But there are still a couple of days left to upload a shot or two so even you will have something to see on <%= link_to "Visualizer Yearly Brew", personal_yearly_brew_url(year: 2024), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>.
                   </p>
                 <% end %>
                 <h2 style="margin: 0 0 24px; font-size: 24px; line-height: 24px; color: #000">

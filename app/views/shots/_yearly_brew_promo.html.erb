@@ -4,13 +4,13 @@
   <div class="px-6 mx-auto max-w-7xl lg:px-8">
     <div class="flex relative flex-col gap-3 text-center sm:flex-row sm:justify-between sm:items-center sm:text-left">
       <p class="text-sm leading-6">
-        <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex items-center gap-2" do %>
+        <%= link_to personal_yearly_brew_path(year: 2025), class: "inline-flex items-center gap-2" do %>
           <span class="font-semibold">Daily Grind 2025</span>
           <span aria-hidden="true" class="text-white/80">·</span>
           <span class="text-white/90">Your Year in Coffee is here!</span>
         <% end %>
       </p>
-      <%= link_to yearly_brew_index_path(year: 2025), class: "inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur border border-white/30 hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto" do %>
+      <%= link_to personal_yearly_brew_path(year: 2025), class: "inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur border border-white/30 hover:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto" do %>
         View stats
         <span aria-hidden="true">→</span>
       <% end %>

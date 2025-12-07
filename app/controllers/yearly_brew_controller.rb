@@ -4,23 +4,23 @@ class YearlyBrewController < ApplicationController
   attr_reader :year
 
   before_action :require_authentication, except: [:show]
-  before_action :set_year, only: %i[index show]
+  before_action :set_year
 
-  def index
+  def personal
     @yearly_brew = YearlyBrew.new(Current.user, year)
-    render template: "yearly_brew/index_#{year}"
+    render template: "yearly_brew/personal_#{year}"
   end
 
   def show
     @user = User.visible.find_by(slug: params[:slug])
 
-    if @user
+    if @user && WHITELISTED_YEARS.include?(year)
       @yearly_brew = YearlyBrew.new(@user, year)
       render template: "yearly_brew/show_#{year}"
     else
       flash[:alert] = "Yearly Brew not found"
       if Current.user
-        redirect_to action: :index
+        redirect_to action: :personal, year: 2025
       else
         redirect_to root_path
       end
@@ -30,7 +30,6 @@ class YearlyBrewController < ApplicationController
   private
 
   def set_year
-    @year = (params[:year].presence || 2023).to_i
-    @year = 2023 unless WHITELISTED_YEARS.include?(@year)
+    @year = params[:year].presence.to_i
   end
 end
