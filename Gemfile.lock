@@ -191,9 +191,9 @@ GEM
       rake (>= 13)
     hashdiff (1.2.1)
     hashie (5.0.0)
-    herb (0.8.3-aarch64-linux-gnu)
-    herb (0.8.3-arm64-darwin)
-    herb (0.8.3-x86_64-linux-gnu)
+    herb (0.8.4-aarch64-linux-gnu)
+    herb (0.8.4-arm64-darwin)
+    herb (0.8.4-x86_64-linux-gnu)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
