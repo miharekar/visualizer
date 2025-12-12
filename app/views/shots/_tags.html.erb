@@ -1,6 +1,6 @@
 <div class="flex flex-wrap gap-1 items-center">
   <% shot.tags.sort_by(&:name).each do |tag| %>
-    <%= link_to shots_path(params.permit(*Filterable::FILTERS.keys, :min_enjoyment, :max_enjoyment, :coffee_bag, :start_date).reject { |_, v| v.blank? }.merge(tag: tag.slug)), class: "relative z-10 pointer-events-auto" do %>
+    <%= link_to shots_path(params.permit(*Filterable::FILTERS.keys, :min_enjoyment, :max_enjoyment, :coffee_bag, :start_date, :all_notes).reject { |_, v| v.blank? }.merge(tag: tag.slug)), class: "relative z-10 pointer-events-auto" do %>
       <span class="inline-flex items-center py-1 px-2 text-xs font-medium rounded-md dark:ring-1 dark:ring-inset bg-oxford-blue-50 text-oxford-blue-600 group dark:bg-oxford-blue-400/5 dark:text-oxford-blue-300 dark:ring-oxford-blue-400/10 dark:hover:bg-neutral-700/75 hover:bg-neutral-200/75">
         <% if truncate && tag.name.length > 15 %>
           <%= tag.name.truncate(15, omission: "…") %>

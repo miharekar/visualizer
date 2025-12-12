@@ -6,11 +6,16 @@
       <%= f.hidden_field :tag, value: params[:tag] %>
       <div class="grid grid-cols-12 gap-3">
         <% Filterable::FILTERS.keys.each do |filter| %>
+          <% next if [:bean_notes, :espresso_notes].include?(filter) %>
           <div class="col-span-6 md:col-span-3">
             <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "standard-label" %>
             <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: {action: "search#submit"} %>
           </div>
         <% end %>
+        <div class="col-span-6 md:col-span-3">
+          <%= f.label :all_notes, "Notes", class: "standard-label" %>
+          <%= f.search_field :all_notes, value: params[:all_notes], class: "mt-1 standard-input", data: {action: "search#submit"} %>
+        </div>
         <div class="col-span-6 md:col-span-3">
           <%= f.label :start_date, "Date", class: "standard-label" %>
           <%= f.date_field :start_date, value: params[:start_date], class: "mt-1 standard-input", data: {action: "change->search#submit"} %>

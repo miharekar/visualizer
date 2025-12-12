@@ -125,6 +125,10 @@ class ShotsController < ApplicationController
 
     if Current.user.premium?
       apply_standard_filters_to_shots
+      if params[:all_notes].present?
+        notes = "%#{ActiveRecord::Base.sanitize_sql_like(params[:all_notes])}%"
+        @shots = @shots.where("bean_notes ILIKE :notes OR espresso_notes ILIKE :notes OR private_notes ILIKE :notes", notes:)
+      end
       @coffee_bag = Current.user.coffee_bags.find_by(id: params[:coffee_bag]) if params[:coffee_bag].present?
       @shots = @shots.where(coffee_bag_id: @coffee_bag.id) if @coffee_bag
       @shots = @shots.where(id: ShotTag.joins(:tag).where(tag: {slug: params[:tag]}).select(:shot_id)) if params[:tag].present?
