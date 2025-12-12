@@ -23,7 +23,7 @@
         <%= render @shots %>
       </div>
     </div>
-    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: community_index_path(params.permit(*CommunityController::FILTERS, :user_id, :min_enjoyment, :max_enjoyment).merge(commit: "Search", before: @cursor, format: :turbo_stream)) } %>
+    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: community_index_path(params.permit(*Filterable::FILTERS, :user, :user_id, :min_enjoyment, :max_enjoyment, :start_date).merge(commit: "Search", before: @cursor, format: :turbo_stream)) } %>
   <% else %>
     <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
       No shots found 🤷‍♂️

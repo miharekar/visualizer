@@ -1,7 +1,6 @@
 class ShotsController < ApplicationController
+  include Filterable
   include Paginatable
-
-  FILTERS = %i[profile_title bean_brand bean_type grinder_model bean_notes espresso_notes].freeze
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
   before_action :check_premium!, only: :coffee_bag_form
@@ -125,11 +124,7 @@ class ShotsController < ApplicationController
     @shots = Current.user.shots.with_attached_image
 
     if Current.user.premium?
-      FILTERS.select { params[it].present? }.each do |filter|
-        @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
-      end
-      @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
-      @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+      apply_standard_filters_to_shots
       @coffee_bag = Current.user.coffee_bags.find_by(id: params[:coffee_bag]) if params[:coffee_bag].present?
       @shots = @shots.where(coffee_bag_id: @coffee_bag.id) if @coffee_bag
       @shots = @shots.where(id: ShotTag.joins(:tag).where(tag: {slug: params[:tag]}).select(:shot_id)) if params[:tag].present?

@@ -2,7 +2,7 @@ class FillAutocompleteValuesJob < ApplicationJob
   queue_as :low
 
   def perform
-    CommunityController::FILTERS.each do |filter, options|
+    Filterable::FILTERS.each do |filter, options|
       next if filter == :user || options[:autocomplete].nil?
 
       Rails.cache.write(

@@ -1,7 +1,13 @@
 <div class="px-4 sm:px-0">
   <%= form_with(url: { action: :index }, method: :get) do |f| %>
     <div class="grid grid-cols-12 gap-3">
-      <% CommunityController::FILTERS.each do |filter, options| %>
+      <div class="col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: :user) %>" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700" data-controller="autocomplete">
+        <%= f.label :user, class: "standard-label" %>
+        <%= f.hidden_field :user_id, value: params[:user_id], data: { autocomplete_target: "hidden" } %>
+        <%= f.search_field :user, value: params[:user], class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
+        <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
+      </div>
+      <% Filterable::FILTERS.each do |filter, options| %>
         <% if options[:autocomplete] %>
           <div class="col-span-6 md:col-span-3" data-autocomplete-url-value="<%= autocomplete_community_index_path(filter: filter) %>" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700" data-controller="autocomplete">
             <%= f.label filter, I18n.t("helpers.label.shot.#{filter}", default: filter.to_s.humanize), class: "standard-label" %>
@@ -18,6 +24,10 @@
           </div>
         <% end %>
       <% end %>
+      <div class="col-span-6 md:col-span-3">
+        <%= f.label :start_date, "Date", class: "standard-label" %>
+        <%= f.date_field :start_date, value: params[:start_date], class: "mt-1 standard-input" %>
+      </div>
       <div class="col-span-6 md:col-span-5">
         <%= f.label :min_enjoyment, class: "standard-label" %>
         <div class="flex items-center mt-1" data-controller="range">

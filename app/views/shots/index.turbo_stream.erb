@@ -15,7 +15,7 @@
   <% end %>
 <% end %>
 <%= turbo_stream.replace "cursor" do %>
-  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*ShotsController::FILTERS, :min_enjoyment, :max_enjoyment, :coffee_bag, :tag).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*Filterable::FILTERS.keys, :start_date, :min_enjoyment, :max_enjoyment, :coffee_bag, :tag, :start_date).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
 <% end %>
 <%= turbo_stream.update "shots-count" do %>
   <% if @shots_count.to_i > 0 %>

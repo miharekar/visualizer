@@ -1,16 +1,6 @@
 class CommunityController < ApplicationController
+  include Filterable
   include Paginatable
-
-  FILTERS = {
-    profile_title: {autocomplete: true},
-    bean_brand: {autocomplete: true},
-    bean_type: {autocomplete: true},
-    user: {autocomplete: true, target: :user_id},
-    grinder_model: {autocomplete: true},
-    roast_level: {autocomplete: true},
-    bean_notes: {},
-    espresso_notes: {}
-  }.freeze
 
   def index
     if params[:commit] || Current.user.blank? || Current.user.premium?
@@ -47,18 +37,10 @@ class CommunityController < ApplicationController
 
   def load_shots
     @shots = Shot.visible_or_owned_by_id(Current.user&.id).includes(:user).with_attached_image
-    FILTERS.each do |filter, options|
-      next if params[filter].blank?
+    apply_standard_filters_to_shots
 
-      @shots = if options[:target]
-        find_user_by_name if filter == :user && params[options[:target]].blank?
-        @shots.where(options[:target] => params[options[:target]])
-      else
-        @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
-      end
-    end
-    @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
-    @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100
+    find_user_by_name if params[:user].present? && params[:user_id].blank?
+    @shots = @shots.where(user_id: params[:user_id]) if params[:user_id].present?
   end
 
   def find_user_by_name
