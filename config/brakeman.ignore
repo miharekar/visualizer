@@ -1,29 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "2f4e57011c40ce2b3faaccb5c0ca7117e8077b84db24cf48c22515a879a31951",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/controllers/shots_controller.rb",
-      "line": 129,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Current.user.shots.with_attached_image.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ShotsController",
-        "method": "load_users_shots"
-      },
-      "user_input": "filter",
-      "confidence": "Weak",
-      "cwe_id": [
-        89
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "44b725f0971e792c144d52314770944107d904403a080f146e6be4ef31e595fb",
@@ -60,21 +37,21 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "c1816b11400b65e3f2ead42e9bb2fc5fa723015bb633dc7b27ee90b1ae39e9db",
+      "fingerprint": "ae2af597523506dc91bb14db2ec25561ab088094b7b32a52804353a8c2b37f13",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "app/controllers/community_controller.rb",
-      "line": 57,
+      "file": "app/controllers/concerns/filterable.rb",
+      "line": 15,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Shot.visible_or_owned_by_id(Current.user.id).includes(:user).with_attached_image.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "code": "@shots.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "CommunityController",
-        "method": "load_shots"
+        "class": "Filterable",
+        "method": "apply_standard_filters_to_shots"
       },
       "user_input": "filter",
-      "confidence": "Medium",
+      "confidence": "Weak",
       "cwe_id": [
         89
       ],
@@ -87,7 +64,7 @@
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/shots_controller.rb",
-      "line": 37,
+      "line": 36,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code}\", :allow_other_host => true)",
       "render_path": null,
