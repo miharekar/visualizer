@@ -1,4 +1,4 @@
-// match-sorter@8.1.0 downloaded from https://ga.jspm.io/npm:match-sorter@8.1.0/dist/match-sorter.esm.js
+// match-sorter@8.2.0 downloaded from https://ga.jspm.io/npm:match-sorter@8.2.0/dist/match-sorter.esm.js
 
 import n from"remove-accents";
 /**
@@ -88,5 +88,5 @@ import n from"remove-accents";
  * Gets all the attributes for the given key
  * @param key - the key from which the attributes will be retrieved
  * @return object containing the key's attributes
- */function d(n){return typeof n==="string"?T:{...T,...n}}export{e as defaultBaseSortFn,r as matchSorter,t as rankings};
+ */function d(n){return typeof n==="string"?T:{...T,...n}}export{e as defaultBaseSortFn,f as getItemValues,r as matchSorter,t as rankings};
 

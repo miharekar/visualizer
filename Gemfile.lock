@@ -210,7 +210,7 @@ GEM
     inline_svg (1.10.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    io-console (0.8.1)
+    io-console (0.8.2)
     irb (1.15.3)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
@@ -276,7 +276,7 @@ GEM
       bigdecimal (~> 3.1)
     net-http (0.8.0)
       uri (>= 0.11.1)
-    net-imap (0.5.12)
+    net-imap (0.6.0)
       date
       net-protocol
     net-pop (0.1.2)
