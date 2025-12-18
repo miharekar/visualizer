@@ -14,7 +14,7 @@ pin "@appsignal/javascript", to: "@appsignal--javascript.js" # @1.6.1
 pin "https" # @2.1.0
 pin "tslib" # @2.8.1
 pin "@appsignal/stimulus", to: "@appsignal--stimulus.js" # @1.0.21
-pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
+pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.13
 pin "el-transition" # @0.0.7
 pin "match-sorter" # @8.2.0
 pin "remove-accents" # @0.5.0
