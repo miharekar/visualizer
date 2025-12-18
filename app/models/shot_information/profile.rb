@@ -65,7 +65,7 @@ class ShotInformation
     end
 
     def data_point(key, index)
-      data[key][index].to_f.round(5) if data[key]
+      data[key][index].to_f.round(5) if data[key].respond_to?(:[])
     end
   end
 end
