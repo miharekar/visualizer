@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { "https://github.com/#{it}.git" }
 
-ruby "3.4.7"
+ruby "3.4.8"
 
 gem "active_link_to"
 gem "appsignal"
