@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_28_105806) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_19_120300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -292,7 +292,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_28_105806) do
     t.index ["created_at"], name: "index_shots_on_created_at"
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["start_time"], name: "index_shots_on_start_time"
-    t.index ["user_id"], name: "index_shots_on_user_id"
+    t.index ["user_id", "start_time"], name: "index_shots_on_user_id_and_start_time"
   end
 
   create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
