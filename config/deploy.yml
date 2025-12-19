@@ -5,13 +5,14 @@ image: miharekar/visualizer
 servers:
   web:
     - hvapp
+    - hvapp2
   job:
     hosts:
       - hvapp
     cmd: bin/jobs
 
 proxy:
-  ssl: true
+  ssl: false
   hosts:
     - visualizer.coffee
     - www.visualizer.coffee
@@ -23,7 +24,9 @@ registry:
     - KAMAL_REGISTRY_PASSWORD
 
 builder:
-  arch: arm64
+  arch:
+    - arm64
+    - amd64
 
 env:
   secret:
@@ -88,6 +91,7 @@ accessories:
     image: amir20/dozzle:v8.14
     hosts:
       - hvapp
+      - hvapp2
       - hvdb
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
