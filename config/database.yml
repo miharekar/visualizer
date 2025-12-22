@@ -5,10 +5,12 @@ postgres: &postgres
   host: localhost
   pool: 100 # https://island94.org/2024/09/secret-to-rails-database-connection-pool-size
 
-_sqlite: &sqlite
-  adapter: sqlite3
-  pool: 100
-  timeout: 5000
+postgres_production: &postgres_production
+  <<: *postgres
+  username: visualizer
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV["POSTGRES_HOST"] %>
+  port: <%= ENV["POSTGRES_PORT"] %>
 
 development:
   primary:
@@ -22,16 +24,16 @@ development:
     database: visualizer_development
     <% end %>
   queue:
-    <<: *sqlite
-    database: storage/queue.sqlite3
+    <<: *postgres
+    database: visualizer_queue_development
     migrations_paths: db/queue_migrate
   cache:
-    <<: *sqlite
-    database: storage/cache.sqlite3
+    <<: *postgres
+    database: visualizer_cache_development
     migrations_paths: db/cache_migrate
   cable:
-    <<: *sqlite
-    database: storage/cable.sqlite3
+    <<: *postgres
+    database: visualizer_cable_development
     migrations_paths: db/cable_migrate
 
 test:
@@ -40,21 +42,20 @@ test:
 
 production:
   primary:
-    <<: *postgres
+    <<: *postgres_production
     database: visualizer_production
-    username: visualizer
-    password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV["POSTGRES_HOST"] %>
-    port: <%= ENV["POSTGRES_PORT"] %>
+
   queue:
-    <<: *sqlite
-    database: storage/production_queue.sqlite3
+    <<: *postgres_production
+    database: visualizer_queue
     migrations_paths: db/queue_migrate
+
   cache:
-    <<: *sqlite
-    database: storage/production_cache.sqlite3
+    <<: *postgres_production
+    database: visualizer_cache
     migrations_paths: db/cache_migrate
+
   cable:
-    <<: *sqlite
-    database: storage/production_cable.sqlite3
+    <<: *postgres_production
+    database: visualizer_cable
     migrations_paths: db/cable_migrate

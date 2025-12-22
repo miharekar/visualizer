@@ -147,7 +147,7 @@ end
 #  index_shots_on_created_at               (created_at)
 #  index_shots_on_sha                      (sha)
 #  index_shots_on_start_time               (start_time)
-#  index_shots_on_user_id                  (user_id)
+#  index_shots_on_user_id_and_start_time   (user_id,start_time)
 #
 # Foreign Keys
 #
