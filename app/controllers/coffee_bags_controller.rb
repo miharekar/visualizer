@@ -34,6 +34,7 @@ class CoffeeBagsController < ApplicationController
     if @coffee_bag.update(coffee_bag_params)
       redirect_to coffee_bags_path(format: :html), notice: "#{@coffee_bag.display_name} was updated."
     else
+      load_roasters
       render :edit, status: :unprocessable_content
     end
   end
