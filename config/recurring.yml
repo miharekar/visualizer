@@ -1,6 +1,6 @@
-solid_queue_cleanup_job:
+clear_solid_queue_finished_jobs:
   queue: low
-  command: "SolidQueue::Job.clear_finished_in_batches"
+  command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
   schedule: "@daily"
 shared_shot_cleanup_job:
   class: SharedShotCleanupJob
