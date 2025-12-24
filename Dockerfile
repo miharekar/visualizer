@@ -12,12 +12,16 @@ LABEL org.opencontainers.image.licenses=MIT
 WORKDIR /rails
 
 # Install base packages
-RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick sqlite3 openssh-client lsb-release postgresql-common && \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+  --mount=type=cache,target=/var/lib/apt,sharing=locked \
+  apt-get update -qq && \
+  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick openssh-client lsb-release postgresql-common && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Add PostgreSQL repository and install PostgreSQL 17 client
-RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+  --mount=type=cache,target=/var/lib/apt,sharing=locked \
+  /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   apt-get update -qq && \
   apt-get install --no-install-recommends -y postgresql-client-17 libpq-dev && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
@@ -26,19 +30,22 @@ RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
 ENV RAILS_ENV="production" \
   BUNDLE_DEPLOYMENT="1" \
   BUNDLE_PATH="/usr/local/bundle" \
-  BUNDLE_WITHOUT="development"
+  BUNDLE_WITHOUT="development:test"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
 # Install packages needed to build gems
-RUN apt-get update -qq && \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+  --mount=type=cache,target=/var/lib/apt,sharing=locked \
+  apt-get update -qq && \
   apt-get install --no-install-recommends -y build-essential git pkg-config && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN --mount=type=cache,target=/usr/local/bundle/cache,sharing=locked \
+  bundle install && \
   rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
   bundle exec bootsnap precompile --gemfile
 
