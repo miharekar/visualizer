@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { "https://github.com/#{it}.git" }
 
-ruby "3.4.8"
+ruby "4.0.0"
 
 gem "active_link_to"
 gem "appsignal"
@@ -50,6 +50,7 @@ end
 group :development do
   gem "actual_db_schema"
   gem "annotaterb"
+  gem "benchmark", require: false
   gem "benchmark-ips"
   gem "brakeman", require: false
   gem "bundler-audit"
@@ -65,6 +66,7 @@ end
 
 group :test do
   gem "factory_bot_rails"
+  gem "minitest", "< 6" # Incompatible with currently released Rails
   gem "retest"
   gem "webmock"
 end

@@ -7,7 +7,7 @@ plugins:
 AllCops:
   NewCops: enable
   DisabledByDefault: false
-  TargetRubyVersion: 3.4
+  TargetRubyVersion: 4.0
   Exclude:
     - db/schema.rb
     - db/migrate/*
