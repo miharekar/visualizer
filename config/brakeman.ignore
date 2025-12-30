@@ -3,6 +3,40 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
+      "fingerprint": "3d738543aaeb7026df6ae78a234a9ca00b5f71b381acb4dc3ddc3d3d995b79e6",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/roasters/index.html.erb",
+      "line": 30,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).with_attached_image.where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\"), { :collection => Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).with_attached_image.where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\") })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "RoastersController",
+          "method": "index",
+          "line": 8,
+          "file": "app/controllers/roasters_controller.rb",
+          "rendered": {
+            "name": "roasters/index",
+            "file": "app/views/roasters/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "roasters/index"
+      },
+      "user_input": "params[:roaster]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
       "fingerprint": "44b725f0971e792c144d52314770944107d904403a080f146e6be4ef31e595fb",
       "check_name": "Render",
       "message": "Render path contains parameter value",
@@ -81,5 +115,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "7.1.1"
+  "brakeman_version": "7.1.2"
 }

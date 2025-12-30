@@ -2,6 +2,13 @@ class RoastersController < ApplicationController
   before_action :require_authentication
   before_action :check_premium!
   before_action :set_roaster, only: %i[edit update destroy remove_image]
+  before_action :load_roasters, only: %i[index search]
+
+  def index; end
+
+  def search
+    render :index
+  end
 
   def new
     @roaster = Current.user.roasters.build
@@ -42,6 +49,12 @@ class RoastersController < ApplicationController
     @roaster = Current.user.roasters.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to coffee_bags_path, alert: "Roaster not found"
+  end
+
+  def load_roasters
+    @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).with_attached_image
+    @roasters = @roasters.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
+    @coffee_bag_counts = CoffeeBag.where(roaster_id: @roasters.select(:id)).group(:roaster_id).count
   end
 
   def roaster_params

@@ -79,12 +79,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roasters, except: %i[index show] do
+  resources :roasters, except: %i[show] do
     delete :remove_image, on: :member
+    post :search, on: :collection
   end
-
-  get "/roasters", to: redirect("/coffee_bags")
-  get "/roasters/*path", to: redirect("/coffee_bags")
 
   resources :canonical, only: [] do
     collection do

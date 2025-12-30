@@ -3,7 +3,11 @@
     <div class="col-span-6 sm:col-span-3">
       <div class="flex justify-between">
         <%= label_tag :roaster, nil, class: "standard-label" %>
-        <%= link_to "New", new_roaster_path, class: "text-sm text-neutral-500 dark:text-neutral-400 standard-link", data: { turbo_frame: "_top" } %>
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          <%= link_to "Manage", roasters_path, class: "standard-link", data: { turbo_frame: "_top" } %>
+|
+          <%= link_to "New", new_roaster_path, class: "standard-link", data: { turbo_frame: "_top" } %>
+        </div>
       </div>
       <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: :roaster_id, selected: @roaster, collection: @roasters, hidden_data: { action: "change->coffee-bag-fields#roaster_changed" }} %>
     </div>
