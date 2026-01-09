@@ -66,7 +66,7 @@ end
 
 group :test do
   gem "factory_bot_rails"
-  gem "minitest", "< 6" # Incompatible with currently released Rails
+  gem "minitest"
   gem "retest"
   gem "webmock"
 end
