@@ -52,6 +52,8 @@ class CommunityController < ApplicationController
   end
 
   def values_for_query(filter, query)
+    return [] if query.blank?
+
     query_parts = query.split(/\s+/).map { Regexp.escape(it) }
     rquery = /#{query_parts.join(".*")}/i
     values = unique_values_for(filter)
