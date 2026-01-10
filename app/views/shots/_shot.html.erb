@@ -34,7 +34,7 @@
               </span>
             </div>
             <div class="flex flex-col space-y-1 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
-              <% if current_user != shot.user %>
+              <% if shot.user && current_user != shot.user %>
                 <div class="flex gap-x-1 items-center">
                   <div>
                     <%= shot.user.display_name %>
