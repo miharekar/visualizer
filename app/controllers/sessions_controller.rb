@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    user = User.authenticate_by(email: params[:email].downcase, password: params[:password])
+    user = User.authenticate_by(email: params[:email]&.downcase, password: params[:password])
     if user
       start_new_session_for user
       redirect_to after_authentication_url
