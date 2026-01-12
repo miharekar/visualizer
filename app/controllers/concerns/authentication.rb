@@ -3,6 +3,7 @@ module Authentication
 
   included do
     before_action :resume_session
+    before_action :tag_request
     helper_method :authenticated?
   end
 
@@ -45,5 +46,9 @@ module Authentication
   def terminate_session
     Current.session.destroy
     cookies.delete(:session_id)
+  end
+
+  def tag_request
+    Appsignal.add_tags(email: Current.user&.email, user_id: Current.user&.id, remote_ip: request.remote_ip, cloudflare_ip: request.headers["CF-Connecting-IP"])
   end
 end
