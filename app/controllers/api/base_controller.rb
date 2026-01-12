@@ -10,6 +10,9 @@ module Api
     prepend_before_action :add_request_tags
     skip_before_action :verify_authenticity_token
 
+    rate_limit to: 200, within: 10.minutes, name: "api-user-10-minutes", if: -> { Current.user.present? }, by: -> { Current.user.id }
+    rescue_from ActionController::TooManyRequests, with: :render_rate_limit
+
     private
 
     def add_request_tags
@@ -56,6 +59,11 @@ module Api
 
     def user_not_authorized
       render json: {error: "You are not authorized to perform this action."}, status: :forbidden
+    end
+
+    def render_rate_limit
+      Rails.logger.warn("Rate limit exceeded cf_ip=#{request.headers['CF-Connecting-IP']}")
+      render json: {error: "Too many requests. Please try again later."}, status: :too_many_requests
     end
   end
 end
