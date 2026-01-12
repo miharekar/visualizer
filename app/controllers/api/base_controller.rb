@@ -7,9 +7,14 @@ module Api
     include Authorization
     include Paginatable
 
+    prepend_before_action :add_request_tags
     skip_before_action :verify_authenticity_token
 
     private
+
+    def add_request_tags
+      Appsignal.add_tags(remote_ip: request.remote_ip, cloudflare_ip: request.headers["CF-Connecting-IP"])
+    end
 
     def resume_session
       Current.session ||= find_session_by_cookie || start_session_from_doorkeeper || start_session_from_basic
