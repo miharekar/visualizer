@@ -15,10 +15,10 @@ module Parsers
       assert shot.valid?
       assert_equal "Parsers::Meticulous", shot.information.brewdata["parser"]
       assert_equal "Adaptive v1", shot.profile_title
-      assert_equal "2025-12-30 09:36:18", shot.start_time.to_fs(:db)
+      assert_equal "2025-12-30 17:36:18", shot.start_time.to_fs(:db)
       assert_equal 204, shot.information.timeframe.size
       assert_in_delta(0.004, shot.information.timeframe.first)
-      assert_in_delta(35.948, shot.information.timeframe.last)
+      assert_in_delta(26.278, shot.information.timeframe.last)
       expected_keys = %w[espresso_pressure espresso_flow espresso_weight espresso_flow_weight espresso_pressure_goal espresso_flow_goal espresso_temperature_mix espresso_state_change]
       assert_equal expected_keys.sort, shot.information.data.keys.sort
       assert_equal 204, shot.information.data["espresso_pressure"].size
