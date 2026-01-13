@@ -56,14 +56,22 @@ class ShotChart
 
     def stages_from_state_change
       indices = []
-      current = data["espresso_state_change"].find { |s| !s.to_i.zero? }
-      data["espresso_state_change"].each.with_index do |s, i|
-        next if s.to_i.zero? || s == current
+      state_data = data["espresso_state_change"]
+      current = state_data.find { |s| state_present?(s) }
+      state_data.each.with_index do |s, i|
+        next unless state_present?(s)
+        next if s == current
 
         indices << i
         current = s
       end
       indices
+    end
+
+    def state_present?(state)
+      return false if state.blank?
+
+      state.is_a?(String) || !state.to_i.zero?
     end
 
     def detect_stages_from_data

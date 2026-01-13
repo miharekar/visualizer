@@ -18,6 +18,8 @@ module Parsers
           Gaggiuino.new(file, json)
         elsif json.key?("samples")
           Gaggimate.new(file, json)
+        elsif json.key?("profile_name") && json.key?("data")
+          Meticulous.new(file, json)
         else
           DecentJson.new(file, json)
         end
