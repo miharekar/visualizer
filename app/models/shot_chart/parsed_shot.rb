@@ -68,6 +68,12 @@ class ShotChart
       indices
     end
 
+    # Checks if a state value represents a valid stage marker.
+    # Handles both numeric states (non-zero integers) and string states
+    # (e.g., "Prefill", "Extraction" from Meticulous machines).
+    #
+    # @param state [String, Integer, nil] The state value to check
+    # @return [Boolean] true if the state represents a valid stage marker
     def state_present?(state)
       return false if state.blank?
 
