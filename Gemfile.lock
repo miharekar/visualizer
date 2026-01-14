@@ -128,7 +128,7 @@ GEM
     bigdecimal (4.0.1)
     bindata (2.5.1)
     bindex (0.8.1)
-    bootsnap (1.20.1)
+    bootsnap (1.21.0)
       msgpack (~> 1.2)
     brakeman (7.1.2)
       racc
@@ -411,7 +411,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.10.2)
       logger
-    rdoc (7.0.3)
+    rdoc (7.1.0)
       erb
       psych (>= 4.0.0)
       tsort
@@ -632,7 +632,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-  ruby 4.0.0
+  ruby 4.0.1
 
 BUNDLED WITH
   4.0.3
