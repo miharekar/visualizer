@@ -234,6 +234,5 @@ module Parsers
       assert_equal 14, shot.information.brewdata["brewFlow"]["targetTemperatureFlow"].size
       assert_equal 10, shot.information.extra.keys.size
     end
-
   end
 end
