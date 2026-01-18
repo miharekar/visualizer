@@ -16,7 +16,7 @@ module Api
     private
 
     def add_request_tags
-      Appsignal.add_tags(remote_ip: request.remote_ip, cloudflare_ip: request.headers["CF-Connecting-IP"])
+      Appsignal.add_tags(remote_ip: request.remote_ip, cloudflare_ip: request.headers["CF-Connecting-IP"], hetzner_lb: request.headers["X-Forwarded-For"])
     end
 
     def resume_session
