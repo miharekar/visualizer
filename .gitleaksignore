@@ -1,7 +1,10 @@
-cfda8674c1f327919b5369d7a9bffe7556b48d76:app/views/premium/index.html.erb:jwt:69
-cfda8674c1f327919b5369d7a9bffe7556b48d76:app/views/premium/index.html.erb:aws-access-token:69
-cfda8674c1f327919b5369d7a9bffe7556b48d76:app/views/premium/index.html.erb:aws-access-token:69
-f80f7ebf941c056836f3e57e93f16094c659e9b4:app/views/premium/index.html.erb:jwt:69
-f80f7ebf941c056836f3e57e93f16094c659e9b4:app/views/premium/index.html.erb:aws-access-token:69
-f80f7ebf941c056836f3e57e93f16094c659e9b4:app/views/premium/index.html.erb:aws-access-token:69
+0ee4adde2a74876d2bd454f770fb1ebf66e12d0d:app/javascript/controllers/application.js:generic-api-key:5
 909978e61323f46ef162b1500bb1e09824379ee5:config/initializers/devise.rb:generic-api-key:17
+cfda8674c1f327919b5369d7a9bffe7556b48d76:app/views/premium/index.html.erb:aws-access-token:69
+cfda8674c1f327919b5369d7a9bffe7556b48d76:app/views/premium/index.html.erb:aws-access-token:69
+cfda8674c1f327919b5369d7a9bffe7556b48d76:app/views/premium/index.html.erb:jwt:69
+da32f81cd3b3bfd3507b5965d8dc2a7b4293fe46:test/files/meticulous.shot.json:generic-api-key:1
+f80f7ebf941c056836f3e57e93f16094c659e9b4:app/views/premium/index.html.erb:aws-access-token:69
+f80f7ebf941c056836f3e57e93f16094c659e9b4:app/views/premium/index.html.erb:aws-access-token:69
+f80f7ebf941c056836f3e57e93f16094c659e9b4:app/views/premium/index.html.erb:jwt:69
+test/files/meticulous.shot.json:generic-api-key:1
