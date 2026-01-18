@@ -1,6 +1,7 @@
 class ShotsController < ApplicationController
   include Filterable
   include Paginatable
+  include Shots::Editing
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
   before_action :check_premium!, only: :coffee_bag_form
@@ -66,14 +67,11 @@ class ShotsController < ApplicationController
   def update
     authorize @shot
     @shot.update(update_shot_params)
-    if params[:shot][:image].present? && Current.user.premium?
-      if ActiveStorage.variable_content_types.include?(params[:shot][:image].content_type)
-        @shot.image.attach(params[:shot][:image])
-      else
-        flash.now[:alert] = "Image must be a valid image file."
-      end
-    end
+    attach_image(params.dig(:shot, :image)) if Current.user.premium?
     flash[:notice] = "Shot successfully updated."
+  rescue Shots::Editing::InvalidImageError => e
+    flash[:alert] = e.message
+  ensure
     redirect_to action: :show
   end
 
@@ -150,12 +148,5 @@ class ShotsController < ApplicationController
     @shared_shot = SharedShot.find_or_initialize_by(shot: @shot, user: Current.user)
     @shared_shot.created_at = Time.current
     @shared_shot.save!
-  end
-
-  def update_shot_params
-    allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
-    allowed << [:tag_list, {metadata: Current.user.metadata_fields}] if Current.user.premium?
-    allowed << :coffee_bag_id if Current.user.coffee_management_enabled?
-    params.expect(shot: allowed)
   end
 end

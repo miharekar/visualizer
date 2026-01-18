@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     get :me, to: "credentials#me"
-    resources :shots, only: %i[show index destroy] do
+    resources :shots, only: %i[show index update destroy] do
       get :download
       get :profile
       collection do

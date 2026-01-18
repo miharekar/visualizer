@@ -1,10 +1,11 @@
 module Api
   class ShotsController < Api::BaseController
-    attr_reader :file_content
+    include Shots::Editing
 
     before_action :verify_upload_access, only: %i[upload]
-    before_action :verify_write_access, only: %i[destroy]
+    before_action :verify_write_access, only: %i[destroy update]
     before_action :extract_file_content, only: %i[upload]
+    before_action :load_users_shot, only: %i[update destroy]
 
     def index
       shots = Current.user.present? ? Current.user.shots : Shot.visible
@@ -57,7 +58,7 @@ module Api
     end
 
     def upload
-      shot = Shot.from_file(Current.user, file_content)
+      shot = Shot.from_file(Current.user, @file_content)
       if shot&.save
         render json: {id: shot.id}
       else
@@ -65,18 +66,30 @@ module Api
       end
     end
 
+    def update
+      raise ActionController::UnknownFormat unless request.format.json?
+
+      @shot.update(update_shot_params)
+      attach_image(params.dig(:shot, :image)) if Current.user.premium?
+      render json: @shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
+    rescue Shots::Editing::InvalidImageError => e
+      render json: {error: e.message}, status: :unprocessable_content
+    rescue ActionController::UnknownFormat
+      render json: {error: "Request must be JSON."}, status: :unprocessable_content
+    end
+
     def destroy
-      shot = Current.user.shots.find_by(id: params[:id])
-      authorize shot
-      if shot
-        shot.destroy!
-        render json: {success: true}
-      else
-        render json: {error: "Shot not found"}, status: :not_found
-      end
+      @shot.destroy!
+      render json: {success: true}
     end
 
     private
+
+    def load_users_shot
+      @shot = Current.user.shots.find_by(id: params[:id])
+      render json: {error: "Shot not found"}, status: :not_found unless @shot
+      authorize @shot
+    end
 
     def with_shot
       id = params[:id].presence || params[:shot_id]
@@ -95,7 +108,7 @@ module Api
       when /application\/json/
         request.raw_post
       end
-      return if file_content.present?
+      return if @file_content.present?
 
       render json: {error: "No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object."}, status: :unprocessable_content
     end

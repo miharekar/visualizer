@@ -238,6 +238,47 @@ module Api
       assert_includes json_response["error"], "Could not save the provided file"
     end
 
+    test "update returns updated shot for JSON request" do
+      shot = FactoryBot.create(:shot, user:, profile_title: "Old title")
+
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {profile_title: "New title"}}, as: :json
+
+      assert_response :success
+      assert_match "application/json", response.media_type
+
+      json_response = response.parsed_body
+      assert_equal "New title", json_response["profile_title"]
+    end
+
+    test "update rejects non-json request" do
+      shot = FactoryBot.create(:shot, user:)
+
+      patch api_shot_url(shot), headers: auth_headers(user).merge("CONTENT_TYPE" => "application/x-www-form-urlencoded"), params: {shot: {profile_title: "New title"}}
+
+      assert_response :unprocessable_content
+      json_response = response.parsed_body
+      assert_equal "Request must be JSON.", json_response["error"]
+    end
+
+    test "update allows metadata fields for premium users" do
+      premium_user = FactoryBot.create(:user, :premium, :with_metadata)
+      shot = FactoryBot.create(:shot, user: premium_user)
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {metadata: {"Portafilter basket" => "IMS"}}}, as: :json
+
+      assert_response :success
+      assert_equal({"Portafilter basket" => "IMS"}, shot.reload.metadata)
+    end
+
+    test "update ignores metadata fields for non-premium users" do
+      shot = FactoryBot.create(:shot, user:)
+
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {metadata: {"Portafilter basket" => "IMS"}}}, as: :json
+
+      assert_response :bad_request
+      assert_empty shot.reload.metadata
+    end
+
     private
 
     def auth_headers(user)
