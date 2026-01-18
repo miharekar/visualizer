@@ -88,7 +88,7 @@ accessories:
       network: ipv6-network
 
   dozzle:
-    image: amir20/dozzle:v8.14
+    image: amir20/dozzle:latest
     hosts:
       - hvapp
       - hvapp2
@@ -96,3 +96,5 @@ accessories:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     port: "127.0.0.1:3200:8080"
+    options:
+      pull: always
