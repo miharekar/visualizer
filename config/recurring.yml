@@ -26,3 +26,6 @@ premium_feedback_job:
 populate_dropdown_values_job:
   class: PopulateDropdownValuesJob
   schedule: "@daily"
+trending_profiles_job:
+  class: TrendingProfilesJob
+  schedule: "@hourly"

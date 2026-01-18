@@ -1,0 +1,132 @@
+<div class="flex flex-col gap-8 mx-auto mb-6 max-w-6xl sm:px-6 sm:my-6 lg:px-8 lg:mt-8">
+  <div class="overflow-hidden relative w-full via-rose-700 to-amber-300 shadow-2xl sm:rounded-3xl bg-linear-to-br from-indigo-950 shadow-neutral-900/10">
+    <div class="absolute inset-0 opacity-60 pointer-events-none">
+      <div class="absolute top-6 -left-20 w-56 h-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
+      <div class="absolute bottom-0 right-6 w-64 h-64 rounded-full bg-sky-200/30 blur-3xl"></div>
+    </div>
+    <div class="relative py-10 px-6 sm:py-14 sm:px-12 lg:px-16">
+      <div class="flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center">
+        <div class="space-y-4 max-w-2xl lg:max-w-md">
+          <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold text-white uppercase rounded-full bg-white/10 tracking-[0.25em]">
+            <span class="inline-block bg-amber-300 rounded-full size-2"></span>
+            Community pulse
+          </div>
+          <h1 class="font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl">Trending</h1>
+          <p class="text-base leading-7 sm:text-lg text-white/90">A snapshot of profile titles and parsers from public shots.</p>
+        </div>
+        <div class="grid gap-4 w-full sm:grid-cols-2 lg:w-120">
+          <div class="overflow-hidden p-4 rounded-2xl border shadow-inner transition group border-white/20 bg-white/10 shadow-black/20 hover:bg-white/15">
+            <p class="text-sm font-medium text-white/75">Total shots · 24h</p>
+            <p class="mt-2 text-3xl font-semibold tracking-tight text-white"><%= @trending_24h[:total_count] %></p>
+            <p class="inline-flex gap-2 items-center mt-1 text-xs font-semibold text-white/80">
+              <span class="inline-block bg-amber-300 rounded-full size-1.5"></span>
+              Public: <%= @trending_24h[:public_count] %>
+            </p>
+          </div>
+          <div class="overflow-hidden p-4 rounded-2xl border shadow-inner transition group border-white/20 bg-white/10 shadow-black/20 hover:bg-white/15">
+            <p class="text-sm font-medium text-white/75">Total shots · 30d</p>
+            <p class="mt-2 text-3xl font-semibold tracking-tight text-white"><%= @trending_30d[:total_count] %></p>
+            <p class="inline-flex gap-2 items-center mt-1 text-xs font-semibold text-white/80">
+              <span class="inline-block bg-amber-300 rounded-full size-1.5"></span>
+              Public: <%= @trending_30d[:public_count] %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="overflow-hidden relative bg-white border shadow-2xl sm:rounded-2xl border-neutral-200/80 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
+      <div class="absolute inset-0 bg-linear-to-br from-terracotta-50/60 to-white/60 dark:from-terracotta-900/30 dark:to-neutral-900/30"></div>
+      <div class="flex relative flex-col gap-6 p-6 sm:p-8">
+        <div class="flex flex-wrap gap-3 justify-between items-center">
+          <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold uppercase rounded-full bg-terracotta-100 tracking-[0.25em] text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200">
+            Last 24 hours
+          </div>
+        </div>
+        <div class="grid gap-6">
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top profiles</h3>
+            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
+              <% if @trending_24h[:profiles].any? %>
+                <% @trending_24h[:profiles].each do |profile| %>
+                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+                    <div>
+                      <p class="font-semibold"><%= profile[:name] %></p>
+                    </div>
+                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></span>
+                  </li>
+                <% end %>
+              <% else %>
+                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No profiles yet.</li>
+              <% end %>
+            </ol>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top parsers</h3>
+            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
+              <% if @trending_24h[:parsers].any? %>
+                <% @trending_24h[:parsers].each do |parser| %>
+                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+                    <div>
+                      <p class="font-semibold"><%= parser[:name] %></p>
+                    </div>
+                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></span>
+                  </li>
+                <% end %>
+              <% else %>
+                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No parsers yet.</li>
+              <% end %>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="overflow-hidden relative bg-white border shadow-2xl sm:rounded-2xl border-neutral-200/80 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
+      <div class="absolute inset-0 bg-linear-to-br from-terracotta-50/60 to-white/60 dark:from-terracotta-900/30 dark:to-neutral-900/30"></div>
+      <div class="flex relative flex-col gap-6 p-6 sm:p-8">
+        <div class="flex flex-wrap gap-3 justify-between items-center">
+          <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold uppercase rounded-full bg-terracotta-100 tracking-[0.25em] text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200">
+            Last 30 days
+          </div>
+        </div>
+        <div class="grid gap-6">
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top profiles</h3>
+            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
+              <% if @trending_30d[:profiles].any? %>
+                <% @trending_30d[:profiles].each do |profile| %>
+                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+                    <div>
+                      <p class="font-semibold"><%= profile[:name] %></p>
+                    </div>
+                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></span>
+                  </li>
+                <% end %>
+              <% else %>
+                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No profiles yet.</li>
+              <% end %>
+            </ol>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top parsers</h3>
+            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
+              <% if @trending_30d[:parsers].any? %>
+                <% @trending_30d[:parsers].each do |parser| %>
+                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+                    <div>
+                      <p class="font-semibold"><%= parser[:name] %></p>
+                    </div>
+                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></span>
+                  </li>
+                <% end %>
+              <% else %>
+                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No parsers yet.</li>
+              <% end %>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -95,6 +95,7 @@ Rails.application.routes.draw do
     collection do
       get :autocomplete
       get :banner
+      get :trending
     end
   end
   get "/search", to: redirect("/community")

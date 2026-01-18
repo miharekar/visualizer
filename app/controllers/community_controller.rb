@@ -25,6 +25,11 @@ class CommunityController < ApplicationController
     render layout: false
   end
 
+  def trending
+    @trending_24h = cached_trending("24h")
+    @trending_30d = cached_trending("30d")
+  end
+
   def unique_values_for(filter)
     if filter == :user
       User.visible_or_id(Current.user&.id).order_by_name
@@ -64,5 +69,9 @@ class CommunityController < ApplicationController
     else
       values.grep(rquery)
     end
+  end
+
+  def cached_trending(window)
+    Rails.cache.read("community/trending/#{window}") || {profiles: [], parsers: [], public_count: 0, total_count: 0}
   end
 end
