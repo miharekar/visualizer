@@ -14,7 +14,7 @@ module Turnstile
     {
       secret: Rails.application.credentials.dig(:cloudflare, :secret_key),
       response: params["cf-turnstile-response"],
-      remoteip: request.remote_ip
+      remoteip: request.headers["CF-Connecting-IP"]
     }
   end
 end
