@@ -41,5 +41,13 @@ module Parsers
       statuses = shot.information.data["espresso_state_change"].uniq
       assert_includes statuses, "Prefill"
     end
+
+    test "detects meticulous stage indices" do
+      shot = new_shot("test/files/meticulous.shot.json")
+      chart = ShotChart.new(shot)
+
+      assert_equal [15, 30, 34, 81, 128, 167], chart.parsed_shot.stage_indices
+      assert_equal [{value: 1977.0}, {value: 3929.0}, {value: 4460.0}, {value: 10458.0}, {value: 16531.0}, {value: 21639.0}], chart.stages
+    end
   end
 end

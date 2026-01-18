@@ -90,4 +90,16 @@ class ParsedShotTest < ActiveSupport::TestCase
     parsed_shot = ShotChart::ParsedShot.new(shot)
     assert_not parsed_shot.fahrenheit?
   end
+
+  test "problematic stages parse without timing out" do
+    payload = JSON.parse(File.read("test/files/problematic_stages.json"))
+    information = build_stubbed(:shot_information, data: payload["data"], timeframe: payload["timeframe"], brewdata: payload["brewdata"], extra: payload["extra"], profile_fields: payload["profile_fields"])
+    shot = build_stubbed(:shot, duration: payload["duration"].to_f, information:)
+
+    assert_nothing_raised do
+      Timeout.timeout(5) do
+        ShotChart::ParsedShot.new(shot).stage_indices
+      end
+    end
+  end
 end

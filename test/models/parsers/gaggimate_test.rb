@@ -65,5 +65,13 @@ module Parsers
       assert_in_delta(0.833, shot.information.data["espresso_flow_weight"][40])
       assert_equal "36.79", shot.drink_weight
     end
+
+    test "detects gaggimate stage indices" do
+      shot = new_shot("test/files/gaggimate-v1.json")
+      chart = ShotChart.new(shot)
+
+      assert_equal [72], chart.parsed_shot.stage_indices
+      assert_equal [{value: 8327.0}], chart.stages
+    end
   end
 end

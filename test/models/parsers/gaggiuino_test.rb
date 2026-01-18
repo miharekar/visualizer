@@ -24,5 +24,13 @@ module Parsers
       assert_equal 279, shot.information.data["espresso_pressure"].size
       assert_in_delta(0.74, shot.information.data["espresso_water_dispensed"][42])
     end
+
+    test "detects gaggiuino stage indices" do
+      shot = new_shot("test/files/gaggiuino-1020.json")
+      chart = ShotChart.new(shot)
+
+      assert_equal [98, 164], chart.parsed_shot.stage_indices
+      assert_equal [{value: 15000.0}, {value: 25000.0}], chart.stages
+    end
   end
 end

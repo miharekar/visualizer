@@ -95,6 +95,7 @@ class ShotChart
         end
 
         break if indices.size <= shot.duration / 2
+        break if diff_threshold >= 500
 
         diff_threshold += 0.05
       end
