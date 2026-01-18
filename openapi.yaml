@@ -4,7 +4,7 @@ info:
   description: >
     Visualizer exposes a REST API for managing espresso shots, roasters, and coffee bag metadata.
     Authenticate with OAuth 2.0 access tokens issued by Visualizer or HTTP Basic using your account credentials.
-  version: "1.0.0"
+  version: "1.2.0"
   contact:
     email: miha@visualizer.coffee
 servers:
@@ -145,6 +145,55 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - Shots
+      summary: Update a shot
+      description: >
+        Updates a shot owned by the authenticated user. The request must be JSON. Fields are restricted by the account tier.
+      operationId: updateShot
+      security:
+        - OAuth2:
+            - write
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShotUpdate"
+      responses:
+        "200":
+          description: Shot updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShotDetail"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Missing `write` scope for the provided token.
+        "404":
+          description: Shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Invalid update payload.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                invalidImage:
+                  summary: Invalid image upload
+                  value:
+                    error: Image must be a valid image file.
+                invalidFormat:
+                  summary: Content type not JSON
+                  value:
+                    error: Request must be JSON.
     delete:
       tags:
         - Shots
@@ -825,6 +874,10 @@ components:
         user_name:
           type: string
           nullable: true
+        canonical_coffee_bag_id:
+          type: string
+          format: uuid
+          nullable: true
       example:
         id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
         user_id: "b82d57c1-5152-49b5-8c32-d5e686fac07b"
@@ -842,6 +895,7 @@ components:
           group: "Competition"
         brewdata:
           profile: "decent"
+
     ShotBeanconqueror:
       type: object
       required:
