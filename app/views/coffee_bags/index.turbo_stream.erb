@@ -1,7 +1,7 @@
 <% if @replace %>
   <%= turbo_stream.update "coffee-bags" do %>
     <% if @coffee_bags.any? %>
-      <%= render @coffee_bags %>
+      <%= render partial: "coffee_bag", collection: @coffee_bags, cached: true %>
     <% else %>
       <div class="col-span-12 pt-12 text-center text-neutral-500">
         No coffee bags found 😢
@@ -10,7 +10,7 @@
   <% end %>
 <% else %>
   <%= turbo_stream.append "coffee-bags" do %>
-    <%= render @coffee_bags %>
+    <%= render partial: "coffee_bag", collection: @coffee_bags, cached: true %>
   <% end %>
 <% end %>
 <%= turbo_stream.replace "offset_pagination" do %>

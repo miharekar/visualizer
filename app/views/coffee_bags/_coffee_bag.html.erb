@@ -1,51 +1,49 @@
 <div id="<%= dom_id coffee_bag %>" class="flex flex-col rounded col-span-1 dark:text-neutral-200 dark:border-neutral-700 <%= coffee_bag.archived? ? 'opacity-40 border-x border-t border-neutral-200' : 'shadow dark:shadow-none dark:border-x dark:border-t' %>">
-  <% cache coffee_bag do %>
-    <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
-      <%= link_to shots_path(coffee_bag: coffee_bag) do %>
-        <span class="absolute inset-x-0 bottom-0 -top-px z-10"></span>
-      <% end %>
-      <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
-        <div class="relative w-full aspect-square">
-          <%= image_tag coffee_bag.image.variant(:display), class: " object-cover object-center w-full h-full" %>
-        </div>
-      <% end %>
-      <div class="flex flex-col flex-1 p-8">
-        <div class="relative group">
-          <h3 class="mt-3 text-lg font-semibold leading-6 group-hover:text-neutral-600">
-            <div>
-              <%= coffee_bag.name %>
-              <% if coffee_bag.canonical_coffee_bag_id %>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="inline-flex align-middle size-4">
-                  <path fill-rule="evenodd" d="M8.5 1.709a.75.75 0 0 0-1 0 8.963 8.963 0 0 1-4.84 2.217.75.75 0 0 0-.654.72 10.499 10.499 0 0 0 5.647 9.672.75.75 0 0 0 .694-.001 10.499 10.499 0 0 0 5.647-9.672.75.75 0 0 0-.654-.719A8.963 8.963 0 0 1 8.5 1.71Zm2.34 5.504a.75.75 0 0 0-1.18-.926L7.394 9.17l-1.156-.99a.75.75 0 1 0-.976 1.138l1.75 1.5a.75.75 0 0 0 1.078-.106l2.75-3.5Z" clip-rule="evenodd" />
-                </svg>
-              <% end %>
-            </div>
-          </h3>
-          <div class="mt-2 prose prose-neutral dark:prose-invert">
-            <table>
-              <tr class="relative z-20">
-                <td>Roaster</td>
-                <td><%= link_to coffee_bag.roaster.name, edit_roaster_path(coffee_bag.roaster) %></td>
-              </tr>
-              <% if coffee_bag.roast_date.present? %>
-                <tr>
-                  <td>Roasted on</td>
-                  <td><%= time_tag coffee_bag.roast_date, format: :long %></td>
-                </tr>
-              <% end %>
-              <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
-                <%= metadata_pair(attribute.underscore.humanize, coffee_bag.send(attribute)) %>
-              <% end %>
-            </table>
+  <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+    <%= link_to shots_path(coffee_bag: coffee_bag) do %>
+      <span class="absolute inset-x-0 bottom-0 -top-px z-10"></span>
+    <% end %>
+    <% if coffee_bag.image.attached? && coffee_bag.image.variable? %>
+      <div class="relative w-full aspect-square">
+        <%= image_tag coffee_bag.image.variant(:display), class: " object-cover object-center w-full h-full" %>
+      </div>
+    <% end %>
+    <div class="flex flex-col flex-1 p-8">
+      <div class="relative group">
+        <h3 class="mt-3 text-lg font-semibold leading-6 group-hover:text-neutral-600">
+          <div>
+            <%= coffee_bag.name %>
+            <% if coffee_bag.canonical_coffee_bag_id %>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="inline-flex align-middle size-4">
+                <path fill-rule="evenodd" d="M8.5 1.709a.75.75 0 0 0-1 0 8.963 8.963 0 0 1-4.84 2.217.75.75 0 0 0-.654.72 10.499 10.499 0 0 0 5.647 9.672.75.75 0 0 0 .694-.001 10.499 10.499 0 0 0 5.647-9.672.75.75 0 0 0-.654-.719A8.963 8.963 0 0 1 8.5 1.71Zm2.34 5.504a.75.75 0 0 0-1.18-.926L7.394 9.17l-1.156-.99a.75.75 0 1 0-.976 1.138l1.75 1.5a.75.75 0 0 0 1.078-.106l2.75-3.5Z" clip-rule="evenodd" />
+              </svg>
+            <% end %>
           </div>
-          <% if coffee_bag.notes.present? %>
-            <hr class="my-2 text-neutral-200 dark:text-neutral-700">
-            <%= markdown_text_from(coffee_bag.notes) %>
-          <% end %>
+        </h3>
+        <div class="mt-2 prose prose-neutral dark:prose-invert">
+          <table>
+            <tr class="relative z-20">
+              <td>Roaster</td>
+              <td><%= link_to coffee_bag.roaster.name, edit_roaster_path(coffee_bag.roaster) %></td>
+            </tr>
+            <% if coffee_bag.roast_date.present? %>
+              <tr>
+                <td>Roasted on</td>
+                <td><%= time_tag coffee_bag.roast_date, format: :long %></td>
+              </tr>
+            <% end %>
+            <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
+              <%= metadata_pair(attribute.underscore.humanize, coffee_bag.send(attribute)) %>
+            <% end %>
+          </table>
         </div>
+        <% if coffee_bag.notes.present? %>
+          <hr class="my-2 text-neutral-200 dark:text-neutral-700">
+          <%= markdown_text_from(coffee_bag.notes) %>
+        <% end %>
       </div>
     </div>
-  <% end %>
+  </div>
   <% search_params = {roaster: params[:roaster], coffee: params[:coffee]}.compact_blank %>
   <div class="border-y border-neutral-200 dark:border-neutral-700">
     <div class="flex divide-x divide-neutral-200 dark:divide-neutral-700">

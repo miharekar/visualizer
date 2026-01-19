@@ -39,7 +39,7 @@
     <div data-controller="modal">
       <%= render "shared/modal" %>
       <div id="coffee-bags"  class="grid grid-cols-1 gap-8 mx-auto max-w-2xl sm:mx-0 sm:max-w-none md:grid-cols-2 lg:grid-cols-3">
-        <%= render @coffee_bags %>
+        <%= render partial: "coffee_bag", collection: @coffee_bags, cached: true %>
       </div>
       <%= render partial: "shared/offset_loader", locals: { offset: @offset, path: coffee_bags_path(params.permit(:roaster_id, :roaster, :coffee).merge(offset: @offset, format: :turbo_stream)) } %>
     </div>

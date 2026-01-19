@@ -27,7 +27,7 @@
     <div data-controller="modal">
       <%= render "shared/modal" %>
       <div id="roasters" class="flex flex-col divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
-        <%= render @roasters %>
+        <%= render partial: "roaster", collection: @roasters, cached: true %>
       </div>
     </div>
   <% else %>

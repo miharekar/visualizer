@@ -1,6 +1,6 @@
 <%= turbo_stream.update "roasters" do %>
   <% if @roasters.any? %>
-    <%= render @roasters %>
+    <%= render partial: "roaster", collection: @roasters, cached: true %>
   <% else %>
     <div class="pt-12 text-center text-neutral-500">
       No roasters found 😢
