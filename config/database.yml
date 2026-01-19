@@ -4,6 +4,9 @@ postgres: &postgres
   encoding: unicode
   host: localhost
   pool: 100 # https://island94.org/2024/09/secret-to-rails-database-connection-pool-size
+  connect_timeout: 3
+  variables:
+    statement_timeout: 10s
 
 postgres_production: &postgres_production
   <<: *postgres

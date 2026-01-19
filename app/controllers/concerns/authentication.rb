@@ -49,6 +49,6 @@ module Authentication
   end
 
   def tag_request
-    Appsignal.add_tags(email: Current.user&.email, user_id: Current.user&.id, remote_ip: request.remote_ip, cloudflare_ip: request.headers["CF-Connecting-IP"])
+    Appsignal.add_tags(email: Current.user&.email, user_id: Current.user&.id, remote_ip: request.remote_ip, cloudflare_ip: request.headers["CF-Connecting-IP"], hetzner_lb: request.headers["X-Forwarded-For"])
   end
 end
