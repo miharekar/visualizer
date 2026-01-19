@@ -47,37 +47,67 @@
         <div class="grid gap-6">
           <div>
             <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top profiles</h3>
-            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
-              <% if @trending_24h[:profiles].any? %>
-                <% @trending_24h[:profiles].each do |profile| %>
-                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-                    <div>
-                      <p class="font-semibold"><%= profile[:name] %></p>
-                    </div>
-                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></span>
-                  </li>
-                <% end %>
-              <% else %>
-                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No profiles yet.</li>
-              <% end %>
-            </ol>
+            <div class="overflow-hidden mt-4 rounded-sm border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+                  <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
+                    <th scope="col" class="py-3 px-4 font-semibold">Profile</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg enjoyment</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
+                  <% if @trending_24h[:profiles].any? %>
+                    <% @trending_24h[:profiles].each do |profile| %>
+                      <tr>
+                        <td class="py-3 px-4 font-semibold"><%= profile[:name] %></td>
+                        <td class="py-3 px-4 text-right">
+                          <% if profile[:avg_enjoyment].present? %>
+                            <span class="inline-flex justify-center items-center text-xs font-semibold text-white rounded-full size-7" style="background-color: <%= enjoyment_hex(profile[:avg_enjoyment]) %>;">
+                              <%= profile[:avg_enjoyment] %>
+                            </span>
+                          <% else %>
+                            <span class="text-neutral-400 dark:text-neutral-500">—</span>
+                          <% end %>
+                        </td>
+                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></td>
+                      </tr>
+                    <% end %>
+                  <% else %>
+                    <tr>
+                      <td colspan="3" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div>
             <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top parsers</h3>
-            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
-              <% if @trending_24h[:parsers].any? %>
-                <% @trending_24h[:parsers].each do |parser| %>
-                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-                    <div>
-                      <p class="font-semibold"><%= parser[:name] %></p>
-                    </div>
-                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></span>
-                  </li>
-                <% end %>
-              <% else %>
-                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No parsers yet.</li>
-              <% end %>
-            </ol>
+            <div class="overflow-hidden mt-4 rounded-sm border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+                  <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
+                    <th scope="col" class="py-3 px-4 font-semibold">Parser</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
+                  <% if @trending_24h[:parsers].any? %>
+                    <% @trending_24h[:parsers].each do |parser| %>
+                      <tr>
+                        <td class="py-3 px-4 font-semibold"><%= parser[:name] %></td>
+                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></td>
+                      </tr>
+                    <% end %>
+                  <% else %>
+                    <tr>
+                      <td colspan="2" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No parsers yet.</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -93,37 +123,67 @@
         <div class="grid gap-6">
           <div>
             <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top profiles</h3>
-            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
-              <% if @trending_30d[:profiles].any? %>
-                <% @trending_30d[:profiles].each do |profile| %>
-                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-                    <div>
-                      <p class="font-semibold"><%= profile[:name] %></p>
-                    </div>
-                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></span>
-                  </li>
-                <% end %>
-              <% else %>
-                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No profiles yet.</li>
-              <% end %>
-            </ol>
+            <div class="overflow-hidden mt-4 rounded-sm border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+                  <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
+                    <th scope="col" class="py-3 px-4 font-semibold">Profile</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg enjoyment</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
+                  <% if @trending_30d[:profiles].any? %>
+                    <% @trending_30d[:profiles].each do |profile| %>
+                      <tr>
+                        <td class="py-3 px-4 font-semibold"><%= profile[:name] %></td>
+                        <td class="py-3 px-4 text-right">
+                          <% if profile[:avg_enjoyment].present? %>
+                            <span class="inline-flex justify-center items-center text-xs font-semibold text-white rounded-full size-7" style="background-color: <%= enjoyment_hex(profile[:avg_enjoyment]) %>;">
+                              <%= profile[:avg_enjoyment] %>
+                            </span>
+                          <% else %>
+                            <span class="text-neutral-400 dark:text-neutral-500">—</span>
+                          <% end %>
+                        </td>
+                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></td>
+                      </tr>
+                    <% end %>
+                  <% else %>
+                    <tr>
+                      <td colspan="3" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div>
             <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top parsers</h3>
-            <ol class="mt-4 space-y-3 text-sm text-neutral-700 dark:text-neutral-200">
-              <% if @trending_30d[:parsers].any? %>
-                <% @trending_30d[:parsers].each do |parser| %>
-                  <li class="flex justify-between items-center py-3 px-4 rounded-2xl border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-                    <div>
-                      <p class="font-semibold"><%= parser[:name] %></p>
-                    </div>
-                    <span class="text-base font-semibold text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></span>
-                  </li>
-                <% end %>
-              <% else %>
-                <li class="py-3 px-4 rounded-2xl border border-dashed border-neutral-200/70 bg-white/40 text-neutral-400 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-500">No parsers yet.</li>
-              <% end %>
-            </ol>
+            <div class="overflow-hidden mt-4 rounded-sm border shadow-inner border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+                  <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
+                    <th scope="col" class="py-3 px-4 font-semibold">Parser</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
+                  <% if @trending_30d[:parsers].any? %>
+                    <% @trending_30d[:parsers].each do |parser| %>
+                      <tr>
+                        <td class="py-3 px-4 font-semibold"><%= parser[:name] %></td>
+                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></td>
+                      </tr>
+                    <% end %>
+                  <% else %>
+                    <tr>
+                      <td colspan="2" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No parsers yet.</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

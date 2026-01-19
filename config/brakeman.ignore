@@ -1,74 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "3d738543aaeb7026df6ae78a234a9ca00b5f71b381acb4dc3ddc3d3d995b79e6",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/roasters/index.html.erb",
-      "line": 30,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).with_attached_image.where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\"), { :collection => Current.user.roasters.order_by_name.includes(:coffee_bags, :canonical_roaster).with_attached_image.where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\") })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "RoastersController",
-          "method": "index",
-          "line": 8,
-          "file": "app/controllers/roasters_controller.rb",
-          "rendered": {
-            "name": "roasters/index",
-            "file": "app/views/roasters/index.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "roasters/index"
-      },
-      "user_input": "params[:roaster]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "44b725f0971e792c144d52314770944107d904403a080f146e6be4ef31e595fb",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/coffee_bags/index.html.erb",
-      "line": 42,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Current.user.coffee_bags.active_first.by_roast_date.includes(:roaster).with_attached_image.where(:roaster_id => params[:roaster_id]).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\"), { :collection => Current.user.coffee_bags.active_first.by_roast_date.includes(:roaster).with_attached_image.where(:roaster_id => params[:roaster_id]).where(\"roasters.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%\").where(\"coffee_bags.name ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%\") })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "CoffeeBagsController",
-          "method": "index",
-          "line": 11,
-          "file": "app/controllers/coffee_bags_controller.rb",
-          "rendered": {
-            "name": "coffee_bags/index",
-            "file": "app/views/coffee_bags/index.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "coffee_bags/index"
-      },
-      "user_input": "params[:coffee]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "ae2af597523506dc91bb14db2ec25561ab088094b7b32a52804353a8c2b37f13",
@@ -98,7 +30,7 @@
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/shots_controller.rb",
-      "line": 36,
+      "line": 37,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code}\", :allow_other_host => true)",
       "render_path": null,
@@ -111,6 +43,50 @@
       "confidence": "Weak",
       "cwe_id": [
         601
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "df9dc1372bf190a711c0a1e272f7a3f2cb5d6d21c618370822eba2822785a49a",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/roasters/_roaster.html.erb",
+      "line": 35,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(Current.new.website, Current.new.website, :class => \"relative truncate standard-link\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "RoastersController",
+          "method": "index",
+          "line": 8,
+          "file": "app/controllers/roasters_controller.rb",
+          "rendered": {
+            "name": "roasters/index",
+            "file": "app/views/roasters/index.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "roasters/index",
+          "line": 30,
+          "file": "app/views/roasters/index.html.erb",
+          "rendered": {
+            "name": "roasters/_roaster",
+            "file": "app/views/roasters/_roaster.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "roasters/_roaster"
+      },
+      "user_input": "Current.new.website",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
       ],
       "note": ""
     }

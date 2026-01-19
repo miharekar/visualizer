@@ -38,10 +38,21 @@ class TrendingProfilesJob < ApplicationJob
     scope
       .where.not(profile_title: [nil, ""])
       .group(Arel.sql("TRIM(profile_title)"))
+      .select(
+        Arel.sql("TRIM(profile_title) AS name"),
+        Arel.sql("COUNT(*) AS count"),
+        Arel.sql("AVG(NULLIF(espresso_enjoyment, 0)) AS avg_enjoyment")
+      )
       .order(Arel.sql("COUNT(*) DESC"))
       .limit(10)
-      .count
-      .map { |name, count| {name:, count:} }
+      .map do |profile|
+        avg_enjoyment = profile.avg_enjoyment&.to_f
+        {
+          name: profile.name,
+          count: profile.count,
+          avg_enjoyment: avg_enjoyment&.round
+        }
+      end
   end
 
   def top_parsers(scope)
