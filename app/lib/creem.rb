@@ -32,7 +32,7 @@ class Creem
     uri.query = URI.encode_www_form(params) if params.present?
 
     request_class = Net::HTTP.const_get(method.to_s.capitalize)
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 5, read_timeout: 10) do |http|
       http.request(build_request(request_class, uri, data))
     end
 
@@ -56,7 +56,7 @@ class Creem
       rescue JSON::ParserError
         nil
       end
-      message = error["message"] || response.message
+      message = error&.dig("message") || response.message
       raise APIError.new(message, response.code.to_i), "Creem API Error (#{response.code}): #{message}"
     end
   end

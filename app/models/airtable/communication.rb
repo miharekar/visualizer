@@ -103,7 +103,7 @@ module Airtable
       uri = URI.parse(API_URL + path)
       data = data.to_json unless data.nil?
       headers = {"Authorization" => "Bearer #{identity.token}", "Content-Type" => "application/json"}
-      Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+      Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 5, read_timeout: 10) do |http|
         attrs = [uri, data, headers].compact
         response = http.public_send(method, *attrs)
         raise DataError.new(data:, response:) unless response.is_a?(Net::HTTPSuccess)
