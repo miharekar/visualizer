@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_19_120300) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_21_090441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -311,6 +311,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_120300) do
     t.boolean "coffee_management_enabled", default: false, null: false
     t.jsonb "communication"
     t.datetime "created_at", null: false
+    t.string "creem_customer_id"
     t.string "date_format"
     t.string "decent_email"
     t.string "decent_token"
@@ -334,6 +335,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_19_120300) do
     t.jsonb "unsubscribed_from"
     t.datetime "updated_at", null: false
     t.string "webauthn_id"
+    t.index ["creem_customer_id"], name: "index_users_on_creem_customer_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["lemon_squeezy_customer_id"], name: "index_users_on_lemon_squeezy_customer_id", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true

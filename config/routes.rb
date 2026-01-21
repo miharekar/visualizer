@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   get :heartbeat, to: "heartbeat#show"
   get :privacy, to: "home#privacy"
   post :lemon_squeezy, to: "webhook#lemon_squeezy"
+  post :creem, to: "webhook#creem"
   post "emails/unsubscribe"
 
   resources :people, only: %i[show] do

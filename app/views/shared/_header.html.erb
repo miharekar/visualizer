@@ -41,7 +41,7 @@
               </div>
               <div class="py-1">
                 <%= link_to "Edit Profile", edit_profile_path, class: "block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
-                <% if Current.user.lemon_squeezy_customer_id.present? %>
+                <% if Current.user.can_manage_premium? %>
                   <%= link_to "Manage Subscription", manage_premium_index_path, class: "block w-full text-left cursor-pointer px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-800" %>
                 <% end %>
                 <% unless Current.user.premium? %>
@@ -130,7 +130,7 @@
               <% end %>
             </div>
           <% end %>
-          <% if Current.user.lemon_squeezy_customer_id.present? %>
+          <% if Current.user.can_manage_premium? %>
             <%= link_to "Manage Subscription", manage_premium_index_path, class: "block border-l-4 py-2 pl-3 pr-4 text-base font-medium border-transparent text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300" %>
           <% end %>
           <% unless Current.user.premium? %>
