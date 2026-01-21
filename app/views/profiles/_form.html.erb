@@ -61,6 +61,17 @@
                 </p>
               </div>
             </div>
+            <div class="flex items-start mt-1">
+              <div class="flex items-center h-5">
+                <%= f.check_box :beta, class: "standard-checkbox size-4 cursor-pointer" %>
+              </div>
+              <div class="ml-3 text-sm">
+                <%= f.label :beta, class: "font-medium text-neutral-700 dark:text-neutral-300" %>
+                <p class="text-neutral-500 dark:text-neutral-400">
+                  Enroll in the beta program to see new features as they're developed.
+                </p>
+              </div>
+            </div>
             <% if @profile.premium? %>
               <div class="flex items-start mt-1">
                 <div class="flex items-center h-5">
