@@ -31,11 +31,14 @@ class LemonSqueezyWebhookHandler
 
     subscription = LemonSqueezy.new.get_subscription(subscription_id)
     premium_expires_at = subscription.dig("data", "attributes", "ends_at").presence || subscription.dig("data", "attributes", "renews_at")
-    user.update(premium_expires_at:)
+    user.update(premium_expires_at:, lemon_squeezy_customer_id:)
   end
 
   def user
-    @user ||= find_by_lemon_squeezy_customer_id || find_by_email
+    @user ||= User.find_by(lemon_squeezy_customer_id:) || User.find_by(email:) || User.find_by(id: custom_data_user_id)
+    return @user if @user
+
+    Appsignal.set_message("No user found for #{email} / #{custom_data_user_id}")
   end
 
   def lemon_squeezy_customer_id
@@ -46,17 +49,7 @@ class LemonSqueezyWebhookHandler
     payload.dig("data", "attributes", "user_email")
   end
 
-  def find_by_lemon_squeezy_customer_id
-    User.find_by(lemon_squeezy_customer_id:)
-  end
-
-  def find_by_email
-    user = User.find_by(email:)
-    if user
-      user.update(lemon_squeezy_customer_id:)
-      user
-    else
-      Appsignal.set_message("No user found for #{email}!")
-    end
+  def custom_data_user_id
+    payload.dig("meta", "custom_data", "user_id")
   end
 end
