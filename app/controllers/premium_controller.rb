@@ -42,7 +42,17 @@ class PremiumController < ApplicationController
 
   def create
     if Current.user.premium_expires_at&.future?
-      redirect_to shots_path, flash: {premium: "You're already a premium user. Thank you for your support!"}
+      redirect_to shots_path, flash: {premium: "You're already a premium user. Thank you for your support! 🙏"}
+    elsif Current.user.beta?
+      data = {
+        product_id: Rails.application.credentials.creem.product_id,
+        success_url: success_premium_index_url(host: "localhost:3000"),
+        customer: {email: Current.user.email},
+        metadata: {user_id: Current.user.id}
+      }
+
+      checkout = Creem.new.create_checkout(data)
+      redirect_to checkout["checkout_url"], allow_other_host: true
     else
       data = {
         data: {
@@ -82,8 +92,11 @@ class PremiumController < ApplicationController
   end
 
   def manage
-    if Current.user.lemon_squeezy_customer_id.blank?
+    if !Current.user.can_manage_premium?
       redirect_to shots_path, flash: {alert: "You don't have a Premium subscription. Please subscribe first."}
+    elsif Current.user.creem_customer_id.present?
+      portal = Creem.new.create_customer_portal(Current.user.creem_customer_id)
+      redirect_to portal["customer_portal_link"], allow_other_host: true
     else
       customer = LemonSqueezy.new.get_customer(Current.user.lemon_squeezy_customer_id)
       redirect_to customer.dig("data", "attributes", "urls", "customer_portal"), allow_other_host: true
@@ -91,7 +104,7 @@ class PremiumController < ApplicationController
   end
 
   def success
-    flash[:notice] = "Subscribing was successful"
+    flash[:notice] = "Subscribing was successful. Thank you for your support! 🙏"
     redirect_to shots_path
   end
 end

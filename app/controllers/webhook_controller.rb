@@ -7,4 +7,11 @@ class WebhookController < ApplicationController
   rescue JSON::ParserError, LemonSqueezy::SignatureVerificationError
     head :bad_request
   end
+
+  def creem
+    CreemWebhookHandler.new(request).handle
+    head :ok
+  rescue JSON::ParserError, Creem::SignatureVerificationError
+    head :bad_request
+  end
 end

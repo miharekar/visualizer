@@ -33,6 +33,7 @@ class User < ApplicationRecord
   validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
+  validates :creem_customer_id, uniqueness: true, allow_blank: true
 
   before_validation :set_webauthn_id
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
@@ -81,12 +82,16 @@ class User < ApplicationRecord
     premium_expires_at&.future? || supporter
   end
 
-  def has_airtable? # rubocop:disable Naming/PredicateName
+  def has_airtable?
     premium? && identities.by_provider(:airtable).exists?
   end
 
   def coffee_management_enabled?
     premium? && coffee_management_enabled
+  end
+
+  def can_manage_premium?
+    premium? && (creem_customer_id.present? || lemon_squeezy_customer_id.present?)
   end
 
   def wants_fahrenheit?
@@ -180,12 +185,14 @@ end
 #  unsubscribed_from         :jsonb
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  creem_customer_id         :string
 #  lemon_squeezy_customer_id :string
 #  stripe_customer_id        :string
 #  webauthn_id               :string
 #
 # Indexes
 #
+#  index_users_on_creem_customer_id          (creem_customer_id) UNIQUE
 #  index_users_on_email                      (email) UNIQUE
 #  index_users_on_lemon_squeezy_customer_id  (lemon_squeezy_customer_id) UNIQUE
 #  index_users_on_slug                       (slug) UNIQUE
