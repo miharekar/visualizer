@@ -19,7 +19,7 @@ class CreemWebhookHandler
     user = find_by_creem_customer_id || find_by_metadata_user_id || find_by_email
     raise Creem::UserNotFoundError unless user
 
-    user.update(
+    user.update!(
       creem_customer_id: payload.dig("object", "customer", "id"),
       premium_expires_at: Time.zone.parse(payload.dig("object", "current_period_end_date"))
     )

@@ -46,7 +46,7 @@ class PremiumController < ApplicationController
     elsif Current.user.beta?
       data = {
         product_id: Rails.application.credentials.creem.product_id,
-        success_url: success_premium_index_url(host: "localhost:3000"),
+        success_url: success_premium_index_url,
         customer: {email: Current.user.email},
         metadata: {user_id: Current.user.id}
       }
