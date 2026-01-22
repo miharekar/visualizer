@@ -25,7 +25,7 @@ class PremiumController < ApplicationController
       ["Do you ever erase shot history for non-premium users?", "Never! Your shots stay safe - they're just hidden until you upgrade."],
       ["If I decide to upgrade, will I be able to see all my past shots?", "Yep! Every single shot you've ever uploaded will be right there waiting for you."],
       ["Can I cancel at any time?", "Of course! You'll keep premium features until your subscription ends."],
-      ["What payment methods do you accept?", "Credit and debit cards, Apple Pay, Google Pay, and everything else [Lemon Squeezy supports](https://docs.lemonsqueezy.com/help/checkout/payment-methods#supported-payment-methods)."],
+      ["What payment methods do you accept?", "Credit and debit cards, Apple Pay, Google Pay, and everything else [Creem supports](https://docs.creem.io/merchant-of-record/finance/payment-methods)."],
       ["Can I use it for free?", "Absolutely! The free plan is here to stay."],
       ["Do you have a free trial?", "Yes! Try premium free for #{helpers.free_trial_days} days. Cancel anytime during the trial and you won't be charged."],
       ["Do you have a refund policy?", "While I don't have a formal policy, just [drop me a line](mailto:miha@visualizer.coffee) if you need help with a refund."],
@@ -42,8 +42,8 @@ class PremiumController < ApplicationController
 
   def create
     if Current.user.premium_expires_at&.future?
-      redirect_to shots_path, flash: {premium: "You're already a premium user. Thank you for your support! 🙏"}
-    elsif Current.user.beta?
+      redirect_to manage_premium_index_path
+    else
       product_id = Current.user.premium_expires_at.present? ? Rails.application.credentials.creem.product_id : Rails.application.credentials.creem.product_id_trial
       data = {
         product_id:,
@@ -54,41 +54,6 @@ class PremiumController < ApplicationController
 
       checkout = Creem.new.create_checkout(data)
       redirect_to checkout["checkout_url"], allow_other_host: true
-    else
-      data = {
-        data: {
-          type: "checkouts",
-          attributes: {
-            checkout_data: {
-              email: Current.user.email,
-              custom: {user_id: Current.user.id}
-            },
-            product_options: {
-              redirect_url: success_premium_index_url
-            },
-            checkout_options: {
-              skip_trial: Current.user.premium_expires_at.present?
-            }
-          },
-          relationships: {
-            variant: {
-              data: {
-                type: "variants",
-                id: Rails.application.credentials.lemon_squeezy.yearly_price_id.to_s
-              }
-            },
-            store: {
-              data: {
-                type: "stores",
-                id: Rails.application.credentials.lemon_squeezy.store_id.to_s
-              }
-            }
-          }
-        }
-      }
-
-      checkout = LemonSqueezy.new.create_checkout(data)
-      redirect_to checkout.dig("data", "attributes", "url"), allow_other_host: true
     end
   end
 
