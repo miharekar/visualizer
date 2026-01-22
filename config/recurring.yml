@@ -11,6 +11,9 @@ fill_autocomplete_values_job:
 duplicate_lemon_squeezy_subscriptions_job:
   class: DuplicateLemonSqueezySubscriptionsJob
   schedule: "@daily"
+duplicate_creem_subscriptions_job:
+  class: DuplicateCreemSubscriptionsJob
+  schedule: "@daily"
 tag_cleaner_job:
   class: TagCleanerJob
   schedule: "@daily"

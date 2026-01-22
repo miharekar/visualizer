@@ -20,4 +20,8 @@ class Creem
   def create_customer_portal(customer_id)
     Client.new("/customers/billing", method: :post, data: {customer_id:}).make_request
   end
+
+  def all_transactions
+    Client.new("/transactions/search").paginate
+  end
 end

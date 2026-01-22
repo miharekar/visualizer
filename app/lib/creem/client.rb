@@ -12,10 +12,22 @@ class Creem
       @request_class = Net::HTTP.const_get(method.to_s.capitalize)
       @data = data
       @params = params
+      @results = []
     end
 
     def make_request
       handle_response(get_response)
+    end
+
+    def paginate(current_page: 1, page_size: 100)
+      @params = params.merge(page_number: current_page, page_size:)
+      response = make_request
+      @results += response.fetch("items", [])
+
+      next_page = response.dig("pagination", "next_page")
+      return @results if next_page.blank?
+
+      paginate(current_page: next_page, page_size:)
     end
 
     private
