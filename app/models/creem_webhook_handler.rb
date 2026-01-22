@@ -16,13 +16,10 @@ class CreemWebhookHandler
   private
 
   def update_premium_expiry
-    user = find_by_creem_customer_id || find_by_metadata_user_id || find_by_email
+    user = User.find_by(creem_customer_id:) || User.find_by(id: metadata_user_id) || User.find_by(email:)
     raise Creem::UserNotFoundError unless user
 
-    user.update!(
-      creem_customer_id: payload.dig("object", "customer", "id"),
-      premium_expires_at: Time.zone.parse(payload.dig("object", "current_period_end_date"))
-    )
+    user.update!(creem_customer_id:, premium_expires_at:)
   end
   alias_method :subscription_paid, :update_premium_expiry
   alias_method :subscription_update, :update_premium_expiry
@@ -32,19 +29,20 @@ class CreemWebhookHandler
   alias_method :subscription_scheduled_cancel, :update_premium_expiry
   alias_method :subscription_unpaid, :update_premium_expiry
 
-  def find_by_creem_customer_id
-    creem_customer_id = payload.dig("object", "customer", "id")
-    User.find_by(creem_customer_id:) if creem_customer_id.present?
+  def creem_customer_id
+    payload.dig("object", "customer", "id")
   end
 
-  def find_by_metadata_user_id
-    metadata_user_id = payload.dig("object", "metadata", "user_id")
-    User.find_by(id: metadata_user_id) if metadata_user_id.present?
+  def metadata_user_id
+    payload.dig("object", "metadata", "user_id")
   end
 
-  def find_by_email
-    email = payload.dig("object", "customer", "email")
-    User.find_by(email:) if email.present?
+  def email
+    payload.dig("object", "customer", "email")
+  end
+
+  def premium_expires_at
+    Time.zone.parse(payload.dig("object", "current_period_end_date"))
   end
 
   def valid_signature?(payload, signature)

@@ -1,6 +1,4 @@
-require "net/http"
-require "json"
-require "uri"
+require "creem/client"
 
 class Creem
   class SignatureVerificationError < StandardError; end
@@ -18,46 +16,10 @@ class Creem
   BASE_URL = "https://#{Rails.env.local? ? 'test-' : ''}api.creem.io/v1".freeze
 
   def create_checkout(data)
-    make_request("/checkouts", method: :post, data:)
+    Client.new("/checkouts", method: :post, data:).make_request
   end
 
   def create_customer_portal(customer_id)
-    make_request("/customers/billing", method: :post, data: {customer_id:})
-  end
-
-  private
-
-  def make_request(path, method: :get, data: nil, params: {})
-    uri = URI.parse(BASE_URL + path)
-    uri.query = URI.encode_www_form(params) if params.present?
-
-    request_class = Net::HTTP.const_get(method.to_s.capitalize)
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 5, read_timeout: 10) do |http|
-      http.request(build_request(request_class, uri, data))
-    end
-
-    handle_response(response)
-  end
-
-  def build_request(request_class, uri, data)
-    request_class.new(uri).tap do
-      it["Content-Type"] = "application/json"
-      it["x-api-key"] = Rails.application.credentials.creem.api_key
-      it.body = data.to_json if data.present?
-    end
-  end
-
-  def handle_response(response)
-    if response.is_a?(Net::HTTPSuccess)
-      JSON.parse(response.body)
-    else
-      error = begin
-        JSON.parse(response.body)
-      rescue JSON::ParserError
-        nil
-      end
-      message = error&.dig("message") || response.message
-      raise APIError.new(message, response.code.to_i), "Creem API Error (#{response.code}): #{message}"
-    end
+    Client.new("/customers/billing", method: :post, data: {customer_id:}).make_request
   end
 end
