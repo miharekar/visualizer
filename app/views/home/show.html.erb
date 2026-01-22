@@ -204,7 +204,7 @@
               <time datetime="<%= update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
                 <%= update.published_at.strftime("%b %d, %Y") %>
               </time>
-              <h2 class="mt-2 font-serif text-xl font-semibold text-neutral-900 text dark:text-neutral-300 group-hover:text-neutral-400">
+              <h2 class="mt-2 font-serif text-2xl font-semibold text-neutral-900 text dark:text-neutral-300 group-hover:text-neutral-400">
                 <%= link_to update_path(update.slug.presence || update.id), target: "_blank" do %>
                   <span class="absolute inset-0"></span>
                   <%= update.title %>
