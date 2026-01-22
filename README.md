@@ -4,7 +4,7 @@
 
 ![Ruby Tests](https://github.com/miharekar/visualizer/actions/workflows/main.yml/badge.svg)
 
-Visualizer plays nice with [Decent espresso machines](https://decentespresso.com/), [Beanconqueror](https://beanconqueror.com/), [Gaggiuino](https://gaggiuino.github.io/), [GaggiMate](https://gaggimate.eu/), [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/), [Pressensor](https://pressensor.com/), and many more devices. The list keeps growing.
+Visualizer plays nice with [Decent espresso machines](https://decentespresso.com/), [Meticulous](https://www.meticuloushome.com/), [Beanconqueror](https://beanconqueror.com/), [Gaggiuino](https://gaggiuino.github.io/), [GaggiMate](https://gaggimate.eu/), [Smart Espresso Profiler](https://www.naked-portafilter.com/product-category/smart-espresso-profiler/), [Pressensor](https://pressensor.com/), and many more devices. The list keeps growing.
 
 Read all about it on [visualizer.coffee](https://visualizer.coffee/).
 

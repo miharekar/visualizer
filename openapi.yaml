@@ -85,7 +85,7 @@ paths:
         - Shots
       summary: Retrieve a shot
       description: >
-        Returns a single shot in Visualizer JSON format by default, or BeanConqueror JSON when `format=beanconqueror`.
+        Returns a single shot in Visualizer JSON format by default, or Beanconqueror JSON when `format=beanconqueror`.
         Set `essentials=true` to omit large brew data payloads.
       operationId: getShot
       parameters:
@@ -124,7 +124,7 @@ paths:
                     brewdata:
                       profile: "decent"
                 beanconqueror:
-                  summary: BeanConqueror format
+                  summary: Beanconqueror format
                   value:
                     bean:
                       roaster: "Example Roaster"
@@ -343,7 +343,7 @@ paths:
         - Shots
       summary: Upload a shot file
       description: >
-        Creates a new shot by uploading a Decent, BeanConqueror, Gaggiuino, or GaggiMate export. Provide either a multipart file upload using the `file` field or send the parsed JSON payload directly.
+        Creates a new shot by uploading a Decent, Beanconqueror, Gaggiuino, or GaggiMate export. Provide either a multipart file upload using the `file` field or send the parsed JSON payload directly.
       operationId: uploadShot
       security:
         - OAuth2:
