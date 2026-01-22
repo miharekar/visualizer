@@ -44,8 +44,9 @@ class PremiumController < ApplicationController
     if Current.user.premium_expires_at&.future?
       redirect_to shots_path, flash: {premium: "You're already a premium user. Thank you for your support! 🙏"}
     elsif Current.user.beta?
+      product_id = Current.user.premium_expires_at.present? ? Rails.application.credentials.creem.product_id : Rails.application.credentials.creem.product_id_trial
       data = {
-        product_id: Rails.application.credentials.creem.product_id,
+        product_id:,
         success_url: success_premium_index_url,
         customer: {email: Current.user.email},
         metadata: {user_id: Current.user.id}
