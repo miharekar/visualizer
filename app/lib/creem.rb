@@ -1,5 +1,3 @@
-require "creem/client"
-
 class Creem
   class SignatureVerificationError < StandardError; end
   class UserNotFoundError < StandardError; end
