@@ -29,16 +29,12 @@ module Api
 
     def profile
       with_shot do |shot|
-        if shot.information&.gaggiuino?
-          send_data shot.information&.profile_fields, filename: "#{shot.profile_title} from Visualizer.json", type: "application/json", disposition: "attachment"
-        elsif shot.information&.gaggimate?
-          render json: shot.information&.profile_fields, filename: "#{shot.profile_title} from Visualizer.json", type: "application/json", disposition: "attachment"
-        elsif params[:format] == "csv"
-          send_data shot.information&.csv_profile, filename: "#{shot.profile_title} from Visualizer.csv", type: "text/csv", disposition: "attachment"
-        elsif params[:format] == "json" && shot.information&.json_profile_fields.present?
-          render json: shot.information&.json_profile
-        elsif shot.information&.tcl_profile_fields.present?
+        if params[:format] == "csv"
+          send_data shot.information.csv_profile, filename: "#{shot.profile_title} from Visualizer.csv", type: "text/csv", disposition: "attachment"
+        elsif params[:format] == "tcl" && shot.information.tcl_profile_fields.present?
           send_data shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
+        elsif shot.information.has_profile?
+          send_data shot.information.json_profile, filename: "#{shot.profile_title} from Visualizer.json", type: "application/json", disposition: "attachment"
         else
           render json: {error: "Shot does not have a profile"}, status: :unprocessable_content
         end

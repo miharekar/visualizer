@@ -59,7 +59,7 @@ class Shot
 
       attributes[:start_time] = start_time unless user&.hide_shot_times
       attributes[:user_name] = user.display_name if user&.public?
-      attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.tcl_profile_fields.present?
+      attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.has_profile?
       attributes[:image_url] = image.url if image.attached?
 
       attributes.compact

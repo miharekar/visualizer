@@ -2,15 +2,21 @@ require "csv"
 
 class ShotInformation
   module Profile
+    prepend MemoWise
+
     JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
     CSV_PROFILE_HEADERS = %w[information_type elapsed pressure current_total_shot_weight flow_in flow_out water_temperature_boiler water_temperature_in water_temperature_basket metatype metadata comment].freeze
 
-    def tcl_profile_fields
-      @tcl_profile_fields ||= profile_fields.except("json")
+    def has_profile?
+      tcl_profile_fields.present? || profile_fields.present?
     end
 
-    def json_profile_fields
-      @json_profile_fields ||= profile_fields["json"]
+    memo_wise def tcl_profile_fields
+      tcl_profile_fields = profile_fields.except("json")
+      return if tcl_profile_fields.blank?
+      return unless %w[profile_notes advanced_shot].all? { tcl_profile_fields.key?(it) }
+
+      tcl_profile_fields
     end
 
     def tcl_profile
@@ -26,15 +32,16 @@ class ShotInformation
     end
 
     def json_profile
-      return if json_profile_fields.blank?
-
-      json = {}
-      JSON_PROFILE_KEYS.each do |key|
-        v = profile_fields["json"][key]
-        v = "#{v.to_s.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if key == "notes"
-        json[key] = v
+      if profile_fields.key?("json")
+        json = {}
+        JSON_PROFILE_KEYS.each do |key|
+          v = profile_fields["json"][key]
+          v = "#{v.to_s.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if key == "notes"
+          json[key] = v
+        end
+      else
+        json = profile_fields
       end
-
       JSON.pretty_generate(json)
     end
 

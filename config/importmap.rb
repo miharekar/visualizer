@@ -19,7 +19,7 @@ pin "el-transition" # @0.0.7
 pin "match-sorter" # @8.2.0
 pin "remove-accents" # @0.5.0
 pin "stimulus-autocomplete" # @3.1.0
-pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.35.6
+pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.36.0
 
 pin_all_from "app/javascript/channels", under: "channels"
 pin_all_from "app/javascript/controllers", under: "controllers"
