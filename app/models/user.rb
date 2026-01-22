@@ -91,7 +91,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_premium?
-    premium? && (creem_customer_id.present? || lemon_squeezy_customer_id.present?)
+    creem_customer_id.present? || lemon_squeezy_customer_id.present?
   end
 
   def wants_fahrenheit?
