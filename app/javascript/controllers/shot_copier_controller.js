@@ -55,11 +55,13 @@ export default class extends Controller {
       tagsController.tagify.addTags(data.tags)
     }
 
-    if (data.coffee_bag_id && data.roaster_id) {
-      const frame = document.getElementById("coffee_bag_fields")
-      if (frame) {
-        frame.src = `/shots/coffee_bag_form?coffee_bag=${data.coffee_bag_id}`
-        frame.reload()
+    if (data.coffee_bag_id) {
+      const hiddenInput = document.querySelector('input[name="shot[coffee_bag_id]"]')
+      const comboboxElement = hiddenInput?.closest('[data-controller~="combobox"]')
+      const comboboxController = comboboxElement ? this.application.getControllerForElementAndIdentifier(comboboxElement, "combobox") : null
+
+      if (comboboxController) {
+        comboboxController.selectById(data.coffee_bag_id)
       }
     }
 

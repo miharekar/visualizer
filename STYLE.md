@@ -33,8 +33,8 @@ This is because guard clauses can be hard to read, especially when they are nest
 
 As an exception, I sometimes use guard clauses to return early from a method:
 
-* When the return is right at the beginning of the method.
-* When the main method body is not trivial and involves several lines of code.
+- When the return is right at the beginning of the method.
+- When the main method body is not trivial and involves several lines of code.
 
 ```ruby
 def after_recorded_as_commit(recording)

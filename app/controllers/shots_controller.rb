@@ -4,10 +4,10 @@ class ShotsController < ApplicationController
   include Shots::Editing
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
-  before_action :check_premium!, only: :coffee_bag_form
   before_action :load_shot, only: %i[show compare remove_image]
   before_action :create_shared_shot, only: %i[share beanconqueror]
   before_action :load_users_shot, only: %i[edit update destroy]
+  before_action :load_coffee_bags_for_form, only: :edit
   before_action :load_users_shots, only: %i[index search]
   before_action :load_related_shots, only: %i[show edit]
 
@@ -95,15 +95,6 @@ class ShotsController < ApplicationController
     render turbo_stream: turbo_stream.remove("shot-image")
   end
 
-  def coffee_bag_form
-    @coffee_bag = CoffeeBag.find_by(id: params[:coffee_bag])
-    @roasters = Current.user.roasters.order_by_name
-    @roaster = params.key?(:roaster_id) ? Current.user.roasters.find_by(id: params[:roaster_id]) : @coffee_bag&.roaster
-    @coffee_bags = @roaster&.coffee_bags&.active&.by_roast_date
-
-    render layout: false
-  end
-
   private
 
   def load_shot
@@ -141,6 +132,13 @@ class ShotsController < ApplicationController
 
   def load_related_shots
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).sort_by { it[3] }.reverse
+  end
+
+  def load_coffee_bags_for_form
+    return unless Current.user.coffee_management_enabled?
+
+    @coffee_bags = Current.user.coffee_bags.active.by_roast_date.to_a
+    @coffee_bags << @shot.coffee_bag if @shot&.coffee_bag && @coffee_bags.exclude?(@shot.coffee_bag)
   end
 
   def create_shared_shot

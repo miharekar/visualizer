@@ -63,7 +63,6 @@ Rails.application.routes.draw do
     end
     collection do
       post :search
-      get :coffee_bag_form
     end
   end
 

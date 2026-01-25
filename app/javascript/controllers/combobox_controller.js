@@ -99,9 +99,21 @@ export default class extends Controller {
       this.active = event.currentTarget
     }
 
-    let active = this.getActive()
+    const active = this.getActive()
     if (!active) return
 
+    this.applySelection(active, event)
+  }
+
+  selectById(id) {
+    const selectedItem = this.allItems.find(item => item.dataset.id === id)
+    if (!selectedItem) return
+
+    this.applySelection(selectedItem, { preventDefault() {}, stopPropagation() {} })
+  }
+
+  applySelection(active, event) {
+    this.active = active
     if (active !== this.selected) {
       this.selected = active
       this.inputTarget.value = this.selected.dataset.name
@@ -109,6 +121,7 @@ export default class extends Controller {
       this.hiddenInputTarget.dispatchEvent(new Event("change"))
     }
 
+    this.markAllAsUnselected()
     this.hide(event)
   }
 

@@ -39,18 +39,11 @@
           </div>
           <% if Current.user.coffee_management_enabled? %>
             <div class="col-span-6">
-              <%= turbo_frame_tag "coffee_bag_fields", src: coffee_bag_form_shots_path(coffee_bag: @shot.coffee_bag) do %>
-                <div class="grid grid-cols-6 gap-6">
-                  <div class="col-span-6 sm:col-span-3">
-                    <%= label_tag :roaster_dummy, "Roaster", class: "standard-label" %>
-                    <%= f.text_field :roaster_dummy, class: "mt-1 standard-input" %>
-                  </div>
-                  <div class="col-span-6 sm:col-span-3">
-                    <%= f.label :coffee_bag_dummy, "Coffee bag", class: "standard-label" %>
-                    <%= f.text_field :coffee_bag_dummy, class: "mt-1 standard-input" %>
-                  </div>
-                </div>
-              <% end %>
+              <div class="flex justify-between">
+                <%= f.label :coffee_bag_id, "Coffee bag", class: "standard-label" %>
+                <%= link_to "New", new_coffee_bag_path, class: "text-sm standard-link text-neutral-500 dark:text-neutral-400" %>
+              </div>
+              <%= render partial: "shared/combobox", locals: { input_name: :coffee_bag, hidden_input_name: "shot[coffee_bag_id]", selected: @shot.coffee_bag, collection: @coffee_bags, name_method: :display_name_with_status } %>
             </div>
           <% else %>
             <div class="col-span-6" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path %>" data-autocomplete-min-length-value="<%= CanonicalCoffeeBag::MIN_TERM_LENGTH %>" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">

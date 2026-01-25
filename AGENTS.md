@@ -172,6 +172,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 
 - For view edits, run `rustywind` and `htmlbeautifier` on changed templates.
 - Use Tailwind utility classes (no custom webpack). Respect existing component patterns.
+- Run Prettier on changed JavaScript files.
 
 ## Cursor/Copilot rules
 
