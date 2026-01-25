@@ -31,9 +31,9 @@ module Api
       with_shot do |shot|
         if params[:format] == "csv"
           send_data shot.information.csv_profile, filename: "#{shot.profile_title} from Visualizer.csv", type: "text/csv", disposition: "attachment"
-        elsif params[:format] == "tcl" && shot.information.tcl_profile_fields.present?
+        elsif params[:format] != "json" && shot.information.tcl_profile_fields.present?
           send_data shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
-        elsif shot.information.has_profile?
+        elsif shot.information.profile_fields.present?
           send_data shot.information.json_profile, filename: "#{shot.profile_title} from Visualizer.json", type: "application/json", disposition: "attachment"
         else
           render json: {error: "Shot does not have a profile"}, status: :unprocessable_content
