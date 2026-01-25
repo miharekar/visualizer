@@ -43,7 +43,7 @@
                 <%= f.label :coffee_bag_id, "Coffee bag", class: "standard-label" %>
                 <%= link_to "New", new_coffee_bag_path, class: "text-sm standard-link text-neutral-500 dark:text-neutral-400" %>
               </div>
-              <%= render partial: "shared/combobox", locals: { input_name: :coffee_bag, hidden_input_name: "shot[coffee_bag_id]", selected: @shot.coffee_bag, collection: @coffee_bags, name_method: :display_name_with_status } %>
+              <%= render partial: "shared/combobox", locals: { input_name: :coffee_bag, hidden_input_name: "shot[coffee_bag_id]", selected: @shot.coffee_bag, collection: @coffee_bags, name_method: :full_display_name } %>
             </div>
           <% else %>
             <div class="col-span-6" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path %>" data-autocomplete-min-length-value="<%= CanonicalCoffeeBag::MIN_TERM_LENGTH %>" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">
