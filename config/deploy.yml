@@ -66,7 +66,7 @@ accessories:
       shm-size: 3g
 
   pg_backup:
-    image: miharekar/postgres-backup-s3:18.1
+    image: miharekar/postgres-backup-s3:18.1d
     host: hvdb
     env:
       clear:
@@ -83,7 +83,6 @@ accessories:
         - POSTGRES_PASSWORD
         - S3_ACCESS_KEY_ID
         - S3_SECRET_ACCESS_KEY
-        - PASSPHRASE:ENCRYPTION_PASSWORD
     options:
       network: ipv6-network
 
