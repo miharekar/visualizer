@@ -26,6 +26,9 @@ loffee_labs_importer_job:
 premium_feedback_job:
   class: PremiumFeedbackJob
   schedule: "@daily"
+disable_expired_premium_coffee_management_job:
+  class: DisableExpiredPremiumCoffeeManagementJob
+  schedule: "@daily"
 populate_dropdown_values_job:
   class: PopulateDropdownValuesJob
   schedule: "@daily"
