@@ -44,7 +44,7 @@ bin/rails db:reset     # drop/create/migrate primary DB
 bin/rails db:seed      # load seed data
 ```
 
-Primary data lives in Postgres (`primary`); Solid Queue/cache/cable use SQLite files under `storage/` with migrations in `db/*_migrate`.
+Primary data lives in Postgres (`primary`).
 
 ### Other utilities
 
@@ -69,7 +69,7 @@ bin/ci                 # full CI pipeline
 
 ### Data and storage
 
-- ActiveRecord primary DB is Postgres; queue/cache/cable databases are SQLite (`storage/queue.sqlite3`, etc.).
+- ActiveRecord primary DB is Postgres.
 - ActiveStorage uses local disk in development/test; S3 buckets configured in `config/storage.yml` for production.
 - Solid Cache backs Rails caching; AppSignal handles monitoring/tracing.
 - All tables use UUID primary keys (see `db/schema.rb`).
@@ -106,7 +106,7 @@ bin/ci                 # full CI pipeline
 
 ### Background jobs
 
-- ActiveJob uses Solid Queue (SQLite queue DB). Run with `bin/jobs`; recurring tasks live in `config/recurring.yml` (shared shot cleanup, dropdown/autocomplete population, Airtable webhook refresh, Loffee Labs importer, premium feedback, duplicate Lemon Squeezy subscriptions, tag cleanup).
+- ActiveJob uses Solid Queue. Run with `bin/jobs`; recurring tasks live in `config/recurring.yml` (shared shot cleanup, dropdown/autocomplete population, Airtable webhook refresh, Loffee Labs importer, premium feedback, duplicate Lemon Squeezy subscriptions, tag cleanup).
 - Mission Control Jobs is mounted at `/jobs` for admins; PgHero at `/pghero`.
 - Jobs handle Airtable sync, image processing, dropdown population, premium notifications, and web push delivery.
 

@@ -51,7 +51,7 @@ asset_path: /rails/public/assets
 
 accessories:
   postgres18:
-    image: postgres:18
+    image: postgres:18.1
     host: hvdb
     port: 5440:5432
     env:
@@ -66,7 +66,7 @@ accessories:
       shm-size: 3g
 
   pg_backup:
-    image: miharekar/postgres-backup-s3:18.0
+    image: miharekar/postgres-backup-s3:18.1
     host: hvdb
     env:
       clear:

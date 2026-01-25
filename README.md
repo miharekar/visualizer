@@ -29,7 +29,7 @@ You can read [the source code](/app/controllers/api) or [the LLM-generated API d
 ## Dependencies
 
 - Ruby (Check [.mise.toml](.mise.toml) for specific version)
-- Postgres (>= 14)
+- Postgres (>= 18)
 
 No other services are required though S3 is expected in `config/storage.yml`.
 Feel free to override it for development purposes.

@@ -18,12 +18,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick openssh-client lsb-release postgresql-common && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Add PostgreSQL repository and install PostgreSQL 17 client
+# Add PostgreSQL repository and install PostgreSQL 18 client
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
   /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y postgresql-client-17 libpq-dev && \
+  apt-get install --no-install-recommends -y postgresql-client-18 libpq-dev && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
