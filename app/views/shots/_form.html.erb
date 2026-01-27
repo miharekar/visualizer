@@ -123,7 +123,7 @@
                   <% next unless value %>
                   <% path = [group, key].join("/") %>
                   <div class="col-span-6 sm:col-span-3">
-                    <%= brewdata.label path, key.underscore.humanize, class: "standard-label" %>
+                    <%= brewdata.label path, [group, key].map { it.underscore.humanize }.join(": "), class: "standard-label" %>
                     <%= brewdata.text_field path, value:, class: "mt-1 standard-input" %>
                   </div>
                 <% end %>

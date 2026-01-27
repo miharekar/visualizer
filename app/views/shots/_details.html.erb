@@ -133,7 +133,7 @@
           <% next if group == "brewFlow" || !values.is_a?(Hash) %>
           <% values.each do |key, value| %>
             <% next if value.is_a?(Hash) || value.is_a?(Array) %>
-            <%= metadata_pair(key.underscore.humanize, value) %>
+            <%= metadata_pair([group, key].map{ it.underscore.humanize }.join(": "), value) %>
           <% end %>
         <% end %>
       <% end %>
