@@ -187,9 +187,9 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    herb (0.8.8-aarch64-linux-gnu)
-    herb (0.8.8-arm64-darwin)
-    herb (0.8.8-x86_64-linux-gnu)
+    herb (0.8.9-aarch64-linux-gnu)
+    herb (0.8.9-arm64-darwin)
+    herb (0.8.9-x86_64-linux-gnu)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -332,7 +332,7 @@ GEM
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
     pg_lock (1.0.0)
-    pg_query (6.2.1)
+    pg_query (6.2.2)
       google-protobuf (>= 3.25.3)
     pghero (3.7.0)
       activerecord (>= 7.1)
