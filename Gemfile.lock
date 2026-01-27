@@ -84,7 +84,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    actual_db_schema (0.8.6)
+    actual_db_schema (0.9.0)
       activerecord
       activesupport
       ast

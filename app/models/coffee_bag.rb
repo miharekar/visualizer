@@ -40,7 +40,7 @@ class CoffeeBag < ApplicationRecord
     details << roast_date.to_fs(:long) if roast_date.present?
     details << "Archived" if archived?
     suffix = details.any? ? " (#{details.join(", ")})" : ""
-    "#{name}#{suffix}, #{roaster.name}"
+    "#{roaster.name}: #{name}#{suffix}"
   end
 
   def duplicate(roast_date)
