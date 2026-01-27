@@ -67,6 +67,7 @@ class ShotsController < ApplicationController
   def update
     authorize @shot
     @shot.update(update_shot_params)
+    apply_brewdata_updates
     attach_image(params.dig(:shot, :image)) if Current.user.premium?
     flash[:notice] = "Shot successfully updated."
   rescue Shots::Editing::InvalidImageError => e

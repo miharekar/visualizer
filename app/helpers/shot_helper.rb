@@ -1,12 +1,21 @@
 module ShotHelper
   def metadata_pair(key, value)
-    value = value.to_s
-    return if value.blank? || value == "0" || value == "UNKNOWN"
+    value = brewdata_input_value(value)
+    return unless value
 
     tag.tr do
       concat tag.td(key, class: "whitespace-nowrap")
       concat tag.td(value, class: "wrap-anywhere")
     end
+  end
+
+  def brewdata_input_value(value)
+    return if value.is_a?(Hash) || value.is_a?(Array)
+
+    value_string = value.to_s
+    return if value_string.blank? || value_string == "0" || value_string == "UNKNOWN"
+
+    value_string
   end
 
   def meta_description(shot)

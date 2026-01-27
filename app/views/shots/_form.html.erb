@@ -113,6 +113,24 @@
             <%= link_to "upgrading to Premium", premium_index_path, class: "standard-link font-semibold" %>.
           </p>
         <% end %>
+        <% if @shot.information&.brewdata.present? %>
+          <div class="grid grid-cols-6 gap-6">
+            <%= f.fields_for :brewdata, @shot.information do |brewdata| %>
+              <% @shot.information.brewdata.each do |group, values| %>
+                <% next if group == "brewFlow" || !values.is_a?(Hash) %>
+                <% values.each do |key, value| %>
+                  <% value = brewdata_input_value(value) %>
+                  <% next unless value %>
+                  <% path = [group, key].join("/") %>
+                  <div class="col-span-6 sm:col-span-3">
+                    <%= brewdata.label path, key.underscore.humanize, class: "standard-label" %>
+                    <%= brewdata.text_field path, value:, class: "mt-1 standard-input" %>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
         <% if Current.user.premium? %>
           <div id="tags_controller" data-controller="tags" data-tags-user-tags-value="<%= Current.user.tags.pluck(:name) %>">
             <%= f.label :tag_list, "Tags", class: "standard-label" %>

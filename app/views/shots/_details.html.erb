@@ -132,19 +132,8 @@
         <% shot.information.brewdata.each do |group, values| %>
           <% next if group == "brewFlow" || !values.is_a?(Hash) %>
           <% values.each do |key, value| %>
-            <% if value.is_a?(Hash) %>
-              <% value.each do |k, v| %>
-                <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
-              <% end %>
-            <% elsif value.is_a?(Array) %>
-              <% value.each do |item| %>
-                <% item.each do |k, v| %>
-                  <%= metadata_pair([key, k].join("_").underscore.humanize, v) %>
-                <% end %>
-              <% end %>
-            <% else %>
-              <%= metadata_pair(key.underscore.humanize, value) %>
-            <% end %>
+            <% next if value.is_a?(Hash) || value.is_a?(Array) %>
+            <%= metadata_pair(key.underscore.humanize, value) %>
           <% end %>
         <% end %>
       <% end %>
