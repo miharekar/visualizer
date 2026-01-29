@@ -1,4 +1,4 @@
-class EnableCoffeeManagementJob < ApplicationJob
+class CoffeeManagementUpdateJob < ApplicationJob
   include DateParseable
   prepend MemoWise
 
@@ -8,6 +8,22 @@ class EnableCoffeeManagementJob < ApplicationJob
 
   def perform(user)
     @user = user
+    shot_ids = user.coffee_management_enabled? ? enable_coffee_management : unlink_coffee_bags
+    return if user.identities.by_provider(:airtable).empty?
+
+    AirtableUploadAllJob.perform_later(user, shot_ids)
+  end
+
+  private
+
+  def unlink_coffee_bags
+    unlink_scope = user.shots.where.not(coffee_bag_id: nil)
+    shot_ids = unlink_scope.pluck(:id)
+    unlink_scope.update_all(coffee_bag_id: nil, canonical_coffee_bag_id: nil) # rubocop:disable Rails/SkipsModelValidations
+    shot_ids
+  end
+
+  def enable_coffee_management
     upsert_attributes = user.shots.where(coffee_bag_id: nil).filter_map do |shot|
       coffee_bag = coffee_bags["#{shot.bean_brand}_#{shot.bean_type}_#{shot.roast_date}"]
       next unless coffee_bag
@@ -18,12 +34,9 @@ class EnableCoffeeManagementJob < ApplicationJob
     ActiveRecord::Base.transaction do
       Shot.upsert_all(upsert_attributes, returning: false) # rubocop:disable Rails/SkipsModelValidations
     end
-    return if user.identities.by_provider(:airtable).empty?
 
-    AirtableUploadAllJob.perform_later(user, upsert_attributes.pluck(:id))
+    upsert_attributes.pluck(:id)
   end
-
-  private
 
   memo_wise def roasters
     user.shots.distinct.pluck(:bean_brand).compact_blank.index_with do |name|

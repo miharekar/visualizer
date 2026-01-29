@@ -142,10 +142,7 @@ class User < ApplicationRecord
   end
 
   def update_coffee_management
-    roasters.destroy_all
-    return unless coffee_management_enabled?
-
-    EnableCoffeeManagementJob.perform_later(self)
+    CoffeeManagementUpdateJob.perform_later(self)
   end
 
   def update_date_format_on_shots
