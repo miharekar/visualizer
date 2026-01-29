@@ -138,7 +138,7 @@ class ShotsController < ApplicationController
   def load_coffee_bags_for_form
     return unless Current.user.coffee_management_enabled?
 
-    @coffee_bags = Current.user.coffee_bags.active.by_roast_date.to_a
+    @coffee_bags = Current.user.coffee_bags.active.by_roast_date.includes(:roaster).to_a
     @coffee_bags << @shot.coffee_bag if @shot&.coffee_bag && @coffee_bags.exclude?(@shot.coffee_bag)
   end
 
