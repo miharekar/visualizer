@@ -40,17 +40,22 @@ class LoffeeLabsImporterJob < ApplicationJob
 
   def import_beans
     url = "https://www.loffeelabs.com/wp-json/beanbase/v1/beans?api_key=#{Rails.application.credentials.dig(:loffee_labs, :api_key)}"
-    JSON.parse(SimpleDownloader.new(url).body)["data"].each do |bean|
-      next if Date.parse(bean["date"]) < @cut_off
+    JSON.parse(SimpleDownloader.new(url).body)["data"].each { import_bean(it) }
+  end
 
-      roaster_name = bean["roaster"]&.squish
-      next if roaster_name.blank?
+  def import_bean(bean)
+    parsed_date = Date.parse(bean["date"])
+    return if parsed_date < @cut_off
 
-      attributes = COFFEE_BAG_JSON_MAPPING.to_h { |attr, key| [attr, bean[key]&.squish] }
-      CanonicalCoffeeBag
-        .find_or_initialize_by(loffee_labs_id: bean["id"])
-        .update(canonical_roaster: roaster_by_name(roaster_name), **attributes)
-    end
+    roaster_name = bean["roaster"]&.squish
+    return if roaster_name.blank?
+
+    attributes = COFFEE_BAG_JSON_MAPPING.to_h { |attr, key| [attr, bean[key]&.squish] }
+    CanonicalCoffeeBag
+      .find_or_initialize_by(loffee_labs_id: bean["id"])
+      .update(canonical_roaster: roaster_by_name(roaster_name), **attributes)
+  rescue StandardError => e
+    Appsignal.report_error(e) { it.set_tags(loffee_labs_id: bean["id"]) }
   end
 
   def roaster_by_name(name)

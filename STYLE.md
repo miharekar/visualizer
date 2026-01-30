@@ -31,6 +31,24 @@ end
 
 This is because guard clauses can be hard to read, especially when they are nested.
 
+## Block style
+
+Prefer `it` for single-parameter blocks where it makes the code more readable.
+
+```ruby
+# Good
+records.each { it.process }
+
+# Acceptable when clarity needs a name
+records.each do |record|
+  record.process
+end
+```
+
+## Modern Ruby/Rails
+
+Adopt newer Ruby and Rails methods when they are clearer or reduce boilerplate, as long as they match existing project conventions.
+
 As an exception, I sometimes use guard clauses to return early from a method:
 
 - When the return is right at the beginning of the method.
