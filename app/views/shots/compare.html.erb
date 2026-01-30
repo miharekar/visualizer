@@ -9,34 +9,38 @@
   </div>
 </div>
 <% if @chart %>
-  <% if Current.user&.premium? %>
-    <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
-        Adjust comparison timing
-      </div>
-      <div class="flex">
-        <div class="flex flex-col mt-2 mr-2 grow">
-          <input id="compare-range" class="flex-1 pt-2 shot-range dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>" autocomplete="off">
-          <div class="flex pt-2">
-            <div class="text-neutral-600 dark:text-neutral-400">
-              -<%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
-            </div>
-            <div class="grow"></div>
-            <div class="text-neutral-600 dark:text-neutral-400">
-              <%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
+  <div data-controller="shot-charts"
+       data-shot-charts-shot-data-value="<%= json_escape((@chart.shot_chart || []).to_json) %>"
+       data-shot-charts-shot-stages-value="[]"
+       data-shot-charts-temperature-data-value="<%= json_escape((@chart.temperature_chart || []).to_json) %>"
+       data-shot-charts-comparison-data-value="<%= json_escape((@chart.comparison_data || {}).to_json) %>">
+    <% if Current.user&.premium? %>
+      <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
+          Adjust comparison timing
+        </div>
+        <div class="flex">
+          <div class="flex flex-col mt-2 mr-2 grow">
+            <input id="compare-range" class="flex-1 pt-2 shot-range dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>" autocomplete="off" data-shot-charts-target="compareRange" data-action="input->shot-charts#onCompareInput">
+            <div class="flex pt-2">
+              <div class="text-neutral-600 dark:text-neutral-400">
+                -<%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
+              </div>
+              <div class="grow"></div>
+              <div class="text-neutral-600 dark:text-neutral-400">
+                <%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
+              </div>
             </div>
           </div>
+          <button id="compare-range-reset" class="items-center py-2 px-4 text-sm font-medium bg-white rounded-md border shadow-sm border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50" data-shot-charts-target="compareReset" data-action="click->shot-charts#onCompareReset">Reset</button>
         </div>
-        <button id="compare-range-reset" class="items-center py-2 px-4 text-sm font-medium bg-white rounded-md border shadow-sm border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Reset</button>
       </div>
-    </div>
-  <% end %>
-  <div data-controller="shot-charts">
+    <% end %>
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div id="shot-chart" data-shot-data="<%= @chart.shot_chart.to_json %>" data-comparison-data="<%= @chart.comparison_data.to_json %>"></div>
+      <div id="shot-chart" data-shot-charts-target="shotChart"></div>
     </div>
     <div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div id="temperature-chart" data-temperature-data="<%= @chart.temperature_chart.to_json %>"></div>
+      <div id="temperature-chart" data-shot-charts-target="temperatureChart"></div>
     </div>
   </div>
 <% end %>

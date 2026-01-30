@@ -1,170 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 import Highcharts from "highcharts"
 import "highcharts-annotations"
-
-const deepMerge = (obj1, obj2) => {
-  const result = { ...obj1 }
-  for (const key in obj2) {
-    if (!obj2.hasOwnProperty(key)) return
-
-    if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
-      result[key] = deepMerge(obj1[key], obj2[key])
-    } else {
-      result[key] = obj2[key]
-    }
-  }
-  return result
-}
-
-const isObject = obj => obj && typeof obj === "object"
-
-const getHoverPoint = (chart, e) => {
-  return chart.pointer.findNearestKDPoint(chart.series, true, chart.pointer.normalize(e))
-}
-
-const syncZoomReset = e => {
-  if (!e.resetSelection) return
-
-  Highcharts.charts.forEach(chart => {
-    if (!isObject(chart) || !isObject(chart.resetZoomButton)) return
-    chart.resetZoomButton = chart.resetZoomButton.destroy()
-  })
-}
-
-const syncExtremes = function (e) {
-  if (e.trigger === "syncExtremes") return
-
-  Highcharts.charts.forEach(chart => {
-    if (!isObject(chart) || chart === this.chart) return
-    if (!chart.xAxis[0].setExtremes) return
-
-    chart.xAxis[0].setExtremes(e.min, e.max, undefined, false, { trigger: "syncExtremes" })
-    if (isObject(chart.resetZoomButton) || e.min === undefined || e.max === undefined) return
-
-    chart.showResetZoom()
-  })
-}
-
-const isDark = () => {
-  if (document.body.classList.contains("system")) {
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-  } else {
-    return document.body.classList.contains("dark")
-  }
-}
-
-const getColors = () => {
-  if (isDark()) {
-    return {
-      background: "#171717",
-      label: "#999999",
-      gridLine: "#191919",
-      line: "#332914",
-      legend: "#cccccc",
-      legendHover: "#ffffff",
-      legendHidden: "#333333"
-    }
-  } else {
-    return {
-      background: "#ffffff",
-      label: "#666666",
-      gridLine: "#e6e6e6",
-      line: "#ccd6eb",
-      legend: "#333333",
-      legendHover: "#000000",
-      legendHidden: "#cccccc"
-    }
-  }
-}
-
-const commonOptions = () => {
-  const colors = getColors()
-
-  return {
-    accessibility: { enabled: false },
-    animation: false,
-    title: false,
-    chart: {
-      zoomType: "x",
-      backgroundColor: colors.background,
-      events: { selection: syncZoomReset }
-    },
-    xAxis: {
-      type: "datetime",
-      events: { setExtremes: syncExtremes },
-      crosshair: true,
-      labels: {
-        style: { color: colors.label },
-        formatter: function () {
-          if (this.value < 0) {
-            return `-${Highcharts.dateFormat("%M:%S", -this.value)}`
-          } else {
-            return Highcharts.dateFormat("%M:%S", this.value)
-          }
-        }
-      },
-      gridLineColor: colors.gridLine,
-      lineColor: colors.line,
-      tickColor: colors.line
-    },
-    yAxis: {
-      title: false,
-      labels: { style: { color: colors.label } },
-      gridLineColor: colors.gridLine,
-      lineColor: colors.line,
-      tickColor: colors.line
-    },
-    tooltip: {
-      animation: false,
-      shared: true,
-      borderRadius: 10,
-      shadow: false,
-      borderWidth: 0,
-      formatter: function (tooltip) {
-        let s
-        if (this.x < 0) {
-          s = [`-${Highcharts.dateFormat("%M:%S.%L", -this.x)}<br>`]
-        } else {
-          s = [`${Highcharts.dateFormat("%M:%S.%L", this.x)}<br>`]
-        }
-
-        const visibleSeries = this.points.filter(point => point.series.visible)
-        if (visibleSeries.length === 2) {
-          const [series1, series2] = visibleSeries
-          const diff = Math.abs(series1.y - series2.y)
-          const formattedDiff = Highcharts.numberFormat(diff, 2)
-          s = s.concat(tooltip.bodyFormatter(visibleSeries))
-          s.push(`Δ <strong>${formattedDiff}</strong>`)
-        } else {
-          s = s.concat(tooltip.bodyFormatter(this.points))
-        }
-
-        return s
-      }
-    },
-    legend: {
-      itemStyle: { color: colors.legend },
-      itemHoverStyle: { color: colors.legendHover },
-      itemHiddenStyle: { color: colors.legendHidden }
-    },
-    plotOptions: {
-      series: {
-        animation: false,
-        marker: {
-          enabled: false,
-          states: { hover: { enabled: false } }
-        },
-        states: {
-          hover: { enabled: false },
-          inactive: { enabled: false }
-        }
-      }
-    },
-    credits: { enabled: false }
-  }
-}
+import { commonOptions, getHoverPoint } from "helpers/shot_chart_helpers"
+import { deepMerge, isObject } from "helpers/object_helpers"
 
 export default class extends Controller {
+  static targets = ["shotChart", "temperatureChart", "compareRange", "compareReset"]
+  static values = { shotData: Array, shotStages: Array, temperatureData: Array, comparisonData: Object }
+
   connect() {
     this.charts = []
     this.syncedElements = []
@@ -179,56 +22,29 @@ export default class extends Controller {
 
   disconnect() {
     this.colorSchemeMedia?.removeEventListener("change", this.handleColorSchemeChange)
-    this.detachComparisonAdjust()
     this.detachMouseSyncEvents()
     this.destroyCharts()
   }
 
   initializeCharts() {
     this.destroyCharts()
+    this.shotStagesNormalized = this.shotStagesValue.map(x => ({ ...x, id: x }))
 
-    const shotChart = this.element.querySelector("#shot-chart")
-    if (shotChart) {
-      this.shotData = this.parseArrayData(shotChart.dataset.shotData)
-      this.shotStages = this.parseArrayData(shotChart.dataset.shotStages)
-      this.comparisonData = this.parseObjectData(shotChart.dataset.comparisonData)
-
-      if (this.shotData.length) {
-        const chart = this.drawShotChart(shotChart)
-        this.charts.push(chart)
-        this.syncMouseEvents(shotChart)
-      }
+    if (this.hasShotChartTarget && this.shotDataValue.length) {
+      const chart = this.drawShotChart(this.shotChartTarget)
+      this.charts.push(chart)
+      this.syncMouseEvents(this.shotChartTarget)
     }
 
-    const temperatureChart = this.element.querySelector("#temperature-chart")
-    if (temperatureChart) {
-      this.temperatureData = this.parseArrayData(temperatureChart.dataset.temperatureData)
-
-      if (this.temperatureData.length) {
-        const chart = this.drawTemperatureChart(temperatureChart)
-        this.charts.push(chart)
-        this.syncMouseEvents(temperatureChart)
-      }
+    if (this.hasTemperatureChartTarget && this.temperatureDataValue.length) {
+      const chart = this.drawTemperatureChart(this.temperatureChartTarget)
+      this.charts.push(chart)
+      this.syncMouseEvents(this.temperatureChartTarget)
     }
 
-    this.attachComparisonAdjust()
-
-    if (this.shotStages?.length > 0) {
-      this.shotStages = this.shotStages.map(x => ({ ...x, id: x }))
+    if (this.shotStagesNormalized.length > 0) {
       this.drawShotStages()
     }
-  }
-
-  parseArrayData(dataset) {
-    if (!dataset) return []
-    const parsed = JSON.parse(dataset)
-    return Array.isArray(parsed) ? parsed : []
-  }
-
-  parseObjectData(dataset) {
-    if (!dataset) return null
-    const parsed = JSON.parse(dataset)
-    return parsed && !Array.isArray(parsed) ? parsed : null
   }
 
   destroyCharts() {
@@ -295,7 +111,7 @@ export default class extends Controller {
   }
 
   extractStages(field, timings) {
-    for (const fieldData of this.shotData) {
+    for (const fieldData of this.shotDataValue) {
       if (fieldData.name === field) {
         return timings.map(time => new Map(fieldData.data).get(time))
       }
@@ -305,7 +121,7 @@ export default class extends Controller {
 
   setupInCupAnnotations(chart) {
     const weightColor = chart.series.find(x => x.name === "Weight Flow").color
-    const timings = this.shotStages.map(x => x.value)
+    const timings = this.shotStagesNormalized.map(x => x.value)
     const weightFlow = this.extractStages("Weight Flow", timings)
     const weight = this.extractStages("Weight", timings)
 
@@ -356,19 +172,19 @@ export default class extends Controller {
     if (annotation && !isVisible) {
       chart.removeAnnotation(annotation)
       chart.inCupAnnotation = null
-    } else if (this.shotStages?.length > 0 && !annotation && isVisible) {
+    } else if (this.shotStagesNormalized.length > 0 && !annotation && isVisible) {
       this.setupInCupAnnotations(chart)
     }
   }
 
   drawShotChart(element) {
-    const hasSecondaryAxis = this.shotData.some(series => series.yAxis === 1)
+    const hasSecondaryAxis = this.shotDataValue.some(series => series.yAxis === 1)
     const custom = {
       chart: {
         height: 650,
         events: { redraw: e => this.updateInCupVisibility(e.target) }
       },
-      series: this.shotData
+      series: this.shotDataValue
     }
 
     let options = deepMerge(commonOptions(), custom)
@@ -385,7 +201,7 @@ export default class extends Controller {
     }
     const chart = Highcharts.chart(element, options)
     chart.controller = this
-    if (this.shotStages?.length > 0) {
+    if (this.shotStagesNormalized.length > 0) {
       this.setupInCupAnnotations(chart)
     }
     return chart
@@ -394,7 +210,7 @@ export default class extends Controller {
   drawShotStages() {
     this.charts.forEach(chart => {
       if (isObject(chart)) {
-        this.shotStages.forEach(x => chart.xAxis[0].addPlotLine(x))
+        this.shotStagesNormalized.forEach(x => chart.xAxis[0].addPlotLine(x))
       }
     })
   }
@@ -416,52 +232,45 @@ export default class extends Controller {
       chart: {
         height: 400
       },
-      series: this.temperatureData
+      series: this.temperatureDataValue
     }
 
     let options = deepMerge(commonOptions(), custom)
     return Highcharts.chart(element, options)
   }
 
-  attachComparisonAdjust() {
-    this.compareRange = document.getElementById("compare-range")
-    if (!this.compareRange || !this.comparisonData) return
+  applyComparisonOffset(value) {
+    if (Object.keys(this.comparisonDataValue).length === 0) return
 
-    this.compareInputHandler = () => {
-      const value = parseInt(this.compareRange.value)
-      this.charts.forEach(chart => {
-        if (isObject(chart)) {
-          chart.series.forEach(s => {
-            if (this.comparisonData[s.name]) {
-              s.setData(
-                this.comparisonData[s.name].map(d => [d[0] + value, d[1]]),
-                true,
-                false,
-                false
-              )
-            }
-          })
-        }
+    this.charts.forEach(chart => {
+      if (!isObject(chart)) return
+
+      chart.series.forEach(s => {
+        if (!this.comparisonDataValue[s.name]) return
+
+        s.setData(
+          this.comparisonDataValue[s.name].map(d => [d[0] + value, d[1]]),
+          true,
+          false,
+          false
+        )
       })
-    }
-
-    this.compareResetButton = document.getElementById("compare-range-reset")
-    this.compareResetHandler = () => {
-      this.compareRange.value = 0
-      this.compareInputHandler()
-    }
-
-    this.compareRange.addEventListener("input", this.compareInputHandler)
-    this.compareResetButton?.addEventListener("click", this.compareResetHandler)
+    })
   }
 
-  detachComparisonAdjust() {
-    if (this.compareRange && this.compareInputHandler) {
-      this.compareRange.removeEventListener("input", this.compareInputHandler)
-    }
-    if (this.compareResetButton && this.compareResetHandler) {
-      this.compareResetButton.removeEventListener("click", this.compareResetHandler)
-    }
+  onCompareInput() {
+    if (!this.hasCompareRangeTarget) return
+
+    const value = parseInt(this.compareRangeTarget.value)
+    this.applyComparisonOffset(value)
+  }
+
+  onCompareReset(event) {
+    event.preventDefault()
+    if (!this.hasCompareRangeTarget) return
+
+    this.compareRangeTarget.value = 0
+    this.applyComparisonOffset(0)
   }
 
   handleColorSchemeChange() {
