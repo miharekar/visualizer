@@ -10,10 +10,10 @@
 </div>
 <% if @chart %>
   <div data-controller="shot-charts"
-       data-shot-charts-shot-data-value="<%= json_escape((@chart.shot_chart || []).to_json) %>"
+       data-shot-charts-shot-data-value="<%= (@chart.shot_chart || []).to_json %>"
        data-shot-charts-shot-stages-value="[]"
-       data-shot-charts-temperature-data-value="<%= json_escape((@chart.temperature_chart || []).to_json) %>"
-       data-shot-charts-comparison-data-value="<%= json_escape((@chart.comparison_data || {}).to_json) %>">
+       data-shot-charts-temperature-data-value="<%= (@chart.temperature_chart || []).to_json %>"
+       data-shot-charts-comparison-data-value="<%= (@chart.comparison_data || {}).to_json %>">
     <% if Current.user&.premium? %>
       <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
