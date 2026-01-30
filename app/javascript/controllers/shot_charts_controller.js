@@ -48,7 +48,9 @@ export default class extends Controller {
   }
 
   destroyCharts() {
-    this.charts.forEach(chart => chart.destroy())
+    this.charts.forEach(chart => {
+      chart.destroy()
+    })
     this.charts = []
   }
 
