@@ -24,5 +24,4 @@ pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.36.0
 pin_all_from "app/javascript/channels", under: "channels"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin_all_from "app/javascript/helpers", under: "helpers"
-pin_all_from "app/javascript/charts", under: "charts"
 pin_all_from "app/javascript/custom", under: "custom"

@@ -3,5 +3,4 @@
 import "@hotwired/turbo-rails"
 import "@rails/activestorage"
 import "controllers"
-import "charts"
 import "custom"
