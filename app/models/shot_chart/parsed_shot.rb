@@ -3,8 +3,8 @@ class ShotChart
     prepend MemoWise
     include Bsearch
 
-    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure", "temperatureFlow" => "espresso_temperature_mix"}.freeze
-    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure", "temperatureFlow" => "actual_temperature"}.freeze
+    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure", "temperatureFlow" => "espresso_temperature_mix", "basketTemperatureFlow" => "espresso_temperature_basket", "targetTemperatureFlow" => "espresso_temperature_goal"}.freeze
+    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure", "temperatureFlow" => "actual_temperature", "basketTemperatureFlow" => "actual_temperature", "targetTemperatureFlow" => "actual_temperature"}.freeze
 
     attr_reader :shot, :timeframe, :data
 
