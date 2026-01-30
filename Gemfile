@@ -57,6 +57,7 @@ group :development do
   gem "bundler-audit"
   gem "herb"
   gem "hotwire-spark"
+  gem "htmlbeautifier"
   gem "kamal"
   gem "letter_opener"
   gem "reactionview"

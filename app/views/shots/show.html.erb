@@ -28,7 +28,7 @@
           </div>
         <% end %>
         <div class="flex-1 <%= width_class %>">
-          <input class="standard-input" type="text" data-action="related-shots#urlCompare" placeholder="With any shot via its URL">
+          <input class="standard-input" type="text" data-action="related-shots#urlCompare" placeholder="With any shot via its URL" autocomplete="off">
         </div>
       </div>
     </div>
@@ -42,37 +42,12 @@
   </div>
 </div>
 <% if @chart %>
-  <% if @chart.data? %>
+  <div data-controller="shot-charts">
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div id="shot-chart"></div>
+      <div id="shot-chart" data-shot-data="<%= @chart.shot_chart.to_json %>" data-shot-stages="<%= @chart.stages.to_json %>"></div>
     </div>
-    <% if @chart.temperature_chart.present? %>
-      <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div id="temperature-chart"></div>
-      </div>
-    <% end %>
-    <script>
-      window.shotData = <%= raw @chart.shot_chart.to_json %>;
-      window.temperatureData = <%= raw @chart.temperature_chart.to_json %>;
-      window.shotStages = <%= raw @chart.stages.to_json %>;
-    </script>
-  <% else %>
-    <div class="p-4 bg-yellow-50 rounded-md">
-      <div class="flex">
-        <div class="shrink-0">
-          <svg class="text-yellow-400 size-5" viewBox="0 0 20 20" fill="currentColor" data-slot="icon">
-            <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
-          </svg>
-        </div>
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-yellow-800">Something is missing 🤷‍♂️</h3>
-          <div class="mt-2 text-sm text-yellow-700">
-            <p>
-              There's no data on this shot. If you think this is an error, please <a href="https://github.com/miharekar/visualizer/issues/new?template=bug_report.md" target="_blank" class="standard-link">open an issue</a> with the original shot/json file.
-            </p>
-          </div>
-        </div>
-      </div>
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div id="temperature-chart" data-temperature-data="<%= @chart.temperature_chart.to_json %>"></div>
     </div>
-  <% end %>
+  </div>
 <% end %>

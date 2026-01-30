@@ -194,6 +194,7 @@ GEM
       listen
       rails (>= 7.0.0)
       zeitwerk
+    htmlbeautifier (1.4.3)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     image_processing (1.14.0)
@@ -595,6 +596,7 @@ DEPENDENCIES
   factory_bot_rails
   herb
   hotwire-spark
+  htmlbeautifier
   image_processing
   importmap-rails
   inline_svg

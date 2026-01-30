@@ -16,7 +16,7 @@
       </div>
       <div class="flex">
         <div class="flex flex-col mt-2 mr-2 grow">
-          <input id="compare-range" class="flex-1 pt-2 shot-range dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>">
+          <input id="compare-range" class="flex-1 pt-2 shot-range dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>" autocomplete="off">
           <div class="flex pt-2">
             <div class="text-neutral-600 dark:text-neutral-400">
               -<%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
@@ -31,16 +31,12 @@
       </div>
     </div>
   <% end %>
-  <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <div id="shot-chart"></div>
+  <div data-controller="shot-charts">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div id="shot-chart" data-shot-data="<%= @chart.shot_chart.to_json %>" data-comparison-data="<%= @chart.comparison_data.to_json %>"></div>
+    </div>
+    <div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div id="temperature-chart" data-temperature-data="<%= @chart.temperature_chart.to_json %>"></div>
+    </div>
   </div>
-  <div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <div id="temperature-chart"></div>
-  </div>
-  <script>
-    window.shotData = <%= @chart.shot_chart.to_json.html_safe %>;
-    window.temperatureData = <%= @chart.temperature_chart.to_json.html_safe %>;
-    window.shotStages = [];
-    window.comparisonData = <%= @chart.comparison_data.to_json.html_safe %>;
-  </script>
 <% end %>
