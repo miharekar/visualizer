@@ -160,7 +160,11 @@ export default class extends Controller {
       .add()
     chart.annotationVisible = true
     const toggleButton = chart.annotationButton.element.querySelector("button")
-    toggleButton?.addEventListener("click", function () {
+    if (!toggleButton) return
+
+    chart.annotationToggleHandler = () => {
+      if (!chart.annotations || !chart.annotations[0] || !chart.annotations[0].graphic) return
+
       if (chart.annotationVisible) {
         chart.controller.destroyShotStages()
         chart.annotations[0].graphic.hide()
@@ -172,7 +176,9 @@ export default class extends Controller {
         chart.annotationVisible = true
         toggleButton.textContent = "Hide annotations"
       }
-    })
+    }
+
+    toggleButton.addEventListener("click", chart.annotationToggleHandler)
   }
 
   updateInCupVisibility(chart) {
@@ -183,6 +189,16 @@ export default class extends Controller {
     if (annotation && !isVisible) {
       chart.removeAnnotation(annotation)
       chart.inCupAnnotation = null
+      chart.annotationVisible = false
+      if (chart.annotationButton) {
+        const toggleButton = chart.annotationButton.element.querySelector("button")
+        if (toggleButton && chart.annotationToggleHandler) {
+          toggleButton.removeEventListener("click", chart.annotationToggleHandler)
+        }
+        chart.annotationButton.destroy()
+        chart.annotationButton = null
+        chart.annotationToggleHandler = null
+      }
     } else if (this.shotStagesNormalized.length > 0 && !annotation && isVisible) {
       this.setupInCupAnnotations(chart)
     }
@@ -221,7 +237,9 @@ export default class extends Controller {
   drawShotStages() {
     this.charts.forEach(chart => {
       if (isObject(chart)) {
-        this.shotStagesNormalized.forEach(x => chart.xAxis[0].addPlotLine(x))
+        this.shotStagesNormalized.forEach(x => {
+          chart.xAxis[0].addPlotLine(x)
+        })
       }
     })
   }
