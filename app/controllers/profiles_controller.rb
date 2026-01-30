@@ -85,7 +85,8 @@ class ProfilesController < ApplicationController
         "color" => params["user"]["#{it}-color"],
         "type" => params["user"]["#{it}-type"],
         "dashed" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{it}-dashed"]),
-        "hidden" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{it}-hidden"])
+        "hidden" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{it}-hidden"]),
+        "secondary_axis" => ActiveModel::Type::Boolean.new.cast(params["user"]["#{it}-secondary-axis"])
       }
     end
 

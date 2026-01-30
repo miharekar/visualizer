@@ -63,7 +63,8 @@ class ShotChart
           valueSuffix: setting["suffix"]
         },
         opacity: setting["opacity"] || 1,
-        type: setting["type"] == "spline" ? "spline" : "line"
+        type: setting["type"] == "spline" ? "spline" : "line",
+        yAxis: setting["secondary_axis"] ? 1 : 0
       }
     end
   end

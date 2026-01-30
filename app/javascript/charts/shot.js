@@ -277,6 +277,7 @@ function updateInCupVisibility(chart) {
 }
 
 function drawShotChart() {
+  const hasSecondaryAxis = window.shotData.some(series => series.yAxis === 1)
   const custom = {
     chart: {
       height: 650,
@@ -286,6 +287,17 @@ function drawShotChart() {
   }
 
   let options = deepMerge(commonOptions(), custom)
+  if (hasSecondaryAxis) {
+    const primaryAxis = options.yAxis
+    options.yAxis = [
+      primaryAxis,
+      {
+        ...primaryAxis,
+        opposite: true,
+        gridLineWidth: 0
+      }
+    ]
+  }
   let chart = Highcharts.chart("shot-chart", options)
   if (window.shotStages?.length > 0) {
     setupInCupAnnotations(chart)

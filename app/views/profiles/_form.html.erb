@@ -149,6 +149,18 @@
                       </div>
                     </div>
                   </div>
+                  <div class="flex-1">
+                    <% if label == "espresso_weight" %>
+                      <div class="flex mt-3">
+                        <div class="flex items-center h-5">
+                          <%= f.check_box "#{label}-secondary-axis", class: "standard-checkbox size-4 cursor-pointer", checked: chart_settings.for_label(label)["secondary_axis"] %>
+                        </div>
+                        <div class="ml-3 text-sm">
+                          <%= f.label "#{label}-secondary-axis", "2nd y-axis", class: "text-neutral-700 dark:text-neutral-300" %>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
                 </div>
               <% end %>
             </div>
