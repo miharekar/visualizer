@@ -122,7 +122,8 @@ export default class extends Controller {
   }
 
   setupInCupAnnotations(chart) {
-    const weightColor = chart.series.find(x => x.name === "Weight Flow").color
+    const weightColor = chart.series.find(x => x.name === "Weight Flow")?.color
+    if (!weightColor) return
     const timings = this.shotStagesNormalized.map(x => x.value)
     const weightFlow = this.extractStages("Weight Flow", timings)
     const weight = this.extractStages("Weight", timings)
@@ -149,15 +150,7 @@ export default class extends Controller {
       labelOptions: { shape: "connector" }
     })
 
-    chart.annotationButton = chart.renderer
-      .text(
-        '<button class="inline-flex py-1 px-2 text-xs font-medium bg-white rounded border shadow-sm cursor-pointer highcharts-no-tooltip border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Hide annotations</button>',
-        50,
-        35,
-        true
-      )
-      .attr({ zIndex: 3 })
-      .add()
+    chart.annotationButton = chart.renderer.text('<button class="inline-flex py-1 px-2 text-xs font-medium bg-white rounded border shadow-sm cursor-pointer highcharts-no-tooltip border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Hide annotations</button>', 50, 35, true).attr({ zIndex: 3 }).add()
     chart.annotationVisible = true
     const toggleButton = chart.annotationButton.element.querySelector("button")
     if (!toggleButton) return
