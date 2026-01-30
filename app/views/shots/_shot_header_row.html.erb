@@ -6,7 +6,7 @@
       <div class="flex flex-col min-w-full lg:flex-row">
         <h1 class="flex text-2xl font-bold leading-tight sm:text-3xl text-neutral-900 dark:text-neutral-100">
           <div class="flex gap-x-2">
-            <img alt="Avatar" class="rounded size-8" src="<%= avatar_url(@shot.user, 80) %>">
+            <%= image_tag avatar_url(@shot.user, 80), alt: "Avatar", class: "rounded size-8" %>
             <span class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
               Shot by <%= link_to "#{@shot.user.display_name}", person_path(@shot.user.slug), class: "underline hover:text-neutral-500" %>
             </span>
@@ -35,7 +35,7 @@
               <%= render Notification.new(type: :default, heading: "URL copied to clipboard", timeout: 3000) %>
             </div>
             <div class="flex mr-3" data-controller="clipboard">
-              <input class="hidden" size="1" type="text" value="<%= request.url %>" readonly data-clipboard-target="source">
+              <input class="hidden" size="1" type="text" value="<%= request.url %>" readonly data-clipboard-target="source" autocomplete="off">
               <a class="inline-flex py-2 px-4 text-sm bg-white rounded-md border shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900 hover:bg-neutral-50" data-action="clipboard#copy" href="#" title="Copy URL to clipboard" data-clipboard-target="container">
                 <svg class="-mr-1 -ml-1 size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="copy">
                   <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />

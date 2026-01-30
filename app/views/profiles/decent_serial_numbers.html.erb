@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "decent_serial_numbers" do %>
   <% if @serial_numbers.present? %>
     <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-      It is linked to Decent <%= "serial number".pluralize(@serial_numbers.size) %> <%= @serial_numbers.to_sentence  %>.
+      It is linked to Decent <%= "serial number".pluralize(@serial_numbers.size) %> <%= @serial_numbers.to_sentence %>.
     </p>
   <% end %>
 <% end %>

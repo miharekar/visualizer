@@ -30,7 +30,7 @@ class Shot < ApplicationRecord
 
   scope :visible, -> { where(public: true) }
   scope :visible_or_owned_by_id, ->(user_id) { user_id ? visible.or(where(user_id:)) : visible }
-  scope :for_list, -> { select(LIST_ATTRIBUTES).includes(:tags, coffee_bag: :roaster) }
+  scope :for_list, -> { select(LIST_ATTRIBUTES).includes(:tags, coffee_bag: :roaster, image_attachment: :blob) }
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }

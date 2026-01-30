@@ -26,7 +26,7 @@
             <div>
               <button type="button" class="flex relative items-center max-w-xs text-sm bg-white rounded dark:ring-offset-black focus:ring-2 focus:ring-offset-2 focus:outline-none focus:ring-terracotta-500" data-action="click->menu#transform click@window->menu#hide" data-menu-target="button">
                 <span class="absolute -inset-1.5"></span>
-                <img class="rounded size-8" src="<%= avatar_url(Current.user, 64) %>">
+                <%= image_tag avatar_url(Current.user, 64), alt: "Account avatar", class: "rounded size-8" %>
               </button>
               <% if update_count > 0 %>
                 <span class="inline-block absolute top-0 right-0 rounded-full transform translate-x-1/2 -translate-y-1/2 size-3 bg-terracotta-600"></span>
