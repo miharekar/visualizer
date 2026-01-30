@@ -28,7 +28,7 @@ export default class extends Controller {
 
   initializeCharts() {
     this.destroyCharts()
-    this.shotStagesNormalized = this.shotStagesValue.map(x => ({ ...x, id: x }))
+    this.shotStagesNormalized = this.shotStagesValue.map(x => ({ ...x, id: String(x.value) }))
 
     if (this.hasShotChartTarget && this.shotDataValue.length) {
       const chart = this.drawShotChart(this.shotChartTarget)
@@ -149,19 +149,28 @@ export default class extends Controller {
       labelOptions: { shape: "connector" }
     })
 
-    chart.renderer.text('<button id="remove-annotations" class="inline-flex py-1 px-2 text-xs font-medium bg-white rounded border shadow-sm cursor-pointer highcharts-no-tooltip border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Hide annotations</span>', 50, 35, true).attr({ zIndex: 3 }).add()
+    chart.annotationButton = chart.renderer
+      .text(
+        '<button class="inline-flex py-1 px-2 text-xs font-medium bg-white rounded border shadow-sm cursor-pointer highcharts-no-tooltip border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Hide annotations</button>',
+        50,
+        35,
+        true
+      )
+      .attr({ zIndex: 3 })
+      .add()
     chart.annotationVisible = true
-    document.getElementById("remove-annotations").addEventListener("click", function () {
+    const toggleButton = chart.annotationButton.element.querySelector("button")
+    toggleButton?.addEventListener("click", function () {
       if (chart.annotationVisible) {
         chart.controller.destroyShotStages()
         chart.annotations[0].graphic.hide()
         chart.annotationVisible = false
-        this.innerHTML = "Show annotations"
+        toggleButton.textContent = "Show annotations"
       } else {
         chart.controller.drawShotStages()
         chart.annotations[0].graphic.show()
         chart.annotationVisible = true
-        this.innerHTML = "Hide annotations"
+        toggleButton.textContent = "Hide annotations"
       }
     })
   }
