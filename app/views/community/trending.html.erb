@@ -53,6 +53,7 @@
                   <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
                     <th scope="col" class="py-3 px-4 font-semibold">Profile</th>
                     <th scope="col" class="py-3 px-4 font-semibold text-right">Avg enjoyment</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg ratio</th>
                     <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
                   </tr>
                 </thead>
@@ -70,12 +71,19 @@
                             <span class="text-neutral-400 dark:text-neutral-500">—</span>
                           <% end %>
                         </td>
+                        <td class="py-3 px-4 text-right">
+                          <% if profile[:avg_ratio].present? %>
+                            <span class="text-xs font-semibold text-neutral-600 dark:text-neutral-300">~1:<%= profile[:avg_ratio] %></span>
+                          <% else %>
+                            <span class="text-neutral-400 dark:text-neutral-500">—</span>
+                          <% end %>
+                        </td>
                         <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></td>
                       </tr>
                     <% end %>
                   <% else %>
                     <tr>
-                      <td colspan="3" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
+                      <td colspan="4" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
                     </tr>
                   <% end %>
                 </tbody>
@@ -129,6 +137,7 @@
                   <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
                     <th scope="col" class="py-3 px-4 font-semibold">Profile</th>
                     <th scope="col" class="py-3 px-4 font-semibold text-right">Avg enjoyment</th>
+                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg ratio</th>
                     <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
                   </tr>
                 </thead>
@@ -146,12 +155,19 @@
                             <span class="text-neutral-400 dark:text-neutral-500">—</span>
                           <% end %>
                         </td>
+                        <td class="py-3 px-4 text-right">
+                          <% if profile[:avg_ratio].present? %>
+                            <span class="text-xs font-semibold text-neutral-600 dark:text-neutral-300">~1:<%= profile[:avg_ratio] %></span>
+                          <% else %>
+                            <span class="text-neutral-400 dark:text-neutral-500">—</span>
+                          <% end %>
+                        </td>
                         <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></td>
                       </tr>
                     <% end %>
                   <% else %>
                     <tr>
-                      <td colspan="3" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
+                      <td colspan="4" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
                     </tr>
                   <% end %>
                 </tbody>

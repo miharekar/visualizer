@@ -41,16 +41,19 @@ class TrendingProfilesJob < ApplicationJob
       .select(
         Arel.sql("TRIM(profile_title) AS name"),
         Arel.sql("COUNT(*) AS count"),
-        Arel.sql("AVG(NULLIF(espresso_enjoyment, 0)) AS avg_enjoyment")
+        Arel.sql("AVG(NULLIF(espresso_enjoyment, 0)) AS avg_enjoyment"),
+        Arel.sql("AVG(CASE WHEN CASE WHEN bean_weight ~ '^\\s*[0-9]+(\\.[0-9]+)?' THEN regexp_replace(bean_weight, '^\\s*([0-9]+(?:\\.[0-9]+)?).*$','\\1') END::float > 0 AND CASE WHEN drink_weight ~ '^\\s*[0-9]+(\\.[0-9]+)?' THEN regexp_replace(drink_weight, '^\\s*([0-9]+(?:\\.[0-9]+)?).*$','\\1') END::float > 0 THEN CASE WHEN drink_weight ~ '^\\s*[0-9]+(\\.[0-9]+)?' THEN regexp_replace(drink_weight, '^\\s*([0-9]+(?:\\.[0-9]+)?).*$','\\1') END::float / CASE WHEN bean_weight ~ '^\\s*[0-9]+(\\.[0-9]+)?' THEN regexp_replace(bean_weight, '^\\s*([0-9]+(?:\\.[0-9]+)?).*$','\\1') END::float END) AS avg_ratio")
       )
       .order(Arel.sql("COUNT(*) DESC"))
       .limit(10)
       .map do |profile|
         avg_enjoyment = profile.avg_enjoyment&.to_f
+        avg_ratio = profile.avg_ratio&.to_f
         {
           name: profile.name,
           count: profile.count,
-          avg_enjoyment: avg_enjoyment&.round
+          avg_enjoyment: avg_enjoyment&.round,
+          avg_ratio: avg_ratio&.round(1)
         }
       end
   end

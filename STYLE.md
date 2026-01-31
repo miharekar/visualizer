@@ -45,6 +45,23 @@ records.each do |record|
 end
 ```
 
+## Line breaks for arguments
+
+Keep method calls on a single line when the arguments fit comfortably. Avoid multi-line formatting for short argument lists.
+
+```ruby
+# Bad
+create(
+  :shot,
+  public: true,
+  profile_title: "Sweet Bloom",
+  start_time: recent_time
+)
+
+# Good
+create(:shot, public: true, profile_title: "Sweet Bloom", start_time: recent_time)
+```
+
 ## Modern Ruby/Rails
 
 Adopt newer Ruby and Rails methods when they are clearer or reduce boilerplate, as long as they match existing project conventions.
