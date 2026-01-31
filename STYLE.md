@@ -45,6 +45,15 @@ records.each do |record|
 end
 ```
 
+## Simple predicates
+
+Prefer one-line selection blocks with `it` when the logic is straightforward. Avoid extracting a helper for a one-liner.
+
+```ruby
+# Good
+active_transactions = transactions.select { now_ms.between?(it["period_start"], it["period_end"]) }
+```
+
 ## Line breaks for arguments
 
 Keep method calls on a single line when the arguments fit comfortably. Avoid multi-line formatting for short argument lists.
