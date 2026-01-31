@@ -54,7 +54,7 @@ class LoffeeLabsImporterJob < ApplicationJob
     CanonicalCoffeeBag
       .find_or_initialize_by(loffee_labs_id: bean["id"])
       .update(canonical_roaster: roaster_by_name(roaster_name), **attributes)
-  rescue StandardError => e
+  rescue Date::Error => e
     Appsignal.report_error(e) { it.set_tags(loffee_labs_id: bean["id"]) }
   end
 
