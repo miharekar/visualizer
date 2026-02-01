@@ -4,7 +4,7 @@ class ShotsController < ApplicationController
   include Shots::Editing
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
-  before_action :load_shot, only: %i[show compare remove_image]
+  before_action :load_shot, only: %i[show compare remove_image share beanconqueror]
   before_action :create_shared_shot, only: %i[share beanconqueror]
   before_action :load_users_shot, only: %i[edit update destroy]
   before_action :load_coffee_bags_for_form, only: :edit
@@ -143,7 +143,6 @@ class ShotsController < ApplicationController
   end
 
   def create_shared_shot
-    load_shot
     @shared_shot = SharedShot.find_or_initialize_by(shot: @shot, user: Current.user)
     @shared_shot.created_at = Time.current
     @shared_shot.save!

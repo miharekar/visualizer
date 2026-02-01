@@ -1,6 +1,29 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "1ae927ffc8cb671cac8eba8d482d36716d5759a51198ec17c25fcf5a8e35ff0d",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/shots_controller.rb",
+      "line": 37,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => Shot.find(params[:id]), :user => Current.user).code}\", :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ShotsController",
+        "method": "beanconqueror"
+      },
+      "user_input": "SharedShot.find_or_initialize_by(:shot => Shot.find(params[:id]), :user => Current.user).code",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "ae2af597523506dc91bb14db2ec25561ab088094b7b32a52804353a8c2b37f13",
@@ -20,29 +43,6 @@
       "confidence": "Weak",
       "cwe_id": [
         89
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Redirect",
-      "warning_code": 18,
-      "fingerprint": "cd14a1e7f78573fa1c46fcb458fa998025ffa91237c084f230e9e0549794b24b",
-      "check_name": "Redirect",
-      "message": "Possible unprotected redirect",
-      "file": "app/controllers/shots_controller.rb",
-      "line": 37,
-      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
-      "code": "redirect_to(\"https://beanconqueror.com?visualizerShare=#{SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code}\", :allow_other_host => true)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "ShotsController",
-        "method": "beanconqueror"
-      },
-      "user_input": "SharedShot.find_or_initialize_by(:shot => (@shot), :user => Current.user).code",
-      "confidence": "Weak",
-      "cwe_id": [
-        601
       ],
       "note": ""
     },
@@ -91,5 +91,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "7.1.2"
+  "brakeman_version": "8.0.1"
 }
