@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_21_090441) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -75,6 +75,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_21_090441) do
     t.string "url"
     t.string "variety"
     t.index ["canonical_roaster_id"], name: "index_canonical_coffee_bags_on_canonical_roaster_id"
+    t.index ["loffee_labs_id"], name: "index_canonical_coffee_bags_on_loffee_labs_id", unique: true
   end
 
   create_table "canonical_roasters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

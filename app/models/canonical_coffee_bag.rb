@@ -5,6 +5,8 @@ class CanonicalCoffeeBag < ApplicationRecord
   belongs_to :canonical_roaster
   has_many :coffee_bags, dependent: :nullify
 
+  validates :loffee_labs_id, uniqueness: true, allow_nil: true
+
   def self.search(term)
     words = term.squish.split.reject { |w| w.length < MIN_TERM_LENGTH }
     return none if words.empty?
@@ -43,6 +45,7 @@ end
 # Indexes
 #
 #  index_canonical_coffee_bags_on_canonical_roaster_id  (canonical_roaster_id)
+#  index_canonical_coffee_bags_on_loffee_labs_id        (loffee_labs_id) UNIQUE
 #
 # Foreign Keys
 #
