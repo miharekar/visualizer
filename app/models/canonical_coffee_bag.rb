@@ -4,6 +4,7 @@ class CanonicalCoffeeBag < ApplicationRecord
 
   belongs_to :canonical_roaster
   has_many :coffee_bags, dependent: :nullify
+  has_many :shots, dependent: :nullify
 
   validates :loffee_labs_id, uniqueness: true, allow_nil: true
 
