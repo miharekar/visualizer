@@ -1,5 +1,5 @@
 <div class="md:col-span-2" id="<%= dom_id(@coffee_bag) %>">
-  <%= form_with(model: @coffee_bag, data: { controller: "coffee-bag-scraper canonical-selector" }) do |f| %>
+  <%= form_with(model: @coffee_bag, data: { controller: "coffee-bag-scraper canonical-selector", canonical_selector_coffee_bag_autocomplete_url_value: autocomplete_coffee_bags_canonical_index_path, canonical_selector_roaster_canonical_map_value: @roasters.to_h { |roaster| [roaster.id.to_s, roaster.canonical_roaster_id] } }) do |f| %>
     <div class="sm:overflow-hidden sm:rounded-md md:shadow">
       <div class="flex flex-col gap-y-6 py-5 px-4 bg-white sm:p-6 dark:bg-neutral-800">
         <div class="grid grid-cols-6 gap-6">
@@ -24,21 +24,16 @@
             <% end %>
             <%= f.label :name, class: "standard-label" %>
             <div class="relative">
-              <% if @coffee_bag&.roaster&.canonical_roaster_id %>
-                <!--TODO: auto update roaster-->
-                <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(roaster_id: @coffee_bag.roaster.canonical_roaster_id) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">
-                  <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id", coffee_bag_scraper_target: "canonicalId" } %>
-                  <%= f.search_field :name, class: "#{name_extra_classes} ps-10 mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
-                  <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
-                  <div class="<%= "hidden" unless coffee_bag.canonical_coffee_bag_id %> pointer-events-none absolute inset-y-0 left-2 flex items-center" data-canonical-selector-target="verified">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                    </svg>
-                  </div>
+              <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(canonical_roaster_id: @coffee_bag.roaster&.canonical_roaster_id) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">
+                <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id", coffee_bag_scraper_target: "canonicalId" } %>
+                <%= f.search_field :name, class: "#{name_extra_classes} #{'ps-10' if coffee_bag.canonical_coffee_bag_id} mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
+                <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
+                <div class="<%= "hidden" unless coffee_bag.canonical_coffee_bag_id %> pointer-events-none absolute inset-y-0 left-2 flex items-center" data-canonical-selector-target="verified">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                  </svg>
                 </div>
-              <% else %>
-                <%= f.text_field :name, class: "#{name_extra_classes} mt-1 standard-input" %>
-              <% end %>
+              </div>
             </div>
             <% if name_errors.any? %>
               <p class="text-sm font-medium text-red-500">
@@ -65,7 +60,7 @@
                 <%= link_to "New", new_roaster_path, class: "standard-link", data: { turbo_frame: "_top" } %>
               </div>
             </div>
-            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters, extra_text_field_classes: roaster_extra_classes} %>
+            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters, extra_text_field_classes: roaster_extra_classes, hidden_data: { canonical_selector_target: "roasterId", action: "change->canonical-selector#roasterChanged" } } %>
             <% if roaster_errors.any? %>
               <p class="text-sm font-medium text-red-500">
                 <% if roaster_errors.any? { |e| e.type == :blank } %>

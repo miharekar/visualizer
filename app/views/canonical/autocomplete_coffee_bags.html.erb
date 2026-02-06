@@ -1,10 +1,8 @@
 <div class="py-1 bg-white dark:bg-neutral-900">
   <% @coffee_bags.each do |coffee_bag| %>
     <li class="py-2 px-4 text-sm" role="option" data-autocomplete-value="<%= coffee_bag.id %>" data-roaster="<%= coffee_bag.canonical_roaster.name %>" data-coffee-bag="<%= coffee_bag.name %>">
-      <%= coffee_bag.name %><% if params[:roaster_id].blank? %> (<%= coffee_bag.canonical_roaster.name %>)
-      <% else %>
-        <div data-coffee-bag-payload-value="<%= coffee_bag.attributes.slice(*CoffeeBag::DISPLAY_ATTRIBUTES).to_json %>"></div>
-      <% end %>
+      <%= coffee_bag.name %>
+      <div data-coffee-bag-payload-value="<%= coffee_bag.attributes.slice(*CoffeeBag::DISPLAY_ATTRIBUTES).to_json %>"></div>
     </li>
   <% end %>
 </div>
