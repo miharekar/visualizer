@@ -88,6 +88,7 @@ bin/ci                 # full CI pipeline
 - `Shot` is the core brew record with profile metadata, attachments, tags, and optional `ShotInformation` JSON for charting.
 - `ShotInformation` stores parsed brew data, profile fields, and parser metadata (`parser_name` detects Decent/Beanconqueror/Gaggiuino/GaggiMate/SEP CSV).
 - `CoffeeBag` belongs to a `Roaster`; canonical roaster/bag records back autocomplete and community sharing.
+- Coffee bag freezer lifecycle uses `frozen_date` and `defrosted_date` naming consistently across model/controller/views/API.
 - `SharedShot` issues short codes for public shares and Beanconqueror deep links; `ShotTag`/`Tag` provide tagging.
 - `Update`, `Stats`, `YearlyBrew`, and `Community` controllers back the public change log and discovery pages.
 
@@ -125,6 +126,8 @@ bin/ci                 # full CI pipeline
 ### Testing & security notes
 
 - Minitest with parallelization; FactoryBot and WebMock are available (network blocked in tests by default).
+- When adding Airtable table fields, update the Airtable metadata factory stub in `test/factories/airtable_infos.rb` so tests do not issue unstubbed field-creation requests.
+- When adding attributes to Airtable-synced models (`Airtablable`), also update the corresponding mapper under `app/models/airtable/` (for example `STANDARD_FIELDS` and `FIELD_OPTIONS`) so sync stays bidirectional.
 - Keep secrets in `.env`/Rails credentials or `.mise.toml`; never commit keys or S3/Lemon Squeezy secrets.
 - When touching auth/billing/dependencies, run `bin/ci` or at least RuboCop + security checks (Brakeman, Bundler Audit, Importmap audit, Gitleaks).
 
@@ -139,6 +142,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 - Order methods: class methods, public (with `initialize` first), then `private` methods.
 - Order methods vertically by invocation flow (top calls next, etc.).
 - Use `!` only when there is a non-`!` counterpart; do not use `!` to signal destructiveness.
+- Prefer `return` over `return nil`; use explicit `nil` only when clarity benefits.
 - Do not indent method bodies under visibility modifiers; put `private` on its own line.
 - Keep controllers thin; call model/domain APIs directly. Services/form objects are allowed but not special.
 - Model non-CRUD endpoints as resources, not custom actions on existing resources.
@@ -172,6 +176,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 
 - For view edits, run `rustywind` and `htmlbeautifier` on changed templates.
 - Use Tailwind utility classes (no custom webpack). Respect existing component patterns.
+- Avoid time-dependent computed values (for example `Date.current`-based counters) inside cached list/card fragments; prefer persisted fields in cached UI.
 - Run Prettier on changed JavaScript files.
 
 ## Cursor/Copilot rules
