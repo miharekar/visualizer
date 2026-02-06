@@ -30,6 +30,11 @@
           <% end %>
         </div>
       </div>
+      <hr class="my-6 text-neutral-200 dark:text-neutral-700">
+      <div data-controller="modal">
+        <%= render "shared/modal" %>
+        <%= button_to "Delete #{@coffee_bag.name}", coffee_bag_path(@coffee_bag), method: :delete, class: "px-4 py-2 button-white w-full", data: {action: "click->modal#confirm", title: "Delete #{@coffee_bag.name}", text: "Are you sure you want to permanently delete #{@coffee_bag.display_name} coffee bag with #{pluralize(@coffee_bag.shots.count, "shot")}? This action cannot be undone."} %>
+      </div>
     </div>
     <hr class="mx-4 mt-6 sm:mx-6 md:hidden text-neutral-200 dark:text-neutral-700">
     <%= render "form", coffee_bag: @coffee_bag %>

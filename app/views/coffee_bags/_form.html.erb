@@ -81,6 +81,14 @@
             <%= f.date_field :roast_date, class: "mt-1 standard-input" %>
           </div>
           <div class="col-span-6 sm:col-span-3">
+            <%= f.label :frozen_date, "Frozen on", class: "standard-label" %>
+            <%= f.date_field :frozen_date, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :defrosted_date, "Defrosted on", class: "standard-label" %>
+            <%= f.date_field :defrosted_date, class: "mt-1 standard-input" %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
             <%= f.label :roast_level, class: "standard-label" %>
             <%= f.text_field :roast_level, class: "mt-1 standard-input" %>
           </div>

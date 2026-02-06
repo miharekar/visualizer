@@ -1090,6 +1090,14 @@ components:
           type: string
           format: date
           nullable: true
+        frozen_date:
+          type: string
+          format: date
+          nullable: true
+        defrosted_date:
+          type: string
+          format: date
+          nullable: true
         roast_level:
           type: string
           nullable: true
@@ -1139,6 +1147,8 @@ components:
         id: "a07b5f68-21a5-4677-9eaf-cbc9f35b4b83"
         name: "Kenya AA"
         roast_date: "2024-01-05"
+        frozen_date: "2024-01-12"
+        defrosted_date: "2024-02-05"
         roast_level: "Light"
         country: "Kenya"
         region: "Nyeri"

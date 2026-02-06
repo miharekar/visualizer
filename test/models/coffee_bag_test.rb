@@ -59,4 +59,38 @@ class CoffeeBagTest < ActiveSupport::TestCase
     assert_equal "Medium", coffee_bag.roast_level
     assert_equal roaster.id, coffee_bag.roaster_id
   end
+
+  test "frozen? is true only when frozen date exists and defrosted date is blank" do
+    coffee_bag = create(:coffee_bag, roaster:, frozen_date: Date.new(2025, 1, 10), defrosted_date: nil)
+    assert coffee_bag.frozen?
+
+    coffee_bag.update!(defrosted_date: Date.new(2025, 1, 15))
+    assert_not coffee_bag.frozen?
+  end
+
+  test "days_in_freezer returns nil when bag was never frozen" do
+    coffee_bag = create(:coffee_bag, roaster:, frozen_date: nil, defrosted_date: nil)
+
+    assert_nil coffee_bag.days_in_freezer
+  end
+
+  test "days_in_freezer returns elapsed days for defrosted bag" do
+    coffee_bag = create(:coffee_bag, roaster:, frozen_date: Date.new(2025, 1, 1), defrosted_date: Date.new(2025, 1, 9))
+
+    assert_equal 8, coffee_bag.days_in_freezer
+  end
+
+  test "defrosted date must be after frozen date" do
+    coffee_bag = build(:coffee_bag, roaster:, roast_date: Date.new(2025, 1, 1), frozen_date: Date.new(2025, 1, 10), defrosted_date: Date.new(2025, 1, 9))
+
+    assert_not coffee_bag.valid?
+    assert_includes coffee_bag.errors[:defrosted_date], "must be after frozen date"
+  end
+
+  test "defrosted date requires frozen date" do
+    coffee_bag = build(:coffee_bag, roaster:, roast_date: Date.new(2025, 1, 1), frozen_date: nil, defrosted_date: Date.new(2025, 1, 9))
+
+    assert_not coffee_bag.valid?
+    assert_includes coffee_bag.errors[:defrosted_date], "requires a frozen date"
+  end
 end

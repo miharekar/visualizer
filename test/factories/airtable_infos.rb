@@ -54,6 +54,8 @@ FactoryBot.define do
               {"name" => "Quality score", "type" => "singleLineText"},
               {"name" => "Region", "type" => "singleLineText"},
               {"name" => "Roast date", "type" => "date", "options" => {"dateFormat" => {"name" => "local"}}},
+              {"name" => "Frozen date", "type" => "date", "options" => {"dateFormat" => {"name" => "local"}}},
+              {"name" => "Defrosted date", "type" => "date", "options" => {"dateFormat" => {"name" => "local"}}},
               {"name" => "Roast level", "type" => "singleLineText"},
               {"name" => "Variety", "type" => "singleLineText"},
               {"name" => "Tasting notes", "type" => "singleLineText"},

@@ -3,7 +3,7 @@ class CoffeeBagsController < ApplicationController
 
   before_action :require_authentication
   before_action :check_premium!
-  before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image archive restore]
+  before_action :set_coffee_bag, only: %i[edit update duplicate destroy remove_image archive restore freeze defrost]
   before_action :load_coffee_bags, only: %i[index search]
   before_action :load_roasters, only: %i[new edit]
 
@@ -96,6 +96,24 @@ class CoffeeBagsController < ApplicationController
     end
   end
 
+  def freeze
+    @coffee_bag.update(frozen_date: Date.current, defrosted_date: nil)
+
+    respond_to do
+      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
+      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was frozen." }
+    end
+  end
+
+  def defrost
+    @coffee_bag.update(defrosted_date: Date.current)
+
+    respond_to do
+      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
+      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was defrosted." }
+    end
+  end
+
   private
 
   def set_coffee_bag
@@ -117,7 +135,7 @@ class CoffeeBagsController < ApplicationController
   end
 
   def coffee_bag_params
-    cb_params = params.expect(coffee_bag: %i[name url canonical_coffee_bag_id roast_date notes image] + CoffeeBag::DISPLAY_ATTRIBUTES)
+    cb_params = params.expect(coffee_bag: %i[name url canonical_coffee_bag_id roast_date frozen_date defrosted_date notes image] + CoffeeBag::DISPLAY_ATTRIBUTES)
     cb_params[:roaster_id] = Current.user.roasters.find_by(id: params.dig(:coffee_bag, :roaster_id))&.id
     cb_params
   end

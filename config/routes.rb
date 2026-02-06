@@ -71,6 +71,8 @@ Rails.application.routes.draw do
       delete :remove_image
       post :archive
       post :restore
+      post :freeze
+      post :defrost
       post :duplicate
     end
     collection do

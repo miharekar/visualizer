@@ -15,6 +15,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validate :defrosted_date_after_frozen_date
 
   after_save_commit :update_shots, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
 
@@ -48,7 +49,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   def to_api_json
-    attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id name roast_date url archived_at notes]
+    attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id name roast_date frozen_date defrosted_date url archived_at notes]
     attributes.slice(*attribute_names).tap do |json|
       json["image_url"] = image&.url if image.attached?
     end
@@ -58,7 +59,26 @@ class CoffeeBag < ApplicationRecord
     archived_at.present?
   end
 
+  def frozen?
+    frozen_date.present? && defrosted_date.blank?
+  end
+
+  def days_in_freezer
+    return nil if frozen_date.blank?
+
+    end_date = defrosted_date || Date.current
+    [(end_date - frozen_date).to_i, 0].max
+  end
+
   private
+
+  def defrosted_date_after_frozen_date
+    if frozen_date.blank? && defrosted_date.present?
+      errors.add(:defrosted_date, "requires a frozen date")
+    elsif frozen_date.present? && defrosted_date.present? && defrosted_date < frozen_date
+      errors.add(:defrosted_date, "must be after frozen date")
+    end
+  end
 
   def update_shots
     RefreshCoffeeBagFieldsOnShotsJob.perform_later(self)
