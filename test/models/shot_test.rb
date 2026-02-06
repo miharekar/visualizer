@@ -39,4 +39,18 @@ class ShotTest < ActiveSupport::TestCase
     shot.tags.delete(tag)
     assert_equal 0, shot.tags.count
   end
+
+  test "days_frozen is nil without coffee bag" do
+    shot = create(:shot)
+
+    assert_nil shot.days_frozen
+  end
+
+  test "days_frozen uses coffee bag frozen window" do
+    roaster = create(:roaster, user: create(:user, :with_coffee_management))
+    coffee_bag = create(:coffee_bag, roaster:, frozen_date: Date.new(2025, 1, 10), defrosted_date: nil)
+    shot = create(:shot, user: roaster.user, coffee_bag:, start_time: Time.zone.parse("2025-01-15 12:00:00"))
+
+    assert_equal 5, shot.days_frozen
+  end
 end

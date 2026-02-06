@@ -66,7 +66,7 @@
       <% if shot.roast_date.present? && shot.parsed_roast_date %>
         from <%= shot.parsed_roast_date.to_fs(:long) %>
         <% if show_start_time %>
-          (<%= pluralize((shot.start_time.to_date - shot.parsed_roast_date.to_date).to_i, "day") %> after roast)
+          (<%= pluralize((shot.start_time.to_date - shot.parsed_roast_date.to_date).to_i, "day") %> after roast<% if shot.days_frozen.to_i.positive? %>, <%= pluralize(shot.days_frozen, "day") %> in freezer<% end %>)
         <% end %>
       <% end %>
     </div>

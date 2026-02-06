@@ -1,4 +1,5 @@
 class Shot < ApplicationRecord
+  prepend MemoWise
   include ShotPresenter
   include Airtablable
   include Jsonable
@@ -71,6 +72,10 @@ class Shot < ApplicationRecord
 
   def iso8601_roast_date_time
     parsed_roast_date&.strftime("%Y-%m-%dT%H:%M:%SZ")
+  end
+
+  memo_wise def days_frozen
+    coffee_bag.days_in_freezer(up_to: start_time.to_date) if coffee_bag
   end
 
   def tag_list=(value)

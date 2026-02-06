@@ -63,11 +63,13 @@ class CoffeeBag < ApplicationRecord
     frozen_date.present? && defrosted_date.blank?
   end
 
-  def days_in_freezer
-    return nil if frozen_date.blank?
+  def days_in_freezer(up_to:)
+    return if frozen_date.blank? || up_to.blank?
 
-    end_date = defrosted_date || Date.current
-    [(end_date - frozen_date).to_i, 0].max
+    end_date = [defrosted_date || up_to.to_date, up_to.to_date].min
+    return if frozen_date > end_date
+
+    (end_date - frozen_date).to_i
   end
 
   private
@@ -93,9 +95,11 @@ end
 #  id                      :uuid             not null, primary key
 #  archived_at             :datetime
 #  country                 :string
+#  defrosted_date          :date
 #  elevation               :string
 #  farm                    :string
 #  farmer                  :string
+#  frozen_date             :date
 #  harvest_time            :string
 #  name                    :string           not null
 #  notes                   :text
