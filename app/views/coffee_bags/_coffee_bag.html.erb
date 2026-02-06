@@ -37,10 +37,12 @@
                 <td>Frozen on</td>
                 <td><%= time_tag coffee_bag.frozen_date, format: :long %></td>
               </tr>
-              <tr>
-                <td>In freezer</td>
-                <td><%= pluralize(coffee_bag.days_in_freezer, "day") %></td>
-              </tr>
+              <% if coffee_bag.defrosted_date.present? %>
+                <tr>
+                  <td>Defrosted on</td>
+                  <td><%= time_tag coffee_bag.defrosted_date, format: :long %></td>
+                </tr>
+              <% end %>
             <% end %>
             <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
               <%= metadata_pair(attribute.underscore.humanize, coffee_bag.send(attribute)) %>

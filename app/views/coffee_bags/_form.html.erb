@@ -84,9 +84,13 @@
             <%= f.label :frozen_date, "Frozen on", class: "standard-label" %>
             <%= f.date_field :frozen_date, class: "mt-1 standard-input" %>
           </div>
+          <% defrosted_date_errors = f.object.errors.full_messages_for(:defrosted_date) %>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :defrosted_date, "Defrosted on", class: "standard-label" %>
-            <%= f.date_field :defrosted_date, class: "mt-1 standard-input" %>
+            <%= f.date_field :defrosted_date, class: "#{'ring-1 ring-red-500 border-red-500' if defrosted_date_errors.any?} mt-1 standard-input" %>
+            <% if defrosted_date_errors.any? %>
+              <p class="text-sm font-medium text-red-500"><%= defrosted_date_errors.join(", ") %></p>
+            <% end %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :roast_level, class: "standard-label" %>

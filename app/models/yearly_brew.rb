@@ -153,7 +153,7 @@ class YearlyBrew
 
   memo_wise def average_enjoyment_change
     previous = average_enjoyment(:past)
-    return nil if previous.zero?
+    return if previous.zero?
 
     (average_enjoyment - previous).round(1)
   end

@@ -80,38 +80,22 @@ class CoffeeBagsController < ApplicationController
 
   def archive
     @coffee_bag.update(archived_at: Time.current)
-
-    respond_to do
-      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
-      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was archived." }
-    end
+    respond_with_coffee_bag_update(notice: "#{@coffee_bag.display_name} was archived.")
   end
 
   def restore
     @coffee_bag.update(archived_at: nil)
-
-    respond_to do
-      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
-      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was restored." }
-    end
+    respond_with_coffee_bag_update(notice: "#{@coffee_bag.display_name} was restored.")
   end
 
   def freeze
     @coffee_bag.update(frozen_date: Date.current, defrosted_date: nil)
-
-    respond_to do
-      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
-      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was frozen." }
-    end
+    respond_with_coffee_bag_update(notice: "#{@coffee_bag.display_name} was frozen.")
   end
 
   def defrost
     @coffee_bag.update(defrosted_date: Date.current)
-
-    respond_to do
-      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
-      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: "#{@coffee_bag.display_name} was defrosted." }
-    end
+    respond_with_coffee_bag_update(notice: "#{@coffee_bag.display_name} was defrosted.")
   end
 
   private
@@ -138,5 +122,12 @@ class CoffeeBagsController < ApplicationController
     cb_params = params.expect(coffee_bag: %i[name url canonical_coffee_bag_id roast_date frozen_date defrosted_date notes image] + CoffeeBag::DISPLAY_ATTRIBUTES)
     cb_params[:roaster_id] = Current.user.roasters.find_by(id: params.dig(:coffee_bag, :roaster_id))&.id
     cb_params
+  end
+
+  def respond_with_coffee_bag_update(notice:)
+    respond_to do |it|
+      it.turbo_stream { render turbo_stream: turbo_stream.replace(@coffee_bag) }
+      it.html { redirect_to coffee_bags_path(**params.permit(:roaster, :coffee), format: :html), notice: }
+    end
   end
 end
