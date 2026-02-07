@@ -1,10 +1,24 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  description: >
-    Visualizer exposes a REST API for managing espresso shots, roasters, and coffee bag metadata.
-    Authenticate with OAuth 2.0 access tokens issued by Visualizer or HTTP Basic using your account credentials.
-  version: "1.2.0"
+  version: "1.3.0"
+  description: |
+    REST API for Visualizer.
+
+    Supports:
+    - Shot retrieval and upload
+    - Shot updates/deletes
+    - Roaster CRUD (premium)
+    - Coffee bag CRUD (premium)
+
+    Authentication options:
+    - OAuth2 access token (Doorkeeper)
+    - HTTP Basic (email/password)
+
+    Notes:
+    - Some read endpoints are public (`/shots`, `/shots/{id}`, `/shots/shared`)
+    - Write endpoints require authenticated users and write scope (OAuth)
+    - Roaster/Coffee Bag writes also require premium access
   contact:
     email: miha@visualizer.coffee
 servers:
@@ -14,342 +28,76 @@ servers:
     description: Local development
 tags:
   - name: Credentials
-    description: Session and identity helpers.
   - name: Shots
-    description: Access espresso shot exports and metadata.
   - name: Roasters
-    description: Roaster catalog for the authenticated account.
   - name: Coffee Bags
-    description: Coffee bag catalog scoped to a roaster.
+
 paths:
   /me:
     get:
-      tags:
-        - Credentials
-      summary: Get current user
-      description: >
-        Returns basic profile information for the authenticated account. Requires an OAuth token with the `read`
-        scope or HTTP Basic credentials for a Visualizer account with password access.
-      operationId: getMe
+      tags: [Credentials]
+      summary: Get current account
+      operationId: getCurrentAccount
       security:
-        - OAuth2:
-            - read
+        - OAuth2: [read]
         - BasicAuth: []
       responses:
         "200":
-          description: Current account profile.
+          description: Authenticated account details.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserSelf"
+                $ref: "#/components/schemas/MeResponse"
         "401":
           description: Authentication required.
+
   /shots:
     get:
-      tags:
-        - Shots
+      tags: [Shots]
       summary: List shots
-      description: >
-        Returns a paginated list of shots visible to the caller. Anonymous clients receive only public shots.
-        Authenticated users receive their own shots; non-premium accounts are limited to recent history while premium accounts see all data.
       operationId: listShots
+      description: |
+        Returns shots sorted by start time (default) or `updated_at`.
+
+        Behavior differs by auth state:
+        - Unauthenticated: only public shots
+        - Authenticated: own shots
       parameters:
-        - $ref: "#/components/parameters/PageParam"
-        - $ref: "#/components/parameters/ItemsParam"
-        - $ref: "#/components/parameters/ShotSortParam"
-      security:
-        - OAuth2:
-            - read
-        - BasicAuth: []
-        - {}
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Items"
+        - $ref: "#/components/parameters/ShotSort"
       responses:
         "200":
-          description: Paginated shots.
+          description: Paginated shot summaries.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ShotListResponse"
         "422":
-          description: Pagination error.
+          description: Invalid pagination/sort.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: Could not paginate
-  /shots/{id}:
-    parameters:
-      - $ref: "#/components/parameters/ShotId"
-    get:
-      tags:
-        - Shots
-      summary: Retrieve a shot
-      description: >
-        Returns a single shot in Visualizer JSON format by default, or Beanconqueror JSON when `format=beanconqueror`.
-        Set `essentials=true` to omit large brew data payloads.
-      operationId: getShot
-      parameters:
-        - $ref: "#/components/parameters/ShotFormatParam"
-        - $ref: "#/components/parameters/ShotEssentialsParam"
-      security:
-        - OAuth2:
-            - read
-        - BasicAuth: []
-        - {}
-      responses:
-        "200":
-          description: Shot payload in requested format.
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ShotDetail"
-                  - $ref: "#/components/schemas/ShotBeanconqueror"
-              examples:
-                visualizer:
-                  summary: Visualizer format
-                  value:
-                    id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
-                    user_id: "b82d57c1-5152-49b5-8c32-d5e686fac07b"
-                    profile_title: "30g/60g/30s"
-                    start_time: "2024-05-18T08:31:20Z"
-                    updated_at: 1716021080
-                    duration: 30.5
-                    bean_weight: "18.0"
-                    drink_weight: "40.0"
-                    espresso_enjoyment: 8
-                    roast_level: "Medium"
-                    tags:
-                      - morning
-                    brewdata:
-                      profile: "decent"
-                beanconqueror:
-                  summary: Beanconqueror format
-                  value:
-                    bean:
-                      roaster: "Example Roaster"
-                      name: "House Espresso"
-                    brew:
-                      grind_weight: 18
-                      brew_beverage_quantity: 36
-                    meta:
-                      visualizer:
-                        shot_id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
-                        user_id: "b82d57c1-5152-49b5-8c32-d5e686fac07b"
-                        updated_at: 1716021080
-                        tags:
-                          - morning
-        "404":
-          description: Shot not found.
+        "429":
+          description: Too many requests.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    patch:
-      tags:
-        - Shots
-      summary: Update a shot
-      description: >
-        Updates a shot owned by the authenticated user. The request must be JSON. Fields are restricted by the account tier.
-      operationId: updateShot
-      security:
-        - OAuth2:
-            - write
-        - BasicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ShotUpdate"
-      responses:
-        "200":
-          description: Shot updated.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ShotDetail"
-        "401":
-          description: Authentication required.
-        "403":
-          description: Missing `write` scope for the provided token.
-        "404":
-          description: Shot not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "422":
-          description: Invalid update payload.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              examples:
-                invalidImage:
-                  summary: Invalid image upload
-                  value:
-                    error: Image must be a valid image file.
-                invalidFormat:
-                  summary: Content type not JSON
-                  value:
-                    error: Request must be JSON.
-    delete:
-      tags:
-        - Shots
-      summary: Delete a shot
-      description: >
-        Deletes a shot owned by the authenticated user. Requires the `write` scope when using OAuth.
-      operationId: deleteShot
-      security:
-        - OAuth2:
-            - write
-        - BasicAuth: []
-      responses:
-        "200":
-          description: Shot deleted.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ShotDeleteResult"
-        "401":
-          description: Authentication required.
-        "403":
-          description: Missing `write` scope for the provided token.
-        "404":
-          description: Shot not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /shots/{id}/download:
-    parameters:
-      - $ref: "#/components/parameters/ShotId"
-    get:
-      tags:
-        - Shots
-      summary: Download a shot
-      description: >
-        Returns the same payload as `GET /shots/{id}` but served as a downloadable attachment.
-      operationId: downloadShot
-      parameters:
-        - $ref: "#/components/parameters/ShotFormatParam"
-        - $ref: "#/components/parameters/ShotEssentialsParam"
-      security:
-        - OAuth2:
-            - read
-        - BasicAuth: []
-        - {}
-      responses:
-        "200":
-          description: Shot payload attachment.
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ShotDetail"
-                  - $ref: "#/components/schemas/ShotBeanconqueror"
-        "404":
-          description: Shot not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /shots/{shot_id}/profile:
-    parameters:
-      - $ref: "#/components/parameters/ShotProfileId"
-    get:
-      tags:
-        - Shots
-      summary: Download a shot profile
-      description: >
-        Downloads a profile file associated with the shot. The response type depends on the underlying shot parser.
-        Use `format=csv` for a CSV export (when available) or `format=json` to force JSON output for supported parsers.
-      operationId: getShotProfile
-      parameters:
-        - $ref: "#/components/parameters/ShotProfileFormatParam"
-      security:
-        - OAuth2:
-            - read
-        - BasicAuth: []
-        - {}
-      responses:
-        "200":
-          description: Profile payload.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ShotProfileJson"
-            text/csv:
-              schema:
-                $ref: "#/components/schemas/ShotProfileFile"
-            application/x-tcl:
-              schema:
-                $ref: "#/components/schemas/ShotProfileFile"
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/ShotProfileFile"
-        "404":
-          description: Shot not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "422":
-          description: Profile is not available for the shot.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                error: Shot does not have a profile
-  /shots/shared:
-    get:
-      tags:
-        - Shots
-      summary: Retrieve shared shots
-      description: >
-        Provide a `code` query parameter to retrieve the shot that was shared with that code. When no `code`
-        is supplied, authenticated users receive every shot they have shared.
-      operationId: getSharedShots
-      parameters:
-        - $ref: "#/components/parameters/ShotCodeParam"
-        - $ref: "#/components/parameters/ShotFormatParam"
-        - $ref: "#/components/parameters/ShotWithDataParam"
-      security:
-        - OAuth2:
-            - read
-        - BasicAuth: []
-        - {}
-      responses:
-        "200":
-          description: Shared shot payload(s).
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ShotDetail"
-                  - $ref: "#/components/schemas/ShotBeanconqueror"
-                  - $ref: "#/components/schemas/ShotSharedCollection"
-        "404":
-          description: Shared shot not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
   /shots/upload:
     post:
-      tags:
-        - Shots
-      summary: Upload a shot file
-      description: >
-        Creates a new shot by uploading a Decent, Beanconqueror, Gaggiuino, or GaggiMate export. Provide either a multipart file upload using the `file` field or send the parsed JSON payload directly.
+      tags: [Shots]
+      summary: Upload shot export
       operationId: uploadShot
+      description: |
+        Upload a shot file via one of:
+        - `multipart/form-data` with `file`
+        - `application/json` raw payload
       security:
-        - OAuth2:
-            - upload
-        - OAuth2:
-            - write
+        - OAuth2: [upload]
+        - OAuth2: [write]
         - BasicAuth: []
       requestBody:
         required: true
@@ -357,19 +105,17 @@ paths:
           multipart/form-data:
             schema:
               type: object
-              required:
-                - file
+              required: [file]
               properties:
                 file:
                   type: string
                   format: binary
-                  description: Shot export file with JSON content.
           application/json:
             schema:
               $ref: "#/components/schemas/ShotUploadPayload"
       responses:
         "200":
-          description: Shot successfully created.
+          description: Shot created.
           content:
             application/json:
               schema:
@@ -377,61 +123,261 @@ paths:
         "401":
           description: Authentication required.
         "403":
-          description: Missing `upload` scope (or `write`) for the provided token.
+          description: Missing OAuth scope.
         "422":
-          description: Shot could not be processed.
+          description: Could not parse or persist shot.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              examples:
-                missingFile:
-                  summary: Missing file
-                  value:
-                    error: No shot file provided. Provide a file parameter with a multipart/form-data request or a JSON body with a valid JSON object.
-                invalidFile:
-                  summary: Invalid content
-                  value:
-                    error: Could not save the provided file. Bean weight can't be blank.
-  /roasters:
+
+  /shots/shared:
     get:
-      tags:
-        - Roasters
-      summary: List roasters
-      description: Returns roasters owned by the authenticated user.
-      operationId: listRoasters
+      tags: [Shots]
+      summary: Resolve shared shot(s)
+      operationId: getSharedShots
+      description: |
+        - With `code`: resolve a specific shared shot.
+        - Without `code` and authenticated: return authenticated user's shared shots.
+        - Without `code` and unauthenticated: returns 404.
       parameters:
-        - $ref: "#/components/parameters/PageParam"
-        - $ref: "#/components/parameters/ItemsParam"
+        - $ref: "#/components/parameters/SharedCode"
+        - $ref: "#/components/parameters/ShotFormat"
+        - $ref: "#/components/parameters/WithData"
+      responses:
+        "200":
+          description: Shared shot or list of shared shots.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SharedShotsResponse"
+        "404":
+          description: Shared shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /shots/{id}:
+    parameters:
+      - $ref: "#/components/parameters/ShotId"
+    get:
+      tags: [Shots]
+      summary: Get shot
+      operationId: getShot
+      parameters:
+        - $ref: "#/components/parameters/ShotFormat"
+        - $ref: "#/components/parameters/Essentials"
+      responses:
+        "200":
+          description: Shot detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShotDetail"
+        "404":
+          description: Shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags: [Shots]
+      summary: Update shot
+      operationId: updateShot
       security:
-        - OAuth2:
-            - read
+        - OAuth2: [write]
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShotUpdateRequest"
+      responses:
+        "200":
+          description: Updated shot detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShotDetail"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Invalid request payload.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags: [Shots]
+      summary: Delete shot
+      operationId: deleteShot
+      security:
+        - OAuth2: [write]
         - BasicAuth: []
       responses:
         "200":
-          description: Paginated roasters.
+          description: Shot deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResult"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /shots/{id}/download:
+    get:
+      tags: [Shots]
+      summary: Download shot (alias of get shot)
+      operationId: downloadShot
+      parameters:
+        - $ref: "#/components/parameters/ShotId"
+        - $ref: "#/components/parameters/ShotFormat"
+        - $ref: "#/components/parameters/Essentials"
+      responses:
+        "200":
+          description: Shot detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShotDetail"
+        "404":
+          description: Shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /shots/{id}/profile:
+    get:
+      tags: [Shots]
+      summary: Download shot profile file
+      operationId: downloadShotProfile
+      parameters:
+        - $ref: "#/components/parameters/ShotId"
+        - $ref: "#/components/parameters/ProfileFormat"
+      responses:
+        "200":
+          description: Profile file stream.
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            application/x-tcl:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Shot not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Shot has no profile.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /roasters:
+    get:
+      tags: [Roasters]
+      summary: List roasters
+      operationId: listRoasters
+      security:
+        - OAuth2: [read]
+        - BasicAuth: []
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Items"
+      responses:
+        "200":
+          description: Paginated roaster summaries.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/RoasterListResponse"
         "401":
           description: Authentication required.
+    post:
+      tags: [Roasters]
+      summary: Create roaster
+      operationId: createRoaster
+      security:
+        - OAuth2: [write]
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoasterWriteRequest"
+      responses:
+        "201":
+          description: Roaster created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoasterDetail"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Premium access or missing OAuth scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Validation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /roasters/{id}:
     parameters:
       - $ref: "#/components/parameters/RoasterId"
     get:
-      tags:
-        - Roasters
-      summary: Retrieve a roaster
-      description: Fetches the specified roaster owned by the authenticated account, including website and image metadata when present.
+      tags: [Roasters]
+      summary: Get roaster
       operationId: getRoaster
       security:
-        - OAuth2:
-            - read
+        - OAuth2: [read]
         - BasicAuth: []
       responses:
         "200":
-          description: Roaster details.
+          description: Roaster detail.
           content:
             application/json:
               schema:
@@ -444,54 +390,144 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /roasters/{roaster_id}/coffee_bags:
-    parameters:
-      - $ref: "#/components/parameters/RoasterRef"
-    get:
-      tags:
-        - Coffee Bags
-      summary: List coffee bags
-      description: Returns coffee bags for the given roaster, ordered by roast date with archived entries last.
-      operationId: listCoffeeBags
-      parameters:
-        - $ref: "#/components/parameters/PageParam"
-        - $ref: "#/components/parameters/ItemsParam"
+    patch:
+      tags: [Roasters]
+      summary: Update roaster
+      operationId: updateRoaster
       security:
-        - OAuth2:
-            - read
+        - OAuth2: [write]
         - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoasterWriteRequest"
       responses:
         "200":
-          description: Paginated coffee bags.
+          description: Roaster updated.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CoffeeBagListResponse"
+                $ref: "#/components/schemas/RoasterDetail"
         "401":
           description: Authentication required.
+        "403":
+          description: Premium access or missing OAuth scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Roaster not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /roasters/{roaster_id}/coffee_bags/{id}:
-    parameters:
-      - $ref: "#/components/parameters/RoasterRef"
-      - $ref: "#/components/parameters/CoffeeBagId"
-    get:
-      tags:
-        - Coffee Bags
-      summary: Retrieve a coffee bag
-      description: Returns detailed information for a coffee bag belonging to the given roaster, including origin, processing, and archival status.
-      operationId: getCoffeeBag
+        "422":
+          description: Validation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags: [Roasters]
+      summary: Delete roaster
+      operationId: deleteRoaster
       security:
-        - OAuth2:
-            - read
+        - OAuth2: [write]
         - BasicAuth: []
       responses:
         "200":
-          description: Coffee bag details.
+          description: Roaster deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResult"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Premium access or missing OAuth scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Roaster not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /coffee_bags:
+    get:
+      tags: [Coffee Bags]
+      summary: List coffee bags
+      operationId: listCoffeeBags
+      security:
+        - OAuth2: [read]
+        - BasicAuth: []
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Items"
+        - $ref: "#/components/parameters/RoasterFilter"
+      responses:
+        "200":
+          description: Paginated coffee bag summaries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoffeeBagListResponse"
+        "401":
+          description: Authentication required.
+    post:
+      tags: [Coffee Bags]
+      summary: Create coffee bag
+      operationId: createCoffeeBag
+      security:
+        - OAuth2: [write]
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoffeeBagWriteRequest"
+      responses:
+        "201":
+          description: Coffee bag created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoffeeBagDetail"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Premium access or missing OAuth scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Validation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /coffee_bags/{id}:
+    parameters:
+      - $ref: "#/components/parameters/CoffeeBagId"
+    get:
+      tags: [Coffee Bags]
+      summary: Get coffee bag
+      operationId: getCoffeeBag
+      security:
+        - OAuth2: [read]
+        - BasicAuth: []
+      responses:
+        "200":
+          description: Coffee bag detail.
           content:
             application/json:
               schema:
@@ -504,13 +540,108 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    patch:
+      tags: [Coffee Bags]
+      summary: Update coffee bag
+      operationId: updateCoffeeBag
+      security:
+        - OAuth2: [write]
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoffeeBagWriteRequest"
+      responses:
+        "200":
+          description: Coffee bag updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoffeeBagDetail"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Premium access or missing OAuth scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Coffee bag not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Validation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags: [Coffee Bags]
+      summary: Delete coffee bag
+      operationId: deleteCoffeeBag
+      security:
+        - OAuth2: [write]
+        - BasicAuth: []
+      responses:
+        "200":
+          description: Coffee bag deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResult"
+        "401":
+          description: Authentication required.
+        "403":
+          description: Premium access or missing OAuth scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Coffee bag not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /roasters/{roaster_id}/coffee_bags:
+    get:
+      tags: [Coffee Bags]
+      summary: Legacy nested coffee bag index
+      description: Deprecated alias that redirects to `/coffee_bags?roaster_id={roaster_id}`.
+      operationId: legacyNestedCoffeeBagsIndex
+      deprecated: true
+      parameters:
+        - $ref: "#/components/parameters/RoasterId"
+      responses:
+        "301":
+          description: Permanent redirect to root coffee bag index.
+
+  /roasters/{roaster_id}/coffee_bags/{id}:
+    get:
+      tags: [Coffee Bags]
+      summary: Legacy nested coffee bag show
+      description: Deprecated alias that redirects to `/coffee_bags/{id}`.
+      operationId: legacyNestedCoffeeBagShow
+      deprecated: true
+      parameters:
+        - $ref: "#/components/parameters/RoasterId"
+        - $ref: "#/components/parameters/CoffeeBagId"
+      responses:
+        "301":
+          description: Permanent redirect to root coffee bag show.
+
 components:
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
-      description: >
-        Use your Visualizer email address and password. Two-factor authentication must be disabled for Basic authentication.
+      description: Email/password authentication.
     OAuth2:
       type: oauth2
       flows:
@@ -519,100 +650,44 @@ components:
           tokenUrl: https://visualizer.coffee/oauth/token
           refreshUrl: https://visualizer.coffee/oauth/token
           scopes:
-            read: Read shots, roasters, coffee bags, and account metadata.
+            read: Read account metadata, shots, roasters, and coffee bags.
             upload: Upload shot files.
-            write: Manage shots.
+            write: Update/delete shots and manage roasters/coffee bags.
+
   parameters:
-    PageParam:
+    Page:
       name: page
       in: query
-      description: 1-based page number (defaults to 1).
       schema:
         type: integer
         minimum: 1
-    ItemsParam:
+      description: 1-based page number (default 1).
+    Items:
       name: items
       in: query
-      description: Items per page (defaults to 10, maximum 100).
       schema:
         type: integer
         minimum: 1
         maximum: 100
-    ShotSortParam:
+      description: Items per page (default 10, max 100).
+    ShotSort:
       name: sort
       in: query
-      description: When set to `updated_at`, results are sorted by last update time; otherwise start time descending.
       schema:
         type: string
-        enum:
-          - updated_at
+        enum: [updated_at]
+      description: Set to `updated_at` for updated-time sorting. Omit for start-time sorting.
     ShotId:
       name: id
       in: path
       required: true
-      description: Shot identifier.
       schema:
         type: string
         format: uuid
-    ShotProfileId:
-      name: shot_id
-      in: path
-      required: true
-      description: Shot identifier.
-      schema:
-        type: string
-        format: uuid
-    ShotFormatParam:
-      name: format
-      in: query
-      description: Response format for shot payloads.
-      schema:
-        type: string
-        enum:
-          - decent
-          - beanconqueror
-    ShotEssentialsParam:
-      name: essentials
-      in: query
-      description: When true, omit brew telemetry from the response.
-      schema:
-        type: boolean
-    ShotProfileFormatParam:
-      name: format
-      in: query
-      description: Force a specific profile file format when available.
-      schema:
-        type: string
-        enum:
-          - csv
-          - json
-    ShotCodeParam:
-      name: code
-      in: query
-      description: Four-character share code (case-insensitive).
-      schema:
-        type: string
-        minLength: 4
-        maxLength: 4
-    ShotWithDataParam:
-      name: with_data
-      in: query
-      description: When true, include brew telemetry in shared shot responses.
-      schema:
-        type: boolean
     RoasterId:
-      name: id
-      in: path
-      required: true
-      description: Roaster identifier.
-      schema:
-        type: string
-        format: uuid
-    RoasterRef:
       name: roaster_id
       in: path
       required: true
-      description: Roaster identifier.
       schema:
         type: string
         format: uuid
@@ -620,46 +695,93 @@ components:
       name: id
       in: path
       required: true
-      description: Coffee bag identifier.
       schema:
         type: string
         format: uuid
+    SharedCode:
+      name: code
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Shared shot code (case-insensitive).
+    ShotFormat:
+      name: format
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Optional output format used by shot serializers.
+    ProfileFormat:
+      name: format
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [csv, json, tcl]
+      description: Profile output format. `tcl` is used when available and format is not `json`.
+    Essentials:
+      name: essentials
+      in: query
+      required: false
+      schema:
+        oneOf:
+          - type: string
+          - type: boolean
+      description: When present, omits full shot information payload.
+    WithData:
+      name: with_data
+      in: query
+      required: false
+      schema:
+        oneOf:
+          - type: string
+          - type: boolean
+      description: When present on shared shot responses, includes detailed shot information.
+    RoasterFilter:
+      name: roaster_id
+      in: query
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Filter coffee bags by roaster ID.
+
   schemas:
     Error:
       type: object
+      required: [error]
       properties:
         error:
           type: string
-      required:
-        - error
       example:
         error: Shot not found
+
+    DeleteResult:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+      example:
+        success: true
+
     Paging:
       type: object
-      required:
-        - count
-        - page
-        - limit
-        - pages
+      required: [count, page, limit, pages]
       properties:
         count:
           type: integer
-          description: Total number of items.
         page:
           type: integer
-          description: Current page number.
         limit:
           type: integer
-          description: Number of items per page.
         pages:
           type: integer
-          description: Total number of pages available.
-    UserSelf:
+
+    MeResponse:
       type: object
-      required:
-        - id
-        - name
-        - public
+      required: [id, name, public, avatar_url]
       properties:
         id:
           type: string
@@ -671,18 +793,10 @@ components:
         avatar_url:
           type: string
           format: uri
-          nullable: true
-      example:
-        id: "c2d5c71e-0e9f-4cbe-81bb-1db7c2422e23"
-        name: "Ava Brewer"
-        public: true
-        avatar_url: "https://visualizer.coffee/uploads/avatars/ava.png"
+
     ShotSummary:
       type: object
-      required:
-        - id
-        - clock
-        - updated_at
+      required: [id, clock, updated_at]
       properties:
         id:
           type: string
@@ -690,20 +804,15 @@ components:
         clock:
           type: integer
           format: int64
-          description: Shot start time in seconds since the Unix epoch.
+          description: Shot start timestamp (unix seconds).
         updated_at:
           type: integer
           format: int64
-          description: Last update time in seconds since the Unix epoch.
-      example:
-        id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
-        clock: 1716021080
-        updated_at: 1716022080
+          description: Last update timestamp (unix seconds).
+
     ShotListResponse:
       type: object
-      required:
-        - data
-        - paging
+      required: [data, paging]
       properties:
         data:
           type: array
@@ -711,313 +820,82 @@ components:
             $ref: "#/components/schemas/ShotSummary"
         paging:
           $ref: "#/components/schemas/Paging"
-    ShotVisualizerMeta:
-      type: object
-      required:
-        - shot_id
-        - user_id
-        - updated_at
-        - tags
-      properties:
-        shot_id:
-          type: string
-          format: uuid
-        user_id:
-          type: string
-          format: uuid
-        updated_at:
-          type: integer
-          format: int64
-        duration:
-          type: number
-          nullable: true
-        profile_title:
-          type: string
-          nullable: true
-        start_time:
-          type: string
-          format: date-time
-          nullable: true
-        metadata:
-          type: object
-          nullable: true
-          additionalProperties: true
-        tags:
-          type: array
-          items:
-            type: string
-        profile_url:
-          type: string
-          format: uri
-          nullable: true
-        image_url:
-          type: string
-          format: uri
-          nullable: true
-        roaster_id:
-          type: string
-          format: uuid
-          nullable: true
-        coffee_bag_id:
-          type: string
-          format: uuid
-          nullable: true
-        user_name:
-          type: string
-          nullable: true
+
     ShotDetail:
       type: object
-      required:
-        - id
-        - updated_at
-        - tags
-        - user_id
-      properties:
-        id:
-          type: string
-          format: uuid
-        user_id:
-          type: string
-          format: uuid
-        profile_title:
-          type: string
-          nullable: true
-        start_time:
-          type: string
-          format: date-time
-          nullable: true
-        updated_at:
-          type: integer
-          format: int64
-        duration:
-          type: number
-          nullable: true
-        bean_brand:
-          type: string
-          nullable: true
-        bean_type:
-          type: string
-          nullable: true
-        bean_notes:
-          type: string
-          nullable: true
-        bean_weight:
-          type: string
-          nullable: true
-        drink_weight:
-          type: string
-          nullable: true
-        drink_tds:
-          type: string
-          nullable: true
-        drink_ey:
-          type: string
-          nullable: true
-        espresso_enjoyment:
-          type: integer
-          nullable: true
-        espresso_notes:
-          type: string
-          nullable: true
-        grinder_model:
-          type: string
-          nullable: true
-        grinder_setting:
-          type: string
-          nullable: true
-        roast_date:
-          type: string
-          nullable: true
-          description: Roast date formatted for the owner.
-        roast_level:
-          type: string
-          nullable: true
-        barista:
-          type: string
-          nullable: true
-        metadata:
-          type: object
-          nullable: true
-          additionalProperties: true
-        tags:
-          type: array
-          items:
-            type: string
-        brewdata:
-          type: object
-          nullable: true
-          additionalProperties: true
-        timeframe:
-          type: object
-          nullable: true
-          additionalProperties: true
-        data:
-          type: object
-          nullable: true
-          additionalProperties: true
-        profile_url:
-          type: string
-          format: uri
-          nullable: true
-        image_url:
-          type: string
-          format: uri
-          nullable: true
-        roaster_id:
-          type: string
-          format: uuid
-          nullable: true
-        coffee_bag_id:
-          type: string
-          format: uuid
-          nullable: true
-        user_name:
-          type: string
-          nullable: true
-        canonical_coffee_bag_id:
-          type: string
-          format: uuid
-          nullable: true
-      example:
-        id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
-        user_id: "b82d57c1-5152-49b5-8c32-d5e686fac07b"
-        profile_title: "30g/60g/30s"
-        start_time: "2024-05-18T08:31:20Z"
-        updated_at: 1716021080
-        duration: 30.5
-        bean_brand: "Example Roasters"
-        bean_type: "House Espresso"
-        drink_weight: "40.0"
-        espresso_enjoyment: 8
-        tags:
-          - morning
-        metadata:
-          group: "Competition"
-        brewdata:
-          profile: "decent"
-
-    ShotBeanconqueror:
-      type: object
-      required:
-        - meta
-      properties:
-        bean:
-          type: object
-          nullable: true
-          additionalProperties: true
-        brew:
-          type: object
-          nullable: true
-          additionalProperties: true
-        mill:
-          type: object
-          nullable: true
-          additionalProperties: true
-        preparation:
-          type: object
-          nullable: true
-          additionalProperties: true
-        timeframe:
-          type: object
-          nullable: true
-          additionalProperties: true
-        data:
-          type: object
-          nullable: true
-          additionalProperties: true
-        brewdata:
-          type: object
-          nullable: true
-          additionalProperties: true
-        meta:
-          type: object
-          required:
-            - visualizer
-          properties:
-            visualizer:
-              $ref: "#/components/schemas/ShotVisualizerMeta"
-      example:
-        bean:
-          roaster: "Example Roaster"
-          name: "House Espresso"
-        brew:
-          grind_weight: 18
-          brew_beverage_quantity: 36
-        preparation:
-          name: "Decent DE1"
-        meta:
-          visualizer:
-            shot_id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
-            user_id: "b82d57c1-5152-49b5-8c32-d5e686fac07b"
-            updated_at: 1716021080
-            tags:
-              - morning
-    ShotSharedCollection:
-      type: array
-      items:
-        $ref: "#/components/schemas/ShotDetail"
-    ShotProfileJson:
-      type: object
+      description: Flexible shot payload. Keys vary by `format` and integration source.
       additionalProperties: true
-      description: JSON profile data emitted by supported integrations.
-      example:
-        name: "Turbo profile"
-        steps:
-          - temperature: 93
-            seconds: 5
-    ShotProfileFile:
-      type: string
-      format: binary
-      description: Downloadable profile file (CSV, JSON, or TCL).
+
+    SharedShotsResponse:
+      oneOf:
+        - $ref: "#/components/schemas/ShotDetail"
+        - type: array
+          items:
+            $ref: "#/components/schemas/ShotDetail"
+
     ShotUploadPayload:
       type: object
+      description: Raw JSON shot export payload from supported tools/devices.
       additionalProperties: true
-      description: Raw JSON payload exported by supported devices or applications.
-      example:
-        bean:
-          roaster: "Example Roaster"
-          name: "House Espresso"
-        brew:
-          grind_weight: 18
-          brew_beverage_quantity: 36
+
     ShotUploadResult:
       type: object
-      required:
-        - id
+      required: [id]
       properties:
         id:
           type: string
           format: uuid
-      example:
-        id: "c8fe2d3a-6d11-4a8f-9c73-1d4f6a0efb73"
-    ShotDeleteResult:
+
+    ShotUpdateRequest:
       type: object
-      required:
-        - success
+      required: [shot]
       properties:
-        success:
-          type: boolean
-      example:
-        success: true
+        shot:
+          type: object
+          additionalProperties: true
+          properties:
+            profile_title:
+              type: string
+              nullable: true
+            barista:
+              type: string
+              nullable: true
+            bean_weight:
+              type: string
+              nullable: true
+            private_notes:
+              type: string
+              nullable: true
+            canonical_coffee_bag_id:
+              type: string
+              format: uuid
+              nullable: true
+            coffee_bag_id:
+              type: string
+              format: uuid
+              nullable: true
+            tag_list:
+              type: array
+              items:
+                type: string
+            metadata:
+              type: object
+              additionalProperties: true
+              nullable: true
+
     RoasterSummary:
       type: object
-      required:
-        - id
-        - name
+      required: [id, name]
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-      example:
-        id: "5f7b3f5a-2fb5-4531-9ee0-6f7e0e6bd2ef"
-        name: "Example Roasters"
+
     RoasterListResponse:
       type: object
-      required:
-        - data
-        - paging
+      required: [data, paging]
       properties:
         data:
           type: array
@@ -1025,11 +903,10 @@ components:
             $ref: "#/components/schemas/RoasterSummary"
         paging:
           $ref: "#/components/schemas/Paging"
+
     RoasterDetail:
       type: object
-      required:
-        - id
-        - name
+      required: [id, name]
       properties:
         id:
           type: string
@@ -1044,30 +921,38 @@ components:
           type: string
           format: uri
           nullable: true
-      example:
-        id: "5f7b3f5a-2fb5-4531-9ee0-6f7e0e6bd2ef"
-        name: "Example Roasters"
-        website: "https://example.com"
-        image_url: "https://visualizer.coffee/uploads/roasters/example.jpg"
+
+    RoasterWriteRequest:
+      type: object
+      required: [roaster]
+      properties:
+        roaster:
+          type: object
+          properties:
+            name:
+              type: string
+            website:
+              type: string
+              format: uri
+              nullable: true
+            canonical_roaster_id:
+              type: string
+              format: uuid
+              nullable: true
+
     CoffeeBagSummary:
       type: object
-      required:
-        - id
-        - name
+      required: [id, name]
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
-      example:
-        id: "a07b5f68-21a5-4677-9eaf-cbc9f35b4b83"
-        name: "Kenya AA (2024-01-05)"
+
     CoffeeBagListResponse:
       type: object
-      required:
-        - data
-        - paging
+      required: [data, paging]
       properties:
         data:
           type: array
@@ -1075,11 +960,10 @@ components:
             $ref: "#/components/schemas/CoffeeBagSummary"
         paging:
           $ref: "#/components/schemas/Paging"
+
     CoffeeBagDetail:
       type: object
-      required:
-        - id
-        - name
+      required: [id, name]
       properties:
         id:
           type: string
@@ -1131,28 +1015,94 @@ components:
         tasting_notes:
           type: string
           nullable: true
+        place_of_purchase:
+          type: string
+          nullable: true
         url:
           type: string
           format: uri
           nullable: true
-        image_url:
+        notes:
           type: string
-          format: uri
           nullable: true
         archived_at:
           type: string
           format: date-time
           nullable: true
-      example:
-        id: "a07b5f68-21a5-4677-9eaf-cbc9f35b4b83"
-        name: "Kenya AA"
-        roast_date: "2024-01-05"
-        frozen_date: "2024-01-12"
-        defrosted_date: "2024-02-05"
-        roast_level: "Light"
-        country: "Kenya"
-        region: "Nyeri"
-        tasting_notes: "Blackberry, lime, honey"
-        url: "https://example.com/bags/kenya-aa"
-        image_url: "https://visualizer.coffee/uploads/bags/kenya-aa.jpg"
-        archived_at: null
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+
+    CoffeeBagWriteRequest:
+      type: object
+      required: [coffee_bag]
+      properties:
+        coffee_bag:
+          type: object
+          properties:
+            name:
+              type: string
+            roaster_id:
+              type: string
+              format: uuid
+              nullable: true
+            canonical_coffee_bag_id:
+              type: string
+              format: uuid
+              nullable: true
+            roast_date:
+              type: string
+              format: date
+              nullable: true
+            frozen_date:
+              type: string
+              format: date
+              nullable: true
+            defrosted_date:
+              type: string
+              format: date
+              nullable: true
+            roast_level:
+              type: string
+              nullable: true
+            country:
+              type: string
+              nullable: true
+            region:
+              type: string
+              nullable: true
+            farm:
+              type: string
+              nullable: true
+            farmer:
+              type: string
+              nullable: true
+            variety:
+              type: string
+              nullable: true
+            elevation:
+              type: string
+              nullable: true
+            processing:
+              type: string
+              nullable: true
+            harvest_time:
+              type: string
+              nullable: true
+            quality_score:
+              type: string
+              nullable: true
+            tasting_notes:
+              type: string
+              nullable: true
+            place_of_purchase:
+              type: string
+              nullable: true
+            url:
+              type: string
+              format: uri
+              nullable: true
+            notes:
+              type: string
+              nullable: true
