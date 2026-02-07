@@ -21,7 +21,7 @@
     <a class="text-lg font-medium leading-6 text-neutral-900 wrap-anywhere dark:text-neutral-100" href="<%= shot_path(shot) %>">
       <%= shot.profile_title %>
     </a>
-    <div class="mt-1 text-base text-neutral-600 dark:text-neutral-400">
+    <div class="text-base prose prose-neutral dark:prose-invert">
       <% if show_name %>
         <div class="flex gap-x-1 items-center">
           <div>
@@ -47,7 +47,7 @@
     </div>
   </div>
 </div>
-<div class="mt-1 text-base text-neutral-600 dark:text-neutral-400">
+<div class="mt-2 text-base prose prose-neutral dark:prose-invert">
   <% if shot.bean_brand.present? || shot.bean_type.present? %>
     <div>
       <% if shot.bean_brand.present? %>
@@ -107,11 +107,11 @@
     </div>
   <% end %>
   <% if shot.tags.any? %>
-    <div class="mt-2 max-w-prose">
+    <div class="mt-4 max-w-prose">
       <%= render "tags", shot: shot, truncate: false %>
     </div>
   <% end %>
-  <div class="mt-2 prose prose-neutral dark:prose-invert">
+  <div class="mt-4 prose prose-neutral dark:prose-invert">
     <table>
       <% if shot.metadata.present? %>
         <% shot.user.metadata_fields.each do |key| %>
