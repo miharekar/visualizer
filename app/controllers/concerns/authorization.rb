@@ -17,10 +17,22 @@ module Authorization
   end
 
   def check_premium!
-    redirect_to premium_index_path, alert: "You must be a premium user to access this feature." unless Current.user.premium?
+    return if Current.user.premium?
+
+    message = "You must be a premium user to access this feature."
+    if request.format.json?
+      render json: {error: message}, status: :forbidden
+    else
+      redirect_to premium_index_path, alert: message
+    end
   end
 
   def user_not_authorized
-    redirect_back_or_to shots_path, alert: "You are not authorized to perform this action."
+    message = "You are not authorized to perform this action."
+    if request.format.json?
+      render json: {error: message}, status: :forbidden
+    else
+      redirect_back_or_to shots_path, alert: message
+    end
   end
 end
