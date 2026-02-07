@@ -96,8 +96,10 @@ bin/ci                 # full CI pipeline
 
 - Shot uploads go through `Shot.from_file` (dispatches parsers under `app/models/parsers`) from the web UI or `/api/shots/upload`.
 - API controllers (`/api/shots`, `/api/roasters`, `/api/coffee_bags`, `/api/me`) accept Doorkeeper OAuth tokens (`upload`/`write` scopes) or HTTP basic auth; session cookies also work for logged-in users.
+- Coffee bag API is root-level (`/api/coffee_bags`) and supports optional `roaster_id` query filtering; keep nested `/api/roasters/:roaster_id/coffee_bags` GET routes only as legacy redirects.
 - Shots can be downloaded as JSON/CSV/TCL profiles via `/api/shots/:id/profile` and shared via `/api/shots/shared?code=...`.
 - OAuth apps are managed at `/oauth/applications` after login.
+- Keep `openapi.yaml` tightly aligned with `config/routes.rb` and controller behavior (auth requirements, scopes, response shapes, redirects, and deprecated aliases).
 
 ### Authentication & authorization
 
