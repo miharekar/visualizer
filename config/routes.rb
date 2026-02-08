@@ -141,7 +141,7 @@ Rails.application.routes.draw do
   resources :updates, except: %i[destroy] do
     get :feed, on: :collection
   end
-  get "/changes(/*path)", to: redirect { |params| "/updates/#{params[:path]}" }
+  get "/changes(/*path)", to: redirect { |params| params[:path].present? ? "/updates/#{params[:path]}" : "/updates" }, constraints: ->(request) { request.params[:path].blank? || Update.exists?(slug: request.params[:path]) }
 
   post :airtable, to: "airtable#notification"
 
