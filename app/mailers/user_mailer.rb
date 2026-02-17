@@ -20,4 +20,9 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     mail to: @user.email, subject: "Visualizer Premium Feedback"
   end
+
+  def upcoming_renewal
+    @user = params[:user]
+    mail to: @user.email, subject: "Quick heads-up before your renewal"
+  end
 end
