@@ -90,10 +90,10 @@
           </div>
         </div>
         <% if Current.user.premium? %>
-          <% if Current.user.metadata_fields.any? %>
+          <% if Current.user.shot_metadata_fields.any? %>
             <%= f.fields_for :metadata do |mf| %>
               <div class="grid grid-cols-6 gap-6">
-                <% Current.user.metadata_fields.each do |field| %>
+                <% Current.user.shot_metadata_fields.each do |field| %>
                   <div class="col-span-6 sm:col-span-3">
                     <%= mf.label field, class: "standard-label" %>
                     <%= mf.text_field field, value: @shot.metadata[field], class: "mt-1 standard-input" %>

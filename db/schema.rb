@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_103000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_131500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -326,11 +326,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_103000) do
     t.boolean "hide_shot_times", default: false, null: false
     t.datetime "last_read_change"
     t.string "lemon_squeezy_customer_id"
-    t.jsonb "metadata_fields"
     t.string "name"
     t.string "password_digest", default: "", null: false
     t.datetime "premium_expires_at"
     t.boolean "public", default: false, null: false
+    t.jsonb "shot_metadata_fields"
     t.string "skin"
     t.string "slug"
     t.string "stripe_customer_id"

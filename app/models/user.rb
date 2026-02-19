@@ -99,11 +99,7 @@ class User < ApplicationRecord
   end
 
   def shot_metadata_fields
-    self[:metadata_fields].presence || []
-  end
-
-  def shot_metadata_fields=(value)
-    self[:metadata_fields] = value
+    super.presence || []
   end
 
   def coffee_bag_metadata_fields
@@ -178,11 +174,11 @@ end
 #  github                     :string
 #  hide_shot_times            :boolean          default(FALSE), not null
 #  last_read_change           :datetime
-#  metadata_fields            :jsonb
 #  name                       :string
 #  password_digest            :string           default(""), not null
 #  premium_expires_at         :datetime
 #  public                     :boolean          default(FALSE), not null
+#  shot_metadata_fields       :jsonb
 #  skin                       :string
 #  slug                       :string
 #  supporter                  :boolean          default(FALSE), not null

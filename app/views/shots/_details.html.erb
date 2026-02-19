@@ -114,13 +114,16 @@
   <div class="mt-4 prose prose-neutral dark:prose-invert">
     <table>
       <% if shot.metadata.present? %>
-        <% shot.user.metadata_fields.each do |key| %>
+        <% shot.user.shot_metadata_fields.each do |key| %>
           <%= metadata_pair(key, shot.metadata[key]) %>
         <% end %>
       <% end %>
       <% if shot.coffee_bag %>
         <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
           <%= metadata_pair(attribute.underscore.humanize, shot.coffee_bag.send(attribute)) %>
+        <% end %>
+        <% shot.coffee_bag.user.coffee_bag_metadata_fields.each do |attribute| %>
+          <%= metadata_pair(attribute, shot.coffee_bag.metadata[attribute]) %>
         <% end %>
       <% elsif shot.canonical_coffee_bag %>
         <% CanonicalCoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>

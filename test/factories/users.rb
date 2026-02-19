@@ -28,7 +28,7 @@ FactoryBot.define do
     end
 
     trait :with_shot_metadata do
-      metadata_fields { ["Portafilter basket", "Bean variety"] }
+      shot_metadata_fields { ["Portafilter basket", "Bean variety"] }
     end
 
     trait :with_coffee_bag_metadata do
