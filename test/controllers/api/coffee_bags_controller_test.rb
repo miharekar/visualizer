@@ -21,6 +21,21 @@ module Api
       assert_equal roaster.id, CoffeeBag.find(json_response["id"]).roaster_id
     end
 
+    test "create saves custom metadata fields" do
+      premium_user.update!(coffee_bag_metadata_fields: ["Bean density", "Bean color"])
+      roaster = FactoryBot.create(:roaster, user: premium_user)
+
+      post api_coffee_bags_url,
+        headers: auth_headers(premium_user),
+        params: {coffee_bag: {name: "Kiambu", roaster_id: roaster.id, metadata: {"Bean density" => "High", "Bean color" => "Brown", "Ignored" => "value"}}},
+        as: :json
+
+      assert_response :created
+      json_response = response.parsed_body
+      assert_equal({"Bean density" => "High", "Bean color" => "Brown"}, json_response["metadata"])
+      assert_equal({"Bean density" => "High", "Bean color" => "Brown"}, CoffeeBag.find(json_response["id"]).metadata)
+    end
+
     test "create requires premium user" do
       roaster = FactoryBot.create(:roaster, user:)
 

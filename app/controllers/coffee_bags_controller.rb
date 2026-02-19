@@ -1,5 +1,6 @@
 class CoffeeBagsController < ApplicationController
   include Paginatable
+  include CoffeeBags::Editing
 
   before_action :require_authentication
   before_action :check_premium!
@@ -116,12 +117,6 @@ class CoffeeBagsController < ApplicationController
 
   def load_roasters
     @roasters = Current.user.roasters.order_by_name.includes(:coffee_bags)
-  end
-
-  def coffee_bag_params
-    cb_params = params.expect(coffee_bag: %i[name url canonical_coffee_bag_id roast_date frozen_date defrosted_date notes image] + CoffeeBag::DISPLAY_ATTRIBUTES)
-    cb_params[:roaster_id] = Current.user.roasters.find_by(id: params.dig(:coffee_bag, :roaster_id))&.id
-    cb_params
   end
 
   def respond_with_coffee_bag_update(notice:)

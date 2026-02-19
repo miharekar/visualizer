@@ -47,6 +47,9 @@
             <% CoffeeBag::DISPLAY_ATTRIBUTES.each do |attribute| %>
               <%= metadata_pair(attribute.underscore.humanize, coffee_bag.send(attribute)) %>
             <% end %>
+            <% Current.user.coffee_bag_metadata_fields.each do |attribute| %>
+              <%= metadata_pair(attribute, coffee_bag.metadata[attribute]) %>
+            <% end %>
           </table>
         </div>
         <% if coffee_bag.notes.present? %>

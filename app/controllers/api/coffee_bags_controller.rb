@@ -1,5 +1,7 @@
 module Api
   class CoffeeBagsController < Api::BaseController
+    include CoffeeBags::Editing
+
     before_action :check_premium!, only: %i[create update destroy]
     before_action :verify_read_access, only: %i[index show]
     before_action :verify_write_access, only: %i[create update destroy]
@@ -43,14 +45,6 @@ module Api
     def load_coffee_bag
       @coffee_bag = Current.user.coffee_bags.find_by(id: params[:id])
       render json: {error: "Coffee bag not found"}, status: :not_found unless @coffee_bag
-    end
-
-    def coffee_bag_params
-      cb_params = params.expect(coffee_bag: %i[name url canonical_coffee_bag_id roast_date frozen_date defrosted_date notes roaster_id] + CoffeeBag::DISPLAY_ATTRIBUTES)
-      return cb_params if params.dig(:coffee_bag, :roaster_id).blank?
-
-      cb_params[:roaster_id] = Current.user.roasters.find_by(id: params.dig(:coffee_bag, :roaster_id))&.id
-      cb_params
     end
   end
 end

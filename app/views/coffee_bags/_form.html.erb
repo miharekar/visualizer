@@ -135,6 +135,23 @@
             <%= f.label :place_of_purchase, class: "standard-label" %>
             <%= f.text_field :place_of_purchase, class: "mt-1 standard-input" %>
           </div>
+          <% if Current.user.coffee_bag_metadata_fields.any? %>
+            <%= f.fields_for :metadata do |mf| %>
+              <% Current.user.coffee_bag_metadata_fields.each do |field| %>
+                <div class="col-span-6 sm:col-span-3">
+                  <%= mf.label field, class: "standard-label" %>
+                  <%= mf.text_field field, value: @coffee_bag.metadata[field], class: "mt-1 standard-input" %>
+                </div>
+              <% end %>
+            <% end %>
+          <% else %>
+            <div class="col-span-6">
+              <p class="text-neutral-700 dark:text-neutral-300">
+                You don't have any coffee bag custom fields yet.
+                <%= link_to "Add some", edit_profile_path, class: "font-bold standard-link" %>!
+              </p>
+            </div>
+          <% end %>
         </div>
         <div>
           <%= f.label :notes, class: "standard-label" %>
