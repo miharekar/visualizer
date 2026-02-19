@@ -118,6 +118,7 @@ class CoffeeBagTest < ActiveSupport::TestCase
     coffee_bag = create(:coffee_bag, roaster:, metadata: nil)
 
     assert_equal({}, coffee_bag.metadata)
+    assert_nil coffee_bag.to_api_json["metadata"]
   end
 
   test "to_api_json includes metadata" do

@@ -1032,6 +1032,10 @@ components:
           type: string
           format: uri
           nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+          nullable: true
 
     CoffeeBagWriteRequest:
       type: object

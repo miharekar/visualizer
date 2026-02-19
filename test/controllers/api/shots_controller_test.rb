@@ -270,7 +270,7 @@ module Api
       assert_equal({"Portafilter basket" => "IMS"}, shot.reload.metadata)
     end
 
-    test "update ignores shot metadata fields for non-premium users" do
+    test "update rejects shot metadata fields for non-premium users" do
       shot = FactoryBot.create(:shot, user:)
 
       patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {metadata: {"Portafilter basket" => "IMS"}}}, as: :json

@@ -59,13 +59,13 @@ FactoryBot.define do
               {"name" => "Roast level", "type" => "singleLineText"},
               {"name" => "Variety", "type" => "singleLineText"},
               {"name" => "Tasting notes", "type" => "singleLineText"},
-               {"name" => "Archived at", "type" => "dateTime", "options" => {"timeZone" => "utc", "dateFormat" => {"name" => "local"}, "timeFormat" => {"name" => "24hour"}}},
-               {"name" => "Place of purchase", "type" => "singleLineText"},
-               {"name" => "Notes", "type" => "richText"},
-               {"name" => "Bean density", "type" => "singleLineText"},
-               {"name" => "Bean color", "type" => "singleLineText"}
-             ]
-           },
+              {"name" => "Archived at", "type" => "dateTime", "options" => {"timeZone" => "utc", "dateFormat" => {"name" => "local"}, "timeFormat" => {"name" => "24hour"}}},
+              {"name" => "Place of purchase", "type" => "singleLineText"},
+              {"name" => "Notes", "type" => "richText"},
+              {"name" => "Bean density", "type" => "singleLineText"},
+              {"name" => "Bean color", "type" => "singleLineText"}
+            ]
+          },
           "Roasters" => {
             "id" => "tblRoasters",
             "fields" => [
