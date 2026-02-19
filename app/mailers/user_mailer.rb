@@ -25,9 +25,4 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     mail to: @user.email, subject: "Quick heads-up before your renewal"
   end
-
-  def yearly_ls_refund
-    @user = params[:user]
-    mail to: @user.email, subject: "I will refund your Lemon Squeezy renewal"
-  end
 end
