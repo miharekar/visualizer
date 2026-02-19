@@ -100,6 +100,7 @@ bin/ci                 # full CI pipeline
 - Shots can be downloaded as JSON/CSV/TCL profiles via `/api/shots/:id/profile` and shared via `/api/shots/shared?code=...`.
 - OAuth apps are managed at `/oauth/applications` after login.
 - Keep `openapi.yaml` tightly aligned with `config/routes.rb` and controller behavior (auth requirements, scopes, response shapes, redirects, and deprecated aliases).
+- Whenever `openapi.yaml` changes, also bump `info.version` in that file.
 
 ### Authentication & authorization
 
