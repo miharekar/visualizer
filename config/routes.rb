@@ -112,10 +112,11 @@ Rails.application.routes.draw do
   resource :profile, only: %i[edit update] do
     get :reset_chart_settings
     get :decent_serial_numbers
-    post :add_metadata_field
-    delete :remove_metadata_field
     delete :disconnect_airtable
   end
+
+  resource :shot_metadata, only: %i[create destroy]
+  resource :coffee_bag_metadata, only: %i[create destroy]
 
   resources :dropdown_values, only: %i[index update]
 

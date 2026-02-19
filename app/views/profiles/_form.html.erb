@@ -89,12 +89,12 @@
           <% if @profile.premium? %>
             <div class="col-span-3 sm:col-span-2" data-controller="modal">
               <%= render "shared/modal" %>
-              <h3 class="font-medium text-neutral-700 dark:text-neutral-300">Custom fields</h3>
+              <h3 class="font-medium text-neutral-700 dark:text-neutral-300">Shot custom fields</h3>
               <div class="flex flex-wrap gap-1 mt-3">
-                <% @profile.metadata_fields.each do |field| %>
+                <% @profile.shot_metadata_fields.each do |field| %>
                   <span class="inline-flex items-center py-0.5 pr-1 pl-2.5 text-sm rounded-full text-neutral-700 bg-neutral-100">
                     <%= field %>
-                    <%= link_to remove_metadata_field_profile_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} custom field? This will remove the data from all the shots that have it filled in!"}, class: "ml-1 inline-flex size-4 shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
+                    <%= link_to shot_metadata_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} custom field? This will remove the data from all the shots that have it filled in!"}, class: "ml-1 inline-flex size-4 shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
                       <svg class="size-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
                         <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
                       </svg>
@@ -102,14 +102,39 @@
                   </span>
                 <% end %>
               </div>
-              <div class="flex items-center my-2 w-full max-w-sm" data-controller="metadata-fields" data-metadata-fields-url-value="<%= add_metadata_field_profile_path %>">
-                <%= text_field_tag :field_name, {}, class: "grow standard-input", data: {metadata_fields_target: "input", action: "keydown.enter->metadata-fields#add"} %>
-                <button class="py-2 px-3 ml-2 text-sm font-medium leading-4 bg-white rounded-md border shadow-sm cursor-pointer dark:ring-offset-black focus:ring-2 focus:ring-offset-2 focus:outline-none border-neutral-300 text-neutral-700 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50 focus:ring-terracotta-500" data-action="click->metadata-fields#add">
+              <div class="flex items-center my-2 w-full max-w-sm" data-controller="custom-fields" data-custom-fields-url-value="<%= shot_metadata_path %>">
+                <%= text_field_tag :field_name, {}, class: "grow standard-input", data: {custom_fields_target: "input", action: "keydown.enter->custom-fields#add"} %>
+                <button class="py-2 px-3 ml-2 text-sm font-medium leading-4 bg-white rounded-md border shadow-sm cursor-pointer dark:ring-offset-black focus:ring-2 focus:ring-offset-2 focus:outline-none border-neutral-300 text-neutral-700 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50 focus:ring-terracotta-500" data-action="click->custom-fields#add">
                   Add
                 </button>
-                <a href="#" class="hidden" data-turbo-method="post" data-metadata-fields-target="link"></a>
+                <a href="#" class="hidden" data-turbo-method="post" data-custom-fields-target="link"></a>
               </div>
               <p class="text-sm text-neutral-500 dark:text-neutral-400">Add custom fields to your shots like "Portafilter basket" or "Bean variety".</p>
+              <p class="text-sm text-neutral-500 dark:text-neutral-400">Only letters, numbers, spaces and underscores are allowed.</p>
+            </div>
+            <div class="col-span-3 sm:col-span-2" data-controller="modal">
+              <%= render "shared/modal" %>
+              <h3 class="font-medium text-neutral-700 dark:text-neutral-300">Coffee bag custom fields</h3>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <% @profile.coffee_bag_metadata_fields.each do |field| %>
+                  <span class="inline-flex items-center py-0.5 pr-1 pl-2.5 text-sm rounded-full text-neutral-700 bg-neutral-100">
+                    <%= field %>
+                    <%= link_to coffee_bag_metadata_path(field:), form_class: "inline-flex items-center", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete #{field}", text: "Are you sure you want to delete #{field} coffee bag custom field? This will remove the data from all coffee bags that have it filled in!"}, class: "ml-1 inline-flex size-4 shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-200 hover:text-neutral-500 focus:bg-neutral-500 focus:text-white focus:outline-none" do %>
+                      <svg class="size-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                        <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+                      </svg>
+                    <% end %>
+                  </span>
+                <% end %>
+              </div>
+              <div class="flex items-center my-2 w-full max-w-sm" data-controller="custom-fields" data-custom-fields-url-value="<%= coffee_bag_metadata_path %>">
+                <%= text_field_tag :coffee_bag_field_name, {}, class: "grow standard-input", data: {custom_fields_target: "input", action: "keydown.enter->custom-fields#add"} %>
+                <button class="py-2 px-3 ml-2 text-sm font-medium leading-4 bg-white rounded-md border shadow-sm cursor-pointer dark:ring-offset-black focus:ring-2 focus:ring-offset-2 focus:outline-none border-neutral-300 text-neutral-700 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50 focus:ring-terracotta-500" data-action="click->custom-fields#add">
+                  Add
+                </button>
+                <a href="#" class="hidden" data-turbo-method="post" data-custom-fields-target="link"></a>
+              </div>
+              <p class="text-sm text-neutral-500 dark:text-neutral-400">Add custom fields to your coffee bags like "Bean density" or "Bean color".</p>
               <p class="text-sm text-neutral-500 dark:text-neutral-400">Only letters, numbers, spaces and underscores are allowed.</p>
             </div>
             <div class="hidden col-span-3 sm:block">
