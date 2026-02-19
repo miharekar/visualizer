@@ -43,4 +43,10 @@ class UserTest < ActiveSupport::TestCase
 
     User.unsubscribe_by_token!("shouldn't raise")
   end
+
+  test "coffee_bag_metadata_fields defaults to empty list" do
+    user = create(:user)
+
+    assert_equal [], user.coffee_bag_metadata_fields
+  end
 end

@@ -113,4 +113,16 @@ class CoffeeBagTest < ActiveSupport::TestCase
 
     assert_equal [active.id, frozen.id, archived.id], CoffeeBag.where(id: [active.id, frozen.id, archived.id]).active_first.pluck(:id)
   end
+
+  test "metadata defaults to empty hash" do
+    coffee_bag = create(:coffee_bag, roaster:, metadata: nil)
+
+    assert_equal({}, coffee_bag.metadata)
+  end
+
+  test "to_api_json includes metadata" do
+    coffee_bag = create(:coffee_bag, roaster:, metadata: {"Bean density" => "High"})
+
+    assert_equal({"Bean density" => "High"}, coffee_bag.to_api_json["metadata"])
+  end
 end

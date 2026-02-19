@@ -27,13 +27,18 @@ FactoryBot.define do
       coffee_management_enabled { true }
     end
 
-    trait :with_metadata do
+    trait :with_shot_metadata do
       metadata_fields { ["Portafilter basket", "Bean variety"] }
+    end
+
+    trait :with_coffee_bag_metadata do
+      coffee_bag_metadata_fields { ["Bean density", "Bean color"] }
     end
 
     trait :with_airtable do
       premium
-      with_metadata
+      with_shot_metadata
+      with_coffee_bag_metadata
       identities { [association(:identity, :airtable)] }
     end
   end

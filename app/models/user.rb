@@ -98,7 +98,15 @@ class User < ApplicationRecord
     temperature_unit == "Fahrenheit"
   end
 
-  def metadata_fields
+  def shot_metadata_fields
+    self[:metadata_fields].presence || []
+  end
+
+  def shot_metadata_fields=(value)
+    self[:metadata_fields] = value
+  end
+
+  def coffee_bag_metadata_fields
     super.presence || []
   end
 
@@ -155,37 +163,38 @@ end
 # Table name: users
 # Database name: primary
 #
-#  id                        :uuid             not null, primary key
-#  admin                     :boolean          default(FALSE), not null
-#  beta                      :boolean          default(FALSE), not null
-#  chart_settings            :jsonb
-#  coffee_management_enabled :boolean          default(FALSE), not null
-#  communication             :jsonb
-#  date_format               :string
-#  decent_email              :string
-#  decent_token              :string
-#  developer                 :boolean          default(FALSE), not null
-#  email                     :string           default(""), not null
-#  github                    :string
-#  hide_shot_times           :boolean          default(FALSE), not null
-#  last_read_change          :datetime
-#  metadata_fields           :jsonb
-#  name                      :string
-#  password_digest           :string           default(""), not null
-#  premium_expires_at        :datetime
-#  public                    :boolean          default(FALSE), not null
-#  skin                      :string
-#  slug                      :string
-#  supporter                 :boolean          default(FALSE), not null
-#  temperature_unit          :string
-#  timezone                  :string
-#  unsubscribed_from         :jsonb
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  creem_customer_id         :string
-#  lemon_squeezy_customer_id :string
-#  stripe_customer_id        :string
-#  webauthn_id               :string
+#  id                         :uuid             not null, primary key
+#  admin                      :boolean          default(FALSE), not null
+#  beta                       :boolean          default(FALSE), not null
+#  chart_settings             :jsonb
+#  coffee_bag_metadata_fields :jsonb
+#  coffee_management_enabled  :boolean          default(FALSE), not null
+#  communication              :jsonb
+#  date_format                :string
+#  decent_email               :string
+#  decent_token               :string
+#  developer                  :boolean          default(FALSE), not null
+#  email                      :string           default(""), not null
+#  github                     :string
+#  hide_shot_times            :boolean          default(FALSE), not null
+#  last_read_change           :datetime
+#  metadata_fields            :jsonb
+#  name                       :string
+#  password_digest            :string           default(""), not null
+#  premium_expires_at         :datetime
+#  public                     :boolean          default(FALSE), not null
+#  skin                       :string
+#  slug                       :string
+#  supporter                  :boolean          default(FALSE), not null
+#  temperature_unit           :string
+#  timezone                   :string
+#  unsubscribed_from          :jsonb
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  creem_customer_id          :string
+#  lemon_squeezy_customer_id  :string
+#  stripe_customer_id         :string
+#  webauthn_id                :string
 #
 # Indexes
 #

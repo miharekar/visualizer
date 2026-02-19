@@ -38,6 +38,10 @@ class CoffeeBag < ApplicationRecord
     roast_date.blank? ? name : "#{name} (#{roast_date.to_fs(:long)})"
   end
 
+  def metadata
+    super.presence || {}
+  end
+
   def full_display_name
     details = []
     details << roast_date.to_fs(:long) if roast_date.present?
@@ -54,6 +58,7 @@ class CoffeeBag < ApplicationRecord
     attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id name roast_date frozen_date defrosted_date url archived_at notes]
     attributes.slice(*attribute_names).tap do |json|
       json["image_url"] = image&.url if image.attached?
+      json["metadata"] = metadata.presence
     end
   end
 
@@ -103,6 +108,7 @@ end
 #  farmer                  :string
 #  frozen_date             :date
 #  harvest_time            :string
+#  metadata                :jsonb
 #  name                    :string           not null
 #  notes                   :text
 #  place_of_purchase       :string

@@ -260,8 +260,8 @@ module Api
       assert_equal "Request must be JSON.", json_response["error"]
     end
 
-    test "update allows metadata fields for premium users" do
-      premium_user = FactoryBot.create(:user, :premium, :with_metadata)
+    test "update allows shot metadata fields for premium users" do
+      premium_user = FactoryBot.create(:user, :premium, :with_shot_metadata)
       shot = FactoryBot.create(:shot, user: premium_user)
 
       patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {metadata: {"Portafilter basket" => "IMS"}}}, as: :json
@@ -270,7 +270,7 @@ module Api
       assert_equal({"Portafilter basket" => "IMS"}, shot.reload.metadata)
     end
 
-    test "update ignores metadata fields for non-premium users" do
+    test "update ignores shot metadata fields for non-premium users" do
       shot = FactoryBot.create(:shot, user:)
 
       patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {metadata: {"Portafilter basket" => "IMS"}}}, as: :json

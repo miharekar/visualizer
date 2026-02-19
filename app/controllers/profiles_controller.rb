@@ -23,27 +23,6 @@ class ProfilesController < ApplicationController
     redirect_to edit_profile_path
   end
 
-  def add_metadata_field
-    field = params[:field].gsub(/[^\w ]/, "").squish
-    if field.present?
-      fields = @profile.metadata_fields + [field]
-      @profile.update(metadata_fields: fields.uniq)
-      redirect_to edit_profile_path, notice: "#{field} added to custom fields."
-    else
-      redirect_to edit_profile_path, alert: "Field name cannot be blank."
-    end
-  end
-
-  def remove_metadata_field
-    if @profile.metadata_fields.include?(params[:field])
-      fields = @profile.metadata_fields - [params[:field]]
-      @profile.update(metadata_fields: fields.uniq)
-      redirect_to edit_profile_path, notice: "#{params[:field]} removed from custom fields."
-    else
-      redirect_to edit_profile_path, alert: "#{params[:field]} not found in custom fields."
-    end
-  end
-
   def decent_serial_numbers
     @serial_numbers = DecentApi.new(@profile.decent_email, @profile.decent_token).serial_numbers
   rescue StandardError
