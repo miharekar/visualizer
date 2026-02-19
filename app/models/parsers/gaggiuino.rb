@@ -13,7 +13,7 @@ module Parsers
     }.freeze
 
     def parse
-      @start_time = Time.at(json["timestamp"]).utc
+      @start_time = json["timestamp"].present? ? Time.at(json["timestamp"]).utc : Time.current.utc
       @profile_title = json.dig("profile", "name")
       @profile_fields = json["profile"]
       prepare_data

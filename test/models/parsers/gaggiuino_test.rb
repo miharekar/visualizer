@@ -32,5 +32,31 @@ module Parsers
       assert_equal [98, 164], chart.parsed_shot.stage_indices
       assert_equal [{value: 15000.0}, {value: 25000.0}], chart.stages
     end
+
+    test "uses current time when timestamp is blank" do
+      payload = JSON.parse(File.read("test/files/gaggiuino-1020.json"))
+      payload["timestamp"] = ""
+
+      before = Time.current
+      shot = Shot.from_file(@user, payload.to_json)
+      after = Time.current
+
+      assert shot.valid?
+      assert_operator shot.start_time, :>=, before
+      assert_operator shot.start_time, :<=, after
+    end
+
+    test "uses current time when timestamp is nil" do
+      payload = JSON.parse(File.read("test/files/gaggiuino-1020.json"))
+      payload["timestamp"] = nil
+
+      before = Time.current
+      shot = Shot.from_file(@user, payload.to_json)
+      after = Time.current
+
+      assert shot.valid?
+      assert_operator shot.start_time, :>=, before
+      assert_operator shot.start_time, :<=, after
+    end
   end
 end
