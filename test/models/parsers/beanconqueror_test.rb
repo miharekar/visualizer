@@ -216,5 +216,23 @@ module Parsers
       assert_equal 16, shot.information.brewdata["brewFlow"]["temperatureFlow"].size
       assert_equal 10, shot.information.extra.keys.size
     end
+
+    test "extracts basket temperature from Beanconqueror" do
+      shot = new_shot("test/files/beanconqueror_temperature_extended.json")
+      assert shot.valid?
+      assert_in_delta(17.201, shot.duration)
+      assert_equal %w[basketTemperatureFlow pressureFlow realtimeFlow targetTemperatureFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
+      assert_equal 15, shot.information.brewdata["brewFlow"]["basketTemperatureFlow"].size
+      assert_equal 10, shot.information.extra.keys.size
+    end
+
+    test "extracts target temperature from Beanconqueror" do
+      shot = new_shot("test/files/beanconqueror_temperature_extended.json")
+      assert shot.valid?
+      assert_in_delta(17.201, shot.duration)
+      assert_equal %w[basketTemperatureFlow pressureFlow realtimeFlow targetTemperatureFlow temperatureFlow waterFlow weight], shot.information.brewdata["brewFlow"].keys.sort
+      assert_equal 14, shot.information.brewdata["brewFlow"]["targetTemperatureFlow"].size
+      assert_equal 10, shot.information.extra.keys.size
+    end
   end
 end
