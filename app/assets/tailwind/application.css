@@ -37,12 +37,6 @@
   --color-oxford-blue-950: oklch(27.26% 0.023 235.76);
 }
 
-@layer base {
-  .prose pre {
-    background-color: #2e3440;
-  }
-}
-
 .standard-link {
   @apply underline hover:no-underline;
 }

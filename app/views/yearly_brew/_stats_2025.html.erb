@@ -57,7 +57,7 @@
   <% end %>
 </div>
 <% if @yearly_brew.user.coffee_management_enabled? || personal %>
-  <div class="from-amber-50 via-white border border-amber-100 shadow-2xl sm:rounded-3xl bg-linear-to-br to-sky-50 text-neutral-900 shadow-neutral-900/10 dark:border-amber-900/40 dark:bg-linear-to-br dark:from-amber-950/30 dark:via-slate-950 dark:to-slate-900 dark:text-neutral-50">
+  <div class="from-amber-50 via-white border border-amber-100 shadow-2xl sm:rounded-3xl bg-linear-to-br to-sky-50 text-neutral-900 shadow-neutral-900/10 dark:border-amber-900/40 dark:bg-linear-to-br dark:from-amber-950/30 dark:via-neutral-950 dark:to-neutral-900 dark:text-neutral-50">
     <div class="py-8 px-6 sm:py-12 sm:px-10">
       <% if @yearly_brew.user.coffee_management_enabled? %>
         <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
@@ -71,7 +71,7 @@
         </div>
         <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
           <% coffee_management_cards_2025(@yearly_brew, personal:).each do |card| %>
-            <div class="p-4 rounded-2xl border border-amber-100 shadow-inner transition bg-white/70 shadow-neutral-900/10 dark:border-amber-900/40 dark:bg-slate-900/60 dark:shadow-black/40">
+            <div class="p-4 rounded-2xl border border-amber-100 shadow-inner transition bg-white/70 shadow-neutral-900/10 dark:border-amber-900/40 dark:bg-neutral-900/60 dark:shadow-black/40">
               <p class="text-sm text-neutral-600 dark:text-neutral-200"><%= card[:label] %></p>
               <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-50"><%= card[:value] %></p>
               <p class="mt-1 text-sm leading-6 text-neutral-700 dark:text-neutral-300"><%= card[:description] %></p>

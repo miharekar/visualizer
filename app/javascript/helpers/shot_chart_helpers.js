@@ -36,26 +36,28 @@ export const isDark = () => {
   }
 }
 
+const cssColor = name => getComputedStyle(document.documentElement).getPropertyValue(name)
+
 export const getColors = () => {
   if (isDark()) {
     return {
-      background: "#171717",
-      label: "#999999",
-      gridLine: "#191919",
-      line: "#332914",
-      legend: "#cccccc",
-      legendHover: "#ffffff",
-      legendHidden: "#333333"
+      background: cssColor("--color-neutral-900"),
+      label: cssColor("--color-neutral-400"),
+      gridLine: cssColor("--color-neutral-800"),
+      line: cssColor("--color-neutral-700"),
+      legend: cssColor("--color-neutral-300"),
+      legendHover: cssColor("--color-white"),
+      legendHidden: cssColor("--color-neutral-700")
     }
   } else {
     return {
-      background: "#ffffff",
-      label: "#666666",
-      gridLine: "#e6e6e6",
-      line: "#ccd6eb",
-      legend: "#333333",
-      legendHover: "#000000",
-      legendHidden: "#cccccc"
+      background: cssColor("--color-white"),
+      label: cssColor("--color-neutral-600"),
+      gridLine: cssColor("--color-neutral-200"),
+      line: cssColor("--color-neutral-300"),
+      legend: cssColor("--color-neutral-700"),
+      legendHover: cssColor("--color-neutral-900"),
+      legendHidden: cssColor("--color-neutral-300")
     }
   }
 }
