@@ -15,8 +15,14 @@ class Creem
       @results = []
     end
 
-    def make_request
+    def make_request(retrying: false)
       handle_response(get_response)
+    rescue Net::ReadTimeout
+      raise if retrying
+
+      retrying = true
+      sleep(1)
+      retry
     end
 
     def paginate(current_page: 1, page_size: 100)
