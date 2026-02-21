@@ -6,12 +6,15 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-local_amazon:
+local_r2:
   service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-  region: <%= Rails.application.credentials.dig(:aws, :region) %>
-  bucket: visualizer-coffee-development
+  endpoint: <%= Rails.application.credentials.dig(:r2, :endpoint) %>
+  access_key_id: <%= Rails.application.credentials.dig(:r2, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:r2, :secret_access_key) %>
+  bucket: visualizer-development
+  region: auto
+  request_checksum_calculation: when_required
+  response_checksum_validation: when_required
 
 amazon:
   service: S3
