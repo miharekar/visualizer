@@ -19,7 +19,7 @@
 <% end %>
 <%= turbo_stream.update "shots-count" do %>
   <% if @shots_count.to_i > 0 %>
-    Your <%= pluralize(@shots_count, "Shot") %>
+    <%= pluralize(@shots_count, "Shot") %>
   <% else %>
     No Shots
   <% end %>

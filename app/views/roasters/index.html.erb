@@ -2,8 +2,8 @@
 <div class="flex flex-col gap-y-6 my-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-row gap-2 justify-between px-4 sm:px-0">
     <div>
-      <h1 class="pr-2 font-serif text-4xl font-bold lining-nums tracking-tight leading-tight whitespace-nowrap text-neutral-900 dark:text-neutral-100">
-        Your <%= pluralize(@roasters.count, "Roaster") %>
+      <h1 class="pr-2 my-1 font-serif text-2xl font-bold lining-nums tracking-tight leading-tight whitespace-nowrap sm:my-0 sm:text-3xl md:text-4xl text-neutral-900 dark:text-neutral-100">
+        <%= pluralize(@roasters.count, "Roaster") %>
       </h1>
     </div>
     <%= link_to new_roaster_path, class: "px-3 py-2 items-center button-white flex sm:ml-auto" do %>

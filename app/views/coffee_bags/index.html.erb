@@ -2,8 +2,8 @@
 <div class="flex flex-col gap-y-6 px-4 my-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-row gap-2 justify-between">
     <div>
-      <h1 class="pr-2 font-serif text-4xl font-bold lining-nums tracking-tight leading-tight text-neutral-900 dark:text-neutral-100">
-        Your <%= pluralize(Current.user.coffee_bags.count, "Coffee Bag") %>
+      <h1 class="pr-2 my-1 font-serif text-2xl font-bold lining-nums tracking-tight leading-tight sm:my-0 sm:text-3xl md:text-4xl text-neutral-900 dark:text-neutral-100">
+        <%= pluralize(Current.user.coffee_bags.count, "Coffee Bag") %>
       </h1>
     </div>
     <div class="flex gap-2">
