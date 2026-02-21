@@ -40,10 +40,6 @@ module Parsers
       file = file.force_encoding("UTF-8").gsub(/[\u0000-\u001F\u007F-\u009F]/, "")
       retrying = true
       retry
-    rescue StandardError
-      s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.current.iso8601}.json")
-      Appsignal.set_message("JSON parsing failed for #{s3_response.etag}")
-      raise
     end
 
     def initialize(file, json = nil)
@@ -72,9 +68,6 @@ module Parsers
         shot.information.save if shot.information.persisted?
       elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
-      elsif Rails.env.production? && shot.errors.reject { |e| e.type == :over_daily_limit }.any?
-        s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.current.iso8601}.json")
-        Appsignal.set_message("Something is wrong with this file #{s3_response.etag} | #{shot.errors.full_messages.join(", ")}")
       end
       shot
     end

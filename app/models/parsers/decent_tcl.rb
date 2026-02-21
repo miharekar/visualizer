@@ -26,8 +26,6 @@ module Parsers
         @file = invalid_machine.first
         retry
       else
-        s3_response = Aws::S3::Client.new.put_object(acl: "private", body: file, bucket: "visualizer-coffee", key: "debug/#{Time.current.iso8601}.json")
-        Appsignal.set_message("TCL parser failed with this file #{s3_response.etag} | #{shot.errors.full_messages.join(", ")}")
         raise e
       end
     end
