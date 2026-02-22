@@ -32,7 +32,7 @@ module Authorization
     if request.format.json?
       render json: {error: message}, status: :forbidden
     else
-      redirect_back_or_to shots_path, alert: message
+      redirect_back_or_to default_path, alert: message
     end
   end
 end

@@ -19,6 +19,9 @@ class ShotsController < ApplicationController
 
   def show
     @chart = ShotChart.new(@shot, Current.user) if @shot.information
+  rescue ShotChart::ParsedShot::NoData
+    flash[:alert] = "This shot does not have enough chart data to compare."
+    redirect_back_or_to default_path
   end
 
   def compare
@@ -27,6 +30,9 @@ class ShotsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
+  rescue ShotChart::ParsedShot::NoData
+    flash[:alert] = "This shot does not have enough chart data to compare."
+    redirect_back_or_to default_path
   end
 
   def share

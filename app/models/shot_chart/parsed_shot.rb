@@ -1,5 +1,7 @@
 class ShotChart
   class ParsedShot
+    class NoData < StandardError; end
+
     prepend MemoWise
     include Bsearch
 
@@ -17,6 +19,7 @@ class ShotChart
       else
         parse_brew_flow
       end
+      raise NoData unless has_data?
     end
 
     memo_wise def fahrenheit?
@@ -26,6 +29,10 @@ class ShotChart
     memo_wise def stage_indices
       has_state_data = data.key?("espresso_state_change") && data["espresso_state_change"].present?
       has_state_data ? stages_from_state_change : detect_stages_from_data
+    end
+
+    def has_data?
+      data.values.any? { |series| series.respond_to?(:size) && series.size > 1 }
     end
 
     private

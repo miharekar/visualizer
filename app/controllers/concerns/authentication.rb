@@ -9,6 +9,10 @@ module Authentication
 
   private
 
+  def default_path
+    authenticated? ? shots_path : community_index_path
+  end
+
   def authenticated?
     resume_session
   end
