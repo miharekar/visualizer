@@ -1,5 +1,5 @@
 <div class="md:col-span-2" id="<%= dom_id(@coffee_bag) %>">
-  <%= form_with(model: @coffee_bag, data: { controller: "coffee-bag-scraper canonical-selector", canonical_selector_coffee_bag_autocomplete_url_value: autocomplete_coffee_bags_canonical_index_path, canonical_selector_roaster_canonical_map_value: @roasters.to_h { |roaster| [roaster.id.to_s, roaster.canonical_roaster_id] } }) do |f| %>
+  <%= form_with(model: @coffee_bag, data: { controller: "coffee-bag-scraper canonical-selector", canonical_selector_coffee_bag_autocomplete_url_value: autocomplete_coffee_bags_canonical_index_path(require_roaster: true), canonical_selector_roaster_canonical_map_value: @roasters.to_h { |roaster| [roaster.id.to_s, roaster.canonical_roaster_id] } }) do |f| %>
     <div class="sm:overflow-hidden sm:rounded-md md:shadow">
       <div class="flex flex-col gap-y-6 py-5 px-4 bg-white sm:p-6 dark:bg-neutral-800">
         <div class="grid grid-cols-6 gap-6">
@@ -24,7 +24,7 @@
             <% end %>
             <%= f.label :name, class: "standard-label" %>
             <div class="relative">
-              <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(canonical_roaster_id: @coffee_bag.roaster&.canonical_roaster_id) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">
+              <div class="relative" data-controller="autocomplete" data-canonical-selector-target="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path(canonical_roaster_id: @coffee_bag.roaster&.canonical_roaster_id, require_roaster: true) %>" data-autocomplete-min-length-value="3" data-autocomplete-selected-class="text-white bg-oxford-blue-400 dark:bg-oxford-blue-700">
                 <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id", coffee_bag_scraper_target: "canonicalId" } %>
                 <%= f.search_field :name, class: "#{name_extra_classes} #{'ps-10' if coffee_bag.canonical_coffee_bag_id} mt-1 standard-input", data: { autocomplete_target: "input", canonical_selector_target: "input" } %>
                 <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
