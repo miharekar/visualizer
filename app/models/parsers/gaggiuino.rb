@@ -1,5 +1,7 @@
 module Parsers
   class Gaggiuino < Base
+    THIS_CENTURY = Time.utc(2000, 1, 1).to_i
+
     DATA_LABELS_MAP = {
       "pressure" => "espresso_pressure",
       "pumpFlow" => "espresso_flow",
@@ -13,7 +15,7 @@ module Parsers
     }.freeze
 
     def parse
-      @start_time = json["timestamp"].present? ? Time.at(json["timestamp"]).utc : Time.current.utc
+      @start_time = parse_start_time
       @profile_title = json.dig("profile", "name")
       @profile_fields = json["profile"]
       prepare_data
@@ -21,6 +23,14 @@ module Parsers
     end
 
     private
+
+    def parse_start_time
+      timestamp = json["timestamp"].to_f
+      return Time.at(timestamp).utc if timestamp > THIS_CENTURY
+
+      Appsignal.set_message("Gaggiuino invalid timestamp #{json["timestamp"]}")
+      Time.current.utc
+    end
 
     def prepare_data
       @timeframe = []

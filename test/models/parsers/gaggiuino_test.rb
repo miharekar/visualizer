@@ -33,30 +33,14 @@ module Parsers
       assert_equal [{value: 15000.0}, {value: 25000.0}], chart.stages
     end
 
-    test "uses current time when timestamp is blank" do
-      payload = JSON.parse(File.read("test/files/gaggiuino-1020.json"))
-      payload["timestamp"] = ""
+    test "parses short timestamp as current time" do
+      travel_to Time.zone.parse("2026-02-24 10:00:00 UTC") do
+        payload = JSON.parse(File.read("test/files/gaggiuino-1020.json"))
+        payload["timestamp"] = ""
+        shot = Shot.from_file(@user, payload.to_json)
 
-      before = Time.current
-      shot = Shot.from_file(@user, payload.to_json)
-      after = Time.current
-
-      assert shot.valid?
-      assert_operator shot.start_time, :>=, before
-      assert_operator shot.start_time, :<=, after
-    end
-
-    test "uses current time when timestamp is nil" do
-      payload = JSON.parse(File.read("test/files/gaggiuino-1020.json"))
-      payload["timestamp"] = nil
-
-      before = Time.current
-      shot = Shot.from_file(@user, payload.to_json)
-      after = Time.current
-
-      assert shot.valid?
-      assert_operator shot.start_time, :>=, before
-      assert_operator shot.start_time, :<=, after
+        assert_equal Time.utc(2026, 2, 24, 10, 0, 0), shot.start_time
+      end
     end
   end
 end
