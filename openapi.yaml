@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.4.0"
+  version: "1.5.0"
   description: |
     REST API for Visualizer.
 
@@ -11,9 +11,31 @@ info:
     - Roaster CRUD (premium)
     - Coffee bag CRUD (premium)
 
-    Authentication options:
-    - OAuth2 access token (Doorkeeper)
-    - HTTP Basic (email/password)
+    Authentication
+
+    The Visualizer API supports the following authentication methods:
+
+    - HTTP Basic Authentication (`email` + `password`)
+      Acceptable for personal use cases, such as private scripts, local tooling, or internal automations.
+
+    - OAuth 2.0 Authorization Code Flow
+      Recommended for public applications, distributed integrations, and any workflow exposed to other users.
+
+    OAuth scopes
+
+    - `read` — read-only access
+    - `upload` — permission to upload shots only
+    - `write` — full write access
+
+    Scope behavior
+
+    - `upload` is a constrained, lower-risk write scope intended for ingestion-only clients.
+    - `write` is required for broader mutating operations (for example, update/delete and other write endpoints).
+
+    Security recommendation
+
+    - For public or user-facing integrations, OAuth should be used instead of Basic Auth.
+    - This avoids collecting user passwords outside Visualizer and reduces credential exposure risk.
 
     Notes:
     - Some read endpoints are public (`/shots`, `/shots/{id}`, `/shots/shared`)

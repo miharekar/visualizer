@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
+  mount Scalar::UI, at: "/", constraints: {subdomain: "apidocs"}
+
   constraints ->(request) { AuthConstraint.admin?(request) } do
     mount MissionControl::Jobs::Engine, at: "/jobs"
     mount PgHero::Engine, at: "/pghero"

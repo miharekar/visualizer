@@ -16,6 +16,7 @@ proxy:
   hosts:
     - visualizer.coffee
     - www.visualizer.coffee
+    - apidocs.visualizer.coffee
 
 registry:
   server: ghcr.io
