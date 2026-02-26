@@ -183,8 +183,10 @@
           </div>
         </div>
       </div>
-      <div class="py-3 px-4 text-right sm:px-6 bg-neutral-50 dark:bg-neutral-700">
-        <%= f.submit "Save", class: "button-terracotta py-2 px-4" %>
+      <div class="sticky bottom-0 z-10 p-4 backdrop-blur bg-neutral-50/70 dark:bg-neutral-700/70">
+        <div class="text-right sm:px-6">
+          <%= f.submit "Save", class: "button-terracotta py-2 px-4" %>
+        </div>
       </div>
     </div>
   <% end %>
