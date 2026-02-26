@@ -18,6 +18,8 @@ class LoffeeLabsImporterJob < ApplicationJob
     tasting_notes: "tasting"
   }.freeze
 
+  EXCLUDED_URLS_REGEX = Regexp.union(%w[airworkscoffee.com thebeanarchives.com mystery.coffee])
+
   def perform(cut_off: 3.months.ago)
     @cut_off = cut_off
     @roasters = {}
@@ -44,6 +46,8 @@ class LoffeeLabsImporterJob < ApplicationJob
   end
 
   def import_bean(bean)
+    return if bean["link"]&.squish&.downcase&.match?(EXCLUDED_URLS_REGEX)
+
     parsed_date = Date.parse(bean["date"])
     return if parsed_date < @cut_off
 
