@@ -21,7 +21,6 @@ gem "omniauth-rails_csrf_protection"
 gem "pg"
 gem "pghero"
 gem "pg_lock"
-gem "pg_query"
 gem "postmark-rails"
 gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
@@ -45,6 +44,7 @@ gem "web-push"
 
 group :development, :test do
   gem "debug", require: "debug/prelude"
+  gem "pg_query"
   gem "prosopite"
   gem "vernier"
 end
