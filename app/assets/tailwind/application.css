@@ -58,15 +58,15 @@
 }
 
 .button-terracotta {
-  @apply inline-flex justify-center font-medium sm:text-sm text-white border border-transparent rounded-md cursor-pointer bg-terracotta-600 hover:bg-terracotta-700 focus:outline-hidden focus-visible:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-terracotta-500 dark:ring-offset-black;
+  @apply inline-flex justify-center font-medium sm:text-sm text-white border border-transparent rounded-md cursor-pointer bg-terracotta-600 hover:bg-terracotta-700 active:bg-terracotta-700 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-terracotta-500 dark:ring-offset-black;
 }
 
 .button-oxford-blue {
-  @apply inline-flex justify-center font-medium sm:text-sm text-white border border-transparent rounded-md cursor-pointer bg-oxford-blue-600 hover:bg-oxford-blue-700 focus:outline-hidden focus-visible:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-oxford-blue-500 dark:ring-offset-black;
+  @apply inline-flex justify-center font-medium sm:text-sm text-white border border-transparent rounded-md cursor-pointer bg-oxford-blue-600 hover:bg-oxford-blue-700 active:bg-oxford-blue-700 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-oxford-blue-500 dark:ring-offset-black;
 }
 
 .button-white {
-  @apply inline-flex justify-center font-medium sm:text-sm bg-white rounded-md shadow-sm cursor-pointer text-neutral-700 ring-1 dark:ring-0 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 focus:shadow-none focus:bg-neutral-100 dark:focus:bg-white/30 focus-visible:outline-hidden;
+  @apply inline-flex justify-center font-medium sm:text-sm bg-white rounded-md shadow-sm cursor-pointer text-neutral-700 ring-1 dark:ring-1 ring-inset ring-neutral-300 dark:ring-white/10 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 dark:shadow-sm dark:shadow-black/40 active:shadow-none active:bg-neutral-100 dark:active:bg-white/30 focus-visible:outline-hidden;
 }
 
 .shot-range {
@@ -217,7 +217,7 @@ a:hover .logo-steam path {
 }
 
 .tagify__tag > div {
-  @apply flex-grow whitespace-nowrap;
+  @apply grow whitespace-nowrap;
 }
 
 .tagify__tag__removeBtn {
@@ -230,7 +230,7 @@ a:hover .logo-steam path {
 }
 
 .tagify__input {
-  @apply flex-grow inline-block min-w-[100px] relative whitespace-pre-wrap align-baseline m-0.5 px-1 py-1 focus:outline-none focus:ring-0;
+  @apply grow inline-block min-w-[100px] relative whitespace-pre-wrap align-baseline m-0.5 px-1 py-1 focus:outline-none focus:ring-0;
 }
 
 .tagify__input::before {
@@ -247,7 +247,7 @@ a:hover .logo-steam path {
 }
 
 .tagify__dropdown {
-  @apply absolute z-[9999] -translate-y-px;
+  @apply absolute z-9999 -translate-y-px;
 }
 
 .tagify__dropdown[placement="top"] {

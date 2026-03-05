@@ -6,20 +6,20 @@
     <%= turbo_frame_tag "banner", src: banner_community_index_path(params.permit!) %>
   <% end %>
 <% end %>
-<div class="flex flex-col gap-y-6 my-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+<div class="flex flex-col mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-row gap-2 justify-between px-4 sm:px-0">
     <div>
-      <h1 class="pr-2 my-1 font-serif text-2xl font-bold lining-nums tracking-tight leading-tight whitespace-nowrap sm:my-0 sm:text-3xl md:text-4xl text-neutral-900 dark:text-neutral-100">
+      <h1 class="py-4 pr-2 font-serif text-3xl font-bold lining-nums sm:text-4xl truncate text-neutral-900 dark:text-neutral-100">
         Community Shots
       </h1>
     </div>
   </div>
   <%= render "filters" %>
   <% if @shots.any? %>
-    <div data-controller="modal shot-compare" class="mt-3 sm:mt-6">
+    <div data-controller="modal shot-compare">
       <%= render "shared/modal" %>
       <%= render "shots/comparison_banner" %>
-      <div id="shots" class="flex flex-col divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
+      <div id="shots" class="flex flex-col mt-6 divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
         <%= render @shots %>
       </div>
     </div>

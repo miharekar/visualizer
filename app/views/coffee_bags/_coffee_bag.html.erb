@@ -1,4 +1,4 @@
-<div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 rounded dark:border-neutral-700 dark:text-neutral-200 <%= coffee_bag.archived? ? 'opacity-40 border-x border-t border-neutral-200' : 'shadow dark:shadow-none dark:border-x dark:border-t' %> <%= coffee_bag.frozen? ? 'bg-sky-100/25 dark:bg-sky-900/25' : '' %>">
+<div id="<%= dom_id coffee_bag %>" class="flex flex-col col-span-1 sm:rounded dark:border-neutral-700 dark:text-neutral-200 <%= coffee_bag.archived? ? 'opacity-40 border-x border-t border-neutral-200' : 'shadow dark:shadow-none dark:border-x dark:border-t' %> <%= coffee_bag.frozen? ? 'bg-sky-100/25 dark:bg-sky-900/25' : '' %>">
   <div class="relative w-full h-full dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
     <%= link_to shots_path(coffee_bag: coffee_bag) do %>
       <span class="absolute inset-x-0 bottom-0 -top-px z-10"></span>
