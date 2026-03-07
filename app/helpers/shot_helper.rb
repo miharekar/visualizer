@@ -1,4 +1,22 @@
 module ShotHelper
+  def tasting_assessment_categories
+    Shot::TASTING_ASSESSMENT_ATTRIBUTES.map { it.to_s.humanize }
+  end
+
+  def tasting_assessment_values(shot)
+    values = Shot::TASTING_ASSESSMENT_ATTRIBUTES.map { |attribute| shot.public_send(attribute).to_i }
+    return if values.all?(0)
+
+    values
+  end
+
+  def tasting_assessment_series(shot, name:)
+    values = tasting_assessment_values(shot)
+    return unless values
+
+    {name:, data: values}
+  end
+
   def metadata_pair(key, value)
     value = brewdata_input_value(value)
     return unless value

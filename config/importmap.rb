@@ -6,6 +6,7 @@ pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 
 pin "highcharts", to: "https://cdn.jsdelivr.net/npm/highcharts@12.5.0/esm/highcharts.js"
 pin "highcharts-annotations", to: "https://cdn.jsdelivr.net/npm/highcharts@12.5.0/esm/modules/annotations.js"
+pin "highcharts-more", to: "https://cdn.jsdelivr.net/npm/highcharts@12.5.0/esm/highcharts-more.js"
 
 pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js
 
