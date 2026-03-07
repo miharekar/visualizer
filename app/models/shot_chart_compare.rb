@@ -1,6 +1,8 @@
 class ShotChartCompare < ShotChart
   prepend MemoWise
 
+  LEFT_LABEL = "Left".freeze
+  RIGHT_LABEL = "Right".freeze
   attr_reader :parsed_comparison
 
   SUFFIX = "_comparison".freeze
@@ -12,7 +14,7 @@ class ShotChartCompare < ShotChart
 
   def comparison_data
     (shot_chart + temperature_chart).filter_map do |s|
-      next unless s[:name].ends_with?("Comparison")
+      next unless s[:name].ends_with?(RIGHT_LABEL)
 
       [s[:name], s[:data]]
     end.to_h
@@ -28,6 +30,13 @@ class ShotChartCompare < ShotChart
   end
 
   private
+
+  def for_highcharts(data)
+    super.map do |series|
+      side = series[:comparison] == true ? RIGHT_LABEL : LEFT_LABEL
+      series.merge(name: "#{series[:name]} #{side}")
+    end
+  end
 
   def prepare_chart_data
     super

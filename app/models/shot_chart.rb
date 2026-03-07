@@ -51,6 +51,7 @@ class ShotChart
       {
         name: setting["title"],
         data: d,
+        comparison: setting["comparison"],
         color: setting["color"],
         visible: !setting["hidden"],
         dashStyle: dash_style,

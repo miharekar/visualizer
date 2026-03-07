@@ -1,6 +1,6 @@
 <% tasting_series = [
-  tasting_assessment_series(@shot, name: @shot.start_time.in_time_zone(Current.timezone).to_fs(:long)),
-  tasting_assessment_series(@comparison, name: @comparison.start_time.in_time_zone(Current.timezone).to_fs(:long))
+  tasting_assessment_series(@shot, name: "Left"),
+  tasting_assessment_series(@comparison, name: "Right")
 ].compact %>
 <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
@@ -24,7 +24,7 @@
     <% if Current.user&.premium? %>
       <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
-          Adjust comparison timing
+          Adjust right timing
         </div>
         <div class="flex">
           <div class="flex flex-col mt-2 mr-2 grow">
