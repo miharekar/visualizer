@@ -4,20 +4,17 @@ require_relative "../config/environment"
 require "rails/test_help"
 require "webmock/minitest"
 
+ActiveModel::SecurePassword.min_cost = true
+
 module ActiveSupport
   class TestCase
     include ActiveJob::TestHelper
     include FactoryBot::Syntax::Methods
 
-    # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    setup do
-      WebMock.disable_net_connect!
-    end
+    setup { WebMock.disable_net_connect! }
 
-    teardown do
-      WebMock.reset!
-    end
+    teardown { WebMock.reset! }
   end
 end
