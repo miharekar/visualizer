@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import Highcharts from "highcharts"
-import "highcharts-annotations"
+import "highcharts/modules/annotations"
 import { commonOptions, getHoverPoint } from "helpers/shot_chart_helpers"
 import { deepMerge, isObject } from "helpers/object_helpers"
 

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import Highcharts from "highcharts"
-import "highcharts-more"
+import "highcharts/highcharts-more"
 import { getColors } from "helpers/shot_chart_helpers"
 
 export default class extends Controller {
