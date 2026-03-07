@@ -29,6 +29,13 @@ module Airtable
       assert_nil @shot.bean_type
       assert_nil @shot.bean_weight
       assert_nil @shot.espresso_enjoyment
+      assert_nil @shot.fragrance
+      assert_nil @shot.aroma
+      assert_nil @shot.flavor
+      assert_nil @shot.aftertaste
+      assert_nil @shot.acidity
+      assert_nil @shot.sweetness
+      assert_nil @shot.mouthfeel
       assert_empty(@shot.metadata)
 
       records = Airtable::Shots.new(@user).download_multiple
@@ -42,8 +49,42 @@ module Airtable
       assert_equal "Genji Challa", @shot.bean_type
       assert_equal "17.0", @shot.bean_weight
       assert_equal 80, @shot.espresso_enjoyment
+      assert_nil @shot.fragrance
       assert_equal({"Bean variety" => "Catuai", "Portafilter basket" => "Decent"}, @shot.metadata)
       assert_no_enqueued_jobs only: AirtableUploadRecordJob
+    end
+
+    test "it downloads tasting assessment fields from airtable" do
+      stub_request(:get, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}?filterByFormula=DATETIME_DIFF%28NOW%28%29%2C+LAST_MODIFIED_TIME%28%29%2C+%27minutes%27%29+%3C+60")
+        .to_return(
+          status: 200,
+          body: {
+            records: [{
+              id: @shot.airtable_id,
+              fields: {
+                "ID" => @shot.id,
+                "Fragrance" => 10,
+                "Aroma" => 9,
+                "Flavor" => 12,
+                "Aftertaste" => 11,
+                "Acidity" => 7,
+                "Sweetness" => 8,
+                "Mouthfeel" => 13
+              }
+            }]
+          }.to_json
+        )
+
+      Airtable::Shots.new(@user).download_multiple
+      @shot.reload
+
+      assert_equal 10, @shot.fragrance
+      assert_equal 9, @shot.aroma
+      assert_equal 12, @shot.flavor
+      assert_equal 11, @shot.aftertaste
+      assert_equal 7, @shot.acidity
+      assert_equal 8, @shot.sweetness
+      assert_equal 13, @shot.mouthfeel
     end
 
     test "it downloads coffee bag relationship from airtable when coffee management is enabled" do
@@ -134,6 +175,26 @@ module Airtable
       stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
         .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"})
         .to_return(status: 200, body: {id: @shot.airtable_id}.to_json, headers: {})
+
+      perform_enqueued_jobs
+      assert_requested(stub)
+    end
+
+    test "it uploads tasting assessment fields to airtable" do
+      Shot.find(@shot.id).update!(fragrance: 10, aroma: 9, flavor: 12, aftertaste: 11, acidity: 7, sweetness: 8, mouthfeel: 13)
+      assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default")
+
+      stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
+        .with(headers: {"Authorization" => "Bearer #{@identity.token}", "Content-Type" => "application/json"}) do
+          body = JSON.parse(it.body)
+          assert_equal 10, body["fields"]["Fragrance"]
+          assert_equal 9, body["fields"]["Aroma"]
+          assert_equal 12, body["fields"]["Flavor"]
+          assert_equal 11, body["fields"]["Aftertaste"]
+          assert_equal 7, body["fields"]["Acidity"]
+          assert_equal 8, body["fields"]["Sweetness"]
+          assert_equal 13, body["fields"]["Mouthfeel"]
+        end.to_return(status: 200, body: {id: @shot.airtable_id}.to_json)
 
       perform_enqueued_jobs
       assert_requested(stub)

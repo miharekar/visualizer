@@ -95,9 +95,9 @@ module Api
       json_response = response.parsed_body
       assert_equal shot.id, json_response["id"]
       expected_keys = %w[
-        barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds drink_weight duration
-        espresso_enjoyment espresso_notes grinder_model grinder_setting id profile_title roast_date roast_level
-        start_time tags updated_at user_id
+        acidity aftertaste aroma barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds
+        drink_weight duration espresso_enjoyment espresso_notes flavor fragrance grinder_model grinder_setting
+        id mouthfeel profile_title roast_date roast_level start_time sweetness tags updated_at user_id
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
@@ -125,9 +125,9 @@ module Api
       json_response = response.parsed_body
       assert_equal shot.id, json_response["id"]
       expected_keys = %w[
-        barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds drink_weight duration
-        espresso_enjoyment espresso_notes grinder_model grinder_setting id profile_title roast_date roast_level
-        start_time tags updated_at user_id
+        acidity aftertaste aroma barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds
+        drink_weight duration espresso_enjoyment espresso_notes flavor fragrance grinder_model grinder_setting
+        id mouthfeel profile_title roast_date roast_level start_time sweetness tags updated_at user_id
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
@@ -270,6 +270,40 @@ module Api
       assert_equal({"Portafilter basket" => "IMS"}, shot.reload.metadata)
     end
 
+    test "update allows tasting assessment fields for premium users" do
+      premium_user = FactoryBot.create(:user, :premium)
+      shot = FactoryBot.create(:shot, user: premium_user)
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {fragrance: 10, aroma: 9, flavor: 12, aftertaste: 11, acidity: 7, sweetness: 8, mouthfeel: 13}}, as: :json
+
+      assert_response :success
+      shot.reload
+      assert_equal 10, shot.fragrance
+      assert_equal 9, shot.aroma
+      assert_equal 12, shot.flavor
+      assert_equal 11, shot.aftertaste
+      assert_equal 7, shot.acidity
+      assert_equal 8, shot.sweetness
+      assert_equal 13, shot.mouthfeel
+    end
+
+    test "update nilifies tasting assessment when all values are zero for premium users" do
+      premium_user = FactoryBot.create(:user, :premium)
+      shot = FactoryBot.create(:shot, user: premium_user, flavor: 8)
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {fragrance: 0, aroma: 0, flavor: 0, aftertaste: 0, acidity: 0, sweetness: 0, mouthfeel: 0}}, as: :json
+
+      assert_response :success
+      shot.reload
+      assert_nil shot.fragrance
+      assert_nil shot.aroma
+      assert_nil shot.flavor
+      assert_nil shot.aftertaste
+      assert_nil shot.acidity
+      assert_nil shot.sweetness
+      assert_nil shot.mouthfeel
+    end
+
     test "update rejects shot metadata fields for non-premium users" do
       shot = FactoryBot.create(:shot, user:)
 
@@ -277,6 +311,15 @@ module Api
 
       assert_response :bad_request
       assert_empty shot.reload.metadata
+    end
+
+    test "update rejects tasting assessment fields for non-premium users" do
+      shot = FactoryBot.create(:shot, user:)
+
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {fragrance: 10}}, as: :json
+
+      assert_response :bad_request
+      assert_nil shot.reload.fragrance
     end
 
     private
