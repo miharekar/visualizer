@@ -90,6 +90,30 @@
           </div>
         </div>
         <% if Current.user.premium? %>
+          <div data-controller="tasting-assessment">
+            <h3 class="standard-label">Tasting assessment</h3>
+            <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+              Intensity scores based on the
+              <a href="https://sca.coffee/sca-news/cva-in-action-descriptive" target="_blank" class="standard-link">SCA Coffee Value Descriptive Assessment</a>
+            </p>
+            <div class="grid grid-cols-6 gap-6 mt-4">
+              <% Shot::TASTING_ASSESSMENT_ATTRIBUTES.each do |attribute| %>
+                <div class="col-span-6 sm:col-span-3">
+                  <div class="flex justify-between items-center">
+                    <%= f.label attribute, attribute.to_s.humanize, class: "standard-label" %>
+                    <span class="hidden text-sm text-neutral-500 dark:text-neutral-400" data-tasting-assessment-target="value"><%= @shot.public_send(attribute) || 0 %></span>
+                  </div>
+                  <%= f.range_field attribute, in: 0..15, value: @shot.public_send(attribute) || 0, class: "mt-3 w-full accent-oxford-blue-600 dark:accent-oxford-blue-500", data: { action: "input->tasting-assessment#update", tasting_assessment_target: "slider" } %>
+                  <div class="flex justify-between px-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    <span>0</span>
+                    <span>5</span>
+                    <span>10</span>
+                    <span>15</span>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
           <% if Current.user.shot_metadata_fields.any? %>
             <%= f.fields_for :metadata do |mf| %>
               <div class="grid grid-cols-6 gap-6">

@@ -2,7 +2,7 @@ class Shot
   module Jsonable
     extend ActiveSupport::Concern
 
-    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista].freeze
+    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista fragrance aroma flavor aftertaste acidity sweetness mouthfeel].freeze
     ALLOWED_FORMATS = %w[beanconqueror decent].freeze
 
     def to_api_json(format:, **options)
@@ -48,6 +48,13 @@ class Shot
         updated_at: updated_at.to_i,
         duration:,
         espresso_enjoyment:,
+        fragrance:,
+        aroma:,
+        flavor:,
+        aftertaste:,
+        acidity:,
+        sweetness:,
+        mouthfeel:,
         espresso_notes:,
         bean_notes:,
         barista:,

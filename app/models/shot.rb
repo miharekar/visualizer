@@ -6,6 +6,7 @@ class Shot < ApplicationRecord
   include DateParseable
 
   DAILY_LIMIT = 50
+  TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity sweetness mouthfeel].freeze
   LIST_ATTRIBUTES = %i[id coffee_bag_id start_time profile_title user_id bean_weight drink_weight drink_tds drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting roast_level roast_date].freeze
 
   belongs_to :user, optional: true, touch: true
@@ -22,8 +23,10 @@ class Shot < ApplicationRecord
   end
 
   validates :start_time, :sha, :user, presence: true
+  validates(*TASTING_ASSESSMENT_ATTRIBUTES, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 15}, allow_nil: true)
   validate :daily_limit, on: :create
 
+  before_validation :normalize_tasting_assessment
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? || canonical_coffee_bag_id_changed? }
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
   after_commit :populate_dropdown_values
@@ -90,6 +93,12 @@ class Shot < ApplicationRecord
 
   private
 
+  def normalize_tasting_assessment
+    return unless TASTING_ASSESSMENT_ATTRIBUTES.all? { public_send(it) == 0 }
+
+    assign_attributes(TASTING_ASSESSMENT_ATTRIBUTES.index_with { nil })
+  end
+
   def daily_limit
     return if user.premium?
     return if self.class.where(user_id:).where("start_time > NOW() - INTERVAL '1 day'").count < DAILY_LIMIT
@@ -114,6 +123,9 @@ end
 # Database name: primary
 #
 #  id                      :uuid             not null, primary key
+#  acidity                 :integer
+#  aftertaste              :integer
+#  aroma                   :integer
 #  barista                 :string
 #  bean_brand              :string
 #  bean_notes              :text
@@ -125,9 +137,12 @@ end
 #  duration                :float
 #  espresso_enjoyment      :integer
 #  espresso_notes          :text
+#  flavor                  :integer
+#  fragrance               :integer
 #  grinder_model           :string
 #  grinder_setting         :string
 #  metadata                :jsonb
+#  mouthfeel               :integer
 #  private_notes           :text
 #  profile_title           :string
 #  public                  :boolean          default(FALSE), not null
@@ -135,6 +150,7 @@ end
 #  roast_level             :string
 #  sha                     :string           not null
 #  start_time              :datetime         not null
+#  sweetness               :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  airtable_id             :string

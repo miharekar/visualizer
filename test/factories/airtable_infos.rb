@@ -32,6 +32,13 @@ FactoryBot.define do
               {"name" => "Bean notes", "type" => "richText"},
               {"name" => "Espresso notes", "type" => "richText"},
               {"name" => "Private notes", "type" => "richText"},
+              {"name" => "Fragrance", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Aroma", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Flavor", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Aftertaste", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Acidity", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Sweetness", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Mouthfeel", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Portafilter basket", "type" => "singleLineText"},
               {"name" => "Bean variety", "type" => "singleLineText"},
               {"name" => "Tags", "type" => "multipleSelects", "options" => {"choices" => []}}

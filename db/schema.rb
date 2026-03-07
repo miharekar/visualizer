@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_131500) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -261,7 +261,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_131500) do
   end
 
   create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "acidity"
+    t.integer "aftertaste"
     t.string "airtable_id"
+    t.integer "aroma"
     t.string "barista"
     t.string "bean_brand"
     t.text "bean_notes"
@@ -276,9 +279,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_131500) do
     t.float "duration"
     t.integer "espresso_enjoyment"
     t.text "espresso_notes"
+    t.integer "flavor"
+    t.integer "fragrance"
     t.string "grinder_model"
     t.string "grinder_setting"
     t.jsonb "metadata"
+    t.integer "mouthfeel"
     t.text "private_notes"
     t.string "profile_title"
     t.boolean "public", default: false, null: false
@@ -286,6 +292,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_131500) do
     t.string "roast_level"
     t.string "sha", null: false
     t.datetime "start_time", precision: nil, null: false
+    t.integer "sweetness"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
