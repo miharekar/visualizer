@@ -28,7 +28,6 @@ module Parsers
       timestamp = json["timestamp"].to_f
       return Time.at(timestamp).utc if timestamp > THIS_CENTURY
 
-      Appsignal.set_message("Gaggiuino invalid timestamp #{json["timestamp"]}")
       Time.current.utc
     end
 
