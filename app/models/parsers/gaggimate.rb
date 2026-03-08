@@ -28,8 +28,8 @@ module Parsers
       @timeframe = []
       (DATA_LABELS_MAP.values + EXTRA_LABELS).each { |label| @data[label] = [] }
 
-      has_scale = json["samples"].any? { |point| point["v"].to_i != 0 }
-      measured_flow = json["samples"].any? { |point| point["vf"].to_i != 0 }
+      has_scale = json["samples"].any? { |point| point["v"].to_f.positive? }
+      measured_flow = json["samples"].any? { |point| point["vf"].to_f.positive? }
       json["samples"].each do |point|
         @timeframe << (point["t"] / 1000.0)
         DATA_LABELS_MAP.each { |key, label| @data[label] << point[key] }

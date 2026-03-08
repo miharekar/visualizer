@@ -66,6 +66,14 @@ module Parsers
       assert_equal "36.79", shot.drink_weight
     end
 
+    test "uses vf when measured flow stays below one gram per second" do
+      shot = new_shot("test/files/gaggimate-vf-under-one.json")
+
+      assert_in_delta(0.1, shot.information.data["espresso_flow_weight"][6])
+      assert_in_delta(0.03, shot.information.data["espresso_flow_weight"][10])
+      assert_equal "0.3", shot.drink_weight
+    end
+
     test "detects gaggimate stage indices" do
       shot = new_shot("test/files/gaggimate-v1.json")
       chart = ShotChart.new(shot)
