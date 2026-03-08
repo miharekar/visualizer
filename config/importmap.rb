@@ -13,6 +13,7 @@ pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.13
 pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.36.0
 pin "el-transition" # @0.0.7
 pin "highcharts" # @12.5.0
+pin "highcharts/highcharts-more", to: "highcharts--highcharts-more.js" # @12.5.0
 pin "highcharts/modules/annotations", to: "highcharts--modules--annotations.js" # @12.5.0
 pin "https" # @2.1.0
 pin "match-sorter" # @8.2.0

@@ -14,9 +14,7 @@ class ShotChartCompare < ShotChart
 
   def comparison_data
     (shot_chart + temperature_chart).filter_map do |s|
-      next unless s[:name].ends_with?(RIGHT_LABEL)
-
-      [s[:name], s[:data]]
+      [s[:name], s[:data]] if s[:comparison]
     end.to_h
   end
 

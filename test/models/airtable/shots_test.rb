@@ -75,7 +75,9 @@ module Airtable
           }.to_json
         )
 
-      Airtable::Shots.new(@user).download_multiple
+      assert_no_enqueued_jobs only: AirtableUploadRecordJob do
+        Airtable::Shots.new(@user).download_multiple
+      end
       @shot.reload
 
       assert_equal 10, @shot.fragrance

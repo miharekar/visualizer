@@ -1,3 +1,7 @@
+<% tasting_series = [
+  tasting_assessment_series(@shot, name: "Left"),
+  tasting_assessment_series(@comparison, name: "Right")
+].compact %>
 <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
     <div class="flex-1">
@@ -8,6 +12,9 @@
     </div>
   </div>
 </div>
+<% if tasting_series.any? %>
+  <%= render "tasting_assessment", categories: tasting_assessment_categories, series: tasting_series, show_legend: true %>
+<% end %>
 <% if @chart %>
   <div data-controller="shot-charts"
        data-shot-charts-shot-data-value="<%= (@chart.shot_chart || []).to_json %>"
