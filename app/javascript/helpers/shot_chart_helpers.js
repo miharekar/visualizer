@@ -1,10 +1,6 @@
 import Highcharts from "highcharts"
 import { isObject } from "helpers/object_helpers"
 
-export const getHoverPoint = (chart, e) => {
-  return chart.pointer.findNearestKDPoint(chart.series, true, chart.pointer.normalize(e))
-}
-
 export const syncZoomReset = e => {
   if (!e.resetSelection) return
 

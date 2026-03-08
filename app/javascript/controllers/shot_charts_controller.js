@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import Highcharts from "highcharts"
-import "highcharts-annotations"
-import { commonOptions, getHoverPoint } from "helpers/shot_chart_helpers"
+import "highcharts/modules/annotations"
+import { commonOptions } from "helpers/shot_chart_helpers"
 import { deepMerge, isObject } from "helpers/object_helpers"
 
 export default class extends Controller {
@@ -74,42 +74,66 @@ export default class extends Controller {
   }
 
   syncMouse(e) {
+    const sourceChart = this.charts.find(chart => chart?.renderTo === e.currentTarget)
+    if (!isObject(sourceChart)) return
+
+    const sourceHoverPoint = this.findPointFromEvent(sourceChart, e)
+    if (!isObject(sourceHoverPoint)) return
+
     this.charts.forEach(chart => {
       if (!isObject(chart) || this.element !== chart.renderTo?.closest("[data-controller~='shot-charts']")) return
 
-      const hoverPoint = getHoverPoint(chart, e)
-      const hoverPoints = []
-
-      if (hoverPoint) {
-        chart.series.forEach(s => {
-          if (!s.visible) return
-
-          const point = s.points.find(p => p.x === hoverPoint.x && !p.isNull)
-          if (isObject(point)) {
-            hoverPoints.push(point)
-          }
-        })
-      }
+      const hoverPoints = this.findHoverPointsAtX(chart, sourceHoverPoint.x)
 
       if (hoverPoints.length) {
         chart.tooltip.refresh(hoverPoints)
-        chart.xAxis[0].drawCrosshair(e, hoverPoints[0])
+        chart.xAxis[0].drawCrosshair(null, hoverPoints[0])
+      } else {
+        chart.tooltip.hide()
+        chart.xAxis[0].hideCrosshair()
       }
     })
   }
 
-  mouseLeave(e) {
+  mouseLeave() {
     this.charts.forEach(chart => {
       if (!isObject(chart)) return
 
-      const hoverPoint = getHoverPoint(chart, e)
-
-      if (hoverPoint) {
-        hoverPoint.onMouseOut()
-        chart.tooltip.hide(hoverPoint)
-        chart.xAxis[0].hideCrosshair()
-      }
+      chart.tooltip.hide()
+      chart.xAxis[0].hideCrosshair()
     })
+  }
+
+  findPointFromEvent(chart, e) {
+    const normalizedEvent = chart.pointer.normalize(e)
+    if (!isObject(normalizedEvent)) return
+
+    return this.nearestPoint(
+      chart.series.filter(s => s.visible && s.searchPoint).map(s => s.searchPoint(normalizedEvent, true)),
+      point => Math.abs((point.plotX + chart.plotLeft) - normalizedEvent.chartX)
+    )
+  }
+
+  findHoverPointsAtX(chart, x) {
+    const anchorPoint = this.nearestPoint(this.visiblePoints(chart), point => Math.abs(point.x - x))
+    if (!isObject(anchorPoint)) return []
+
+    return chart.series.filter(s => s.visible).flatMap(s => {
+      const point = s.points.find(p => p.x === anchorPoint.x && !p.isNull)
+      return isObject(point) ? [point] : []
+    })
+  }
+
+  visiblePoints(chart) {
+    return chart.series.filter(s => s.visible).flatMap(s => s.points.filter(point => !point.isNull))
+  }
+
+  nearestPoint(points, distanceFn) {
+    return points.filter(isObject).reduce((nearestPoint, point) => {
+      if (!isObject(nearestPoint)) return point
+
+      return distanceFn(point) < distanceFn(nearestPoint) ? point : nearestPoint
+    }, null)
   }
 
   extractStages(field, timings) {
