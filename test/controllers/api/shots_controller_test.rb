@@ -287,23 +287,6 @@ module Api
       assert_equal 13, shot.mouthfeel
     end
 
-    test "update nilifies tasting assessment when all values are zero for premium users" do
-      premium_user = FactoryBot.create(:user, :premium)
-      shot = FactoryBot.create(:shot, user: premium_user, flavor: 8)
-
-      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {fragrance: 0, aroma: 0, flavor: 0, aftertaste: 0, acidity: 0, sweetness: 0, mouthfeel: 0}}, as: :json
-
-      assert_response :success
-      shot.reload
-      assert_nil shot.fragrance
-      assert_nil shot.aroma
-      assert_nil shot.flavor
-      assert_nil shot.aftertaste
-      assert_nil shot.acidity
-      assert_nil shot.sweetness
-      assert_nil shot.mouthfeel
-    end
-
     test "update rejects shot metadata fields for non-premium users" do
       shot = FactoryBot.create(:shot, user:)
 

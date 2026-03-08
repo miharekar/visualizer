@@ -26,7 +26,6 @@ class Shot < ApplicationRecord
   validates(*TASTING_ASSESSMENT_ATTRIBUTES, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 15}, allow_nil: true)
   validate :daily_limit, on: :create
 
-  before_validation :normalize_tasting_assessment
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? || canonical_coffee_bag_id_changed? }
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
   after_commit :populate_dropdown_values
@@ -92,12 +91,6 @@ class Shot < ApplicationRecord
   end
 
   private
-
-  def normalize_tasting_assessment
-    return unless TASTING_ASSESSMENT_ATTRIBUTES.all? { public_send(it) == 0 }
-
-    assign_attributes(TASTING_ASSESSMENT_ATTRIBUTES.index_with { nil })
-  end
 
   def daily_limit
     return if user.premium?

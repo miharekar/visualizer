@@ -53,25 +53,4 @@ class ShotTest < ActiveSupport::TestCase
 
     assert_equal 5, shot.days_frozen
   end
-
-  test "nilifies tasting assessment when all values are zero" do
-    shot = build(:shot, fragrance: 0, aroma: 0, flavor: 0, aftertaste: 0, acidity: 0, sweetness: 0, mouthfeel: 0)
-
-    assert shot.valid?
-    assert_nil shot.fragrance
-    assert_nil shot.aroma
-    assert_nil shot.flavor
-    assert_nil shot.aftertaste
-    assert_nil shot.acidity
-    assert_nil shot.sweetness
-    assert_nil shot.mouthfeel
-  end
-
-  test "keeps tasting assessment when any value is above zero" do
-    shot = build(:shot, fragrance: 0, aroma: 0, flavor: 8, aftertaste: 0, acidity: 0, sweetness: 0, mouthfeel: 0)
-
-    assert shot.valid?
-    assert_equal 0, shot.fragrance
-    assert_equal 8, shot.flavor
-  end
 end
