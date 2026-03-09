@@ -50,9 +50,9 @@ export default class extends Controller {
     }
 
     if (data.tags && document.getElementById("tags_controller")) {
-      const tagField = this.tagField()
       const tagsController = this.application.getControllerForElementAndIdentifier(document.getElementById("tags_controller"), "tags")
-      const currentTags = this.currentTags(tagsController)
+      const tagField = document.querySelector('#tags_controller [name="shot[tag_list]"]')
+      const currentTags = tagsController.tagify.value.map(tag => tag.value)
 
       if (tagField && tagField.dataset.previousValue === undefined) {
         tagField.dataset.previousValue = JSON.stringify(currentTags)
@@ -129,22 +129,21 @@ export default class extends Controller {
   setFieldValue = (name, value) => {
     const field = document.querySelector(`[name="${name}"]`)
     if (!field) return
+    if (value == null) return
 
     this.updateField(field, value || "", false)
   }
 
   rollback(event) {
     event.preventDefault()
-
     const field = document.getElementById(event.currentTarget.dataset.revertFor)
-
     this.handleRollback(field)
   }
 
   rollbackTags(event) {
     event.preventDefault()
 
-    const tagField = this.tagField()
+    const tagField = document.querySelector('#tags_controller [name="shot[tag_list]"]')
     if (!tagField || tagField.dataset.previousValue === undefined) return
 
     const tagsController = this.application.getControllerForElementAndIdentifier(document.getElementById("tags_controller"), "tags")
@@ -156,14 +155,6 @@ export default class extends Controller {
 
     delete tagField.dataset.previousValue
     this.removeRevert(tagField, true)
-  }
-
-  tagField() {
-    return document.querySelector('#tags_controller [name="shot[tag_list]"]')
-  }
-
-  currentTags(tagsController) {
-    return tagsController.tagify.value.map(tag => tag.value)
   }
 
   handleRollback(field, isTags = false, renderCallback = null) {
