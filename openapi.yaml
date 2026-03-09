@@ -860,6 +860,7 @@ components:
         Default shot response shape used by Visualizer's native serializer.
 
         `private_notes` is only included when the authenticated user owns the shot.
+        Some optional Visualizer-specific fields may be omitted entirely when blank.
       properties:
         id:
           type: string
@@ -996,6 +997,7 @@ components:
         Shot response shape used when `format=beanconqueror`.
 
         `meta.visualizer.private_notes` is only included when the authenticated user owns the shot.
+        Some optional `meta.visualizer` fields may be omitted entirely when blank.
       properties:
         bean:
           $ref: "#/components/schemas/BeanconquerorBean"
@@ -1241,7 +1243,11 @@ components:
       properties:
         visualizer:
           type: object
-          description: Owner-only fields such as `private_notes` are only included when the authenticated user owns the shot.
+          description: |
+            Visualizer-specific metadata for the shot.
+
+            Owner-only fields such as `private_notes` are only included when the authenticated user owns the shot.
+            Some optional fields may be omitted entirely when blank.
           properties:
             shot_id:
               type: string
@@ -1249,12 +1255,74 @@ components:
             user_id:
               type: string
               format: uuid
+              nullable: true
             updated_at:
               type: integer
               format: int64
+            duration:
+              type: number
+              nullable: true
+            espresso_enjoyment:
+              type: integer
+              nullable: true
+            fragrance:
+              type: integer
+              nullable: true
+            aroma:
+              type: integer
+              nullable: true
+            flavor:
+              type: integer
+              nullable: true
+            aftertaste:
+              type: integer
+              nullable: true
+            acidity:
+              type: integer
+              nullable: true
+            sweetness:
+              type: integer
+              nullable: true
+            mouthfeel:
+              type: integer
+              nullable: true
+            espresso_notes:
+              type: string
+              nullable: true
+            bean_notes:
+              type: string
+              nullable: true
+            barista:
+              type: string
+              nullable: true
+            metadata:
+              allOf:
+                - $ref: "#/components/schemas/ShotMetadata"
+              nullable: true
+            tags:
+              type: array
+              items:
+                type: string
+            roaster_id:
+              type: string
+              format: uuid
+            coffee_bag_id:
+              type: string
+              format: uuid
+            start_time:
+              type: string
+              format: date-time
+            user_name:
+              type: string
             private_notes:
               type: string
               nullable: true
+            profile_url:
+              type: string
+              format: uri
+            image_url:
+              type: string
+              format: uri
 
     DecentSeriesPayload:
       type: object

@@ -95,13 +95,39 @@ module Api
       json_response = response.parsed_body
       assert_equal shot.id, json_response["id"]
       expected_keys = %w[
-        acidity aftertaste aroma barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds
-        drink_weight duration espresso_enjoyment espresso_notes flavor fragrance grinder_model grinder_setting
-        id mouthfeel private_notes profile_title roast_date roast_level start_time sweetness tags updated_at user_id
+        barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds drink_weight duration
+        espresso_enjoyment espresso_notes grinder_model grinder_setting id private_notes profile_title roast_date
+        roast_level start_time tags updated_at user_id
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
       assert_equal "Only for me", json_response["private_notes"]
+    end
+
+    test "show returns tasting assessment data when present" do
+      shot = FactoryBot.create(
+        :shot,
+        user:,
+        fragrance: 1,
+        aroma: 2,
+        flavor: 3,
+        aftertaste: 4,
+        acidity: 5,
+        sweetness: 6,
+        mouthfeel: 7
+      )
+
+      get api_shot_url(shot), headers: auth_headers(user), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal 1, json_response["fragrance"]
+      assert_equal 2, json_response["aroma"]
+      assert_equal 3, json_response["flavor"]
+      assert_equal 4, json_response["aftertaste"]
+      assert_equal 5, json_response["acidity"]
+      assert_equal 6, json_response["sweetness"]
+      assert_equal 7, json_response["mouthfeel"]
     end
 
     test "show returns shot data in beanconqueror format" do
@@ -126,9 +152,9 @@ module Api
       json_response = response.parsed_body
       assert_equal shot.id, json_response["id"]
       expected_keys = %w[
-        acidity aftertaste aroma barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds
-        drink_weight duration espresso_enjoyment espresso_notes flavor fragrance grinder_model grinder_setting
-        id mouthfeel private_notes profile_title roast_date roast_level start_time sweetness tags updated_at user_id
+        barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds drink_weight duration
+        espresso_enjoyment espresso_notes grinder_model grinder_setting id private_notes profile_title roast_date
+        roast_level start_time tags updated_at user_id
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]

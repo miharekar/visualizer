@@ -2,7 +2,7 @@ class Shot
   module Jsonable
     extend ActiveSupport::Concern
 
-    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista fragrance aroma flavor aftertaste acidity sweetness mouthfeel].freeze
+    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista].freeze
     FORMAT_METHODS = {
       "beanconqueror" => :beanconqueror_json,
       "default" => :default_json,
@@ -40,7 +40,7 @@ class Shot
     def default_json(include_information:)
       json = attributes.slice(*ALLOWED_ATTRIBUTES)
       add_brew_data(json) if include_information
-      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes]))
+      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity sweetness mouthfeel]))
     end
 
     private
