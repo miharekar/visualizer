@@ -172,52 +172,54 @@
     </div>
   </div>
 </div>
-<div class="py-12 sm:py-16">
-  <div class="px-6 pb-16 mx-auto max-w-7xl lg:px-8">
-    <div class="mx-auto max-w-2xl text-center">
-      <h2 class="font-serif text-5xl font-bold tracking-tight sm:text-6xl text-neutral-900 dark:text-neutral-300">
-        Latest Updates
-      </h2>
+<% if @last_update.present? %>
+  <div class="py-12 sm:py-16">
+    <div class="px-6 pb-16 mx-auto max-w-7xl lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="font-serif text-5xl font-bold tracking-tight sm:text-6xl text-neutral-900 dark:text-neutral-300">
+          Latest Updates
+        </h2>
+      </div>
     </div>
-  </div>
-  <div class="grid grid-cols-1 gap-x-8 gap-y-12 px-6 mx-auto max-w-7xl sm:gap-y-16 lg:grid-cols-2 lg:px-8">
-    <article class="mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-lg">
-      <time datetime="<%= @last_update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-        <%= @last_update.published_at.strftime("%b %d, %Y") %>
-      </time>
-      <h2 id="featured-post" class="mt-4">
-        <%= link_to @last_update.title, update_path(@last_update.slug.presence || @last_update.id), class: "text-3xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl hover:text-neutral-500 dark:hover:text-neutral-400", target: "_blank" %>
-      </h2>
-      <p class="mt-4 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-        <%= @last_update.excerpt %>
-      </p>
-      <div class="flex flex-col gap-6 justify-between mt-4 sm:flex-row-reverse sm:gap-8 sm:mt-8 lg:flex-col lg:mt-4">
-        <div class="flex">
-          <%= link_to "Continue reading →", update_path(@last_update.slug.presence || @last_update.id), class: "text-sm font-semibold leading-6 text-terracotta-600 dark:text-terracotta-500 hover:text-terracotta-500 dark:hover:text-terracotta-400", target: "_blank" %>
+    <div class="grid grid-cols-1 gap-x-8 gap-y-12 px-6 mx-auto max-w-7xl sm:gap-y-16 lg:grid-cols-2 lg:px-8">
+      <article class="mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-lg">
+        <time datetime="<%= @last_update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+          <%= @last_update.published_at.strftime("%b %d, %Y") %>
+        </time>
+        <h2 id="featured-post" class="mt-4">
+          <%= link_to @last_update.title, update_path(@last_update.slug.presence || @last_update.id), class: "text-3xl font-serif font-bold tracking-tight text-neutral-900 dark:text-neutral-300 sm:text-4xl hover:text-neutral-500 dark:hover:text-neutral-400", target: "_blank" %>
+        </h2>
+        <p class="mt-4 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
+          <%= @last_update.excerpt %>
+        </p>
+        <div class="flex flex-col gap-6 justify-between mt-4 sm:flex-row-reverse sm:gap-8 sm:mt-8 lg:flex-col lg:mt-4">
+          <div class="flex">
+            <%= link_to "Continue reading →", update_path(@last_update.slug.presence || @last_update.id), class: "text-sm font-semibold leading-6 text-terracotta-600 dark:text-terracotta-500 hover:text-terracotta-500 dark:hover:text-terracotta-400", target: "_blank" %>
+          </div>
+        </div>
+      </article>
+      <div class="pt-12 mx-auto w-full max-w-2xl border-t sm:pt-16 lg:pt-0 lg:mx-0 lg:max-w-none lg:border-t-0 border-neutral-200 dark:border-neutral-700">
+        <div class="-my-12 divide-y divide-neutral-200 dark:divide-neutral-700">
+          <% @updates.each do |update| %>
+            <article class="py-12">
+              <div class="relative max-w-xl group">
+                <time datetime="<%= update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+                  <%= update.published_at.strftime("%b %d, %Y") %>
+                </time>
+                <h2 class="mt-2 font-serif text-2xl font-semibold text-neutral-900 text dark:text-neutral-300 group-hover:text-neutral-400">
+                  <%= link_to update_path(update.slug.presence || update.id), target: "_blank" do %>
+                    <span class="absolute inset-0"></span>
+                    <%= update.title %>
+                  <% end %>
+                </h2>
+                <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
+                  <%= update.excerpt %>
+                </p>
+              </div>
+            </article>
+          <% end %>
         </div>
       </div>
-    </article>
-    <div class="pt-12 mx-auto w-full max-w-2xl border-t sm:pt-16 lg:pt-0 lg:mx-0 lg:max-w-none lg:border-t-0 border-neutral-200 dark:border-neutral-700">
-      <div class="-my-12 divide-y divide-neutral-200 dark:divide-neutral-700">
-        <% @updates.each do |update| %>
-          <article class="py-12">
-            <div class="relative max-w-xl group">
-              <time datetime="<%= update.published_at.strftime("%Y-%m-%d") %>" class="block text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-                <%= update.published_at.strftime("%b %d, %Y") %>
-              </time>
-              <h2 class="mt-2 font-serif text-2xl font-semibold text-neutral-900 text dark:text-neutral-300 group-hover:text-neutral-400">
-                <%= link_to update_path(update.slug.presence || update.id), target: "_blank" do %>
-                  <span class="absolute inset-0"></span>
-                  <%= update.title %>
-                <% end %>
-              </h2>
-              <p class="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-300">
-                <%= update.excerpt %>
-              </p>
-            </div>
-          </article>
-        <% end %>
-      </div>
     </div>
   </div>
-</div>
+<% end %>

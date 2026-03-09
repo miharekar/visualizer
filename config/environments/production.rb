@@ -97,4 +97,3 @@ Rails.application.configure do
 
   config.webauthn_origin = "https://visualizer.coffee"
 end
-Rails.application.routes.default_url_options[:host] = "visualizer.coffee"

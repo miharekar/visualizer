@@ -54,4 +54,3 @@ Rails.application.configure do
   config.time_zone = "UTC"
   config.webauthn_origin = "http://visualizer.localhost:3000"
 end
-Rails.application.routes.default_url_options = {host: "visualizer.test", protocol: "https"}
