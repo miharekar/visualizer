@@ -129,9 +129,9 @@ export default class extends Controller {
   setFieldValue = (name, value) => {
     const field = document.querySelector(`[name="${name}"]`)
     if (!field) return
-    if (value == null) return
+    if (value === undefined) return
 
-    this.updateField(field, value || "", false)
+    this.updateField(field, value ?? "", false)
   }
 
   rollback(event) {
