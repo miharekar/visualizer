@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
 
-  mount Scalar::UI, at: "/", constraints: {subdomain: "apidocs"}
+  if Rails.env.local?
+    mount Scalar::UI, at: "/apidocs"
+  else
+    mount Scalar::UI, at: "/", constraints: {subdomain: "apidocs"}
+  end
 
   constraints ->(request) { AuthConstraint.admin?(request) } do
     mount MissionControl::Jobs::Engine, at: "/jobs"
