@@ -1,4 +1,23 @@
 module ShotHelper
+  def shot_copyable_label(form, attribute, text = nil, &block)
+    tag.div(class: "flex justify-between items-center gap-2") do
+      concat form.label(attribute, text, class: "standard-label")
+      concat tag.div(class: "flex items-center gap-2") {
+        concat capture(&block) if block_given?
+        concat link_to("Revert", "#", class: "hidden text-sm font-light standard-link text-neutral-500 dark:text-neutral-400", data: {action: "click->shot-copier#rollback", revert_for: form.field_id(attribute)})
+      }
+    end
+  end
+
+  def shot_copyable_label_tag(label_for, revert_for, text)
+    tag.div(class: "flex justify-between items-center gap-2") do
+      concat label_tag(label_for, text, class: "standard-label")
+      concat tag.div(class: "flex items-center gap-2") {
+        concat link_to("Revert", "#", class: "hidden text-sm font-light standard-link text-neutral-500 dark:text-neutral-400", data: {action: "click->shot-copier#rollbackTags", revert_for:})
+      }
+    end
+  end
+
   def tasting_assessment_categories
     Shot::TASTING_ASSESSMENT_ATTRIBUTES.map { it.to_s.humanize }
   end
