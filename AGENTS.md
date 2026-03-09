@@ -101,6 +101,7 @@ bin/ci                 # full CI pipeline
 - OAuth apps are managed at `/oauth/applications` after login.
 - Keep `openapi.yaml` tightly aligned with `config/routes.rb` and controller behavior (auth requirements, scopes, response shapes, redirects, and deprecated aliases).
 - Whenever `openapi.yaml` changes, also bump `info.version` in that file.
+- Any API behavior change also requires checking whether `openapi.yaml` must be updated, even if the route itself did not change (for example response fields, visibility rules, auth behavior, or parameter semantics).
 
 ### Authentication & authorization
 

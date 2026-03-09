@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.7.0"
+  version: "1.8.0"
   description: |
     REST API for Visualizer.
 
@@ -187,6 +187,10 @@ paths:
       tags: [Shots]
       summary: Get shot
       operationId: getShot
+      description: |
+        Returns a shot by id.
+
+        When the authenticated user owns the shot, the response also includes `private_notes`.
       parameters:
         - $ref: "#/components/parameters/ShotFormat"
         - $ref: "#/components/parameters/Essentials"
@@ -852,7 +856,10 @@ components:
 
     DefaultShotDetail:
       type: object
-      description: Default shot response shape used by Visualizer's native serializer.
+      description: |
+        Default shot response shape used by Visualizer's native serializer.
+
+        `private_notes` is only included when the authenticated user owns the shot.
       properties:
         id:
           type: string
@@ -904,6 +911,9 @@ components:
           type: string
           nullable: true
         bean_notes:
+          type: string
+          nullable: true
+        private_notes:
           type: string
           nullable: true
         barista:
@@ -982,7 +992,10 @@ components:
 
     BeanconquerorShotDetail:
       type: object
-      description: Shot response shape used when `format=beanconqueror`.
+      description: |
+        Shot response shape used when `format=beanconqueror`.
+
+        `meta.visualizer.private_notes` is only included when the authenticated user owns the shot.
       properties:
         bean:
           $ref: "#/components/schemas/BeanconquerorBean"
@@ -1018,6 +1031,7 @@ components:
         meta:
           visualizer:
             shot_id: 15d4ec9f-7f86-4f63-b2ac-cfce8277f33f
+            private_notes: Dialed in and syrupy
 
     SharedShotsResponse:
       oneOf:
@@ -1227,6 +1241,7 @@ components:
       properties:
         visualizer:
           type: object
+          description: Owner-only fields such as `private_notes` are only included when the authenticated user owns the shot.
           properties:
             shot_id:
               type: string
@@ -1237,6 +1252,9 @@ components:
             updated_at:
               type: integer
               format: int64
+            private_notes:
+              type: string
+              nullable: true
 
     DecentSeriesPayload:
       type: object

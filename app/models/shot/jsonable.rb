@@ -40,7 +40,7 @@ class Shot
     def default_json(include_information:)
       json = attributes.slice(*ALLOWED_ATTRIBUTES)
       add_brew_data(json) if include_information
-      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id]))
+      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes]))
     end
 
     private
@@ -70,6 +70,7 @@ class Shot
 
       attributes[:start_time] = start_time unless user&.hide_shot_times
       attributes[:user_name] = user.display_name if user&.public?
+      attributes[:private_notes] = private_notes if Current.user == user
       attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.has_profile?
       attributes[:image_url] = image.url if image.attached?
 

@@ -87,9 +87,9 @@ module Api
     end
 
     test "show returns shot data" do
-      shot = FactoryBot.create(:shot, user:)
+      shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
 
-      get api_shot_url(shot), as: :json
+      get api_shot_url(shot), headers: auth_headers(user), as: :json
       assert_response :success
 
       json_response = response.parsed_body
@@ -97,10 +97,11 @@ module Api
       expected_keys = %w[
         acidity aftertaste aroma barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds
         drink_weight duration espresso_enjoyment espresso_notes flavor fragrance grinder_model grinder_setting
-        id mouthfeel profile_title roast_date roast_level start_time sweetness tags updated_at user_id
+        id mouthfeel private_notes profile_title roast_date roast_level start_time sweetness tags updated_at user_id
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
+      assert_equal "Only for me", json_response["private_notes"]
     end
 
     test "show returns shot data in beanconqueror format" do
@@ -117,9 +118,9 @@ module Api
     end
 
     test "show returns shot data in decent format for unknown format" do
-      shot = FactoryBot.create(:shot, user:)
+      shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
 
-      get api_shot_url(shot), params: {format: "unknown"}, as: :json
+      get api_shot_url(shot), params: {format: "unknown"}, headers: auth_headers(user), as: :json
       assert_response :success
 
       json_response = response.parsed_body
@@ -127,10 +128,21 @@ module Api
       expected_keys = %w[
         acidity aftertaste aroma barista bean_brand bean_notes bean_type bean_weight brewdata drink_ey drink_tds
         drink_weight duration espresso_enjoyment espresso_notes flavor fragrance grinder_model grinder_setting
-        id mouthfeel profile_title roast_date roast_level start_time sweetness tags updated_at user_id
+        id mouthfeel private_notes profile_title roast_date roast_level start_time sweetness tags updated_at user_id
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
+      assert_equal "Only for me", json_response["private_notes"]
+    end
+
+    test "show does not expose private notes to other users" do
+      shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
+
+      get api_shot_url(shot), headers: auth_headers(public_user), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_not_includes json_response.keys, "private_notes"
     end
 
     test "show returns 404 for non-existent shot" do
