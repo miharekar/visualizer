@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.6.0"
+  version: "1.7.0"
   description: |
     REST API for Visualizer.
 
@@ -733,7 +733,8 @@ components:
       required: false
       schema:
         type: string
-      description: Optional output format used by shot serializers.
+        enum: [default, beanconqueror]
+      description: Optional output format used by shot serializers. Defaults to `default` when omitted. Legacy `decent` remains accepted as an alias for backward compatibility.
     ProfileFormat:
       name: format
       in: query
@@ -844,9 +845,179 @@ components:
           $ref: "#/components/schemas/Paging"
 
     ShotDetail:
-      type: object
       description: Flexible shot payload. Keys vary by `format` and integration source.
-      additionalProperties: true
+      oneOf:
+        - $ref: "#/components/schemas/DefaultShotDetail"
+        - $ref: "#/components/schemas/BeanconquerorShotDetail"
+
+    DefaultShotDetail:
+      type: object
+      description: Default shot response shape used by Visualizer's native serializer.
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+          nullable: true
+        duration:
+          type: number
+          nullable: true
+        profile_title:
+          type: string
+          nullable: true
+        drink_tds:
+          type: string
+          nullable: true
+        drink_ey:
+          type: string
+          nullable: true
+        espresso_enjoyment:
+          type: integer
+          nullable: true
+        bean_weight:
+          type: string
+          nullable: true
+        drink_weight:
+          type: string
+          nullable: true
+        grinder_model:
+          type: string
+          nullable: true
+        grinder_setting:
+          type: string
+          nullable: true
+        bean_brand:
+          type: string
+          nullable: true
+        bean_type:
+          type: string
+          nullable: true
+        roast_date:
+          type: string
+          nullable: true
+        espresso_notes:
+          type: string
+          nullable: true
+        roast_level:
+          type: string
+          nullable: true
+        bean_notes:
+          type: string
+          nullable: true
+        barista:
+          type: string
+          nullable: true
+        fragrance:
+          type: integer
+          nullable: true
+        aroma:
+          type: integer
+          nullable: true
+        flavor:
+          type: integer
+          nullable: true
+        aftertaste:
+          type: integer
+          nullable: true
+        acidity:
+          type: integer
+          nullable: true
+        sweetness:
+          type: integer
+          nullable: true
+        mouthfeel:
+          type: integer
+          nullable: true
+        start_time:
+          type: string
+          format: date-time
+        updated_at:
+          type: integer
+          format: int64
+        user_name:
+          type: string
+        metadata:
+          allOf:
+            - $ref: "#/components/schemas/ShotMetadata"
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+        profile_url:
+          type: string
+          format: uri
+        image_url:
+          type: string
+          format: uri
+        roaster_id:
+          type: string
+          format: uuid
+        coffee_bag_id:
+          type: string
+          format: uuid
+        timeframe:
+          type: array
+          items:
+            type: number
+        data:
+          $ref: "#/components/schemas/ShotSeriesData"
+        brewdata:
+          $ref: "#/components/schemas/ShotBrewdata"
+      example:
+        id: 15d4ec9f-7f86-4f63-b2ac-cfce8277f33f
+        user_id: 0c2f8248-7d67-44c1-a89a-3a6c0d468875
+        profile_title: Rao Allonge
+        drink_weight: "42.1"
+        bean_weight: "20.0"
+        start_time: "2026-03-09T08:12:00Z"
+        updated_at: 1741517580
+        timeframe: [0.0, 1.2, 2.4]
+        data:
+          espresso_pressure: [0.5, 2.7, 8.4]
+          espresso_flow: [0.0, 1.1, 2.3]
+        tags: [daily, washed]
+
+    BeanconquerorShotDetail:
+      type: object
+      description: Shot response shape used when `format=beanconqueror`.
+      properties:
+        bean:
+          $ref: "#/components/schemas/BeanconquerorBean"
+        mill:
+          $ref: "#/components/schemas/BeanconquerorMill"
+        brew:
+          $ref: "#/components/schemas/BeanconquerorBrew"
+        preparation:
+          $ref: "#/components/schemas/BeanconquerorPreparation"
+        meta:
+          $ref: "#/components/schemas/BeanconquerorMeta"
+        brewdata:
+          $ref: "#/components/schemas/ShotBrewdata"
+        timeframe:
+          type: array
+          items:
+            type: number
+        data:
+          $ref: "#/components/schemas/ShotSeriesData"
+      example:
+        bean:
+          roaster: Sey
+          name: Kenya Kii
+          roast: Light
+        mill:
+          name: EK43
+        brew:
+          grind_size: "7.5"
+          brew_beverage_quantity: "40"
+          grind_weight: "20"
+        preparation:
+          name: Beanconqueror
+        meta:
+          visualizer:
+            shot_id: 15d4ec9f-7f86-4f63-b2ac-cfce8277f33f
 
     SharedShotsResponse:
       oneOf:
@@ -856,9 +1027,101 @@ components:
             $ref: "#/components/schemas/ShotDetail"
 
     ShotUploadPayload:
-      type: object
       description: Raw JSON shot export payload from supported tools/devices.
-      additionalProperties: true
+      oneOf:
+        - $ref: "#/components/schemas/BeanconquerorUploadPayload"
+        - $ref: "#/components/schemas/DecentUploadPayload"
+        - $ref: "#/components/schemas/GaggiuinoUploadPayload"
+        - $ref: "#/components/schemas/GaggiMateUploadPayload"
+        - $ref: "#/components/schemas/MeticulousUploadPayload"
+
+    BeanconquerorUploadPayload:
+      type: object
+      properties:
+        bean:
+          $ref: "#/components/schemas/BeanconquerorBean"
+        mill:
+          $ref: "#/components/schemas/BeanconquerorMill"
+        brew:
+          $ref: "#/components/schemas/BeanconquerorBrew"
+        preparation:
+          $ref: "#/components/schemas/BeanconquerorPreparation"
+        brewFlow:
+          type: object
+          description: Beanconqueror brew flow series keyed by metric.
+      required: [brew]
+
+    DecentUploadPayload:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        elapsed:
+          type: array
+          items:
+            type: number
+        profile:
+          type: object
+          description: Exported profile settings.
+        pressure:
+          $ref: "#/components/schemas/DecentSeriesPayload"
+        flow:
+          $ref: "#/components/schemas/DecentSeriesPayload"
+        temperature:
+          $ref: "#/components/schemas/DecentTemperaturePayload"
+        totals:
+          $ref: "#/components/schemas/DecentTotalsPayload"
+      required: [timestamp]
+
+    GaggiuinoUploadPayload:
+      type: object
+      properties:
+        timestamp:
+          oneOf:
+            - type: integer
+            - type: number
+        profile:
+          type: object
+          description: Gaggiuino profile payload.
+        datapoints:
+          type: array
+          items:
+            $ref: "#/components/schemas/GaggiuinoDatapoint"
+      required: [datapoints]
+
+    GaggiMateUploadPayload:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        profile:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/GaggiMateProfile"
+        samples:
+          type: array
+          items:
+            $ref: "#/components/schemas/GaggiMateSample"
+      required: [timestamp, samples]
+
+    MeticulousUploadPayload:
+      type: object
+      properties:
+        time:
+          type: integer
+          format: int64
+        profile_name:
+          type: string
+        profile:
+          type: object
+          description: Meticulous profile payload.
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/MeticulousDatapoint"
+      required: [time, profile_name, data]
 
     ShotUploadResult:
       type: object
@@ -867,6 +1130,232 @@ components:
         id:
           type: string
           format: uuid
+
+    ShotBrewdata:
+      description: Raw brew payload preserved from the original integration source.
+      oneOf:
+        - $ref: "#/components/schemas/BeanconquerorUploadPayload"
+        - $ref: "#/components/schemas/DecentUploadPayload"
+        - $ref: "#/components/schemas/GaggiuinoUploadPayload"
+        - $ref: "#/components/schemas/GaggiMateUploadPayload"
+        - $ref: "#/components/schemas/MeticulousUploadPayload"
+
+    ShotMetadata:
+      type: object
+      description: Optional user-defined metadata attached to the shot.
+      example:
+        grinder_burrs: SSP HU
+        water_recipe: Rao/Perger
+
+    ShotSeriesData:
+      type: object
+      description: Common shot time-series arrays keyed by metric name.
+      properties:
+        espresso_pressure:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_flow:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_weight:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_flow_weight:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_pressure_goal:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_flow_goal:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_temperature_goal:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_temperature_mix:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_temperature_basket:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_water_dispensed:
+          $ref: "#/components/schemas/ShotSeries"
+        espresso_state_change:
+          $ref: "#/components/schemas/ShotSeries"
+
+    ShotSeries:
+      type: array
+      items:
+        oneOf:
+          - type: number
+          - type: string
+          - type: boolean
+          - type: "null"
+
+    BeanconquerorBean:
+      type: object
+      properties:
+        roaster:
+          type: string
+        name:
+          type: string
+        roast:
+          type: string
+        roastingDate:
+          type: string
+          format: date-time
+
+    BeanconquerorMill:
+      type: object
+      properties:
+        name:
+          type: string
+
+    BeanconquerorBrew:
+      type: object
+      properties:
+        grind_size:
+          type: string
+        brew_beverage_quantity:
+          type: string
+        grind_weight:
+          type: string
+        tds:
+          type: string
+        ey:
+          type: string
+
+    BeanconquerorPreparation:
+      type: object
+      properties:
+        name:
+          type: string
+
+    BeanconquerorMeta:
+      type: object
+      properties:
+        visualizer:
+          type: object
+          properties:
+            shot_id:
+              type: string
+              format: uuid
+            user_id:
+              type: string
+              format: uuid
+            updated_at:
+              type: integer
+              format: int64
+
+    DecentSeriesPayload:
+      type: object
+      properties:
+        pressure:
+          $ref: "#/components/schemas/ShotSeries"
+        flow:
+          $ref: "#/components/schemas/ShotSeries"
+        by_weight:
+          $ref: "#/components/schemas/ShotSeries"
+        by_weight_raw:
+          $ref: "#/components/schemas/ShotSeries"
+        goal:
+          $ref: "#/components/schemas/ShotSeries"
+
+    DecentTemperaturePayload:
+      type: object
+      properties:
+        basket:
+          $ref: "#/components/schemas/ShotSeries"
+        mix:
+          $ref: "#/components/schemas/ShotSeries"
+        goal:
+          $ref: "#/components/schemas/ShotSeries"
+
+    DecentTotalsPayload:
+      type: object
+      properties:
+        weight:
+          $ref: "#/components/schemas/ShotSeries"
+        water_dispensed:
+          $ref: "#/components/schemas/ShotSeries"
+
+    GaggiuinoDatapoint:
+      type: object
+      properties:
+        timeInShot:
+          type: number
+        pressure:
+          type: number
+        pumpFlow:
+          type: number
+        shotWeight:
+          type: number
+        targetPressure:
+          type: number
+        targetPumpFlow:
+          type: number
+        targetTemperature:
+          type: number
+        temperature:
+          type: number
+        waterPumped:
+          type: number
+        weightFlow:
+          type: number
+
+    GaggiMateProfile:
+      type: object
+      properties:
+        label:
+          type: string
+
+    GaggiMateSample:
+      type: object
+      properties:
+        t:
+          type: number
+        cp:
+          type: number
+        fl:
+          type: number
+        tp:
+          type: number
+        tf:
+          type: number
+        tt:
+          type: number
+        ct:
+          type: number
+        v:
+          type: number
+        ev:
+          type: number
+        vf:
+          type: number
+        pf:
+          type: number
+
+    MeticulousDatapoint:
+      type: object
+      properties:
+        time:
+          type: number
+        status:
+          type: string
+        shot:
+          type: object
+          properties:
+            pressure:
+              type: number
+            flow:
+              type: number
+            weight:
+              type: number
+            gravimetric_flow:
+              type: number
+            setpoints:
+              type: object
+              properties:
+                pressure:
+                  type: number
+                flow:
+                  type: number
+        sensors:
+          type: object
+          properties:
+            tube:
+              type: number
 
     ShotUpdateRequest:
       type: object
