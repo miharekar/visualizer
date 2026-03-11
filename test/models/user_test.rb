@@ -49,4 +49,12 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal [], user.coffee_bag_metadata_fields
   end
+
+  test "unified_chart follows the user preference" do
+    user = build(:user)
+    assert_not user.unified_chart?
+
+    user = build(:user, unified_chart: true)
+    assert user.unified_chart?
+  end
 end

@@ -12,11 +12,11 @@ class ShotChart
   end
 
   memo_wise def shot_chart
-    for_highcharts(@processed_shot_data.sort.reject { |key, _v| key.include?("temperature") })
+    for_highcharts(shot_chart_data)
   end
 
   memo_wise def temperature_chart
-    for_highcharts(@processed_shot_data.sort.select { |key, _v| key.include?("temperature") })
+    for_highcharts(temperature_chart_data)
   end
 
   memo_wise def stages
@@ -26,6 +26,15 @@ class ShotChart
   end
 
   private
+
+  def shot_chart_data
+    data = @processed_shot_data.sort
+    user&.unified_chart? ? data : data.reject { |key, _v| key.include?("temperature") }
+  end
+
+  def temperature_chart_data
+    user&.unified_chart? ? {} : @processed_shot_data.sort.select { |key, _v| key.include?("temperature") }
+  end
 
   def prepare_chart_data
     @processed_shot_data = process_data(parsed_shot)
@@ -42,6 +51,7 @@ class ShotChart
       setting = chart_settings.for_label(label)
       next if setting.blank?
 
+      setting["secondary_axis"] = true if user&.unified_chart? && label.include?("temperature")
       if setting["comparison"]
         dash_style = setting["dashed"] ? "DashDot" : "ShortDot"
       else

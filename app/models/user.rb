@@ -184,6 +184,7 @@ end
 #  supporter                  :boolean          default(FALSE), not null
 #  temperature_unit           :string
 #  timezone                   :string
+#  unified_chart              :boolean          default(FALSE), not null
 #  unsubscribed_from          :jsonb
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
