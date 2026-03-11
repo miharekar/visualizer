@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_07_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_11_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -344,6 +344,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_07_120000) do
     t.boolean "supporter", default: false, null: false
     t.string "temperature_unit"
     t.string "timezone"
+    t.boolean "unified_chart", default: false, null: false
     t.jsonb "unsubscribed_from"
     t.datetime "updated_at", null: false
     t.string "webauthn_id"

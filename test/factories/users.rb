@@ -8,6 +8,7 @@ FactoryBot.define do
     supporter { false }
     developer { false }
     coffee_management_enabled { false }
+    unified_chart { false }
 
     trait :admin do
       admin { true }
