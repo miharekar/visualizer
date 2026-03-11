@@ -25,7 +25,7 @@ class ChartSettings
   def for_label(label)
     return for_comparison(label) if label.end_with?(ShotChartCompare::SUFFIX)
 
-    setting = DEFAULT[label]
+    setting = DEFAULT[label]&.dup
     return if setting.blank?
 
     user_setting = user_settings[label]
