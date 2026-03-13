@@ -14,12 +14,7 @@ class ShotPolicy < ApplicationPolicy
   def create?
     owner?
   end
-
-  def update?
-    owner?
-  end
-
-  def destroy?
-    owner?
-  end
+  alias :update? :create?
+  alias :remove_image? :create?
+  alias :destroy? :create?
 end

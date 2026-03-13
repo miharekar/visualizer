@@ -4,9 +4,9 @@ class ShotsController < ApplicationController
   include Shots::Editing
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
-  before_action :load_shot, only: %i[show compare remove_image share beanconqueror]
+  before_action :load_shot, only: %i[show compare share beanconqueror]
   before_action :create_shared_shot, only: %i[share beanconqueror]
-  before_action :load_users_shot, only: %i[edit update destroy]
+  before_action :load_users_shot, only: %i[edit update remove_image destroy]
   before_action :load_coffee_bags_for_form, only: :edit
   before_action :load_users_shots, only: %i[index search]
   before_action :load_related_shots, only: %i[show edit]
@@ -98,6 +98,7 @@ class ShotsController < ApplicationController
   end
 
   def remove_image
+    authorize @shot
     @shot.image.purge
     render turbo_stream: turbo_stream.remove("shot-image")
   end
