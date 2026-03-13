@@ -20,11 +20,11 @@
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= shot_copyable_label(f, :bean_weight) %>
-            <%= f.text_field :bean_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "beanWeight" } %>
+            <%= f.text_field :bean_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "beanWeight", shot_copier_preserve_existing_value: true } %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= shot_copyable_label(f, :drink_weight) %>
-            <%= f.text_field :drink_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "drinkWeight" } %>
+            <%= f.text_field :drink_weight, class: "mt-1 standard-input", data: { ey_calculator_target: "drinkWeight", shot_copier_preserve_existing_value: true } %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= shot_copyable_label(f, :grinder_model) do %>

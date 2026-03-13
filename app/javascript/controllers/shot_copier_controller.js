@@ -72,9 +72,7 @@ export default class extends Controller {
       const comboboxElement = hiddenInput?.closest('[data-controller~="combobox"]')
       const comboboxController = comboboxElement ? this.application.getControllerForElementAndIdentifier(comboboxElement, "combobox") : null
 
-      if (comboboxController) {
-        comboboxController.selectById(data.coffee_bag_id)
-      }
+      if (comboboxController) comboboxController.selectById(data.coffee_bag_id)
     }
 
     if (document.getElementById("shot_canonical_coffee_bag_search")) {
@@ -84,11 +82,11 @@ export default class extends Controller {
   }
 
   updateField(field, newValue, isTags = false) {
+    if (this.shouldPreserveExistingValue(field)) return
+
     const currentValue = field.value || ""
 
-    if (field.dataset.previousValue === undefined) {
-      field.dataset.previousValue = currentValue
-    }
+    if (field.dataset.previousValue === undefined) field.dataset.previousValue = currentValue
 
     const originalValue = field.dataset.previousValue
     if (currentValue != newValue) {
@@ -134,6 +132,13 @@ export default class extends Controller {
     this.updateField(field, value ?? "", false)
   }
 
+  shouldPreserveExistingValue(field) {
+    if (field.dataset.shotCopierPreserveExistingValue !== "true") return false
+
+    const currentValue = (field.value ?? "").toString().trim()
+    return !["", "0", "0.0"].includes(currentValue)
+  }
+
   rollback(event) {
     event.preventDefault()
     const field = document.getElementById(event.currentTarget.dataset.revertFor)
@@ -158,16 +163,14 @@ export default class extends Controller {
   }
 
   handleRollback(field, isTags = false, renderCallback = null) {
-    if (field && field.dataset.previousValue !== undefined) {
-      field.value = field.dataset.previousValue
-      field.dispatchEvent(new Event("input", { bubbles: true }))
-      field.classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
-      delete field.dataset.previousValue
-      this.removeRevert(field, isTags)
+    if (!field || field.dataset.previousValue === undefined) return
 
-      if (renderCallback) {
-        renderCallback()
-      }
-    }
+    field.value = field.dataset.previousValue
+    field.dispatchEvent(new Event("input", { bubbles: true }))
+    field.classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
+    delete field.dataset.previousValue
+    this.removeRevert(field, isTags)
+
+    if (renderCallback) renderCallback()
   }
 }
