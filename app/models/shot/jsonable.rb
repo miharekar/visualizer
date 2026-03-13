@@ -40,7 +40,7 @@ class Shot
     def default_json(include_information:)
       json = attributes.slice(*ALLOWED_ATTRIBUTES)
       add_brew_data(json) if include_information
-      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity sweetness mouthfeel]))
+      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
     end
 
     private
@@ -57,6 +57,7 @@ class Shot
         flavor:,
         aftertaste:,
         acidity:,
+        bitterness:,
         sweetness:,
         mouthfeel:,
         espresso_notes:,

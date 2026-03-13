@@ -37,6 +37,7 @@ FactoryBot.define do
               {"name" => "Flavor", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Aftertaste", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Acidity", "type" => "number", "options" => {"precision" => 0}},
+              {"name" => "Bitterness", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Sweetness", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Mouthfeel", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Portafilter basket", "type" => "singleLineText"},

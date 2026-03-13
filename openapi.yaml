@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.8.0"
+  version: "1.8.1"
   description: |
     REST API for Visualizer.
 
@@ -935,6 +935,9 @@ components:
         acidity:
           type: integer
           nullable: true
+        bitterness:
+          type: integer
+          nullable: true
         sweetness:
           type: integer
           nullable: true
@@ -1280,6 +1283,9 @@ components:
             acidity:
               type: integer
               nullable: true
+            bitterness:
+              type: integer
+              nullable: true
             sweetness:
               type: integer
               nullable: true
@@ -1484,6 +1490,11 @@ components:
               maximum: 15
               nullable: true
             acidity:
+              type: integer
+              minimum: 0
+              maximum: 15
+              nullable: true
+            bitterness:
               type: integer
               minimum: 0
               maximum: 15

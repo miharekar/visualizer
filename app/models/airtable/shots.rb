@@ -6,7 +6,7 @@ module Airtable
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
-      fragrance aroma flavor aftertaste acidity sweetness mouthfeel
+      fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel
     ].index_by { it.to_s.humanize }
     FIELD_OPTIONS = {
       "espresso_enjoyment" => {type: "number", options: {precision: 0}},
@@ -19,6 +19,7 @@ module Airtable
       "flavor" => {type: "number", options: {precision: 0}},
       "aftertaste" => {type: "number", options: {precision: 0}},
       "acidity" => {type: "number", options: {precision: 0}},
+      "bitterness" => {type: "number", options: {precision: 0}},
       "sweetness" => {type: "number", options: {precision: 0}},
       "mouthfeel" => {type: "number", options: {precision: 0}}
     }.freeze

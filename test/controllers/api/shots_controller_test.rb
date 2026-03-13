@@ -113,8 +113,9 @@ module Api
         flavor: 3,
         aftertaste: 4,
         acidity: 5,
-        sweetness: 6,
-        mouthfeel: 7
+        bitterness: 6,
+        sweetness: 7,
+        mouthfeel: 8
       )
 
       get api_shot_url(shot), headers: auth_headers(user), as: :json
@@ -126,8 +127,9 @@ module Api
       assert_equal 3, json_response["flavor"]
       assert_equal 4, json_response["aftertaste"]
       assert_equal 5, json_response["acidity"]
-      assert_equal 6, json_response["sweetness"]
-      assert_equal 7, json_response["mouthfeel"]
+      assert_equal 6, json_response["bitterness"]
+      assert_equal 7, json_response["sweetness"]
+      assert_equal 8, json_response["mouthfeel"]
     end
 
     test "show returns shot data in beanconqueror format" do
@@ -312,7 +314,7 @@ module Api
       premium_user = FactoryBot.create(:user, :premium)
       shot = FactoryBot.create(:shot, user: premium_user)
 
-      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {fragrance: 10, aroma: 9, flavor: 12, aftertaste: 11, acidity: 7, sweetness: 8, mouthfeel: 13}}, as: :json
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {fragrance: 10, aroma: 9, flavor: 12, aftertaste: 11, acidity: 7, bitterness: 6, sweetness: 8, mouthfeel: 13}}, as: :json
 
       assert_response :success
       shot.reload
@@ -321,6 +323,7 @@ module Api
       assert_equal 12, shot.flavor
       assert_equal 11, shot.aftertaste
       assert_equal 7, shot.acidity
+      assert_equal 6, shot.bitterness
       assert_equal 8, shot.sweetness
       assert_equal 13, shot.mouthfeel
     end

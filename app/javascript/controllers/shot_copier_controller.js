@@ -40,7 +40,7 @@ export default class extends Controller {
   }
 
   fillFormFields(data) {
-    const fields = ["barista", "bean_weight", "drink_weight", "grinder_model", "grinder_setting", "bean_brand", "bean_type", "roast_date", "roast_level", "espresso_notes", "bean_notes", "private_notes", "fragrance", "aroma", "flavor", "aftertaste", "acidity", "sweetness", "mouthfeel"]
+    const fields = ["barista", "bean_weight", "drink_weight", "grinder_model", "grinder_setting", "bean_brand", "bean_type", "roast_date", "roast_level", "espresso_notes", "bean_notes", "private_notes", "fragrance", "aroma", "flavor", "aftertaste", "acidity", "bitterness", "sweetness", "mouthfeel"]
     fields.forEach(field => this.setFieldValue(`shot[${field}]`, data[field]))
 
     if (data.metadata) {

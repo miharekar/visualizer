@@ -35,6 +35,7 @@ module Airtable
       assert_nil @shot.aftertaste
       assert_nil @shot.acidity
       assert_nil @shot.sweetness
+      assert_nil @shot.bitterness
       assert_nil @shot.mouthfeel
       assert_empty(@shot.metadata)
 
@@ -68,6 +69,7 @@ module Airtable
                 "Flavor" => 12,
                 "Aftertaste" => 11,
                 "Acidity" => 7,
+                "Bitterness" => 6,
                 "Sweetness" => 8,
                 "Mouthfeel" => 13
               }
@@ -86,6 +88,7 @@ module Airtable
       assert_equal 11, @shot.aftertaste
       assert_equal 7, @shot.acidity
       assert_equal 8, @shot.sweetness
+      assert_equal 6, @shot.bitterness
       assert_equal 13, @shot.mouthfeel
     end
 
@@ -183,7 +186,7 @@ module Airtable
     end
 
     test "it uploads tasting assessment fields to airtable" do
-      Shot.find(@shot.id).update!(fragrance: 10, aroma: 9, flavor: 12, aftertaste: 11, acidity: 7, sweetness: 8, mouthfeel: 13)
+      Shot.find(@shot.id).update!(fragrance: 10, aroma: 9, flavor: 12, aftertaste: 11, acidity: 7, bitterness: 6, sweetness: 8, mouthfeel: 13)
       assert_enqueued_with(job: AirtableUploadRecordJob, args: [@shot], queue: "default")
 
       stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
@@ -194,6 +197,7 @@ module Airtable
           assert_equal 12, body["fields"]["Flavor"]
           assert_equal 11, body["fields"]["Aftertaste"]
           assert_equal 7, body["fields"]["Acidity"]
+          assert_equal 6, body["fields"]["Bitterness"]
           assert_equal 8, body["fields"]["Sweetness"]
           assert_equal 13, body["fields"]["Mouthfeel"]
         end.to_return(status: 200, body: {id: @shot.airtable_id}.to_json)

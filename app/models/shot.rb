@@ -6,7 +6,7 @@ class Shot < ApplicationRecord
   include DateParseable
 
   DAILY_LIMIT = 50
-  TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity sweetness mouthfeel].freeze
+  TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
   LIST_ATTRIBUTES = %i[id user_id start_time profile_title bean_weight drink_weight drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   belongs_to :user, optional: true, touch: true
@@ -124,6 +124,7 @@ end
 #  bean_notes              :text
 #  bean_type               :string
 #  bean_weight             :string
+#  bitterness              :integer
 #  drink_ey                :string
 #  drink_tds               :string
 #  drink_weight            :string
