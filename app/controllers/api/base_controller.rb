@@ -20,24 +20,24 @@ module Api
     end
 
     def resume_session
-      Current.session ||= find_session_by_cookie || start_session_from_doorkeeper || start_session_from_basic
+      Current.session ||= find_session_by_cookie || session_from_doorkeeper || session_from_basic
     end
 
-    def start_session_from_doorkeeper
+    def session_from_doorkeeper
       return unless valid_doorkeeper_token?
 
       user = User.find_by(id: doorkeeper_token.resource_owner_id)
       return unless user
 
-      start_new_session_for(user)
+      Session.new(user:)
     end
 
-    def start_session_from_basic
+    def session_from_basic
       authenticate_with_http_basic do |email, password|
         user = User.authenticate_by(email: email.downcase, password:)
         next unless user
 
-        start_new_session_for(user)
+        Session.new(user:)
       end
     end
 
