@@ -14,6 +14,7 @@ class PasswordsController < ApplicationController
 
   def update
     if @user.update(params.permit(:password, :password_confirmation))
+      @user.sessions.destroy_all
       redirect_to new_session_url, notice: "Password has been reset."
     else
       redirect_to edit_password_url(params[:token]), alert: @user.errors.full_messages.join(", ")
