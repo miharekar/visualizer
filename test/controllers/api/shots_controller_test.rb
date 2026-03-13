@@ -346,10 +346,59 @@ module Api
       assert_nil shot.reload.fragrance
     end
 
+    test "basic auth does not create a persisted session or set a session cookie" do
+      FactoryBot.create(:shot, user:, public: true)
+
+      assert_no_difference "Session.count" do
+        get api_shots_url, headers: auth_headers(user), as: :json
+      end
+
+      assert_response :success
+      assert_not_includes response.headers["Set-Cookie"].to_s, "session_id="
+    end
+
+    test "bearer auth does not create a persisted session or set a session cookie" do
+      token = create_access_token_for(user)
+      FactoryBot.create(:shot, user:, public: true)
+
+      assert_no_difference "Session.count" do
+        get api_shots_url, headers: bearer_headers(token), as: :json
+      end
+
+      assert_response :success
+      assert_not_includes response.headers["Set-Cookie"].to_s, "session_id="
+    end
+
+    test "cookie-backed api auth still works with a persisted session" do
+      FactoryBot.create(:shot, user:, public: true)
+
+      assert_difference "Session.count", 1 do
+        post session_url, params: {email: user.email, password: "password"}
+      end
+
+      assert_redirected_to shots_url
+
+      assert_no_difference "Session.count" do
+        get api_shots_url, as: :json
+      end
+
+      assert_response :success
+      assert_equal 1, response.parsed_body.dig("paging", "count")
+    end
+
     private
 
     def auth_headers(user)
       {"HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials(user.email, "password")}
+    end
+
+    def bearer_headers(token)
+      {"Authorization" => "Bearer #{token.token}"}
+    end
+
+    def create_access_token_for(user)
+      application = Doorkeeper::Application.create!(name: "Test App", owner: user, redirect_uri: "urn:ietf:wg:oauth:2.0:oob")
+      Doorkeeper::AccessToken.create!(application:, resource_owner_id: user.id, scopes: "read write upload", expires_in: 1.week)
     end
   end
 end
