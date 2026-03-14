@@ -20,16 +20,14 @@ module Api
     end
 
     def resume_session
-      Current.session ||= find_session_by_cookie || session_from_doorkeeper || session_from_basic
+      Current.session ||= session_from_doorkeeper || session_from_basic
     end
 
     def session_from_doorkeeper
       return unless valid_doorkeeper_token?
 
       user = User.find_by(id: doorkeeper_token.resource_owner_id)
-      return unless user
-
-      Session.new(user:)
+      Session.new(user:) if user
     end
 
     def session_from_basic

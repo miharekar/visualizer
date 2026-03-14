@@ -369,23 +369,6 @@ module Api
       assert_not_includes response.headers["Set-Cookie"].to_s, "session_id="
     end
 
-    test "cookie-backed api auth still works with a persisted session" do
-      FactoryBot.create(:shot, user:, public: true)
-
-      assert_difference "Session.count", 1 do
-        post session_url, params: {email: user.email, password: "password"}
-      end
-
-      assert_redirected_to shots_url
-
-      assert_no_difference "Session.count" do
-        get api_shots_url, as: :json
-      end
-
-      assert_response :success
-      assert_equal 1, response.parsed_body.dig("paging", "count")
-    end
-
     private
 
     def auth_headers(user)
