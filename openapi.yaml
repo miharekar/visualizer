@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.8.1"
+  version: "1.8.2"
   description: |
     REST API for Visualizer.
 
@@ -36,6 +36,13 @@ info:
 
     - For public or user-facing integrations, OAuth should be used instead of Basic Auth.
     - This avoids collecting user passwords outside Visualizer and reduces credential exposure risk.
+
+    Rate limits
+
+    - All API requests are limited to 50 requests per minute per client IP.
+    - All API requests are also limited to 200 requests per 10 minutes per client IP.
+    - Authenticated API requests are additionally limited to 200 requests per 10 minutes per user.
+    - When a limit is exceeded, the API returns `429 Too Many Requests` with a JSON error payload.
 
     Notes:
     - Some read endpoints are public (`/shots`, `/shots/{id}`, `/shots/shared`)
@@ -72,6 +79,8 @@ paths:
                 $ref: "#/components/schemas/MeResponse"
         "401":
           description: Authentication required.
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /shots:
     get:
@@ -102,11 +111,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "429":
-          description: Too many requests.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/RateLimited"
 
   /shots/upload:
     post:
@@ -152,6 +157,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /shots/shared:
     get:
@@ -179,6 +186,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /shots/{id}:
     parameters:
@@ -207,6 +216,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     patch:
       tags: [Shots]
       summary: Update shot
@@ -247,6 +258,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     delete:
       tags: [Shots]
       summary: Delete shot
@@ -275,6 +288,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /shots/{id}/download:
     get:
@@ -298,6 +313,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /shots/{id}/profile:
     get:
@@ -335,6 +352,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /roasters:
     get:
@@ -356,6 +375,8 @@ paths:
                 $ref: "#/components/schemas/RoasterListResponse"
         "401":
           description: Authentication required.
+        "429":
+          $ref: "#/components/responses/RateLimited"
     post:
       tags: [Roasters]
       summary: Create roaster
@@ -390,6 +411,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /roasters/{id}:
     parameters:
@@ -416,6 +439,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     patch:
       tags: [Roasters]
       summary: Update roaster
@@ -456,6 +481,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     delete:
       tags: [Roasters]
       summary: Delete roaster
@@ -484,6 +511,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /coffee_bags:
     get:
@@ -506,6 +535,8 @@ paths:
                 $ref: "#/components/schemas/CoffeeBagListResponse"
         "401":
           description: Authentication required.
+        "429":
+          $ref: "#/components/responses/RateLimited"
     post:
       tags: [Coffee Bags]
       summary: Create coffee bag
@@ -540,6 +571,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /coffee_bags/{id}:
     parameters:
@@ -566,6 +599,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     patch:
       tags: [Coffee Bags]
       summary: Update coffee bag
@@ -606,6 +641,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     delete:
       tags: [Coffee Bags]
       summary: Delete coffee bag
@@ -634,6 +671,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /roasters/{roaster_id}/coffee_bags:
     get:
@@ -647,6 +686,8 @@ paths:
       responses:
         "301":
           description: Permanent redirect to root coffee bag index.
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
   /roasters/{roaster_id}/coffee_bags/{id}:
     get:
@@ -661,8 +702,20 @@ paths:
       responses:
         "301":
           description: Permanent redirect to root coffee bag show.
+        "429":
+          $ref: "#/components/responses/RateLimited"
 
 components:
+  responses:
+    RateLimited:
+      description: Too many requests. The API rate limit has been exceeded.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: Too many requests. Please try again later.
+
   securitySchemes:
     BasicAuth:
       type: http
