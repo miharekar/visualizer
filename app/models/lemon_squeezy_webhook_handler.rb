@@ -28,6 +28,7 @@ class LemonSqueezyWebhookHandler
 
   def update_premium_expiry(subscription_id)
     return unless subscription_id && user
+    return if user.creem_customer_id.present?
 
     subscription = LemonSqueezy.new.get_subscription(subscription_id)
     premium_expires_at = subscription.dig("data", "attributes", "ends_at").presence || subscription.dig("data", "attributes", "renews_at")
