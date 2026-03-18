@@ -21,7 +21,7 @@ class Creem
     Client.new("/customers/billing", method: :post, data: {customer_id:}).make_request
   end
 
-  def all_transactions
-    Client.new("/transactions/search").paginate
+  def all_subscriptions
+    Client.new("/subscriptions/search").paginate
   end
 end
