@@ -76,6 +76,7 @@ Rails.application.configure do
   config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.hosts << ".localhost"
+  config.hosts.concat(Array(Rails.application.credentials.allowed_hosts))
 
   config.webauthn_origin = "http://visualizer.localhost:3000"
 
