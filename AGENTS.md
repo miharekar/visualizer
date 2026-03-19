@@ -165,6 +165,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 - Ruby: 2-space indent; follow RuboCop `rubocop-rails-omakase` defaults and any local overrides.
 - Filenames: Stimulus controllers are kebab-case; controller classes are camelCase identifiers.
 - Rails naming conventions apply for classes, modules, and files.
+- In JavaScript, prefer one-line early returns whenever they keep the code clear.
 
 ### Types and data handling
 

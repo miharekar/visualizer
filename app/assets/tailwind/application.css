@@ -69,6 +69,19 @@
   @apply inline-flex justify-center font-medium sm:text-sm bg-white rounded-md shadow-sm cursor-pointer text-neutral-700 ring-1 dark:ring-1 ring-inset ring-neutral-300 dark:ring-white/10 hover:bg-neutral-50 dark:text-white dark:bg-white/10 dark:hover:bg-white/20 dark:shadow-sm dark:shadow-black/40 active:shadow-none active:bg-neutral-100 dark:active:bg-white/30 focus-visible:outline-hidden;
 }
 
+.pull-refresh-indicator {
+  --pull-progress: 0;
+  background-image: linear-gradient(to right, var(--color-terracotta-200), var(--color-terracotta-400));
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: calc(var(--pull-progress) * 100%) 100%;
+  @apply relative overflow-hidden rounded-full border border-neutral-200 bg-white px-4 py-2 text-center text-sm font-medium text-neutral-700 shadow-sm transition-opacity duration-150 dark:border-none dark:bg-neutral-900 dark:text-neutral-200;
+}
+
+.dark .pull-refresh-indicator {
+  background-image: linear-gradient(to right, var(--color-terracotta-900), var(--color-terracotta-500));
+}
+
 .shot-range {
   -webkit-appearance: none;
   -moz-appearance: none;

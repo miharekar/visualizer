@@ -5,6 +5,8 @@
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
     <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color">
     <meta content="#171717" media="(prefers-color-scheme: dark)" name="theme-color">
     <%= csrf_meta_tags %>
@@ -19,7 +21,7 @@
     <%= stylesheet_link_tag "tailwind", "hljs", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="flex flex-col h-full overflow-y-scroll <%= @skin %>" data-controller="local-time">
+  <body class="flex flex-col h-full overflow-y-scroll bg-white text-neutral-900 dark:bg-neutral-950 dark:text-white <%= @skin %>" data-controller="local-time">
     <header><%= render "shared/header" %></header>
     <main class="dark:text-white grow dark:bg-neutral-900">
       <%= render "shared/notifications" %>

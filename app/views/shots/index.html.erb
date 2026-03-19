@@ -2,6 +2,11 @@
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= render "shared/premium_banner", count: @premium_count %>
 <%= render "shared/migration_banner" %>
+<div class="flex fixed inset-x-0 top-2 z-50 justify-center pointer-events-none" data-controller="pull-refresh" data-action="touchstart@window->pull-refresh#touchstart touchmove@window->pull-refresh#touchmove touchend@window->pull-refresh#touchend touchcancel@window->pull-refresh#touchcancel" data-pull-refresh-threshold-value="80">
+  <div class="opacity-0 pull-refresh-indicator min-w-40" data-pull-refresh-target="indicator">
+    Pull to refresh
+  </div>
+</div>
 <div class="flex flex-col mx-auto max-w-7xl sm:px-6 lg:px-8" data-controller="panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form">
   <div data-upload-drop-target="overlay" class="hidden fixed inset-0 justify-center items-center z-99 bg-oxford-blue-500/50 backdrop-blur-sm">
     <div class="text-center">
