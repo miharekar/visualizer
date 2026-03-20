@@ -4,12 +4,12 @@
       <div class="pb-16 xl:flex xl:justify-between xl:items-center">
         <div>
           <h1 class="font-serif text-4xl font-bold tracking-tight sm:text-6xl text-balance">
-            <span class="dark:text-white text-neutral-900">Upgrade to Premium for just</span>
+            <span class="dark:text-white text-neutral-900">Premium if you want even more for</span>
             <span class="text-terracotta-600 dark:text-terracotta-500">€5/month</span>
             <span class="dark:text-white text-neutral-900">or</span>
             <span class="text-terracotta-600 dark:text-terracotta-500">€50/year</span>
           </h1>
-          <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Take your coffee journey to the next level</p>
+          <p class="mt-5 text-xl text-neutral-500 dark:text-neutral-200">Premium is there when you want more history, more organization, and more ways to learn from your coffee data.</p>
         </div>
         <%= form_with( data:{turbo:"false"}) do |f| %>
           <%= f.submit "Subscribe now", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto xl:mt-0 hover:shadow-lg hover:shadow-terracotta-500/50" %>
@@ -17,8 +17,8 @@
       </div>
       <div class="pt-16 border-t xl:grid xl:grid-cols-3 xl:gap-x-8 border-neutral-200">
         <div>
-          <p class="mt-2 font-serif text-3xl font-bold tracking-tight dark:text-white text-neutral-900 text-balance">Everything you need to perfect your coffee</p>
-          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Start your <%= free_trial_days %>-day free trial today. No commitment, cancel anytime.</p>
+          <p class="mt-2 font-serif text-3xl font-bold tracking-tight dark:text-white text-neutral-900 text-balance">Everything in one place</p>
+          <p class="mt-4 text-lg text-neutral-500 dark:text-neutral-200">Start your <%= free_trial_days %>-day free trial today. Cancel anytime.</p>
         </div>
         <div class="mt-4 sm:mt-8 md:grid md:grid-cols-2 md:gap-x-8 md:mt-10 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
@@ -51,16 +51,15 @@
       <div class="grid grid-cols-1 gap-x-8 gap-y-16 mx-auto max-w-2xl sm:gap-y-20 lg:grid-cols-2 lg:mx-0 lg:max-w-none">
         <div class="lg:pt-4 lg:pl-4 lg:ml-auto">
           <div class="lg:max-w-lg">
-            <span class="py-1 px-3 text-sm font-semibold leading-6 rounded-full ring-1 ring-inset text-terracotta-600 bg-terracotta-600/10 ring-terracotta-600/10">New</span>
             <p class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl dark:text-white text-neutral-900 text-balance">AI Coffee Bag Details Import</p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Adding information to coffee bags just got easier. No more searching for and copy-pasting information field by field.
+              Adding coffee details should not feel like homework.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Just paste the URL of your coffee, and watch as Visualizer automatically extracts all the details - origin, process, variety, altitude, and more. You keep full control over what gets saved.
+              Paste in a coffee URL and Visualizer pulls in the details for you: origin, process, variety, altitude, and more. You still decide what gets saved.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Less time managing coffee data means more time enjoying your coffee.
+              Less time copying fields around means more time brewing and enjoying coffee.
             </p>
             <div class="mt-8">
               <%= form_with( data:{turbo:"false"}) do |f| %>
@@ -79,7 +78,7 @@
     <div class="px-6 mx-auto max-w-7xl lg:px-8">
       <div class="mx-auto max-w-2xl lg:mx-0">
         <h2 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl dark:text-white text-pretty text-neutral-900">Take Control of Your Coffee Collection</h2>
-        <p class="mt-6 text-lg/8 text-neutral-600 dark:text-neutral-300">Tired of manually entering the same roaster and coffee details for every shot? <a href="/updates/september-when-did-that-happen" class="standard-link text-terracotta-600 dark:text-terracotta-500" target="_blank">Coffee Management</a> transforms how you organize your coffee data.</p>
+        <p class="mt-6 text-lg/8 text-neutral-600 dark:text-neutral-300">If you keep coming back to the same roasters and coffees, Coffee Management turns all that repeated shot metadata into something structured and actually useful.</p>
       </div>
       <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
         <dl class="grid grid-cols-1 gap-x-8 gap-y-16 max-w-xl lg:grid-cols-3 lg:max-w-none">
@@ -93,7 +92,7 @@
               Save Time
             </dt>
             <dd class="flex flex-col flex-auto mt-1 text-base/7 text-neutral-600 dark:text-neutral-400">
-              <p class="flex-auto">No more repetitive data entry for the same beans. Create roasters and coffee bags once, then connect them to all your shots with a single click.</p>
+              <p class="flex-auto">Create roasters and coffee bags once, then attach them to your shots without retyping the same details over and over.</p>
             </dd>
           </div>
           <div class="flex flex-col">
@@ -106,7 +105,7 @@
               Stay Organized
             </dt>
             <dd class="flex flex-col flex-auto mt-1 text-base/7 text-neutral-600 dark:text-neutral-400">
-              <p class="flex-auto">Your coffee collection becomes a searchable, manageable library. Find any coffee or roaster instantly, see all connected shots at a glance.</p>
+              <p class="flex-auto">Turn scattered notes into a searchable coffee library. Find any coffee or roaster fast and see every connected shot in one place.</p>
             </dd>
           </div>
           <div class="flex flex-col">
@@ -119,7 +118,7 @@
               Scale Effortlessly
             </dt>
             <dd class="flex flex-col flex-auto mt-1 text-base/7 text-neutral-600 dark:text-neutral-400">
-              <p class="flex-auto">Whether you have 10 shots or 10,000, your data stays clean. Update a coffee's details once, and it changes everywhere instantly. Your database grows with you.</p>
+              <p class="flex-auto">Whether you have 10 shots or 10,000, your data stays tidy. Update a coffee once, and the change carries through everywhere it matters.</p>
             </dd>
           </div>
         </dl>
@@ -133,13 +132,13 @@
           <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
             <p class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl dark:text-white text-neutral-900">Instant Filters</p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Remember that amazing coffee you made last month? With Instant Filters, your best shots are always just a few keystrokes away.
+              When you want to find that coffee, grinder setting, or shot from a month ago, Instant Filters gets you there fast.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              No more digging through old records or trying to remember what worked before. Just type and find exactly what you're looking for - whether it's a specific bean, roaster, grinder, or that perfect profile you want to recreate.
+              No more digging through old history or trying to remember what worked. Just type a few letters and narrow things down immediately.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Turn your shot history into your personal coffee diary, helping you brew consistently amazing coffee, every single time.
+              It turns your shot history into something you can actually use while brewing, not just something you save and forget.
             </p>
           </div>
           <div class="flex justify-center">
@@ -170,8 +169,8 @@
   <div class="bg-terracotta-50 dark:bg-terracotta-950">
     <div class="py-12 px-4 mx-auto max-w-7xl sm:px-6 lg:flex lg:justify-between lg:items-center lg:py-24 lg:px-8">
       <h2 class="text-3xl font-bold tracking-tight sm:text-4xl text-terracotta-600 dark:text-terracotta-100">
-        <span class="block font-serif">Start Your Free Trial Today</span>
-        <span class="block mt-2 text-xl font-normal"><%= free_trial_days %> days to explore everything Premium has to offer</span>
+        <span class="block font-serif">Try Premium for free</span>
+        <span class="block mt-2 text-xl font-normal"><%= free_trial_days %> days to explore the extra tools, then keep it only if it fits your workflow</span>
       </h2>
       <div class="flex mt-8 lg:mt-0 lg:shrink-0">
         <div class="inline-flex rounded-md shadow">
