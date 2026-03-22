@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { appsignal } from "./application"
 
 export default class extends Controller {
   static targets = ["canonicalId", "url", "loader"]

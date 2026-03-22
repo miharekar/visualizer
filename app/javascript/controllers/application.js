@@ -14,4 +14,4 @@ application.warnings = true
 application.debug = false
 window.Stimulus = application
 
-export { application }
+export { application, appsignal }

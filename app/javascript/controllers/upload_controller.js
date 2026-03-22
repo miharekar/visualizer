@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { Turbo } from "@hotwired/turbo-rails"
 import { post } from "@rails/request.js"
+import { appsignal } from "./application"
 
 export default class extends Controller {
   static targets = ["dropArea", "loader", "error", "form", "files"]
