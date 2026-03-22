@@ -143,6 +143,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 
 - Prefer expanded conditionals over guard clauses for readability.
 - Use guard clauses only for early returns at the very top when the main body is non-trivial.
+- Do not assign values inside conditionals; assign first, then branch on the result.
 - Order methods: class methods, public (with `initialize` first), then `private` methods.
 - Order methods vertically by invocation flow (top calls next, etc.).
 - Use `!` only when there is a non-`!` counterpart; do not use `!` to signal destructiveness.
