@@ -1,7 +1,7 @@
 class OpenAi
   API_ENDPOINT = "https://api.openai.com/v1/responses".freeze
   API_KEY = Rails.application.credentials.open_ai.api_key
-  MODEL = "gpt-5-nano".freeze
+  MODEL = Rails.application.credentials.open_ai.model
   PROMPT_ID = Rails.application.credentials.open_ai.prompt_id
 
   def message(content, attempt: 1)
@@ -15,7 +15,7 @@ class OpenAi
       model: MODEL,
       prompt: {id: PROMPT_ID},
       max_output_tokens: 500,
-      reasoning: {effort: "minimal"},
+      reasoning: {effort: "none"},
       input: content
     }.to_json
 
