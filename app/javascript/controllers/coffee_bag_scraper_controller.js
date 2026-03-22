@@ -2,6 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 import { appsignal } from "controllers/application"
 import consumer from "channels/consumer"
 
+const FIELDS = ["name", "roast_level", "country", "region", "farm", "farmer", "variety", "elevation", "processing", "harvest_time", "quality_score", "tasting_notes"]
+const LOADING_CLASSES = ["opacity-50", "cursor-wait"]
+
 export default class extends Controller {
   static targets = ["canonicalId", "url", "loader"]
 
@@ -52,9 +55,7 @@ export default class extends Controller {
   }
 
   received(payload) {
-    if (payload.request_id !== this.currentRequestId) {
-      return
-    }
+    if (payload.request_id !== this.currentRequestId) return
 
     this.finishLoading()
 
@@ -73,10 +74,9 @@ export default class extends Controller {
   }
 
   populateFields(data) {
-    const fields = ["name", "roast_level", "country", "region", "farm", "farmer", "variety", "elevation", "processing", "harvest_time", "quality_score", "tasting_notes"]
-
-    fields.forEach(field => {
+    FIELDS.forEach(field => {
       const input = document.querySelector(`#coffee_bag_${field}`)
+
       if (input && data[field]) {
         this.updateField(input, data[field])
       }
@@ -118,19 +118,17 @@ export default class extends Controller {
 
   startLoading() {
     this.loaderTarget.classList.remove("hidden")
-
-    this.element.querySelectorAll("input, select, textarea, button").forEach(el => {
-      el.disabled = true
-      el.classList.add("opacity-50", "cursor-wait")
+    this.element.querySelectorAll("input, select, textarea, button").forEach(element => {
+      element.disabled = true
+      element.classList.add(...LOADING_CLASSES)
     })
   }
 
   finishLoading() {
     this.loaderTarget.classList.add("hidden")
-
-    this.element.querySelectorAll("input, select, textarea, button").forEach(el => {
-      el.disabled = false
-      el.classList.remove("opacity-50", "cursor-wait")
+    this.element.querySelectorAll("input, select, textarea, button").forEach(element => {
+      element.disabled = false
+      element.classList.remove(...LOADING_CLASSES)
     })
   }
 
