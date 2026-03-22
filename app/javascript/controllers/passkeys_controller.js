@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { appsignal } from "./application"
+import { appsignal } from "controllers/application"
 
 export default class extends Controller {
   static values = { autologin: Boolean }

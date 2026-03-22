@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { appsignal } from "./application"
+import { appsignal } from "controllers/application"
 
 const uuidV4Regex = /shots\/([A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12})/i
 
