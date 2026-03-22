@@ -64,14 +64,9 @@ class CoffeeBagsController < ApplicationController
 
   def scrape_info
     Rails.logger.info "Scraping coffee bag info for #{params[:url]} by #{Current.user.id}"
-    info = CoffeeBagScraper.new.get_info(params[:url])
-
-    if info && info[:error].blank?
-      render json: info
-    else
-      error = info[:error].presence || "Could not extract information from URL"
-      render json: {error:}, status: :unprocessable_content
-    end
+    request_id = params[:request_id].presence || SecureRandom.uuid
+    CoffeeBagScrapeJob.perform_later(Current.user, params[:url], request_id)
+    render json: {request_id:}, status: :accepted
   end
 
   def destroy

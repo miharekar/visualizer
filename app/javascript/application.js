@@ -2,5 +2,6 @@
 
 import "@hotwired/turbo-rails"
 import "@rails/activestorage"
+import "channels/consumer"
 import "controllers"
 import "custom"

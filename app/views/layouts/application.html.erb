@@ -11,6 +11,7 @@
     <meta content="#171717" media="(prefers-color-scheme: dark)" name="theme-color">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= action_cable_meta_tag %>
     <%= yield :head %>
     <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">

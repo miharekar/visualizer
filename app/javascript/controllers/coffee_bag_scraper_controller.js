@@ -1,8 +1,21 @@
 import { Controller } from "@hotwired/stimulus"
 import { appsignal } from "controllers/application"
+import consumer from "channels/consumer"
 
 export default class extends Controller {
   static targets = ["canonicalId", "url", "loader"]
+
+  connect() {
+    this.subscription = consumer.subscriptions.create({ channel: "CoffeeBagScraperChannel" }, {
+      received: payload => this.received(payload)
+    })
+  }
+
+  disconnect() {
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
+  }
 
   async fetch(event) {
     if (event.type === "click") {
@@ -12,49 +25,51 @@ export default class extends Controller {
     const url = this.urlTarget.value
     if (!url) return
 
+    this.currentRequestId = this.requestId()
+    this.startLoading()
+
     try {
-      this.loaderTarget.classList.remove("hidden")
-
-      this.element.querySelectorAll("input, select, textarea, button").forEach(el => {
-        el.disabled = true
-        el.classList.add("opacity-50", "cursor-wait")
-      })
-
       const response = await fetch(this.urlTarget.dataset.scrapeUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
         },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url, request_id: this.currentRequestId })
       })
-
-      const data = await response.json()
 
       if (!response.ok) {
+        const data = await response.json()
+        this.finishLoading()
         throw new Error(data.error || "Failed to fetch coffee info")
       }
-
-      if (this.hasCanonicalIdTarget) {
-        this.canonicalIdTarget.value = null
-      }
-      this.populateFields(data)
     } catch (error) {
+      this.finishLoading()
+      this.currentRequestId = null
       appsignal.sendError(error)
-      const template = document.getElementById("scraper-error-template")
-      const notificationHtml = template.innerHTML
-      const updatedNotification = notificationHtml.replace("Something went wrong", error.message)
-
-      const notificationsContainer = document.getElementById("notifications-container")
-      notificationsContainer.insertAdjacentHTML("beforeend", updatedNotification)
-    } finally {
-      this.loaderTarget.classList.add("hidden")
-
-      this.element.querySelectorAll("input, select, textarea, button").forEach(el => {
-        el.disabled = false
-        el.classList.remove("opacity-50", "cursor-wait")
-      })
+      this.showError(error.message)
     }
+  }
+
+  received(payload) {
+    if (payload.request_id !== this.currentRequestId) {
+      return
+    }
+
+    this.finishLoading()
+
+    if (payload.error) {
+      this.currentRequestId = null
+      this.showError(payload.error)
+      return
+    }
+
+    if (this.hasCanonicalIdTarget) {
+      this.canonicalIdTarget.value = null
+    }
+
+    this.populateFields(payload.data)
+    this.currentRequestId = null
   }
 
   populateFields(data) {
@@ -99,5 +114,40 @@ export default class extends Controller {
 
       label.innerHTML = label.querySelector("div > span").innerHTML
     }
+  }
+
+  startLoading() {
+    this.loaderTarget.classList.remove("hidden")
+
+    this.element.querySelectorAll("input, select, textarea, button").forEach(el => {
+      el.disabled = true
+      el.classList.add("opacity-50", "cursor-wait")
+    })
+  }
+
+  finishLoading() {
+    this.loaderTarget.classList.add("hidden")
+
+    this.element.querySelectorAll("input, select, textarea, button").forEach(el => {
+      el.disabled = false
+      el.classList.remove("opacity-50", "cursor-wait")
+    })
+  }
+
+  showError(message) {
+    const template = document.getElementById("scraper-error-template")
+    const notificationHtml = template.innerHTML
+    const updatedNotification = notificationHtml.replace("Something went wrong", message)
+
+    const notificationsContainer = document.getElementById("notifications-container")
+    notificationsContainer.insertAdjacentHTML("beforeend", updatedNotification)
+  }
+
+  requestId() {
+    if (window.crypto?.randomUUID) {
+      return window.crypto.randomUUID()
+    }
+
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`
   }
 }
