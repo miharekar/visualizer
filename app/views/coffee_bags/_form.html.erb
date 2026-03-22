@@ -11,8 +11,19 @@
                 <button type="button" class="py-2 px-4 whitespace-nowrap button-terracotta" data-action="coffee-bag-scraper#fetch">
                   Get info
                 </button>
-                <div data-coffee-bag-scraper-target="loader" class="hidden col-span-6 mx-auto">
-                  <%= inline_svg_tag "logo-loading.svg", class: "logo-loading size-10 stroke-neutral-800 text-neutral-800 dark:text-neutral-300 dark:stroke-neutral-300" %>
+              </div>
+              <div data-coffee-bag-scraper-target="progress" class="hidden py-3 px-4 mt-3 rounded-lg border border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/60">
+                <div>
+                  <div class="overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
+                    <div data-coffee-bag-scraper-target="progressBar" style="width: 0%" class="h-2 rounded-full bg-terracotta-500"></div>
+                  </div>
+                  <ol class="hidden gap-3 justify-between items-center mt-3 text-sm font-medium sm:flex">
+                    <li data-step="starting" class="text-neutral-500 dark:text-neutral-400"><span data-step-label>Starting</span></li>
+                    <li data-step="fetching" class="text-center text-neutral-500 dark:text-neutral-400"><span data-step-label>Fetching page</span></li>
+                    <li data-step="retrying" class="hidden text-center text-neutral-500 dark:text-neutral-400"><span data-step-label>Retrying in browser mode</span></li>
+                    <li data-step="extracting" class="text-center text-neutral-500 dark:text-neutral-400"><span data-step-label>AI extraction</span></li>
+                    <li data-step="finalizing" class="text-right text-neutral-500 dark:text-neutral-400"><span data-step-label>Applying</span></li>
+                  </ol>
                 </div>
               </div>
             </div>

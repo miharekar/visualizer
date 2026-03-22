@@ -4,41 +4,57 @@ class CoffeeBagScraper
     /access from your area has been temporarily limited/i
   ].freeze
 
-  def get_info(url)
-    scraped_content = page_content(url)
-    response = OpenAi.new.message(scraped_content)
-    JSON.parse(response).compact_blank
-  rescue StandardError => e
-    Appsignal.report_error(e)
-    {error: e.message}
+  attr_reader :user, :url, :request_id
+
+  def initialize(user, url, request_id)
+    @user = user
+    @url = url
+    @request_id = request_id
+  end
+
+  def scrape
+    run_step("fetching") { page_content(url) }
+      .then { |content| run_step("extracting") { OpenAi.new.message(content) } }
+      .then { |response| run_step("finalizing") { JSON.parse(response).compact_blank } }
   end
 
   private
 
-  def page_content(url, limit = 5, via_crawlbase: false)
+  def run_step(status)
+    CoffeeBagScraperChannel.broadcast_to(user, {request_id:, status:})
+    yield
+  end
+
+  def page_content(url, limit = 5)
     raise ArgumentError, "Too many HTTP redirects" if limit.zero?
 
-    response = via_crawlbase ? content_via_crawlbase(url) : Net::HTTP.get_response(URI(url))
-    return page_content(url, 1, via_crawlbase: true) if is_blocked?(response) && !via_crawlbase
-
-    case response
-    when Net::HTTPSuccess
-      doc = Nokogiri::HTML(response.body)
-      doc.search("script, style, svg, img").remove
-      content = doc.text.squish
-      return page_content(url, 1, via_crawlbase: true) if content.size < 100 && !via_crawlbase
-
-      content
-    when Net::HTTPRedirection
+    response = Net::HTTP.get_response(URI(url))
+    if is_blocked?(response)
+      crawlbase_content(url)
+    elsif response.is_a?(Net::HTTPRedirection)
       redirected_url = URI.join(url, response["location"]).to_s
       page_content(redirected_url, limit - 1)
     else
-      raise "Failed to fetch page: #{response.code} #{response.message}"
+      content = extract_content(response)
+      content.size < 100 ? crawlbase_content(url) : content
     end
   end
 
-  def content_via_crawlbase(url)
-    SimpleDownloader.new("https://api.crawlbase.com/?token=#{Rails.application.credentials.crawlbase.token}&url=#{CGI.escape(url)}").response
+  def crawlbase_content(url)
+    run_step("retrying") do
+      response = SimpleDownloader.new("https://api.crawlbase.com/?token=#{Rails.application.credentials.crawlbase.token}&url=#{CGI.escape(url)}").response
+      extract_content(response)
+    end
+  end
+
+  def extract_content(response)
+    if response.is_a?(Net::HTTPSuccess)
+      doc = Nokogiri::HTML(response.body)
+      doc.search("script, style, svg, img").remove
+      doc.text.squish
+    else
+      raise "Failed to fetch page: #{response.code} #{response.message}"
+    end
   end
 
   def is_blocked?(response)
