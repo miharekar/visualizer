@@ -1,12 +1,12 @@
 <% content_for(:html_title) { "Visualizer | Updates" } %>
 <% content_for(:head) { auto_discovery_link_tag :rss, feed_updates_path(format: :rss) } %>
-<div class="py-12 px-4 mx-auto max-w-3xl sm:px-6">
+<div class="py-4 px-4 mx-auto max-w-3xl sm:py-8 sm:px-6">
   <% if Current.user&.admin %>
     <div class="text-xs text-right">
       <%= link_to "New", new_update_path, class: "text-right" %>
     </div>
   <% end %>
-  <div id="updates" class="flex flex-col gap-y-20">
+  <div id="updates" class="flex flex-col gap-y-8 md:gap-y-20">
     <%= render @updates %>
   </div>
   <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(before: @cursor, format: :turbo_stream) } %>
