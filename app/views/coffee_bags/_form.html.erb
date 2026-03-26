@@ -28,7 +28,31 @@
               </div>
             </div>
           </div>
-          <div class="col-span-6 sm:col-span-4">
+          <div class="col-span-6 sm:col-span-3">
+            <% roaster_errors = f.object.errors.select { |e| e.attribute == :roaster } %>
+            <% if roaster_errors.any? %>
+              <% roaster_extra_classes = "ring-1 ring-red-500 border-red-500" %>
+            <% end %>
+            <div class="flex justify-between">
+              <%= f.label :roaster, class: "standard-label" %>
+              <div class="text-sm text-neutral-500 dark:text-neutral-400">
+                <%= link_to "Manage", roasters_path, class: "standard-link", data: { turbo_frame: "_top" } %>
+                |
+                <%= link_to "New", new_roaster_path, class: "standard-link", data: { turbo_frame: "_top" } %>
+              </div>
+            </div>
+            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters, extra_text_field_classes: roaster_extra_classes, hidden_data: { canonical_selector_target: "roasterId", action: "change->canonical-selector#roasterChanged" } } %>
+            <% if roaster_errors.any? %>
+              <p class="text-sm font-medium text-red-500">
+                <% if roaster_errors.any? { |e| e.type == :blank } %>
+                  Roaster is required.
+                <% else %>
+                  <%= roaster_errors.map(&:full_message).join(", ") %>
+                <% end %>
+              </p>
+            <% end %>
+          </div>
+          <div class="col-span-6 sm:col-span-3">
             <% name_errors = f.object.errors.select { |e| e.attribute == :name } %>
             <% if name_errors.any? %>
               <% name_extra_classes = "ring-1 ring-red-500 border-red-500" %>
@@ -59,28 +83,8 @@
             <% end %>
           </div>
           <div class="col-span-6 sm:col-span-3">
-            <% roaster_errors = f.object.errors.select { |e| e.attribute == :roaster } %>
-            <% if roaster_errors.any? %>
-              <% roaster_extra_classes = "ring-1 ring-red-500 border-red-500" %>
-            <% end %>
-            <div class="flex justify-between">
-              <%= f.label :roaster, class: "standard-label" %>
-              <div class="text-sm text-neutral-500 dark:text-neutral-400">
-                <%= link_to "Manage", roasters_path, class: "standard-link", data: { turbo_frame: "_top" } %>
-                |
-                <%= link_to "New", new_roaster_path, class: "standard-link", data: { turbo_frame: "_top" } %>
-              </div>
-            </div>
-            <%= render partial: "shared/combobox", locals: { input_name: :roaster, hidden_input_name: "coffee_bag[roaster_id]", selected: @coffee_bag.roaster, collection: @roasters, extra_text_field_classes: roaster_extra_classes, hidden_data: { canonical_selector_target: "roasterId", action: "change->canonical-selector#roasterChanged" } } %>
-            <% if roaster_errors.any? %>
-              <p class="text-sm font-medium text-red-500">
-                <% if roaster_errors.any? { |e| e.type == :blank } %>
-                  Roaster is required.
-                <% else %>
-                  <%= roaster_errors.map(&:full_message).join(", ") %>
-                <% end %>
-              </p>
-            <% end %>
+            <%= f.label :roast_level, class: "standard-label" %>
+            <%= f.text_field :roast_level, class: "mt-1 standard-input" %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :roast_date, class: "standard-label" %>
@@ -97,10 +101,6 @@
             <% if defrosted_date_errors.any? %>
               <p class="text-sm font-medium text-red-500"><%= defrosted_date_errors.join(", ") %></p>
             <% end %>
-          </div>
-          <div class="col-span-6 sm:col-span-3">
-            <%= f.label :roast_level, class: "standard-label" %>
-            <%= f.text_field :roast_level, class: "mt-1 standard-input" %>
           </div>
           <div class="col-span-6 sm:col-span-3">
             <%= f.label :country, class: "standard-label" %>
@@ -138,13 +138,13 @@
             <%= f.label :quality_score, class: "standard-label" %>
             <%= f.text_field :quality_score, class: "mt-1 standard-input" %>
           </div>
+          <div class="col-span-6 sm:col-span-3">
+            <%= f.label :place_of_purchase, class: "standard-label" %>
+            <%= f.text_field :place_of_purchase, class: "mt-1 standard-input" %>
+          </div>
           <div class="col-span-6">
             <%= f.label :tasting_notes, class: "standard-label" %>
             <%= f.text_field :tasting_notes, class: "mt-1 standard-input" %>
-          </div>
-          <div class="col-span-6">
-            <%= f.label :place_of_purchase, class: "standard-label" %>
-            <%= f.text_field :place_of_purchase, class: "mt-1 standard-input" %>
           </div>
           <% if Current.user.coffee_bag_metadata_fields.any? %>
             <%= f.fields_for :metadata do |mf| %>
