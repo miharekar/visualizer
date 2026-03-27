@@ -15,7 +15,7 @@ WORKDIR /rails
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libyaml-dev imagemagick openssh-client lsb-release postgresql-common && \
+  apt-get install --no-install-recommends -y ca-certificates libjemalloc2 libvips postgresql-common && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Add PostgreSQL repository and install PostgreSQL 18 client
@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
   /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y postgresql-client-18 libpq-dev && \
+  apt-get install --no-install-recommends -y postgresql-client-18 && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
@@ -39,7 +39,7 @@ FROM base AS build
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y build-essential git pkg-config && \
+  apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
