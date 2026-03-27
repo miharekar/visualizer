@@ -39,5 +39,4 @@
 # DB
 *.dump
 
-lib/misc/snippets.rb
-infrastructure/opentofu
+/snippets.rb
