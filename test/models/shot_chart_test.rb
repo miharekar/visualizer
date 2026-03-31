@@ -30,4 +30,14 @@ class ShotChartTest < ActiveSupport::TestCase
 
     assert_includes chart.comparison_data.keys, "Temperature Mix Right"
   end
+
+  test "temperature chart tooltip uses fahrenheit suffix for fahrenheit users" do
+    user = build_stubbed(:user, temperature_unit: "Fahrenheit")
+    chart = ShotChart.new(shot_from_fixture, user)
+
+    temperature_series = chart.temperature_chart.find { |series| series[:name] == "Temperature Mix" }
+
+    assert_not_nil temperature_series
+    assert_equal " °F", temperature_series.dig(:tooltip, :valueSuffix)
+  end
 end

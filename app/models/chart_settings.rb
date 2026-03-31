@@ -28,9 +28,7 @@ class ChartSettings
     setting = DEFAULT[label]&.dup
     return if setting.blank?
 
-    user_setting = user_settings[label]
-    return setting if user_setting.blank?
-
+    user_setting = user_settings[label].presence || {}
     user_setting["suffix"] = " °F" if label.include?("temperature") && wants_fahrenheit
     setting.merge(user_setting)
   end
