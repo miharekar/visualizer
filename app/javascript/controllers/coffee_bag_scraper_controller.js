@@ -1,16 +1,14 @@
 import { Controller } from "@hotwired/stimulus"
 import consumer from "channels/consumer"
 
-const FIELDS = ["name", "roast_level", "country", "region", "farm", "farmer", "variety", "elevation", "processing", "harvest_time", "quality_score", "tasting_notes"]
 const LOADING_CLASSES = ["opacity-50", "cursor-wait"]
 const STEP_ORDER = ["starting", "fetching", "retrying", "extracting", "finalizing"]
 const PROGRESS_WIDTHS = { starting: 10, fetching: 35, retrying: 50, extracting: 75, finalizing: 90 }
 const STEP_CLASSES = { idle: ["text-neutral-500", "dark:text-neutral-400"], active: ["text-terracotta-600", "dark:text-terracotta-400"], complete: ["line-through", "text-neutral-400", "dark:text-neutral-500"] }
-const FIELD_HIGHLIGHT_CLASSES = ["!bg-oxford-blue-50", "dark:!bg-oxford-blue-900"]
 const FORM_ELEMENT_SELECTOR = "input, select, textarea, button"
 
 export default class extends Controller {
-  static targets = ["canonicalId", "progress", "progressBar", "url"]
+  static targets = ["progress", "progressBar", "url"]
 
   connect() {
     this.currentRequestId = null
@@ -60,40 +58,9 @@ export default class extends Controller {
     }
 
     this.setLoading(false)
-    if (this.hasCanonicalIdTarget) this.canonicalIdTarget.value = null
-    this.populateFields(payload.data)
+    this.dispatchApply(payload.data)
     this.completeProgress()
     this.currentRequestId = null
-  }
-
-  populateFields(data) {
-    FIELDS.forEach(name => {
-      if (!data[name]) return
-
-      const field = document.querySelector(`#coffee_bag_${name}`)
-      if (field) this.updateField(field, data[name])
-    })
-  }
-
-  updateField(field, newValue) {
-    if (field.value === newValue) return
-    if (field.dataset.previousValue === undefined) field.dataset.previousValue = field.value || ""
-
-    field.value = newValue
-    field.classList.add(...FIELD_HIGHLIGHT_CLASSES)
-    this.addRollbackLink(field)
-  }
-
-  rollback(event) {
-    const label = event.target.closest("label")
-    const field = document.getElementById(label.getAttribute("for"))
-
-    if (field && field.dataset.previousValue !== undefined) {
-      field.value = field.dataset.previousValue
-      field.classList.remove(...FIELD_HIGHLIGHT_CLASSES)
-      delete field.dataset.previousValue
-      label.innerHTML = label.querySelector("div > span").innerHTML
-    }
   }
 
   setLoading(isLoading) {
@@ -163,15 +130,6 @@ export default class extends Controller {
     this.showError(message)
   }
 
-  addRollbackLink(field) {
-    const label = document.querySelector(`label[for="${field.id}"]`)
-    if (!label) return
-    if (label.querySelector(`[data-action*="rollback"]`)) return
-
-    const originalText = label.innerHTML
-    label.innerHTML = `<div class="flex justify-between items-center"><span>${originalText}</span><span class="ml-2 font-light cursor-pointer standard-link" data-action="click->coffee-bag-scraper#rollback" title="${field.dataset.previousValue}">Revert</span></div>`
-  }
-
   createSubscription() {
     this.subscription = consumer.subscriptions.create(
       { channel: "CoffeeBagScraperChannel" },
@@ -210,6 +168,10 @@ export default class extends Controller {
 
   toggleClasses(element, classes, enabled) {
     classes.forEach(className => element.classList.toggle(className, enabled))
+  }
+
+  dispatchApply(data) {
+    this.element.dispatchEvent(new CustomEvent("coffee-bag:apply", { detail: { data, clearCanonicalId: true } }))
   }
 
   clearProgressTimeout() {

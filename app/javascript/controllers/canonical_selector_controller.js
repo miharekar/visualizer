@@ -27,9 +27,7 @@ export default class extends Controller {
 
     const raw_payload = selected.querySelector("[data-coffee-bag-payload-value]")?.dataset?.coffeeBagPayloadValue
     if (raw_payload) {
-      const formEl = this.element.closest('form[data-controller~="coffee-bag-scraper"]')
-      const scraper = formEl && this.application.getControllerForElementAndIdentifier(formEl, "coffee-bag-scraper")
-      scraper?.populateFields(JSON.parse(raw_payload))
+      this.element.dispatchEvent(new CustomEvent("coffee-bag:apply", { detail: { data: JSON.parse(raw_payload) } }))
     }
 
     this.toggleInputs()
