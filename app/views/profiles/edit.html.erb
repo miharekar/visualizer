@@ -78,6 +78,9 @@
         <div id="passkey-success" class="hidden">
           <%= render Notification.new(type: :default, heading: "Passkey registered successfully", timeout: 3000) %>
         </div>
+        <div id="passkey-already-registered" class="hidden">
+          <%= render Notification.new(type: :alert, heading: "Passkey already registered", text: "This passkey is already registered to your account.", timeout: 3000) %>
+        </div>
       </div>
       <% if Current.user.has_airtable? %>
         <div class="py-6">

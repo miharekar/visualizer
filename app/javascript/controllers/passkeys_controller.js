@@ -24,8 +24,8 @@ export default class extends Controller {
 
       this.showNotification("passkey-success")
     } catch (error) {
+      if (this.duplicateRegistrationError(error)) return this.showNotification("passkey-already-registered")
       if (this.expectedWebAuthnError(error)) return
-
       appsignal.sendError(error)
       console.error("Passkey registration failed", error)
       this.showNotification("passkey-error")
@@ -108,6 +108,10 @@ export default class extends Controller {
 
   expectedWebAuthnError(error) {
     return error?.name === "AbortError" || error?.name === "NotAllowedError"
+  }
+
+  duplicateRegistrationError(error) {
+    return error?.name === "InvalidStateError"
   }
 
   async postJSON(url, body) {
