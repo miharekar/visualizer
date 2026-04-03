@@ -24,7 +24,7 @@ export default class extends Controller {
 
       this.showNotification("passkey-success")
     } catch (error) {
-      if (error?.name === "AbortError") return
+      if (this.expectedWebAuthnError(error)) return
 
       appsignal.sendError(error)
       console.error("Passkey registration failed", error)
@@ -55,7 +55,7 @@ export default class extends Controller {
       const res = await this.postJSON("/passkeys/callback", this.buildPayload(cred))
       if (res?.redirect_to) window.location.href = res.redirect_to
     } catch (error) {
-      if (error?.name === "AbortError") return
+      if (this.expectedWebAuthnError(error)) return
 
       appsignal.sendError(error)
       console.error("Passkey sign-in failed", error)
@@ -104,6 +104,10 @@ export default class extends Controller {
     } catch {
       return false
     }
+  }
+
+  expectedWebAuthnError(error) {
+    return error?.name === "AbortError" || error?.name === "NotAllowedError"
   }
 
   async postJSON(url, body) {
