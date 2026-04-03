@@ -118,10 +118,11 @@ export default class extends Controller {
       body: JSON.stringify(body)
     })
 
-    const data = await res.json().catch(() => ({}))
+    const text = await res.text()
+    const data = text ? JSON.parse(text) : {}
 
     if (!res.ok) {
-      const error = new Error(data.error || res.statusText)
+      const error = new Error(text)
       error.status = res.status
       error.data = data
       throw error
