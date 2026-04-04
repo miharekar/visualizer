@@ -10,8 +10,8 @@ export default class extends Controller {
     }
   }
 
-  async register(e) {
-    e.preventDefault()
+  async register() {
+    if (typeof PublicKeyCredential?.parseCreationOptionsFromJSON !== "function") return
 
     try {
       const opts = await this.postJSON("/passkeys/options", {})
@@ -37,6 +37,8 @@ export default class extends Controller {
   }
 
   async signIn({ mediation }) {
+    if (typeof PublicKeyCredential?.parseRequestOptionsFromJSON !== "function") return
+
     try {
       const opts = await this.postJSON("/passkeys/sign_in", {})
       const publicKey = PublicKeyCredential.parseRequestOptionsFromJSON(opts)
