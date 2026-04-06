@@ -11,7 +11,10 @@ export default class extends Controller {
   }
 
   async register() {
-    if (typeof PublicKeyCredential?.parseCreationOptionsFromJSON !== "function") return
+    if (typeof PublicKeyCredential?.parseCreationOptionsFromJSON !== "function") {
+      this.showNotification("passkey-error")
+      return
+    }
 
     try {
       const opts = await this.postJSON("/passkeys/options", {})
@@ -37,7 +40,10 @@ export default class extends Controller {
   }
 
   async signIn({ mediation }) {
-    if (typeof PublicKeyCredential?.parseRequestOptionsFromJSON !== "function") return
+    if (typeof PublicKeyCredential?.parseRequestOptionsFromJSON !== "function") {
+      this.showNotification("passkey-error")
+      return
+    }
 
     try {
       const opts = await this.postJSON("/passkeys/sign_in", {})
@@ -129,7 +135,8 @@ export default class extends Controller {
     })
 
     const text = await res.text()
-    const data = text ? JSON.parse(text) : {}
+    const contentType = res.headers.get("content-type") || ""
+    const data = text && contentType.includes("application/json") ? JSON.parse(text) : {}
 
     if (!res.ok) {
       const error = new Error(text)
