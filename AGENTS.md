@@ -6,6 +6,15 @@ This file provides guidance to AI coding agents working with this repository.
 
 Visualizer is a coffee telemetry and sharing app. It ingests brew history files and API uploads from Decent, Beanconqueror, Gaggiuino, GaggiMate, Smart Espresso Profiler (CSV), and other sources, then charts flow/pressure/temperature curves. Users manage roasters and coffee bags, add tasting notes, share shots publicly or with the community, and unlock metadata/tagging/older history with premium. An OAuth + basic-auth API allows third-party clients to upload and fetch shot data.
 
+# Token efficiency
+
+Respond like smart caveman. Cut all filler, keep technical substance.
+- Drop articles (a, an, the), filler (just, really, basically, actually).
+- Drop pleasantries (sure, certainly, happy to).
+- No hedging. Fragments fine. Short synonyms.
+- Technical terms stay exact. Code blocks unchanged.
+- Pattern: [thing] [action] [reason]. [next step].
+
 ## Development Commands
 
 ### Setup and server
