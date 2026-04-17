@@ -13,11 +13,11 @@ pin "@appsignal/stimulus", to: "@appsignal--stimulus.js" # @1.0.21
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.13
 pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.37.0
 pin "el-transition" # @0.0.7
-pin "highcharts" # @12.5.0
-pin "highcharts/highcharts-more", to: "highcharts--highcharts-more.js" # @12.5.0
-pin "highcharts/modules/annotations", to: "highcharts--modules--annotations.js" # @12.5.0
+pin "highcharts" # @12.6.0
+pin "highcharts/highcharts-more", to: "highcharts--highcharts-more.js" # @12.6.0
+pin "highcharts/modules/annotations", to: "highcharts--modules--annotations.js" # @12.6.0
 pin "https" # @2.1.0
-pin "match-sorter" # @8.2.0
+pin "match-sorter" # @8.3.0
 pin "remove-accents" # @0.5.0
 pin "stimulus-autocomplete" # @3.1.0
 pin "tslib" # @2.8.1
