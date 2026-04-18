@@ -3,9 +3,10 @@ class SimpleDownloader
 
   attr_reader :uri, :request, :http
 
-  def initialize(url)
+  def initialize(url, headers: {})
     @uri = URI(url)
     @request = Net::HTTP::Get.new(uri)
+    headers.each { |key, value| @request[key] = value }
     @http = Net::HTTP.new(uri.host, uri.port)
     @http.use_ssl = true
   end
