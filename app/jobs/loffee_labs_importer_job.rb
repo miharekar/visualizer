@@ -3,7 +3,10 @@ class LoffeeLabsImporterJob < ApplicationJob
 
   queue_as :low
 
-  ROASTER_CSV_MAPPING = {name: "roaster", website: "link", country: "country", address: "locality"}.freeze
+  BASE_URL = "https://beta.loffeelabs.com/api/v2".freeze
+  ROASTERS_URL = "#{BASE_URL}/terms?list=roasters".freeze
+  BEANS_BULK_URL = "#{BASE_URL}/beans/bulk".freeze
+
   COFFEE_BAG_JSON_MAPPING = {
     name: "roast-name",
     url: "link",
@@ -30,19 +33,17 @@ class LoffeeLabsImporterJob < ApplicationJob
   private
 
   def import_roasters
-    url = Rails.application.credentials.dig(:loffee_labs, :roasters_url)
-    CSV.parse(SimpleDownloader.new(url).body, headers: true).each do |row|
-      name = row["roaster"]&.squish
+    JSON.parse(SimpleDownloader.new(ROASTERS_URL).body).fetch("data", []).each do |name|
+      name = name&.squish
       next if name.blank?
 
-      @roasters[name] = CanonicalRoaster.find_or_initialize_by(loffee_labs_id: name)
-      @roasters[name].update(ROASTER_CSV_MAPPING.to_h { |attr, col| [attr, row[col]&.squish] })
+      @roasters[name] = CanonicalRoaster.find_or_create_by!(loffee_labs_id: name) { |roaster| roaster.name = name }
     end
   end
 
   def import_beans
-    url = "https://www.loffeelabs.com/wp-json/beanbase/v1/beans?api_key=#{Rails.application.credentials.dig(:loffee_labs, :api_key)}"
-    JSON.parse(SimpleDownloader.new(url).body)["data"].each { import_bean(it) }
+    json = JSON.parse(SimpleDownloader.new(BEANS_BULK_URL, headers: {"Authorization" => "Bearer #{Rails.application.credentials.dig(:loffee_labs, :api_key)}"}).body)
+    json["beans"].each { import_bean(it) } if json.key?("beans") && json["beans"].is_a?(Array)
   end
 
   def import_bean(bean)
