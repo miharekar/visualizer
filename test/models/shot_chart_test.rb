@@ -28,7 +28,7 @@ class ShotChartTest < ActiveSupport::TestCase
     user = build_stubbed(:user, unified_chart: true)
     chart = ShotChartCompare.new(shot_from_fixture, shot_from_fixture, user)
 
-    assert_includes chart.comparison_data.keys, "Temperature Mix Right"
+    assert_includes chart.comparison_data.keys, "Temperature Mix Comparison"
   end
 
   test "temperature chart tooltip uses fahrenheit suffix for fahrenheit users" do

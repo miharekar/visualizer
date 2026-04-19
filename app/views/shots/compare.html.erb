@@ -1,13 +1,15 @@
 <% tasting_series = [
-  tasting_assessment_series(@shot, name: "Left"),
-  tasting_assessment_series(@comparison, name: "Right")
+  tasting_assessment_series(@shot, name: "Base"),
+  tasting_assessment_series(@comparison, name: "Comparison")
 ].compact %>
 <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
     <div class="flex-1">
+      <div class="mb-2 text-sm font-medium tracking-wide uppercase text-neutral-500 dark:text-neutral-400">Base</div>
       <%= render "details", shot: @shot, name: true %>
     </div>
     <div class="flex-1 mt-6 md:mt-0 md:ml-3">
+      <div class="mb-2 text-sm font-medium tracking-wide uppercase text-neutral-500 dark:text-neutral-400">Comparison</div>
       <%= render "details", shot: @comparison, name: true %>
     </div>
   </div>
@@ -24,7 +26,7 @@
     <% if Current.user&.premium? %>
       <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
-          Adjust right timing
+          Adjust comparison timing
         </div>
         <div class="flex">
           <div class="flex flex-col mt-2 mr-2 grow">
