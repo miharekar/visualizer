@@ -82,9 +82,10 @@ module Api
     private
 
     def load_users_shot
-      @shot = Current.user.shots.find_by(id: params[:id])
-      render json: {error: "Shot not found"}, status: :not_found unless @shot
-      authorize @shot
+      @shot = Shot.find_by(id: params[:id])
+      return render json: {error: "Shot not found"}, status: :not_found unless @shot
+
+      authorize! @shot
     end
 
     def with_shot

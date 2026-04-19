@@ -3,6 +3,7 @@ git_source(:github) { "https://github.com/#{it}.git" }
 
 ruby "4.0.2"
 
+gem "action_policy"
 gem "active_job-performs"
 gem "active_link_to"
 gem "appsignal"
@@ -26,7 +27,6 @@ gem "postmark-rails"
 gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
-gem "pundit"
 gem "rack-cors"
 gem "rails"
 gem "responders"

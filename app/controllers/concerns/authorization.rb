@@ -1,16 +1,13 @@
 module Authorization
   extend ActiveSupport::Concern
-  include Pundit::Authorization
+  include ActionPolicy::Controller
 
   included do
-    rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+    authorize :user, through: -> { Current.user }
+    rescue_from ActionPolicy::Unauthorized, with: :user_not_authorized
   end
 
   private
-
-  def pundit_user
-    Current.user
-  end
 
   def check_admin!
     redirect_to shots_path unless Current.user.admin?
@@ -27,8 +24,8 @@ module Authorization
     end
   end
 
-  def user_not_authorized
-    message = "You are not authorized to perform this action."
+  def user_not_authorized(exception)
+    message = exception.result.message
     if request.format.json?
       render json: {error: message}, status: :forbidden
     else

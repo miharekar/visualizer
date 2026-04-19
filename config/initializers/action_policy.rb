@@ -1,0 +1,1 @@
+ActionPolicy.enforce_predicate_rules_naming = true

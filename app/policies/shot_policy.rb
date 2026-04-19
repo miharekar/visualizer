@@ -1,20 +1,16 @@
 class ShotPolicy < ApplicationPolicy
-  def owner?
-    user && user.id == record.user_id
-  end
+  alias_rule :edit?, :destroy?, :remove_image?, to: :update?
+  alias_rule :show?, to: :index?
 
   def index?
-    true
-  end
-
-  def show?
     true
   end
 
   def create?
     owner?
   end
-  alias :update? :create?
-  alias :remove_image? :create?
-  alias :destroy? :create?
+
+  def update?
+    create?
+  end
 end

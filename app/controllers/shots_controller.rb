@@ -44,7 +44,7 @@ class ShotsController < ApplicationController
   end
 
   def edit
-    authorize @shot
+    authorize! @shot
   end
 
   def create
@@ -71,7 +71,7 @@ class ShotsController < ApplicationController
   end
 
   def update
-    authorize @shot
+    authorize! @shot
     @shot.update(update_shot_params)
     apply_brewdata_updates
     attach_image(params.dig(:shot, :image)) if Current.user.premium?
@@ -83,7 +83,7 @@ class ShotsController < ApplicationController
   end
 
   def destroy
-    authorize @shot
+    authorize! @shot
     @shot.destroy!
 
     respond_to do |format|
@@ -98,7 +98,7 @@ class ShotsController < ApplicationController
   end
 
   def remove_image
-    authorize @shot
+    authorize! @shot
     @shot.image.purge
     render turbo_stream: turbo_stream.remove("shot-image")
   end

@@ -1,7 +1,10 @@
 require "test_helper"
+require "action_policy/test_helper"
 
 module Api
   class ShotsControllerTest < ActionDispatch::IntegrationTest
+    include ActionPolicy::TestHelper
+
     attr_reader :user, :public_user, :premium_user
 
     setup do
@@ -290,6 +293,14 @@ module Api
       assert_equal "New title", json_response["profile_title"]
     end
 
+    test "update authorizes with shot policy" do
+      shot = FactoryBot.create(:shot, user:)
+
+      assert_authorized_to(:update?, shot, with: ShotPolicy) do
+        patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {profile_title: "New title"}}, as: :json
+      end
+    end
+
     test "update rejects non-json request" do
       shot = FactoryBot.create(:shot, user:)
 
@@ -308,6 +319,15 @@ module Api
 
       assert_response :success
       assert_equal({"Portafilter basket" => "IMS"}, shot.reload.metadata)
+    end
+
+    test "update rejects non-owner" do
+      shot = FactoryBot.create(:shot)
+
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {profile_title: "New title"}}, as: :json
+
+      assert_response :forbidden
+      assert_equal "You are not authorized to perform this action.", response.parsed_body["error"]
     end
 
     test "update allows tasting assessment fields for premium users" do
