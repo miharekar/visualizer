@@ -53,6 +53,8 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
+    active_job-performs (1.0.2)
+      activejob (>= 6.1)
     active_link_to (1.0.5)
       actionpack
       addressable
@@ -589,6 +591,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_job-performs
   active_link_to
   actual_db_schema
   annotaterb

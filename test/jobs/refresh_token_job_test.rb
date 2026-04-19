@@ -7,7 +7,7 @@ class RefreshTokenJobTest < ActiveJob::TestCase
       .to_return(status: 200, body: {refresh_token: "new_refresh_token", access_token: "new_access_token", expires_at: 1.hour.from_now.to_i}.to_json, headers: {"Content-Type" => "application/json"})
 
     identity = create(:identity, :airtable, :expired)
-    RefreshTokenJob.perform_now(identity)
+    Identity::RefreshTokenJob.perform_now(identity)
 
     assert_requested(stub)
     identity.reload
@@ -18,7 +18,7 @@ class RefreshTokenJobTest < ActiveJob::TestCase
 
   test "does not refresh token when not expired" do
     identity = create(:identity, :airtable)
-    RefreshTokenJob.perform_now(identity)
+    Identity::RefreshTokenJob.perform_now(identity)
     identity.reload
     assert_equal "access_token", identity.token
     assert_equal "refresh_token", identity.refresh_token

@@ -1,7 +1,7 @@
 class AirtableWebhookRefreshAllJob < AirtableJob
   def perform
     AirtableInfo.find_each do |airtable_info|
-      AirtableWebhookRefreshJob.perform_later(airtable_info)
+      airtable_info.webhook_refresh_later
     end
   end
 end

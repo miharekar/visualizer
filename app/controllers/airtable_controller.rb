@@ -7,7 +7,7 @@ class AirtableController < ApplicationController
       if airtable_info.identity.valid_token?
         AirtableWebhookJob.perform_later(airtable_info)
       else
-        RefreshTokenJob.perform_later(airtable_info.identity)
+        airtable_info.identity.refresh_token_later!
         AirtableWebhookJob.set(wait: 1.minute).perform_later(airtable_info)
       end
     else

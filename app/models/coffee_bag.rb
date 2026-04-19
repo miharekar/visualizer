@@ -2,6 +2,8 @@ class CoffeeBag < ApplicationRecord
   include Airtablable
   include Squishable
 
+  performs :refresh_shot_values
+
   DISPLAY_ATTRIBUTES = %w[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes place_of_purchase].freeze
 
   belongs_to :roaster, touch: true
@@ -17,7 +19,7 @@ class CoffeeBag < ApplicationRecord
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
   validate :defrosted_date_after_frozen_date
 
-  after_save_commit :update_shots, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
+  after_save_commit :refresh_shot_values_later, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
 
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
   scope :active, -> { where(archived_at: nil) }
@@ -79,6 +81,13 @@ class CoffeeBag < ApplicationRecord
     (end_date - frozen_date).to_i
   end
 
+  def refresh_shot_values
+    shots.find_each do
+      it.refresh_coffee_bag_fields
+      it.save!
+    end
+  end
+
   private
 
   def defrosted_date_after_frozen_date
@@ -87,10 +96,6 @@ class CoffeeBag < ApplicationRecord
     elsif frozen_date.present? && defrosted_date.present? && defrosted_date < frozen_date
       errors.add(:defrosted_date, "must be after frozen date")
     end
-  end
-
-  def update_shots
-    RefreshCoffeeBagFieldsOnShotsJob.perform_later(self)
   end
 end
 

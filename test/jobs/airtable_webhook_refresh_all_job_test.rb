@@ -7,7 +7,7 @@ class AirtableWebhookRefreshAllJobTest < ActiveJob::TestCase
     AirtableWebhookRefreshAllJob.perform_now
 
     airtable_infos.map do
-      assert_enqueued_with(job: AirtableWebhookRefreshJob, args: [it], queue: "default")
+      assert_enqueued_with(job: AirtableInfo::WebhookRefreshJob, args: [it], queue: "default")
     end
   end
 end

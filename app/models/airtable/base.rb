@@ -20,7 +20,7 @@ module Airtable
       raise "Airtable identity not found for User##{user.id}" unless identity
       return if identity.valid_token?
 
-      RefreshTokenJob.perform_later(identity)
+      identity.refresh_token_later!
       raise TokenError
     end
 

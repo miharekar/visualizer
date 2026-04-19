@@ -40,4 +40,18 @@ class RoasterTest < ActiveSupport::TestCase
       Roaster.for_user_by_name(user, "")
     end
   end
+
+  test "changing roaster name enqueues refresh_shot_values jobs for coffee bags" do
+    roaster = create(:roaster, user:)
+    coffee_bags = [
+      create(:coffee_bag, roaster:, name: "Coffee A", roast_date: Date.new(2025, 1, 1)),
+      create(:coffee_bag, roaster:, name: "Coffee B", roast_date: Date.new(2025, 1, 2))
+    ]
+
+    roaster.update!(name: "Updated")
+
+    coffee_bags.each do |coffee_bag|
+      assert_enqueued_with(job: CoffeeBag::RefreshShotValuesJob, args: [coffee_bag], queue: "default")
+    end
+  end
 end

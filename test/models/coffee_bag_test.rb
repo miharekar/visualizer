@@ -126,4 +126,12 @@ class CoffeeBagTest < ActiveSupport::TestCase
 
     assert_equal({"Bean density" => "High"}, coffee_bag.to_api_json["metadata"])
   end
+
+  test "changing coffee bag enqueues refresh_shot_values job" do
+    coffee_bag = create(:coffee_bag, roaster:, roast_date: Date.new(2025, 1, 1))
+
+    assert_enqueued_with(job: CoffeeBag::RefreshShotValuesJob, args: [coffee_bag], queue: "default") do
+      coffee_bag.update!(name: "Updated")
+    end
+  end
 end

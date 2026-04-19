@@ -1,4 +1,8 @@
 class AirtableInfo < ApplicationRecord
+  class Job < AirtableJob; end
+
+  performs :webhook_refresh
+
   belongs_to :identity
 
   def tables
@@ -14,6 +18,17 @@ class AirtableInfo < ApplicationRecord
 
   def table_fields_for(table_name)
     tables&.dig(table_name, "fields")&.index_by { |f| f["name"] } || {}
+  end
+
+  def webhook_refresh
+    user = identity.user
+    Airtable::Shots.new(user).webhook_refresh
+  rescue Airtable::DataError => e
+    if e.matches_error_type?(%w[NOT_FOUND INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND CANNOT_REFRESH_DISABLED_WEBHOOK])
+      destroy
+    else
+      Appsignal.report_error(e) { it.set_tags(user_id: user.id) }
+    end
   end
 end
 

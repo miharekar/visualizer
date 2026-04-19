@@ -3,6 +3,7 @@ git_source(:github) { "https://github.com/#{it}.git" }
 
 ruby "4.0.2"
 
+gem "active_job-performs"
 gem "active_link_to"
 gem "appsignal"
 gem "aws-sdk-s3", require: false

@@ -9,7 +9,7 @@ class AirtableWebhookRefreshJobTest < ActiveJob::TestCase
 
   test "refreshes the webhook payload for airtable_info" do
     stub = stub_request(:post, @refresh_url).to_return(status: 200, body: "{}", headers: {})
-    AirtableWebhookRefreshJob.perform_now(@airtable_info)
+    AirtableInfo::WebhookRefreshJob.perform_now(@airtable_info)
     assert_requested(stub)
   end
 
@@ -23,7 +23,7 @@ class AirtableWebhookRefreshJobTest < ActiveJob::TestCase
       stub_request(:post, @refresh_url).to_return(status: error_case[:status], body: error_response, headers: {})
 
       assert_difference -> { AirtableInfo.count }, -1 do
-        AirtableWebhookRefreshJob.perform_now(@airtable_info)
+        AirtableInfo::WebhookRefreshJob.perform_now(@airtable_info)
       end
 
       assert_raises(ActiveRecord::RecordNotFound) { @airtable_info.reload }
@@ -34,7 +34,7 @@ class AirtableWebhookRefreshJobTest < ActiveJob::TestCase
       stub_request(:post, @refresh_url).to_return(status: error_case[:status], body: error_response, headers: {})
 
       assert_difference -> { AirtableInfo.count }, -1 do
-        AirtableWebhookRefreshJob.perform_now(@airtable_info)
+        AirtableInfo::WebhookRefreshJob.perform_now(@airtable_info)
       end
 
       assert_raises(ActiveRecord::RecordNotFound) { @airtable_info.reload }

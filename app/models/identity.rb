@@ -1,6 +1,10 @@
 class Identity < ApplicationRecord
   include Lockable
 
+  performs :refresh_token!, queue_as: :high do
+    retry_on PgLock::UnableToLockError, wait: :polynomially_longer
+  end
+
   belongs_to :user
   has_one :airtable_info, dependent: :destroy
 
