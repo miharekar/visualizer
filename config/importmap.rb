@@ -11,7 +11,7 @@ pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn
 pin "@appsignal/javascript", to: "@appsignal--javascript.js" # @1.6.1
 pin "@appsignal/stimulus", to: "@appsignal--stimulus.js" # @1.0.21
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.13
-pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.37.0
+pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.37.1
 pin "el-transition" # @0.0.7
 pin "highcharts" # @12.6.0
 pin "highcharts/highcharts-more", to: "highcharts--highcharts-more.js" # @12.6.0
