@@ -69,6 +69,21 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert_equal 147, parsed_shot.data["espresso_weight"].size
   end
 
+  test "it parses beanconqueror water dispensed file correctly" do
+    shot = Shot.from_file(build_stubbed(:user), File.read("test/files/beanconqueror_water_dispensed.json"))
+    assert_equal 1, shot.information.timeframe.count
+    assert shot.information.data.blank?
+
+    parsed_shot = ShotChart::ParsedShot.new(shot)
+    assert_equal 241, parsed_shot.timeframe.size
+    assert_equal "0.0", parsed_shot.timeframe.first
+    assert_equal "24.209", parsed_shot.timeframe.last
+    assert_equal %w[espresso_flow espresso_pressure espresso_temperature_mix espresso_water_dispensed], parsed_shot.data.keys.sort
+    assert_equal 241, parsed_shot.data["espresso_water_dispensed"].size
+    assert_in_delta(3.2, parsed_shot.data["espresso_flow"][42])
+    assert_in_delta(1.4, parsed_shot.data["espresso_water_dispensed"][42])
+  end
+
   test "fahrenheit? should return true only if extra enable_fahrenheit is 1" do
     shot = build_stubbed(:shot, :with_information, information: build_stubbed(:shot_information, extra: {enable_fahrenheit: 1}))
     parsed_shot = ShotChart::ParsedShot.new(shot)

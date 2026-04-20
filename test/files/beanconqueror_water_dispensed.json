@@ -1,0 +1,5900 @@
+{
+  "application": "BEANCONQUEROR",
+  "bean": {
+    "name": "Kolumbien Sugarcane",
+    "buyDate": "2026-03-16T15:49:00.000Z",
+    "roastingDate": "2026-03-13T15:49:00.000Z",
+    "note": "",
+    "roaster": "Schvarz Kaffee",
+    "roast": "UNKNOWN",
+    "roast_range": 0,
+    "roast_custom": "",
+    "beanMix": "SINGLE_ORIGIN",
+    "aromatics": "Karamellbonbon, Butterkeks, sahnig",
+    "weight": 1000,
+    "cost": 34.81,
+    "decaffeinated": true,
+    "cupping_points": "",
+    "bean_roasting_type": "ESPRESSO",
+    "bean_information": [
+      {
+        "country": "Colombia",
+        "region": "",
+        "farm": "La Cristalina",
+        "farmer": "",
+        "elevation": "",
+        "harvest_time": "",
+        "variety": "Castillo",
+        "processing": "Sugar Cane E.A.",
+        "certification": "",
+        "purchasing_price": 0,
+        "fob_price": 0
+      }
+    ],
+    "url": "",
+    "ean_article_number": "",
+    "rating": 0
+  },
+  "brew": {
+    "grind_size": 11,
+    "grind_weight": 20,
+    "mill_speed": 0,
+    "mill_timer": 0,
+    "pressure_profile": "",
+    "brew_temperature_time": 0,
+    "brew_temperature": 92,
+    "brew_time": 18,
+    "brew_quantity": 0,
+    "brew_quantity_type": "GR",
+    "note": "",
+    "rating": 0,
+    "coffee_type": "",
+    "coffee_concentration": "",
+    "coffee_first_drip_time": 0,
+    "coffee_blooming_time": 0,
+    "tds": 0,
+    "brew_beverage_quantity": 40.2,
+    "brew_beverage_quantity_type": "GR",
+    "mill_timer_milliseconds": 0,
+    "brew_time_milliseconds": 574,
+    "brew_temperature_time_milliseconds": 0,
+    "coffee_first_drip_time_milliseconds": 0,
+    "coffee_blooming_time_milliseconds": 0,
+    "bean_weight_in": 0,
+    "vessel_name": "",
+    "vessel_weight": 0,
+    "config": {
+      "uuid": "cd8769e9-6e7d-4844-82ac-7db45f17d357",
+      "unix_timestamp": 1776625793
+    },
+    "ey": 0
+  },
+  "mill": {
+    "name": "Sette 30"
+  },
+  "preparation": {
+    "name": "Sanremo",
+    "type": "SANREMO_YOU",
+    "style_type": "ESPRESSO"
+  },
+  "water": {
+    "name": "",
+    "general_hardness": 0,
+    "total_alkalinity": 0,
+    "calcium": 0,
+    "magnesium": 0,
+    "sodium": 0,
+    "potassium": 0,
+    "tds": 0,
+    "general_hardness_type": "UNKNOWN",
+    "total_alkalinity_type": "UNKNOWN",
+    "calcium_type": "UNKNOWN",
+    "magnesium_type": "UNKNOWN",
+    "sodium_type": "UNKNOWN",
+    "potassium_type": "UNKNOWN",
+    "tds_type": "PPM"
+  },
+  "brewFlow": {
+    "weight": [],
+    "weightSecond": [],
+    "waterFlow": [],
+    "realtimeFlow": [],
+    "realtimeFlowSecond": [],
+    "pressureFlow": [
+      {
+        "timestamp": "21:10:09.602",
+        "brew_time": "0.0",
+        "actual_pressure": 0.6,
+        "old_pressure": 0.6
+      },
+      {
+        "timestamp": "21:10:09.702",
+        "brew_time": "0.2",
+        "actual_pressure": 0.6,
+        "old_pressure": 0.6
+      },
+      {
+        "timestamp": "21:10:09.802",
+        "brew_time": "0.4",
+        "actual_pressure": 0.6,
+        "old_pressure": 0.6
+      },
+      {
+        "timestamp": "21:10:09.903",
+        "brew_time": "0.6",
+        "actual_pressure": 0.6,
+        "old_pressure": 0.6
+      },
+      {
+        "timestamp": "21:10:10.004",
+        "brew_time": "0.8",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.104",
+        "brew_time": "0.10",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.204",
+        "brew_time": "0.12",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.305",
+        "brew_time": "0.14",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.406",
+        "brew_time": "0.16",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.506",
+        "brew_time": "0.18",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.606",
+        "brew_time": "0.20",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.707",
+        "brew_time": "1.2",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.807",
+        "brew_time": "1.4",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:10.909",
+        "brew_time": "1.6",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:11.009",
+        "brew_time": "1.8",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:11.109",
+        "brew_time": "1.10",
+        "actual_pressure": 0.8,
+        "old_pressure": 0.8
+      },
+      {
+        "timestamp": "21:10:11.209",
+        "brew_time": "1.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.310",
+        "brew_time": "1.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.410",
+        "brew_time": "1.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.510",
+        "brew_time": "1.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.610",
+        "brew_time": "1.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.711",
+        "brew_time": "2.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.811",
+        "brew_time": "2.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:11.912",
+        "brew_time": "2.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.012",
+        "brew_time": "2.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.113",
+        "brew_time": "2.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.213",
+        "brew_time": "2.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.314",
+        "brew_time": "2.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.414",
+        "brew_time": "2.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.515",
+        "brew_time": "2.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.616",
+        "brew_time": "2.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.716",
+        "brew_time": "3.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.817",
+        "brew_time": "3.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:12.918",
+        "brew_time": "3.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.019",
+        "brew_time": "3.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.119",
+        "brew_time": "3.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.220",
+        "brew_time": "3.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.329",
+        "brew_time": "3.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.429",
+        "brew_time": "3.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.530",
+        "brew_time": "3.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.630",
+        "brew_time": "3.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.731",
+        "brew_time": "4.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.832",
+        "brew_time": "4.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:13.932",
+        "brew_time": "4.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.033",
+        "brew_time": "4.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.133",
+        "brew_time": "4.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.233",
+        "brew_time": "4.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.334",
+        "brew_time": "4.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.434",
+        "brew_time": "4.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.534",
+        "brew_time": "4.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.636",
+        "brew_time": "4.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.737",
+        "brew_time": "5.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.837",
+        "brew_time": "5.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:14.937",
+        "brew_time": "5.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.038",
+        "brew_time": "5.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.138",
+        "brew_time": "5.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.238",
+        "brew_time": "5.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.338",
+        "brew_time": "5.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.439",
+        "brew_time": "5.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.539",
+        "brew_time": "5.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.640",
+        "brew_time": "5.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.740",
+        "brew_time": "6.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.841",
+        "brew_time": "6.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:15.941",
+        "brew_time": "6.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.042",
+        "brew_time": "6.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.142",
+        "brew_time": "6.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.243",
+        "brew_time": "6.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.344",
+        "brew_time": "6.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.444",
+        "brew_time": "6.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.544",
+        "brew_time": "6.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.645",
+        "brew_time": "6.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.745",
+        "brew_time": "7.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.846",
+        "brew_time": "7.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:16.946",
+        "brew_time": "7.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.047",
+        "brew_time": "7.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.149",
+        "brew_time": "7.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.250",
+        "brew_time": "7.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.350",
+        "brew_time": "7.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.450",
+        "brew_time": "7.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.550",
+        "brew_time": "7.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.650",
+        "brew_time": "7.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.750",
+        "brew_time": "8.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.851",
+        "brew_time": "8.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:17.951",
+        "brew_time": "8.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.051",
+        "brew_time": "8.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.152",
+        "brew_time": "8.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.253",
+        "brew_time": "8.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.353",
+        "brew_time": "8.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.454",
+        "brew_time": "8.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.555",
+        "brew_time": "8.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.656",
+        "brew_time": "8.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.757",
+        "brew_time": "9.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.858",
+        "brew_time": "9.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:18.958",
+        "brew_time": "9.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.058",
+        "brew_time": "9.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.159",
+        "brew_time": "9.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.259",
+        "brew_time": "9.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.359",
+        "brew_time": "9.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.459",
+        "brew_time": "9.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.562",
+        "brew_time": "9.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.662",
+        "brew_time": "9.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.762",
+        "brew_time": "10.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.862",
+        "brew_time": "10.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:19.962",
+        "brew_time": "10.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.063",
+        "brew_time": "10.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.163",
+        "brew_time": "10.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.268",
+        "brew_time": "10.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.369",
+        "brew_time": "10.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.470",
+        "brew_time": "10.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.571",
+        "brew_time": "10.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.672",
+        "brew_time": "10.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.772",
+        "brew_time": "11.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.872",
+        "brew_time": "11.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:20.973",
+        "brew_time": "11.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.073",
+        "brew_time": "11.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.173",
+        "brew_time": "11.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.276",
+        "brew_time": "11.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.376",
+        "brew_time": "11.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.476",
+        "brew_time": "11.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.576",
+        "brew_time": "11.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.676",
+        "brew_time": "11.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.776",
+        "brew_time": "12.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.877",
+        "brew_time": "12.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:21.977",
+        "brew_time": "12.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.077",
+        "brew_time": "12.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.177",
+        "brew_time": "12.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.278",
+        "brew_time": "12.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.378",
+        "brew_time": "12.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.479",
+        "brew_time": "12.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.580",
+        "brew_time": "12.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.680",
+        "brew_time": "12.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.781",
+        "brew_time": "13.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.882",
+        "brew_time": "13.4",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:22.982",
+        "brew_time": "13.6",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.083",
+        "brew_time": "13.8",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.184",
+        "brew_time": "13.10",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.285",
+        "brew_time": "13.12",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.385",
+        "brew_time": "13.14",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.486",
+        "brew_time": "13.16",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.586",
+        "brew_time": "13.18",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.688",
+        "brew_time": "13.20",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.789",
+        "brew_time": "14.2",
+        "actual_pressure": 0.9,
+        "old_pressure": 0.9
+      },
+      {
+        "timestamp": "21:10:23.889",
+        "brew_time": "14.4",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:23.989",
+        "brew_time": "14.6",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.089",
+        "brew_time": "14.8",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.189",
+        "brew_time": "14.10",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.290",
+        "brew_time": "14.12",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.390",
+        "brew_time": "14.14",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.490",
+        "brew_time": "14.16",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.591",
+        "brew_time": "14.18",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.691",
+        "brew_time": "14.20",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.792",
+        "brew_time": "15.2",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.892",
+        "brew_time": "15.4",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:24.992",
+        "brew_time": "15.6",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.093",
+        "brew_time": "15.8",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.193",
+        "brew_time": "15.10",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.294",
+        "brew_time": "15.12",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.395",
+        "brew_time": "15.14",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.496",
+        "brew_time": "15.16",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.597",
+        "brew_time": "15.18",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.698",
+        "brew_time": "15.20",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.798",
+        "brew_time": "16.2",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.898",
+        "brew_time": "16.4",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:25.998",
+        "brew_time": "16.6",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.098",
+        "brew_time": "16.8",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.201",
+        "brew_time": "16.10",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.301",
+        "brew_time": "16.12",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.401",
+        "brew_time": "16.14",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.501",
+        "brew_time": "16.16",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.602",
+        "brew_time": "16.18",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.702",
+        "brew_time": "16.20",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.802",
+        "brew_time": "17.2",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:26.903",
+        "brew_time": "17.4",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.003",
+        "brew_time": "17.6",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.103",
+        "brew_time": "17.8",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.204",
+        "brew_time": "17.10",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.304",
+        "brew_time": "17.12",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.405",
+        "brew_time": "17.14",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.505",
+        "brew_time": "17.16",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.606",
+        "brew_time": "17.18",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.706",
+        "brew_time": "17.20",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.807",
+        "brew_time": "18.2",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:27.907",
+        "brew_time": "18.4",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.008",
+        "brew_time": "18.6",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.108",
+        "brew_time": "18.8",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.209",
+        "brew_time": "18.10",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.310",
+        "brew_time": "18.12",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.411",
+        "brew_time": "18.14",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.511",
+        "brew_time": "18.16",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.612",
+        "brew_time": "18.18",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.714",
+        "brew_time": "18.20",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.814",
+        "brew_time": "18.22",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:28.915",
+        "brew_time": "18.24",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.016",
+        "brew_time": "18.26",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.119",
+        "brew_time": "18.28",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.220",
+        "brew_time": "18.30",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.321",
+        "brew_time": "18.32",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.422",
+        "brew_time": "18.34",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.522",
+        "brew_time": "18.36",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.623",
+        "brew_time": "18.38",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.724",
+        "brew_time": "18.40",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.825",
+        "brew_time": "18.42",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:29.926",
+        "brew_time": "18.44",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.027",
+        "brew_time": "18.46",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.128",
+        "brew_time": "18.48",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.229",
+        "brew_time": "18.50",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.331",
+        "brew_time": "18.52",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.430",
+        "brew_time": "18.54",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.532",
+        "brew_time": "18.56",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.632",
+        "brew_time": "18.58",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.734",
+        "brew_time": "18.60",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.834",
+        "brew_time": "18.62",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:30.936",
+        "brew_time": "18.64",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.036",
+        "brew_time": "18.66",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.137",
+        "brew_time": "18.68",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.238",
+        "brew_time": "18.70",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.339",
+        "brew_time": "18.72",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.440",
+        "brew_time": "18.74",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.541",
+        "brew_time": "18.76",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.642",
+        "brew_time": "18.78",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.743",
+        "brew_time": "18.80",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.844",
+        "brew_time": "18.82",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:31.945",
+        "brew_time": "18.84",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.046",
+        "brew_time": "18.86",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.147",
+        "brew_time": "18.88",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.247",
+        "brew_time": "18.90",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.349",
+        "brew_time": "18.92",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.450",
+        "brew_time": "18.94",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.551",
+        "brew_time": "18.96",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.652",
+        "brew_time": "18.98",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.755",
+        "brew_time": "18.100",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.861",
+        "brew_time": "18.102",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:32.963",
+        "brew_time": "18.104",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.098",
+        "brew_time": "18.106",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.197",
+        "brew_time": "18.108",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.298",
+        "brew_time": "18.110",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.398",
+        "brew_time": "18.112",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.498",
+        "brew_time": "18.114",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.611",
+        "brew_time": "18.116",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.711",
+        "brew_time": "18.118",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      },
+      {
+        "timestamp": "21:10:33.811",
+        "brew_time": "18.120",
+        "actual_pressure": 0,
+        "old_pressure": 0
+      }
+    ],
+    "temperatureFlow": [
+      {
+        "timestamp": "21:10:09.602",
+        "brew_time": "0.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:09.716",
+        "brew_time": "0.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:09.802",
+        "brew_time": "0.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:09.903",
+        "brew_time": "0.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.016",
+        "brew_time": "0.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.104",
+        "brew_time": "0.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.204",
+        "brew_time": "0.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.320",
+        "brew_time": "0.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.406",
+        "brew_time": "0.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.506",
+        "brew_time": "0.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.620",
+        "brew_time": "1.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.707",
+        "brew_time": "1.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.807",
+        "brew_time": "1.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:10.922",
+        "brew_time": "1.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.009",
+        "brew_time": "1.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.109",
+        "brew_time": "1.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.223",
+        "brew_time": "1.13",
+        "actual_temperature": 23.9,
+        "old_temperature": 23.9
+      },
+      {
+        "timestamp": "21:10:11.310",
+        "brew_time": "1.15",
+        "actual_temperature": 23.9,
+        "old_temperature": 23.9
+      },
+      {
+        "timestamp": "21:10:11.410",
+        "brew_time": "1.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.524",
+        "brew_time": "1.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.611",
+        "brew_time": "2.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.711",
+        "brew_time": "2.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.826",
+        "brew_time": "2.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:11.912",
+        "brew_time": "2.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.012",
+        "brew_time": "2.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.128",
+        "brew_time": "2.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.214",
+        "brew_time": "2.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.314",
+        "brew_time": "2.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.430",
+        "brew_time": "2.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.515",
+        "brew_time": "2.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.616",
+        "brew_time": "3.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.733",
+        "brew_time": "3.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.817",
+        "brew_time": "3.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:12.918",
+        "brew_time": "3.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.034",
+        "brew_time": "3.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.119",
+        "brew_time": "3.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.220",
+        "brew_time": "3.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.342",
+        "brew_time": "3.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.429",
+        "brew_time": "3.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.530",
+        "brew_time": "3.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.645",
+        "brew_time": "4.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.731",
+        "brew_time": "4.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.832",
+        "brew_time": "4.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:13.947",
+        "brew_time": "4.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.033",
+        "brew_time": "4.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.133",
+        "brew_time": "4.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.250",
+        "brew_time": "4.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.334",
+        "brew_time": "4.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.434",
+        "brew_time": "4.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.550",
+        "brew_time": "4.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.636",
+        "brew_time": "5.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.737",
+        "brew_time": "5.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.853",
+        "brew_time": "5.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:14.937",
+        "brew_time": "5.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.038",
+        "brew_time": "5.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.151",
+        "brew_time": "5.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.238",
+        "brew_time": "5.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.339",
+        "brew_time": "5.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.454",
+        "brew_time": "5.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.539",
+        "brew_time": "5.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.640",
+        "brew_time": "6.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.756",
+        "brew_time": "6.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.841",
+        "brew_time": "6.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:15.941",
+        "brew_time": "6.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.059",
+        "brew_time": "6.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.142",
+        "brew_time": "6.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.243",
+        "brew_time": "6.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.361",
+        "brew_time": "6.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.444",
+        "brew_time": "6.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.544",
+        "brew_time": "6.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.661",
+        "brew_time": "7.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.745",
+        "brew_time": "7.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.846",
+        "brew_time": "7.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:16.963",
+        "brew_time": "7.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.047",
+        "brew_time": "7.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.149",
+        "brew_time": "7.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.264",
+        "brew_time": "7.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.350",
+        "brew_time": "7.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.450",
+        "brew_time": "7.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.565",
+        "brew_time": "7.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.650",
+        "brew_time": "8.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.751",
+        "brew_time": "8.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.866",
+        "brew_time": "8.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:17.951",
+        "brew_time": "8.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.052",
+        "brew_time": "8.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.168",
+        "brew_time": "8.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.253",
+        "brew_time": "8.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.353",
+        "brew_time": "8.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.470",
+        "brew_time": "8.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.555",
+        "brew_time": "8.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.656",
+        "brew_time": "9.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:18.772",
+        "brew_time": "9.3",
+        "actual_temperature": 23.9,
+        "old_temperature": 23.9
+      },
+      {
+        "timestamp": "21:10:18.858",
+        "brew_time": "9.5",
+        "actual_temperature": 23.9,
+        "old_temperature": 23.9
+      },
+      {
+        "timestamp": "21:10:18.958",
+        "brew_time": "9.7",
+        "actual_temperature": 23.9,
+        "old_temperature": 23.9
+      },
+      {
+        "timestamp": "21:10:19.072",
+        "brew_time": "9.9",
+        "actual_temperature": 23.9,
+        "old_temperature": 23.9
+      },
+      {
+        "timestamp": "21:10:19.159",
+        "brew_time": "9.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.259",
+        "brew_time": "9.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.376",
+        "brew_time": "9.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.459",
+        "brew_time": "9.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.562",
+        "brew_time": "9.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.678",
+        "brew_time": "10.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.762",
+        "brew_time": "10.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.862",
+        "brew_time": "10.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:19.977",
+        "brew_time": "10.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.063",
+        "brew_time": "10.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.163",
+        "brew_time": "10.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.283",
+        "brew_time": "10.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.370",
+        "brew_time": "10.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.470",
+        "brew_time": "10.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.585",
+        "brew_time": "10.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.674",
+        "brew_time": "11.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.772",
+        "brew_time": "11.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.887",
+        "brew_time": "11.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:20.973",
+        "brew_time": "11.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.073",
+        "brew_time": "11.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.191",
+        "brew_time": "11.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.276",
+        "brew_time": "11.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.376",
+        "brew_time": "11.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.492",
+        "brew_time": "11.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.576",
+        "brew_time": "11.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.676",
+        "brew_time": "12.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.790",
+        "brew_time": "12.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.877",
+        "brew_time": "12.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:21.977",
+        "brew_time": "12.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.091",
+        "brew_time": "12.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.177",
+        "brew_time": "12.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.278",
+        "brew_time": "12.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.393",
+        "brew_time": "12.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.479",
+        "brew_time": "12.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.580",
+        "brew_time": "12.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.697",
+        "brew_time": "13.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.781",
+        "brew_time": "13.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.882",
+        "brew_time": "13.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:22.998",
+        "brew_time": "13.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.083",
+        "brew_time": "13.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.184",
+        "brew_time": "13.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.300",
+        "brew_time": "13.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.385",
+        "brew_time": "13.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.486",
+        "brew_time": "13.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.601",
+        "brew_time": "13.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.688",
+        "brew_time": "14.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.789",
+        "brew_time": "14.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.904",
+        "brew_time": "14.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:23.989",
+        "brew_time": "14.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.089",
+        "brew_time": "14.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.203",
+        "brew_time": "14.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.290",
+        "brew_time": "14.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.390",
+        "brew_time": "14.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.506",
+        "brew_time": "14.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.591",
+        "brew_time": "14.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.691",
+        "brew_time": "15.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.807",
+        "brew_time": "15.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.892",
+        "brew_time": "15.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:24.992",
+        "brew_time": "15.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.110",
+        "brew_time": "15.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.193",
+        "brew_time": "15.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.294",
+        "brew_time": "15.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.412",
+        "brew_time": "15.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.496",
+        "brew_time": "15.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.597",
+        "brew_time": "15.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.715",
+        "brew_time": "16.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.798",
+        "brew_time": "16.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:25.898",
+        "brew_time": "16.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.014",
+        "brew_time": "16.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.098",
+        "brew_time": "16.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.201",
+        "brew_time": "16.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.317",
+        "brew_time": "16.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.401",
+        "brew_time": "16.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.502",
+        "brew_time": "16.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.617",
+        "brew_time": "16.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.702",
+        "brew_time": "17.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.802",
+        "brew_time": "17.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:26.918",
+        "brew_time": "17.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.003",
+        "brew_time": "17.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.103",
+        "brew_time": "17.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.218",
+        "brew_time": "17.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.304",
+        "brew_time": "17.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.405",
+        "brew_time": "17.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.521",
+        "brew_time": "17.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.606",
+        "brew_time": "17.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.707",
+        "brew_time": "18.1",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.823",
+        "brew_time": "18.3",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:27.907",
+        "brew_time": "18.5",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.008",
+        "brew_time": "18.7",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.122",
+        "brew_time": "18.9",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.209",
+        "brew_time": "18.11",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.310",
+        "brew_time": "18.13",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.444",
+        "brew_time": "18.15",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.511",
+        "brew_time": "18.17",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.612",
+        "brew_time": "18.19",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.748",
+        "brew_time": "18.21",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.814",
+        "brew_time": "18.23",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:28.915",
+        "brew_time": "18.25",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.045",
+        "brew_time": "18.27",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.119",
+        "brew_time": "18.29",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.220",
+        "brew_time": "18.31",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.355",
+        "brew_time": "18.33",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.422",
+        "brew_time": "18.35",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.523",
+        "brew_time": "18.37",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.656",
+        "brew_time": "18.39",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.725",
+        "brew_time": "18.41",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.826",
+        "brew_time": "18.43",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:29.960",
+        "brew_time": "18.45",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.027",
+        "brew_time": "18.47",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.128",
+        "brew_time": "18.49",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.263",
+        "brew_time": "18.51",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.331",
+        "brew_time": "18.53",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.431",
+        "brew_time": "18.55",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.567",
+        "brew_time": "18.57",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.633",
+        "brew_time": "18.59",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.734",
+        "brew_time": "18.61",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.871",
+        "brew_time": "18.63",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:30.937",
+        "brew_time": "18.65",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.037",
+        "brew_time": "18.67",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.173",
+        "brew_time": "18.69",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.238",
+        "brew_time": "18.71",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.339",
+        "brew_time": "18.73",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.473",
+        "brew_time": "18.75",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.541",
+        "brew_time": "18.77",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.642",
+        "brew_time": "18.79",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.776",
+        "brew_time": "18.81",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.844",
+        "brew_time": "18.83",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:31.945",
+        "brew_time": "18.85",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.077",
+        "brew_time": "18.87",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.147",
+        "brew_time": "18.89",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.248",
+        "brew_time": "18.91",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.379",
+        "brew_time": "18.93",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.450",
+        "brew_time": "18.95",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.551",
+        "brew_time": "18.97",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.685",
+        "brew_time": "18.99",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.755",
+        "brew_time": "18.101",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.861",
+        "brew_time": "18.103",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:32.994",
+        "brew_time": "18.105",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.098",
+        "brew_time": "18.107",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.197",
+        "brew_time": "18.109",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.332",
+        "brew_time": "18.111",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.399",
+        "brew_time": "18.113",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.499",
+        "brew_time": "18.115",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.631",
+        "brew_time": "18.117",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.711",
+        "brew_time": "18.119",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      },
+      {
+        "timestamp": "21:10:33.811",
+        "brew_time": "18.121",
+        "actual_temperature": 23.7,
+        "old_temperature": 23.7
+      }
+    ],
+    "waterDispensed": [
+      {
+        "timestamp": "21:10:09.602",
+        "brew_time": "0.0",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:09.716",
+        "brew_time": "0.1",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:09.802",
+        "brew_time": "0.2",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:09.903",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.016",
+        "brew_time": "0.4",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:10.104",
+        "brew_time": "0.5",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:10.204",
+        "brew_time": "0.6",
+        "actual": 2,
+        "old": 2
+      },
+      {
+        "timestamp": "21:10:10.320",
+        "brew_time": "0.7",
+        "actual": 2,
+        "old": 2
+      },
+      {
+        "timestamp": "21:10:10.406",
+        "brew_time": "0.8",
+        "actual": 2,
+        "old": 2
+      },
+      {
+        "timestamp": "21:10:10.506",
+        "brew_time": "0.9",
+        "actual": 2,
+        "old": 2
+      },
+      {
+        "timestamp": "21:10:10.620",
+        "brew_time": "0.0",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:10.707",
+        "brew_time": "0.1",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:10.807",
+        "brew_time": "0.2",
+        "actual": 4.2,
+        "old": 4.2
+      },
+      {
+        "timestamp": "21:10:10.922",
+        "brew_time": "0.3",
+        "actual": 4.2,
+        "old": 4.2
+      },
+      {
+        "timestamp": "21:10:11.009",
+        "brew_time": "0.4",
+        "actual": 4.2,
+        "old": 4.2
+      },
+      {
+        "timestamp": "21:10:11.109",
+        "brew_time": "0.5",
+        "actual": 4.2,
+        "old": 4.2
+      },
+      {
+        "timestamp": "21:10:11.223",
+        "brew_time": "0.6",
+        "actual": 5.2,
+        "old": 5.2
+      },
+      {
+        "timestamp": "21:10:11.310",
+        "brew_time": "0.7",
+        "actual": 5.2,
+        "old": 5.2
+      },
+      {
+        "timestamp": "21:10:11.410",
+        "brew_time": "0.8",
+        "actual": 6.5,
+        "old": 6.5
+      },
+      {
+        "timestamp": "21:10:11.525",
+        "brew_time": "0.9",
+        "actual": 6.5,
+        "old": 6.5
+      },
+      {
+        "timestamp": "21:10:11.611",
+        "brew_time": "0.0",
+        "actual": 6.5,
+        "old": 6.5
+      },
+      {
+        "timestamp": "21:10:11.711",
+        "brew_time": "0.1",
+        "actual": 6.5,
+        "old": 6.5
+      },
+      {
+        "timestamp": "21:10:11.826",
+        "brew_time": "0.2",
+        "actual": 7.5,
+        "old": 7.5
+      },
+      {
+        "timestamp": "21:10:11.912",
+        "brew_time": "0.3",
+        "actual": 7.5,
+        "old": 7.5
+      },
+      {
+        "timestamp": "21:10:12.012",
+        "brew_time": "0.4",
+        "actual": 8.5,
+        "old": 8.5
+      },
+      {
+        "timestamp": "21:10:12.128",
+        "brew_time": "0.5",
+        "actual": 8.5,
+        "old": 8.5
+      },
+      {
+        "timestamp": "21:10:12.214",
+        "brew_time": "0.6",
+        "actual": 8.5,
+        "old": 8.5
+      },
+      {
+        "timestamp": "21:10:12.314",
+        "brew_time": "0.7",
+        "actual": 8.5,
+        "old": 8.5
+      },
+      {
+        "timestamp": "21:10:12.430",
+        "brew_time": "0.8",
+        "actual": 9.7,
+        "old": 9.7
+      },
+      {
+        "timestamp": "21:10:12.515",
+        "brew_time": "0.9",
+        "actual": 9.7,
+        "old": 9.7
+      },
+      {
+        "timestamp": "21:10:12.616",
+        "brew_time": "0.0",
+        "actual": 10.7,
+        "old": 10.7
+      },
+      {
+        "timestamp": "21:10:12.733",
+        "brew_time": "0.1",
+        "actual": 10.7,
+        "old": 10.7
+      },
+      {
+        "timestamp": "21:10:12.817",
+        "brew_time": "0.2",
+        "actual": 10.7,
+        "old": 10.7
+      },
+      {
+        "timestamp": "21:10:12.918",
+        "brew_time": "0.3",
+        "actual": 10.7,
+        "old": 10.7
+      },
+      {
+        "timestamp": "21:10:13.034",
+        "brew_time": "0.4",
+        "actual": 10.7,
+        "old": 10.7
+      },
+      {
+        "timestamp": "21:10:13.120",
+        "brew_time": "0.5",
+        "actual": 12,
+        "old": 12
+      },
+      {
+        "timestamp": "21:10:13.220",
+        "brew_time": "0.6",
+        "actual": 12,
+        "old": 12
+      },
+      {
+        "timestamp": "21:10:13.342",
+        "brew_time": "0.7",
+        "actual": 12,
+        "old": 12
+      },
+      {
+        "timestamp": "21:10:13.429",
+        "brew_time": "0.8",
+        "actual": 13,
+        "old": 13
+      },
+      {
+        "timestamp": "21:10:13.530",
+        "brew_time": "0.9",
+        "actual": 13,
+        "old": 13
+      },
+      {
+        "timestamp": "21:10:13.645",
+        "brew_time": "0.0",
+        "actual": 14,
+        "old": 14
+      },
+      {
+        "timestamp": "21:10:13.731",
+        "brew_time": "0.1",
+        "actual": 14,
+        "old": 14
+      },
+      {
+        "timestamp": "21:10:13.832",
+        "brew_time": "0.2",
+        "actual": 14,
+        "old": 14
+      },
+      {
+        "timestamp": "21:10:13.947",
+        "brew_time": "0.3",
+        "actual": 14,
+        "old": 14
+      },
+      {
+        "timestamp": "21:10:14.033",
+        "brew_time": "0.4",
+        "actual": 15.2,
+        "old": 15.2
+      },
+      {
+        "timestamp": "21:10:14.133",
+        "brew_time": "0.5",
+        "actual": 15.2,
+        "old": 15.2
+      },
+      {
+        "timestamp": "21:10:14.250",
+        "brew_time": "0.6",
+        "actual": 16.2,
+        "old": 16.2
+      },
+      {
+        "timestamp": "21:10:14.334",
+        "brew_time": "0.7",
+        "actual": 16.2,
+        "old": 16.2
+      },
+      {
+        "timestamp": "21:10:14.434",
+        "brew_time": "0.8",
+        "actual": 16.2,
+        "old": 16.2
+      },
+      {
+        "timestamp": "21:10:14.550",
+        "brew_time": "0.9",
+        "actual": 16.2,
+        "old": 16.2
+      },
+      {
+        "timestamp": "21:10:14.636",
+        "brew_time": "0.0",
+        "actual": 17.5,
+        "old": 17.5
+      },
+      {
+        "timestamp": "21:10:14.737",
+        "brew_time": "0.1",
+        "actual": 17.5,
+        "old": 17.5
+      },
+      {
+        "timestamp": "21:10:14.853",
+        "brew_time": "0.2",
+        "actual": 18.5,
+        "old": 18.5
+      },
+      {
+        "timestamp": "21:10:14.938",
+        "brew_time": "0.3",
+        "actual": 18.5,
+        "old": 18.5
+      },
+      {
+        "timestamp": "21:10:15.038",
+        "brew_time": "0.4",
+        "actual": 18.5,
+        "old": 18.5
+      },
+      {
+        "timestamp": "21:10:15.151",
+        "brew_time": "0.5",
+        "actual": 18.5,
+        "old": 18.5
+      },
+      {
+        "timestamp": "21:10:15.238",
+        "brew_time": "0.6",
+        "actual": 19.7,
+        "old": 19.7
+      },
+      {
+        "timestamp": "21:10:15.339",
+        "brew_time": "0.7",
+        "actual": 19.7,
+        "old": 19.7
+      },
+      {
+        "timestamp": "21:10:15.454",
+        "brew_time": "0.8",
+        "actual": 20.7,
+        "old": 20.7
+      },
+      {
+        "timestamp": "21:10:15.539",
+        "brew_time": "0.9",
+        "actual": 20.7,
+        "old": 20.7
+      },
+      {
+        "timestamp": "21:10:15.640",
+        "brew_time": "0.0",
+        "actual": 20.7,
+        "old": 20.7
+      },
+      {
+        "timestamp": "21:10:15.756",
+        "brew_time": "0.1",
+        "actual": 22,
+        "old": 22
+      },
+      {
+        "timestamp": "21:10:15.841",
+        "brew_time": "0.2",
+        "actual": 22,
+        "old": 22
+      },
+      {
+        "timestamp": "21:10:15.941",
+        "brew_time": "0.3",
+        "actual": 22,
+        "old": 22
+      },
+      {
+        "timestamp": "21:10:16.059",
+        "brew_time": "0.4",
+        "actual": 22,
+        "old": 22
+      },
+      {
+        "timestamp": "21:10:16.142",
+        "brew_time": "0.5",
+        "actual": 23,
+        "old": 23
+      },
+      {
+        "timestamp": "21:10:16.244",
+        "brew_time": "0.6",
+        "actual": 23,
+        "old": 23
+      },
+      {
+        "timestamp": "21:10:16.361",
+        "brew_time": "0.7",
+        "actual": 24,
+        "old": 24
+      },
+      {
+        "timestamp": "21:10:16.444",
+        "brew_time": "0.8",
+        "actual": 24,
+        "old": 24
+      },
+      {
+        "timestamp": "21:10:16.544",
+        "brew_time": "0.9",
+        "actual": 24,
+        "old": 24
+      },
+      {
+        "timestamp": "21:10:16.661",
+        "brew_time": "0.0",
+        "actual": 24,
+        "old": 24
+      },
+      {
+        "timestamp": "21:10:16.745",
+        "brew_time": "0.1",
+        "actual": 25.2,
+        "old": 25.2
+      },
+      {
+        "timestamp": "21:10:16.846",
+        "brew_time": "0.2",
+        "actual": 25.2,
+        "old": 25.2
+      },
+      {
+        "timestamp": "21:10:16.964",
+        "brew_time": "0.3",
+        "actual": 26.2,
+        "old": 26.2
+      },
+      {
+        "timestamp": "21:10:17.047",
+        "brew_time": "0.4",
+        "actual": 26.2,
+        "old": 26.2
+      },
+      {
+        "timestamp": "21:10:17.150",
+        "brew_time": "0.5",
+        "actual": 26.2,
+        "old": 26.2
+      },
+      {
+        "timestamp": "21:10:17.264",
+        "brew_time": "0.6",
+        "actual": 26.2,
+        "old": 26.2
+      },
+      {
+        "timestamp": "21:10:17.350",
+        "brew_time": "0.7",
+        "actual": 27.5,
+        "old": 27.5
+      },
+      {
+        "timestamp": "21:10:17.450",
+        "brew_time": "0.8",
+        "actual": 27.5,
+        "old": 27.5
+      },
+      {
+        "timestamp": "21:10:17.565",
+        "brew_time": "0.9",
+        "actual": 28.5,
+        "old": 28.5
+      },
+      {
+        "timestamp": "21:10:17.650",
+        "brew_time": "0.0",
+        "actual": 28.5,
+        "old": 28.5
+      },
+      {
+        "timestamp": "21:10:17.751",
+        "brew_time": "0.1",
+        "actual": 28.5,
+        "old": 28.5
+      },
+      {
+        "timestamp": "21:10:17.866",
+        "brew_time": "0.2",
+        "actual": 28.5,
+        "old": 28.5
+      },
+      {
+        "timestamp": "21:10:17.951",
+        "brew_time": "0.3",
+        "actual": 29.7,
+        "old": 29.7
+      },
+      {
+        "timestamp": "21:10:18.052",
+        "brew_time": "0.4",
+        "actual": 29.7,
+        "old": 29.7
+      },
+      {
+        "timestamp": "21:10:18.168",
+        "brew_time": "0.5",
+        "actual": 30.7,
+        "old": 30.7
+      },
+      {
+        "timestamp": "21:10:18.253",
+        "brew_time": "0.6",
+        "actual": 30.7,
+        "old": 30.7
+      },
+      {
+        "timestamp": "21:10:18.354",
+        "brew_time": "0.7",
+        "actual": 30.7,
+        "old": 30.7
+      },
+      {
+        "timestamp": "21:10:18.470",
+        "brew_time": "0.8",
+        "actual": 30.7,
+        "old": 30.7
+      },
+      {
+        "timestamp": "21:10:18.555",
+        "brew_time": "0.9",
+        "actual": 32,
+        "old": 32
+      },
+      {
+        "timestamp": "21:10:18.656",
+        "brew_time": "0.0",
+        "actual": 32,
+        "old": 32
+      },
+      {
+        "timestamp": "21:10:18.772",
+        "brew_time": "0.1",
+        "actual": 33,
+        "old": 33
+      },
+      {
+        "timestamp": "21:10:18.858",
+        "brew_time": "0.2",
+        "actual": 33,
+        "old": 33
+      },
+      {
+        "timestamp": "21:10:18.958",
+        "brew_time": "0.4",
+        "actual": 33,
+        "old": 33
+      },
+      {
+        "timestamp": "21:10:19.072",
+        "brew_time": "0.5",
+        "actual": 33,
+        "old": 33
+      },
+      {
+        "timestamp": "21:10:19.159",
+        "brew_time": "0.6",
+        "actual": 34.2,
+        "old": 34.2
+      },
+      {
+        "timestamp": "21:10:19.259",
+        "brew_time": "0.7",
+        "actual": 34.2,
+        "old": 34.2
+      },
+      {
+        "timestamp": "21:10:19.376",
+        "brew_time": "0.8",
+        "actual": 34.2,
+        "old": 34.2
+      },
+      {
+        "timestamp": "21:10:19.459",
+        "brew_time": "0.8",
+        "actual": 34.2,
+        "old": 34.2
+      },
+      {
+        "timestamp": "21:10:19.562",
+        "brew_time": "1.0",
+        "actual": 35.2,
+        "old": 35.2
+      },
+      {
+        "timestamp": "21:10:19.678",
+        "brew_time": "0.1",
+        "actual": 35.2,
+        "old": 35.2
+      },
+      {
+        "timestamp": "21:10:19.762",
+        "brew_time": "0.2",
+        "actual": 36.5,
+        "old": 36.5
+      },
+      {
+        "timestamp": "21:10:19.863",
+        "brew_time": "0.3",
+        "actual": 36.5,
+        "old": 36.5
+      },
+      {
+        "timestamp": "21:10:19.978",
+        "brew_time": "0.4",
+        "actual": 36.5,
+        "old": 36.5
+      },
+      {
+        "timestamp": "21:10:20.063",
+        "brew_time": "0.5",
+        "actual": 36.5,
+        "old": 36.5
+      },
+      {
+        "timestamp": "21:10:20.163",
+        "brew_time": "0.6",
+        "actual": 37.5,
+        "old": 37.5
+      },
+      {
+        "timestamp": "21:10:20.284",
+        "brew_time": "0.7",
+        "actual": 37.5,
+        "old": 37.5
+      },
+      {
+        "timestamp": "21:10:20.370",
+        "brew_time": "0.8",
+        "actual": 38.7,
+        "old": 38.7
+      },
+      {
+        "timestamp": "21:10:20.470",
+        "brew_time": "0.9",
+        "actual": 38.7,
+        "old": 38.7
+      },
+      {
+        "timestamp": "21:10:20.585",
+        "brew_time": "1.0",
+        "actual": 38.7,
+        "old": 38.7
+      },
+      {
+        "timestamp": "21:10:20.674",
+        "brew_time": "0.1",
+        "actual": 38.7,
+        "old": 38.7
+      },
+      {
+        "timestamp": "21:10:20.772",
+        "brew_time": "0.2",
+        "actual": 38.7,
+        "old": 38.7
+      },
+      {
+        "timestamp": "21:10:20.887",
+        "brew_time": "0.3",
+        "actual": 39.7,
+        "old": 39.7
+      },
+      {
+        "timestamp": "21:10:20.973",
+        "brew_time": "0.4",
+        "actual": 41,
+        "old": 41
+      },
+      {
+        "timestamp": "21:10:21.073",
+        "brew_time": "0.5",
+        "actual": 41,
+        "old": 41
+      },
+      {
+        "timestamp": "21:10:21.191",
+        "brew_time": "0.6",
+        "actual": 41,
+        "old": 41
+      },
+      {
+        "timestamp": "21:10:21.276",
+        "brew_time": "0.7",
+        "actual": 41,
+        "old": 41
+      },
+      {
+        "timestamp": "21:10:21.376",
+        "brew_time": "0.8",
+        "actual": 41,
+        "old": 41
+      },
+      {
+        "timestamp": "21:10:21.492",
+        "brew_time": "0.9",
+        "actual": 42,
+        "old": 42
+      },
+      {
+        "timestamp": "21:10:21.576",
+        "brew_time": "1.0",
+        "actual": 43.2,
+        "old": 43.2
+      },
+      {
+        "timestamp": "21:10:21.676",
+        "brew_time": "0.1",
+        "actual": 43.2,
+        "old": 43.2
+      },
+      {
+        "timestamp": "21:10:21.790",
+        "brew_time": "0.2",
+        "actual": 43.2,
+        "old": 43.2
+      },
+      {
+        "timestamp": "21:10:21.877",
+        "brew_time": "0.3",
+        "actual": 43.2,
+        "old": 43.2
+      },
+      {
+        "timestamp": "21:10:21.977",
+        "brew_time": "0.4",
+        "actual": 44.2,
+        "old": 44.2
+      },
+      {
+        "timestamp": "21:10:22.092",
+        "brew_time": "0.5",
+        "actual": 44.2,
+        "old": 44.2
+      },
+      {
+        "timestamp": "21:10:22.177",
+        "brew_time": "0.6",
+        "actual": 44.2,
+        "old": 44.2
+      },
+      {
+        "timestamp": "21:10:22.278",
+        "brew_time": "0.7",
+        "actual": 44.2,
+        "old": 44.2
+      },
+      {
+        "timestamp": "21:10:22.394",
+        "brew_time": "0.8",
+        "actual": 44.2,
+        "old": 44.2
+      },
+      {
+        "timestamp": "21:10:22.479",
+        "brew_time": "0.9",
+        "actual": 45.5,
+        "old": 45.5
+      },
+      {
+        "timestamp": "21:10:22.580",
+        "brew_time": "1.0",
+        "actual": 45.5,
+        "old": 45.5
+      },
+      {
+        "timestamp": "21:10:22.697",
+        "brew_time": "0.1",
+        "actual": 46.7,
+        "old": 46.7
+      },
+      {
+        "timestamp": "21:10:22.781",
+        "brew_time": "0.2",
+        "actual": 46.7,
+        "old": 46.7
+      },
+      {
+        "timestamp": "21:10:22.882",
+        "brew_time": "0.3",
+        "actual": 46.7,
+        "old": 46.7
+      },
+      {
+        "timestamp": "21:10:22.998",
+        "brew_time": "0.4",
+        "actual": 46.7,
+        "old": 46.7
+      },
+      {
+        "timestamp": "21:10:23.083",
+        "brew_time": "0.5",
+        "actual": 47.7,
+        "old": 47.7
+      },
+      {
+        "timestamp": "21:10:23.184",
+        "brew_time": "0.6",
+        "actual": 47.7,
+        "old": 47.7
+      },
+      {
+        "timestamp": "21:10:23.300",
+        "brew_time": "0.7",
+        "actual": 49,
+        "old": 49
+      },
+      {
+        "timestamp": "21:10:23.386",
+        "brew_time": "0.8",
+        "actual": 49,
+        "old": 49
+      },
+      {
+        "timestamp": "21:10:23.486",
+        "brew_time": "0.9",
+        "actual": 49,
+        "old": 49
+      },
+      {
+        "timestamp": "21:10:23.601",
+        "brew_time": "1.0",
+        "actual": 49,
+        "old": 49
+      },
+      {
+        "timestamp": "21:10:23.688",
+        "brew_time": "0.1",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:23.789",
+        "brew_time": "0.2",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:23.904",
+        "brew_time": "0.3",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:23.989",
+        "brew_time": "0.4",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.089",
+        "brew_time": "0.5",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.203",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.290",
+        "brew_time": "0.7",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.390",
+        "brew_time": "0.8",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.506",
+        "brew_time": "0.9",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.591",
+        "brew_time": "1.0",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.692",
+        "brew_time": "0.1",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.807",
+        "brew_time": "0.2",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.892",
+        "brew_time": "0.3",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:24.992",
+        "brew_time": "0.4",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.110",
+        "brew_time": "0.5",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.193",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.294",
+        "brew_time": "0.7",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.412",
+        "brew_time": "0.8",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.496",
+        "brew_time": "0.9",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.597",
+        "brew_time": "1.0",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.715",
+        "brew_time": "0.1",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.798",
+        "brew_time": "0.2",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:25.898",
+        "brew_time": "0.3",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.015",
+        "brew_time": "0.4",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.098",
+        "brew_time": "0.5",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.201",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.317",
+        "brew_time": "0.7",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.401",
+        "brew_time": "0.8",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.502",
+        "brew_time": "0.9",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.617",
+        "brew_time": "1.0",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.702",
+        "brew_time": "0.1",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.802",
+        "brew_time": "0.2",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:26.918",
+        "brew_time": "0.3",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.003",
+        "brew_time": "0.4",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.103",
+        "brew_time": "0.5",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.218",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.304",
+        "brew_time": "0.7",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.405",
+        "brew_time": "0.8",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.522",
+        "brew_time": "0.9",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.606",
+        "brew_time": "1.0",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.707",
+        "brew_time": "0.1",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.823",
+        "brew_time": "0.2",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:27.907",
+        "brew_time": "0.3",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.008",
+        "brew_time": "0.4",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.122",
+        "brew_time": "0.5",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.209",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.310",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.444",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.511",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.613",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.748",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.814",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:28.915",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.045",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.119",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.221",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.355",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.422",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.523",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.656",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.725",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.826",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:29.960",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.027",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.128",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.263",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.331",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.431",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.567",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.633",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.734",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.871",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:30.937",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.037",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.173",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.238",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.339",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.473",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.541",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.642",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.776",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.844",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:31.945",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.077",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.147",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.248",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.379",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.450",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.551",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.685",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.755",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.861",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:32.995",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.098",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.197",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.332",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.399",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.499",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.631",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.711",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      },
+      {
+        "timestamp": "21:10:33.811",
+        "brew_time": "0.6",
+        "actual": 50,
+        "old": 50
+      }
+    ],
+    "waterDispensedFlowSecond": [
+      {
+        "timestamp": "21:10:09.602",
+        "brew_time": "0.0",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:09.716",
+        "brew_time": "0.1",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:09.802",
+        "brew_time": "0.2",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:09.903",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.016",
+        "brew_time": "0.4",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.104",
+        "brew_time": "0.5",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.204",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.320",
+        "brew_time": "0.7",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.406",
+        "brew_time": "0.8",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.506",
+        "brew_time": "0.9",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:10.620",
+        "brew_time": "0.0",
+        "actual": 0.5,
+        "old": 0.5
+      },
+      {
+        "timestamp": "21:10:10.707",
+        "brew_time": "0.1",
+        "actual": 0.5,
+        "old": 0.5
+      },
+      {
+        "timestamp": "21:10:10.807",
+        "brew_time": "0.2",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:10.922",
+        "brew_time": "0.3",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:11.009",
+        "brew_time": "0.4",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:11.109",
+        "brew_time": "0.5",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:11.223",
+        "brew_time": "0.6",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:11.310",
+        "brew_time": "0.7",
+        "actual": 1,
+        "old": 1
+      },
+      {
+        "timestamp": "21:10:11.410",
+        "brew_time": "0.8",
+        "actual": 1.2,
+        "old": 1.2
+      },
+      {
+        "timestamp": "21:10:11.525",
+        "brew_time": "0.9",
+        "actual": 1.2,
+        "old": 1.2
+      },
+      {
+        "timestamp": "21:10:11.611",
+        "brew_time": "0.0",
+        "actual": 1.2,
+        "old": 1.2
+      },
+      {
+        "timestamp": "21:10:11.711",
+        "brew_time": "0.1",
+        "actual": 1.2,
+        "old": 1.2
+      },
+      {
+        "timestamp": "21:10:11.826",
+        "brew_time": "0.2",
+        "actual": 1.2,
+        "old": 1.2
+      },
+      {
+        "timestamp": "21:10:11.912",
+        "brew_time": "0.3",
+        "actual": 1.2,
+        "old": 1.2
+      },
+      {
+        "timestamp": "21:10:12.012",
+        "brew_time": "0.4",
+        "actual": 1.7,
+        "old": 1.7
+      },
+      {
+        "timestamp": "21:10:12.128",
+        "brew_time": "0.5",
+        "actual": 1.7,
+        "old": 1.7
+      },
+      {
+        "timestamp": "21:10:12.214",
+        "brew_time": "0.6",
+        "actual": 1.7,
+        "old": 1.7
+      },
+      {
+        "timestamp": "21:10:12.314",
+        "brew_time": "0.7",
+        "actual": 1.7,
+        "old": 1.7
+      },
+      {
+        "timestamp": "21:10:12.430",
+        "brew_time": "0.8",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:12.515",
+        "brew_time": "0.9",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:12.616",
+        "brew_time": "0.0",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:12.733",
+        "brew_time": "0.1",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:12.817",
+        "brew_time": "0.2",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:12.918",
+        "brew_time": "0.3",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:13.034",
+        "brew_time": "0.4",
+        "actual": 2.2,
+        "old": 2.2
+      },
+      {
+        "timestamp": "21:10:13.120",
+        "brew_time": "0.5",
+        "actual": 2.7,
+        "old": 2.7
+      },
+      {
+        "timestamp": "21:10:13.220",
+        "brew_time": "0.6",
+        "actual": 2.7,
+        "old": 2.7
+      },
+      {
+        "timestamp": "21:10:13.342",
+        "brew_time": "0.7",
+        "actual": 2.7,
+        "old": 2.7
+      },
+      {
+        "timestamp": "21:10:13.429",
+        "brew_time": "0.8",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:13.530",
+        "brew_time": "0.9",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:13.645",
+        "brew_time": "0.0",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:13.731",
+        "brew_time": "0.1",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:13.832",
+        "brew_time": "0.2",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:13.947",
+        "brew_time": "0.3",
+        "actual": 3.2,
+        "old": 3.2
+      },
+      {
+        "timestamp": "21:10:14.033",
+        "brew_time": "0.4",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.133",
+        "brew_time": "0.5",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.250",
+        "brew_time": "0.6",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.334",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.434",
+        "brew_time": "0.8",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.550",
+        "brew_time": "0.9",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.636",
+        "brew_time": "0.0",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.737",
+        "brew_time": "0.1",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.853",
+        "brew_time": "0.2",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:14.938",
+        "brew_time": "0.3",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:15.038",
+        "brew_time": "0.4",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:15.151",
+        "brew_time": "0.5",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:15.238",
+        "brew_time": "0.6",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:15.339",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:15.454",
+        "brew_time": "0.8",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:15.539",
+        "brew_time": "0.9",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:15.640",
+        "brew_time": "0.0",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:15.756",
+        "brew_time": "0.1",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:15.841",
+        "brew_time": "0.2",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:15.941",
+        "brew_time": "0.3",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:16.059",
+        "brew_time": "0.4",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:16.142",
+        "brew_time": "0.5",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:16.244",
+        "brew_time": "0.6",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:16.361",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:16.444",
+        "brew_time": "0.8",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:16.544",
+        "brew_time": "0.9",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:16.662",
+        "brew_time": "0.0",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:16.745",
+        "brew_time": "0.1",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:16.846",
+        "brew_time": "0.2",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:16.964",
+        "brew_time": "0.3",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.047",
+        "brew_time": "0.4",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.150",
+        "brew_time": "0.5",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.264",
+        "brew_time": "0.6",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.350",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.450",
+        "brew_time": "0.8",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.565",
+        "brew_time": "0.9",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.650",
+        "brew_time": "0.0",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.751",
+        "brew_time": "0.1",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.866",
+        "brew_time": "0.2",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:17.951",
+        "brew_time": "0.3",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:18.052",
+        "brew_time": "0.4",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:18.168",
+        "brew_time": "0.5",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:18.253",
+        "brew_time": "0.6",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:18.354",
+        "brew_time": "0.7",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:18.470",
+        "brew_time": "0.8",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:18.555",
+        "brew_time": "0.9",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:18.656",
+        "brew_time": "0.0",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:18.772",
+        "brew_time": "0.1",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:18.858",
+        "brew_time": "0.2",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:18.958",
+        "brew_time": "0.4",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.072",
+        "brew_time": "0.5",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.159",
+        "brew_time": "0.6",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.259",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.376",
+        "brew_time": "0.8",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.459",
+        "brew_time": "0.8",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.562",
+        "brew_time": "1.0",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.678",
+        "brew_time": "0.1",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.762",
+        "brew_time": "0.2",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.863",
+        "brew_time": "0.3",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:19.978",
+        "brew_time": "0.4",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:20.063",
+        "brew_time": "0.5",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:20.163",
+        "brew_time": "0.6",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:20.284",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:20.370",
+        "brew_time": "0.8",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:20.470",
+        "brew_time": "0.9",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:20.585",
+        "brew_time": "1.0",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:20.674",
+        "brew_time": "0.1",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:20.772",
+        "brew_time": "0.2",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:20.887",
+        "brew_time": "0.3",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:20.973",
+        "brew_time": "0.4",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:21.073",
+        "brew_time": "0.5",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:21.191",
+        "brew_time": "0.6",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:21.276",
+        "brew_time": "0.7",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:21.376",
+        "brew_time": "0.8",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:21.492",
+        "brew_time": "0.9",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:21.576",
+        "brew_time": "1.0",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:21.676",
+        "brew_time": "0.1",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:21.790",
+        "brew_time": "0.2",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:21.877",
+        "brew_time": "0.3",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:21.977",
+        "brew_time": "0.4",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:22.092",
+        "brew_time": "0.5",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:22.177",
+        "brew_time": "0.6",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:22.278",
+        "brew_time": "0.7",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:22.394",
+        "brew_time": "0.8",
+        "actual": 3.5,
+        "old": 3.5
+      },
+      {
+        "timestamp": "21:10:22.479",
+        "brew_time": "0.9",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:22.580",
+        "brew_time": "1.0",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:22.697",
+        "brew_time": "0.1",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:22.781",
+        "brew_time": "0.2",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:22.882",
+        "brew_time": "0.3",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:22.998",
+        "brew_time": "0.4",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.083",
+        "brew_time": "0.5",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.184",
+        "brew_time": "0.6",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.300",
+        "brew_time": "0.7",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.386",
+        "brew_time": "0.8",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.486",
+        "brew_time": "0.9",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.601",
+        "brew_time": "1.0",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.688",
+        "brew_time": "0.1",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.789",
+        "brew_time": "0.2",
+        "actual": 3.7,
+        "old": 3.7
+      },
+      {
+        "timestamp": "21:10:23.904",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:23.989",
+        "brew_time": "0.4",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.089",
+        "brew_time": "0.5",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.203",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.290",
+        "brew_time": "0.7",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.390",
+        "brew_time": "0.8",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.506",
+        "brew_time": "0.9",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.591",
+        "brew_time": "1.0",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.692",
+        "brew_time": "0.1",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.807",
+        "brew_time": "0.2",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.892",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:24.992",
+        "brew_time": "0.4",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.110",
+        "brew_time": "0.5",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.193",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.294",
+        "brew_time": "0.7",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.412",
+        "brew_time": "0.8",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.496",
+        "brew_time": "0.9",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.597",
+        "brew_time": "1.0",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.715",
+        "brew_time": "0.1",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.798",
+        "brew_time": "0.2",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:25.898",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.015",
+        "brew_time": "0.4",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.098",
+        "brew_time": "0.5",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.201",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.317",
+        "brew_time": "0.7",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.401",
+        "brew_time": "0.8",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.502",
+        "brew_time": "0.9",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.617",
+        "brew_time": "1.0",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.702",
+        "brew_time": "0.1",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.802",
+        "brew_time": "0.2",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:26.918",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.003",
+        "brew_time": "0.4",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.103",
+        "brew_time": "0.5",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.218",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.304",
+        "brew_time": "0.7",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.405",
+        "brew_time": "0.8",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.522",
+        "brew_time": "0.9",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.606",
+        "brew_time": "1.0",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.707",
+        "brew_time": "0.1",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.823",
+        "brew_time": "0.2",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:27.907",
+        "brew_time": "0.3",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.008",
+        "brew_time": "0.4",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.122",
+        "brew_time": "0.5",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.209",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.310",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.444",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.511",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.615",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.748",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.814",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:28.915",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.045",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.119",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.221",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.355",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.422",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.523",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.656",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.725",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.826",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:29.960",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.027",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.129",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.263",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.331",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.431",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.567",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.633",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.734",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.871",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:30.937",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.037",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.173",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.238",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.339",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.473",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.541",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.643",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.776",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.844",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:31.945",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.077",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.147",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.248",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.379",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.450",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.551",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.685",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.755",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.861",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:32.995",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.098",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.197",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.332",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.399",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.499",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.631",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.711",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      },
+      {
+        "timestamp": "21:10:33.811",
+        "brew_time": "0.6",
+        "actual": 0,
+        "old": 0
+      }
+    ],
+    "brewbyweight": [],
+    "customMetrics": {},
+    "customAxes": []
+  },
+  "visualizerId": ""
+}

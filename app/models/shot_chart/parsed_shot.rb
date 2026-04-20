@@ -5,8 +5,8 @@ class ShotChart
     prepend MemoWise
     include Bsearch
 
-    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure", "temperatureFlow" => "espresso_temperature_mix"}.freeze
-    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure", "temperatureFlow" => "actual_temperature"}.freeze
+    DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "waterDispensedFlowSecond" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure", "temperatureFlow" => "espresso_temperature_mix", "waterDispensed" => "espresso_water_dispensed"}.freeze
+    DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "waterDispensedFlowSecond" => "actual", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure", "temperatureFlow" => "actual_temperature", "waterDispensed" => "actual"}.freeze
 
     attr_reader :shot, :timeframe, :data
 
@@ -43,6 +43,7 @@ class ShotChart
 
       @timeframe = []
       relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 } & DATA_LABELS_MAP.keys
+      relevant_keys -= ["waterDispensedFlowSecond"] if relevant_keys.include?("waterFlow")
       @data = DATA_LABELS_MAP.values_at(*relevant_keys).index_with { [] }
       brew_flow.each_value do |data|
         data.each do |d|
@@ -56,6 +57,7 @@ class ShotChart
         relevant_keys.each do |key|
           closest = closest_bsearch(brew_flow[key], d["unix_timestamp"], key: "unix_timestamp")
           value = closest[DATA_VALUES_MAP[key]]
+          value /= 10.0 if key == "waterDispensed" && value
           @data[DATA_LABELS_MAP[key]] << (value&.positive? ? value : 0)
         end
       end
