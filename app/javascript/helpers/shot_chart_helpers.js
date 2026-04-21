@@ -66,6 +66,7 @@ export const commonOptions = () => {
     animation: false,
     title: false,
     chart: {
+      alignThresholds: true,
       zoomType: "x",
       backgroundColor: colors.background,
       events: { selection: syncZoomReset }
@@ -131,6 +132,7 @@ export const commonOptions = () => {
     plotOptions: {
       series: {
         animation: false,
+        threshold: 0,
         marker: {
           enabled: false,
           states: { hover: { enabled: false } }
