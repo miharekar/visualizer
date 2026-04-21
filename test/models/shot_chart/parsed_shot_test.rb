@@ -84,6 +84,18 @@ class ParsedShotTest < ActiveSupport::TestCase
     assert_in_delta(1.4, parsed_shot.data["espresso_water_dispensed"][42])
   end
 
+  test "it prefers beanconqueror water dispensed flow over legacy water flow" do
+    payload = JSON.parse(File.read("test/files/beanconqueror_water_dispensed.json"))
+    payload["brewFlow"]["waterFlow"] = payload["brewFlow"]["waterDispensedFlowSecond"].map do |point|
+      {"timestamp" => point["timestamp"], "brew_time" => point["brew_time"], "value" => 0}
+    end
+
+    shot = Shot.from_file(build_stubbed(:user), JSON.generate(payload))
+    parsed_shot = ShotChart::ParsedShot.new(shot)
+
+    assert_in_delta(3.2, parsed_shot.data["espresso_flow"][42])
+  end
+
   test "fahrenheit? should return true only if extra enable_fahrenheit is 1" do
     shot = build_stubbed(:shot, :with_information, information: build_stubbed(:shot_information, extra: {enable_fahrenheit: 1}))
     parsed_shot = ShotChart::ParsedShot.new(shot)

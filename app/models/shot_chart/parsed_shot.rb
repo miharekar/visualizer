@@ -43,7 +43,7 @@ class ShotChart
 
       @timeframe = []
       relevant_keys = brew_flow.keys.select { |k| brew_flow[k].size > 1 } & DATA_LABELS_MAP.keys
-      relevant_keys -= ["waterDispensedFlowSecond"] if relevant_keys.include?("waterFlow")
+      relevant_keys -= ["waterFlow"] if relevant_keys.include?("waterDispensedFlowSecond")
       @data = DATA_LABELS_MAP.values_at(*relevant_keys).index_with { [] }
       brew_flow.each_value do |data|
         data.each do |d|
