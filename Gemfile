@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { "https://github.com/#{it}.git" }
 
-ruby "4.0.2"
+ruby "4.0.3"
 
 gem "action_policy"
 gem "active_job-performs"
