@@ -110,7 +110,7 @@ export default class extends Controller {
 
     return this.nearestPoint(
       chart.series.filter(s => s.visible && s.searchPoint).map(s => s.searchPoint(normalizedEvent, true)),
-      point => Math.abs((point.plotX + chart.plotLeft) - normalizedEvent.chartX)
+      point => Math.abs(point.plotX + chart.plotLeft - normalizedEvent.chartX)
     )
   }
 
@@ -118,10 +118,12 @@ export default class extends Controller {
     const anchorPoint = this.nearestPoint(this.visiblePoints(chart), point => Math.abs(point.x - x))
     if (!isObject(anchorPoint)) return []
 
-    return chart.series.filter(s => s.visible).flatMap(s => {
-      const point = s.points.find(p => p.x === anchorPoint.x && !p.isNull)
-      return isObject(point) ? [point] : []
-    })
+    return chart.series
+      .filter(s => s.visible)
+      .flatMap(s => {
+        const point = s.points.find(p => p.x === anchorPoint.x && !p.isNull)
+        return isObject(point) ? [point] : []
+      })
   }
 
   visiblePoints(chart) {
@@ -225,9 +227,11 @@ export default class extends Controller {
     const hasSecondaryAxis = this.shotDataValue.some(series => series.yAxis === 1)
     const custom = {
       chart: {
+        alignThresholds: hasSecondaryAxis,
         height: 650,
         events: { redraw: e => this.updateInCupVisibility(e.target) }
       },
+      plotOptions: { series: { threshold: 0 } },
       series: this.shotDataValue
     }
 
