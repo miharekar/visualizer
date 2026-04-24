@@ -64,6 +64,8 @@ accessories:
     directories:
       - data:/var/lib/postgresql
     options:
+      security-opt:
+        - seccomp=/root/seccomp-postgres-io-uring.json
       shm-size: 3g
 
   pg_backup:
