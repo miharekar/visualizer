@@ -197,9 +197,9 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    herb (0.9.7-aarch64-linux-gnu)
-    herb (0.9.7-arm64-darwin)
-    herb (0.9.7-x86_64-linux-gnu)
+    herb (0.10.1-aarch64-linux-gnu)
+    herb (0.10.1-arm64-darwin)
+    herb (0.10.1-x86_64-linux-gnu)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -609,7 +609,7 @@ DEPENDENCIES
   debug
   doorkeeper
   factory_bot_rails
-  herb (~> 0.9.7)
+  herb
   hotwire-spark
   htmlbeautifier
   image_processing
