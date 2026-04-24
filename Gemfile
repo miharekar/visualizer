@@ -57,7 +57,7 @@ group :development do
   gem "benchmark-ips"
   gem "brakeman", require: false
   gem "bundler-audit"
-  gem "herb"
+  gem "herb", "~> 0.9.7"
   gem "hotwire-spark"
   gem "htmlbeautifier"
   gem "kamal"
