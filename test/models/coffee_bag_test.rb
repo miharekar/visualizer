@@ -106,12 +106,12 @@ class CoffeeBagTest < ActiveSupport::TestCase
     assert_includes coffee_bag.errors[:defrosted_date], "requires a frozen date"
   end
 
-  test "active_first orders active, then frozen, then archived" do
+  test "by_brewability orders active, then frozen, then archived" do
     active = create(:coffee_bag, roaster:, name: "Active", roast_date: Date.new(2024, 1, 1), frozen_date: nil, defrosted_date: nil, archived_at: nil)
     frozen = create(:coffee_bag, roaster:, name: "Frozen", roast_date: Date.new(2024, 2, 1), frozen_date: Date.new(2024, 2, 5), defrosted_date: nil, archived_at: nil)
     archived = create(:coffee_bag, roaster:, name: "Archived", roast_date: Date.new(2024, 3, 1), frozen_date: nil, defrosted_date: nil, archived_at: Time.current)
 
-    assert_equal [active.id, frozen.id, archived.id], CoffeeBag.where(id: [active.id, frozen.id, archived.id]).active_first.pluck(:id)
+    assert_equal [active.id, frozen.id, archived.id], CoffeeBag.where(id: [active.id, frozen.id, archived.id]).by_brewability.pluck(:id)
   end
 
   test "metadata defaults to empty hash" do

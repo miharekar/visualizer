@@ -24,11 +24,16 @@ class CoffeeBag < ApplicationRecord
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
-  scope :active_first, -> {
-    order(Arel.sql("CASE WHEN archived_at IS NULL AND (frozen_date IS NULL OR defrosted_date IS NOT NULL) THEN 0 WHEN archived_at IS NULL AND frozen_date IS NOT NULL AND defrosted_date IS NULL THEN 1 ELSE 2 END"))
-  }
   scope :by_roast_date, -> { order("roast_date DESC NULLS LAST") }
-  scope :for_user, ->(user) { joins(:roaster).where(roasters: {user:}) }
+  scope :by_brewability, -> {
+    order(Arel.sql(<<~SQL.squish))
+      CASE
+      WHEN archived_at IS NOT NULL THEN 2
+      WHEN frozen_date IS NOT NULL AND defrosted_date IS NULL THEN 1
+      ELSE 0
+      END
+    SQL
+  }
 
   squishes(*%i[country elevation farm farmer harvest_time name processing quality_score region roast_level url variety tasting_notes place_of_purchase])
 
