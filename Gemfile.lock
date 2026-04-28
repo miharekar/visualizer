@@ -115,7 +115,7 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.123.0)
+    aws-sdk-kms (1.124.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.220.0)
@@ -132,7 +132,7 @@ GEM
     bigdecimal (4.1.2)
     bindata (2.5.1)
     bindex (0.8.1)
-    bootsnap (1.23.0)
+    bootsnap (1.24.0)
       msgpack (~> 1.2)
     brakeman (8.0.4)
       racc
@@ -302,11 +302,11 @@ GEM
       net-protocol
     net-ssh (7.3.2)
     nio4r (2.7.5)
-    nokogiri (1.19.2-aarch64-linux-gnu)
+    nokogiri (1.19.3-aarch64-linux-gnu)
       racc (~> 1.4)
-    nokogiri (1.19.2-arm64-darwin)
+    nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.2-x86_64-linux-gnu)
+    nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
     oauth2 (2.0.18)
       faraday (>= 0.17.3, < 4.0)
@@ -367,7 +367,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (8.0.0)
+    puma (8.0.1)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -524,9 +524,9 @@ GEM
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.2.2-aarch64-linux-gnu)
-    tailwindcss-ruby (4.2.2-arm64-darwin)
-    tailwindcss-ruby (4.2.2-x86_64-linux-gnu)
+    tailwindcss-ruby (4.2.4-aarch64-linux-gnu)
+    tailwindcss-ruby (4.2.4-arm64-darwin)
+    tailwindcss-ruby (4.2.4-x86_64-linux-gnu)
     thor (1.5.0)
     thruster (0.1.20-aarch64-linux)
     thruster (0.1.20-arm64-darwin)
