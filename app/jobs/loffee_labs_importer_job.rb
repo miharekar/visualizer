@@ -4,9 +4,8 @@ class LoffeeLabsImporterJob < ApplicationJob
   queue_as :low
 
   BASE_URL = "https://beta.loffeelabs.com/api/v2".freeze
-  ROASTERS_URL = "#{BASE_URL}/terms?list=roasters".freeze
+  ROASTERS_URL = "#{BASE_URL}/roasters".freeze
   BEANS_BULK_URL = "#{BASE_URL}/beans/bulk".freeze
-
   COFFEE_BAG_JSON_MAPPING = {
     name: "roast-name",
     url: "link",
@@ -49,7 +48,7 @@ class LoffeeLabsImporterJob < ApplicationJob
   def import_bean(bean)
     return if bean["link"]&.squish&.downcase&.match?(EXCLUDED_URLS_REGEX)
 
-    parsed_date = Date.parse(bean["date"])
+    parsed_date = Date.iso8601(bean["date"])
     return if parsed_date < @cut_off
 
     roaster_name = bean["roaster"]&.squish
