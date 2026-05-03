@@ -2,10 +2,10 @@ class DuplicateCreemSubscriptionsJob < ApplicationJob
   queue_as :low
 
   def perform
-    Creem.new.all_subscriptions.group_by { |subscription| subscription.dig("customer", "id") }.each do |customer_id, subscriptions|
-      active_subscriptions = subscriptions.select do |subscription|
-        start_at = subscription["current_period_start_date"].present? ? Time.zone.parse(subscription["current_period_start_date"]) : nil
-        end_at = subscription["current_period_end_date"].present? ? Time.zone.parse(subscription["current_period_end_date"]) : nil
+    Creem.new.all_subscriptions.group_by { it.dig("customer", "id") }.each do |customer_id, subscriptions|
+      active_subscriptions = subscriptions.reject { it.dig("status") == "canceled" }.select do
+        start_at = it["current_period_start_date"].present? ? Time.zone.parse(it["current_period_start_date"]) : nil
+        end_at = it["current_period_end_date"].present? ? Time.zone.parse(it["current_period_end_date"]) : nil
 
         start_at.present? && end_at.present? && Time.current.between?(start_at, end_at)
       end
