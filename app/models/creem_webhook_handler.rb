@@ -15,6 +15,11 @@ class CreemWebhookHandler
 
   private
 
+  def checkout_completed
+    @payload = {"object" => Creem.new.get_subscription(payload.dig("object", "subscription", "id"))}
+    update_premium_expiry
+  end
+
   def update_premium_expiry
     user = User.find_by(creem_customer_id:) || User.find_by(id: metadata_user_id) || User.find_by(email:)
     raise Creem::UserNotFoundError unless user
@@ -28,6 +33,9 @@ class CreemWebhookHandler
   alias_method :subscription_trialing, :update_premium_expiry
   alias_method :subscription_scheduled_cancel, :update_premium_expiry
   alias_method :subscription_unpaid, :update_premium_expiry
+  alias_method :subscription_active, :update_premium_expiry
+  alias_method :subscription_paused, :update_premium_expiry
+  alias_method :subscription_past_due, :update_premium_expiry
 
   def creem_customer_id
     payload.dig("object", "customer", "id")
