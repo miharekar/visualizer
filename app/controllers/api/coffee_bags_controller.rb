@@ -8,7 +8,7 @@ module Api
     before_action :load_coffee_bag, only: %i[show update destroy]
 
     def index
-      coffee_bags = Current.user.coffee_bags.by_brewability.by_roast_date
+      coffee_bags = Current.user.coffee_bags.by_brewability.by_roast_date.by_name
       coffee_bags = coffee_bags.where(roaster_id: params[:roaster_id]) if params[:roaster_id].present?
       coffee_bags, paging = paginate(coffee_bags)
       render json: {data: coffee_bags.map { {id: it.id, name: it.name} }, paging:}

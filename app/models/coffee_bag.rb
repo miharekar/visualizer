@@ -25,6 +25,7 @@ class CoffeeBag < ApplicationRecord
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
   scope :by_roast_date, -> { order("roast_date DESC NULLS LAST") }
+  scope :by_name, -> { order(:name) }
   scope :by_brewability, -> {
     order(Arel.sql(<<~SQL.squish))
       CASE

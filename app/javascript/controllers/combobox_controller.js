@@ -9,6 +9,7 @@ export default class extends Controller {
     activeClasses: { type: Array, default: ["bg-oxford-blue-100", "dark:bg-oxford-blue-600"] },
     inactiveClasses: { type: Array, default: ["text-neutral-700", "dark:text-neutral-300"] },
     hiddenClass: { type: String, default: "hidden" },
+    preserveOrder: { type: Boolean, default: false },
     selectedClass: { type: String, default: "is-selected" }
   }
 
@@ -79,7 +80,9 @@ export default class extends Controller {
 
   filter() {
     this.show()
-    const sortedMatches = matchSorter(this.allItems, this.inputTarget.value, { keys: [item => item.dataset.name] })
+    const options = { keys: [item => item.dataset.name] }
+    if (this.preserveOrderValue) options.sorter = matches => matches.sort((a, b) => a.index - b.index)
+    const sortedMatches = matchSorter(this.allItems, this.inputTarget.value, options)
 
     const matchesHtml = sortedMatches.map(el => this.listTarget.appendChild(el).outerHTML).join("")
 

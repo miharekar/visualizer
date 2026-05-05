@@ -4,7 +4,7 @@ class CoffeeBagTest < ActiveSupport::TestCase
   attr_reader :user, :roaster
 
   setup do
-    @user = FactoryBot.create(:user, :with_coffee_management)
+    @user = FactoryBot.create(:user, :with_coffee_management, email: "coffee-bag-#{name.parameterize}@example.com")
     @roaster = FactoryBot.create(:roaster, user:)
   end
 
@@ -112,6 +112,13 @@ class CoffeeBagTest < ActiveSupport::TestCase
     archived = create(:coffee_bag, roaster:, name: "Archived", roast_date: Date.new(2024, 3, 1), frozen_date: nil, defrosted_date: nil, archived_at: Time.current)
 
     assert_equal [active.id, frozen.id, archived.id], CoffeeBag.where(id: [active.id, frozen.id, archived.id]).by_brewability.pluck(:id)
+  end
+
+  test "by_name orders bags with matching brewability and roast date" do
+    zed = create(:coffee_bag, roaster:, name: "Zed", roast_date: Date.new(2024, 1, 1))
+    alpha = create(:coffee_bag, roaster:, name: "Alpha", roast_date: Date.new(2024, 1, 1))
+
+    assert_equal [alpha.id, zed.id], CoffeeBag.where(id: [zed.id, alpha.id]).by_brewability.by_roast_date.by_name.pluck(:id)
   end
 
   test "metadata defaults to empty hash" do
