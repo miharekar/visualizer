@@ -5,6 +5,7 @@ plugins:
   - rubocop-performance
   - rubocop-rails
 AllCops:
+  StringLiteralsFrozenByDefault: true
   NewCops: enable
   DisabledByDefault: false
   TargetRubyVersion: 4.0

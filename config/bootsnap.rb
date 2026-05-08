@@ -1,0 +1,1 @@
+Bootsnap.enable_frozen_string_literal
