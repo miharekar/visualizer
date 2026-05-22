@@ -14,6 +14,9 @@ jobs:
           ruby-version: 4.0.5
           bundler-cache: true
 
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
+
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
@@ -57,8 +60,8 @@ jobs:
           ruby-version: 4.0.5
           bundler-cache: true
 
-      - name: Install postgres headers
-        run: sudo apt-get install libpq-dev
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev libvips
 
       - name: Setup database
         run: bin/rails db:test:prepare
