@@ -1,6 +1,30 @@
 require "test_helper"
 
 class ShotTest < ActiveSupport::TestCase
+  test "does not send shot uploaded email by default" do
+    user = create(:user)
+
+    assert_enqueued_jobs 0, only: ActionMailer::MailDeliveryJob do
+      create(:shot, user:)
+    end
+  end
+
+  test "sends shot uploaded email when user opted in" do
+    user = create(:user, :premium, unsubscribed_from: [])
+
+    assert_enqueued_jobs 1, only: ActionMailer::MailDeliveryJob do
+      create(:shot, user:)
+    end
+  end
+
+  test "does not send shot uploaded email when non-premium user opted in" do
+    user = create(:user, unsubscribed_from: [])
+
+    assert_enqueued_jobs 0, only: ActionMailer::MailDeliveryJob do
+      create(:shot, user:)
+    end
+  end
+
   test "can have multiple tags" do
     user = create(:user)
     shot = create(:shot, user:)

@@ -4,7 +4,8 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter].freeze
+  EMAIL_NOTIFICATIONS = %w[yearly_brew newsletter shot_uploaded].freeze
+  OPT_IN_EMAIL_NOTIFICATIONS = %w[shot_uploaded].freeze
   DATE_FORMATS = {
     "dd.mm.yyyy" => "%d.%m.%Y",
     "mm.dd.yyyy" => "%m.%d.%Y",
@@ -36,6 +37,7 @@ class User < ApplicationRecord
   validates :creem_customer_id, uniqueness: true, allow_blank: true
 
   before_validation :set_webauthn_id
+  before_validation :set_default_unsubscribed_from, on: :create
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
   after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
@@ -135,6 +137,10 @@ class User < ApplicationRecord
 
   def set_webauthn_id
     self.webauthn_id ||= WebAuthn.generate_user_id
+  end
+
+  def set_default_unsubscribed_from
+    self.unsubscribed_from = OPT_IN_EMAIL_NOTIFICATIONS if self[:unsubscribed_from].nil?
   end
 
   def generate_slug

@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  before_action :check_subscription
+  before_action :check_notification
 
   default from: email_address_with_name("miha@visualizer.coffee", "Miha from Visualizer"), message_stream: -> { notification_exists? ? "broadcast" : "outbound" }
   layout "mailer"
@@ -12,7 +12,7 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
-  def check_subscription
+  def check_notification
     return unless params.try(:[], :user).is_a?(User)
     return unless notification_exists?
 

@@ -1,0 +1,15 @@
+<% content_for(:title) { "New shot uploaded" } %>
+<% content_for(:preheader) { "See your new #{@shot.profile_title} shot 👀" } %>
+<tr>
+  <td style="padding: 24px; background-color: #ffffff; border-radius: 16px">
+    <h1 style="margin: 0 0 16px; color: #171717; font-size: 24px; line-height: 32px">
+      New shot uploaded
+    </h1>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      See your new <strong><%= @shot.profile_title %></strong> shot 👀
+    </p>
+    <p style="margin: 0">
+      <%= link_to "View shot", shot_url(@shot), style: "display: inline-block; border-radius: 8px; background-color: #ee5b45; padding: 12px 20px; color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none", target: "_blank" %>
+    </p>
+  </td>
+</tr>

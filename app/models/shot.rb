@@ -30,6 +30,7 @@ class Shot < ApplicationRecord
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
   after_commit :populate_dropdown_values
   after_create_commit :send_web_push_notification
+  after_create_commit :send_email_notification
 
   scope :visible, -> { where(public: true) }
   scope :visible_or_owned_by_id, ->(user_id) { user_id ? visible.or(where(user_id:)) : visible }
@@ -103,6 +104,13 @@ class Shot < ApplicationRecord
     user.push_subscriptions&.each do |push_subscription|
       WebPushJob.perform_later(push_subscription, title: "New Shot", body: "See your new #{profile_title} shot 👀", path: "/shots/#{id}")
     end
+  end
+
+  def send_email_notification
+    return unless user.premium?
+    return unless user.notify?(:shot_uploaded)
+
+    UserMailer.with(user:, shot: self).shot_uploaded.deliver_later
   end
 
   def populate_dropdown_values
