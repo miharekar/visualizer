@@ -3,7 +3,7 @@ class PasskeysController < ApplicationController
     options = WebAuthn::Credential.options_for_create(
       user: {id: Current.user.webauthn_id, name: Current.user.email, display_name: Current.user.display_name},
       exclude: Current.user.webauthn_credentials.pluck(:external_id),
-      authenticator_selection: {user_verification: "required"}
+      authenticator_selection: {resident_key: "required", user_verification: "required"}
     )
     session[:webauthn_challenge] = options.challenge
     render json: options
