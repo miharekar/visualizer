@@ -25,6 +25,18 @@ module Api
       assert_equal "You must be a premium user to access this feature.", response.parsed_body["error"]
     end
 
+    test "show includes canonical roaster id" do
+      canonical_roaster = CanonicalRoaster.create!(name: "Luma")
+      roaster = FactoryBot.create(:roaster, user: premium_user, canonical_roaster:)
+
+      get api_roaster_url(roaster), headers: auth_headers(premium_user), as: :json
+
+      assert_response :success
+      json_response = response.parsed_body
+      assert_equal roaster.id, json_response["id"]
+      assert_equal canonical_roaster.id, json_response["canonical_roaster_id"]
+    end
+
     test "update updates owned roaster" do
       roaster = FactoryBot.create(:roaster, user: premium_user, name: "Before")
 

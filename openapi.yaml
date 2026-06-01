@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.8.2"
+  version: "1.9.0"
   description: |
     REST API for Visualizer.
 
@@ -671,37 +671,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "429":
-          $ref: "#/components/responses/RateLimited"
-
-  /roasters/{roaster_id}/coffee_bags:
-    get:
-      tags: [Coffee Bags]
-      summary: Legacy nested coffee bag index
-      description: Deprecated alias that redirects to `/coffee_bags?roaster_id={roaster_id}`.
-      operationId: legacyNestedCoffeeBagsIndex
-      deprecated: true
-      parameters:
-        - $ref: "#/components/parameters/RoasterId"
-      responses:
-        "301":
-          description: Permanent redirect to root coffee bag index.
-        "429":
-          $ref: "#/components/responses/RateLimited"
-
-  /roasters/{roaster_id}/coffee_bags/{id}:
-    get:
-      tags: [Coffee Bags]
-      summary: Legacy nested coffee bag show
-      description: Deprecated alias that redirects to `/coffee_bags/{id}`.
-      operationId: legacyNestedCoffeeBagShow
-      deprecated: true
-      parameters:
-        - $ref: "#/components/parameters/RoasterId"
-        - $ref: "#/components/parameters/CoffeeBagId"
-      responses:
-        "301":
-          description: Permanent redirect to root coffee bag show.
         "429":
           $ref: "#/components/responses/RateLimited"
 
@@ -1613,6 +1582,10 @@ components:
           type: string
           format: uri
           nullable: true
+        canonical_roaster_id:
+          type: string
+          format: uuid
+          nullable: true
         image_url:
           type: string
           format: uri
@@ -1642,6 +1615,13 @@ components:
         id:
           type: string
           format: uuid
+        roaster_id:
+          type: string
+          format: uuid
+        canonical_coffee_bag_id:
+          type: string
+          format: uuid
+          nullable: true
         name:
           type: string
 

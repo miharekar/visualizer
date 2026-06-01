@@ -46,13 +46,6 @@ Rails.application.routes.draw do
       end
     end
 
-    # redirects for potential existing integrations of nested
-    get "roasters/:roaster_id/coffee_bags", to: redirect { |params, request|
-      query = request.query_parameters.merge(roaster_id: params[:roaster_id]).to_query
-      query.present? ? "/api/coffee_bags?#{query}" : "/api/coffee_bags"
-    }
-    get "roasters/:roaster_id/coffee_bags/:id", to: redirect("/api/coffee_bags/%{id}")
-
     resources :roasters, only: %i[index show create update destroy]
     resources :coffee_bags, only: %i[index show create update destroy]
   end

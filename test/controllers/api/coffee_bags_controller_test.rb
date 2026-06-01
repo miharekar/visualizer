@@ -45,6 +45,21 @@ module Api
       assert_equal "You must be a premium user to access this feature.", response.parsed_body["error"]
     end
 
+    test "show includes roaster and canonical coffee bag ids" do
+      canonical_roaster = CanonicalRoaster.create!(name: "Luma")
+      canonical_coffee_bag = CanonicalCoffeeBag.create!(name: "Kiambu", canonical_roaster:)
+      roaster = FactoryBot.create(:roaster, user: premium_user)
+      coffee_bag = FactoryBot.create(:coffee_bag, roaster:, canonical_coffee_bag:)
+
+      get api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), as: :json
+
+      assert_response :success
+      json_response = response.parsed_body
+      assert_equal coffee_bag.id, json_response["id"]
+      assert_equal roaster.id, json_response["roaster_id"]
+      assert_equal canonical_coffee_bag.id, json_response["canonical_coffee_bag_id"]
+    end
+
     test "update updates coffee bag and allows moving to another owned roaster" do
       roaster = FactoryBot.create(:roaster, user: premium_user)
       other_roaster = FactoryBot.create(:roaster, user: premium_user, name: "Other")
@@ -75,24 +90,6 @@ module Api
       assert_response :success
       assert_not CoffeeBag.exists?(coffee_bag.id)
       assert_equal true, response.parsed_body["success"]
-    end
-
-    test "legacy nested index endpoint redirects to root coffee bags endpoint" do
-      roaster = FactoryBot.create(:roaster, user: premium_user)
-
-      get "/api/roasters/#{roaster.id}/coffee_bags?items=5&page=2", headers: auth_headers(premium_user)
-
-      assert_response :moved_permanently
-      assert_redirected_to "/api/coffee_bags?items=5&page=2&roaster_id=#{roaster.id}"
-    end
-
-    test "legacy nested show endpoint redirects to root coffee bag endpoint" do
-      coffee_bag = FactoryBot.create(:coffee_bag, roaster: FactoryBot.create(:roaster, user: premium_user))
-
-      get "/api/roasters/#{coffee_bag.roaster_id}/coffee_bags/#{coffee_bag.id}", headers: auth_headers(premium_user)
-
-      assert_response :moved_permanently
-      assert_redirected_to "/api/coffee_bags/#{coffee_bag.id}"
     end
 
     private

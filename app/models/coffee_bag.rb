@@ -63,7 +63,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   def to_api_json
-    attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id name roast_date frozen_date defrosted_date url archived_at notes]
+    attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id roaster_id canonical_coffee_bag_id name roast_date frozen_date defrosted_date url archived_at notes]
     attributes.slice(*attribute_names).tap do |json|
       json["image_url"] = image&.url if image.attached?
       json["metadata"] = metadata.presence

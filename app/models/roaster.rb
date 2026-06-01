@@ -25,7 +25,7 @@ class Roaster < ApplicationRecord
   end
 
   def to_api_json
-    attributes.slice(*%w[id name website]).tap do |json|
+    attributes.slice(*%w[id name website canonical_roaster_id]).tap do |json|
       json["image_url"] = image&.url if image.attached?
     end
   end
