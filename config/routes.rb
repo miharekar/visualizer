@@ -12,13 +12,13 @@ Rails.application.routes.draw do
     mount PgHero::Engine, at: "/pghero"
   end
 
-  use_doorkeeper do
-    controllers applications: "oauth/applications"
-  end
+  use_doorkeeper { controllers applications: "oauth/applications" }
 
   root to: "home#show"
 
   resource :session, only: %i[new create destroy]
+  resources :passwords, param: :token, only: %i[new create edit update]
+  resources :registrations, only: %i[new create]
 
   resources :passkeys, only: %i[create destroy] do
     collection do
@@ -27,9 +27,6 @@ Rails.application.routes.draw do
       post :callback
     end
   end
-
-  resources :passwords, param: :token, only: %i[new create edit update]
-  resources :registrations, only: %i[new create]
 
   get "auth/airtable/callback", to: "omniauth_callbacks#airtable"
   get "auth/airtable", as: :connect_airtable
@@ -115,7 +112,6 @@ Rails.application.routes.draw do
 
   resource :shot_metadata, only: %i[create destroy]
   resource :coffee_bag_metadata, only: %i[create destroy]
-
   resources :dropdown_values, only: %i[index update]
 
   resources :premium, only: %i[index create] do
