@@ -103,14 +103,6 @@
           </p>
         </div>
       <% end %>
-      <% if @profile.decent_token.present? %>
-        <div class="py-6">
-          <h3 class="text-lg font-medium leading-6 text-neutral-900 dark:text-neutral-100">
-            Your profile is connected to Decent.
-          </h3>
-          <%= turbo_frame_tag "decent_serial_numbers", src: decent_serial_numbers_profile_path %>
-        </div>
-      <% end %>
     </div>
     <hr class="mx-4 sm:mx-6 md:hidden text-neutral-200 dark:text-neutral-700">
     <%= render "form", profile: @profile %>

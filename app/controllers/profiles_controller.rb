@@ -23,12 +23,6 @@ class ProfilesController < ApplicationController
     redirect_to edit_profile_path
   end
 
-  def decent_serial_numbers
-    @serial_numbers = DecentApi.new(@profile.decent_email, @profile.decent_token).serial_numbers
-  rescue StandardError
-    @serial_numbers = []
-  end
-
   def disconnect_airtable
     airtables = @profile.identities.by_provider(:airtable)
     return unless airtables.exists?

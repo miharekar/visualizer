@@ -110,7 +110,6 @@ Rails.application.routes.draw do
 
   resource :profile, only: %i[edit update] do
     get :reset_chart_settings
-    get :decent_serial_numbers
     delete :disconnect_airtable
   end
 
@@ -126,8 +125,6 @@ Rails.application.routes.draw do
       get :cancel
     end
   end
-
-  resources :decent_tokens, only: %i[new create]
 
   resources :push_subscriptions, only: %i[create]
 

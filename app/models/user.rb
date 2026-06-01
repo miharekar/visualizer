@@ -173,8 +173,6 @@ end
 #  coffee_management_enabled  :boolean          default(FALSE), not null
 #  communication              :jsonb
 #  date_format                :string
-#  decent_email               :string
-#  decent_token               :string
 #  developer                  :boolean          default(FALSE), not null
 #  email                      :string           default(""), not null
 #  github                     :string
