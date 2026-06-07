@@ -8,16 +8,7 @@ module Api
     before_action :load_users_shot, only: %i[update destroy]
 
     def index
-      shots = Current.user.present? ? Current.user.shots : Shot.visible
-      if Current.user.present? && params[:updated_after].present?
-        updated_after = params[:updated_after].to_s
-        raise ArgumentError unless updated_after.match?(/\A\d+\z/)
-
-        shots = shots.where("updated_at > ?", Time.zone.at(Integer(updated_after)))
-      end
-      shots = shots.non_premium unless Current.user&.premium?
-      shots = params[:sort] == "updated_at" ? shots.order(updated_at: :desc) : shots.by_start_time
-      shots = shots.select(:id, :start_time, :user_id, :updated_at)
+      shots = shots_for_index.select(:id, :start_time, :user_id, :updated_at)
       shots, paging = paginate(shots, with_counts: Current.user.present?)
       data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
       render json: {data:, paging:, user_id: Current.user&.id}
@@ -88,6 +79,19 @@ module Api
     end
 
     private
+
+    def shots_for_index
+      shots = Current.user.present? ? Current.user.shots : Shot.visible
+      shots = shots.where("updated_at > ?", updated_after) if Current.user.present? && params[:updated_after].present?
+      shots = shots.non_premium unless Current.user&.premium?
+      params[:sort] == "updated_at" ? shots.order(updated_at: :desc) : shots.by_start_time
+    end
+
+    def updated_after
+      raise ArgumentError unless params[:updated_after].match?(/\A\d+\z/)
+
+      Time.zone.at(Integer(params[:updated_after]))
+    end
 
     def load_users_shot
       @shot = Shot.find_by(id: params[:id])
