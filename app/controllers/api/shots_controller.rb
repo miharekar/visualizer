@@ -9,12 +9,20 @@ module Api
 
     def index
       shots = Current.user.present? ? Current.user.shots : Shot.visible
+      if Current.user.present? && params[:updated_after].present?
+        updated_after = params[:updated_after].to_s
+        raise ArgumentError unless updated_after.match?(/\A\d+\z/)
+
+        shots = shots.where("updated_at > ?", Time.zone.at(Integer(updated_after)))
+      end
       shots = shots.non_premium unless Current.user&.premium?
       shots = params[:sort] == "updated_at" ? shots.order(updated_at: :desc) : shots.by_start_time
       shots = shots.select(:id, :start_time, :user_id, :updated_at)
       shots, paging = paginate(shots, with_counts: Current.user.present?)
       data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
       render json: {data:, paging:, user_id: Current.user&.id}
+    rescue ArgumentError, RangeError
+      render json: {error: "updated_after must be a Unix timestamp in seconds"}, status: :unprocessable_content
     rescue ActiveRecord::ActiveRecordError => e
       Appsignal.report_error(e)
       render json: {error: "Could not paginate"}, status: :unprocessable_content

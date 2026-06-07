@@ -81,6 +81,48 @@ module Api
       assert_equal 1, json_response["data"].length
     end
 
+    test "index ignores updated_after for unauthenticated user" do
+      FactoryBot.create(:shot, user: public_user)
+
+      get api_shots_url(updated_after: 1_741_500_000), as: :json
+
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_nil json_response["user_id"]
+      assert_equal 1, json_response["data"].length
+    end
+
+    test "index filters authenticated user shots by updated_after" do
+      older_time = 30.minutes.ago.change(usec: 0)
+      newer_time = 20.minutes.ago.change(usec: 0)
+      other_time = 10.minutes.ago.change(usec: 0)
+      newer_shot = nil
+      travel_to older_time do
+        FactoryBot.create(:shot, user:, public: true)
+      end
+      travel_to newer_time do
+        newer_shot = FactoryBot.create(:shot, user:, public: true)
+      end
+      travel_to other_time do
+        FactoryBot.create(:shot, user: public_user, public: true)
+      end
+
+      get api_shots_url(updated_after: 25.minutes.ago.to_i, sort: "updated_at"), headers: auth_headers(user), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_equal user.id, json_response["user_id"]
+      assert_equal [newer_shot.id], json_response["data"].pluck("id")
+    end
+
+    test "index rejects non-unix updated_after values" do
+      get api_shots_url(updated_after: "2026-06-07T00:00:00Z"), headers: auth_headers(user), as: :json
+
+      assert_response :unprocessable_content
+      assert_equal "updated_after must be a Unix timestamp in seconds", response.parsed_body["error"]
+    end
+
     test "index returns non-premium shots for non-premium user" do
       FactoryBot.create_list(:shot, 5, user:, public: true)
       FactoryBot.create(:shot, user: premium_user, public: true)

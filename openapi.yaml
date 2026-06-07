@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.10.0"
+  version: "1.11.0"
   description: |
     REST API for Visualizer.
 
@@ -93,10 +93,13 @@ paths:
         Behavior differs by auth state:
         - Unauthenticated: only public shots
         - Authenticated: own shots
+
+        `updated_after` applies only to authenticated requests and must be a Unix timestamp in seconds.
       parameters:
         - $ref: "#/components/parameters/Page"
         - $ref: "#/components/parameters/Items"
         - $ref: "#/components/parameters/ShotSort"
+        - $ref: "#/components/parameters/UpdatedAfter"
       responses:
         "200":
           description: Paginated shot summaries.
@@ -105,7 +108,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ShotListResponse"
         "422":
-          description: Invalid pagination/sort.
+          description: Invalid pagination/sort/updated_after.
           content:
             application/json:
               schema:
@@ -725,6 +728,13 @@ components:
         type: string
         enum: [updated_at]
       description: Set to `updated_at` for updated-time sorting. Omit for start-time sorting.
+    UpdatedAfter:
+      name: updated_after
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+      description: Return authenticated user's shots updated after this Unix timestamp in seconds. Ignored for unauthenticated requests.
     ShotId:
       name: id
       in: path
