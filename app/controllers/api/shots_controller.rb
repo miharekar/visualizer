@@ -14,7 +14,7 @@ module Api
       shots = shots.select(:id, :start_time, :user_id, :updated_at)
       shots, paging = paginate(shots, with_counts: Current.user.present?)
       data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
-      render json: {data:, paging:}
+      render json: {data:, paging:, user_id: Current.user&.id}
     rescue ActiveRecord::ActiveRecordError => e
       Appsignal.report_error(e)
       render json: {error: "Could not paginate"}, status: :unprocessable_content

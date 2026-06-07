@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.9.0"
+  version: "1.10.0"
   description: |
     REST API for Visualizer.
 
@@ -861,7 +861,7 @@ components:
 
     ShotListResponse:
       type: object
-      required: [data, paging]
+      required: [data, paging, user_id]
       properties:
         data:
           type: array
@@ -869,6 +869,11 @@ components:
             $ref: "#/components/schemas/ShotSummary"
         paging:
           $ref: "#/components/schemas/Paging"
+        user_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Authenticated user whose shots are listed. Null for unauthenticated public feed.
 
     ShotDetail:
       description: Flexible shot payload. Keys vary by `format` and integration source.

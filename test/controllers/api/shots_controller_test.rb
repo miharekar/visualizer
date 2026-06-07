@@ -20,6 +20,7 @@ module Api
       assert_response :success
 
       json_response = response.parsed_body
+      assert_equal user.id, json_response["user_id"]
       assert_equal 5, json_response["data"].length
       assert_includes json_response, "paging"
       assert_equal %w[count page limit pages], json_response["paging"].keys
@@ -35,6 +36,7 @@ module Api
       assert_response :success
 
       json_response = response.parsed_body
+      assert_equal user.id, json_response["user_id"]
       assert_equal 1, json_response["data"].length
 
       assert_equal 5, json_response["paging"]["count"]
@@ -75,6 +77,7 @@ module Api
       assert_response :success
 
       json_response = response.parsed_body
+      assert_nil json_response["user_id"]
       assert_equal 1, json_response["data"].length
     end
 
