@@ -72,6 +72,7 @@ export const commonOptions = () => {
     },
     xAxis: {
       type: "datetime",
+      minorTicks: false,
       events: { setExtremes: syncExtremes },
       crosshair: true,
       labels: {
@@ -90,6 +91,7 @@ export const commonOptions = () => {
     },
     yAxis: {
       title: false,
+      minorTicks: false,
       labels: { style: { color: colors.label } },
       gridLineColor: colors.gridLine,
       lineColor: colors.line,

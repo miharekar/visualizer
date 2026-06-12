@@ -298,13 +298,14 @@ export default class extends Controller {
       chart.series.forEach(s => {
         if (!this.comparisonDataValue[s.name]) return
 
-        s.setData(
-          this.comparisonDataValue[s.name].map(d => [d[0] + value, d[1]]),
-          true,
-          false,
-          false
-        )
+        this.comparisonDataValue[s.name].forEach((d, index) => {
+          const point = s.data[index]
+          if (!point) return
+
+          point.update([d[0] + value, d[1]], false, false)
+        })
       })
+      chart.redraw(false)
     })
   }
 
