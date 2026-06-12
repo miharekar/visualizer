@@ -5,6 +5,10 @@ class CoffeeBag < ApplicationRecord
   performs :refresh_shot_values
 
   DISPLAY_ATTRIBUTES = %w[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes place_of_purchase].freeze
+  # Descriptive fields a personal bag inherits from its canonical (curated)
+  # record. Excludes the bag-owned name and fields the canonical lacks (farm,
+  # quality_score, place_of_purchase).
+  CANONICAL_INHERITED_ATTRIBUTES = %w[roast_level country region farmer variety elevation processing harvest_time tasting_notes].freeze
 
   belongs_to :roaster, touch: true
   belongs_to :canonical_coffee_bag, optional: true
@@ -19,6 +23,7 @@ class CoffeeBag < ApplicationRecord
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
   validate :defrosted_date_after_frozen_date
 
+  before_validation :inherit_descriptive_fields_from_canonical, if: -> { canonical_coffee_bag_id.present? && canonical_coffee_bag_id_changed? }
   after_save_commit :refresh_shot_values_later, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
 
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
@@ -95,6 +100,14 @@ class CoffeeBag < ApplicationRecord
   end
 
   private
+
+  def inherit_descriptive_fields_from_canonical
+    if canonical_coffee_bag
+      CANONICAL_INHERITED_ATTRIBUTES.each do |attr|
+        self[attr] = canonical_coffee_bag.public_send(attr) if self[attr].blank?
+      end
+    end
+  end
 
   def defrosted_date_after_frozen_date
     if frozen_date.blank? && defrosted_date.present?

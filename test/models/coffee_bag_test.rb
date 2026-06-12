@@ -141,4 +141,19 @@ class CoffeeBagTest < ActiveSupport::TestCase
       coffee_bag.update!(name: "Updated")
     end
   end
+
+  test "inherits blank descriptive fields from canonical when linked, preserving set ones" do
+    canonical_roaster = CanonicalRoaster.create!(name: "Luma")
+    canonical = CanonicalCoffeeBag.create!(name: "Kiambu", canonical_roaster:, roast_level: "Light", country: "Kenya", region: "Kiambu", farmer: "Smallholders", variety: "SL28", tasting_notes: "Black currant")
+    coffee_bag = create(:coffee_bag, roaster:, country: nil, region: "My own region")
+
+    coffee_bag.update!(canonical_coffee_bag: canonical)
+
+    assert_equal "Kenya", coffee_bag.country         # was blank -> inherited
+    assert_equal "Smallholders", coffee_bag.farmer
+    assert_equal "SL28", coffee_bag.variety
+    assert_equal "Black currant", coffee_bag.tasting_notes
+    assert_equal "Light", coffee_bag.roast_level
+    assert_equal "My own region", coffee_bag.region  # already set -> preserved
+  end
 end
