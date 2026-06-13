@@ -45,6 +45,8 @@ Rails.application.routes.draw do
 
     resources :roasters, only: %i[index show create update destroy]
     resources :coffee_bags, only: %i[index show create update destroy]
+    resources :canonical_roasters, only: %i[index]
+    resources :canonical_coffee_bags, only: %i[index]
   end
 
   get :heartbeat, to: "heartbeat#show"
