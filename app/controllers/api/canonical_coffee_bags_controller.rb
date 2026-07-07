@@ -11,7 +11,7 @@ module Api
     private
 
     def coffee_bag_json(coffee_bag)
-      coffee_bag.attributes.slice("id", "canonical_roaster_id", "name", "url", *CanonicalCoffeeBag::DISPLAY_ATTRIBUTES).tap do |json|
+      coffee_bag.attributes.slice("id", "canonical_roaster_id", "name", "url", "created_at", "updated_at", *CanonicalCoffeeBag::DISPLAY_ATTRIBUTES).tap do |json|
         json["canonical_roaster_name"] = coffee_bag.canonical_roaster.name
       end
     end

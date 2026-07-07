@@ -18,6 +18,8 @@ module Api
       assert_equal "Ethiopia", json_response["data"].first["country"]
       assert_equal "Heirloom", json_response["data"].first["variety"]
       assert_equal "Peach", json_response["data"].first["tasting_notes"]
+      assert_equal coffee_bag.created_at.iso8601(3), json_response["data"].first["created_at"]
+      assert_equal coffee_bag.updated_at.iso8601(3), json_response["data"].first["updated_at"]
       assert_equal 1, json_response["paging"]["count"]
     end
 
