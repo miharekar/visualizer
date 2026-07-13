@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.12.0"
+  version: "1.13.0"
   description: |
     REST API for Visualizer.
 
@@ -1737,7 +1737,7 @@ components:
 
     CanonicalCoffeeBagSummary:
       type: object
-      required: [id, canonical_roaster_id, canonical_roaster_name, name]
+      required: [id, canonical_roaster_id, canonical_roaster_name, name, created_at, updated_at]
       properties:
         id:
           type: string

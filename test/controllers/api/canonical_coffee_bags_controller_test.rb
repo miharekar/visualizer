@@ -4,7 +4,8 @@ module Api
   class CanonicalCoffeeBagsControllerTest < ActionDispatch::IntegrationTest
     test "index searches canonical coffee bags without authentication" do
       roaster = CanonicalRoaster.create!(name: "Ritual")
-      coffee_bag = CanonicalCoffeeBag.create!(name: "Ethiopia Aricha", canonical_roaster: roaster, country: "Ethiopia", variety: "Heirloom", tasting_notes: "Peach")
+      timestamp = Time.current
+      coffee_bag = CanonicalCoffeeBag.create!(name: "Ethiopia Aricha", canonical_roaster: roaster, country: "Ethiopia", variety: "Heirloom", tasting_notes: "Peach", created_at: timestamp, updated_at: timestamp)
       CanonicalCoffeeBag.create!(name: "Kenya Gakuyuini", canonical_roaster: roaster)
 
       get api_canonical_coffee_bags_url, params: {q: "ethiopia"}, as: :json
@@ -18,8 +19,8 @@ module Api
       assert_equal "Ethiopia", json_response["data"].first["country"]
       assert_equal "Heirloom", json_response["data"].first["variety"]
       assert_equal "Peach", json_response["data"].first["tasting_notes"]
-      assert_equal coffee_bag.created_at.iso8601(3), json_response["data"].first["created_at"]
-      assert_equal coffee_bag.updated_at.iso8601(3), json_response["data"].first["updated_at"]
+      assert_equal timestamp.iso8601(3), json_response["data"].first["created_at"]
+      assert_equal timestamp.iso8601(3), json_response["data"].first["updated_at"]
       assert_equal 1, json_response["paging"]["count"]
     end
 
