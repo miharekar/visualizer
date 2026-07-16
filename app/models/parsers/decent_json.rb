@@ -19,8 +19,8 @@ module Parsers
         end
       end
 
-      %w[basket mix goal].each do |key|
-        @data["espresso_temperature_#{key}"] = json.dig("temperature", key)
+      json["temperature"].to_h.slice(*%w[basket mix goal mix_goal]).compact.each do |key, value|
+        @data["espresso_temperature_#{key}"] = value
       end
 
       %w[weight water_dispensed].each do |key|

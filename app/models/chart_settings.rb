@@ -12,7 +12,8 @@ class ChartSettings
     "espresso_conductance_derivative" => {"title" => "Conductance Derivative", "color" => "#f36943", "suffix" => "", "hidden" => true, "type" => "spline"},
     "espresso_temperature_basket" => {"title" => "Temperature Basket", "color" => "#EE7733", "suffix" => " °C", "type" => "spline"},
     "espresso_temperature_mix" => {"title" => "Temperature Mix", "color" => "#CC3311", "suffix" => " °C", "type" => "spline"},
-    "espresso_temperature_goal" => {"title" => "Temperature Goal", "color" => "#EE3377", "suffix" => " °C", "dashed" => true, "type" => "spline"}
+    "espresso_temperature_goal" => {"title" => "Basket Temperature Goal", "color" => "#EE3377", "suffix" => " °C", "dashed" => true, "type" => "spline"},
+    "espresso_temperature_mix_goal" => {"title" => "Mix Temperature Goal", "color" => "#AA3377", "suffix" => " °C", "dashed" => true, "type" => "spline"}
   }.freeze
 
   attr_reader :user_settings, :wants_fahrenheit

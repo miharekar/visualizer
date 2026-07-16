@@ -40,4 +40,19 @@ class ShotChartTest < ActiveSupport::TestCase
     assert_not_nil temperature_series
     assert_equal " °F", temperature_series.dig(:tooltip, :valueSuffix)
   end
+
+  test "it shows separate basket and mix temperature goals" do
+    payload = JSON.parse(File.read("test/files/20211019T100744.json"))
+    payload["temperature"]["mix_goal"] = payload.dig("temperature", "goal").map { |value| value.to_f + 2 }
+    shot = Shot.from_file(build_stubbed(:user), JSON.generate(payload))
+
+    series = ShotChart.new(shot, build_stubbed(:user)).temperature_chart
+    basket_goal = series.find { |item| item[:name] == "Basket Temperature Goal" }
+    mix_goal = series.find { |item| item[:name] == "Mix Temperature Goal" }
+
+    assert_not_nil basket_goal
+    assert_not_nil mix_goal
+    assert_equal "Dash", basket_goal[:dashStyle]
+    assert_equal "Dash", mix_goal[:dashStyle]
+  end
 end

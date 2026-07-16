@@ -7,6 +7,7 @@ class ShotChart
 
     DATA_LABELS_MAP = {"weight" => "espresso_weight", "waterFlow" => "espresso_flow", "waterDispensedFlowSecond" => "espresso_flow", "realtimeFlow" => "espresso_flow_weight", "pressureFlow" => "espresso_pressure", "temperatureFlow" => "espresso_temperature_mix", "waterDispensed" => "espresso_water_dispensed"}.freeze
     DATA_VALUES_MAP = {"weight" => "actual_weight", "waterFlow" => "value", "waterDispensedFlowSecond" => "actual", "realtimeFlow" => "flow_value", "pressureFlow" => "actual_pressure", "temperatureFlow" => "actual_temperature", "waterDispensed" => "actual"}.freeze
+    STAGE_GOAL_LABELS = %w[espresso_pressure_goal espresso_flow_goal espresso_temperature_goal].freeze
 
     attr_reader :shot, :timeframe, :data
 
@@ -89,7 +90,7 @@ class ShotChart
 
       loop do
         indices = []
-        data.select { |label, _| label.end_with?("_goal") }.each_value do |d|
+        data.slice(*STAGE_GOAL_LABELS).each_value do |d|
           next if d.blank?
 
           d = d.map(&:to_f)

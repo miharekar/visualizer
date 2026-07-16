@@ -91,6 +91,24 @@ module Parsers
       assert_equal 101, shot.information.timeframe.size
     end
 
+    test "extracts separate basket and mix temperature goals" do
+      payload = JSON.parse(File.read("test/files/20211019T100744.json"))
+      basket_goal = payload.dig("temperature", "goal")
+      mix_goal = basket_goal.map { |value| value.to_f + 2 }
+      payload["temperature"]["mix_goal"] = mix_goal
+
+      shot = Shot.from_file(@user, JSON.generate(payload))
+
+      assert_equal basket_goal, shot.information.data["espresso_temperature_goal"]
+      assert_equal mix_goal, shot.information.data["espresso_temperature_mix_goal"]
+    end
+
+    test "does not add an empty mix temperature goal to legacy uploads" do
+      shot = new_shot("test/files/20211019T100744.json")
+
+      assert_not shot.information.data.key?("espresso_temperature_mix_goal")
+    end
+
     test "handles even more invalid profile string" do
       shot = new_shot("test/files/invalid_profile_2.json")
       assert shot.valid?

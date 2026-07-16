@@ -129,4 +129,17 @@ class ParsedShotTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test "mix temperature goal does not affect stage detection" do
+    timeframe = Array.new(10) { |index| index.to_s }
+    data = {
+      "espresso_pressure" => Array.new(10, 1),
+      "espresso_pressure_goal" => Array.new(10, 1),
+      "espresso_temperature_mix_goal" => [90, 90, 90, 90, 90, 95, 90, 95, 90, 95]
+    }
+    information = build_stubbed(:shot_information, data:, timeframe:, brewdata: {}, extra: {}, profile_fields: {})
+    shot = build_stubbed(:shot, duration: 10, information:)
+
+    assert_nil ShotChart::ParsedShot.new(shot).stage_indices
+  end
 end

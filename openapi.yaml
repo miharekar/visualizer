@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.13.0"
+  version: "1.14.0"
   description: |
     REST API for Visualizer.
 
@@ -1277,6 +1277,8 @@ components:
           $ref: "#/components/schemas/ShotSeries"
         espresso_temperature_goal:
           $ref: "#/components/schemas/ShotSeries"
+        espresso_temperature_mix_goal:
+          $ref: "#/components/schemas/ShotSeries"
         espresso_temperature_mix:
           $ref: "#/components/schemas/ShotSeries"
         espresso_temperature_basket:
@@ -1435,6 +1437,8 @@ components:
         by_weight_raw:
           $ref: "#/components/schemas/ShotSeries"
         goal:
+          $ref: "#/components/schemas/ShotSeries"
+        mix_goal:
           $ref: "#/components/schemas/ShotSeries"
 
     DecentTemperaturePayload:
