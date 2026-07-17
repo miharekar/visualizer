@@ -8,7 +8,7 @@ module Airtable
       bean_brand bean_type roast_date roast_level drink_tds drink_ey
       fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel
     ].index_by { it.to_s.humanize }
-    NOTE_FIELDS = %w[bean_notes espresso_notes private_notes].index_by { it.humanize }.freeze
+    NOTE_FIELDS = %w[bean_notes espresso_notes private_notes].index_by { "#{it.humanize} HTML" }.freeze
     FIELD_OPTIONS = {
       "espresso_enjoyment" => {type: "number", options: {precision: 0}},
       "duration" => {type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
@@ -41,7 +41,7 @@ module Airtable
         ]
         coffee_management = user.coffee_management_enabled? ? [{name: "Coffee Bag", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[CoffeeBags::TABLE_NAME]["id"]}}] : []
         standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
-        notes = note_fields.map { |name, _attribute| {name:, type: note_field_type} }
+        notes = NOTE_FIELDS.map { |name, _attribute| {name:, type: "multilineText"} }
         metadata = user.shot_metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
         static + coffee_management + standard + notes + metadata
@@ -62,7 +62,7 @@ module Airtable
       end
 
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
-      note_fields.each { |name, attribute| fields[name] = note_value(shot, attribute) }
+      NOTE_FIELDS.each { |name, attribute| fields[name] = shot.rich_text_html(attribute) }
       user.shot_metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
       data = {fields: fields.compact}
@@ -72,7 +72,7 @@ module Airtable
 
     def update_local_record(shot, record, updated_at)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |key| STANDARD_FIELDS[key] }
-      attributes.merge!(record["fields"].slice(*note_fields.keys).transform_keys { |key| note_fields[key] })
+      attributes.merge!(record["fields"].slice(*NOTE_FIELDS.keys).transform_keys { |key| NOTE_FIELDS[key] })
       shot.assign_attributes(attributes)
       shot.skip_airtable_sync = true
       shot.updated_at = updated_at

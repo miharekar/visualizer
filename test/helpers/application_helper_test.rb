@@ -1,8 +1,9 @@
 require "test_helper"
 
 class ApplicationHelperTest < ActionView::TestCase
-  test "renders sanitized Markdown" do
-    result = notes_text_from("**Bold**\n\n<img src=\"x\" onerror=\"alert(1)\">")
+  test "renders sanitized rich text" do
+    update = Update.new(body: "<strong>Bold</strong><img src=\"x\" onerror=\"alert(1)\">")
+    result = notes_text_from(update.body)
 
     assert_includes result, "<strong>Bold</strong>"
     assert_not_includes result, "onerror"

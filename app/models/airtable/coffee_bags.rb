@@ -6,7 +6,7 @@ module Airtable
     STANDARD_FIELDS = %w[
       country elevation farm farmer harvest_time processing quality_score region roast_date frozen_date defrosted_date roast_level variety tasting_notes archived_at place_of_purchase
     ].index_by { |f| f.to_s.humanize }
-    NOTE_FIELDS = {"Notes" => "notes"}.freeze
+    NOTE_FIELDS = {"Notes HTML" => "notes"}.freeze
     FIELD_OPTIONS = {
       "roast_date" => {type: "date", options: {dateFormat: {name: "local"}}},
       "frozen_date" => {type: "date", options: {dateFormat: {name: "local"}}},
@@ -26,7 +26,7 @@ module Airtable
           {name: "Roaster", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[Roasters::TABLE_NAME]["id"]}}
         ]
         standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
-        notes = note_fields.map { |name, _attribute| {name:, type: note_field_type} }
+        notes = NOTE_FIELDS.map { |name, _attribute| {name:, type: "multilineText"} }
         metadata = user.coffee_bag_metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
         static + standard + notes + metadata
@@ -43,7 +43,7 @@ module Airtable
         "URL" => shots_url(coffee_bag:)
       }
       STANDARD_FIELDS.each { |name, attribute| fields[name] = coffee_bag.public_send(attribute) }
-      note_fields.each { |name, attribute| fields[name] = note_value(coffee_bag, attribute) }
+      NOTE_FIELDS.each { |name, attribute| fields[name] = coffee_bag.rich_text_html(attribute) }
       user.coffee_bag_metadata_fields.each { |field| fields[field] = coffee_bag.metadata[field].to_s }
       fields["Image"] = [{url: coffee_bag.image.url(disposition: "attachment"), filename: coffee_bag.image.filename.to_s}] if coffee_bag.image.attached?
       {fields:}
@@ -51,7 +51,7 @@ module Airtable
 
     def update_local_record(coffee_bag, record, updated_at)
       attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |key| STANDARD_FIELDS[key] }
-      attributes.merge!(record["fields"].slice(*note_fields.keys).transform_keys { |key| note_fields[key] })
+      attributes.merge!(record["fields"].slice(*NOTE_FIELDS.keys).transform_keys { |key| NOTE_FIELDS[key] })
       attributes[:name] = record["fields"]["Name"]
       attributes[:metadata] = user.coffee_bag_metadata_fields.index_with { |f| record["fields"][f] }
       roaster_airtable_id = Array(record["fields"]["Roaster"]).first

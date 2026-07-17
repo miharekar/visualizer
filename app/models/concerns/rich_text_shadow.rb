@@ -12,9 +12,6 @@ module RichTextShadow
           rich_text.body = Markdown.to_html(self[attribute]) if rich_text.body.blank? && self[attribute].present? && !rich_text.will_save_change_to_body?
           rich_text
         end
-        define_method("#{attribute}=") do |value|
-          rich_text_reader.bind_call(self).body = value
-        end
       end
 
       callback = -> { sync_rich_text_shadows(attributes) }
@@ -31,14 +28,7 @@ module RichTextShadow
   def sync_rich_text_shadows(attributes)
     attributes.each do |attribute|
       rich_text = public_send(attribute)
-      if rich_text.will_save_change_to_body?
-        self[attribute] = rich_text.body&.to_plain_text&.presence
-      elsif rich_text.body.present?
-        self[attribute] = rich_text.body.to_plain_text
-      elsif self[attribute].present?
-        public_send("#{attribute}=", Markdown.to_html(self[attribute]))
-        self[attribute] = public_send(attribute).body.to_plain_text
-      end
+      self[attribute] = rich_text.body&.to_plain_text&.presence if rich_text.will_save_change_to_body?
     end
   end
 end

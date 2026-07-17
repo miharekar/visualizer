@@ -1,4 +1,4 @@
-class CreateActionTextAndMigrateNotes < ActiveRecord::Migration[8.1]
+class CreateActionTextRichTexts < ActiveRecord::Migration[8.1]
   def up
     create_table :action_text_rich_texts, id: :uuid do |t|
       t.string :name, null: false
