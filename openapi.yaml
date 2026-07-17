@@ -208,7 +208,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/ShotFormat"
         - $ref: "#/components/parameters/Essentials"
-        - $ref: "#/components/parameters/EditorNotes"
       responses:
         "200":
           description: Shot detail.
@@ -837,15 +836,6 @@ components:
           - type: string
           - type: boolean
       description: When present, omits full shot information payload.
-    EditorNotes:
-      name: editor_notes
-      in: query
-      required: false
-      schema:
-        oneOf:
-          - type: string
-          - type: boolean
-      description: When present, normalizes note fields for the authenticated user's rich-text or Markdown editor.
     WithData:
       name: with_data
       in: query

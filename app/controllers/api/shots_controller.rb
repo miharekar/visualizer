@@ -21,7 +21,7 @@ module Api
 
     def show
       with_shot do |shot|
-        render json: shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence, editor_notes: params[:editor_notes].presence)
+        render json: shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
       end
     end
     alias_method :download, :show

@@ -153,23 +153,6 @@ module Api
       assert_includes json_response["private_notes"], "Only for <strong>me</strong>"
     end
 
-    test "show normalizes notes for destination editor" do
-      legacy_owner = FactoryBot.create(:user, rich_text_enabled: false)
-      legacy_shot = FactoryBot.create(:shot, user: legacy_owner)
-      legacy_shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
-
-      get api_shot_url(legacy_shot), params: {editor_notes: true}, headers: auth_headers(user), as: :json
-
-      assert_includes response.parsed_body["bean_notes"], "<strong>Chocolate</strong>"
-
-      rich_shot = FactoryBot.create(:shot, user:, bean_notes: "<p><strong>Caramel</strong></p>")
-      legacy_requester = FactoryBot.create(:user, rich_text_enabled: false)
-
-      get api_shot_url(rich_shot), params: {editor_notes: true}, headers: auth_headers(legacy_requester), as: :json
-
-      assert_equal "Caramel", response.parsed_body["bean_notes"]
-    end
-
     test "show returns tasting assessment data when present" do
       shot = FactoryBot.create(
         :shot,

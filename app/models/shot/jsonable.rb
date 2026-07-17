@@ -37,17 +37,17 @@ class Shot
       json.compact
     end
 
-    def default_json(include_information:, editor_notes: false)
+    def default_json(include_information:)
       json = attributes.slice(*ALLOWED_ATTRIBUTES)
-      json["bean_notes"] = note_for_api(:bean_notes, editor_notes:)
-      json["espresso_notes"] = note_for_api(:espresso_notes, editor_notes:)
+      json["bean_notes"] = serialized_note(:bean_notes)
+      json["espresso_notes"] = serialized_note(:espresso_notes)
       add_brew_data(json) if include_information
-      json.merge(visualizer_attributes(editor_notes:).slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
+      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
     end
 
     private
 
-    def visualizer_attributes(editor_notes: false)
+    def visualizer_attributes
       attributes = {
         shot_id: id,
         user_id:,
@@ -62,8 +62,8 @@ class Shot
         bitterness:,
         sweetness:,
         mouthfeel:,
-        espresso_notes: note_for_api(:espresso_notes, editor_notes:),
-        bean_notes: note_for_api(:bean_notes, editor_notes:),
+        espresso_notes: serialized_note(:espresso_notes),
+        bean_notes: serialized_note(:bean_notes),
         barista:,
         metadata: metadata.presence,
         tags: tags.pluck(:name),
@@ -73,7 +73,7 @@ class Shot
 
       attributes[:start_time] = start_time unless user&.hide_shot_times
       attributes[:user_name] = user.display_name if user&.public?
-      attributes[:private_notes] = note_for_api(:private_notes, editor_notes:) if Current.user == user
+      attributes[:private_notes] = serialized_note(:private_notes) if Current.user == user
       attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.has_profile?
       attributes[:image_url] = image.url if image.attached?
 
@@ -82,13 +82,6 @@ class Shot
 
     def serialized_note(attribute)
       return note(attribute).to_s.presence if user&.rich_text_enabled? == false
-
-      note_html(attribute).presence
-    end
-
-    def note_for_api(attribute, editor_notes:)
-      return serialized_note(attribute) unless editor_notes
-      return self[attribute].to_s.presence if Current.user&.rich_text_enabled? == false
 
       note_html(attribute).presence
     end

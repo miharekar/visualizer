@@ -29,7 +29,7 @@ export default class extends Controller {
 
   async copyFrom(shotId) {
     try {
-      const response = await fetch(`/api/shots/${shotId}?essentials=true&editor_notes=true`)
+      const response = await fetch(`/api/shots/${shotId}?essentials=true`)
       if (!response.ok) throw new Error("Failed to fetch shot data")
       const data = await response.json()
       this.fillFormFields(data)
