@@ -4,6 +4,7 @@ if Rails.env.local?
   Prosopite.min_n_queries = 3
   Prosopite.allow_stack_paths = [
     /action_controller\/metal\/rate_limiting\.rb/,
+    /app\/controllers\/shots_controller\.rb:75/,
     /mission_control\/jobs/
   ]
 end
