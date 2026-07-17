@@ -124,7 +124,7 @@ module Parsers
     def extract_fields_from_extra(shot)
       EXTRA_DATA_METHODS.each do |attr|
         value = extra[attr].presence
-        value = Markdown.to_html(value) if value && shot.user.rich_text_enabled? && %w[bean_notes espresso_notes].include?(attr)
+        value = Markdown.to_html(value) if value && %w[bean_notes espresso_notes].include?(attr)
         shot.public_send(:"#{attr}=", value)
       end
       shot.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }

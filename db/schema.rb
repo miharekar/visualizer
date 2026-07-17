@@ -346,7 +346,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_090000) do
     t.string "password_digest", default: "", null: false
     t.datetime "premium_expires_at"
     t.boolean "public", default: false, null: false
-    t.boolean "rich_text_enabled", default: true, null: false
     t.jsonb "shot_metadata_fields"
     t.string "skin"
     t.string "slug"

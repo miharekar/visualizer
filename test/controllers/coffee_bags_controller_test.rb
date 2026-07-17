@@ -23,16 +23,4 @@ class CoffeeBagsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to coffee_bags_url(format: :html)
     assert_includes @coffee_bag.reload.notes.to_s, "<strong>Chocolate</strong>"
   end
-
-  test "legacy user edits Markdown without conversion" do
-    @user.update_columns(rich_text_enabled: false) # rubocop:disable Rails/SkipsModelValidations
-    @coffee_bag.update_columns(notes: "**Before**") # rubocop:disable Rails/SkipsModelValidations
-
-    get edit_coffee_bag_url(@coffee_bag)
-
-    assert_select "textarea[name='coffee_bag[notes]']", text: "**Before**"
-    patch coffee_bag_url(@coffee_bag), params: {coffee_bag: {notes: "**After**"}}
-
-    assert_equal "**After**", @coffee_bag.reload[:notes]
-  end
 end

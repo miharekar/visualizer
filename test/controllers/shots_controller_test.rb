@@ -23,20 +23,6 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @shot.reload.bean_notes.to_s, "<strong>Chocolate</strong>"
   end
 
-  test "legacy user edits Markdown without conversion" do
-    @user.update_columns(rich_text_enabled: false) # rubocop:disable Rails/SkipsModelValidations
-    @shot.update_columns(bean_notes: "**Before**") # rubocop:disable Rails/SkipsModelValidations
-
-    get edit_shot_url(@shot)
-
-    assert_select "textarea[name='shot[bean_notes]']", text: "**Before**"
-    assert_select "lexxy-editor[name='shot[bean_notes]']", count: 0
-
-    patch shot_url(@shot), params: {shot: {bean_notes: "**After**"}}
-
-    assert_equal "**After**", @shot.reload[:bean_notes]
-  end
-
   test "filters rich text notes through plain text shadow column" do
     user = create(:user, :premium)
     matching = create(:shot, user:, profile_title: "Matching shot", bean_notes: "<p><strong>Chocolate</strong> and caramel</p>")

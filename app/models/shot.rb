@@ -18,7 +18,7 @@ class Shot < ApplicationRecord
   has_many :shared_shots, dependent: :destroy
   has_many :shot_tags, dependent: :destroy
   has_many :tags, through: :shot_tags
-  has_shadowed_rich_text(*NOTE_ATTRIBUTES, enabled: -> { user&.rich_text_enabled? })
+  has_shadowed_rich_text(*NOTE_ATTRIBUTES)
 
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500], format: :jpeg, saver: {strip: true}

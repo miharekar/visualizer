@@ -18,17 +18,6 @@ class ShotTest < ActiveSupport::TestCase
     assert_not shot.bean_notes.body.present?
   end
 
-  test "does not promote legacy Markdown notes for opted-out user" do
-    user = create(:user, rich_text_enabled: false)
-    shot = create(:shot, user:)
-    shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
-
-    shot.update!(profile_title: "Saved")
-
-    assert_equal "**Chocolate**", shot.reload[:bean_notes]
-    assert_not shot.rich_text_bean_notes&.body.present?
-  end
-
   test "does not send shot uploaded email by default" do
     user = create(:user)
 

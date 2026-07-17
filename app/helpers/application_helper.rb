@@ -4,13 +4,9 @@ module ApplicationHelper
     tag.div(html.to_s.html_safe, class: "lexxy-content prose prose-neutral dark:prose-invert", data: {controller: "syntax-highlight"}) # rubocop:disable Rails/OutputSafety
   end
 
-  def note_editor(form, attribute, content:, rich_text: Current.user.rich_text_enabled?)
-    if rich_text
-      html = content.respond_to?(:body) ? content.body&.to_html : Markdown.to_html(content)
-      form.lexxy_rich_text_area(attribute, value: html)
-    else
-      text_area_tag("#{form.object_name}[#{attribute}]", content, id: "#{form.object_name}_#{attribute}", rows: 10, class: "block w-full rounded-md border-neutral-300 font-mono shadow-sm focus:border-oxford-blue-500 focus:ring-oxford-blue-500 dark:bg-neutral-800 sm:text-sm")
-    end
+  def note_editor(form, attribute, content:)
+    html = content.respond_to?(:body) ? content.body&.to_html : Markdown.to_html(content)
+    form.lexxy_rich_text_area(attribute, value: html)
   end
 
   def faq_markdown_text_from(input, link_class: "")

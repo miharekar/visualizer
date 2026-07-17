@@ -83,19 +83,6 @@
                 </p>
               </div>
             </div>
-            <% unless profile.rich_text_enabled? %>
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <%= f.check_box :rich_text_enabled, class: "standard-checkbox size-4 cursor-pointer" %>
-                </div>
-                <div class="ml-3 text-sm">
-                  <%= f.label :rich_text_enabled, "Enable rich text notes", class: "font-medium text-neutral-700 dark:text-neutral-300" %>
-                  <p class="text-neutral-500 dark:text-neutral-400">
-                    Switches notes to rich text as you edit them. This cannot be undone. Airtable will receive new HTML fields.
-                  </p>
-                </div>
-              </div>
-            <% end %>
             <% if profile.premium? %>
               <div class="flex items-start">
                 <div class="flex items-center h-5">

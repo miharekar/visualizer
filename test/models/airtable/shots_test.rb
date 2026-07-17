@@ -185,23 +185,13 @@ module Airtable
       assert_requested(stub)
     end
 
-    test "it uses HTML note fields for rich text users" do
+    test "it uses HTML note fields" do
       @shot.update!(bean_notes: "<p><strong>Chocolate</strong></p>")
 
       fields = Airtable::Shots.new(@user).__send__(:prepare_record, @shot)[:fields]
 
       assert_includes fields["Bean notes HTML"], "<strong>Chocolate</strong>"
       assert_not_includes fields, "Bean notes"
-    end
-
-    test "it uses existing rich text fields for opted-out users" do
-      @user.update_columns(rich_text_enabled: false) # rubocop:disable Rails/SkipsModelValidations
-      @shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
-
-      fields = Airtable::Shots.new(@user).__send__(:prepare_record, @shot)[:fields]
-
-      assert_equal "**Chocolate**", fields["Bean notes"]
-      assert_not_includes fields, "Bean notes HTML"
     end
 
     test "it uploads tasting assessment fields to airtable" do

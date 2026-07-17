@@ -69,15 +69,15 @@ module Airtable
     end
 
     def note_fields
-      @note_fields ||= self.class::NOTE_FIELDS.transform_keys { |name| user.rich_text_enabled? ? "#{name} HTML" : name }
+      @note_fields ||= self.class::NOTE_FIELDS.transform_keys { |name| "#{name} HTML" }
     end
 
     def note_field_type
-      user.rich_text_enabled? ? "multilineText" : "richText"
+      "multilineText"
     end
 
     def note_value(record, attribute)
-      user.rich_text_enabled? ? record.rich_text_html(attribute) : record.public_send(attribute)
+      record.rich_text_html(attribute)
     end
 
     def create_table

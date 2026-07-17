@@ -1001,18 +1001,18 @@ components:
         espresso_notes:
           type: string
           nullable: true
-          description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
+          description: Rich text HTML.
         roast_level:
           type: string
           nullable: true
         bean_notes:
           type: string
           nullable: true
-          description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
+          description: Rich text HTML.
         private_notes:
           type: string
           nullable: true
-          description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise markdown.
+          description: Owner-only rich text HTML.
         barista:
           type: string
           nullable: true
@@ -1132,7 +1132,7 @@ components:
         meta:
           visualizer:
             shot_id: 15d4ec9f-7f86-4f63-b2ac-cfce8277f33f
-            private_notes: Dialed in and syrupy
+            private_notes: <p>Dialed in and syrupy</p>
 
     SharedShotsResponse:
       oneOf:
@@ -1393,11 +1393,11 @@ components:
             espresso_notes:
               type: string
               nullable: true
-              description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
+              description: Rich text HTML.
             bean_notes:
               type: string
               nullable: true
-              description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
+              description: Rich text HTML.
             barista:
               type: string
               nullable: true
@@ -1423,7 +1423,7 @@ components:
             private_notes:
               type: string
               nullable: true
-              description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise markdown.
+              description: Owner-only rich text HTML.
             profile_url:
               type: string
               format: uri
@@ -1572,15 +1572,15 @@ components:
             private_notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
+              description: Rich text HTML.
             bean_notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
+              description: Rich text HTML.
             espresso_notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
+              description: Rich text HTML.
             fragrance:
               type: integer
               minimum: 0
@@ -1881,7 +1881,7 @@ components:
         notes:
           type: string
           nullable: true
-          description: HTML when the coffee bag owner has rich text notes enabled; otherwise markdown.
+          description: Rich text HTML.
         archived_at:
           type: string
           format: date-time
@@ -1967,7 +1967,7 @@ components:
             notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
+              description: Rich text HTML.
             metadata:
               type: object
               additionalProperties: true

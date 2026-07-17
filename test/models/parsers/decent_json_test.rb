@@ -163,14 +163,5 @@ module Parsers
       assert_includes shot.bean_notes.to_s, "<li>woodsy</li>"
       assert_includes shot.bean_notes.to_s, "<li>smooth</li>"
     end
-
-    test "preserves Markdown notes for opted-out user" do
-      user = build_stubbed(:user, rich_text_enabled: false)
-
-      shot = new_shot("test/files/20211019T100744.json", user:)
-
-      assert_equal "With BPlus", shot.bean_notes
-      assert_not shot.rich_text_bean_notes&.body.present?
-    end
   end
 end

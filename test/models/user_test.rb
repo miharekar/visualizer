@@ -3,30 +3,6 @@ require "test_helper"
 class UserTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
-  test "enabling rich text promotes legacy notes on their next save" do
-    user = create(:user, rich_text_enabled: false)
-    shot = create(:shot, user:)
-    shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
-
-    user.update!(rich_text_enabled: true)
-
-    assert_equal "**Chocolate**", shot.reload[:bean_notes]
-    assert_includes shot.rich_text_html(:bean_notes), "<strong>Chocolate</strong>"
-    assert_not shot.bean_notes.persisted?
-
-    shot.update!(profile_title: "Saved")
-
-    assert_equal "Chocolate", shot.reload[:bean_notes]
-    assert_includes shot.bean_notes.to_s, "<strong>Chocolate</strong>"
-  end
-
-  test "rich text cannot be disabled after conversion" do
-    user = create(:user)
-
-    assert_not user.update(rich_text_enabled: false)
-    assert_includes user.errors[:rich_text_enabled], "cannot be disabled after notes have been converted"
-  end
-
   test "it can generate an unsubscribe token for a notification" do
     user = create(:user)
 

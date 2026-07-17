@@ -42,7 +42,7 @@ class ProfilesController < ApplicationController
   end
 
   def profile_params
-    allowed_params = %i[avatar name timezone temperature_unit date_format skin public hide_shot_times beta unified_chart rich_text_enabled]
+    allowed_params = %i[avatar name timezone temperature_unit date_format skin public hide_shot_times beta unified_chart]
     allowed_params << %i[github supporter developer] if Current.user.admin?
     allowed_params << %i[coffee_management_enabled] if Current.user.premium?
     notification_settings = {unsubscribed_from: User::EMAIL_NOTIFICATIONS - (params[:user][:email_notifications] || [])}

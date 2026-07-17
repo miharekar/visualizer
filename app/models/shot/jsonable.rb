@@ -81,8 +81,6 @@ class Shot
     end
 
     def serialized_note(attribute)
-      return public_send(attribute).to_s.presence unless user&.rich_text_enabled?
-
       rich_text_html(attribute).presence
     end
 
