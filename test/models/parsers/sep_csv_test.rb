@@ -19,7 +19,7 @@ module Parsers
       assert_equal 9, shot.information.extra.keys.size
       assert_equal %w[espresso_flow_weight espresso_weight], shot.information.data.keys.sort
       assert_equal "TSP18 Z", shot.profile_title
-      assert_equal "Espresso Machine Brand: Flair PRO\nBrew ratio: 1.0\nExtraction time: 48.403\nAvarage flow rate: 0.6406627688366423\nUnit system: metric\nAttribution: Smart Espresso Profiler\nSoftware: Smart Espresso Profiler App\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+      assert_equal "Espresso Machine Brand: Flair PRO\nBrew ratio: 1.0\nExtraction time: 48.403\nAvarage flow rate: 0.6406627688366423\nUnit system: metric\nAttribution: Smart Espresso Profiler\nSoftware: Smart Espresso Profiler App\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes.to_plain_text.strip.gsub(/\n+/, "\n")
       assert_equal "Herd", shot.bean_brand
       assert_equal "Kenya", shot.bean_type
       assert_equal "Medium", shot.roast_level
@@ -43,7 +43,7 @@ module Parsers
       assert_in_delta(0.73, shot.information.data["espresso_flow_weight"][400])
       assert_equal 9, shot.information.extra.keys.size
       assert_equal "Profitec/Victoria Arduino dual spring setup", shot.profile_title
-      assert_equal "Espresso Machine Brand: Profitec\nEspresso Machine Model: Pro800\nBrew ratio: 1.0\nExtraction time: 58.536\nAvarage flow rate: 0.6551523848571821\nUnit system: metric\nAttribution: Coffee Flow\nSoftware: Coffee Flow\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+      assert_equal "Espresso Machine Brand: Profitec\nEspresso Machine Model: Pro800\nBrew ratio: 1.0\nExtraction time: 58.536\nAvarage flow rate: 0.6551523848571821\nUnit system: metric\nAttribution: Coffee Flow\nSoftware: Coffee Flow\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes.to_plain_text.strip.gsub(/\n+/, "\n")
       assert_equal "Kavekalmar", shot.bean_brand
       assert_equal "Brasil Cerrado Mineiro", shot.bean_type
       assert_equal "dark", shot.roast_level
@@ -68,7 +68,7 @@ module Parsers
       assert_in_delta(0.66, shot.information.data["espresso_flow_weight"][400])
       assert_equal 6, shot.information.extra.keys.size
       assert_equal "My espresso #438", shot.profile_title
-      assert_equal "Basket Diameter: 58.8\nBasket Capacity: 15.8\nBrew ratio: 1.0\nExtraction time: 33.085\nAvarage flow rate: 1.1446274746864138\nUnit system: metric\nAttribution: Coffee Flow\nSoftware: Coffee Flow\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+      assert_equal "Basket Diameter: 58.8\nBasket Capacity: 15.8\nBrew ratio: 1.0\nExtraction time: 33.085\nAvarage flow rate: 1.1446274746864138\nUnit system: metric\nAttribution: Coffee Flow\nSoftware: Coffee Flow\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes.to_plain_text.strip.gsub(/\n+/, "\n")
       assert_equal "Kávékalmár", shot.bean_brand
       assert_equal "Ethiopia Banti Nenka", shot.bean_type
       assert_equal "Medium", shot.roast_level
@@ -92,7 +92,7 @@ module Parsers
       assert_in_delta(0.04, shot.information.data["espresso_flow_weight"][150])
       assert_equal 10, shot.information.extra.keys.size
       assert_equal "First Pull", shot.profile_title
-      assert_equal "Espresso Machine Brand: Flair 58\nEspresso Machine Model: f58\nBasket Diameter: 58.0\nBrew ratio: 1.0\nExtraction time: 18.674\nAvarage flow rate: 1.931562600406983\nUnit system: metric\nAttribution: Pressensor CF\nSoftware: Pressensor CF\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes
+      assert_equal "Espresso Machine Brand: Flair 58\nEspresso Machine Model: f58\nBasket Diameter: 58.0\nBrew ratio: 1.0\nExtraction time: 18.674\nAvarage flow rate: 1.931562600406983\nUnit system: metric\nAttribution: Pressensor CF\nSoftware: Pressensor CF\nUrl: https://itunes.apple.com/hu/app/smart-espresso-profiler/id1391707089\nExport version: 1.1.0", shot.espresso_notes.to_plain_text.strip.gsub(/\n+/, "\n")
       assert_equal "Ninetens", shot.bean_brand
       assert_equal "Kintamani Cascara Washed", shot.bean_type
       assert_equal "Medium", shot.roast_level

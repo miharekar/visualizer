@@ -7,6 +7,7 @@ module CoffeeBags
       allowed << {metadata: Current.user.coffee_bag_metadata_fields}
       cb_params = params.expect(coffee_bag: allowed)
       cb_params[:roaster_id] = Current.user.roasters.find_by(id: params.dig(:coffee_bag, :roaster_id))&.id if params.dig(:coffee_bag, :roaster_id).present?
+      cb_params[:legacy_notes] = cb_params.delete(:notes) if !Current.user.rich_text_enabled? && cb_params.key?(:notes)
 
       cb_params
     end

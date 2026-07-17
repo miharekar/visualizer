@@ -5,15 +5,14 @@ module Airtable
     TABLE_DESCRIPTION = "Shots from Visualizer".freeze
     STANDARD_FIELDS = %w[
       espresso_enjoyment profile_title duration barista bean_weight drink_weight grinder_model grinder_setting
-      bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
+      bean_brand bean_type roast_date roast_level drink_tds drink_ey
       fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel
     ].index_by { it.to_s.humanize }
+    MARKDOWN_NOTE_FIELDS = %w[bean_notes espresso_notes private_notes].to_h { |attribute| [attribute.humanize, "legacy_#{attribute}"] }.freeze
+    HTML_NOTE_FIELDS = %w[bean_notes espresso_notes private_notes].index_by { |attribute| "#{attribute.humanize} HTML" }.freeze
     FIELD_OPTIONS = {
       "espresso_enjoyment" => {type: "number", options: {precision: 0}},
       "duration" => {type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
-      "bean_notes" => {type: "richText"},
-      "espresso_notes" => {type: "richText"},
-      "private_notes" => {type: "richText"},
       "fragrance" => {type: "number", options: {precision: 0}},
       "aroma" => {type: "number", options: {precision: 0}},
       "flavor" => {type: "number", options: {precision: 0}},
@@ -42,7 +41,7 @@ module Airtable
           {name: "Tags", type: "multipleSelects", options: {choices: user.tags.pluck("name").map { {name: it} }}}
         ]
         coffee_management = user.coffee_management_enabled? ? [{name: "Coffee Bag", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[CoffeeBags::TABLE_NAME]["id"]}}] : []
-        standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
+        standard = standard_fields.map { |name, attribute| {name:, **field_options(name, attribute)} }
         metadata = user.shot_metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
         static + coffee_management + standard + metadata
@@ -62,7 +61,10 @@ module Airtable
         fields["Coffee Bag"] = [shot.coffee_bag.airtable_id]
       end
 
-      STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
+      standard_fields.each do |name, attribute|
+        value = shot.public_send(attribute)
+        fields[name] = name.end_with?(" HTML") ? shot.note_html(attribute) : value
+      end
       user.shot_metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
       data = {fields: fields.compact}
@@ -71,7 +73,8 @@ module Airtable
     end
 
     def update_local_record(shot, record, updated_at)
-      shot.assign_attributes(record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |k| STANDARD_FIELDS[k] })
+      attributes = record["fields"].slice(*standard_fields.keys).transform_keys { |key| standard_fields[key] }
+      shot.assign_attributes(attributes)
       shot.skip_airtable_sync = true
       shot.updated_at = updated_at
       shot.metadata = user.shot_metadata_fields.index_with { |f| record["fields"][f] }
@@ -87,6 +90,17 @@ module Airtable
     def upload_coffee_bag_to_airtable(shot)
       AirtableUploadRecordJob.perform_now(shot.coffee_bag)
       shot.coffee_bag.reload
+    end
+
+    def standard_fields
+      @standard_fields ||= STANDARD_FIELDS.merge(user.rich_text_enabled? ? HTML_NOTE_FIELDS : MARKDOWN_NOTE_FIELDS)
+    end
+
+    def field_options(name, attribute)
+      return {type: "multilineText"} if name.end_with?(" HTML")
+      return {type: "richText"} if MARKDOWN_NOTE_FIELDS.key?(name)
+
+      FIELD_OPTIONS[attribute] || {type: "singleLineText"}
     end
   end
 end

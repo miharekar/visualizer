@@ -35,12 +35,14 @@ class User < ApplicationRecord
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
   validates :creem_customer_id, uniqueness: true, allow_blank: true
+  validate :rich_text_cannot_be_disabled, on: :update
 
   before_validation :set_webauthn_id
   before_validation :set_default_unsubscribed_from, on: :create
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
   after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
+  after_update_commit :upload_rich_text_to_airtable, if: -> { saved_change_to_rich_text_enabled? }
 
   generates_token_for :unsubscribe
 
@@ -143,6 +145,16 @@ class User < ApplicationRecord
     self.unsubscribed_from = OPT_IN_EMAIL_NOTIFICATIONS if self[:unsubscribed_from].nil?
   end
 
+  def upload_rich_text_to_airtable
+    AirtableUploadAllJob.perform_later(self, nil, force: true) if identities.by_provider(:airtable).exists?
+  end
+
+  def rich_text_cannot_be_disabled
+    return unless rich_text_enabled_in_database && will_save_change_to_rich_text_enabled?
+
+    errors.add(:rich_text_enabled, "cannot be disabled after notes have been converted")
+  end
+
   def generate_slug
     super if public?
   end
@@ -182,6 +194,7 @@ end
 #  password_digest            :string           default(""), not null
 #  premium_expires_at         :datetime
 #  public                     :boolean          default(FALSE), not null
+#  rich_text_enabled          :boolean          default(TRUE), not null
 #  shot_metadata_fields       :jsonb
 #  skin                       :string
 #  slug                       :string

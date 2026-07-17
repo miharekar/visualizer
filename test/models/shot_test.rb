@@ -1,6 +1,34 @@
 require "test_helper"
 
 class ShotTest < ActiveSupport::TestCase
+  test "promotes legacy Markdown notes to Action Text on save" do
+    shot = create(:shot)
+    shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
+
+    assert_includes shot.reload.note_html(:bean_notes), "<strong>Chocolate</strong>"
+
+    shot.update!(profile_title: "Saved")
+
+    assert_equal "Chocolate", shot.reload[:bean_notes]
+    assert_includes shot.bean_notes.to_s, "<strong>Chocolate</strong>"
+
+    shot.update!(bean_notes: "")
+
+    assert_nil shot.reload[:bean_notes]
+    assert_not shot.bean_notes.body.present?
+  end
+
+  test "does not promote legacy Markdown notes for opted-out user" do
+    user = create(:user, rich_text_enabled: false)
+    shot = create(:shot, user:)
+    shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
+
+    shot.update!(profile_title: "Saved")
+
+    assert_equal "**Chocolate**", shot.reload[:bean_notes]
+    assert_not shot.bean_notes.body.present?
+  end
+
   test "does not send shot uploaded email by default" do
     user = create(:user)
 

@@ -24,6 +24,7 @@ gem "pg_lock"
 gem "postmark-rails"
 gem "propshaft"
 gem "inline_svg" # rubocop:disable Bundler/OrderedGems
+gem "lexxy"
 gem "puma"
 gem "rack-cors"
 gem "rails"

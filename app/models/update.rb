@@ -1,4 +1,7 @@
 class Update < ApplicationRecord
+  include RichTextShadow
+
+  has_shadowed_rich_text :body
   self.table_name = :changes
 
   include Sluggable
@@ -9,6 +12,10 @@ class Update < ApplicationRecord
   end
 
   validates :slug, uniqueness: true
+
+  def content
+    shadowed_rich_text(:body)
+  end
 end
 
 # == Schema Information

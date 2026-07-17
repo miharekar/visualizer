@@ -2,6 +2,9 @@
 
 import "@hotwired/turbo-rails"
 import "@rails/activestorage"
+import * as Lexxy from "lexxy"
 import "channels/consumer"
 import "controllers"
 import "custom"
+
+Lexxy.configure({ default: { attachments: false } })

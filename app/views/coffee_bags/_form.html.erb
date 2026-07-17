@@ -167,10 +167,9 @@
         <div>
           <%= f.label :notes, class: "standard-label" %>
           <div class="mt-1">
-            <%= f.text_area :notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
+            <%= note_editor(f, :notes, content: f.object.note) %>
             <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Supports
-              <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
+              Markdown shortcuts supported.
             </div>
           </div>
         </div>

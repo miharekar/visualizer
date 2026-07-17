@@ -208,6 +208,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/ShotFormat"
         - $ref: "#/components/parameters/Essentials"
+        - $ref: "#/components/parameters/EditorNotes"
       responses:
         "200":
           description: Shot detail.
@@ -836,6 +837,15 @@ components:
           - type: string
           - type: boolean
       description: When present, omits full shot information payload.
+    EditorNotes:
+      name: editor_notes
+      in: query
+      required: false
+      schema:
+        oneOf:
+          - type: string
+          - type: boolean
+      description: When present, normalizes note fields for the authenticated user's rich-text or Markdown editor.
     WithData:
       name: with_data
       in: query
@@ -1001,15 +1011,18 @@ components:
         espresso_notes:
           type: string
           nullable: true
+          description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
         roast_level:
           type: string
           nullable: true
         bean_notes:
           type: string
           nullable: true
+          description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
         private_notes:
           type: string
           nullable: true
+          description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
         barista:
           type: string
           nullable: true
@@ -1390,9 +1403,11 @@ components:
             espresso_notes:
               type: string
               nullable: true
+              description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
             bean_notes:
               type: string
               nullable: true
+              description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
             barista:
               type: string
               nullable: true
@@ -1418,6 +1433,7 @@ components:
             private_notes:
               type: string
               nullable: true
+              description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
             profile_url:
               type: string
               format: uri
@@ -1566,6 +1582,15 @@ components:
             private_notes:
               type: string
               nullable: true
+              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
+            bean_notes:
+              type: string
+              nullable: true
+              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
+            espresso_notes:
+              type: string
+              nullable: true
+              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
             fragrance:
               type: integer
               minimum: 0
@@ -1866,6 +1891,7 @@ components:
         notes:
           type: string
           nullable: true
+          description: HTML when the coffee bag owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
         archived_at:
           type: string
           format: date-time
@@ -1951,6 +1977,7 @@ components:
             notes:
               type: string
               nullable: true
+              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
             metadata:
               type: object
               additionalProperties: true

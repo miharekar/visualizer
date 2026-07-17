@@ -65,12 +65,13 @@ module Api
       other_roaster = FactoryBot.create(:roaster, user: premium_user, name: "Other")
       coffee_bag = FactoryBot.create(:coffee_bag, roaster:, name: "Before")
 
-      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {name: "After", roaster_id: other_roaster.id}}, as: :json
+      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {name: "After", roaster_id: other_roaster.id, notes: "<p><strong>Chocolate</strong></p>"}}, as: :json
 
       assert_response :success
       coffee_bag.reload
       assert_equal "After", coffee_bag.name
       assert_equal other_roaster.id, coffee_bag.roaster_id
+      assert_includes coffee_bag.notes.to_s, "<strong>Chocolate</strong>"
     end
 
     test "update returns not found for unowned coffee bag" do

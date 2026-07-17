@@ -4,9 +4,11 @@ class Shot < ApplicationRecord
   include Airtablable
   include Jsonable
   include DateParseable
+  include RichTextShadow
 
   DAILY_LIMIT = 50
   TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
+  NOTE_ATTRIBUTES = %i[bean_notes espresso_notes private_notes].freeze
   LIST_ATTRIBUTES = %i[id user_id start_time updated_at profile_title bean_weight drink_weight drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
   belongs_to :user, optional: true, touch: true
@@ -16,6 +18,7 @@ class Shot < ApplicationRecord
   has_many :shared_shots, dependent: :destroy
   has_many :shot_tags, dependent: :destroy
   has_many :tags, through: :shot_tags
+  has_shadowed_rich_text(*NOTE_ATTRIBUTES, enabled: -> { user&.rich_text_enabled? })
 
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500], format: :jpeg, saver: {strip: true}
@@ -47,6 +50,14 @@ class Shot < ApplicationRecord
 
   def metadata
     super.presence || {}
+  end
+
+  def note(attribute)
+    shadowed_rich_text(attribute, enabled: user&.rich_text_enabled? != false)
+  end
+
+  def note_html(attribute)
+    shadowed_rich_text_html(attribute, enabled: user&.rich_text_enabled? != false)
   end
 
   def refresh_coffee_bag_fields

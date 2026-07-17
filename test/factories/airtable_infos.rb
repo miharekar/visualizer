@@ -32,6 +32,9 @@ FactoryBot.define do
               {"name" => "Bean notes", "type" => "richText"},
               {"name" => "Espresso notes", "type" => "richText"},
               {"name" => "Private notes", "type" => "richText"},
+              {"name" => "Bean notes HTML", "type" => "multilineText"},
+              {"name" => "Espresso notes HTML", "type" => "multilineText"},
+              {"name" => "Private notes HTML", "type" => "multilineText"},
               {"name" => "Fragrance", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Aroma", "type" => "number", "options" => {"precision" => 0}},
               {"name" => "Flavor", "type" => "number", "options" => {"precision" => 0}},
@@ -70,6 +73,7 @@ FactoryBot.define do
               {"name" => "Archived at", "type" => "dateTime", "options" => {"timeZone" => "utc", "dateFormat" => {"name" => "local"}, "timeFormat" => {"name" => "24hour"}}},
               {"name" => "Place of purchase", "type" => "singleLineText"},
               {"name" => "Notes", "type" => "richText"},
+              {"name" => "Notes HTML", "type" => "multilineText"},
               {"name" => "Bean density", "type" => "singleLineText"},
               {"name" => "Bean color", "type" => "singleLineText"}
             ]

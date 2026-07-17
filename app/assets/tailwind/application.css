@@ -6,6 +6,33 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+.dark {
+  --lexxy-color-ink: oklch(96% 0 0);
+  --lexxy-color-ink-medium: oklch(75% 0 0);
+  --lexxy-color-ink-light: oklch(55% 0 0);
+  --lexxy-color-ink-lighter: oklch(40% 0 0);
+  --lexxy-color-ink-lightest: oklch(25% 0 0);
+  --lexxy-color-ink-inverted: oklch(15% 0 0);
+  --lexxy-color-accent-dark: var(--color-oxford-blue-400);
+  --lexxy-color-accent-medium: var(--color-oxford-blue-300);
+  --lexxy-color-accent-light: var(--color-oxford-blue-800);
+  --lexxy-color-accent-lightest: var(--color-oxford-blue-900);
+  --lexxy-shadow: 0 0 0 1px oklch(55% 0 0 / 30%);
+}
+
+lexxy-editor {
+  --lexxy-toolbar-button-size: 1.5lh;
+  min-height: 12rem;
+}
+
+lexxy-toolbar {
+  --lexxy-toolbar-icon-size: 0.875em;
+}
+
+.lexxy-floating-controls {
+  --button-size: 1.5rem;
+}
+
 @theme {
   --font-sans: "Inter", sans-serif;
   --font-serif: "Cormorant", serif;

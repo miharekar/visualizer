@@ -37,8 +37,8 @@ module Parsers
       assert_equal "0", shot.drink_tds
       assert_equal "0", shot.drink_ey
       assert_equal 0, shot.espresso_enjoyment
-      assert_nil shot.espresso_notes
-      assert_equal "With BPlus", shot.bean_notes
+      assert_not shot.espresso_notes.body.present?
+      assert_equal "With BPlus", shot.bean_notes.to_plain_text
       assert_equal "Miha Rekar", shot.information.extra["my_name"]
       assert_equal "Miha Rekar", shot.barista
       assert_equal "MimojaCafe", shot.information.extra["skin"]
@@ -75,8 +75,8 @@ module Parsers
       assert_equal "0", shot.drink_tds
       assert_equal "0", shot.drink_ey
       assert_equal 80, shot.espresso_enjoyment
-      assert_nil shot.espresso_notes
-      assert_equal "With BPlus", shot.bean_notes
+      assert_not shot.espresso_notes.body.present?
+      assert_equal "With BPlus", shot.bean_notes.to_plain_text
       assert_equal "Miha Rekar", shot.information.extra["my_name"]
       assert_equal "Miha Rekar", shot.barista
       assert_equal "MimojaCafe", shot.information.extra["skin"]
@@ -159,7 +159,18 @@ module Parsers
     test "extracts newlines in bean notes from .shot file" do
       shot = new_shot("test/files/20240202T063530.shot")
       assert shot.valid?
-      assert_equal "- chocolate\n- woodsy\n- smooth", shot.bean_notes
+      assert_includes shot.bean_notes.to_s, "<li>chocolate</li>"
+      assert_includes shot.bean_notes.to_s, "<li>woodsy</li>"
+      assert_includes shot.bean_notes.to_s, "<li>smooth</li>"
+    end
+
+    test "preserves Markdown notes for opted-out user" do
+      user = build_stubbed(:user, rich_text_enabled: false)
+
+      shot = new_shot("test/files/20211019T100744.json", user:)
+
+      assert_equal "With BPlus", shot.legacy_bean_notes
+      assert_not shot.bean_notes.body.present?
     end
   end
 end

@@ -2,7 +2,7 @@ class Shot
   module Jsonable
     extend ActiveSupport::Concern
 
-    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista].freeze
+    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date roast_level barista].freeze
     FORMAT_METHODS = {
       "beanconqueror" => :beanconqueror_json,
       "default" => :default_json,
@@ -37,15 +37,17 @@ class Shot
       json.compact
     end
 
-    def default_json(include_information:)
+    def default_json(include_information:, editor_notes: false)
       json = attributes.slice(*ALLOWED_ATTRIBUTES)
+      json["bean_notes"] = note_for_api(:bean_notes, editor_notes:)
+      json["espresso_notes"] = note_for_api(:espresso_notes, editor_notes:)
       add_brew_data(json) if include_information
-      json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
+      json.merge(visualizer_attributes(editor_notes:).slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
     end
 
     private
 
-    def visualizer_attributes
+    def visualizer_attributes(editor_notes: false)
       attributes = {
         shot_id: id,
         user_id:,
@@ -60,8 +62,8 @@ class Shot
         bitterness:,
         sweetness:,
         mouthfeel:,
-        espresso_notes:,
-        bean_notes:,
+        espresso_notes: note_for_api(:espresso_notes, editor_notes:),
+        bean_notes: note_for_api(:bean_notes, editor_notes:),
         barista:,
         metadata: metadata.presence,
         tags: tags.pluck(:name),
@@ -71,11 +73,24 @@ class Shot
 
       attributes[:start_time] = start_time unless user&.hide_shot_times
       attributes[:user_name] = user.display_name if user&.public?
-      attributes[:private_notes] = private_notes if Current.user == user
+      attributes[:private_notes] = note_for_api(:private_notes, editor_notes:) if Current.user == user
       attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.has_profile?
       attributes[:image_url] = image.url if image.attached?
 
       attributes.compact
+    end
+
+    def serialized_note(attribute)
+      return note(attribute).to_s.presence if user&.rich_text_enabled? == false
+
+      note_html(attribute).presence
+    end
+
+    def note_for_api(attribute, editor_notes:)
+      return serialized_note(attribute) unless editor_notes
+      return self[attribute].to_s.presence if Current.user&.rich_text_enabled? == false
+
+      note_html(attribute).presence
     end
 
     def add_brew_data(json)

@@ -18,3 +18,9 @@ module ActiveSupport
     teardown { WebMock.reset! }
   end
 end
+
+class ActionDispatch::IntegrationTest
+  def sign_in(user)
+    post session_url, params: {email: user.email, password: "password"}
+  end
+end

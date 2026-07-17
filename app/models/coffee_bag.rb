@@ -1,5 +1,6 @@
 class CoffeeBag < ApplicationRecord
   include Airtablable
+  include RichTextShadow
   include Squishable
 
   performs :refresh_shot_values
@@ -10,6 +11,7 @@ class CoffeeBag < ApplicationRecord
   belongs_to :canonical_coffee_bag, optional: true
   has_one :user, through: :roaster
   has_many :shots, dependent: :nullify
+  has_shadowed_rich_text :notes, enabled: -> { user.rich_text_enabled? }
 
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
@@ -50,6 +52,14 @@ class CoffeeBag < ApplicationRecord
     super.presence || {}
   end
 
+  def note
+    shadowed_rich_text(:notes, enabled: user.rich_text_enabled?)
+  end
+
+  def note_html
+    shadowed_rich_text_html(:notes, enabled: user.rich_text_enabled?)
+  end
+
   def full_display_name
     details = []
     details << roast_date.to_fs(:long) if roast_date.present?
@@ -59,12 +69,16 @@ class CoffeeBag < ApplicationRecord
   end
 
   def duplicate(roast_date)
-    dup.tap { |d| d.roast_date = roast_date }
+    dup.tap do |copy|
+      copy.roast_date = roast_date
+      copy.notes = notes.body if user.rich_text_enabled? && notes.body.present?
+    end
   end
 
   def to_api_json
     attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id roaster_id canonical_coffee_bag_id name roast_date frozen_date defrosted_date url archived_at notes]
-    attributes.slice(*attribute_names).tap do |json|
+    attributes.slice(*(attribute_names - ["notes"])).tap do |json|
+      json["notes"] = user.rich_text_enabled? ? note_html.presence : note.to_s.presence
       json["image_url"] = image&.url if image.attached?
       json["metadata"] = metadata.presence
     end

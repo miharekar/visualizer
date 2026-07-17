@@ -135,7 +135,7 @@ module Api
     end
 
     test "show returns shot data" do
-      shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
+      shot = FactoryBot.create(:shot, user:, bean_notes: "<p><strong>Chocolate</strong></p>", private_notes: "<p>Only for <strong>me</strong></p>")
 
       get api_shot_url(shot), headers: auth_headers(user), as: :json
       assert_response :success
@@ -149,7 +149,25 @@ module Api
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
-      assert_equal "Only for me", json_response["private_notes"]
+      assert_includes json_response["bean_notes"], "<strong>Chocolate</strong>"
+      assert_includes json_response["private_notes"], "Only for <strong>me</strong>"
+    end
+
+    test "show normalizes notes for destination editor" do
+      legacy_owner = FactoryBot.create(:user, rich_text_enabled: false)
+      legacy_shot = FactoryBot.create(:shot, user: legacy_owner)
+      legacy_shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
+
+      get api_shot_url(legacy_shot), params: {editor_notes: true}, headers: auth_headers(user), as: :json
+
+      assert_includes response.parsed_body["bean_notes"], "<strong>Chocolate</strong>"
+
+      rich_shot = FactoryBot.create(:shot, user:, bean_notes: "<p><strong>Caramel</strong></p>")
+      legacy_requester = FactoryBot.create(:user, rich_text_enabled: false)
+
+      get api_shot_url(rich_shot), params: {editor_notes: true}, headers: auth_headers(legacy_requester), as: :json
+
+      assert_equal "Caramel", response.parsed_body["bean_notes"]
     end
 
     test "show returns tasting assessment data when present" do
@@ -208,7 +226,7 @@ module Api
       ]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response["updated_at"]
-      assert_equal "Only for me", json_response["private_notes"]
+      assert_includes json_response["private_notes"], "Only for me"
     end
 
     test "show does not expose private notes to other users" do
@@ -329,13 +347,14 @@ module Api
     test "update returns updated shot for JSON request" do
       shot = FactoryBot.create(:shot, user:, profile_title: "Old title")
 
-      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {profile_title: "New title"}}, as: :json
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {profile_title: "New title", bean_notes: "<p><strong>Chocolate</strong></p>"}}, as: :json
 
       assert_response :success
       assert_match "application/json", response.media_type
 
       json_response = response.parsed_body
       assert_equal "New title", json_response["profile_title"]
+      assert_includes shot.reload.bean_notes.to_s, "<strong>Chocolate</strong>"
     end
 
     test "update authorizes with shot policy" do

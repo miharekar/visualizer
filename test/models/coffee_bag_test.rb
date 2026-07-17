@@ -74,6 +74,15 @@ class CoffeeBagTest < ActiveSupport::TestCase
     assert_nil coffee_bag.days_in_freezer(up_to: Date.new(2025, 1, 9))
   end
 
+  test "duplicate preserves rich notes" do
+    coffee_bag = create(:coffee_bag, roaster:, notes: "<p><strong>Chocolate</strong></p>")
+
+    duplicate = coffee_bag.duplicate(Date.new(2025, 2, 1))
+    duplicate.save!
+
+    assert_includes duplicate.notes.to_s, "<strong>Chocolate</strong>"
+  end
+
   test "days_in_freezer returns nil when shot date is before frozen date" do
     coffee_bag = create(:coffee_bag, roaster:, frozen_date: Date.new(2025, 1, 10), defrosted_date: nil)
 
