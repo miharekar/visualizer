@@ -1001,18 +1001,18 @@ components:
         espresso_notes:
           type: string
           nullable: true
-          description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+          description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
         roast_level:
           type: string
           nullable: true
         bean_notes:
           type: string
           nullable: true
-          description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+          description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
         private_notes:
           type: string
           nullable: true
-          description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+          description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise markdown.
         barista:
           type: string
           nullable: true
@@ -1393,11 +1393,11 @@ components:
             espresso_notes:
               type: string
               nullable: true
-              description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
             bean_notes:
               type: string
               nullable: true
-              description: HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: HTML when the shot owner has rich text notes enabled; otherwise markdown.
             barista:
               type: string
               nullable: true
@@ -1423,7 +1423,7 @@ components:
             private_notes:
               type: string
               nullable: true
-              description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: Owner-only HTML when the shot owner has rich text notes enabled; otherwise markdown.
             profile_url:
               type: string
               format: uri
@@ -1572,15 +1572,15 @@ components:
             private_notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
             bean_notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
             espresso_notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
             fragrance:
               type: integer
               minimum: 0
@@ -1881,7 +1881,7 @@ components:
         notes:
           type: string
           nullable: true
-          description: HTML when the coffee bag owner has rich text notes enabled; otherwise GitHub Flavored Markdown.
+          description: HTML when the coffee bag owner has rich text notes enabled; otherwise markdown.
         archived_at:
           type: string
           format: date-time
@@ -1967,7 +1967,7 @@ components:
             notes:
               type: string
               nullable: true
-              description: HTML when the authenticated user has rich text notes enabled; otherwise GitHub Flavored Markdown.
+              description: HTML when the authenticated user has rich text notes enabled; otherwise markdown.
             metadata:
               type: object
               additionalProperties: true
