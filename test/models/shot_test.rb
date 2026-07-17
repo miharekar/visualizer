@@ -5,7 +5,7 @@ class ShotTest < ActiveSupport::TestCase
     shot = create(:shot)
     shot.update_columns(bean_notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
 
-    assert_includes shot.reload.note_html(:bean_notes), "<strong>Chocolate</strong>"
+    assert_includes shot.reload.rich_text_html(:bean_notes), "<strong>Chocolate</strong>"
 
     shot.update!(profile_title: "Saved")
 

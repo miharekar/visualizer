@@ -12,7 +12,7 @@
       </time>
       <%= link_to "Edit", edit_update_path(update) if Current.user&.admin %>
     </div>
-    <%= notes_text_from(update.content) %>
+    <%= notes_text_from(update.body) %>
   </div>
 <% end %>
 <hr class="mx-auto w-48 last:hidden text-neutral-200 dark:text-neutral-700">

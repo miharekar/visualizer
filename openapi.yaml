@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.14.0"
+  version: "1.15.0"
   description: |
     REST API for Visualizer.
 

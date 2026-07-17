@@ -62,7 +62,7 @@ module Airtable
       end
 
       STANDARD_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
-      note_fields.each { |name, attribute| fields[name] = user.rich_text_enabled? ? shot.note_html(attribute) : shot.public_send(attribute) }
+      note_fields.each { |name, attribute| fields[name] = note_value(shot, attribute) }
       user.shot_metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
       data = {fields: fields.compact}
@@ -89,14 +89,6 @@ module Airtable
     def upload_coffee_bag_to_airtable(shot)
       AirtableUploadRecordJob.perform_now(shot.coffee_bag)
       shot.coffee_bag.reload
-    end
-
-    def note_fields
-      @note_fields ||= NOTE_FIELDS.transform_keys { |name| user.rich_text_enabled? ? "#{name} HTML" : name }
-    end
-
-    def note_field_type
-      user.rich_text_enabled? ? "multilineText" : "richText"
     end
   end
 end

@@ -52,9 +52,9 @@
             <% end %>
           </table>
         </div>
-        <% if coffee_bag.note.present? %>
+        <% if coffee_bag.notes.present? %>
           <hr class="my-2 text-neutral-200 dark:text-neutral-700">
-          <%= notes_text_from(coffee_bag.note) %>
+          <%= notes_text_from(coffee_bag.notes) %>
         <% end %>
       </div>
     </div>

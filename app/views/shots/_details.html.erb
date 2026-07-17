@@ -142,20 +142,20 @@
       <% end %>
     </table>
   </div>
-  <% if shot.note(:bean_notes).present? %>
+  <% if shot.bean_notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Bean notes:</div>
-    <%= notes_text_from(shot.note(:bean_notes)) %>
+    <%= notes_text_from(shot.bean_notes) %>
   <% end %>
-  <% if shot.note(:espresso_notes).present? %>
+  <% if shot.espresso_notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Notes:</div>
-    <%= notes_text_from(shot.note(:espresso_notes)) %>
+    <%= notes_text_from(shot.espresso_notes) %>
   <% end %>
-  <% if shot.coffee_bag && shot.coffee_bag.note.present? %>
+  <% if shot.coffee_bag && shot.coffee_bag.notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Coffee bag notes:</div>
-    <%= notes_text_from(shot.coffee_bag.note) %>
+    <%= notes_text_from(shot.coffee_bag.notes) %>
   <% end %>
-  <% if owner && shot.note(:private_notes).present? %>
+  <% if owner && shot.private_notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Private notes:</div>
-    <%= notes_text_from(shot.note(:private_notes)) %>
+    <%= notes_text_from(shot.private_notes) %>
   <% end %>
 </div>

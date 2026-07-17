@@ -52,14 +52,6 @@ class Shot < ApplicationRecord
     super.presence || {}
   end
 
-  def note(attribute)
-    shadowed_rich_text(attribute, enabled: user&.rich_text_enabled? != false)
-  end
-
-  def note_html(attribute)
-    shadowed_rich_text_html(attribute, enabled: user&.rich_text_enabled? != false)
-  end
-
   def refresh_coffee_bag_fields
     if coffee_bag
       self.bean_brand = coffee_bag&.roaster&.name

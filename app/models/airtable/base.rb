@@ -68,6 +68,18 @@ module Airtable
       create_missing_fields
     end
 
+    def note_fields
+      @note_fields ||= self.class::NOTE_FIELDS.transform_keys { |name| user.rich_text_enabled? ? "#{name} HTML" : name }
+    end
+
+    def note_field_type
+      user.rich_text_enabled? ? "multilineText" : "richText"
+    end
+
+    def note_value(record, attribute)
+      user.rich_text_enabled? ? record.rich_text_html(attribute) : record.public_send(attribute)
+    end
+
     def create_table
       tables = api_request("/meta/bases/#{airtable_info.base_id}/tables", method: :get)["tables"]
       table = tables.find { |t| t["name"] == self.class::TABLE_NAME } || api_request("/meta/bases/#{airtable_info.base_id}/tables", {name: self.class::TABLE_NAME, fields: table_fields, description: self.class::TABLE_DESCRIPTION})

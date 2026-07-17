@@ -6,13 +6,20 @@ module RichTextShadow
       attributes.each do |attribute|
         has_rich_text attribute
         rich_text_reader = instance_method(attribute)
-        rich_text_writer = instance_method("#{attribute}=")
 
         define_method(attribute) do
-          enabled.nil? || instance_exec(&enabled) ? rich_text_reader.bind_call(self) : self[attribute]
+          return self[attribute] unless enabled.nil? || instance_exec(&enabled)
+
+          rich_text = rich_text_reader.bind_call(self)
+          rich_text.body = Markdown.to_html(self[attribute]) if rich_text.body.blank? && self[attribute].present? && !rich_text.will_save_change_to_body?
+          rich_text
         end
         define_method("#{attribute}=") do |value|
-          enabled.nil? || instance_exec(&enabled) ? rich_text_writer.bind_call(self, value) : self[attribute] = value
+          if enabled.nil? || instance_exec(&enabled)
+            rich_text_reader.bind_call(self).body = value
+          else
+            self[attribute] = value
+          end
         end
       end
 
@@ -21,15 +28,8 @@ module RichTextShadow
     end
   end
 
-  def shadowed_rich_text(attribute, enabled: true)
-    return self[attribute] unless enabled
-
-    rich_text = public_send(attribute)
-    rich_text.body.present? || self[attribute].blank? ? rich_text : self[attribute]
-  end
-
-  def shadowed_rich_text_html(attribute, enabled: true)
-    value = shadowed_rich_text(attribute, enabled:)
+  def rich_text_html(attribute)
+    value = public_send(attribute)
     value.respond_to?(:body) ? value.body&.to_html.to_s : Markdown.to_html(value)
   end
 

@@ -81,9 +81,9 @@ class Shot
     end
 
     def serialized_note(attribute)
-      return note(attribute).to_s.presence if user&.rich_text_enabled? == false
+      return public_send(attribute).to_s.presence unless user&.rich_text_enabled?
 
-      note_html(attribute).presence
+      rich_text_html(attribute).presence
     end
 
     def add_brew_data(json)

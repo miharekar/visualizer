@@ -12,10 +12,6 @@ class Update < ApplicationRecord
   end
 
   validates :slug, uniqueness: true
-
-  def content
-    shadowed_rich_text(:body)
-  end
 end
 
 # == Schema Information

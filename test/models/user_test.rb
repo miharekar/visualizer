@@ -11,8 +11,8 @@ class UserTest < ActiveSupport::TestCase
     user.update!(rich_text_enabled: true)
 
     assert_equal "**Chocolate**", shot.reload[:bean_notes]
-    assert_includes shot.note_html(:bean_notes), "<strong>Chocolate</strong>"
-    assert_not shot.bean_notes.body.present?
+    assert_includes shot.rich_text_html(:bean_notes), "<strong>Chocolate</strong>"
+    assert_not shot.bean_notes.persisted?
 
     shot.update!(profile_title: "Saved")
 

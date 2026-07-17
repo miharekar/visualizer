@@ -43,7 +43,7 @@ module Airtable
         "URL" => shots_url(coffee_bag:)
       }
       STANDARD_FIELDS.each { |name, attribute| fields[name] = coffee_bag.public_send(attribute) }
-      note_fields.each { |name, attribute| fields[name] = user.rich_text_enabled? ? coffee_bag.note_html : coffee_bag.public_send(attribute) }
+      note_fields.each { |name, attribute| fields[name] = note_value(coffee_bag, attribute) }
       user.coffee_bag_metadata_fields.each { |field| fields[field] = coffee_bag.metadata[field].to_s }
       fields["Image"] = [{url: coffee_bag.image.url(disposition: "attachment"), filename: coffee_bag.image.filename.to_s}] if coffee_bag.image.attached?
       {fields:}
@@ -63,14 +63,6 @@ module Airtable
     def upload_roaster_to_airtable(coffee_bag)
       AirtableUploadRecordJob.perform_now(coffee_bag.roaster)
       coffee_bag.roaster.reload
-    end
-
-    def note_fields
-      @note_fields ||= NOTE_FIELDS.transform_keys { |name| user.rich_text_enabled? ? "#{name} HTML" : name }
-    end
-
-    def note_field_type
-      user.rich_text_enabled? ? "multilineText" : "richText"
     end
   end
 end
