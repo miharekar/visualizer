@@ -20,6 +20,7 @@ module Airtable
     test "uses existing rich text field for opted-out users" do
       @user.update_columns(rich_text_enabled: false) # rubocop:disable Rails/SkipsModelValidations
       @coffee_bag.update_columns(notes: "**Chocolate**") # rubocop:disable Rails/SkipsModelValidations
+      @coffee_bag.reload
 
       fields = Airtable::CoffeeBags.new(@user).__send__(:prepare_record, @coffee_bag)[:fields]
 

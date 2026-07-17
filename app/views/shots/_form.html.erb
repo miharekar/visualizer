@@ -164,18 +164,12 @@
           <%= shot_copyable_label(f, :bean_notes) %>
           <div class="mt-1">
             <%= note_editor(f, :bean_notes, content: f.object.note(:bean_notes)) %>
-            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Markdown shortcuts supported.
-            </div>
           </div>
         </div>
         <div>
           <%= shot_copyable_label(f, :espresso_notes) %>
           <div class="mt-1">
             <%= note_editor(f, :espresso_notes, content: f.object.note(:espresso_notes)) %>
-            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Markdown shortcuts supported.
-            </div>
           </div>
         </div>
         <% if Current.user.premium? %>
@@ -184,7 +178,7 @@
             <div class="mt-1">
               <%= note_editor(f, :private_notes, content: f.object.note(:private_notes)) %>
               <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                Only visible to you. Markdown shortcuts supported.
+                Only visible to you.
               </div>
             </div>
           </div>

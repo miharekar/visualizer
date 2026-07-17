@@ -169,8 +169,8 @@ module Parsers
 
       shot = new_shot("test/files/20211019T100744.json", user:)
 
-      assert_equal "With BPlus", shot.legacy_bean_notes
-      assert_not shot.bean_notes.body.present?
+      assert_equal "With BPlus", shot.bean_notes
+      assert_not shot.rich_text_bean_notes&.body.present?
     end
   end
 end

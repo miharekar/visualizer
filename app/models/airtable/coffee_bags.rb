@@ -6,8 +6,7 @@ module Airtable
     STANDARD_FIELDS = %w[
       country elevation farm farmer harvest_time processing quality_score region roast_date frozen_date defrosted_date roast_level variety tasting_notes archived_at place_of_purchase
     ].index_by { |f| f.to_s.humanize }
-    MARKDOWN_NOTE_FIELDS = {"Notes" => "legacy_notes"}.freeze
-    HTML_NOTE_FIELDS = {"Notes HTML" => "notes"}.freeze
+    NOTE_FIELDS = {"Notes" => "notes"}.freeze
     FIELD_OPTIONS = {
       "roast_date" => {type: "date", options: {dateFormat: {name: "local"}}},
       "frozen_date" => {type: "date", options: {dateFormat: {name: "local"}}},
@@ -26,10 +25,11 @@ module Airtable
           {name: "Image", type: "multipleAttachments"},
           {name: "Roaster", type: "multipleRecordLinks", options: {linkedTableId: airtable_info.tables[Roasters::TABLE_NAME]["id"]}}
         ]
-        standard = standard_fields.map { |name, attribute| {name:, **field_options(name, attribute)} }
+        standard = STANDARD_FIELDS.map { |name, attribute| {name:, **(FIELD_OPTIONS[attribute] || {type: "singleLineText"})} }
+        notes = note_fields.map { |name, _attribute| {name:, type: note_field_type} }
         metadata = user.coffee_bag_metadata_fields.map { |field| {name: field, type: "singleLineText"} }
 
-        static + standard + metadata
+        static + standard + notes + metadata
       end.map(&:deep_stringify_keys)
     end
 
@@ -42,17 +42,16 @@ module Airtable
         "ID" => coffee_bag.id,
         "URL" => shots_url(coffee_bag:)
       }
-      standard_fields.each do |name, attribute|
-        value = coffee_bag.public_send(attribute)
-        fields[name] = name.end_with?(" HTML") ? coffee_bag.note_html : value
-      end
+      STANDARD_FIELDS.each { |name, attribute| fields[name] = coffee_bag.public_send(attribute) }
+      note_fields.each { |name, attribute| fields[name] = user.rich_text_enabled? ? coffee_bag.note_html : coffee_bag.public_send(attribute) }
       user.coffee_bag_metadata_fields.each { |field| fields[field] = coffee_bag.metadata[field].to_s }
       fields["Image"] = [{url: coffee_bag.image.url(disposition: "attachment"), filename: coffee_bag.image.filename.to_s}] if coffee_bag.image.attached?
       {fields:}
     end
 
     def update_local_record(coffee_bag, record, updated_at)
-      attributes = record["fields"].slice(*standard_fields.keys).transform_keys { |key| standard_fields[key] }
+      attributes = record["fields"].slice(*STANDARD_FIELDS.keys).transform_keys { |key| STANDARD_FIELDS[key] }
+      attributes.merge!(record["fields"].slice(*note_fields.keys).transform_keys { |key| note_fields[key] })
       attributes[:name] = record["fields"]["Name"]
       attributes[:metadata] = user.coffee_bag_metadata_fields.index_with { |f| record["fields"][f] }
       roaster_airtable_id = Array(record["fields"]["Roaster"]).first
@@ -66,15 +65,12 @@ module Airtable
       coffee_bag.roaster.reload
     end
 
-    def standard_fields
-      @standard_fields ||= STANDARD_FIELDS.merge(user.rich_text_enabled? ? HTML_NOTE_FIELDS : MARKDOWN_NOTE_FIELDS)
+    def note_fields
+      @note_fields ||= NOTE_FIELDS.transform_keys { |name| user.rich_text_enabled? ? "#{name} HTML" : name }
     end
 
-    def field_options(name, attribute)
-      return {type: "multilineText"} if name.end_with?(" HTML")
-      return {type: "richText"} if MARKDOWN_NOTE_FIELDS.key?(name)
-
-      FIELD_OPTIONS[attribute] || {type: "singleLineText"}
+    def note_field_type
+      user.rich_text_enabled? ? "multilineText" : "richText"
     end
   end
 end

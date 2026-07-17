@@ -5,8 +5,15 @@ module RichTextShadow
     def has_shadowed_rich_text(*attributes, enabled: nil)
       attributes.each do |attribute|
         has_rich_text attribute
-        define_method("legacy_#{attribute}") { self[attribute] }
-        define_method("legacy_#{attribute}=") { |value| self[attribute] = value }
+        rich_text_reader = instance_method(attribute)
+        rich_text_writer = instance_method("#{attribute}=")
+
+        define_method(attribute) do
+          enabled.nil? || instance_exec(&enabled) ? rich_text_reader.bind_call(self) : self[attribute]
+        end
+        define_method("#{attribute}=") do |value|
+          enabled.nil? || instance_exec(&enabled) ? rich_text_writer.bind_call(self, value) : self[attribute] = value
+        end
       end
 
       callback = -> { sync_rich_text_shadows(attributes) }

@@ -26,7 +26,7 @@ class ShotTest < ActiveSupport::TestCase
     shot.update!(profile_title: "Saved")
 
     assert_equal "**Chocolate**", shot.reload[:bean_notes]
-    assert_not shot.bean_notes.body.present?
+    assert_not shot.rich_text_bean_notes&.body.present?
   end
 
   test "does not send shot uploaded email by default" do

@@ -146,7 +146,7 @@ class User < ApplicationRecord
   end
 
   def upload_rich_text_to_airtable
-    AirtableUploadAllJob.perform_later(self, nil, force: true) if identities.by_provider(:airtable).exists?
+    AirtableUploadAllJob.perform_later(self) if identities.by_provider(:airtable).exists?
   end
 
   def rich_text_cannot_be_disabled
