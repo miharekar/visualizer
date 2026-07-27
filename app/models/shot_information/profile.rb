@@ -25,7 +25,7 @@ class ShotInformation
       tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
         v = "#{v.to_s.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if k == "profile_notes"
         v = "{}" if v.blank?
-        v = "{#{v}}" if /\w\s\w/.match?(v)
+        v = "{#{v}}" if /\s/.match?(v)
 
         "#{k} #{v}"
       end.join("\n")
