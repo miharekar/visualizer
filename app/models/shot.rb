@@ -45,6 +45,13 @@ class Shot < ApplicationRecord
     Parsers::Base.parser_for(file_content).build_shot(user)
   end
 
+  def self.with_all_tag_slugs(slugs)
+    slugs = Array(slugs).flat_map { it.to_s.split(",") }.map(&:strip).compact_blank.uniq
+    return all if slugs.empty?
+
+    where(id: ShotTag.joins(:tag).where(tags: {slug: slugs}).group(:shot_id).having("COUNT(DISTINCT tags.slug) = ?", slugs.size).select(:shot_id))
+  end
+
   def metadata
     super.presence || {}
   end
@@ -84,7 +91,10 @@ class Shot < ApplicationRecord
   def tag_list=(value)
     return unless user.premium?
 
-    self.tags = value.split(",").map { it.squish.gsub(/[^\w\s-]/, "").downcase }.compact_blank.uniq.map { |name| user.tags.find_or_create_by(name:) }.select(&:persisted?)
+    names = value.split(",").map { it.squish.gsub(/[^\w\s-]/, "").downcase }.compact_blank.uniq
+    tags_by_name = user.tags.where(name: names).index_by(&:name)
+    selected_tags = names.map { |name| tags_by_name[name] || user.tags.create(name:) }
+    self.tags = selected_tags.select(&:persisted?)
   end
 
   def tag_list

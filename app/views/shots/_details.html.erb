@@ -108,7 +108,7 @@
   <% end %>
   <% if shot.tags.any? %>
     <div class="mt-4 max-w-prose">
-      <%= render "tags", shot: shot, truncate: false %>
+      <%= render "tags", shot: shot, truncate: false, selected_tag_slugs: [] %>
     </div>
   <% end %>
   <div class="mt-4 prose prose-neutral dark:prose-invert">

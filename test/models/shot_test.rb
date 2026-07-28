@@ -64,6 +64,28 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 0, shot.tags.count
   end
 
+  test "with_all_tag_slugs requires every tag" do
+    user = create(:user)
+    basket = create(:tag, name: "Basket", user:)
+    high_speed = create(:tag, name: "High speed", user:)
+    matching_shot = create(:shot, user:, tags: [basket, high_speed])
+    create(:shot, user:, tags: [basket])
+
+    assert_equal [matching_shot], Shot.with_all_tag_slugs("basket,high-speed").to_a
+    assert_empty Shot.with_all_tag_slugs("basket,missing")
+  end
+
+  test "tag list reuses existing tags" do
+    user = create(:user, :premium)
+    tags = %w[first second third].map { |name| create(:tag, name:, user:) }
+    shot = create(:shot, user:)
+
+    shot.update!(tag_list: "first,second,third")
+
+    assert_equal tags, shot.tags.order(:name).to_a
+    assert_equal 3, user.tags.count
+  end
+
   test "days_frozen is nil without coffee bag" do
     shot = create(:shot)
 

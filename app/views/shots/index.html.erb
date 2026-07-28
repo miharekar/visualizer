@@ -22,8 +22,7 @@
     <div class="min-w-0 shrink">
       <h1 class="py-4 pr-2 font-serif text-3xl font-bold lining-nums sm:text-4xl truncate text-neutral-900 dark:text-neutral-100" id="shots-count">
         <% if @shots_count.to_i > 0 %>
-          <% word = params[:tag].present? ? "#{Tag.find_by(slug: params[:tag])&.name} Shot" : "Shot" %>
-          <%= pluralize(@shots_count, word) %>
+          <%= pluralize(@shots_count, "Shot") %>
           <% if @coffee_bag.present? %>
             with <%= link_to @coffee_bag.display_name, edit_coffee_bag_path(@coffee_bag), class: "standard-link" %>
           <% end %>
@@ -68,10 +67,10 @@
       <%= render "shared/modal" %>
       <%= render "comparison_banner" %>
       <div id="shots" class="flex flex-col mt-6 divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
-        <%= render @shots %>
+        <%= render @shots, selected_tag_slugs: @tag_slugs %>
       </div>
     </div>
-    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*Filterable::FILTERS.keys, :min_enjoyment, :max_enjoyment, :coffee_bag, :tag, :start_date, :all_notes).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
+    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*Filterable::FILTERS.keys, :min_enjoyment, :max_enjoyment, :coffee_bag, :tags, :start_date, :all_notes).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
   <% else %>
     <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
       <% if @premium_count.to_i > 0 %>

@@ -69,6 +69,19 @@ module Api
       assert_equal 100, json_response["data"].length
     end
 
+    test "index filters by every requested tag" do
+      basket = create(:tag, name: "Basket", user: premium_user)
+      high_speed = create(:tag, name: "High speed", user: premium_user)
+      matching_shot = create(:shot, user: premium_user, tags: [basket, high_speed])
+      create(:shot, user: premium_user, tags: [basket])
+
+      get api_shots_url(tags: "basket,high-speed"), headers: auth_headers(premium_user), as: :json
+
+      assert_response :success
+      assert_equal [matching_shot.id], response.parsed_body["data"].pluck("id")
+      assert_equal 1, response.parsed_body.dig("paging", "count")
+    end
+
     test "index returns only public shots for unauthenticated user" do
       FactoryBot.create(:shot, user:)
       FactoryBot.create(:shot, user: public_user)

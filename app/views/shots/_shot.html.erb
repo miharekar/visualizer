@@ -58,7 +58,7 @@
                 </div>
               <% end %>
               <% if shot.tags.any? %>
-                <%= render "shots/tags", shot: shot, truncate: true %>
+                <%= render "shots/tags", shot: shot, truncate: true, selected_tag_slugs: local_assigns.fetch(:selected_tag_slugs, []) %>
               <% end %>
             </div>
           </div>

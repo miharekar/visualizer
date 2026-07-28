@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.14.0"
+  version: "1.15.0"
   description: |
     REST API for Visualizer.
 
@@ -102,6 +102,7 @@ paths:
         - $ref: "#/components/parameters/Items"
         - $ref: "#/components/parameters/ShotSort"
         - $ref: "#/components/parameters/UpdatedAfter"
+        - $ref: "#/components/parameters/ShotTags"
       responses:
         "200":
           description: Paginated shot summaries.
@@ -783,6 +784,17 @@ components:
         type: integer
         minimum: 0
       description: Return authenticated user's shots updated after this Unix timestamp in seconds. Ignored for unauthenticated requests.
+    ShotTags:
+      name: tags
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      example: [basket, high-speed]
+      description: Return shots containing every comma-separated tag slug.
     ShotId:
       name: id
       in: path

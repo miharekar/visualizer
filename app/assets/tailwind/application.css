@@ -127,6 +127,57 @@ input[type="range"].shot-range::-moz-range-thumb:active {
   cursor: -moz-grabbing;
 }
 
+.enjoyment-range {
+  @apply relative h-8;
+}
+
+.enjoyment-range::before {
+  content: "";
+  background: linear-gradient(45deg, hsl(0, 70%, 50%), hsl(120, 70%, 50%) 100%);
+  transform: translateY(-50%);
+  @apply absolute inset-x-0 top-1/2 h-1 rounded-full;
+}
+
+.enjoyment-range-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  pointer-events: none;
+  @apply absolute inset-0 m-0 h-8 w-full bg-transparent p-0;
+}
+
+.enjoyment-range-input::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  @apply h-1 bg-transparent;
+}
+
+.enjoyment-range-input::-moz-range-track {
+  -moz-appearance: none;
+  @apply h-1 bg-transparent;
+}
+
+.enjoyment-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  cursor: grab;
+  margin-top: -8px;
+  @apply size-5 rounded-full border-2 border-solid border-neutral-700 bg-white dark:border-neutral-300 dark:bg-neutral-800;
+}
+
+.enjoyment-range-input::-moz-range-thumb {
+  -moz-appearance: none;
+  pointer-events: auto;
+  cursor: grab;
+  @apply size-5 rounded-full border-2 border-solid border-neutral-700 bg-white dark:border-neutral-300 dark:bg-neutral-800;
+}
+
+.enjoyment-range-input::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.enjoyment-range-input::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
 input[type="color"] {
   -webkit-appearance: none;
   border: none;
@@ -218,6 +269,28 @@ a:hover .logo-steam path {
 
 .tagify {
   @apply relative flex flex-wrap items-center p-1;
+}
+
+.single-line-tag-filter .tagify {
+  scrollbar-width: none;
+  @apply h-[42px] flex-nowrap overflow-x-auto overflow-y-hidden sm:h-[38px];
+}
+
+.single-line-tag-filter .tagify::-webkit-scrollbar {
+  display: none;
+}
+
+.single-line-tag-filter .tagify__tag,
+.single-line-tag-filter .tagify__input {
+  @apply shrink-0;
+}
+
+.single-line-tag-filter .tagify__input {
+  @apply my-0;
+}
+
+.single-line-tag-filter .tagify:has(.tagify__tag) .tagify__input {
+  @apply min-w-px grow-0 px-0;
 }
 
 .tagify + input,

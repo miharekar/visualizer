@@ -1,7 +1,7 @@
 <% if params[:fresh_search] == "1" %>
   <%= turbo_stream.update "shots" do %>
     <% if @shots.any? %>
-      <%= render @shots %>
+      <%= render @shots, selected_tag_slugs: @tag_slugs %>
     <% else %>
       <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
         No shots found 😢
@@ -11,11 +11,11 @@
   <%= turbo_stream.remove "shots_live_stream" %>
 <% else %>
   <%= turbo_stream.append "shots" do %>
-    <%= render @shots %>
+    <%= render @shots, selected_tag_slugs: @tag_slugs %>
   <% end %>
 <% end %>
 <%= turbo_stream.replace "cursor" do %>
-  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*Filterable::FILTERS.keys, :min_enjoyment, :max_enjoyment, :coffee_bag, :tag, :start_date, :all_notes).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: shots_path(params.permit(*Filterable::FILTERS.keys, :min_enjoyment, :max_enjoyment, :coffee_bag, :tags, :start_date, :all_notes).reject { |_, v| v.blank? }.merge(before: @cursor, format: :turbo_stream)) } %>
 <% end %>
 <%= turbo_stream.update "shots-count" do %>
   <% if @shots_count.to_i > 0 %>

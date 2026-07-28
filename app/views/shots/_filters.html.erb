@@ -3,7 +3,6 @@
     <%= form_with(url: search_shots_path, data: {controller: "search", search_target: "form"}) do |f| %>
       <%= f.hidden_field :fresh_search, value: 1 %>
       <%= f.hidden_field :coffee_bag, value: params[:coffee_bag] %>
-      <%= f.hidden_field :tag, value: params[:tag] %>
       <div class="grid grid-cols-12 gap-3">
         <% Filterable::FILTERS.keys.each do |filter| %>
           <% next if [:bean_notes, :espresso_notes].include?(filter) %>
@@ -16,32 +15,29 @@
           <%= f.label :all_notes, "Notes", class: "standard-label" %>
           <%= f.search_field :all_notes, value: params[:all_notes], class: "mt-1 standard-input", data: {action: "search#submit"} %>
         </div>
+        <% user_tags = Current.user.tags.order(:name).map { {value: it.slug, name: it.name.truncate(15, omission: "…"), search: it.name, title: it.name} } %>
+        <div class="col-span-6 md:col-span-3 single-line-tag-filter" data-controller="tags" data-tags-enforce-whitelist-value="true" data-tags-tag-text-prop-value="name" data-tags-user-tags-value="<%= user_tags.to_json %>">
+          <%= f.label :tags, class: "standard-label" %>
+          <%= f.text_field :tags, value: params[:tags], class: "mt-1 standard-input", data: {action: "change->search#submit", tags_target: "input"} %>
+        </div>
         <div class="col-span-6 md:col-span-3">
           <%= f.label :start_date, "Date", class: "standard-label" %>
           <%= f.date_field :start_date, value: params[:start_date], class: "mt-1 standard-input", data: {action: "change->search#submit"} %>
         </div>
         <div class="col-span-6 md:col-span-3">
-          <%= f.label :min_enjoyment, class: "standard-label" %>
-          <div class="flex items-center mt-1" data-controller="range">
-            <% min = params[:min_enjoyment].presence || 0 %>
-            <div class="rounded-full size-8" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
-              <div class="py-1 text-center text-white" data-range-target="text">
-                <%= min %>
-              </div>
+          <% min = params[:min_enjoyment].presence || 0 %>
+          <% max = params[:max_enjoyment].presence || 100 %>
+          <div data-controller="dual-range">
+            <div class="flex justify-between standard-label">
+              <%= f.label :min_enjoyment, "Enjoyment" %>
+              <span class="font-normal lining-nums">
+                <output data-dual-range-target="minValue"><%= min %></output>–<output data-dual-range-target="maxValue"><%= max %></output>
+              </span>
             </div>
-            <%= f.range_field :min_enjoyment, in: 0..100, value: min, allow_blank: true, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
-          </div>
-        </div>
-        <div class="col-span-6 md:col-span-3">
-          <%= f.label :max_enjoyment, class: "standard-label" %>
-          <div class="flex items-center mt-1" data-controller="range">
-            <% max = params[:max_enjoyment].presence || 100 %>
-            <div class="rounded-full size-8" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
-              <div class="py-1 text-center text-white" data-range-target="text">
-                <%= max %>
-              </div>
+            <div class="mt-1 enjoyment-range">
+              <%= f.range_field :min_enjoyment, in: 0..100, value: min, class: "enjoyment-range-input", aria: {label: "Minimum enjoyment"}, data: {action: "input->dual-range#update input->search#submit", dual_range_target: "min"} %>
+              <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "enjoyment-range-input", aria: {label: "Maximum enjoyment"}, data: {action: "input->dual-range#update input->search#submit", dual_range_target: "max"} %>
             </div>
-            <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update search#submit" } %>
           </div>
         </div>
       </div>

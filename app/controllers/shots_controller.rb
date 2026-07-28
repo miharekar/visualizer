@@ -119,6 +119,7 @@ class ShotsController < ApplicationController
 
   def load_users_shots
     @shots = Current.user.shots.with_attached_image
+    @tag_slugs = params[:tags].to_s.split(",")
 
     if Current.user.premium?
       apply_standard_filters_to_shots
@@ -128,7 +129,7 @@ class ShotsController < ApplicationController
       end
       @coffee_bag = Current.user.coffee_bags.find_by(id: params[:coffee_bag]) if params[:coffee_bag].present?
       @shots = @shots.where(coffee_bag_id: @coffee_bag.id) if @coffee_bag
-      @shots = @shots.where(id: ShotTag.joins(:tag).where(tag: {slug: params[:tag]}).select(:shot_id)) if params[:tag].present?
+      @shots = @shots.with_all_tag_slugs(params[:tags]) if params[:tags].present?
     else
       @premium_count = @shots.premium.count
       @shots = @shots.non_premium
