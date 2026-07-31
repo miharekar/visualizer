@@ -6,13 +6,12 @@ class CoffeeBag < ApplicationRecord
   performs :refresh_shot_values
 
   DISPLAY_ATTRIBUTES = %w[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes place_of_purchase].freeze
-  RICH_TEXT_ATTRIBUTES = %i[notes].freeze
 
   belongs_to :roaster, touch: true
   belongs_to :canonical_coffee_bag, optional: true
   has_one :user, through: :roaster
   has_many :shots, dependent: :nullify
-  has_rich_text :notes
+  has_sanitized_rich_text :notes
 
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}

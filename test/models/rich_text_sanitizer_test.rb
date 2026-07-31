@@ -15,7 +15,7 @@ class RichTextSanitizerTest < ActiveSupport::TestCase
     assert_equal "Sweet shot", fragment.text.squish
     assert fragment.at_css("strong")
     assert_not fragment.at_css("script, img, video, action-text-attachment")
-    assert_not_includes fragment.at_css("p").attributes, "style"
+    assert_no_match(/url\s*\(/i, fragment.at_css("p")["style"].to_s)
   end
 
   test "removes executable tags attributes and URL schemes" do

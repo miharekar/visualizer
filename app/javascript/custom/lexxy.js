@@ -5,5 +5,3 @@ Lexxy.configure({
     attachments: false
   }
 })
-
-document.addEventListener("lexxy:file-accept", event => event.preventDefault())

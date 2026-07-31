@@ -8,7 +8,8 @@ module Airtable
       bean_brand bean_type roast_date roast_level drink_tds drink_ey bean_notes espresso_notes private_notes
       fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel
     ].index_by { it.to_s.humanize }
-    OUTBOUND_ONLY_FIELDS = %w[bean_notes espresso_notes private_notes].freeze
+    OUTBOUND_ONLY_FIELDS = %w[bean_notes espresso_notes private_notes].index_by { it.humanize }.freeze
+    INBOUND_FIELDS = STANDARD_FIELDS.except(*OUTBOUND_ONLY_FIELDS.keys).freeze
     FIELD_OPTIONS = {
       "espresso_enjoyment" => {type: "number", options: {precision: 0}},
       "duration" => {type: "duration", options: {durationFormat: "h:mm:ss.SS"}},
@@ -63,13 +64,8 @@ module Airtable
         fields["Coffee Bag"] = [shot.coffee_bag.airtable_id]
       end
 
-      STANDARD_FIELDS.each do |name, attribute|
-        fields[name] = if OUTBOUND_ONLY_FIELDS.include?(attribute)
-          shot.rich_text_plain_text(attribute)
-        else
-          shot.public_send(attribute)
-        end
-      end
+      INBOUND_FIELDS.each { |name, attribute| fields[name] = shot.public_send(attribute) }
+      OUTBOUND_ONLY_FIELDS.each { |name, attribute| fields[name] = shot.rich_text_plain_text(attribute) }
       user.shot_metadata_fields.each { |field| fields[field] = shot.metadata[field].to_s }
       fields["Image"] = [{url: shot.image.url(disposition: "attachment"), filename: shot.image.filename.to_s}] if shot.image.attached?
       data = {fields: fields.compact}
@@ -78,8 +74,7 @@ module Airtable
     end
 
     def update_local_record(shot, record, updated_at)
-      inbound_fields = STANDARD_FIELDS.reject { |_name, attribute| OUTBOUND_ONLY_FIELDS.include?(attribute) }
-      shot.assign_attributes(record["fields"].slice(*inbound_fields.keys).transform_keys { |k| inbound_fields[k] })
+      shot.assign_attributes(record["fields"].slice(*INBOUND_FIELDS.keys).transform_keys { |key| INBOUND_FIELDS[key] })
       shot.skip_airtable_sync = true
       shot.updated_at = updated_at
       shot.metadata = user.shot_metadata_fields.index_with { |f| record["fields"][f] }

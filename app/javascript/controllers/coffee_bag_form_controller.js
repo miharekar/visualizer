@@ -15,7 +15,7 @@ export default class extends Controller {
 
   applyPayload(event) {
     const { data = {}, clearCanonicalId = false } = event.detail || {}
-    if (clearCanonicalId) this.clearCanonicalId()
+    if (clearCanonicalId) this.field("canonical_coffee_bag_id").value = ""
 
     Object.entries(data).forEach(([fieldName, value]) => {
       if (!value) return
@@ -28,16 +28,17 @@ export default class extends Controller {
   }
 
   revert(event) {
-    const label = event.target.closest("label")
-    const field = label && document.getElementById(label.getAttribute("for"))
+    const revert = event.currentTarget
+    const label = revert.closest("label")
+    const field = document.getElementById(label.getAttribute("for"))
     if (!field || field.dataset.previousValue === undefined) return
 
     field.value = field.dataset.previousValue
     field.dispatchEvent(new Event("input", { bubbles: true }))
     field.classList.remove(...FIELD_HIGHLIGHT_CLASSES)
     delete field.dataset.previousValue
-    const originalLabel = label.querySelector("[data-original-label]")
-    label.replaceChildren(...originalLabel.childNodes)
+    label.classList.remove("flex", "items-center", "justify-between")
+    revert.remove()
   }
 
   updateField(field, newValue) {
@@ -60,25 +61,13 @@ export default class extends Controller {
     if (!label) return
     if (label.querySelector(`[data-action*="coffee-bag-form#revert"]`)) return
 
-    const wrapper = document.createElement("div")
-    wrapper.className = "flex justify-between items-center"
-
-    const originalLabel = document.createElement("span")
-    originalLabel.dataset.originalLabel = ""
-    originalLabel.append(...label.childNodes)
-
     const revert = document.createElement("span")
     revert.className = "ml-2 font-light cursor-pointer standard-link"
     revert.dataset.action = "click->coffee-bag-form#revert"
     revert.title = field.dataset.previousValue
     revert.textContent = "Revert"
 
-    wrapper.append(originalLabel, revert)
-    label.replaceChildren(wrapper)
-  }
-
-  clearCanonicalId() {
-    const field = this.field("canonical_coffee_bag_id")
-    if (field) field.value = ""
+    label.classList.add("flex", "items-center", "justify-between")
+    label.append(revert)
   }
 }

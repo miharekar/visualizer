@@ -6,7 +6,8 @@ module Airtable
     STANDARD_FIELDS = %w[
       country elevation farm farmer harvest_time processing quality_score region roast_date frozen_date defrosted_date roast_level variety tasting_notes archived_at place_of_purchase notes
     ].index_by { |f| f.to_s.humanize }
-    OUTBOUND_ONLY_FIELDS = %w[notes].freeze
+    OUTBOUND_ONLY_FIELDS = %w[notes].index_by { it.humanize }.freeze
+    INBOUND_FIELDS = STANDARD_FIELDS.except(*OUTBOUND_ONLY_FIELDS.keys).freeze
     FIELD_OPTIONS = {
       "roast_date" => {type: "date", options: {dateFormat: {name: "local"}}},
       "frozen_date" => {type: "date", options: {dateFormat: {name: "local"}}},
@@ -42,21 +43,15 @@ module Airtable
         "ID" => coffee_bag.id,
         "URL" => shots_url(coffee_bag:)
       }
-      STANDARD_FIELDS.each do |name, attribute|
-        fields[name] = if OUTBOUND_ONLY_FIELDS.include?(attribute)
-          coffee_bag.rich_text_plain_text(attribute)
-        else
-          coffee_bag.public_send(attribute)
-        end
-      end
+      INBOUND_FIELDS.each { |name, attribute| fields[name] = coffee_bag.public_send(attribute) }
+      OUTBOUND_ONLY_FIELDS.each { |name, attribute| fields[name] = coffee_bag.rich_text_plain_text(attribute) }
       user.coffee_bag_metadata_fields.each { |field| fields[field] = coffee_bag.metadata[field].to_s }
       fields["Image"] = [{url: coffee_bag.image.url(disposition: "attachment"), filename: coffee_bag.image.filename.to_s}] if coffee_bag.image.attached?
       {fields:}
     end
 
     def update_local_record(coffee_bag, record, updated_at)
-      inbound_fields = STANDARD_FIELDS.reject { |_name, attribute| OUTBOUND_ONLY_FIELDS.include?(attribute) }
-      attributes = record["fields"].slice(*inbound_fields.keys).transform_keys { |k| inbound_fields[k] }
+      attributes = record["fields"].slice(*INBOUND_FIELDS.keys).transform_keys { |key| INBOUND_FIELDS[key] }
       attributes[:name] = record["fields"]["Name"]
       attributes[:metadata] = user.coffee_bag_metadata_fields.index_with { |f| record["fields"][f] }
       roaster_airtable_id = Array(record["fields"]["Roaster"]).first

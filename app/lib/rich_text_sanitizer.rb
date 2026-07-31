@@ -5,24 +5,12 @@ class RichTextSanitizer
     return if value.nil?
 
     source = value.respond_to?(:to_html) ? value.to_html : value.to_s
-    fragment = clean_fragment(source)
-    fragment = clean_fragment(ActionText::Content.new(fragment.to_html).to_html)
-    safe_list_sanitize(fragment.to_html)
-  end
-
-  def self.clean_fragment(html)
-    fragment = Nokogiri::HTML5.fragment(html)
+    fragment = Nokogiri::HTML5.fragment(source)
     fragment.css(DISALLOWED_SELECTOR).remove
-    fragment.css(".lexxy-content").each { it.replace(it.children) }
-    fragment.css("[style]").each { it.remove_attribute("style") if it["style"].match?(/url\s*\(/i) }
-    fragment
-  end
-
-  def self.safe_list_sanitize(html)
     sanitizer = ActionText::ContentHelper.sanitizer
     tags = ActionText::ContentHelper.allowed_tags || sanitizer.class.allowed_tags + %w[figure figcaption]
     attributes = ActionText::ContentHelper.allowed_attributes || sanitizer.class.allowed_attributes
-    sanitizer.sanitize(html, tags:, attributes: attributes + %w[data-language])
+    sanitizer.sanitize(fragment.to_html, tags:, attributes: attributes + %w[data-language])
   end
 
   def self.from_plain_text(value)
@@ -38,18 +26,10 @@ class RichTextSanitizer
     return if value.nil?
 
     fragment = Nokogiri::HTML5.fragment(Kramdown::Document.new(value.to_s, input: "GFM").to_html)
-    add_code_languages(fragment)
-    sanitize(fragment.to_html)
-  end
-
-  def self.add_code_languages(fragment)
     fragment.css("pre > code").each do |code|
       language = code["class"].to_s[/language-([a-zA-Z0-9_-]+)/, 1]
       code.parent["data-language"] = language if language
     end
-  end
-
-  def self.embedded_media?(value)
-    Nokogiri::HTML5.fragment(value.to_s).at_css(DISALLOWED_SELECTOR).present?
+    sanitize(fragment.to_html)
   end
 end

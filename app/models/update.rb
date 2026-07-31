@@ -4,11 +4,9 @@ class Update < ApplicationRecord
   include Sluggable
   include SanitizedRichText
 
-  RICH_TEXT_ATTRIBUTES = %i[body].freeze
-
   slug_from :title
 
-  has_rich_text :body
+  has_sanitized_rich_text :body
 
   has_one_attached :image do |attachable|
     attachable.variant :social, resize_to_limit: [800, 500], format: :jpeg, saver: {strip: true}

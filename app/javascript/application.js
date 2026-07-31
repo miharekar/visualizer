@@ -2,7 +2,6 @@
 
 import "@hotwired/turbo-rails"
 import "@rails/activestorage"
-import "lexxy"
 import "channels/consumer"
 import "controllers"
 import "custom"
