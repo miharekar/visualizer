@@ -18,6 +18,30 @@ class RichTextSanitizerTest < ActiveSupport::TestCase
     assert_not_includes fragment.at_css("p").attributes, "style"
   end
 
+  test "removes executable tags attributes and URL schemes" do
+    html = <<~HTML
+      <p onclick="alert('no')">Words</p>
+      <a href="javascript:alert('no')" onmouseover="alert('no')">Link</a>
+      <svg onload="alert('no')"><circle></circle></svg>
+    HTML
+
+    sanitized = RichTextSanitizer.sanitize(html)
+    fragment = Nokogiri::HTML5.fragment(sanitized)
+
+    assert_equal "Words\nLink", fragment.text.strip
+    assert_not fragment.at_css("svg")
+    assert_not_includes fragment.at_css("p").attributes, "onclick"
+    assert_not_includes fragment.at_css("a").attributes, "href"
+    assert_not_includes fragment.at_css("a").attributes, "onmouseover"
+  end
+
+  test "sanitizes stored rich text when serializing HTML" do
+    shot = create(:shot, bean_notes: "<p>Safe</p>")
+    shot.bean_notes.update_column(:body, '<p onclick="alert(1)">Unsafe</p>') # rubocop:disable Rails/SkipsModelValidations
+
+    assert_equal "<p>Unsafe</p>", shot.reload.rich_text_html(:bean_notes)
+  end
+
   test "converts plain text into paragraphs and line breaks" do
     html = RichTextSanitizer.from_plain_text("First <line>\nSecond line\n\nNext paragraph")
 

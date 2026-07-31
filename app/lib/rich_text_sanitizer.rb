@@ -7,7 +7,7 @@ class RichTextSanitizer
     source = value.respond_to?(:to_html) ? value.to_html : value.to_s
     fragment = clean_fragment(source)
     fragment = clean_fragment(ActionText::Content.new(fragment.to_html).to_html)
-    fragment.to_html
+    safe_list_sanitize(fragment.to_html)
   end
 
   def self.clean_fragment(html)
@@ -16,6 +16,13 @@ class RichTextSanitizer
     fragment.css(".lexxy-content").each { it.replace(it.children) }
     fragment.css("[style]").each { it.remove_attribute("style") if it["style"].match?(/url\s*\(/i) }
     fragment
+  end
+
+  def self.safe_list_sanitize(html)
+    sanitizer = ActionText::ContentHelper.sanitizer
+    tags = ActionText::ContentHelper.allowed_tags || sanitizer.class.allowed_tags + %w[figure figcaption]
+    attributes = ActionText::ContentHelper.allowed_attributes || sanitizer.class.allowed_attributes
+    sanitizer.sanitize(html, tags:, attributes: attributes + %w[data-language])
   end
 
   def self.from_plain_text(value)

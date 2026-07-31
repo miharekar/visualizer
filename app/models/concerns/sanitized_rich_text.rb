@@ -8,7 +8,7 @@ module SanitizedRichText
   end
 
   def rich_text_html(attribute)
-    public_send(attribute).body&.to_html.presence
+    RichTextSanitizer.sanitize(public_send(attribute).body).presence
   end
 
   def rich_text_plain_text(attribute)
