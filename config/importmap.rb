@@ -4,8 +4,7 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin "@rails/actioncable", to: "actioncable.esm.js"
 pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
-
-pin "highlight.js" # downloaded from https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/es/highlight.min.js
+pin "lexxy", to: "lexxy.js"
 
 # use bin/importmap update to update the local ones below
 pin "@appsignal/javascript", to: "@appsignal--javascript.js" # @1.6.1

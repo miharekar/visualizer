@@ -251,6 +251,8 @@ GEM
       logger (~> 1.6)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
+    lexxy (0.9.28)
+      rails (>= 8.0.2)
     lint_roller (1.1.0)
     listen (3.10.0)
       logger
@@ -618,6 +620,7 @@ DEPENDENCIES
   kramdown
   kramdown-parser-gfm
   letter_opener
+  lexxy
   memo_wise
   minitest
   mission_control-jobs
