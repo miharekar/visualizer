@@ -206,6 +206,23 @@ module Airtable
       assert_requested(stub)
     end
 
+    test "it uploads notes as plain text" do
+      @shot.update!(bean_notes: "<p><strong>Sweet</strong><br>Floral</p>")
+
+      fields = Airtable::Shots.new(@user).__send__(:prepare_record, @shot)[:fields]
+
+      assert_equal "Sweet\nFloral", fields["Bean notes"]
+    end
+
+    test "it does not download notes from airtable" do
+      @shot.update!(bean_notes: "<p>Local notes</p>")
+      record = {"fields" => {"Bean notes" => "Remote notes"}}
+
+      Airtable::Shots.new(@user).__send__(:update_local_record, @shot, record, Time.current)
+
+      assert_equal "Local notes", @shot.reload.bean_notes.to_plain_text
+    end
+
     test "it uploads a new record to airtable" do
       shot_id = "e5b3a587-809a-444a-bb27-e2f5bdbeacbe"
       sync = Airtable::Shots.new(@user)

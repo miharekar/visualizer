@@ -2,7 +2,7 @@ class Shot
   module Jsonable
     extend ActiveSupport::Concern
 
-    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date espresso_notes roast_level bean_notes barista].freeze
+    ALLOWED_ATTRIBUTES = %w[id duration profile_title user_id drink_tds drink_ey espresso_enjoyment bean_weight drink_weight grinder_model grinder_setting bean_brand bean_type roast_date roast_level barista].freeze
     FORMAT_METHODS = {
       "beanconqueror" => :beanconqueror_json,
       "default" => :default_json,
@@ -31,7 +31,7 @@ class Shot
           ey: drink_ey
         }.compact,
         preparation: {name: profile_title}.compact,
-        meta: {visualizer: visualizer_attributes}
+        meta: {visualizer: visualizer_attributes(notes_format: :plain_text)}
       }
       add_brew_data(json)
       json.compact
@@ -39,13 +39,15 @@ class Shot
 
     def default_json(include_information:)
       json = attributes.slice(*ALLOWED_ATTRIBUTES)
+      json["bean_notes"] = rich_text_html(:bean_notes)
+      json["espresso_notes"] = rich_text_html(:espresso_notes)
       add_brew_data(json) if include_information
       json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
     end
 
     private
 
-    def visualizer_attributes
+    def visualizer_attributes(notes_format: :html)
       attributes = {
         shot_id: id,
         user_id:,
@@ -60,8 +62,8 @@ class Shot
         bitterness:,
         sweetness:,
         mouthfeel:,
-        espresso_notes:,
-        bean_notes:,
+        espresso_notes: serialized_note(:espresso_notes, format: notes_format),
+        bean_notes: serialized_note(:bean_notes, format: notes_format),
         barista:,
         metadata: metadata.presence,
         tags: tags.pluck(:name),
@@ -71,11 +73,15 @@ class Shot
 
       attributes[:start_time] = start_time unless user&.hide_shot_times
       attributes[:user_name] = user.display_name if user&.public?
-      attributes[:private_notes] = private_notes if Current.user == user
+      attributes[:private_notes] = serialized_note(:private_notes, format: notes_format) if Current.user == user
       attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.has_profile?
       attributes[:image_url] = image.url if image.attached?
 
       attributes.compact
+    end
+
+    def serialized_note(attribute, format:)
+      format == :plain_text ? rich_text_plain_text(attribute) : rich_text_html(attribute)
     end
 
     def add_brew_data(json)

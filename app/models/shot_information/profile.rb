@@ -54,7 +54,7 @@ class ShotInformation
         csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, "Roasting Date", shot.iso8601_roast_date_time, "ISO8601 formatted date"] if shot.iso8601_roast_date_time
 
         Parsers::SepCsv::MAPPING.each do |key, value|
-          metadata_value = extra[value]
+          metadata_value = value == "bean_notes" ? shot.rich_text_plain_text(:bean_notes) : extra[value]
           next if metadata_value.blank?
 
           csv << ["meta", nil, nil, nil, nil, nil, nil, nil, nil, key, metadata_value, "text"]

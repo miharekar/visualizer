@@ -59,6 +59,14 @@ module Parsers
       end
     end
 
+    def note_html(attribute, value)
+      if attribute == "espresso_notes"
+        RichTextSanitizer.from_plain_text(value)
+      else
+        super
+      end
+    end
+
     def parse_data(row)
       if row["comment"] == "sample: weight" && row["current_total_shot_weight"].present?
         @datapoints[:weight][row["elapsed"].to_f] = row["current_total_shot_weight"].to_f

@@ -40,8 +40,8 @@ module Parsers
       assert_equal "0", shot.drink_tds
       assert_equal "0", shot.drink_ey
       assert_equal 70, shot.espresso_enjoyment
-      assert_equal "Neat.", shot.espresso_notes
-      assert_equal "With BPlus", shot.bean_notes
+      assert_equal "Neat.", shot.espresso_notes.to_plain_text
+      assert_equal "With BPlus", shot.bean_notes.to_plain_text
       assert_equal "Miha Rekar", shot.information.extra["my_name"]
       assert_equal "Miha Rekar", shot.barista
       assert_equal "MimojaCafe", shot.information.extra["skin"]

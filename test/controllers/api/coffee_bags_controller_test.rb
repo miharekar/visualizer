@@ -36,6 +36,17 @@ module Api
       assert_equal({"Bean density" => "High", "Bean color" => "Brown"}, CoffeeBag.find(json_response["id"]).metadata)
     end
 
+    test "create accepts sanitized HTML notes and removes embedded media" do
+      roaster = FactoryBot.create(:roaster, user: premium_user)
+      notes = '<p><em>Floral</em></p><video src="https://example.com/bag.mp4"></video>'
+
+      post api_coffee_bags_url, headers: auth_headers(premium_user), params: {coffee_bag: {name: "Kiambu", roaster_id: roaster.id, notes:}}, as: :json
+
+      assert_response :created
+      assert_equal "<p><em>Floral</em></p>", response.parsed_body["notes"]
+      assert_empty CoffeeBag.find(response.parsed_body["id"]).notes.embeds
+    end
+
     test "create requires premium user" do
       roaster = FactoryBot.create(:roaster, user:)
 

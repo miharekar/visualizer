@@ -123,10 +123,16 @@ module Parsers
 
     def extract_fields_from_extra(shot)
       EXTRA_DATA_METHODS.each do |attr|
-        shot.public_send(:"#{attr}=", extra[attr].presence)
+        value = extra[attr].presence
+        value = note_html(attr, value) if %w[bean_notes espresso_notes].include?(attr)
+        shot.public_send(:"#{attr}=", value)
       end
       shot.bean_weight = extra.slice("DSx_bean_weight", "grinder_dose_weight", "bean_weight").values.find { |v| v.to_i.positive? }
       shot.barista = extra["my_name"].presence
+    end
+
+    def note_html(_attribute, value)
+      RichTextSanitizer.from_markdown(value)
     end
   end
 end

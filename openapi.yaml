@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.15.0"
+  version: "1.16.0"
   description: |
     REST API for Visualizer.
 
@@ -1012,15 +1012,18 @@ components:
           nullable: true
         espresso_notes:
           type: string
+          description: Sanitized HTML.
           nullable: true
         roast_level:
           type: string
           nullable: true
         bean_notes:
           type: string
+          description: Sanitized HTML.
           nullable: true
         private_notes:
           type: string
+          description: Owner-only sanitized HTML.
           nullable: true
         barista:
           type: string
@@ -1401,9 +1404,11 @@ components:
               nullable: true
             espresso_notes:
               type: string
+              description: Plain text.
               nullable: true
             bean_notes:
               type: string
+              description: Plain text.
               nullable: true
             barista:
               type: string
@@ -1429,6 +1434,7 @@ components:
               type: string
             private_notes:
               type: string
+              description: Owner-only plain text.
               nullable: true
             profile_url:
               type: string
@@ -1575,8 +1581,17 @@ components:
             bean_weight:
               type: string
               nullable: true
+            bean_notes:
+              type: string
+              description: Sanitized HTML.
+              nullable: true
+            espresso_notes:
+              type: string
+              description: Sanitized HTML.
+              nullable: true
             private_notes:
               type: string
+              description: Premium-only sanitized HTML.
               nullable: true
             fragrance:
               type: integer
@@ -1877,6 +1892,7 @@ components:
           nullable: true
         notes:
           type: string
+          description: Sanitized HTML.
           nullable: true
         archived_at:
           type: string
@@ -1962,6 +1978,7 @@ components:
               nullable: true
             notes:
               type: string
+              description: Sanitized HTML.
               nullable: true
             metadata:
               type: object

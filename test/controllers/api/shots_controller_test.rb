@@ -194,7 +194,7 @@ module Api
     end
 
     test "show returns shot data in beanconqueror format" do
-      shot = FactoryBot.create(:shot, user:)
+      shot = FactoryBot.create(:shot, user:, bean_notes: "<p><strong>Chocolate</strong></p>")
 
       get api_shot_url(shot), params: {format: "beanconqueror"}, as: :json
       assert_response :success
@@ -204,6 +204,7 @@ module Api
       expected_keys = %w[bean brew meta mill preparation]
       assert_equal expected_keys.sort, json_response.keys.sort
       assert_equal shot.updated_at.to_i, json_response.dig("meta", "visualizer", "updated_at")
+      assert_equal "Chocolate", json_response.dig("meta", "visualizer", "bean_notes")
     end
 
     test "show returns shot data in decent format for unknown format" do
@@ -349,6 +350,28 @@ module Api
 
       json_response = response.parsed_body
       assert_equal "New title", json_response["profile_title"]
+    end
+
+    test "update accepts sanitized HTML notes and removes embedded media" do
+      shot = FactoryBot.create(:shot, user: premium_user)
+      notes = '<p><strong>Sweet</strong></p><img src="https://example.com/shot.jpg"><action-text-attachment sgid="bad"></action-text-attachment>'
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {bean_notes: notes, private_notes: notes}}, as: :json
+
+      assert_response :success
+      assert_equal "<p><strong>Sweet</strong></p>", response.parsed_body["bean_notes"]
+      assert_equal "<p><strong>Sweet</strong></p>", response.parsed_body["private_notes"]
+      assert_empty shot.reload.bean_notes.embeds
+      assert_empty shot.private_notes.embeds
+    end
+
+    test "update rejects private notes for non-premium users" do
+      shot = FactoryBot.create(:shot, user:)
+
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {private_notes: "<p>Private</p>"}}, as: :json
+
+      assert_response :bad_request
+      assert_nil shot.reload.private_notes.body
     end
 
     test "update authorizes with shot policy" do

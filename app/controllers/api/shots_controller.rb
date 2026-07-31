@@ -46,7 +46,8 @@ module Api
         render json: shared.shot.to_api_json(format: params[:format], include_information: params[:with_data].presence)
       elsif Current.user.present?
         distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
-        render json: Shot.where(id: distinct_shots).map { |s| s.to_api_json(format: params[:format], include_information: params[:with_data].presence) }
+        shots = Shot.where(id: distinct_shots).with_notes.includes(:information, :tags, :user, coffee_bag: :roaster, image_attachment: :blob)
+        render json: shots.map { it.to_api_json(format: params[:format], include_information: params[:with_data].presence) }
       else
         render json: {error: "Shared shot not found"}, status: :not_found
       end
@@ -95,7 +96,7 @@ module Api
     end
 
     def load_users_shot
-      @shot = Shot.find_by(id: params[:id])
+      @shot = Shot.with_notes.find_by(id: params[:id])
       return render json: {error: "Shot not found"}, status: :not_found unless @shot
 
       authorize! @shot

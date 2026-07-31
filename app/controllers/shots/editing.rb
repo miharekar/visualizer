@@ -5,8 +5,8 @@ module Shots
     private
 
     def update_shot_params
-      allowed = [:image, :profile_title, :barista, :bean_weight, :private_notes, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
-      allowed += [*Shot::TASTING_ASSESSMENT_ATTRIBUTES, :tag_list, {metadata: Current.user.shot_metadata_fields}] if Current.user.premium?
+      allowed = [:image, :profile_title, :barista, :bean_weight, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
+      allowed += [:private_notes, *Shot::TASTING_ASSESSMENT_ATTRIBUTES, :tag_list, {metadata: Current.user.shot_metadata_fields}] if Current.user.premium?
       allowed << :coffee_bag_id if Current.user.coffee_management_enabled?
       params.expect(shot: allowed)
     end
