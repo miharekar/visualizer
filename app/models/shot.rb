@@ -43,7 +43,7 @@ class Shot < ApplicationRecord
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
-  scope :with_notes, -> { with_rich_text_bean_notes.with_rich_text_espresso_notes.with_rich_text_private_notes }
+  scope :with_notes, -> { with_rich_text_bean_notes_and_embeds.with_rich_text_espresso_notes_and_embeds.with_rich_text_private_notes_and_embeds }
 
   def self.from_file(user, file_content)
     return Shot.new(user:) if file_content.blank?
