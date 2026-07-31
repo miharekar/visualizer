@@ -4,8 +4,10 @@ class Shot < ApplicationRecord
   include Airtablable
   include Jsonable
   include DateParseable
+  include SanitizedRichText
 
   DAILY_LIMIT = 50
+  RICH_TEXT_ATTRIBUTES = %i[bean_notes espresso_notes private_notes].freeze
   TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
   LIST_ATTRIBUTES = %i[id user_id start_time updated_at profile_title bean_weight drink_weight drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
@@ -16,6 +18,9 @@ class Shot < ApplicationRecord
   has_many :shared_shots, dependent: :destroy
   has_many :shot_tags, dependent: :destroy
   has_many :tags, through: :shot_tags
+  has_rich_text :bean_notes
+  has_rich_text :espresso_notes
+  has_rich_text :private_notes
 
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [1000, 500], format: :jpeg, saver: {strip: true}
@@ -38,6 +43,7 @@ class Shot < ApplicationRecord
   scope :by_start_time, -> { order(start_time: :desc) }
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
+  scope :with_notes, -> { with_rich_text_bean_notes.with_rich_text_espresso_notes.with_rich_text_private_notes }
 
   def self.from_file(user, file_content)
     return Shot.new(user:) if file_content.blank?

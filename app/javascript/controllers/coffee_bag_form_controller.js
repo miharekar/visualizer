@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { plainTextToHtml } from "helpers/rich_text"
 
 const FIELD_HIGHLIGHT_CLASSES = ["!bg-oxford-blue-50", "dark:!bg-oxford-blue-900"]
 
@@ -32,16 +33,20 @@ export default class extends Controller {
     if (!field || field.dataset.previousValue === undefined) return
 
     field.value = field.dataset.previousValue
+    field.dispatchEvent(new Event("input", { bubbles: true }))
     field.classList.remove(...FIELD_HIGHLIGHT_CLASSES)
     delete field.dataset.previousValue
-    label.innerHTML = label.querySelector("div > span").innerHTML
+    const originalLabel = label.querySelector("[data-original-label]")
+    label.replaceChildren(...originalLabel.childNodes)
   }
 
   updateField(field, newValue) {
-    if (field.value === newValue) return
+    const value = field.tagName === "LEXXY-EDITOR" ? plainTextToHtml(newValue) : newValue
+    if (field.value === value) return
     if (field.dataset.previousValue === undefined) field.dataset.previousValue = field.value || ""
 
-    field.value = newValue
+    field.value = value
+    field.dispatchEvent(new Event("input", { bubbles: true }))
     field.classList.add(...FIELD_HIGHLIGHT_CLASSES)
     this.addRollbackLink(field)
   }
@@ -55,8 +60,21 @@ export default class extends Controller {
     if (!label) return
     if (label.querySelector(`[data-action*="coffee-bag-form#revert"]`)) return
 
-    const originalText = label.innerHTML
-    label.innerHTML = `<div class="flex justify-between items-center"><span>${originalText}</span><span class="ml-2 font-light cursor-pointer standard-link" data-action="click->coffee-bag-form#revert" title="${field.dataset.previousValue}">Revert</span></div>`
+    const wrapper = document.createElement("div")
+    wrapper.className = "flex justify-between items-center"
+
+    const originalLabel = document.createElement("span")
+    originalLabel.dataset.originalLabel = ""
+    originalLabel.append(...label.childNodes)
+
+    const revert = document.createElement("span")
+    revert.className = "ml-2 font-light cursor-pointer standard-link"
+    revert.dataset.action = "click->coffee-bag-form#revert"
+    revert.title = field.dataset.previousValue
+    revert.textContent = "Revert"
+
+    wrapper.append(originalLabel, revert)
+    label.replaceChildren(wrapper)
   }
 
   clearCanonicalId() {

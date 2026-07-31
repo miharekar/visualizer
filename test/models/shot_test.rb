@@ -75,6 +75,55 @@ class ShotTest < ActiveSupport::TestCase
     assert_empty Shot.with_all_tag_slugs("basket,missing")
   end
 
+  test "rich text notes sync to plain text columns" do
+    user = create(:user)
+    shot = create(:shot, user:, bean_notes: "<p><strong>Floral</strong> coffee</p>", espresso_notes: "<p>Chocolate</p>", private_notes: "<p>Grind finer</p>")
+
+    assert_equal "Floral coffee", shot[:bean_notes]
+    assert_equal "Chocolate", shot[:espresso_notes]
+    assert_equal "Grind finer", shot[:private_notes]
+    assert_equal [shot], Shot.where("bean_notes ILIKE ?", "%floral coffee%")
+
+    shot.update!(bean_notes: "")
+
+    assert_nil shot.reload[:bean_notes]
+  end
+
+  test "updating another field preserves legacy note text" do
+    shot = create(:shot)
+    shot.update_column(:bean_notes, "**Legacy Markdown**") # rubocop:disable Rails/SkipsModelValidations
+
+    shot.reload.update!(profile_title: "Updated")
+
+    assert_equal "**Legacy Markdown**", shot[:bean_notes]
+  end
+
+  test "updating rich text notes touches shot" do
+    shot = create(:shot)
+
+    travel 1.minute do
+      shot.update!(bean_notes: "<p>New notes</p>")
+    end
+
+    assert_operator shot.reload.updated_at, :>, shot.created_at
+  end
+
+  test "updating another field does not load rich text notes" do
+    shot = create(:shot, bean_notes: "<p>Floral</p>")
+    shot.reload
+    queries = []
+    callback = ->(*args) do
+      payload = args.last
+      queries << payload[:sql] if payload[:sql].include?("action_text_rich_texts")
+    end
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      shot.update!(profile_title: "Updated")
+    end
+
+    assert_empty queries
+  end
+
   test "tag list reuses existing tags" do
     user = create(:user, :premium)
     tags = %w[first second third].map { |name| create(:tag, name:, user:) }

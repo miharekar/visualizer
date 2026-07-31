@@ -1,17 +1,4 @@
 module ApplicationHelper
-  def markdown_text_from(input)
-    tags = Rails::Html::SafeListSanitizer.allowed_tags + %w[table thead tbody th tr td video]
-    attributes = Rails::Html::SafeListSanitizer.allowed_attributes + %w[id style controls]
-    text = sanitize(Kramdown::Document.new(input, input: "GFM").to_html, tags:, attributes:)
-    tag.div(text, class: "prose prose-neutral dark:prose-invert")
-  end
-
-  def faq_markdown_text_from(input, link_class: "")
-    text = Kramdown::Document.new(input, input: "GFM").to_html
-    text = text.gsub(/a href="([^"]+)"/, %(a class="#{link_class}" href="\\1" target="_blank"))
-    text.html_safe # rubocop:disable Rails/OutputSafety
-  end
-
   def avatar_url(user, size)
     if user.avatar.attached?
       rails_representation_url(user.avatar.variant(:thumb))

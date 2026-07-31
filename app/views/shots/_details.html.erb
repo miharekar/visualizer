@@ -144,18 +144,18 @@
   </div>
   <% if shot.bean_notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Bean notes:</div>
-    <%= markdown_text_from(shot.bean_notes) %>
+    <%= shot.bean_notes %>
   <% end %>
   <% if shot.espresso_notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Notes:</div>
-    <%= markdown_text_from(shot.espresso_notes) %>
+    <%= shot.espresso_notes %>
   <% end %>
   <% if shot.coffee_bag && shot.coffee_bag.notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Coffee bag notes:</div>
-    <%= markdown_text_from(shot.coffee_bag.notes) %>
+    <%= shot.coffee_bag.notes %>
   <% end %>
   <% if owner && shot.private_notes.present? %>
     <div class="mt-4 mb-2 font-medium text-neutral-900 dark:text-neutral-100">Private notes:</div>
-    <%= markdown_text_from(shot.private_notes) %>
+    <%= shot.private_notes %>
   <% end %>
 </div>

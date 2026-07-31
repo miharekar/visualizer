@@ -112,7 +112,7 @@ class ShotsController < ApplicationController
   end
 
   def load_users_shot
-    @shot = Current.user.shots.find(params[:id])
+    @shot = Current.user.shots.with_notes.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to shots_path, alert: "Shot not found!"
   end

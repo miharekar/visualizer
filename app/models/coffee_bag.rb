@@ -1,15 +1,18 @@
 class CoffeeBag < ApplicationRecord
   include Airtablable
   include Squishable
+  include SanitizedRichText
 
   performs :refresh_shot_values
 
   DISPLAY_ATTRIBUTES = %w[roast_level country region farm farmer variety elevation processing harvest_time quality_score tasting_notes place_of_purchase].freeze
+  RICH_TEXT_ATTRIBUTES = %i[notes].freeze
 
   belongs_to :roaster, touch: true
   belongs_to :canonical_coffee_bag, optional: true
   has_one :user, through: :roaster
   has_many :shots, dependent: :nullify
+  has_rich_text :notes
 
   has_one_attached :image do |attachable|
     attachable.variant :thumb, resize_to_limit: [200, 200], format: :jpeg, saver: {strip: true}
@@ -59,12 +62,16 @@ class CoffeeBag < ApplicationRecord
   end
 
   def duplicate(roast_date)
-    dup.tap { |d| d.roast_date = roast_date }
+    dup.tap do |duplicate|
+      duplicate.roast_date = roast_date
+      duplicate.notes = notes.body
+    end
   end
 
   def to_api_json
     attribute_names = CoffeeBag::DISPLAY_ATTRIBUTES + %w[id roaster_id canonical_coffee_bag_id name roast_date frozen_date defrosted_date url archived_at notes]
     attributes.slice(*attribute_names).tap do |json|
+      json["notes"] = rich_text_html(:notes)
       json["image_url"] = image&.url if image.attached?
       json["metadata"] = metadata.presence
     end

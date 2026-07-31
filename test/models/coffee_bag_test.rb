@@ -134,6 +134,15 @@ class CoffeeBagTest < ActiveSupport::TestCase
     assert_equal({"Bean density" => "High"}, coffee_bag.to_api_json["metadata"])
   end
 
+  test "duplicate copies rich text notes" do
+    coffee_bag = create(:coffee_bag, roaster:, notes: "<p><strong>Floral</strong></p>")
+
+    duplicate = coffee_bag.duplicate(Date.new(2025, 1, 1))
+
+    assert_equal "Floral", coffee_bag[:notes]
+    assert_equal "<p><strong>Floral</strong></p>", duplicate.rich_text_html(:notes)
+  end
+
   test "changing coffee bag enqueues refresh_shot_values job" do
     coffee_bag = create(:coffee_bag, roaster:, roast_date: Date.new(2025, 1, 1))
 

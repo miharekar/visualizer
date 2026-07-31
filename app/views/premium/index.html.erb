@@ -156,12 +156,22 @@
       <h2 class="font-serif text-4xl font-bold tracking-tight text-white">Frequently Asked Questions</h2>
       <div class="pt-10 mt-6">
         <dl class="flex flex-col gap-y-10 md:grid md:grid-cols-2 md:grid-rows-2 md:gap-x-8 md:gap-y-8">
-          <% @qas.each do |q, a| %>
-            <div>
-              <dt class="text-lg font-medium leading-6 text-white"><%= q %></dt>
-              <dd class="mt-2 text-base text-terracotta-200"><%= faq_markdown_text_from(a, link_class:"standard-link text-terracotta-100") %></dd>
-            </div>
-          <% end %>
+          <%= render "faq", question: "What's the biggest difference between free and premium?" do %>Premium unlocks your complete shot history, plus extra tools for organizing and learning from your coffee data.<% end %>
+          <%= render "faq", question: "Can I use Visualizer for free?" do %>Absolutely. The free tier is here to stay and already covers the core workflow.<% end %>
+          <%= render "faq", question: "How much does it cost?" do %>€5 per month or €50 per year.<% end %>
+          <%= render "faq", question: "Do you have a free trial?" do %>Yes. Try Premium free for <%= free_trial_days %> days. Cancel anytime during the trial and you won't be charged.<% end %>
+          <%= render "faq", question: "Do you ever erase shot history for non-premium users?" do %>Never. Your shots stay safe - they're just hidden until you upgrade.<% end %>
+          <%= render "faq", question: "If I upgrade later, will I be able to see all my past shots?" do %>Yep. Every shot you've ever uploaded will be right there waiting for you.<% end %>
+          <%= render "faq", question: "Can I cancel at any time?" do %>Of course. You'll keep Premium features until your subscription ends.<% end %>
+          <%= render "faq", question: "What payment methods do you accept?" do %>Credit and debit cards, Apple Pay, Google Pay, and everything else <%= link_to "Creem supports", "https://docs.creem.io/merchant-of-record/finance/payment-methods", class: "standard-link text-terracotta-100", target: "_blank", rel: "noopener" %>.<% end %>
+          <%= render "faq", question: "Do you have a refund policy?" do %>I don't have a formal refund policy, but if you need help, just <%= mail_to "miha@visualizer.coffee", "send me a message", class: "standard-link text-terracotta-100", target: "_blank", rel: "noopener" %>.<% end %>
+          <%= render "faq", question: "Do you offer any discounts?" do %><%= link_to "No", "/updates/black-friday", class: "standard-link text-terracotta-100", target: "_blank", rel: "noopener" %>. I keep things simple with one straightforward price, though the annual plan saves you 2 months.<% end %>
+          <%= render "faq", question: "Do you have a privacy policy?" do %>Sure do. Read it <%= link_to "here", "/privacy", class: "standard-link text-terracotta-100", target: "_blank", rel: "noopener" %>.<% end %>
+          <%= render "faq", question: "Can I pay with Bitcoin/Ethereum/Dogecoin/…?" do %>No.<% end %>
+          <%= render "faq", question: "Can I use it on multiple devices?" do %>Yes. Use it anywhere you want at no extra charge.<% end %>
+          <%= render "faq", question: "How did you decide on the price?" do %>That's quite a story! Read all about it in <%= link_to "this post", "/updates/visualizer-v3", class: "standard-link text-terracotta-100", target: "_blank", rel: "noopener" %>.<% end %>
+          <%= render "faq", question: "What's your favorite exercise?" do %>The daily grind.<% end %>
+          <%= render "faq", question: "What if I have more questions?" do %>Just <%= mail_to "miha@visualizer.coffee", "send me a message", class: "standard-link text-terracotta-100", target: "_blank", rel: "noopener" %> - I'm here to help!<% end %>
         </dl>
       </div>
     </div>

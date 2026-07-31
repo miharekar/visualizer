@@ -163,31 +163,22 @@
         <div>
           <%= shot_copyable_label(f, :bean_notes) %>
           <div class="mt-1">
-            <%= f.text_area :bean_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
-            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Supports
-              <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
-            </div>
+            <%= f.rich_text_area :bean_notes, class: "lexxy-content min-h-48" %>
           </div>
         </div>
         <div>
           <%= shot_copyable_label(f, :espresso_notes) %>
           <div class="mt-1">
-            <%= f.text_area :espresso_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
-            <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-              Supports
-              <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
-            </div>
+            <%= f.rich_text_area :espresso_notes, class: "lexxy-content min-h-48" %>
           </div>
         </div>
         <% if Current.user.premium? %>
           <div>
             <%= shot_copyable_label(f, :private_notes, "Private notes") %>
             <div class="mt-1">
-              <%= f.text_area :private_notes, rows: 10, class: "shadow-sm font-mono focus:ring-oxford-blue-500 focus:border-oxford-blue-500 mt-1 block w-full sm:text-sm border-neutral-300 rounded-md dark:bg-neutral-800" %>
+              <%= f.rich_text_area :private_notes, class: "lexxy-content min-h-48" %>
               <div class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                Only visible to you. Supports
-                <a class="standard-link" target="_blank" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown</a>.
+                Only visible to you.
               </div>
             </div>
           </div>
