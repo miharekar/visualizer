@@ -4,18 +4,13 @@ import { plainTextToHtml } from "helpers/rich_text"
 const FIELD_HIGHLIGHT_CLASSES = ["!bg-oxford-blue-50", "dark:!bg-oxford-blue-900"]
 
 export default class extends Controller {
-  connect() {
-    this.handleApply = this.applyPayload.bind(this)
-    this.element.addEventListener("coffee-bag:apply", this.handleApply)
-  }
-
-  disconnect() {
-    this.element.removeEventListener("coffee-bag:apply", this.handleApply)
-  }
-
   applyPayload(event) {
     const { data = {}, clearCanonicalId = false } = event.detail || {}
-    if (clearCanonicalId) this.field("canonical_coffee_bag_id").value = ""
+    if (clearCanonicalId) {
+      const canonicalId = this.field("canonical_coffee_bag_id")
+      canonicalId.value = ""
+      canonicalId.dispatchEvent(new Event("change"))
+    }
 
     Object.entries(data).forEach(([fieldName, value]) => {
       if (!value) return

@@ -1,7 +1,3 @@
-import * as Lexxy from "lexxy"
+import { configure } from "lexxy"
 
-Lexxy.configure({
-  default: {
-    attachments: false
-  }
-})
+configure({ default: { attachments: false } })

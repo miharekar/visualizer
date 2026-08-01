@@ -9,7 +9,6 @@
 .dark {
   --lexxy-color-ink: oklch(96% 0 0);
   --lexxy-color-ink-medium: oklch(75% 0 0);
-  --lexxy-color-ink-light: oklch(55% 0 0);
   --lexxy-color-ink-lighter: oklch(40% 0 0);
   --lexxy-color-ink-lightest: oklch(25% 0 0);
   --lexxy-color-ink-inverted: oklch(15% 0 0);

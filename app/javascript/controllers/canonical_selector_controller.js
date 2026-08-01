@@ -8,13 +8,6 @@ export default class extends Controller {
     if (!this.hasIdTarget) return
 
     this.toggleInputs()
-    this.autocompleteTarget.addEventListener("autocomplete.change", this.autocompleted.bind(this))
-    this.observer = new MutationObserver(() => this.toggleInputs())
-    this.observer.observe(this.idTarget, { attributes: true, attributeFilter: ["value"] })
-  }
-
-  disconnect() {
-    this.observer?.disconnect()
   }
 
   autocompleted(event) {
@@ -55,7 +48,6 @@ export default class extends Controller {
     this.idTarget.value = ""
     this.idTarget.dispatchEvent(new Event("change"))
     this.inputTarget.value = ""
-    this.toggleInputs()
   }
 
   selectedCanonicalRoasterId() {
