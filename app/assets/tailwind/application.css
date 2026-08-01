@@ -6,17 +6,40 @@
 
 @variant dark (&:where(.dark, .dark *));
 
-.dark {
-  --lexxy-color-ink: oklch(96% 0 0);
-  --lexxy-color-ink-medium: oklch(75% 0 0);
-  --lexxy-color-ink-lighter: oklch(40% 0 0);
-  --lexxy-color-ink-lightest: oklch(25% 0 0);
-  --lexxy-color-ink-inverted: oklch(15% 0 0);
+:root:has(body.dark) {
+  color-scheme: dark;
+  --lexxy-color-ink: var(--color-neutral-100);
+  --lexxy-color-ink-medium: var(--color-neutral-400);
+  --lexxy-color-ink-light: var(--color-neutral-500);
+  --lexxy-color-ink-lighter: var(--color-neutral-600);
+  --lexxy-color-ink-lightest: var(--color-neutral-700);
+  --lexxy-color-ink-inverted: var(--color-neutral-800);
   --lexxy-color-accent-dark: var(--color-oxford-blue-400);
   --lexxy-color-accent-medium: var(--color-oxford-blue-300);
-  --lexxy-color-accent-light: var(--color-oxford-blue-800);
-  --lexxy-color-accent-lightest: var(--color-oxford-blue-900);
-  --lexxy-shadow: 0 0 0 1px oklch(55% 0 0 / 30%);
+  --lexxy-color-accent-light: var(--color-oxford-blue-700);
+  --lexxy-color-accent-lightest: var(--color-oxford-blue-800);
+  --lexxy-color-red: var(--color-red-400);
+  --lexxy-color-green: var(--color-green-400);
+  --lexxy-color-blue: var(--color-blue-400);
+  --lexxy-color-purple: var(--color-purple-400);
+  --lexxy-color-code-token-att: var(--color-red-400);
+  --lexxy-color-code-token-comment: var(--color-neutral-400);
+  --lexxy-color-code-token-function: var(--color-purple-300);
+  --lexxy-color-code-token-operator: var(--color-red-400);
+  --lexxy-color-code-token-property: var(--color-blue-300);
+  --lexxy-color-code-token-punctuation: var(--color-neutral-100);
+  --lexxy-color-code-token-selector: var(--color-green-300);
+  --lexxy-color-code-token-variable: var(--color-orange-300);
+  --lexxy-shadow: 0 0 0 1px color-mix(in oklch, var(--color-neutral-500) 30%, transparent);
+  --highlight-1: var(--color-yellow-400);
+  --highlight-2: var(--color-orange-400);
+  --highlight-3: var(--color-red-400);
+  --highlight-4: var(--color-pink-400);
+  --highlight-5: var(--color-purple-400);
+  --highlight-6: var(--color-blue-400);
+  --highlight-7: var(--color-green-400);
+  --highlight-8: var(--color-amber-500);
+  --highlight-9: var(--color-neutral-400);
 }
 
 lexxy-editor {
