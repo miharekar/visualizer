@@ -124,6 +124,54 @@ class ShotTest < ActiveSupport::TestCase
     assert_empty queries
   end
 
+  test "with notes preloads rich text embeds" do
+    shot = create(:shot, bean_notes: "<p>Floral</p>", espresso_notes: "<p>Sweet</p>", private_notes: "<p>Grind finer</p>")
+    shot = Shot.with_notes.find(shot.id)
+
+    %i[bean_notes espresso_notes private_notes].each do |attribute|
+      assert_predicate shot.public_send(attribute).association(:embeds_attachments), :loaded?
+    end
+  end
+
+  test "does not store rich text for notes that were never set" do
+    shot = create(:shot, bean_notes: nil, espresso_notes: nil, private_notes: nil)
+
+    assert_equal 0, ActionText::RichText.where(record: shot).count
+  end
+
+  test "blanking a note removes its rich text row" do
+    shot = create(:shot, bean_notes: "<p>Floral</p>")
+
+    assert_equal 1, ActionText::RichText.where(record: shot).count
+
+    shot.update!(bean_notes: "")
+
+    assert_equal 0, ActionText::RichText.where(record: shot.reload).count
+    assert_nil shot[:bean_notes]
+  end
+
+  test "setting a note after blanking it preserves the rich text row" do
+    shot = create(:shot, bean_notes: "<p>Floral</p>")
+
+    shot.bean_notes = ""
+    shot.bean_notes = "<p>Sweet</p>"
+    shot.save!
+
+    assert_equal 1, ActionText::RichText.where(record: shot.reload).count
+    assert_equal "<p>Sweet</p>", shot.rich_text_html(:bean_notes)
+  end
+
+  test "formatting only note edit still bumps updated_at" do
+    shot = create(:shot, bean_notes: "<p>Floral</p>")
+    original = shot.updated_at
+
+    travel 1.minute do
+      shot.update!(bean_notes: "<p><strong>Floral</strong></p>")
+    end
+
+    assert_operator shot.reload.updated_at, :>, original
+  end
+
   test "tag list reuses existing tags" do
     user = create(:user, :premium)
     tags = %w[first second third].map { |name| create(:tag, name:, user:) }

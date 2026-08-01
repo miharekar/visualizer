@@ -6,7 +6,7 @@ class AirtableUploadAllJob < AirtableJob
     if identity.valid_token?
       if user.coffee_management_enabled?
         Airtable::Roasters.new(user).upload_multiple(user.roasters.where(airtable_id: nil))
-        Airtable::CoffeeBags.new(user).upload_multiple(user.coffee_bags.where(airtable_id: nil).includes(:roaster, :rich_text_notes))
+        Airtable::CoffeeBags.new(user).upload_multiple(user.coffee_bags.where(airtable_id: nil).includes(:roaster).with_rich_text_notes)
       end
 
       shots = shot_ids ? user.shots.where(id: shot_ids) : user.shots.where(airtable_id: nil)

@@ -15,6 +15,7 @@ AllCops:
     - db/schema.rb
     - db/migrate/*
     - bin/*
+    - snippets.rb
     - lib/misc/snippets.rb
 Bundler/OrderedGems:
   Enabled: true

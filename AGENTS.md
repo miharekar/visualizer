@@ -140,7 +140,7 @@ bin/ci                 # full CI pipeline
 
 - Minitest with parallelization; FactoryBot and WebMock are available (network blocked in tests by default).
 - When adding Airtable table fields, update the Airtable metadata factory stub in `test/factories/airtable_infos.rb` so tests do not issue unstubbed field-creation requests.
-- When adding attributes to Airtable-synced models (`Airtablable`), also update the corresponding mapper under `app/models/airtable/` (for example `STANDARD_FIELDS` and `FIELD_OPTIONS`) so sync stays bidirectional.
+- When adding attributes to Airtable-synced models (`Airtablable`), also update the corresponding mapper under `app/models/airtable/` (for example `STANDARD_FIELDS` and `FIELD_OPTIONS`) so sync stays bidirectional. Rich text notes are the deliberate exception: they sit in `OUTBOUND_ONLY_FIELDS` and are pushed to Airtable as plain text, but edits made in Airtable are never synced back.
 - Keep secrets in `.env`/Rails credentials or `.mise.toml`; never commit keys or S3/Lemon Squeezy secrets.
 - When touching auth/billing/dependencies, run `bin/ci` or at least RuboCop + security checks (Brakeman, Bundler Audit, Importmap audit, Gitleaks).
 
