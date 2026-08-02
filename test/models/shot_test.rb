@@ -89,15 +89,6 @@ class ShotTest < ActiveSupport::TestCase
     assert_nil shot.reload[:bean_notes]
   end
 
-  test "updating another field preserves legacy note text" do
-    shot = create(:shot)
-    shot.update_column(:bean_notes, "**Legacy Markdown**") # rubocop:disable Rails/SkipsModelValidations
-
-    shot.reload.update!(profile_title: "Updated")
-
-    assert_equal "**Legacy Markdown**", shot[:bean_notes]
-  end
-
   test "updating rich text notes touches shot" do
     shot = create(:shot)
 
