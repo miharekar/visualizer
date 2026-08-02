@@ -6,14 +6,34 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+:root:root {
+  --lexxy-color-ink: var(--color-neutral-700);
+  --lexxy-color-ink-medium: var(--color-neutral-500);
+  --lexxy-color-ink-light: var(--color-neutral-400);
+  --lexxy-color-ink-lighter: var(--color-neutral-200);
+  --lexxy-color-ink-lightest: var(--color-neutral-100);
+  --lexxy-color-link: var(--color-neutral-900);
+  --lexxy-color-heading: var(--color-neutral-900);
+  --lexxy-color-bold: var(--color-neutral-900);
+  --lexxy-color-quote: var(--color-neutral-900);
+  --lexxy-color-counter: var(--color-neutral-500);
+  --lexxy-color-bullet: var(--color-neutral-300);
+}
+
 :root:has(body.dark) {
   color-scheme: dark;
-  --lexxy-color-ink: var(--color-neutral-100);
+  --lexxy-color-ink: var(--color-neutral-300);
   --lexxy-color-ink-medium: var(--color-neutral-400);
   --lexxy-color-ink-light: var(--color-neutral-500);
-  --lexxy-color-ink-lighter: var(--color-neutral-600);
-  --lexxy-color-ink-lightest: var(--color-neutral-700);
+  --lexxy-color-ink-lighter: var(--color-neutral-700);
+  --lexxy-color-ink-lightest: var(--color-neutral-800);
   --lexxy-color-ink-inverted: var(--color-neutral-800);
+  --lexxy-color-link: var(--color-white);
+  --lexxy-color-heading: var(--color-white);
+  --lexxy-color-bold: var(--color-white);
+  --lexxy-color-quote: var(--color-neutral-50);
+  --lexxy-color-counter: var(--color-neutral-400);
+  --lexxy-color-bullet: var(--color-neutral-600);
   --lexxy-color-accent-dark: var(--color-oxford-blue-400);
   --lexxy-color-accent-medium: var(--color-oxford-blue-300);
   --lexxy-color-accent-light: var(--color-oxford-blue-700);
@@ -53,6 +73,34 @@ lexxy-toolbar {
 
 .lexxy-floating-controls {
   --button-size: 1.5rem;
+}
+
+.lexxy-content {
+  color: var(--lexxy-color-ink);
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--lexxy-color-heading);
+  }
+
+  :where(a) {
+    color: var(--lexxy-color-link);
+  }
+
+  :where(strong, .lexxy-content__bold) {
+    color: var(--lexxy-color-bold);
+  }
+
+  :where(blockquote) {
+    color: var(--lexxy-color-quote);
+  }
+
+  :where(ol > li)::marker {
+    color: var(--lexxy-color-counter);
+  }
+
+  :where(ul > li)::marker {
+    color: var(--lexxy-color-bullet);
+  }
 }
 
 @theme {
