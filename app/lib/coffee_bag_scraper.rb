@@ -29,7 +29,10 @@ class CoffeeBagScraper
   def page_content(url, limit = 5)
     raise ArgumentError, "Too many HTTP redirects" if limit.zero?
 
-    response = Net::HTTP.get_response(URI(url))
+    uri = URI.parse(url)
+    raise ArgumentError, "URL must be an HTTP or HTTPS URL" unless uri.is_a?(URI::HTTP) && uri.host.present?
+
+    response = Net::HTTP.get_response(uri)
     if is_blocked?(response)
       crawlbase_content(url)
     elsif response.is_a?(Net::HTTPRedirection)

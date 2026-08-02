@@ -63,10 +63,15 @@ class CoffeeBagsController < ApplicationController
   end
 
   def scrape_info
-    Rails.logger.info "Scraping coffee bag info for #{params[:url]} by #{Current.user.id}"
-    request_id = params[:request_id].presence || SecureRandom.uuid
-    CoffeeBagScrapeJob.perform_later(Current.user, params[:url], request_id)
-    render json: {request_id:}, status: :accepted
+    url = scrape_url
+    if url
+      Rails.logger.info "Scraping coffee bag info for #{url} by #{Current.user.id}"
+      request_id = params[:request_id].presence || SecureRandom.uuid
+      CoffeeBagScrapeJob.perform_later(Current.user, url.to_s, request_id)
+      render json: {request_id:}, status: :accepted
+    else
+      render json: {error: "Please provide a valid HTTP or HTTPS URL."}, status: :unprocessable_content
+    end
   end
 
   def destroy
@@ -95,6 +100,13 @@ class CoffeeBagsController < ApplicationController
   end
 
   private
+
+  def scrape_url
+    uri = URI.parse(params[:url].to_s.strip)
+    uri if uri.is_a?(URI::HTTP) && uri.host.present?
+  rescue URI::InvalidURIError
+    nil
+  end
 
   def set_coffee_bag
     @coffee_bag = Current.user.coffee_bags.find(params[:id])
