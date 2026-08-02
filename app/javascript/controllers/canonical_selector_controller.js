@@ -8,6 +8,12 @@ export default class extends Controller {
     if (!this.hasIdTarget) return
 
     this.toggleInputs()
+    this.observer = new MutationObserver(() => this.toggleInputs())
+    this.observer.observe(this.idTarget, { attributes: true, attributeFilter: ["value"] })
+  }
+
+  disconnect() {
+    this.observer?.disconnect()
   }
 
   autocompleted(event) {

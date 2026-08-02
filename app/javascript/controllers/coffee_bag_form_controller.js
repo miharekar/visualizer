@@ -30,7 +30,7 @@ export default class extends Controller {
 
     field.value = field.dataset.previousValue
     field.dispatchEvent(new Event("input", { bubbles: true }))
-    field.classList.remove(...FIELD_HIGHLIGHT_CLASSES)
+    this.highlightTarget(field).classList.remove(...FIELD_HIGHLIGHT_CLASSES)
     delete field.dataset.previousValue
     label.classList.remove("flex", "items-center", "justify-between")
     revert.remove()
@@ -43,12 +43,16 @@ export default class extends Controller {
 
     field.value = value
     field.dispatchEvent(new Event("input", { bubbles: true }))
-    field.classList.add(...FIELD_HIGHLIGHT_CLASSES)
+    this.highlightTarget(field).classList.add(...FIELD_HIGHLIGHT_CLASSES)
     this.addRollbackLink(field)
   }
 
   field(fieldName) {
     return this.element.querySelector(`#coffee_bag_${fieldName}`)
+  }
+
+  highlightTarget(field) {
+    return field.editorContentElement || field
   }
 
   addRollbackLink(field) {

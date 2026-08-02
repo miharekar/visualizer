@@ -15,6 +15,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "lexxy-editor[name='shot[bean_notes]']"
+    assert_select "[data-controller='autocomplete'][data-action='autocomplete.change->canonical-selector#autocompleted']"
     assert_includes response.body, "&lt;strong&gt;Before&lt;/strong&gt;"
 
     patch shot_url(@shot), params: {shot: {

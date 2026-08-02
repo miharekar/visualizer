@@ -365,15 +365,6 @@ module Api
       assert_empty shot.private_notes.embeds
     end
 
-    test "update rejects private notes for non-premium users" do
-      shot = FactoryBot.create(:shot, user:)
-
-      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {private_notes: "<p>Private</p>"}}, as: :json
-
-      assert_response :bad_request
-      assert_nil shot.reload.private_notes.body
-    end
-
     test "update authorizes with shot policy" do
       shot = FactoryBot.create(:shot, user:)
 

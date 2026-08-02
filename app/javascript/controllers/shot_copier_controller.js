@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import { appsignal } from "controllers/application"
 
 const uuidV4Regex = /shots\/([A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12})/i
+const FIELD_HIGHLIGHT_CLASSES = ["!bg-oxford-blue-50", "dark:!bg-oxford-blue-900"]
 
 export default class extends Controller {
   async from(event) {
@@ -95,9 +96,9 @@ export default class extends Controller {
       field.dispatchEvent(new Event("input", { bubbles: true }))
 
       if (isTags) {
-        document.getElementById("tags_input").classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
+        document.getElementById("tags_input").classList.add(...FIELD_HIGHLIGHT_CLASSES)
       } else {
-        field.classList.add("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
+        this.highlightTarget(field).classList.add(...FIELD_HIGHLIGHT_CLASSES)
       }
 
       this.showRevert(field, originalValue, isTags)
@@ -140,6 +141,10 @@ export default class extends Controller {
     return !["", "0", "0.0"].includes(currentValue)
   }
 
+  highlightTarget(field) {
+    return field.editorContentElement || field
+  }
+
   rollback(event) {
     event.preventDefault()
     const field = document.getElementById(event.currentTarget.dataset.revertFor)
@@ -168,7 +173,7 @@ export default class extends Controller {
 
     field.value = field.dataset.previousValue
     field.dispatchEvent(new Event("input", { bubbles: true }))
-    field.classList.remove("!bg-oxford-blue-50", "dark:!bg-oxford-blue-900")
+    this.highlightTarget(field).classList.remove(...FIELD_HIGHLIGHT_CLASSES)
     delete field.dataset.previousValue
     this.removeRevert(field, isTags)
 

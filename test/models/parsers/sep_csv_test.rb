@@ -30,6 +30,16 @@ module Parsers
       assert_equal "31.01", shot.drink_weight
     end
 
+    test "treats descriptions as plain text" do
+      file = File.read("test/files/sharebrew_tsp.csv").sub("Description,,text", "Description,**Sweet** [coffee](https://example.com),text")
+
+      shot = Shot.from_file(@user, file)
+
+      assert_equal "**Sweet** [coffee](https://example.com)", shot.bean_notes.to_plain_text
+      assert_not_includes shot.rich_text_html(:bean_notes), "<strong>"
+      assert_not_includes shot.rich_text_html(:bean_notes), "<a "
+    end
+
     test "extracts pressure from CoffeeFlow app" do
       shot = new_shot("test/files/profitec_victoria_arduino.csv")
       assert shot.valid?

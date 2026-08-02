@@ -59,12 +59,8 @@ module Parsers
       end
     end
 
-    def note_html(attribute, value)
-      if attribute == "espresso_notes"
-        RichTextSanitizer.from_plain_text(value)
-      else
-        super
-      end
+    def note_html(_attribute, value)
+      RichTextSanitizer.from_plain_text(value)
     end
 
     def parse_data(row)
