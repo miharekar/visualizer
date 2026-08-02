@@ -201,9 +201,9 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    herb (0.10.2-aarch64-linux-gnu)
-    herb (0.10.2-arm64-darwin)
-    herb (0.10.2-x86_64-linux-gnu)
+    herb (0.10.3-aarch64-linux-gnu)
+    herb (0.10.3-arm64-darwin)
+    herb (0.10.3-x86_64-linux-gnu)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -560,7 +560,7 @@ GEM
     uri (1.1.1)
     useragent (0.16.11)
     vernier (1.10.1)
-    version_gem (1.1.14)
+    version_gem (1.1.15)
     web-console (4.3.0)
       actionview (>= 8.0.0)
       bindex (>= 0.4.0)
@@ -585,7 +585,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     wisper (2.0.1)
-    zeitwerk (2.8.2)
+    zeitwerk (2.8.3)
 
 PLATFORMS
   aarch64-linux
