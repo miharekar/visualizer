@@ -3,6 +3,7 @@ class CoffeeBagScraper
     /your access to this site has been limited/i,
     /access from your area has been temporarily limited/i
   ].freeze
+  BLOCKED_RESPONSE_CLASSES = [Net::HTTPTooManyRequests].freeze
 
   attr_reader :user, :url, :request_id
 
@@ -59,6 +60,7 @@ class CoffeeBagScraper
 
   def is_blocked?(response)
     body = response.body.to_s
-    BLOCK_PATTERNS.any? { |pattern| body.match?(pattern) }
+    BLOCKED_RESPONSE_CLASSES.any? { |response_class| response.is_a?(response_class) } ||
+      BLOCK_PATTERNS.any? { |pattern| body.match?(pattern) }
   end
 end
