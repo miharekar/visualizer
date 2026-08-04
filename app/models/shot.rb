@@ -96,7 +96,7 @@ class Shot < ApplicationRecord
   def tag_list=(value)
     return unless user.premium?
 
-    names = value.split(",").map { it.squish.gsub(/[^\w\s-]/, "").downcase }.compact_blank.uniq
+    names = Array(value).flat_map { it.to_s.split(",") }.map { it.squish.gsub(/[^\w\s-]/, "").downcase }.compact_blank.uniq
     tags_by_name = user.tags.where(name: names).index_by(&:name)
     selected_tags = names.map { |name| tags_by_name[name] || user.tags.create(name:) }
     self.tags = selected_tags.select(&:persisted?)

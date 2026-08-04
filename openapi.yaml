@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.16.0"
+  version: "1.17.0"
   description: |
     REST API for Visualizer.
 
@@ -1566,6 +1566,7 @@ components:
 
     ShotUpdateRequest:
       type: object
+      description: Wrap editable fields in the `shot` object. Tags and other premium fields require a premium account.
       required: [shot]
       properties:
         shot:
@@ -1643,12 +1644,16 @@ components:
               nullable: true
             tag_list:
               type: array
+              description: Premium-only tag names. Send an empty array to remove all tags.
               items:
                 type: string
             metadata:
               type: object
               additionalProperties: true
               nullable: true
+      example:
+        shot:
+          tag_list: [22g Decent, high-speed]
 
     RoasterSummary:
       type: object

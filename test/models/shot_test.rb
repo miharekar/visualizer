@@ -174,6 +174,15 @@ class ShotTest < ActiveSupport::TestCase
     assert_equal 3, user.tags.count
   end
 
+  test "tag list accepts an array" do
+    user = create(:user, :premium)
+    shot = create(:shot, user:)
+
+    shot.update!(tag_list: ["First Tag", "second, third"])
+
+    assert_equal ["first tag", "second", "third"], shot.tags.order(:name).pluck(:name)
+  end
+
   test "days_frozen is nil without coffee bag" do
     shot = create(:shot)
 

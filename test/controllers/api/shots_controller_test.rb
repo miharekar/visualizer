@@ -393,6 +393,21 @@ module Api
       assert_equal({"Portafilter basket" => "IMS"}, shot.reload.metadata)
     end
 
+    test "update replaces and removes tags using an array" do
+      old_tag = create(:tag, name: "old", user: premium_user)
+      shot = create(:shot, user: premium_user, tags: [old_tag])
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {tag_list: ["22g Decent", "High-Speed"]}}, as: :json
+
+      assert_response :success
+      assert_equal ["22g decent", "high-speed"], shot.reload.tags.order(:name).pluck(:name)
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {tag_list: []}}, as: :json
+
+      assert_response :success
+      assert_empty shot.reload.tags
+    end
+
     test "update rejects non-owner" do
       shot = FactoryBot.create(:shot)
 
