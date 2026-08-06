@@ -166,7 +166,7 @@ GEM
     dotenv (3.2.0)
     drb (2.2.3)
     ed25519 (1.4.0)
-    erb (6.0.6)
+    erb (6.0.7)
     erubi (1.13.1)
     et-orbi (1.4.1)
       tzinfo
@@ -211,7 +211,7 @@ GEM
     htmlbeautifier (1.4.3)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    image_processing (2.0.2)
+    image_processing (2.0.3)
     importmap-rails (2.2.3)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -351,7 +351,7 @@ GEM
     pg_lock (1.0.0)
     pg_query (6.2.2)
       google-protobuf (>= 3.25.3)
-    pghero (3.8.0)
+    pghero (4.0.0)
       activerecord (>= 7.2)
     postmark (1.25.1)
       json
@@ -659,4 +659,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-  4.0.17
+  4.0.18
