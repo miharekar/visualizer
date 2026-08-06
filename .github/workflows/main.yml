@@ -4,8 +4,80 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   call-ruby-tests:
     name: Ruby Tests
     uses: ./.github/workflows/ruby-tests.yml
     secrets: inherit
+
+  build-image:
+    name: Build Image
+    needs: call-ruby-tests
+    uses: docker/github-builder/.github/workflows/build.yml@v1
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    with:
+      output: image
+      push: true
+      platforms: linux/amd64,linux/arm64
+      cache: true
+      cache-mode: max
+      sign: "false"
+      labels: service=visualizer
+      meta-images: ghcr.io/miharekar/visualizer
+      meta-tags: type=raw,value=${{ github.sha }}
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      registry-auths: |
+        - registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy Production
+    needs: build-image
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: production
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.6
+          bundler-cache: true
+
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@v4
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          ping: hvapp
+
+      - name: Configure SSH host keys
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          cp .github/known_hosts ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: bundle exec kamal deploy --skip-push --version "$GITHUB_SHA"
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
