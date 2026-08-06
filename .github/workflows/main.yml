@@ -15,6 +15,7 @@ jobs:
 
   build-image:
     name: Build Image (${{ matrix.platform }})
+    if: ${{ vars.DEPLOY_ENABLED != 'false' }}
     needs: call-ruby-tests
     runs-on: ${{ matrix.runner }}
     strategy:
