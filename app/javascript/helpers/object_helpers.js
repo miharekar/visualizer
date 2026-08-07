@@ -1,7 +1,7 @@
 export const deepMerge = (obj1, obj2) => {
   const result = { ...obj1 }
   for (const key in obj2) {
-    if (!Object.hasOwn(obj2, key)) continue
+    if (!Object.prototype.hasOwnProperty.call(obj2, key)) continue
 
     if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
       result[key] = deepMerge(obj1[key], obj2[key])
