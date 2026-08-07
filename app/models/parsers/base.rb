@@ -81,7 +81,7 @@ module Parsers
     private
 
     memo_wise def sha
-      Digest::SHA256.base64digest(data.sort.to_json) if data.present?
+      Digest::SHA256.base64digest(data.sort.to_json) if timeframe.present? && data.values.any?(&:present?)
     end
 
     def existing_shot(_user)

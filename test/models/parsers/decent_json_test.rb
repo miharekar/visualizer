@@ -109,6 +109,21 @@ module Parsers
       assert_not shot.information.data.key?("espresso_temperature_mix_goal")
     end
 
+    test "rejects an unsupported JSON shape" do
+      payload = {
+        author: "Pullograph",
+        data: {espresso_weight: [1.0, 2.0]},
+        metadata: {duration: 1.0},
+        profile_title: "Pullograph",
+        timeframe: [0.5, 1.0]
+      }
+
+      shot = Shot.from_file(@user, JSON.generate(payload))
+
+      assert_not shot.valid?
+      assert_includes shot.errors[:sha], "can't be blank"
+    end
+
     test "handles even more invalid profile string" do
       shot = new_shot("test/files/invalid_profile_2.json")
       assert shot.valid?
