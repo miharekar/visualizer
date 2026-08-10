@@ -1,6 +1,7 @@
 class Roaster < ApplicationRecord
   include Airtablable
   include Squishable
+  include VariableImageAttachment
 
   belongs_to :user
   belongs_to :canonical_roaster, optional: true
@@ -12,6 +13,7 @@ class Roaster < ApplicationRecord
   end
 
   validates :name, presence: true, uniqueness: {scope: :user_id, case_sensitive: false}
+  validates_variable_image :image
 
   after_save_commit :update_shots, if: -> { saved_change_to_name? }
 

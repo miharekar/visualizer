@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Sluggable
+  include VariableImageAttachment
   slug_from :name
 
   has_secure_password
@@ -35,6 +36,7 @@ class User < ApplicationRecord
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
   validates :creem_customer_id, uniqueness: true, allow_blank: true
+  validates_variable_image :avatar
 
   before_validation :set_webauthn_id
   before_validation :set_default_unsubscribed_from, on: :create

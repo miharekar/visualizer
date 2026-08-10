@@ -65,11 +65,11 @@ module Api
     def update
       raise ActionController::UnknownFormat unless request.format.json?
 
-      @shot.update(update_shot_params)
-      attach_image(params.dig(:shot, :image)) if Current.user.premium?
-      render json: @shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
-    rescue Shots::Editing::InvalidImageError => e
-      render json: {error: e.message}, status: :unprocessable_content
+      if @shot.update(update_shot_params)
+        render json: @shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
+      else
+        render json: {error: @shot.errors.full_messages.join(", ")}, status: :unprocessable_content
+      end
     rescue ActionController::UnknownFormat
       render json: {error: "Request must be JSON."}, status: :unprocessable_content
     end

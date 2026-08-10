@@ -32,7 +32,7 @@
               <%= image_tag @update.image.variant(:social), class: "mt-1" %>
             <% end %>
             <div class="mt-1">
-              <%= form.file_field :image, class: "standard-file-input" %>
+              <%= form.file_field :image, accept: "image/*", class: "standard-file-input" %>
             </div>
           </div>
         </div>

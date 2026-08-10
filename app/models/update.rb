@@ -3,6 +3,7 @@ class Update < ApplicationRecord
 
   include Sluggable
   include SanitizedRichText
+  include VariableImageAttachment
 
   slug_from :title
 
@@ -13,6 +14,7 @@ class Update < ApplicationRecord
   end
 
   validates :slug, uniqueness: true
+  validates_variable_image :image
 end
 
 # == Schema Information

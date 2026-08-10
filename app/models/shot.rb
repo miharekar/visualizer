@@ -5,6 +5,7 @@ class Shot < ApplicationRecord
   include Jsonable
   include DateParseable
   include SanitizedRichText
+  include VariableImageAttachment
 
   DAILY_LIMIT = 50
   TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
@@ -28,6 +29,7 @@ class Shot < ApplicationRecord
 
   validates :start_time, :sha, :user, presence: true
   validates(*TASTING_ASSESSMENT_ATTRIBUTES, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 15}, allow_nil: true)
+  validates_variable_image :image
   validate :daily_limit, on: :create
 
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? || canonical_coffee_bag_id_changed? }

@@ -1,6 +1,6 @@
 module ApplicationHelper
   def avatar_url(user, size)
-    if user.avatar.attached?
+    if user.avatar.attached? && user.avatar.variable?
       rails_representation_url(user.avatar.variant(:thumb))
     else
       "#{user.gravatar_url}?s=#{size}&d=mp"

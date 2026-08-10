@@ -2,6 +2,7 @@ class CoffeeBag < ApplicationRecord
   include Airtablable
   include Squishable
   include SanitizedRichText
+  include VariableImageAttachment
 
   performs :refresh_shot_values
 
@@ -19,6 +20,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   validates :name, presence: true, uniqueness: {scope: %i[roaster_id roast_date], case_sensitive: false} # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validates_variable_image :image
   validate :defrosted_date_after_frozen_date
 
   after_save_commit :refresh_shot_values_later, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
