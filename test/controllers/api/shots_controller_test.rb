@@ -441,6 +441,7 @@ module Api
       patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {metadata: {"Portafilter basket" => "IMS"}}}, as: :json
 
       assert_response :bad_request
+      assert_equal "param is missing or the value is empty or invalid: shot", response.parsed_body["error"]
       assert_empty shot.reload.metadata
     end
 
@@ -450,7 +451,17 @@ module Api
       patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {fragrance: 10}}, as: :json
 
       assert_response :bad_request
+      assert_equal "param is missing or the value is empty or invalid: shot", response.parsed_body["error"]
       assert_nil shot.reload.fragrance
+    end
+
+    test "update rejects tag removal for non-premium users with a JSON error" do
+      shot = FactoryBot.create(:shot, user:)
+
+      patch api_shot_url(shot), headers: auth_headers(user), params: {shot: {tag_list: []}}, as: :json
+
+      assert_response :bad_request
+      assert_equal "param is missing or the value is empty or invalid: shot", response.parsed_body["error"]
     end
 
     test "basic auth does not create a persisted session or set a session cookie" do

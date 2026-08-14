@@ -18,6 +18,8 @@ class ShotsController < ApplicationController
   end
 
   def show
+    return head :not_acceptable unless request.format.html?
+
     @chart = ShotChart.new(@shot, Current.user) if @shot.information
   rescue ShotChart::ParsedShot::NoData
     flash[:alert] = "This shot does not have enough chart data to compare."

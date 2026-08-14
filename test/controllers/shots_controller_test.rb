@@ -8,6 +8,13 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     sign_in(@user)
   end
 
+  test "show rejects unsupported formats" do
+    get shot_url(@shot, format: :png)
+
+    assert_response :not_acceptable
+    assert_empty response.body
+  end
+
   test "rich notes use Lexxy and persist HTML" do
     @shot.update!(bean_notes: "<p><strong>Before</strong></p>")
 

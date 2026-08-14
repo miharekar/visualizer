@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.17.0"
+  version: "1.17.1"
   description: |
     REST API for Visualizer.
 
@@ -244,6 +244,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ShotDetail"
+        "400":
+          description: Missing, empty, or unauthorized update parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "401":
           description: Authentication required.
         "403":

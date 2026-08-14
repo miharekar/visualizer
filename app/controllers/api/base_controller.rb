@@ -11,6 +11,7 @@ module Api
     skip_before_action :verify_authenticity_token
 
     rate_limit to: 200, within: 10.minutes, name: "api-user-10-minutes", if: -> { Current.user.present? }, by: -> { Current.user.id }
+    rescue_from ActionController::ParameterMissing, with: :render_bad_parameters
     rescue_from ActionController::TooManyRequests, with: :render_rate_limit
 
     private
@@ -53,6 +54,10 @@ module Api
 
     def verify_basic_user
       head :unauthorized unless Current.user
+    end
+
+    def render_bad_parameters(error)
+      render json: {error: error.message}, status: :bad_request
     end
 
     def render_rate_limit
