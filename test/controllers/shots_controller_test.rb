@@ -13,6 +13,20 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :not_acceptable
     assert_empty response.body
+
+    get shot_url(@shot, format: :json)
+
+    assert_response :not_acceptable
+    assert_empty response.body
+  end
+
+  test "show accepts wildcard format" do
+    @shot.update!(duration: 30)
+
+    get shot_url(@shot), headers: {"Accept" => "*/*"}
+
+    assert_response :success
+    assert_equal "text/html", response.media_type
   end
 
   test "rich notes use Lexxy and persist HTML" do
