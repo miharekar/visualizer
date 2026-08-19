@@ -156,6 +156,9 @@ GEM
       bigdecimal
       rexml
     crass (1.0.7)
+    cruise (0.2.0-aarch64-linux-gnu)
+    cruise (0.2.0-arm64-darwin)
+    cruise (0.2.0-x86_64-linux-gnu)
     csv (3.3.6)
     date (3.5.1)
     debug (1.11.1)
@@ -251,7 +254,7 @@ GEM
       logger (~> 1.6)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
-    lexxy (0.9.29)
+    lexxy (0.9.30)
       rails (>= 8.0.2)
     lint_roller (1.1.0)
     listen (3.10.0)
@@ -432,9 +435,10 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    reactionview (0.3.0)
+    reactionview (0.4.0)
       actionview (>= 7.0)
-      herb (>= 0.9.0, < 1.0.0)
+      cruise
+      herb (>= 0.10.0, < 0.11.0)
     regexp_parser (2.12.0)
     reline (0.7.0)
       io-console (~> 0.5)
@@ -559,7 +563,7 @@ GEM
     unicode-emoji (4.2.0)
     uri (1.1.1)
     useragent (0.16.11)
-    vernier (1.10.1)
+    vernier (1.11.0)
     version_gem (1.1.15)
     web-console (4.3.0)
       actionview (>= 8.0.0)
