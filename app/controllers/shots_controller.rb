@@ -11,18 +11,21 @@ class ShotsController < ApplicationController
   before_action :load_users_shots, only: %i[index search]
   before_action :load_related_shots, only: %i[show edit]
 
-  def index; end
+  def index
+    respond_to do |format|
+      format.html
+      format.json { render_api_endpoint_error }
+    end
+  end
 
   def search
     render :index
   end
 
   def show
-    @chart = ShotChart.new(@shot, Current.user) if @shot.information
-
     respond_to do |format|
-      format.html
-      format.any { head :not_acceptable }
+      format.html { @chart = ShotChart.new(@shot, Current.user) if @shot.information }
+      format.json { render_api_endpoint_error }
     end
   rescue ShotChart::ParsedShot::NoData
     flash[:alert] = "This shot does not have enough chart data to compare."
@@ -109,6 +112,10 @@ class ShotsController < ApplicationController
   end
 
   private
+
+  def render_api_endpoint_error
+    render json: {error: "This is not an API endpoint.", api_docs: "https://apidocs.visualizer.coffee"}, status: :not_acceptable
+  end
 
   def load_shot
     @shot = Shot.find(params[:id])

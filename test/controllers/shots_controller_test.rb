@@ -8,16 +8,26 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     sign_in(@user)
   end
 
-  test "show rejects unsupported formats" do
-    get shot_url(@shot, format: :png)
+  test "index directs JSON requests to the API documentation" do
+    get shots_url(format: :json)
 
     assert_response :not_acceptable
-    assert_empty response.body
+    assert_equal "application/json", response.media_type
+    assert_equal({
+      "error" => "This is not an API endpoint.",
+      "api_docs" => "https://apidocs.visualizer.coffee"
+    }, response.parsed_body)
+  end
 
+  test "show directs JSON requests to the API documentation" do
     get shot_url(@shot, format: :json)
 
     assert_response :not_acceptable
-    assert_empty response.body
+    assert_equal "application/json", response.media_type
+    assert_equal({
+      "error" => "This is not an API endpoint.",
+      "api_docs" => "https://apidocs.visualizer.coffee"
+    }, response.parsed_body)
   end
 
   test "show accepts wildcard format" do
