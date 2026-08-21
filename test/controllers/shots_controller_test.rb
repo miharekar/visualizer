@@ -19,6 +19,14 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     }, response.parsed_body)
   end
 
+  test "index renders Turbo Stream pagination" do
+    get shots_url(format: :turbo_stream, before: 1.day.from_now.iso8601)
+
+    assert_response :success
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    assert_select "turbo-stream[action='append'][target='shots']"
+  end
+
   test "show directs JSON requests to the API documentation" do
     get shot_url(@shot, format: :json)
 
