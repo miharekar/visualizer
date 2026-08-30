@@ -1,4 +1,6 @@
 class PasskeysController < ApplicationController
+  before_action :require_authentication, except: %i[sign_in callback]
+
   def options
     options = WebAuthn::Credential.options_for_create(
       user: {id: Current.user.webauthn_id, name: Current.user.email, display_name: Current.user.display_name},

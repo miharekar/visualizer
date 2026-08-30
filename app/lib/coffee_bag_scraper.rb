@@ -1,3 +1,5 @@
+require "resolv"
+
 class CoffeeBagScraper
   BLOCK_PATTERNS = [
     /your access to this site has been limited/i,
@@ -32,7 +34,7 @@ class CoffeeBagScraper
     uri = URI.parse(url)
     raise ArgumentError, "URL must be an HTTP or HTTPS URL" unless uri.is_a?(URI::HTTP) && uri.host.present?
 
-    response = Net::HTTP.get_response(uri)
+    response = get_response(uri)
     if is_blocked?(response)
       crawlbase_content(url)
     elsif response.is_a?(Net::HTTPRedirection)
@@ -42,6 +44,20 @@ class CoffeeBagScraper
       content = extract_content(response)
       content.size < 100 ? crawlbase_content(url) : content
     end
+  end
+
+  def get_response(uri)
+    addresses = Resolv.getaddresses(uri.host)
+    raise ArgumentError, "URL must resolve to a public IP address" if addresses.empty? || addresses.any? { private_address?(it) }
+
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", ipaddr: addresses.first) do |http|
+      http.get(uri.request_uri)
+    end
+  end
+
+  def private_address?(address)
+    ip = IPAddr.new(address)
+    ip.private? || ip.loopback? || ip.link_local? || ip.multicast? || ip.to_i.zero?
   end
 
   def crawlbase_content(url)

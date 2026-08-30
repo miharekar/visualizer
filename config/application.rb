@@ -1,5 +1,6 @@
 require_relative "boot"
 require_relative "../lib/bad_multipart_request_middleware"
+require_relative "../lib/extensions/ip_addr"
 
 require "rails/all"
 
@@ -15,7 +16,7 @@ module Visualizer
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets tasks misc])
+    config.autoload_lib(ignore: %w[assets tasks misc extensions])
 
     # Configuration for the application, engines, and railties goes here.
     #

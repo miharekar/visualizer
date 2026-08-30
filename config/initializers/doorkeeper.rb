@@ -180,7 +180,7 @@ Doorkeeper.configure do
   # Note: If you are already a user of doorkeeper and have existing tokens
   # in your installation, they will be invalid without adding 'fallback: :plain'.
   #
-  # hash_token_secrets
+  hash_token_secrets fallback: :plain
   # By default, token secrets will be hashed using the
   # +Doorkeeper::Hashing::SHA256+ strategy.
   #
@@ -194,7 +194,7 @@ Doorkeeper.configure do
 
   # Hash application secrets before persisting them.
   #
-  # hash_application_secrets
+  hash_application_secrets fallback: :plain
   #
   # By default, applications will be hashed
   # with the +Doorkeeper::SecretStoring::SHA256+ strategy.
