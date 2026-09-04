@@ -7,7 +7,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    action_policy (0.7.6)
+    action_policy (0.7.7)
       ruby-next-core (>= 1.0)
     action_text-trix (2.1.19)
       railties
@@ -156,9 +156,9 @@ GEM
       bigdecimal
       rexml
     crass (1.0.7)
-    cruise (0.2.1-aarch64-linux-gnu)
-    cruise (0.2.1-arm64-darwin)
-    cruise (0.2.1-x86_64-linux-gnu)
+    cruise (0.3.0-aarch64-linux-gnu)
+    cruise (0.3.0-arm64-darwin)
+    cruise (0.3.0-x86_64-linux-gnu)
     csv (3.3.6)
     date (3.5.1)
     debug (1.11.1)
@@ -352,8 +352,8 @@ GEM
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
     pg_lock (1.0.0)
-    pg_query (6.2.2)
-      google-protobuf (>= 3.25.3)
+    pg_query (6.2.3)
+      google-protobuf (>= 4.34.0)
     pghero (4.0.1)
       activerecord (>= 7.2)
     postmark (1.25.1)
