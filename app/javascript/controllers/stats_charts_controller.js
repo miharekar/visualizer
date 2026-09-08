@@ -28,11 +28,13 @@ export default class extends Controller {
         height: 500
       },
       xAxis: {
-        type: "datetime"
+        type: "datetime",
+        minorTicks: false
       },
       title: false,
       yAxis: {
-        title: false
+        title: false,
+        minorTicks: false
       },
       credits: {
         enabled: false
