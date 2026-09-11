@@ -1,15 +1,15 @@
 <div class="bg-white shadow dark:bg-neutral-900">
-  <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <h1 class="font-serif text-3xl font-bold lining-nums md:text-4xl text-neutral-900 dark:text-neutral-100">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <h1 class="font-serif text-3xl font-bold text-neutral-900 lining-nums md:text-4xl dark:text-neutral-100">
       Edit <%= @roaster.name %>
     </h1>
   </div>
 </div>
-<div class="pt-6 mx-auto max-w-7xl md:py-6 md:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl pt-6 md:px-6 md:py-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
     <div class="px-4 sm:px-6 md:col-span-1 md:p-0">
       <div>
-        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+        <h3 class="leading-6 font-medium text-neutral-900 dark:text-neutral-100">
           You have
           <strong><%= link_to pluralize(@roaster.coffee_bags.count, "coffee bag"), coffee_bags_path(roaster_id: @roaster.id), class: "standard-link" %></strong>
           <% if @roaster.coffee_bags.archived.count > 0 %>
@@ -25,7 +25,7 @@
         <%= button_to "Delete #{@roaster.name}", roaster_path(@roaster), method: :delete, class: "px-4 py-2 button-white w-full", data: {action: "click->modal#confirm", title: "Delete #{@roaster.name}", text: "Are you sure you want to permanently delete #{@roaster.name} roaster with #{pluralize(@roaster.coffee_bags.count, "coffee bag")}? This action cannot be undone."} %>
       </div>
     </div>
-    <hr class="mx-4 mt-6 sm:mx-6 md:hidden text-neutral-200 dark:text-neutral-700">
+    <hr class="mx-4 mt-6 text-neutral-200 sm:mx-6 md:hidden dark:text-neutral-700">
     <%= render "form", roaster: @roaster %>
   </div>
 </div>

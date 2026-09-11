@@ -3,7 +3,7 @@
     <% if @shots.any? %>
       <%= render @shots, selected_tag_slugs: @tag_slugs %>
     <% else %>
-      <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
+      <div class="my-8 px-6 text-center text-neutral-500 sm:px-8">
         No shots found 😢
       </div>
     <% end %>

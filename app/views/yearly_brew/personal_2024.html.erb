@@ -1,10 +1,10 @@
 <% content_for(:html_title) { "Visualizer | Bean Counting 2024: Your Year on Visualizer" } %>
-<div class="flex flex-col gap-y-24 items-center px-4 my-24 mx-auto max-w-7xl sm:gap-y-32 sm:px-6 lg:px-8 dark:text-neutral-200">
-  <div class="px-6 bg-white lg:px-8 dark:bg-neutral-900">
+<div class="mx-auto my-24 flex max-w-7xl flex-col items-center gap-y-24 px-4 sm:gap-y-32 sm:px-6 lg:px-8 dark:text-neutral-200">
+  <div class="bg-white px-6 lg:px-8 dark:bg-neutral-900">
     <div class="mx-auto max-w-2xl text-center">
-      <p class="font-semibold text-terracotta-600 text-base/7 dark:text-terracotta-500">Your Year on Visualizer</p>
-      <h1 class="mt-2 font-serif text-5xl font-semibold tracking-tight sm:text-7xl text-neutral-900 text-balance dark:text-neutral-100">Bean Counting 2024</h1>
-      <p class="mt-8 text-lg font-medium text-neutral-500 text-pretty sm:text-xl/8 dark:text-neutral-400">
+      <p class="text-terracotta-600 dark:text-terracotta-500 text-base/7 font-semibold">Your Year on Visualizer</p>
+      <h1 class="mt-2 font-serif text-5xl font-semibold tracking-tight text-balance text-neutral-900 sm:text-7xl dark:text-neutral-100">Bean Counting 2024</h1>
+      <p class="mt-8 text-lg font-medium text-pretty text-neutral-500 sm:text-xl/8 dark:text-neutral-400">
         <% if @yearly_brew.shots_this_year.any? %>
           This is your personal coffee chronicle of the year.
           A data-driven journey through every bean you've ground, every shot you've pulled, and every sip you've savored.
@@ -28,7 +28,7 @@
         <% end %>
       </div>
     <% else %>
-      <div class="flex flex-col gap-y-4 items-center max-w-prose">
+      <div class="flex max-w-prose flex-col items-center gap-y-4">
         <p class="text-center">
           Want to share your coffee journey? It's brew-tiful to share with friends!
           <br>
@@ -37,15 +37,15 @@
       </div>
     <% end %>
   <% end %>
-  <div class="flex flex-col gap-y-6 max-w-prose">
-    <h2 class="font-serif text-3xl font-semibold leading-6 text-neutral-900 dark:text-neutral-100">
+  <div class="flex max-w-prose flex-col gap-y-6">
+    <h2 class="font-serif text-3xl leading-6 font-semibold text-neutral-900 dark:text-neutral-100">
       Thank you! 🙏
     </h2>
     <p>
       Another year of shots, discoveries, and coffee moments comes to an end. Thank you for being part of this journey - your uploads, feedback, and enthusiasm make Visualizer what it is. It's amazing to see how this little project has grown into such a vibrant community of coffee lovers.
     </p>
     <p>
-      In case you missed it last year, my friend <a href="https://banibeans.si/" class="standard-link" target="_blank">Banibeans</a> is still offering Visualizer users a special 10% discount with code <code class="px-1 rounded text-neutral-800 bg-neutral-200">VISUALIZER10</code>.
+      In case you missed it last year, my friend <a href="https://banibeans.si/" class="standard-link" target="_blank">Banibeans</a> is still offering Visualizer users a special 10% discount with code <code class="rounded bg-neutral-200 px-1 text-neutral-800">VISUALIZER10</code>.
       Perfect timing if you're looking to start 2025 with some amazing beans or if you're looking for a last second gift for a fellow coffee enthusiast! 🎁
     </p>
     <p>

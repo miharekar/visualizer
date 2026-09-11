@@ -1,11 +1,11 @@
 <div class="md:col-span-2" id="<%= dom_id(@shot) %>">
   <%= form_with(model: @shot) do |f| %>
     <div class="sm:overflow-hidden sm:rounded-md md:shadow">
-      <div class="flex flex-col gap-y-6 py-5 px-4 bg-white sm:p-6 dark:bg-neutral-800" data-controller="canonical-selector">
+      <div class="flex flex-col gap-y-6 bg-white px-4 py-5 sm:p-6 dark:bg-neutral-800" data-controller="canonical-selector">
         <div class="grid grid-cols-6 gap-6" data-controller="ey-calculator">
           <div class="col-span-6">
             <%= f.label :espresso_enjoyment, class: "standard-label" %>
-            <div class="flex items-center mt-1" data-controller="range">
+            <div class="mt-1 flex items-center" data-controller="range">
               <%= f.number_field :espresso_enjoyment, min: 0, max: 100, inputmode: "numeric", style: "background-color: #{enjoyment_hex(@shot.espresso_enjoyment)};", class: "text-white border-none shot-number rounded-full h-8 w-20 text-center dark:bg-neutral-800", data: { action: "input->range#update", range_target: "number" } %>
               <%= f.range_field :espresso_enjoyment, in: 0..100, class: "shot-range ml-2 grow dark:bg-neutral-800", data: { action: "input->range#update", range_target: "range" } %>
             </div>
@@ -49,7 +49,7 @@
               <%= f.label :canonical_coffee_bag_search, "Search Loffee Labs Bean Base", class: "standard-label" %>
               <%= f.hidden_field :canonical_coffee_bag_id, data: { autocomplete_target: "hidden", canonical_selector_target: "id" } %>
               <%= f.search_field :canonical_coffee_bag_search, value: "#{@shot.canonical_coffee_bag&.name}", class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
-              <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
+              <ul class="absolute z-10 mt-2 max-h-96 list-group overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black/5" data-autocomplete-target="results"></ul>
             </div>
             <div class="col-span-6 sm:col-span-3">
               <%= shot_copyable_label(f, :bean_brand) do %>
@@ -79,7 +79,7 @@
           <div class="col-span-6 sm:col-span-3">
             <div class="flex justify-between">
               <%= f.label :drink_ey, class: "standard-label" %>
-              <span class="text-sm cursor-pointer text-neutral-500 standard-link dark:text-neutral-400" data-action="click->ey-calculator#calculate">
+              <span class="standard-link cursor-pointer text-sm text-neutral-500 dark:text-neutral-400" data-action="click->ey-calculator#calculate">
                 Calculate
               </span>
             </div>
@@ -93,7 +93,7 @@
               Terminology and value ranges are mostly based on the
               <a href="https://sca.coffee/sca-news/cva-in-action-descriptive" target="_blank" class="standard-link">SCA CVA Descriptive</a>.
             </p>
-            <div class="grid grid-cols-6 gap-6 mt-4">
+            <div class="mt-4 grid grid-cols-6 gap-6">
               <% Shot::TASTING_ASSESSMENT_ATTRIBUTES.each do |attribute| %>
                 <div class="col-span-6 sm:col-span-3">
                   <%= shot_copyable_label(f, attribute, attribute.to_s.humanize) do %>
@@ -128,7 +128,7 @@
             </p>
           <% end %>
         <% else %>
-          <p class="p-3 text-sm rounded-md bg-terracotta-100/50 dark:bg-terracotta-800/10">
+          <p class="bg-terracotta-100/50 dark:bg-terracotta-800/10 rounded-md p-3 text-sm">
             Easily manage your coffee bags, add tags, custom fields, private notes, photos, and more by
             <%= link_to "upgrading to Premium", premium_index_path, class: "standard-link font-semibold" %>.
           </p>
@@ -187,7 +187,7 @@
             <% if @shot.image.attached? && @shot.image.variable? %>
               <div id="shot-image">
                 <%= image_tag @shot.image.variant(:display), class: "rounded-lg mt-1" %>
-                <div class="flex mt-1 mb-4 text-sm text-red-600 dark:text-red-700 hover:text-red-800 dark:hover:text-red-600">
+                <div class="mt-1 mb-4 flex text-sm text-red-600 hover:text-red-800 dark:text-red-700 dark:hover:text-red-600">
                   <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -201,7 +201,7 @@
           </div>
         <% end %>
       </div>
-      <div class="sticky bottom-0 z-10 p-4 backdrop-blur bg-neutral-50/70 dark:bg-neutral-700/70">
+      <div class="sticky bottom-0 z-10 bg-neutral-50/70 p-4 backdrop-blur dark:bg-neutral-700/70">
         <div class="text-right sm:px-6">
           <%= f.submit "Save", class: "button-terracotta py-2 px-4" %>
         </div>

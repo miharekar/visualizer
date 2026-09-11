@@ -2,14 +2,14 @@
   tasting_assessment_series(@shot, name: "Base"),
   tasting_assessment_series(@comparison, name: "Comparison")
 ].compact %>
-<div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
   <div class="flex flex-col md:flex-row">
     <div class="flex-1">
-      <div class="mb-2 text-sm font-medium tracking-wide uppercase text-neutral-500 dark:text-neutral-400">Base</div>
+      <div class="mb-2 text-sm font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">Base</div>
       <%= render "details", shot: @shot, name: true %>
     </div>
-    <div class="flex-1 mt-6 md:mt-0 md:ml-3">
-      <div class="mb-2 text-sm font-medium tracking-wide uppercase text-neutral-500 dark:text-neutral-400">Comparison</div>
+    <div class="mt-6 flex-1 md:mt-0 md:ml-3">
+      <div class="mb-2 text-sm font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">Comparison</div>
       <%= render "details", shot: @comparison, name: true %>
     </div>
   </div>
@@ -24,13 +24,13 @@
        data-shot-charts-temperature-data-value="<%= (@chart.temperature_chart || []).to_json %>"
        data-shot-charts-comparison-data-value="<%= (@chart.comparison_data || {}).to_json %>">
     <% if Current.user&.premium? %>
-      <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="text-lg text-center text-neutral-900 dark:text-neutral-100">
+      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div class="text-center text-lg text-neutral-900 dark:text-neutral-100">
           Adjust comparison timing
         </div>
         <div class="flex">
-          <div class="flex flex-col mt-2 mr-2 grow">
-            <input id="compare-range" class="flex-1 pt-2 shot-range dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>" autocomplete="off" data-shot-charts-target="compareRange" data-action="input->shot-charts#onCompareInput">
+          <div class="mt-2 mr-2 flex grow flex-col">
+            <input id="compare-range" class="shot-range flex-1 pt-2 dark:bg-neutral-900" type="range" min="-<%= @chart.duration %>" max="<%= @chart.duration %>" value="0" step="<%= @chart.timestep %>" autocomplete="off" data-shot-charts-target="compareRange" data-action="input->shot-charts#onCompareInput">
             <div class="flex pt-2">
               <div class="text-neutral-600 dark:text-neutral-400">
                 -<%= ActiveSupport::Duration.build(@chart.duration / 1000).inspect %>
@@ -41,7 +41,7 @@
               </div>
             </div>
           </div>
-          <button id="compare-range-reset" class="items-center py-2 px-4 text-sm font-medium bg-white rounded-md border shadow-sm border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50" data-shot-charts-target="compareReset" data-action="click->shot-charts#onCompareReset">Reset</button>
+          <button id="compare-range-reset" class="items-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900" data-shot-charts-target="compareReset" data-action="click->shot-charts#onCompareReset">Reset</button>
         </div>
       </div>
     <% end %>
@@ -49,7 +49,7 @@
       <div id="shot-chart" data-shot-charts-target="shotChart"></div>
     </div>
     <% if @chart.temperature_chart.present? %>
-      <div class="pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl pb-8 sm:px-6 lg:px-8">
         <div id="temperature-chart" data-shot-charts-target="temperatureChart"></div>
       </div>
     <% end %>

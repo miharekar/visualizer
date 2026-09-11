@@ -1,6 +1,6 @@
 <% if Date.current < Date.new(2025, 2, 7) %>
-  <div class="flex gap-x-6 items-center py-2.5 px-3 sm:px-3.5 xs: bg-terracotta-50 sm:before:flex-1 dark:bg-terracotta-950">
-    <div class="flex flex-1 gap-y-2 gap-x-4 justify-between items-center sm:flex-auto sm:justify-center">
+  <div class="xs: bg-terracotta-50 dark:bg-terracotta-950 flex items-center gap-x-6 px-3 py-2.5 sm:px-3.5 sm:before:flex-1">
+    <div class="flex flex-1 items-center justify-between gap-x-4 gap-y-2 sm:flex-auto sm:justify-center">
       <p class="text-sm leading-6 text-neutral-900 dark:text-neutral-100">
         <strong class="font-semibold">The <%= link_to "Lemon Squeezy migration", "/updates/on-migration-and-other-updates", class: "text-terracotta-600 dark:text-terracotta-500 hover:underline" %> is wrapped up!</strong> If you are experiencing any issues, please contact me at <%= mail_to "miha@visualizer.coffee", nil, class: "text-terracotta-600 dark:text-terracotta-500 hover:underline" %>. 🙏
       </p>

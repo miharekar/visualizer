@@ -1,5 +1,5 @@
 <div class="flex-1" data-controller="related-shots">
-  <select class="mt-0 standard-input" data-action="related-shots#goTo">
+  <select class="standard-input mt-0" data-action="related-shots#goTo">
     <% related_shots.each do |id, title, bean_type, time| %>
       <% title = "#{bean_type} (#{title})" if bean_type.present? %>
       <% if id == shot.id %>

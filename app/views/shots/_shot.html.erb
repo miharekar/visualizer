@@ -4,45 +4,45 @@
 <% can_edit = allowed_to?(:update?, shot, context: {user: current_user}) %>
 <% can_destroy = allowed_to?(:destroy?, shot, context: {user: current_user}) %>
 <%= tag.div id: dom_id(shot), class: "group" do %>
-  <div class="flex relative sm:rounded sm:shadow dark:sm:shadow-none dark:sm:border dark:sm:border-neutral-700 dark:text-neutral-200">
-    <div class="flex relative p-4 min-w-0 cursor-pointer sm:gap-x-8 grow has-checked:bg-oxford-blue-50 has-checked:dark:bg-oxford-blue-800 dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+  <div class="relative flex sm:rounded sm:shadow dark:text-neutral-200 dark:sm:border dark:sm:border-neutral-700 dark:sm:shadow-none">
+    <div class="has-checked:bg-oxford-blue-50 has-checked:dark:bg-oxford-blue-800 relative flex min-w-0 grow cursor-pointer p-4 hover:bg-neutral-100/25 sm:gap-x-8 dark:hover:bg-neutral-800/25">
       <div class="absolute top-3 right-3 z-1 group-data-comparing:[&:not(:has(input:checked))]:hidden">
         <%= check_box_tag "compare_shots[]", shot.id, id: "compare_shots_#{shot.id}", class: "standard-checkbox size-5 cursor-copy", data: { shot_compare_target: "checkbox", action: "change->shot-compare#select" } %>
       </div>
-      <div class="hidden flex-none -my-4 -ml-4 w-24 lg:w-40" data-check-images-target="container">
+      <div class="-my-4 -ml-4 hidden w-24 flex-none lg:w-40" data-check-images-target="container">
         <% if shot.image.attached? && shot.image.variable? %>
-          <div class="flex w-full h-full">
+          <div class="flex h-full w-full">
             <%= image_tag shot.image.variant(:thumb), class: "rounded-l object-cover object-center" %>
           </div>
         <% end %>
       </div>
-      <div class="flex overflow-hidden flex-col gap-y-1 justify-between md:flex-row md:gap-y-0 md:gap-x-8 grow">
-        <div class="flex flex-col justify-between basis-1/2">
+      <div class="flex grow flex-col justify-between gap-y-1 overflow-hidden md:flex-row md:gap-x-8 md:gap-y-0">
+        <div class="flex basis-1/2 flex-col justify-between">
           <div class="flex flex-col space-y-1">
-            <div class="flex flex-col space-y-1 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
+            <div class="flex flex-col space-y-1 text-sm text-neutral-500 md:text-base dark:text-neutral-400">
             </div>
-            <div class="flex gap-x-2 items-center pr-6 mb-1 md:pr-0">
+            <div class="mb-1 flex items-center gap-x-2 pr-6 md:pr-0">
               <% if shot.espresso_enjoyment.to_i > 0 %>
-                <span class="inline-flex items-center py-0.5 px-1.5 text-sm font-medium text-white rounded-md md:text-base" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+                <span class="inline-flex items-center rounded-md px-1.5 py-0.5 text-sm font-medium text-white md:text-base" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
                   <%= shot.espresso_enjoyment %>
                 </span>
               <% end %>
               <span class="text-base font-semibold md:text-lg">
                 <%= link_to shot_path(shot), data: { action: "click->shot-compare#view" } do %>
-                  <span class="absolute inset-x-0 bottom-0 -top-px"></span>
+                  <span class="absolute inset-x-0 -top-px bottom-0"></span>
                   <%= shot.profile_title %>
                 <% end %>
               </span>
             </div>
-            <div class="flex flex-col space-y-1 text-sm md:text-base text-neutral-500 dark:text-neutral-400">
+            <div class="flex flex-col space-y-1 text-sm text-neutral-500 md:text-base dark:text-neutral-400">
               <% if shot.user && current_user != shot.user %>
-                <div class="flex gap-x-1 items-center">
+                <div class="flex items-center gap-x-1">
                   <div>
                     <%= shot.user.display_name %>
                   </div>
                   <% if shot.user.premium? %>
                     <%= link_to premium_index_path, class: "z-1" do %>
-                      <svg class="size-4 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg class="text-terracotta-600 hover:text-terracotta-800 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
                       </svg>
                     <% end %>
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="flex flex-col space-y-1 text-sm md:pr-6 md:min-w-0 md:text-base grow text-neutral-500 basis-1/2 dark:text-neutral-400">
+        <div class="flex grow basis-1/2 flex-col space-y-1 text-sm text-neutral-500 md:min-w-0 md:pr-6 md:text-base dark:text-neutral-400">
           <% if shot.bean_brand.present? || shot.bean_type.present? %>
             <div>
               <% if shot.bean_brand.present? %>
@@ -75,7 +75,7 @@
             </div>
           <% end %>
           <% if shot.bean_weight_f > 0 || shot.drink_weight_f > 0 %>
-            <div class="flex flex-wrap gap-x-1 items-center">
+            <div class="flex flex-wrap items-center gap-x-1">
               <% if shot.bean_weight_f > 0 %>
                 <span><%= shot.bean_weight_f %>g</span>
               <% end %>
@@ -93,7 +93,7 @@
             </div>
           <% end %>
           <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
-            <div class="flex overflow-hidden flex-wrap gap-x-1 items-center">
+            <div class="flex flex-wrap items-center gap-x-1 overflow-hidden">
               <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
                 <span class="truncate"><%= shot.grinder_setting %></span>
               <% end %>
@@ -103,7 +103,7 @@
             </div>
           <% end %>
           <% if shot.drink_tds_f > 0 || shot.drink_ey_f > 0 %>
-            <div class="flex flex-nowrap gap-x-2 items-center whitespace-nowrap">
+            <div class="flex flex-nowrap items-center gap-x-2 whitespace-nowrap">
               <% if shot.drink_tds_f > 0 %>
                 <span>TDS: <%= shot.drink_tds_f %>%</span>
               <% end %>
@@ -117,11 +117,11 @@
     </div>
     <% if can_edit || can_destroy %>
       <div class="flex border-l border-neutral-200 group-data-comparing:pointer-events-none group-data-comparing:opacity-30 dark:border-neutral-700">
-        <div class="flex flex-col -mt-px w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+        <div class="-mt-px flex w-full flex-col divide-y divide-neutral-200 dark:divide-neutral-700">
           <% if can_edit %>
-            <div class="flex relative grow dark:hover:bg-neutral-800/25 hover:bg-neutral-100/25">
+            <div class="relative flex grow hover:bg-neutral-100/25 dark:hover:bg-neutral-800/25">
               <%= link_to edit_shot_path(shot), class: "flex items-center p-4 text-sm border border-transparent gap-x-3" do %>
-                <span class="absolute inset-x-0 bottom-0 -top-px"></span>
+                <span class="absolute inset-x-0 -top-px bottom-0"></span>
                 <svg class="size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
                 </svg>
@@ -130,9 +130,9 @@
             </div>
           <% end %>
           <% if can_destroy %>
-            <div class="flex relative hover:bg-red-500/10">
+            <div class="relative flex hover:bg-red-500/10">
               <%= link_to shot_path(shot), class: "flex items-center px-4 py-3 text-sm border border-transparent gap-x-3 text-neutral-400 dark:text-neutral-500", data: {turbo_method: :delete, action: "click->modal#confirm", title: "Delete Shot", text: "Are you sure you want to permanently delete this shot from #{shot.start_time.in_time_zone(Current.timezone).to_formatted_s(:long)}?"} do %>
-                <span class="absolute inset-x-0 bottom-0 -top-px"></span>
+                <span class="absolute inset-x-0 -top-px bottom-0"></span>
                 <svg class="size-4 text-neutral-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
                   <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
                 </svg>

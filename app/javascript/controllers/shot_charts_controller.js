@@ -176,7 +176,7 @@ export default class extends Controller {
       labelOptions: { shape: "connector" }
     })
 
-    chart.annotationButton = chart.renderer.text('<button class="inline-flex py-1 px-2 text-xs font-medium bg-white rounded border shadow-sm cursor-pointer highcharts-no-tooltip border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900 hover:bg-neutral-50">Hide annotations</button>', 50, 35, true).attr({ zIndex: 3 }).add()
+    chart.annotationButton = chart.renderer.text('<button class="highcharts-no-tooltip inline-flex cursor-pointer rounded border border-neutral-300 bg-white px-2 py-1 text-xs font-medium text-neutral-700 shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-900">Hide annotations</button>', 50, 35, true).attr({ zIndex: 3 }).add()
     chart.annotationVisible = true
     const toggleButton = chart.annotationButton.element.querySelector("button")
     if (!toggleButton) return

@@ -6,10 +6,10 @@
     <%= turbo_frame_tag "banner", src: banner_community_index_path(params.permit!) %>
   <% end %>
 <% end %>
-<div class="flex flex-col mx-auto max-w-7xl sm:px-6 lg:px-8">
-  <div class="flex flex-row gap-2 justify-between px-4 sm:px-0">
+<div class="mx-auto flex max-w-7xl flex-col sm:px-6 lg:px-8">
+  <div class="flex flex-row justify-between gap-2 px-4 sm:px-0">
     <div>
-      <h1 class="py-4 pr-2 font-serif text-3xl font-bold lining-nums sm:text-4xl truncate text-neutral-900 dark:text-neutral-100">
+      <h1 class="truncate py-4 pr-2 font-serif text-3xl font-bold text-neutral-900 lining-nums sm:text-4xl dark:text-neutral-100">
         Community Shots
       </h1>
     </div>
@@ -19,13 +19,13 @@
     <div data-controller="modal shot-compare">
       <%= render "shared/modal" %>
       <%= render "shots/comparison_banner" %>
-      <div id="shots" class="flex flex-col mt-6 divide-y sm:gap-y-4 sm:border-none sm:divide-none border-y border-neutral-200 divide-neutral-200 dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
+      <div id="shots" class="mt-6 flex flex-col divide-y divide-neutral-200 border-y border-neutral-200 sm:gap-y-4 sm:divide-none sm:border-none dark:divide-neutral-700 dark:border-neutral-700" data-controller="check-images">
         <%= render @shots %>
       </div>
     </div>
     <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: community_index_path(params.permit(*Filterable::FILTERS, :user, :user_id, :min_enjoyment, :max_enjoyment, :start_date).merge(commit: "Search", before: @cursor, format: :turbo_stream)) } %>
   <% else %>
-    <div class="px-6 my-8 text-center sm:px-8 text-neutral-500">
+    <div class="my-8 px-6 text-center text-neutral-500 sm:px-8">
       No shots found 🤷‍♂️
     </div>
   <% end %>

@@ -5,7 +5,7 @@
         <%= f.label :user, class: "standard-label" %>
         <%= f.hidden_field :user_id, value: params[:user_id], data: { autocomplete_target: "hidden" } %>
         <%= f.search_field :user, value: params[:user], class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
-        <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
+        <ul class="absolute z-10 mt-2 max-h-96 list-group overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black/5" data-autocomplete-target="results"></ul>
       </div>
       <% Filterable::FILTERS.each do |filter, options| %>
         <% if options[:autocomplete] %>
@@ -15,7 +15,7 @@
               <%= f.hidden_field options[:target], value: params[options[:target]], data: { autocomplete_target: "hidden" } %>
             <% end %>
             <%= f.search_field filter, value: params[filter], class: "mt-1 standard-input", data: { autocomplete_target: "input" } %>
-            <ul class="overflow-y-auto absolute z-10 mt-2 max-h-96 bg-white rounded-md ring-1 shadow-lg list-group ring-black/5" data-autocomplete-target="results"></ul>
+            <ul class="absolute z-10 mt-2 max-h-96 list-group overflow-y-auto rounded-md bg-white shadow-lg ring-1 ring-black/5" data-autocomplete-target="results"></ul>
           </div>
         <% else %>
           <div class="col-span-6 md:col-span-3">
@@ -30,9 +30,9 @@
       </div>
       <div class="col-span-6 md:col-span-5">
         <%= f.label :min_enjoyment, class: "standard-label" %>
-        <div class="flex items-center mt-1" data-controller="range">
+        <div class="mt-1 flex items-center" data-controller="range">
           <% min = params[:min_enjoyment].presence || 0 %>
-          <div class="rounded-full size-8" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
+          <div class="size-8 rounded-full" style="background-color: <%= enjoyment_hex(min) %>;" data-range-target="color">
             <div class="py-1 text-center text-white" data-range-target="text">
               <%= min %>
             </div>
@@ -42,9 +42,9 @@
       </div>
       <div class="col-span-6 md:col-span-5">
         <%= f.label :max_enjoyment, class: "standard-label" %>
-        <div class="flex items-center mt-1" data-controller="range">
+        <div class="mt-1 flex items-center" data-controller="range">
           <% max = params[:max_enjoyment].presence || 100 %>
-          <div class="rounded-full size-8" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
+          <div class="size-8 rounded-full" style="background-color: <%= enjoyment_hex(max) %>;" data-range-target="color">
             <div class="py-1 text-center text-white" data-range-target="text">
               <%= max %>
             </div>

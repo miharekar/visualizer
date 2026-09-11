@@ -1,10 +1,10 @@
 <% owner = Current.user && @shot.user_id == Current.user.id %>
 <div class="bg-white shadow dark:bg-neutral-900" data-controller="modal">
   <%= render "shared/modal" %>
-  <div class="flex justify-between items-center py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
     <% if !owner && @shot.user&.public? %>
-      <div class="flex flex-col min-w-full lg:flex-row">
-        <h1 class="flex text-2xl font-bold leading-tight sm:text-3xl text-neutral-900 dark:text-neutral-100">
+      <div class="flex min-w-full flex-col lg:flex-row">
+        <h1 class="flex text-2xl leading-tight font-bold text-neutral-900 sm:text-3xl dark:text-neutral-100">
           <div class="flex gap-x-2">
             <%= image_tag avatar_url(@shot.user, 80), alt: "Avatar", class: "rounded size-8" %>
             <span class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
@@ -12,43 +12,43 @@
             </span>
             <% if @shot.user.premium? %>
               <%= link_to premium_index_path do %>
-                <svg class="size-9 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="text-terracotta-600 hover:text-terracotta-800 size-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
               <% end %>
             <% end %>
           </div>
         </h1>
-        <div class="grow min-w-2"></div>
+        <div class="min-w-2 grow"></div>
         <div class="lg:max-w-1/2">
-          <div class="flex items-center mt-3 lg:mt-0">
+          <div class="mt-3 flex items-center lg:mt-0">
             <%= render "share" %>
             <%= render "related_shots", related_shots: @related_shots, shot: @shot if @related_shots.present? %>
           </div>
         </div>
       </div>
     <% else %>
-      <div class="flex flex-col items-center min-w-full sm:flex-row">
+      <div class="flex min-w-full flex-col items-center sm:flex-row">
         <div class="flex items-center">
           <% if owner %>
             <div id="clipboard-success" class="hidden">
               <%= render Notification.new(type: :default, heading: "URL copied to clipboard", timeout: 3000) %>
             </div>
-            <div class="flex mr-3" data-controller="clipboard">
+            <div class="mr-3 flex" data-controller="clipboard">
               <input class="hidden" size="1" type="text" value="<%= request.url %>" readonly data-clipboard-target="source" autocomplete="off">
-              <a class="inline-flex py-2 px-4 text-sm bg-white rounded-md border shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900 hover:bg-neutral-50" data-action="clipboard#copy" href="#" title="Copy URL to clipboard" data-clipboard-target="container">
+              <a class="inline-flex cursor-pointer rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900" data-action="clipboard#copy" href="#" title="Copy URL to clipboard" data-clipboard-target="container">
                 <svg class="-mr-1 -ml-1 size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="copy">
                   <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
                   <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
                 </svg>
-                <svg class="hidden -mr-1 -ml-1 size-4 text-terracotta-500 dark:text-terracotta-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="check">
+                <svg class="text-terracotta-500 dark:text-terracotta-300 -mr-1 -ml-1 hidden size-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="check">
                   <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                   <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
               </a>
             </div>
             <div class="mr-3">
-              <a class="inline-flex py-2 px-4 text-sm bg-white rounded-md border shadow-sm cursor-pointer border-neutral-300 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900 hover:bg-neutral-50" href="<%= edit_shot_path %>">
+              <a class="inline-flex cursor-pointer rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900" href="<%= edit_shot_path %>">
                 <svg class="-mr-1 -ml-1 size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
                 </svg>
@@ -66,7 +66,7 @@
         </div>
         <% if owner && @related_shots.present? %>
           <div class="grow"></div>
-          <div class="flex mt-3 sm:mt-0">
+          <div class="mt-3 flex sm:mt-0">
             <%= render "related_shots", related_shots: @related_shots, shot: @shot %>
           </div>
         <% end %>

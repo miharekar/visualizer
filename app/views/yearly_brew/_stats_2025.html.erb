@@ -1,30 +1,30 @@
-<div class="overflow-hidden relative w-full via-rose-700 to-amber-300 shadow-2xl sm:rounded-3xl bg-linear-to-br from-indigo-950 shadow-neutral-900/10">
-  <div class="absolute inset-0 opacity-50 pointer-events-none">
-    <div class="absolute top-6 -left-20 w-56 h-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
-    <div class="absolute bottom-0 right-6 w-64 h-64 rounded-full bg-sky-200/30 blur-3xl"></div>
+<div class="relative w-full overflow-hidden bg-linear-to-br from-indigo-950 via-rose-700 to-amber-300 shadow-2xl shadow-neutral-900/10 sm:rounded-3xl">
+  <div class="pointer-events-none absolute inset-0 opacity-50">
+    <div class="absolute top-6 -left-20 h-56 w-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
+    <div class="absolute right-6 bottom-0 h-64 w-64 rounded-full bg-sky-200/30 blur-3xl"></div>
   </div>
-  <div class="relative py-10 px-6 sm:py-14 sm:px-12 lg:px-16">
-    <div class="flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center">
-      <div class="space-y-4 max-w-2xl lg:max-w-md">
-        <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold text-white uppercase rounded-full bg-white/10 tracking-[0.25em]">
-          <span class="inline-block bg-amber-300 rounded-full size-2"></span>
+  <div class="relative px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div class="max-w-2xl space-y-4 lg:max-w-md">
+        <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-[0.25em] text-white uppercase">
+          <span class="inline-block size-2 rounded-full bg-amber-300"></span>
           Year in Review · 2025
         </div>
-        <h2 class="font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl">
+        <h2 class="font-serif text-4xl leading-tight font-semibold text-white sm:text-5xl">
           Daily Grind 2025<%= ": #{@yearly_brew.user.display_name}" unless personal %>
         </h2>
-        <p class="text-base leading-7 sm:text-lg text-white/90">
+        <p class="text-base leading-7 text-white/90 sm:text-lg">
           Here’s what happened at <%= personal ? "the bar" : "#{@yearly_brew.user.display_name.split.first.capitalize}'s bar" %> this year: the shots pulled, the beans that kept getting ground, and the routines that stuck.
         </p>
       </div>
-      <div class="grid gap-4 w-full sm:grid-cols-2 lg:w-120">
+      <div class="grid w-full gap-4 sm:grid-cols-2 lg:w-120">
         <% summary_metrics_2025(@yearly_brew, personal:).each do |metric| %>
-          <div class="overflow-hidden p-4 rounded-2xl border shadow-inner transition hover:shadow-none group bg-white/10 border-white/20 shadow-black/20 hover:bg-white/15">
+          <div class="group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner shadow-black/20 transition hover:bg-white/15 hover:shadow-none">
             <p class="text-sm font-medium text-white/75"><%= metric[:label] %></p>
             <p class="mt-2 text-3xl font-semibold tracking-tight text-white"><%= metric[:value] %></p>
             <% if metric[:detail].present? %>
-              <p class="inline-flex gap-2 items-center mt-1 text-xs font-semibold text-white/80">
-                <span class="inline-block w-1.5 h-1.5 bg-amber-300 rounded-full"></span>
+              <p class="mt-1 inline-flex items-center gap-2 text-xs font-semibold text-white/80">
+                <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-300"></span>
                 <%= metric[:detail] %>
               </p>
             <% end %>
@@ -38,10 +38,10 @@
   <% highlight_cards_2025(@yearly_brew, personal:).each do |key, card| %>
     <% stat = card[:stat] %>
     <% next if stat.blank? %>
-    <div class="overflow-hidden relative bg-white border shadow-2xl transition sm:rounded-2xl border-neutral-200/80 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
-      <div class="absolute inset-0 via-transparent dark:via-transparent bg-linear-to-br from-terracotta-50/60 to-white/60 dark:from-terracotta-900/30 dark:to-neutral-900/30"></div>
-      <div class="flex relative flex-col gap-3 p-6 sm:p-8">
-        <div class="inline-flex gap-2 items-center self-start py-1 px-3 text-xs font-semibold uppercase rounded-full bg-terracotta-100 tracking-[0.25em] text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200">
+    <div class="relative overflow-hidden border border-neutral-200/80 bg-white shadow-2xl shadow-neutral-900/10 transition sm:rounded-2xl dark:border-neutral-800 dark:bg-neutral-900">
+      <div class="from-terracotta-50/60 dark:from-terracotta-900/30 absolute inset-0 bg-linear-to-br via-transparent to-white/60 dark:via-transparent dark:to-neutral-900/30"></div>
+      <div class="relative flex flex-col gap-3 p-6 sm:p-8">
+        <div class="bg-terracotta-100 text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200 inline-flex items-center gap-2 self-start rounded-full px-3 py-1 text-xs font-semibold tracking-[0.25em] uppercase">
           <%= card[:title] %>
         </div>
         <p class="text-2xl font-semibold text-neutral-900 dark:text-neutral-50">
@@ -57,21 +57,21 @@
   <% end %>
 </div>
 <% if @yearly_brew.user.coffee_management_enabled? || personal %>
-  <div class="from-amber-50 via-white border border-amber-100 shadow-2xl sm:rounded-3xl bg-linear-to-br to-sky-50 text-neutral-900 shadow-neutral-900/10 dark:border-amber-900/40 dark:bg-linear-to-br dark:from-amber-950/30 dark:via-neutral-950 dark:to-neutral-900 dark:text-neutral-50">
-    <div class="py-8 px-6 sm:py-12 sm:px-10">
+  <div class="border border-amber-100 bg-linear-to-br from-amber-50 via-white to-sky-50 text-neutral-900 shadow-2xl shadow-neutral-900/10 sm:rounded-3xl dark:border-amber-900/40 dark:bg-linear-to-br dark:from-amber-950/30 dark:via-neutral-950 dark:to-neutral-900 dark:text-neutral-50">
+    <div class="px-6 py-8 sm:px-10 sm:py-12">
       <% if @yearly_brew.user.coffee_management_enabled? %>
-        <div class="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-300">Coffee management</p>
+            <p class="text-terracotta-700 dark:text-terracotta-300 text-xs font-semibold tracking-[0.2em] uppercase">Coffee management</p>
             <p class="text-2xl font-semibold">Tracked <%= possessive(personal) %> beans, got better stats!</p>
             <p class="mt-2 text-sm leading-6 text-neutral-600 dark:text-neutral-200">
               See which roasters and bags fueled <%= possessive(personal) %> brews this year.
             </p>
           </div>
         </div>
-        <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-3">
+        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <% coffee_management_cards_2025(@yearly_brew, personal:).each do |card| %>
-            <div class="p-4 rounded-2xl border border-amber-100 shadow-inner transition bg-white/70 shadow-neutral-900/10 dark:border-amber-900/40 dark:bg-neutral-900/60 dark:shadow-black/40">
+            <div class="rounded-2xl border border-amber-100 bg-white/70 p-4 shadow-inner shadow-neutral-900/10 transition dark:border-amber-900/40 dark:bg-neutral-900/60 dark:shadow-black/40">
               <p class="text-sm text-neutral-600 dark:text-neutral-200"><%= card[:label] %></p>
               <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-50"><%= card[:value] %></p>
               <p class="mt-1 text-sm leading-6 text-neutral-700 dark:text-neutral-300"><%= card[:description] %></p>
@@ -79,9 +79,9 @@
           <% end %>
         </div>
       <% elsif personal %>
-        <div class="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-300">Unlock coffee management</p>
+            <p class="text-terracotta-700 dark:text-terracotta-300 text-xs font-semibold tracking-[0.2em] uppercase">Unlock coffee management</p>
             <p class="text-lg font-semibold text-neutral-900 dark:text-neutral-50">Track your beans, unlock richer stats</p>
             <p class="text-sm leading-6 text-neutral-600 dark:text-neutral-300">
               Attach shots to coffee bags to see roaster/bag breakdowns, discovery counts, bean-level trends, and more.
@@ -100,40 +100,40 @@
   </div>
 <% end %>
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-  <div class="p-6 bg-white border shadow-2xl transition sm:rounded-2xl border-neutral-200 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
-    <div class="flex justify-between items-center">
+  <div class="border border-neutral-200 bg-white p-6 shadow-2xl shadow-neutral-900/10 transition sm:rounded-2xl dark:border-neutral-800 dark:bg-neutral-900">
+    <div class="flex items-center justify-between">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-400">Weekly rhythm</p>
+        <p class="text-terracotta-700 dark:text-terracotta-400 text-xs font-semibold tracking-[0.2em] uppercase">Weekly rhythm</p>
         <p class="mt-1 text-xl font-semibold text-neutral-900 dark:text-neutral-50">When the caffeine spikes</p>
       </div>
     </div>
     <div id="weekly-rhythm-chart" class="mt-4 h-52" data-controller="weekly-rhythm-chart" data-chart-data="<%= @yearly_brew.shots_per_day_of_week.to_json %>"></div>
   </div>
-  <div class="p-6 bg-white border shadow-2xl transition sm:rounded-2xl border-neutral-200 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
-    <div class="flex justify-between items-center">
+  <div class="border border-neutral-200 bg-white p-6 shadow-2xl shadow-neutral-900/10 transition sm:rounded-2xl dark:border-neutral-800 dark:bg-neutral-900">
+    <div class="flex items-center justify-between">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-400">Mood tracker</p>
+        <p class="text-terracotta-700 dark:text-terracotta-400 text-xs font-semibold tracking-[0.2em] uppercase">Mood tracker</p>
         <p class="mt-1 text-xl font-semibold text-neutral-900 dark:text-neutral-50">Month-by-month enjoyment</p>
       </div>
     </div>
     <div id="monthly-enjoyment-chart" class="mt-4 h-52" data-controller="monthly-enjoyment-chart" data-chart-data="<%= @yearly_brew.monthly_enjoyments.to_json %>"></div>
   </div>
 </div>
-<div class="p-6 border shadow-2xl sm:rounded-3xl border-neutral-200 bg-white/90 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
-  <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+<div class="border border-neutral-200 bg-white/90 p-6 shadow-2xl shadow-neutral-900/10 sm:rounded-3xl dark:border-neutral-800 dark:bg-neutral-900">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div class="space-y-1">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-terracotta-700 dark:text-terracotta-400">Habits & streaks</p>
+      <p class="text-terracotta-700 dark:text-terracotta-400 text-xs font-semibold tracking-[0.2em] uppercase">Habits & streaks</p>
       <p class="text-xl font-semibold text-neutral-900 dark:text-neutral-50">How <%= possessive(personal) %> coffee ritual evolved</p>
       <p class="text-sm text-neutral-600 dark:text-neutral-400">Momentum, cadence, and all the times <%= personal ? "you" : "they" %> reached for the beans.</p>
     </div>
-    <div class="flex flex-wrap gap-2 items-center text-sm text-neutral-600 dark:text-neutral-400">
-      <span class="py-1 px-3 rounded-full bg-terracotta-100 text-terracotta-800 dark:bg-terracotta-900/50 dark:text-terracotta-200"><%= @yearly_brew.shots_count %> total shots</span>
-      <span class="py-1 px-3 rounded-full bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"><%= @yearly_brew.amount_brewed %> kg brewed</span>
+    <div class="flex flex-wrap items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+      <span class="bg-terracotta-100 text-terracotta-800 dark:bg-terracotta-900/50 dark:text-terracotta-200 rounded-full px-3 py-1"><%= @yearly_brew.shots_count %> total shots</span>
+      <span class="rounded-full bg-neutral-100 px-3 py-1 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"><%= @yearly_brew.amount_brewed %> kg brewed</span>
     </div>
   </div>
-  <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
     <% habit_cards_2025(@yearly_brew, personal:).each do |card| %>
-      <div class="p-4 bg-white rounded-xl border shadow-inner transition border-neutral-200 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+      <div class="rounded-xl border border-neutral-200 bg-white p-4 shadow-inner shadow-neutral-200/60 transition dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
         <p class="text-sm text-neutral-500 dark:text-neutral-400"><%= card[:label] %></p>
         <p class="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-50"><%= card[:value] %></p>
         <p class="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400"><%= card[:description] %></p>

@@ -1,25 +1,25 @@
 <div class="bg-white shadow dark:bg-neutral-900">
-  <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <h1 class="font-serif text-3xl font-bold lining-nums md:text-4xl text-neutral-900 dark:text-neutral-100">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <h1 class="font-serif text-3xl font-bold text-neutral-900 lining-nums md:text-4xl dark:text-neutral-100">
       Edit Shot
     </h1>
   </div>
 </div>
-<div class="pt-6 mx-auto max-w-7xl md:py-6 md:px-6 lg:px-8" data-controller="shot-copier">
+<div class="mx-auto max-w-7xl pt-6 md:px-6 md:py-6 lg:px-8" data-controller="shot-copier">
   <div class="md:grid md:grid-cols-3 md:gap-6">
     <div class="px-4 sm:px-6 md:col-span-1 md:p-0">
       <div>
-        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+        <h3 class="leading-6 font-medium text-neutral-900 dark:text-neutral-100">
           You're editing shot made on
           <strong><%= @shot.start_time.in_time_zone(Current.timezone).to_formatted_s(:long) %></strong>.
         </h3>
       </div>
       <hr class="my-6 text-neutral-200 dark:text-neutral-700">
       <div class="flex flex-col">
-        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+        <h3 class="leading-6 font-medium text-neutral-900 dark:text-neutral-100">
           Copy values from another shot
         </h3>
-        <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400">
+        <div class="mt-3 flex-1 text-sm text-neutral-600 dark:text-neutral-400">
           <select class="standard-input" data-action="shot-copier#from">
             <option>From one of your recent shots</option>
             <% @related_shots.each do |id, title, bean_type, time| %>
@@ -30,11 +30,11 @@
               </option>
             <% end %>
           </select>
-          <input class="mt-2 standard-input" type="text" data-action="shot-copier#fromUrl" placeholder="From any shot via its URL" autocomplete="url">
+          <input class="standard-input mt-2" type="text" data-action="shot-copier#fromUrl" placeholder="From any shot via its URL" autocomplete="url">
         </div>
       </div>
     </div>
-    <hr class="mx-4 mt-6 sm:mx-6 md:hidden text-neutral-200 dark:text-neutral-700">
+    <hr class="mx-4 mt-6 text-neutral-200 sm:mx-6 md:hidden dark:text-neutral-700">
     <%= render "form" %>
   </div>
 </div>

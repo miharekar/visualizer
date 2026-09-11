@@ -1,11 +1,11 @@
 <% content_for(:html_title) { "Visualizer | Stats" } %>
-<div class="px-4 my-6 max-w-7xl sm:hidden">
+<div class="my-6 max-w-7xl px-4 sm:hidden">
   <h1 class="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
     Stats
   </h1>
 </div>
-<div class="my-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-  <div class="flex flex-col gap-y-6 p-4 bg-white sm:p-4 dark:bg-neutral-800"
+<div class="mx-auto my-6 max-w-7xl sm:px-6 lg:px-8">
+  <div class="flex flex-col gap-y-6 bg-white p-4 sm:p-4 dark:bg-neutral-800"
        data-controller="stats-charts"
        data-stats-charts-uploaded-chart-data-value="<%= (@shot_charts || []).to_json %>"
        data-stats-charts-user-chart-data-value="<%= (@user_charts || []).to_json %>">

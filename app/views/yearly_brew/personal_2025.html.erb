@@ -1,6 +1,6 @@
 <% content_for(:html_title) { "Visualizer | 2025 Year in Coffee" } %>
-<div class="flex flex-col items-center mx-auto max-w-6xl sm:px-6 sm:mt-6 lg:px-8 lg:mt-8 dark:text-neutral-200">
-  <div class="space-y-10 w-full sm:space-y-12">
+<div class="mx-auto flex max-w-6xl flex-col items-center sm:mt-6 sm:px-6 lg:mt-8 lg:px-8 dark:text-neutral-200">
+  <div class="w-full space-y-10 sm:space-y-12">
     <% if @yearly_brew.shots_this_year.any? %>
       <%= render "yearly_brew/stats_2025", personal: true %>
       <% if Current.user.public? %>
@@ -13,7 +13,7 @@
           <% end %>
         </div>
       <% else %>
-        <div class="flex flex-col gap-y-3 items-center max-w-prose text-center">
+        <div class="flex max-w-prose flex-col items-center gap-y-3 text-center">
           <p class="text-neutral-600 dark:text-neutral-400">
             Want to show off your year in coffee?
             <%= link_to "Make your profile public", edit_profile_path, class: "standard-link text-terracotta-600 dark:text-terracotta-400" %>
@@ -22,22 +22,22 @@
         </div>
       <% end %>
     <% else %>
-      <div class="overflow-hidden relative w-full via-rose-700 to-amber-300 shadow-2xl sm:rounded-3xl bg-linear-to-br from-indigo-950 shadow-neutral-900/10">
-        <div class="absolute inset-0 opacity-50 pointer-events-none">
-          <div class="absolute top-6 -left-20 w-56 h-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
-          <div class="absolute bottom-0 right-6 w-64 h-64 rounded-full bg-sky-200/30 blur-3xl"></div>
+      <div class="relative w-full overflow-hidden bg-linear-to-br from-indigo-950 via-rose-700 to-amber-300 shadow-2xl shadow-neutral-900/10 sm:rounded-3xl">
+        <div class="pointer-events-none absolute inset-0 opacity-50">
+          <div class="absolute top-6 -left-20 h-56 w-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
+          <div class="absolute right-6 bottom-0 h-64 w-64 rounded-full bg-sky-200/30 blur-3xl"></div>
         </div>
-        <div class="relative py-10 px-6 sm:py-14 sm:px-12 lg:px-16">
-          <div class="flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center">
-            <div class="space-y-4 max-w-2xl">
-              <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold text-white uppercase rounded-full bg-white/10 tracking-[0.25em]">
-                <span class="inline-block bg-amber-300 rounded-full size-2"></span>
+        <div class="relative px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div class="max-w-2xl space-y-4">
+              <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-[0.25em] text-white uppercase">
+                <span class="inline-block size-2 rounded-full bg-amber-300"></span>
                 Year in Review · 2025
               </div>
-              <h2 class="font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl">
+              <h2 class="font-serif text-4xl leading-tight font-semibold text-white sm:text-5xl">
                 Daily Grind 2025
               </h2>
-              <p class="text-base leading-7 sm:text-lg text-white/90">
+              <p class="text-base leading-7 text-white/90 sm:text-lg">
                 You didn't upload any shots in 2025, but there’s a brand new year ahead. Be sure to log some in 2026 so you’ll be ready for the next Year in Review.
               </p>
             </div>
@@ -47,9 +47,9 @@
     <% end %>
   </div>
 </div>
-<div class="flex flex-col items-center px-4 mx-auto mt-16 mb-6 max-w-6xl sm:px-6 lg:px-8 dark:text-neutral-200">
+<div class="mx-auto mt-16 mb-6 flex max-w-6xl flex-col items-center px-4 sm:px-6 lg:px-8 dark:text-neutral-200">
   <h2 class="pb-6 font-serif text-3xl font-bold text-neutral-900 dark:text-neutral-100">Thank you for the first 5! 🙏</h2>
-  <div class="gap-y-3 text-neutral-700 prose prose-neutral dark:text-neutral-300 dark:prose-invert">
+  <div class="prose-neutral gap-y-3 prose text-neutral-700 dark:prose-invert dark:text-neutral-300">
     <p>
       2025 has been an absolutely incredible year for Visualizer. There were so many changes and improvements that even I can barely keep track:
       <a href="/updates/new-year-new-changes" target="_blank" class="standard-link text-terracotta-600 dark:text-terracotta-400">Push notifications</a>,
@@ -78,7 +78,7 @@
     </p>
     <p>
       Once again, my friend <a href="https://banibeans.si/" class="standard-link text-terracotta-600 dark:text-terracotta-400" target="_blank">Luka (Banibeans)</a> has a special offer for Visualizer users.
-      This year, when you use <code class="px-1 rounded text-neutral-800 bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-100">VISUALIZER10</code>, you not only get a 10% discount, but he also promised he'll throw in an extra 100g of something very tasty.
+      This year, when you use <code class="rounded bg-neutral-200 px-1 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100">VISUALIZER10</code>, you not only get a 10% discount, but he also promised he'll throw in an extra 100g of something very tasty.
     </p>
     <p>
       And whether you're decorating a tree, lighting candles, raising an aluminum pole, or just catching your breath, I wish you wonderful holidays filled with great coffee and even better company. 🥂

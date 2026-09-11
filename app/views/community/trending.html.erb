@@ -1,33 +1,33 @@
-<div class="flex flex-col gap-8 mx-auto mb-6 max-w-6xl sm:px-6 sm:my-6 lg:px-8 lg:mt-8">
-  <div class="overflow-hidden relative w-full via-rose-700 to-amber-300 shadow-2xl sm:rounded-3xl bg-linear-to-br from-indigo-950 shadow-neutral-900/10">
-    <div class="absolute inset-0 opacity-60 pointer-events-none">
-      <div class="absolute top-6 -left-20 w-56 h-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
-      <div class="absolute bottom-0 right-6 w-64 h-64 rounded-full bg-sky-200/30 blur-3xl"></div>
+<div class="mx-auto mb-6 flex max-w-6xl flex-col gap-8 sm:my-6 sm:px-6 lg:mt-8 lg:px-8">
+  <div class="relative w-full overflow-hidden bg-linear-to-br from-indigo-950 via-rose-700 to-amber-300 shadow-2xl shadow-neutral-900/10 sm:rounded-3xl">
+    <div class="pointer-events-none absolute inset-0 opacity-60">
+      <div class="absolute top-6 -left-20 h-56 w-56 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-800/30"></div>
+      <div class="absolute right-6 bottom-0 h-64 w-64 rounded-full bg-sky-200/30 blur-3xl"></div>
     </div>
-    <div class="relative py-10 px-6 sm:py-14 sm:px-12 lg:px-16">
-      <div class="flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center">
-        <div class="space-y-4 max-w-2xl lg:max-w-md">
-          <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold text-white uppercase rounded-full bg-white/10 tracking-[0.25em]">
-            <span class="inline-block bg-amber-300 rounded-full size-2"></span>
+    <div class="relative px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="max-w-2xl space-y-4 lg:max-w-md">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-[0.25em] text-white uppercase">
+            <span class="inline-block size-2 rounded-full bg-amber-300"></span>
             Community pulse
           </div>
-          <h1 class="font-serif text-4xl font-semibold leading-tight text-white sm:text-5xl">Trending</h1>
-          <p class="text-base leading-7 sm:text-lg text-white/90">A snapshot of profile titles and parsers from public shots.</p>
+          <h1 class="font-serif text-4xl leading-tight font-semibold text-white sm:text-5xl">Trending</h1>
+          <p class="text-base leading-7 text-white/90 sm:text-lg">A snapshot of profile titles and parsers from public shots.</p>
         </div>
-        <div class="grid gap-4 w-full sm:grid-cols-2 lg:w-120">
-          <div class="overflow-hidden p-4 rounded-2xl border shadow-inner transition group border-white/20 bg-white/10 shadow-black/20 hover:bg-white/15">
+        <div class="grid w-full gap-4 sm:grid-cols-2 lg:w-120">
+          <div class="group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner shadow-black/20 transition hover:bg-white/15">
             <p class="text-sm font-medium text-white/75">Total shots · 24h</p>
             <p class="mt-2 text-3xl font-semibold tracking-tight text-white"><%= @trending_24h[:total_count] %></p>
-            <p class="inline-flex gap-2 items-center mt-1 text-xs font-semibold text-white/80">
-              <span class="inline-block bg-amber-300 rounded-full size-1.5"></span>
+            <p class="mt-1 inline-flex items-center gap-2 text-xs font-semibold text-white/80">
+              <span class="inline-block size-1.5 rounded-full bg-amber-300"></span>
               Public: <%= @trending_24h[:public_count] %>
             </p>
           </div>
-          <div class="overflow-hidden p-4 rounded-2xl border shadow-inner transition group border-white/20 bg-white/10 shadow-black/20 hover:bg-white/15">
+          <div class="group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner shadow-black/20 transition hover:bg-white/15">
             <p class="text-sm font-medium text-white/75">Total shots · 30d</p>
             <p class="mt-2 text-3xl font-semibold tracking-tight text-white"><%= @trending_30d[:total_count] %></p>
-            <p class="inline-flex gap-2 items-center mt-1 text-xs font-semibold text-white/80">
-              <span class="inline-block bg-amber-300 rounded-full size-1.5"></span>
+            <p class="mt-1 inline-flex items-center gap-2 text-xs font-semibold text-white/80">
+              <span class="inline-block size-1.5 rounded-full bg-amber-300"></span>
               Public: <%= @trending_30d[:public_count] %>
             </p>
           </div>
@@ -36,54 +36,54 @@
     </div>
   </div>
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-    <div class="overflow-x-scroll relative bg-white border shadow-2xl sm:rounded-2xl border-neutral-200/80 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
-      <div class="absolute inset-0 bg-linear-to-br from-terracotta-50/60 to-white/60 dark:from-terracotta-900/30 dark:to-neutral-900/30"></div>
-      <div class="flex relative flex-col gap-6 py-6 px-2 sm:p-8">
-        <div class="flex flex-wrap gap-3 justify-between items-center">
-          <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold uppercase rounded-full bg-terracotta-100 tracking-[0.25em] text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200">
+    <div class="relative overflow-x-scroll border border-neutral-200/80 bg-white shadow-2xl shadow-neutral-900/10 sm:rounded-2xl dark:border-neutral-800 dark:bg-neutral-900">
+      <div class="from-terracotta-50/60 dark:from-terracotta-900/30 absolute inset-0 bg-linear-to-br to-white/60 dark:to-neutral-900/30"></div>
+      <div class="relative flex flex-col gap-6 px-2 py-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="bg-terracotta-100 text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-[0.25em] uppercase">
             Last 24 hours
           </div>
         </div>
         <div class="grid gap-6">
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top profiles</h3>
-            <div class="overflow-hidden -mx-2 mt-4 border shadow-inner sm:mx-0 sm:rounded-sm border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
-                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+            <h3 class="text-xs font-semibold tracking-[0.25em] text-neutral-500 uppercase dark:text-neutral-400">Top profiles</h3>
+            <div class="-mx-2 mt-4 overflow-hidden border border-neutral-200/70 bg-white/90 shadow-inner shadow-neutral-200/60 sm:mx-0 sm:rounded-sm dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-left text-sm text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs tracking-[0.2em] text-neutral-400 uppercase">
                   <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
-                    <th scope="col" class="py-3 px-4 font-semibold">Profile</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg enjoyment</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg ratio</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                    <th scope="col" class="px-4 py-3 font-semibold">Profile</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Avg enjoyment</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Avg ratio</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Shots</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
                   <% if @trending_24h[:profiles].any? %>
                     <% @trending_24h[:profiles].each do |profile| %>
                       <tr>
-                        <td class="py-3 px-4 font-semibold"><%= profile[:name] %></td>
-                        <td class="py-3 px-4 text-right">
+                        <td class="px-4 py-3 font-semibold"><%= profile[:name] %></td>
+                        <td class="px-4 py-3 text-right">
                           <% if profile[:avg_enjoyment].present? %>
-                            <span class="inline-flex justify-center items-center text-xs font-semibold text-white rounded-full size-7" style="background-color: <%= enjoyment_hex(profile[:avg_enjoyment]) %>;">
+                            <span class="inline-flex size-7 items-center justify-center rounded-full text-xs font-semibold text-white" style="background-color: <%= enjoyment_hex(profile[:avg_enjoyment]) %>;">
                               <%= profile[:avg_enjoyment] %>
                             </span>
                           <% else %>
                             <span class="text-neutral-400 dark:text-neutral-500">—</span>
                           <% end %>
                         </td>
-                        <td class="py-3 px-4 text-right">
+                        <td class="px-4 py-3 text-right">
                           <% if profile[:avg_ratio].present? %>
                             <span class="text-xs font-semibold text-neutral-600 dark:text-neutral-300">~1:<%= profile[:avg_ratio] %></span>
                           <% else %>
                             <span class="text-neutral-400 dark:text-neutral-500">—</span>
                           <% end %>
                         </td>
-                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></td>
+                        <td class="text-terracotta-700 dark:text-terracotta-200 px-4 py-3 text-right"><%= profile[:count] %></td>
                       </tr>
                     <% end %>
                   <% else %>
                     <tr>
-                      <td colspan="4" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
+                      <td colspan="4" class="px-4 py-3 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
                     </tr>
                   <% end %>
                 </tbody>
@@ -91,26 +91,26 @@
             </div>
           </div>
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top parsers</h3>
-            <div class="overflow-hidden -mx-2 mt-4 border shadow-inner sm:mx-0 sm:rounded-sm border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
-                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+            <h3 class="text-xs font-semibold tracking-[0.25em] text-neutral-500 uppercase dark:text-neutral-400">Top parsers</h3>
+            <div class="-mx-2 mt-4 overflow-hidden border border-neutral-200/70 bg-white/90 shadow-inner shadow-neutral-200/60 sm:mx-0 sm:rounded-sm dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-left text-sm text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs tracking-[0.2em] text-neutral-400 uppercase">
                   <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
-                    <th scope="col" class="py-3 px-4 font-semibold">Parser</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                    <th scope="col" class="px-4 py-3 font-semibold">Parser</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Shots</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
                   <% if @trending_24h[:parsers].any? %>
                     <% @trending_24h[:parsers].each do |parser| %>
                       <tr>
-                        <td class="py-3 px-4 font-semibold"><%= parser[:name] %></td>
-                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></td>
+                        <td class="px-4 py-3 font-semibold"><%= parser[:name] %></td>
+                        <td class="text-terracotta-700 dark:text-terracotta-200 px-4 py-3 text-right"><%= parser[:count] %></td>
                       </tr>
                     <% end %>
                   <% else %>
                     <tr>
-                      <td colspan="2" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No parsers yet.</td>
+                      <td colspan="2" class="px-4 py-3 text-neutral-400 dark:text-neutral-500">No parsers yet.</td>
                     </tr>
                   <% end %>
                 </tbody>
@@ -120,54 +120,54 @@
         </div>
       </div>
     </div>
-    <div class="overflow-x-scroll relative bg-white border shadow-2xl sm:rounded-2xl border-neutral-200/80 shadow-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-900">
-      <div class="absolute inset-0 bg-linear-to-br from-terracotta-50/60 to-white/60 dark:from-terracotta-900/30 dark:to-neutral-900/30"></div>
-      <div class="flex relative flex-col gap-6 py-6 px-2 sm:p-8">
-        <div class="flex flex-wrap gap-3 justify-between items-center">
-          <div class="inline-flex gap-2 items-center py-1 px-3 text-xs font-semibold uppercase rounded-full bg-terracotta-100 tracking-[0.25em] text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200">
+    <div class="relative overflow-x-scroll border border-neutral-200/80 bg-white shadow-2xl shadow-neutral-900/10 sm:rounded-2xl dark:border-neutral-800 dark:bg-neutral-900">
+      <div class="from-terracotta-50/60 dark:from-terracotta-900/30 absolute inset-0 bg-linear-to-br to-white/60 dark:to-neutral-900/30"></div>
+      <div class="relative flex flex-col gap-6 px-2 py-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="bg-terracotta-100 text-terracotta-700 dark:bg-terracotta-900/60 dark:text-terracotta-200 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-[0.25em] uppercase">
             Last 30 days
           </div>
         </div>
         <div class="grid gap-6">
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top profiles</h3>
-            <div class="overflow-hidden -mx-2 mt-4 border shadow-inner sm:mx-0 sm:rounded-sm border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
-                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+            <h3 class="text-xs font-semibold tracking-[0.25em] text-neutral-500 uppercase dark:text-neutral-400">Top profiles</h3>
+            <div class="-mx-2 mt-4 overflow-hidden border border-neutral-200/70 bg-white/90 shadow-inner shadow-neutral-200/60 sm:mx-0 sm:rounded-sm dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-left text-sm text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs tracking-[0.2em] text-neutral-400 uppercase">
                   <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
-                    <th scope="col" class="py-3 px-4 font-semibold">Profile</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg enjoyment</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Avg ratio</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                    <th scope="col" class="px-4 py-3 font-semibold">Profile</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Avg enjoyment</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Avg ratio</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Shots</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
                   <% if @trending_30d[:profiles].any? %>
                     <% @trending_30d[:profiles].each do |profile| %>
                       <tr>
-                        <td class="py-3 px-4 font-semibold"><%= profile[:name] %></td>
-                        <td class="py-3 px-4 text-right">
+                        <td class="px-4 py-3 font-semibold"><%= profile[:name] %></td>
+                        <td class="px-4 py-3 text-right">
                           <% if profile[:avg_enjoyment].present? %>
-                            <span class="inline-flex justify-center items-center text-xs font-semibold text-white rounded-full size-7" style="background-color: <%= enjoyment_hex(profile[:avg_enjoyment]) %>;">
+                            <span class="inline-flex size-7 items-center justify-center rounded-full text-xs font-semibold text-white" style="background-color: <%= enjoyment_hex(profile[:avg_enjoyment]) %>;">
                               <%= profile[:avg_enjoyment] %>
                             </span>
                           <% else %>
                             <span class="text-neutral-400 dark:text-neutral-500">—</span>
                           <% end %>
                         </td>
-                        <td class="py-3 px-4 text-right">
+                        <td class="px-4 py-3 text-right">
                           <% if profile[:avg_ratio].present? %>
                             <span class="text-xs font-semibold text-neutral-600 dark:text-neutral-300">~1:<%= profile[:avg_ratio] %></span>
                           <% else %>
                             <span class="text-neutral-400 dark:text-neutral-500">—</span>
                           <% end %>
                         </td>
-                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= profile[:count] %></td>
+                        <td class="text-terracotta-700 dark:text-terracotta-200 px-4 py-3 text-right"><%= profile[:count] %></td>
                       </tr>
                     <% end %>
                   <% else %>
                     <tr>
-                      <td colspan="4" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
+                      <td colspan="4" class="px-4 py-3 text-neutral-400 dark:text-neutral-500">No profiles yet.</td>
                     </tr>
                   <% end %>
                 </tbody>
@@ -175,26 +175,26 @@
             </div>
           </div>
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500 dark:text-neutral-400">Top parsers</h3>
-            <div class="overflow-x-scroll -mx-2 mt-4 border shadow-inner sm:mx-0 sm:rounded-sm border-neutral-200/70 bg-white/90 shadow-neutral-200/60 dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
-              <table class="w-full text-sm text-left text-neutral-700 dark:text-neutral-200">
-                <thead class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+            <h3 class="text-xs font-semibold tracking-[0.25em] text-neutral-500 uppercase dark:text-neutral-400">Top parsers</h3>
+            <div class="-mx-2 mt-4 overflow-x-scroll border border-neutral-200/70 bg-white/90 shadow-inner shadow-neutral-200/60 sm:mx-0 sm:rounded-sm dark:border-neutral-800 dark:bg-neutral-950/70 dark:shadow-black/40">
+              <table class="w-full text-left text-sm text-neutral-700 dark:text-neutral-200">
+                <thead class="text-xs tracking-[0.2em] text-neutral-400 uppercase">
                   <tr class="border-b border-neutral-200/70 dark:border-neutral-800">
-                    <th scope="col" class="py-3 px-4 font-semibold">Parser</th>
-                    <th scope="col" class="py-3 px-4 font-semibold text-right">Shots</th>
+                    <th scope="col" class="px-4 py-3 font-semibold">Parser</th>
+                    <th scope="col" class="px-4 py-3 text-right font-semibold">Shots</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-200/70 dark:divide-neutral-800">
                   <% if @trending_30d[:parsers].any? %>
                     <% @trending_30d[:parsers].each do |parser| %>
                       <tr>
-                        <td class="py-3 px-4 font-semibold"><%= parser[:name] %></td>
-                        <td class="py-3 px-4 text-right text-terracotta-700 dark:text-terracotta-200"><%= parser[:count] %></td>
+                        <td class="px-4 py-3 font-semibold"><%= parser[:name] %></td>
+                        <td class="text-terracotta-700 dark:text-terracotta-200 px-4 py-3 text-right"><%= parser[:count] %></td>
                       </tr>
                     <% end %>
                   <% else %>
                     <tr>
-                      <td colspan="2" class="py-3 px-4 text-neutral-400 dark:text-neutral-500">No parsers yet.</td>
+                      <td colspan="2" class="px-4 py-3 text-neutral-400 dark:text-neutral-500">No parsers yet.</td>
                     </tr>
                   <% end %>
                 </tbody>

@@ -1,15 +1,15 @@
 <div class="bg-white shadow dark:bg-neutral-900">
-  <div class="py-6 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-    <h1 class="font-serif text-3xl font-bold lining-nums md:text-4xl text-neutral-900 dark:text-neutral-100">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <h1 class="font-serif text-3xl font-bold text-neutral-900 lining-nums md:text-4xl dark:text-neutral-100">
       Edit <%= @coffee_bag.name %> by <%= @coffee_bag.roaster.name %>
     </h1>
   </div>
 </div>
-<div class="pt-6 mx-auto max-w-7xl md:py-6 md:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl pt-6 md:px-6 md:py-6 lg:px-8">
   <div class="md:grid md:grid-cols-3 md:gap-6">
     <div class="px-4 sm:px-6 md:col-span-1 md:p-0">
       <div>
-        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+        <h3 class="leading-6 font-medium text-neutral-900 dark:text-neutral-100">
           You made
           <strong><%= link_to pluralize(@coffee_bag.shots.count, "shot"), shots_path(coffee_bag: @coffee_bag), class: "standard-link" %></strong>
           with
@@ -20,10 +20,10 @@
       </div>
       <hr class="my-6 text-neutral-200 dark:text-neutral-700">
       <div>
-        <h3 class="font-medium leading-6 text-neutral-900 dark:text-neutral-100">
+        <h3 class="leading-6 font-medium text-neutral-900 dark:text-neutral-100">
           Duplicate this coffee bag with a different roast date
         </h3>
-        <div class="flex-1 mt-3 text-sm text-neutral-600 dark:text-neutral-400">
+        <div class="mt-3 flex-1 text-sm text-neutral-600 dark:text-neutral-400">
           <%= form_with(url: duplicate_coffee_bag_path(@coffee_bag), class: "flex flex-row items-center gap-2 md:flex-col lg:flex-row md:items-stretch lg:items-center") do |f| %>
             <%= f.date_field :roast_date, class: "mt-0 standard-input" %>
             <%= f.submit "Duplicate", class: "px-4 py-2 button-oxford-blue md:w-full lg:w-auto" %>
@@ -36,7 +36,7 @@
         <%= button_to "Delete #{@coffee_bag.name}", coffee_bag_path(@coffee_bag), method: :delete, class: "px-4 py-2 button-white w-full", data: {action: "click->modal#confirm", title: "Delete #{@coffee_bag.name}", text: "Are you sure you want to permanently delete #{@coffee_bag.display_name} coffee bag with #{pluralize(@coffee_bag.shots.count, "shot")}? This action cannot be undone."} %>
       </div>
     </div>
-    <hr class="mx-4 mt-6 sm:mx-6 md:hidden text-neutral-200 dark:text-neutral-700">
+    <hr class="mx-4 mt-6 text-neutral-200 sm:mx-6 md:hidden dark:text-neutral-700">
     <%= render "form", coffee_bag: @coffee_bag %>
   </div>
 </div>

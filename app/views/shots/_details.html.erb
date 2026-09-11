@@ -10,7 +10,7 @@
 <div class="flex">
   <div class="shrink-0">
     <% if has_enjoyment %>
-      <div class="flex justify-center items-center rounded-full size-12" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
+      <div class="flex size-12 items-center justify-center rounded-full" style="background-color: <%= enjoyment_hex(shot.espresso_enjoyment) %>;">
         <div class="py-1 text-center text-white">
           <%= shot.espresso_enjoyment %>
         </div>
@@ -18,18 +18,18 @@
     <% end %>
   </div>
   <div class="<%= 'ml-4' if has_enjoyment %>">
-    <a class="text-lg font-medium leading-6 text-neutral-900 wrap-anywhere dark:text-neutral-100" href="<%= shot_path(shot) %>">
+    <a class="text-lg leading-6 font-medium wrap-anywhere text-neutral-900 dark:text-neutral-100" href="<%= shot_path(shot) %>">
       <%= shot.profile_title %>
     </a>
-    <div class="text-base prose prose-neutral dark:prose-invert">
+    <div class="prose-neutral prose text-base dark:prose-invert">
       <% if show_name %>
-        <div class="flex gap-x-1 items-center">
+        <div class="flex items-center gap-x-1">
           <div>
             <%= shot.user.display_name %>
           </div>
           <% if shot.user.premium? %>
             <%= link_to premium_index_path do %>
-              <svg class="size-4 text-terracotta-600 hover:text-terracotta-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg class="text-terracotta-600 hover:text-terracotta-800 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
               </svg>
             <% end %>
@@ -47,7 +47,7 @@
     </div>
   </div>
 </div>
-<div class="mt-2 text-base prose prose-neutral dark:prose-invert">
+<div class="prose-neutral mt-2 prose text-base dark:prose-invert">
   <% if shot.bean_brand.present? || shot.bean_type.present? %>
     <div>
       <% if shot.bean_brand.present? %>
@@ -71,7 +71,7 @@
       <% end %>
     </div>
   <% end %>
-  <div class="flex flex-wrap gap-x-1 items-center">
+  <div class="flex flex-wrap items-center gap-x-1">
     <% if bean_weight > 0 %>
       <span><%= bean_weight %>g</span>
     <% end %>
@@ -87,7 +87,7 @@
     <span>in <%= shot.duration.round(1) %>s</span>
   </div>
   <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>
-    <div class="flex flex-wrap gap-x-1 items-center">
+    <div class="flex flex-wrap items-center gap-x-1">
       <% if shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0" %>
         <span><%= shot.grinder_setting %></span>
       <% end %>
@@ -97,7 +97,7 @@
     </div>
   <% end %>
   <% if tds > 0 || ey > 0 %>
-    <div class="flex gap-x-2 items-center">
+    <div class="flex items-center gap-x-2">
       <% if tds > 0 %>
         <span>TDS: <%= tds %>%</span>
       <% end %>
@@ -111,7 +111,7 @@
       <%= render "tags", shot: shot, truncate: false, selected_tag_slugs: [] %>
     </div>
   <% end %>
-  <div class="mt-4 prose prose-neutral dark:prose-invert">
+  <div class="prose-neutral mt-4 prose dark:prose-invert">
     <table>
       <% if shot.metadata.present? %>
         <% shot.user.shot_metadata_fields.each do |key| %>
