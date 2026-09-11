@@ -8,14 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
+      - name: Start system dependency installation
+        run: |
+          sudo systemd-run --unit=install-ci-dependencies --no-block \
+            --property=Type=oneshot --property=RemainAfterExit=yes \
+            /bin/bash -e -c 'apt-get update && apt-get install --no-install-recommends -y libvips'
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 4.0.6
           bundler-cache: true
 
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips
+      - name: Wait for system dependency installation
+        run: |
+          sudo systemctl start install-ci-dependencies.service
+          sudo journalctl --unit=install-ci-dependencies --no-pager
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -54,14 +63,22 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Start system dependency installation
+        run: |
+          sudo systemd-run --unit=install-ci-dependencies --no-block \
+            --property=Type=oneshot --property=RemainAfterExit=yes \
+            /bin/bash -e -c 'apt-get update && apt-get install --no-install-recommends -y libpq-dev libvips'
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 4.0.6
           bundler-cache: true
 
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev libvips
+      - name: Wait for system dependency installation
+        run: |
+          sudo systemctl start install-ci-dependencies.service
+          sudo journalctl --unit=install-ci-dependencies --no-pager
 
       - name: Setup database
         run: bin/rails db:test:prepare

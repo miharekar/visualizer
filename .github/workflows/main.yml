@@ -52,8 +52,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: service=visualizer
           outputs: type=image,name=ghcr.io/miharekar/visualizer,push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha,scope=${{ matrix.artifact }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.artifact }}
+          cache-from: type=registry,ref=ghcr.io/miharekar/visualizer:buildcache-${{ matrix.artifact }}
+          cache-to: type=registry,ref=ghcr.io/miharekar/visualizer:buildcache-${{ matrix.artifact }},mode=max
 
       - name: Export digest
         run: |
