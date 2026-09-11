@@ -10,6 +10,12 @@ class CommunityController < ApplicationController
     else
       @shots = []
     end
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+      format.json { render_api_endpoint_error }
+    end
   end
 
   def banner

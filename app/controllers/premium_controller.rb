@@ -17,6 +17,11 @@ class PremiumController < ApplicationController
       "Upload over 50 shots per day",
       "Support Visualizer's development and keep the coffee flowing"
     ]
+
+    respond_to do |format|
+      format.html
+      format.json { render_api_endpoint_error }
+    end
   end
 
   def create

@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def render_api_endpoint_error
+    render json: {error: "This is not an API endpoint.", api_docs: "https://apidocs.visualizer.coffee"}, status: :not_acceptable
+  end
+
   def set_timezone
     Current.set_timezone_from_cookie(cookies["browser.timezone"])
   end
