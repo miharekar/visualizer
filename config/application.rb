@@ -1,5 +1,5 @@
 require_relative "boot"
-require_relative "../lib/bad_multipart_request_middleware"
+require_relative "../lib/bad_request_middleware"
 require_relative "../lib/extensions/ip_addr"
 
 require "rails/all"
@@ -29,7 +29,7 @@ module Visualizer
     config.active_storage.analyzers = []
     config.exceptions_app = routes
     config.log_tags = %i[request_id remote_ip]
-    config.middleware.insert_before Rack::MethodOverride, BadMultipartRequestMiddleware
+    config.middleware.insert_before Rack::MethodOverride, BadRequestMiddleware
     config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end
