@@ -44,11 +44,16 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
+      - name: Read Ruby version
+        id: ruby-version
+        run: echo "version=$(cat .ruby-version)" >> "$GITHUB_OUTPUT"
+
       - name: Build and push
         id: build
         uses: docker/build-push-action@v7
         with:
           context: .
+          build-args: RUBY_VERSION=${{ steps.ruby-version.outputs.version }}
           platforms: ${{ matrix.platform }}
           labels: service=visualizer
           outputs: type=image,name=ghcr.io/miharekar/visualizer,push-by-digest=true,name-canonical=true,push=true
@@ -124,7 +129,6 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 4.0.6
           bundler-cache: true
 
       - name: Install 1Password CLI

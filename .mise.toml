@@ -1,2 +1,2 @@
-[tools]
-ruby = "4.0.6"
+[settings]
+idiomatic_version_file_enable_tools = ["ruby"]

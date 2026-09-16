@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 # check=error=true
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=4.0.6
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+# CI and Kamal pass the pinned version from .ruby-version.
+ARG RUBY_VERSION
+FROM docker.io/library/ruby:${RUBY_VERSION:+${RUBY_VERSION}-}slim AS base
 
 LABEL org.opencontainers.image.source=https://github.com/miharekar/visualizer
 LABEL org.opencontainers.image.licenses=MIT

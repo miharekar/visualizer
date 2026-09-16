@@ -25,6 +25,8 @@ registry:
     - KAMAL_REGISTRY_PASSWORD
 
 builder:
+  args:
+    RUBY_VERSION: <%= File.read(".ruby-version").strip %>
   arch:
     - arm64
     - amd64

@@ -110,8 +110,8 @@ GEM
     auth-sanitizer (0.2.3)
       version_gem (~> 1.1, >= 1.1.14)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1286.0)
-    aws-sdk-core (3.256.0)
+    aws-partitions (1.1287.0)
+    aws-sdk-core (3.257.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -157,6 +157,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.7)
+    cruise (0.3.0)
     cruise (0.3.0-aarch64-linux-gnu)
     cruise (0.3.0-arm64-darwin)
     cruise (0.3.0-x86_64-linux-gnu)
@@ -179,12 +180,13 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faraday (2.14.3)
+    faraday (2.14.4)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-net_http (3.4.4)
       net-http (~> 0.5)
+    ffi (1.17.4)
     ffi (1.17.4-aarch64-linux-gnu)
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
@@ -193,6 +195,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.4.0)
       activesupport (>= 6.1)
+    google-protobuf (4.36.1)
+      bigdecimal
+      rake (~> 13.3)
     google-protobuf (4.36.1-aarch64-linux-gnu)
       bigdecimal
       rake (~> 13.3)
@@ -205,6 +210,7 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
+    herb (0.10.4)
     herb (0.10.4-aarch64-linux-gnu)
     herb (0.10.4-arm64-darwin)
     herb (0.10.4-x86_64-linux-gnu)
@@ -349,6 +355,7 @@ GEM
       racc
     pastel (0.8.0)
       tty-color (~> 0.5)
+    pg (1.6.3)
     pg (1.6.3-aarch64-linux)
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
@@ -530,10 +537,12 @@ GEM
     tailwindcss-rails (4.6.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.3.3)
     tailwindcss-ruby (4.3.3-aarch64-linux-gnu)
     tailwindcss-ruby (4.3.3-arm64-darwin)
     tailwindcss-ruby (4.3.3-x86_64-linux-gnu)
     thor (1.5.0)
+    thruster (0.1.26)
     thruster (0.1.26-aarch64-linux)
     thruster (0.1.26-arm64-darwin)
     thruster (0.1.26-x86_64-linux)
@@ -663,4 +672,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-  4.0.18
+  4.0.20
