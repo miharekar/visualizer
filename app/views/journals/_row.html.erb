@@ -26,7 +26,7 @@
           <%= image_tag shot.image.variant(:thumb), class: "h-8 w-10 rounded object-cover", alt: "Shot photo", loading: "lazy" %>
         <% end %>
       <% elsif field == "start_time" %>
-        <span class="block whitespace-nowrap px-2 py-1"><%= journal_display(Current.journal, shot, field) %></span>
+        <span class="block px-2 py-1 whitespace-nowrap"><%= journal_display(Current.journal, shot, field) %></span>
         <% if local_assigns[:pinned] %><span class="block px-2 text-xs text-neutral-500"><%= local_assigns[:matches] ? "New · pinned until next search" : "New · outside current search" %></span><% end %>
       <% elsif editable && (field == "coffee" || field == "tag_list" || Journal::NOTES.include?(field) || Journal::DROPDOWN_FIELDS.include?(field)) %>
         <button type="button" class="focus:ring-terracotta-500 w-full rounded px-2 py-1 text-left hover:bg-neutral-100 focus:ring-2 dark:hover:bg-neutral-800" data-action="journal#edit" aria-label="Edit <%= Current.journal.columns[field] %>" data-display>

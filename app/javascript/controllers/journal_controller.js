@@ -10,6 +10,7 @@ export default class extends Controller {
     this.disconnected = false
     this.pendingRenders = new Map()
     this.partialRows = new Set()
+    this.staleRows = new Set()
     this.pending = new Map()
     this.busy = false
     this.failures = new Map()
@@ -50,6 +51,10 @@ export default class extends Controller {
 
   get lastOperation() {
     return this.undoHistory.at(-1)
+  }
+
+  get dialogOpen() {
+    return this.dialogTarget.open || this.application?.getControllerForElementAndIdentifier(this.element, "modal")?.modalShown
   }
 
   row(id) {
@@ -228,7 +233,12 @@ export default class extends Controller {
   }
 
   refreshErrors() {
-    for (const [key, target] of [["create", this.draftErrorTarget], ["columns", this.columnsErrorTarget], ["undo", this.undoErrorTarget], ["dialog", this.dialogErrorTarget]]) {
+    for (const [key, target] of [
+      ["create", this.draftErrorTarget],
+      ["columns", this.columnsErrorTarget],
+      ["undo", this.undoErrorTarget],
+      ["dialog", this.dialogErrorTarget]
+    ]) {
       const failure = this.failures.get(key)
       target.textContent = failure ? `Couldn't save: ${failure.error}` : ""
       target.classList.toggle("hidden", !failure)
@@ -240,26 +250,29 @@ export default class extends Controller {
     this.undoTarget.classList.toggle("hidden!", !this.lastOperation)
     this.undoLabelTarget.textContent = this.lastOperation?.ids.length > 1 ? `Undo change to ${this.lastOperation.ids.length} shots` : "Undo last change"
     this.undoTarget.title = `${this.undoHistory.length} changes available to undo`
+    if (this.hasApplyTarget) this.applyTarget.disabled = this.failures.has("dialog")
 
     this.rowTargets.forEach(row => {
       const messages = []
       row.querySelectorAll('[aria-invalid="true"]').forEach(input => input.removeAttribute("aria-invalid"))
       row.querySelectorAll("[data-field-error]").forEach(cell => {
-        cell.classList.remove("bg-red-50", "dark:bg-red-950", "ring-1", "ring-inset", "ring-red-500")
+        cell.classList.remove("bg-red-50", "dark:bg-red-950")
         delete cell.dataset.fieldError
       })
       for (const failure of this.failures.values()) {
-        failure.keys.filter(key => key.startsWith(`${row.dataset.shotId}:`)).forEach(key => {
-          const field = key.slice(row.dataset.shotId.length + 1)
-          const label = this.columnListTarget.querySelector(`[data-column-choice="${CSS.escape(field)}"] [data-column-label]`)?.textContent || field
-          messages.push(`${label}: ${failure.error}`)
-          const cell = this.cell(row, field)
-          if (cell) {
-            cell.dataset.fieldError = "true"
-            cell.classList.add("bg-red-50", "dark:bg-red-950")
-            cell.querySelector("[data-editor]")?.setAttribute("aria-invalid", "true")
-          }
-        })
+        failure.keys
+          .filter(key => key.startsWith(`${row.dataset.shotId}:`))
+          .forEach(key => {
+            const field = key.slice(row.dataset.shotId.length + 1)
+            const label = this.columnListTarget.querySelector(`[data-column-choice="${CSS.escape(field)}"] [data-column-label]`)?.textContent || field
+            messages.push(`${label}: ${failure.error}`)
+            const cell = this.cell(row, field)
+            if (cell) {
+              cell.dataset.fieldError = "true"
+              cell.classList.add("bg-red-50", "dark:bg-red-950")
+              cell.querySelector("[data-editor]")?.setAttribute("aria-invalid", "true")
+            }
+          })
       }
       let errorRow = this.rowsTarget.querySelector(`[data-error-for="${row.dataset.shotId}"]`)
       if (messages.length) {
@@ -312,6 +325,13 @@ export default class extends Controller {
     const incoming = event.detail.newElement
     if (element.matches("[data-shot-id]")) {
       if (incoming?.dataset.journalPartial === "true") this.partialRows.add(element.dataset.shotId)
+      const input = element.querySelector("[data-editor]:focus")
+      if (input && incoming && input.value !== input.dataset.original) {
+        const cell = input.closest("[data-column]")
+        const key = `${element.dataset.shotId}:${cell.dataset.column}`
+        const updated = this.cell(incoming, cell.dataset.column)
+        if (updated && !updated.dataset.unloaded && updated.dataset.value !== cell.dataset.value && !this.currentOperation?.keys.includes(key)) this.staleRows.add(element.dataset.shotId)
+      }
       return
     }
     if (element.matches("[data-selection]")) event.preventDefault()
@@ -326,11 +346,15 @@ export default class extends Controller {
   }
 
   beforeMorphAttribute(event) {
-    if (this.partialRows.has(event.target.dataset.shotId)) event.preventDefault()
+    const id = event.target.dataset.shotId
+    if (this.partialRows.has(id) || (this.staleRows.has(id) && event.detail.attributeName === "data-version")) event.preventDefault()
   }
 
   afterMorph(event) {
-    if (event.target.matches("[data-shot-id]")) this.partialRows.delete(event.target.dataset.shotId)
+    if (event.target.matches("[data-shot-id]")) {
+      this.partialRows.delete(event.target.dataset.shotId)
+      this.staleRows.delete(event.target.dataset.shotId)
+    }
     if (event.target.matches("[data-editor]") && event.target === document.activeElement) event.target.dataset.original = event.target.value
   }
 
@@ -361,8 +385,8 @@ export default class extends Controller {
   undoShortcut(event) {
     if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey || event.key.toLowerCase() !== "z") return
     const input = event.target.closest?.("[data-editor]")
-    if (input ? input.value !== input.dataset.original : event.target.closest?.("input, textarea, [contenteditable], lexxy-editor")) return
-    if (!this.lastOperation || this.busy || this.queue.length || this.dialogTarget.open) return
+    if (input ? input.value !== input.dataset.original : event.target.closest?.('input:not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable], lexxy-editor')) return
+    if (!this.lastOperation || this.busy || this.queue.length || this.dialogOpen) return
     event.preventDefault()
     this.undo()
   }
@@ -370,14 +394,18 @@ export default class extends Controller {
   performUndo(operation) {
     if (!operation) return
     this.editEpoch++
-    this.enqueue(async () => {
-      const result = await this.request(this.urlValue, "PATCH", { undo: operation.token })
-      if (this.lastOperation === operation) {
-        this.undoHistory.pop()
-      }
-      await this.renderStreams(result)
-      if (Object.values(this.queryValue).some(Boolean)) this.searchPending = true
-    }, [], "undo")
+    this.enqueue(
+      async () => {
+        const result = await this.request(this.urlValue, "PATCH", { undo: operation.token })
+        if (this.lastOperation === operation) {
+          this.undoHistory.pop()
+        }
+        await this.renderStreams(result)
+        if (Object.values(this.queryValue).some(Boolean)) this.searchPending = true
+      },
+      [],
+      "undo"
+    )
   }
 
   bulkCoffee() {
@@ -414,16 +442,22 @@ export default class extends Controller {
     this.dialogTitleTarget.textContent = { coffee: "Assign coffee", field: "Set field", tags: "Tags", note: "Notes" }[mode]
     if (mode === "field") {
       const select = this.dialogFormTarget.elements.field
-      ;[...select.options].forEach(option => { option.disabled = ["start_time", "duration"].includes(option.value) && ids.some(id => this.row(id).dataset.manual === "false") })
+      ;[...select.options].forEach(option => {
+        option.disabled = ["start_time", "duration"].includes(option.value) && ids.some(id => this.row(id).dataset.manual === "false")
+      })
       select.value = field
       this.fieldChanged()
     }
     if (mode === "tags") {
       this.tagEditor()?.tagify.removeAllTags()
-      this.readForDialog(["tag_list"], () => {
-        const lists = ids.map(id => (this.cell(this.row(id), "tag_list").dataset.value || "").split(",").filter(Boolean))
-        this.tagEditor()?.tagify.addTags(lists[0].filter(tag => lists.every(tags => tags.includes(tag))))
-      }, true)
+      this.readForDialog(
+        ["tag_list"],
+        () => {
+          const lists = ids.map(id => (this.cell(this.row(id), "tag_list").dataset.value || "").split(",").filter(Boolean))
+          this.tagEditor()?.tagify.addTags(lists[0].filter(tag => lists.every(tags => tags.includes(tag))))
+        },
+        true
+      )
     }
     if (mode === "coffee" && ids.length === 1) {
       const fields = this.coffeeFieldsTarget.querySelector('[name="bean_brand"]') ? ["bean_brand", "bean_type"] : []
@@ -433,35 +467,39 @@ export default class extends Controller {
   }
 
   fillCoffee(id) {
-      const row = this.row(id)
-      const attempted = this.failureForCell(`${id}:coffee`)?.changes?.find(change => change.id === id)?.attributes || {}
-      for (const name of ["coffee_bag_id", "canonical_coffee_bag_id", "bean_brand", "bean_type"]) {
-        const input = this.coffeeFieldsTarget.querySelector(`[name="${name}"]`)
-        if (input) {
-          input.value = attempted[name] ?? (name === "coffee_bag_id" ? row.dataset.coffeeBagId : name === "canonical_coffee_bag_id" ? row.dataset.canonicalCoffeeBagId : this.cell(row, name)?.dataset.value || "")
-          this.combobox(input.closest('[data-controller~="combobox"]'))?.reset(input.value)
-        }
+    const row = this.row(id)
+    const attempted = this.failureForCell(`${id}:coffee`)?.changes?.find(change => change.id === id)?.attributes || {}
+    for (const name of ["coffee_bag_id", "canonical_coffee_bag_id", "bean_brand", "bean_type"]) {
+      const input = this.coffeeFieldsTarget.querySelector(`[name="${name}"]`)
+      if (input) {
+        input.value = attempted[name] ?? (name === "coffee_bag_id" ? row.dataset.coffeeBagId : name === "canonical_coffee_bag_id" ? row.dataset.canonicalCoffeeBagId : this.cell(row, name)?.dataset.value || "")
+        this.combobox(input.closest('[data-controller~="combobox"]'))?.reset(input.value)
       }
-      const canonical = this.coffeeFieldsTarget.querySelector('[name="canonical_coffee_bag_id"]')
-      const search = this.coffeeFieldsTarget.querySelector('input[type="search"]')
-      if (search) search.value = canonical.value ? [this.cell(row, "bean_brand")?.dataset.value, this.cell(row, "bean_type")?.dataset.value].filter(Boolean).join(" / ") : ""
+    }
+    const canonical = this.coffeeFieldsTarget.querySelector('[name="canonical_coffee_bag_id"]')
+    const search = this.coffeeFieldsTarget.querySelector('input[type="search"]')
+    if (search) search.value = canonical.value ? [this.cell(row, "bean_brand")?.dataset.value, this.cell(row, "bean_type")?.dataset.value].filter(Boolean).join(" / ") : ""
   }
 
   readForDialog(fields, ready, force = false) {
     const version = ++this.dialogLoadVersion
     const ids = [...this.dialogIds]
     this.dialogFormTarget.inert = true
-    this.enqueue(async () => {
-      try {
-        const missing = fields.filter(field => force || ids.some(id => !this.cell(this.row(id), field) || this.cell(this.row(id), field).dataset.unloaded))
-        await this.loadCells(ids, missing)
-        if (version === this.dialogLoadVersion) ready()
-      } catch (error) {
-        if (version === this.dialogLoadVersion) throw error
-      } finally {
-        if (version === this.dialogLoadVersion) this.dialogFormTarget.inert = false
-      }
-    }, [], "dialog")
+    this.enqueue(
+      async () => {
+        try {
+          const missing = fields.filter(field => force || ids.some(id => !this.cell(this.row(id), field) || this.cell(this.row(id), field).dataset.unloaded))
+          await this.loadCells(ids, missing)
+          if (version === this.dialogLoadVersion) ready()
+        } catch (error) {
+          if (version === this.dialogLoadVersion) throw error
+        } finally {
+          if (version === this.dialogLoadVersion) this.dialogFormTarget.inert = false
+        }
+      },
+      [],
+      "dialog"
+    )
   }
 
   combobox(element) {
@@ -495,6 +533,7 @@ export default class extends Controller {
 
   saveDialog(event) {
     event.preventDefault()
+    if (this.dialogFormTarget.inert || this.failures.has("dialog")) return
     const data = new FormData(this.dialogFormTarget)
     if (this.dialogMode === "note") {
       const value = this.noteFieldsTarget.querySelector("lexxy-editor").value
@@ -535,16 +574,18 @@ export default class extends Controller {
   openNote(row, field) {
     this.openDialog("note", [row.dataset.shotId])
     this.noteField = field
-    const attempted = this.failureForCell(`${row.dataset.shotId}:${field}`)?.changes?.find(change => change.id === row.dataset.shotId)?.attributes[field]
-    const value = attempted ?? this.cell(row, field).dataset.value
-    const editor = this.noteFieldsTarget.querySelector("lexxy-editor")
-    editor.value = value
-    this.noteValue = value
     this.dialogTitleTarget.textContent = this.columnListTarget.querySelector(`[data-column-choice="${field}"] [data-column-label]`).textContent.trim()
+    this.readForDialog([field], () => {
+      const attempted = this.failureForCell(`${row.dataset.shotId}:${field}`)?.changes?.find(change => change.id === row.dataset.shotId)?.attributes[field]
+      const value = attempted ?? this.cell(row, field).dataset.value
+      this.noteFieldsTarget.querySelector("lexxy-editor").value = value
+      this.noteValue = value
+    })
   }
 
   closeDialog(event) {
     event?.preventDefault()
+    this.tagEditor()?.tagify.dropdown.hide()
     this.dialogLoadVersion++
     this.failures.delete("dialog")
     this.dialogFormTarget.inert = false
@@ -651,15 +692,19 @@ export default class extends Controller {
     const id = row.dataset.shotId
     const url = event.currentTarget.dataset.deleteUrl
     this.editEpoch++
-    this.enqueue(async () => {
-      const result = await this.request(url, "DELETE", { query: this.queryValue })
-      await this.renderStreams(result)
-      this.rowsTarget.querySelector(`[data-error-for="${id}"]`)?.remove()
-      const keys = [...this.failures.values()].flatMap(failure => failure.keys.filter(key => key.startsWith(`${id}:`)))
-      this.supersedeFailures(keys, "undo")
-      this.undoHistory = this.undoHistory.filter(operation => !operation.ids.includes(id))
-      this.select()
-    }, [`${id}:actions`], `delete:${id}`)
+    this.enqueue(
+      async () => {
+        const result = await this.request(url, "DELETE", { query: this.queryValue })
+        await this.renderStreams(result)
+        this.rowsTarget.querySelector(`[data-error-for="${id}"]`)?.remove()
+        const keys = [...this.failures.values()].flatMap(failure => failure.keys.filter(key => key.startsWith(`${id}:`)))
+        this.supersedeFailures(keys, "undo")
+        this.undoHistory = this.undoHistory.filter(operation => !operation.ids.includes(id))
+        this.select()
+      },
+      [`${id}:actions`],
+      `delete:${id}`
+    )
   }
 
   columns(movedField = null) {
@@ -669,10 +714,14 @@ export default class extends Controller {
     this.columnSaveFrame = requestAnimationFrame(() => {
       this.columnSaveFrame = requestAnimationFrame(() => {
         this.columnSaveFrame = null
-        this.enqueue(async () => {
-          await this.request(this.columnsUrlValue, "PATCH", { columns })
-          await this.loadVisibleCells()
-        }, [], "columns")
+        this.enqueue(
+          async () => {
+            await this.request(this.columnsUrlValue, "PATCH", { columns })
+            await this.loadVisibleCells()
+          },
+          [],
+          "columns"
+        )
       })
     })
   }
@@ -809,7 +858,9 @@ export default class extends Controller {
   arrangeColumns(row, choices, movedField = null) {
     const cells = new Map([...row.querySelectorAll("[data-column]")].map(cell => [cell.dataset.column, cell]))
     const known = new Set(choices.map(item => item.dataset.columnChoice))
-    cells.forEach((cell, field) => { if (!known.has(field)) cell.classList.add("hidden") })
+    cells.forEach((cell, field) => {
+      if (!known.has(field)) cell.classList.add("hidden")
+    })
     let previous = row.firstElementChild
     choices.forEach(item => {
       const field = item.dataset.columnChoice
@@ -900,7 +951,7 @@ export default class extends Controller {
     const editing = this.rowsTarget.querySelector("[data-editor]:focus")
     const dirtyCell = editing && editing.value !== editing.dataset.original
     const dirtyNote = this.dialogMode === "note" && this.noteFieldsTarget.querySelector("lexxy-editor").value !== this.noteValue
-    return !!this.columnSaveFrame || this.busy || this.queue.length > 0 || this.failures.size > 0 || !this.draftTarget.classList.contains("hidden") || this.dialogTarget.open || dirtyCell || dirtyNote
+    return !!this.columnSaveFrame || this.busy || this.queue.length > 0 || this.failures.size > 0 || !this.draftTarget.classList.contains("hidden") || this.dialogOpen || dirtyCell || dirtyNote
   }
 
   beforeVisit(event) {

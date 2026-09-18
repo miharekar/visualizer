@@ -74,6 +74,10 @@ export default class extends Controller {
     }
   }
 
+  retainFocus(event) {
+    if (event.target.closest("li")) event.preventDefault()
+  }
+
   toggle(event) {
     this.shown ? this.hide(event) : this.show()
   }

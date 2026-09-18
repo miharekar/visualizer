@@ -1,17 +1,19 @@
 # Journal implementation plan
 
-Status: implemented and verified.
+Status: implementation updated after review and verified.
 
 ## Goal
 
-Make Visualizer a useful coffee journal: manage imported brews, log manual
-brews, record taste, recover successful recipes, and review dialing-in attempts.
+Make Visualizer a coffee journal: manage imported brews, log manual brews,
+record taste, recover successful recipes, and compare dialing-in attempts.
 
 Acceptance scenarios:
 
-1. Seven shots using three coffees can be assigned coffees, rated, and annotated
-   without visiting seven edit pages.
-2. A manual brew can be created and subsequently edited without leaving list.
+1. Assign three coffees to seven shots, rate them, and edit notes without visiting
+   seven edit pages. Enter moves down the same column for rapid rating.
+2. Create and edit a manual brew without leaving the list.
+3. Errors, delayed searches, retries, and changes in another tab must not silently
+   discard edits or overwrite newer values.
 
 Vladimir's September 2026 feedback supplies longer-term direction: logging
 becomes a chore once users know their preferences. Learning from others brewing
@@ -19,183 +21,192 @@ the same coffee could make history useful again, especially with a new bag.
 Reduce logging friction now; preserve structured coffee identity for future
 community discovery.
 
-## Confirmed decisions
+## Confirmed interface
 
-- Journal is an optional **view of `/shots`**, not a separate destination.
-- Account setting defaults off and is available to everyone. No beta gate.
-- Main navigation still says **Shots** and stays active in either view.
-- Reuse classic shot-index header width, count heading, push notification
-  button, Upload button/panel, and drag-and-drop upload behavior. Add **Create
-  a shot** beside those controls. Header, Upload, and Columns panels remain
-  narrow; search/table container uses full screen width with responsive gutters,
-  including ultrawide screens.
-- All columns size from content without compact/non-compact categories. Inputs
-  grow while typing, capped for long text. Table fills its container when content
-  is narrow and scrolls horizontally when content is wider.
-- No Journal heading or instructional subtitle.
-- Rails/Turbo/Stimulus/Tailwind only; no grid/spreadsheet dependency.
-- Desktop-first, usable on mobile with single-tap controls.
-- Ordinary cells are inputs all along, styled as text until focused. No
-  duplicated text display and hidden input.
-- **Enjoyment first by default**, with existing red-to-green color treatment in
-  a compact 36px editable badge centered in its cell.
-- Brewed time links to existing shot page. No Details column or details panel.
-- Always newest-to-oldest; no Sort/Order controls or alternate row ordering.
-- Infinite loading, using existing lazy Turbo-frame pattern. Cursor uses brew
-  timestamp and shot UUID so equal timestamps do not skip rows.
-- Table sits in a bounded, viewport-relative scroll container with native
-  horizontal/vertical scrollbars and sticky headers. Infinite-loading sentinel
-  is inside this container; standard page footer remains reachable below it.
-  Height uses measured space above table and footer height, not a fixed pixel
-  allowance; resize observation keeps it correct as panels open or close.
-  A 32rem (512px) minimum keeps the table usable in short viewports/devtools.
-  Table links disable Turbo hover prefetch, including newly loaded rows.
-- Premium search is instant and preserves focus; no Search button. Free users
-  submit search explicitly. Search field fills remaining header-row width.
-- Single search box covers coffee, notes, profiles, tags (premium), and other
-  text fields. Combined terms match across fields. Brew timestamps are excluded:
-  no date formatting/timezone conversion or separate date/coffee/tag controls.
-- Free users cannot read/edit old shots through Journal. Existing cutoff is
-  based on upload `created_at`, not brew time. Premium field entitlements apply.
-- Column visibility and order persist on account from initial rollout.
-  `journal_columns = NULL` means default layout; empty settings also fall back.
-- Columns button sits immediately left of Upload; configuration panel is hidden
-  until opened, above search, with no outer border. Drag handles replace arrow
-  buttons; pointer dragging and arrow-key reordering save account preferences.
-  Escape cancels dragging. Reset persists SQL NULL and restores default order
-  and visibility immediately.
-- Column configuration separates Visible and Hidden groups without checkboxes
-  or group backgrounds. Cross-group drops change visibility; within-group drops
-  reorder columns. A floating chip follows pointer, with a faded placeholder
-  and no orange drag outline. Picker labels omit units.
-- Reordering updates only the moved table column and skips unchanged DOM
-  positions. Preference requests are deferred until after a browser paint.
-- Column updates and Reset save quietly; failures still show retry feedback.
-- Existing-row edits save immediately on commit, with session-scoped per-cell
-  revert and bulk undo. Undo restores preceding saved value, not original value
-  from page load, and preserves unrelated later edits.
-- Notes use rich-text dialog with explicit **Save notes**. Cancel/Escape saves
-  nothing. This supersedes initial delayed-autosave proposal for notes.
+- Optional view of **`/shots`**, controlled by a default-off profile setting.
+  Available to everyone; no beta gate or separate Journal page.
+- Main navigation stays **Shots** and remains active on `/shots.html` redirects.
+- Shared classic-index header: shot count, push-notification bell, **Columns**,
+  **Upload**, and **Create**. Upload has no plus icon. Columns/Upload buttons
+  show a depressed state while their panels are open.
+- Header, upload panel, and column panel retain normal narrow sizing. Search
+  and table use available screen width with responsive gutters, including
+  ultrawide screens. Space separates table container from footer.
+- No Journal heading or instructional subtitle. Serif font only on page heading.
+- Compact content-sized rows and inputs. Table fills container if content is
+  narrow and scrolls horizontally if wider. Numeric presentation follows normal
+  shot cards: time rounded to one decimal; weights/TDS/EY up to four decimals.
+  Formatting alone does not rewrite stored values.
+- Always newest first. No row-sort/order controls.
+- Infinite loading **inside** bounded table container, with sticky headers and
+  native scrollbars. Height uses measured header/footer space with a **512px
+  minimum**. Standard footer remains reachable.
+- Table links disable Turbo hover prefetch, including newly loaded rows.
+- Single search box for coffee, profile, notes, tags where entitled, and other
+  supported text fields. **Brew timestamps are not searched.** Premium search
+  is instant with no button; free users submit Search.
+- Selection toolbar floats near viewport top without moving layout. Hidden
+  until a row is selected; Compare appears only for exactly two selected rows.
+  Maximum 100 selected shots per atomic edit. Action controls use pointer cursors.
+- No "Saved" text. Errors appear directly below affected rows; associated cells
+  get red backgrounds, without a red border. No global Retry button. Correcting
+  or re-submitting an errored field creates a fresh save.
 
-## Columns and workflows
-
-Default columns, in order:
+## Default columns — exact order
 
 1. Enjoyment
-2. Brewed
-3. Coffee
+2. Made at
+3. Coffee — with coffee management; otherwise **Roaster**, then **Coffee bag**
 4. Profile
 5. Dose
-6. Yield
-7. Time
-8. Grind
-9. Notes
+6. Grind
+7. Grinder
+8. Yield
+9. Time
+10. Actions
 
-Additional columns: grinder, roaster, coffee name, barista, roast date/level,
-TDS/EY, bean notes, tags, private notes, tasting assessments, custom metadata.
-Premium entitlements govern availability independently of saved column choices.
+- Enjoyment uses existing colors in a compact, centered editable badge.
+- Made at is plain text, not a link.
+- Actions contains View, Edit, Delete icons. Uses Heroicons eye and shared
+  pencil/trash artwork from shot detail. Delete uses existing confirmation popup.
+- Actions is a regular configurable column, at the end by default.
+- With coffee management enabled, Roaster/Coffee bag name columns are absent
+  from picker and defaults; bag-derived fields cannot be edited directly.
+- With management disabled, managed Coffee column is absent. Manual roaster and
+  coffee-name editing clears canonical selection rather than silently ignoring
+  changed text.
+- Optional fields include notes, tags, barista, roast details, TDS/EY, ratio,
+  photo, tasting assessments, private notes, and configured custom metadata.
+  Entitlements apply independently of column preferences.
 
-Coffee assignment uses own bags when coffee management is enabled; otherwise
-canonical coffee search and manual roaster/name fields. Assignment preserves
-measurements. Bulk toolbar supports coffee assignment, setting individual
-fields, adding/removing tags, and entering existing two-shot comparison.
-Selection toolbar is hidden with no selection and floats 5rem below viewport top
-when rows are selected, without moving table layout. Save/error status remains
-separate from selection controls.
+## Column configuration and reusable editors
 
-Manual shots:
+- Columns opens a borderless panel **above search**, with **Visible** and
+  **Hidden** groups. Groups have no background and no checkboxes.
+- Cross-group dragging changes visibility; within-group dragging changes order.
+  Floating chip follows pointer, with faded placeholder and no orange outline.
+  Chips have extra right padding; picker labels omit `(g)`/`(s)`.
+- Arrow keys support reordering/transfers. Escape cancels dragging.
+- Account-persisted order/visibility follows user across devices. **Reset stores
+  SQL NULL** and restores defaults. Saves are quiet; errors remain local.
+- Drop updates only moved column, skips unchanged DOM positions, and saves
+  preferences after browser paint.
+- Coffee bags, grinder, and unmanaged roaster/coffee-name editors reuse existing
+  combobox partial/controller. Suggestions retain input focus during selection.
+- Tags reuse existing Tagify controller: one tags input, no add/remove/replace
+  action selector. A multi-shot edit applies the entered set to every selected
+  shot; initial input shows shared tags.
+- Dialog suggestions are positioned locally and can overflow the tag dialog;
+  height is capped for short viewports. Single-shot buttons say **Save**;
+  bulk buttons say **Apply to N shots**.
+- Notes use existing rich-text editor, with explicit Save. Cancel/Escape saves
+  nothing. No automatic delayed note saves.
 
-- **Create a shot** opens inline creation panel without “New shot” heading.
-- Brew time defaults to now in user's configured time zone; backdating allowed.
-- Coffee, profile, measurements, enjoyment, and rich notes can be entered.
-- Cancel and Add shot are right-aligned; Add shot is rightmost.
-- No record until Add shot succeeds. Cancel abandons draft.
-- Absence of `ShotInformation` identifies manual entry; no manual-origin column.
-- Draft keeps one ordinary shot UUID across retries, preventing duplicate
-  creation. Required `sha` generated server-side.
-- No telemetry/profile required; measurements optional. Manual duration can be
-  edited in row; manual brew time through Set field. Imported timestamp and
-  duration stay read-only.
-- Existing free daily creation limit and premium field entitlements apply.
-- Creation is separate from field undo; use existing shot deletion if needed.
+## Undo and keyboard behavior
 
-## Persistence and safety
+- Undo sits beside search, appears only after a successful edit, and steps
+  backwards through successful shot edits in current page session.
+- Each bulk edit is one undo operation. Search does not clear history.
+- No per-cell Revert links or separate success bar.
+- Ctrl/Cmd+Z invokes saved-edit undo when not editing text. No shortcut hint.
+  Inputs and rich-text editors retain native text undo for active changes.
+- Enter moves down same field and selects next value; Shift+Enter moves up.
+- Undo checks affected saved values, preserves unrelated later edits, restores
+  dependent coffee fields, and restores absence of newly added metadata keys.
+- Creation/deletion and column preferences are separate from shot-edit undo.
+  Deleting a shot removes undo entries that reference it.
 
-- `GET /shots` renders classic index or Journal based on account preference.
-- `POST /shots` creates manual shot via JSON or handles existing file uploads.
-- `PATCH /shots/journal` saves bounded batches
-  or reverts signed snapshots. These are internal session-authenticated writes.
-- `PATCH /profile/journal_columns` persists account layout.
-- Profile saves explicitly redirect to HTML so Turbo navigates and shows flash
-  notice instead of treating destination as a list-update stream. Shots navigation
-  uses controller/action matching, remaining active on `/shots.html` too.
-- Share editable-field rules through `Shot.editable_attributes(user)`.
-- Owner-scope shots and own coffee bags. Recheck history and premium access on
-  every write, including undo.
-- Maximum 100 distinct shots per atomic batch. Use model saves to preserve
-  validation, tag/note setters, coffee callbacks, broadcasts, and Airtable sync.
-- Preserve string-valued measurements/grinder settings, omitted fields,
-  untouched metadata, and rich-text formatting.
-- Serialize client saves; retain failed edits independently and continue saving
-  other cells. Correcting a failed value replaces its failed operation. Offer
-  retry/reload without making validation errors block the entire editor.
-- Lock records and check versions for edits. Signed undo snapshots check
-  affected values, preserving unrelated later edits and rejecting conflicts.
-- Coffee undo includes related fields changed by assignment callbacks.
-- New rows remain visible until next search; background uploads do not replace
-  actively edited rows. Infinite loading skips already-present row IDs.
-- Existing chartless shot views tolerate missing duration; profile download
-  returns documented 422 for manual shots. OpenAPI version bumped accordingly.
+## Manual creation and comparison
 
-## Implementation checklist
+- Create opens inline panel with no "New shot" heading. Cancel/Add shot are
+  right-aligned, with Add shot rightmost.
+- Made at defaults to now in user's timezone; backdating allowed. No telemetry
+  or profile required; measurements optional. Draft is not persisted until Add.
+- Absence of `ShotInformation` identifies manual entries, with no origin column.
+- Draft reuses ordinary shot UUID across retries. Server-generated SHA fingerprints
+  creation payload: replaying changed values returns conflict and a link to saved
+  shot, keeping revised draft instead of silently discarding it.
+- Creation updates count/empty state. New row remains pinned until next search,
+  marked when it does not match current filter.
+- Existing rule retained: manual date/duration editable; imported values read-only.
+  Information presence is only used for this rule, not comparison eligibility.
+- Any two shots can be compared. Details/tasting assessments render even without
+  telemetry; charts appear for whichever sides have data. Timing adjustment only
+  appears when both sides have charts.
+- Non-premium daily limit counts records **created in last 24 hours**, rather than
+  brew dates, so backdating cannot bypass it.
 
-- [x] Inspect routes, preferences, editing rules, parsers, callbacks, and tests.
-- [x] Add default-off Journal setting and nullable account column preferences.
-- [x] Select interface at `/shots`; preserve Shots navigation and settings flow.
-- [x] Share classic index header, sizing, notification and upload controls.
-- [x] Implement native table, text-styled inputs, enjoyment colors, coffee picker.
-- [x] Add atomic bulk editing, tag operations, version checks, signed undo.
-- [x] Add rich-note editing with explicit save and Escape cancellation.
-- [x] Add manual creation, retry identity, timestamp/duration support.
-- [x] Add account column visibility/order controls and NULL reset fallback.
-- [x] Add newest-first infinite loading with timestamp/UUID cursor.
-- [x] Add submitted free search and focus-preserving premium instant search.
-- [x] Keep existing chart/comparison entry points; handle chartless manual shots.
-- [x] Finish controller/model regression checks and browser smoke checks against
-      latest UI changes, including settings enablement, NULL preferences,
-      cancellation, pagination, failed saves, keyboard and mobile use.
-- [x] Format templates with rustywind/htmlbeautifier and JavaScript with Prettier.
-- [x] Run RuboCop and relevant security checks; record final results below.
+## Rails / Hotwire implementation
 
-## Verification log
+- `Current.journal` is request-scoped and reset with Current. View selection uses
+  explicit user preference and templates, not existence of an instance variable.
+- `GET /shots` selects classic or Journal template. `POST /shots` creates manual
+  shots via JSON or handles existing file uploads. JSON DELETE uses normal shot
+  ownership policy and confirmation flow.
+- `PATCH /shots/journal` handles bounded atomic updates and signed undo snapshots.
+- `PATCH /profile/journal_columns` saves layout or NULL reset.
+- `GET /shots/journal/cells` supplies requested cells for at most 100 owned,
+  accessible shots. Called when revealing a column or opening its editor.
+- `Journal.for_list` selects only base identifiers plus visible column attributes
+  and their dependencies. Action Text, tags, and image associations load only
+  when shown or explicitly edited. Telemetry JSON never loads for list rendering.
+- `journals/row` is shared HTML row template, including action icons. Updates use
+  Turbo Stream morphs rather than manually rebuilding/merging row HTML in JS.
+  Partial column loads preserve existing cells; focused dirty/pending/error cells
+  are protected through Turbo morph callbacks.
+- Mutations await stream rendering before next queued save so row versions stay
+  current. Partial reads do not advance optimistic write versions.
+- Search and pagination responses carry search generation IDs. Stale searches
+  cannot replace an active edit or overwrite a subsequently completed save.
+- Pagination uses readable `before` timestamp and `before_id` UUID tie-breaker.
+- Owner scope, premium fields, and free history cutoff apply on every read/write,
+  including undo. History cutoff remains based on `created_at`, not brew time.
+- Failed bulk operations are superseded per affected cell; old failed values are
+  never replayed over individual corrections. Failed values remain available.
+- Keep model validations/callbacks and integrations; no `update_all` edits.
 
-- `PARALLEL_WORKERS=1 bin/rails test`: 310 tests, 1,378 assertions, no failures,
-  errors, or skips.
-- `node --test test/javascript/journal_controller_test.mjs`: three passing native
-  Node tests for validation recovery, independent saves, retry behavior, and
-  quiet column saves with visible failure feedback.
-- Brakeman: no security warnings or scan errors.
-- RuboCop: 260 files, no offenses. Gitleaks: no leaks.
-- Chromium smoke checks have exercised inline save/revert, bulk assignment,
-  note save/Escape cancellation, manual creation, column persistence, infinite
-  loading, premium search retaining focus, and mobile coffee editing.
-- Later Chromium checks verified profile theme-save navigation/notice, drag
-  preview, cross-group visibility changes, persisted reordering, Escape
-  cancellation, NULL Reset, and top-positioned selection toolbar. Verified
-  contained infinite loading leaves footer/table height unchanged and preserves
-  horizontal scroll; 512px minimum holds in a short viewport.
-- Chromium reproduced invalid Enjoyment `101`, verified another field still
-  saves, then corrected score to `90` without reloading. Verified badge's width
-  and horizontal centering through actual computed geometry.
-- Default parallel Rails test execution exhausted local Postgres connections;
-  use `PARALLEL_WORKERS=1` for remaining checks.
-- Temporary browser tooling installed outside repository; no app dependency.
+## Verification checklist
 
-## Concrete follow-up
+- [x] Original seven-shot/three-coffee workflow, manual creation, desktop/mobile
+      interaction, infinite loading and column persistence exercised in Chromium.
+- [x] Regression tests for ownership, entitlements, metadata undo, stale edits,
+      atomic rollback, creation replay, quotas, cursor ties, query preloading,
+      dynamic column sets, profile redirects, and chartless comparison.
+- [x] Native JS checks for save recovery, overlapping failures, search races,
+      session undo, shortcut behavior and vertical Enter navigation.
+- [x] Native JS tests added to `bin/ci` (Node 22.15+).
+- [x] Current browser checks: Turbo row morphs, hidden Undo/push bell, compact
+      rows, field-local errors, shared tags/grinder editors, short-viewport tag
+      suggestions, delayed search during edits, lazy metadata loading, metadata
+      undo, changed server-side columns, creation and confirmed deletion.
+- [x] Complete final regression/style/security checks for this review pass.
+- [x] Record final results below.
 
-Community discovery by coffee: find other users' successful brews with same
-coffee, particularly for dialing in a new bag. Separate product discovery;
-does not depend on recruiting roasters to publish recipes.
+## Latest verification
+
+- `PARALLEL_WORKERS=1 bin/rails test`: **324 tests, 1,495 assertions**, no failures
+  or errors.
+- `node --test test/javascript/*_test.mjs`: **11 passing tests**.
+- RuboCop: **260 files**, no offenses. Changed templates formatted with
+  rustywind/htmlbeautifier; JavaScript formatted with Prettier.
+- Brakeman: no security warnings. Bundler audit and Importmap audit: no known
+  vulnerabilities (existing unversioned Highcharts pins are skipped by audit).
+  Gitleaks: no leaks.
+- Chromium verified error correction without blocking other rows, multi-step
+  keyboard undo, vertical Enter, stale search protection, shared combobox and
+  Tagify editors, short-viewport suggestion positioning, lazy custom columns,
+  metadata undo, changing server-side columns, creation/counts, confirmed deletion,
+  exact managed-mode defaults, and comparison of manual shots without charts.
+- Browser-test account and its records were removed after verification.
+
+Temporary browser tooling and fixtures live outside repository; no new runtime
+JavaScript dependency. Use `PARALLEL_WORKERS=1` locally to avoid exhausting
+Postgres connections with default parallel worker count.
+
+## Future product work
+
+Community discovery by coffee: find others' successful brews with same coffee,
+particularly for dialing in a new bag. Does not depend on recruiting roasters.
 
 ## Research references
 
@@ -205,5 +216,4 @@ does not depend on recruiting roasters to publish recipes.
 - [Visualizer #162: preparation-method search](https://github.com/miharekar/visualizer/issues/162)
 - [Beanconqueror](https://beanconqueror.com/) and [Filtru](https://filtru.coffee/)
 
-Reddit request returned HTTP 403; forum searches yielded no usable evidence.
-Demand conclusions rely on linked Visualizer issues and supplied user feedback.
+Reddit request returned HTTP 403; no usable forum evidence was retrieved.

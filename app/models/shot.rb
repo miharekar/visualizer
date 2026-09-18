@@ -69,10 +69,12 @@ class Shot < ApplicationRecord
   end
 
   def manual?
-    if has_attribute?(:has_information) && !association(:information).loaded?
+    if new_record? || association(:information).loaded?
+      information.nil?
+    elsif has_attribute?(:has_information)
       !self[:has_information]
     else
-      information.nil?
+      !ShotInformation.exists?(shot_id: id)
     end
   end
 

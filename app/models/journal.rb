@@ -176,13 +176,14 @@ class Journal
     previous = []
     shots = []
     user.with_lock do
-      records = locked_shots(changes.pluck("id"))
+      fields = changes.flat_map { it["attributes"].is_a?(Hash) ? it["attributes"].keys : [] }
+      records = locked_shots(changes.pluck("id"), fields:)
       changes.sort_by { it["id"].to_s }.each do |change|
         shot = records.fetch(change["id"])
         check_version(shot, change["version"])
         attributes = permitted_attributes(shot, change["attributes"])
         metadata_keys = change["attributes"]["metadata"]&.keys
-        absent_metadata_keys = Array(metadata_keys) - shot.metadata.keys
+        absent_metadata_keys = metadata_keys ? metadata_keys - shot.metadata.keys : []
         before = snapshot(shot, attributes, metadata_keys:)
         shot.assign_attributes(attributes)
         shot.updated_at = Time.current
@@ -203,7 +204,7 @@ class Journal
 
     shots = []
     user.with_lock do
-      records = locked_shots(previous.pluck("id"))
+      records = locked_shots(previous.pluck("id"), fields: previous.flat_map { it["attributes"].keys })
       previous.sort_by { it["id"] }.each do |change|
         shot = records.fetch(change["id"])
         current = snapshot(shot, change["attributes"], metadata_keys: change["attributes"]["metadata"]&.keys)
@@ -251,8 +252,12 @@ class Journal
     "manual:#{Digest::SHA256.hexdigest(canonical.sort.to_h.to_json)}"
   end
 
-  def locked_shots(ids)
-    records = scope.where(id: ids).order(:id).lock.with_information_presence.with_notes.includes(:tags, coffee_bag: :roaster).index_by(&:id)
+  def locked_shots(ids, fields:)
+    shots = scope.where(id: ids).order(:id).lock
+    shots = shots.with_information_presence if (fields & %w[start_time duration]).any?
+    (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
+    shots = shots.includes(:tags) if fields.include?("tag_list")
+    records = shots.index_by(&:id)
     raise ActiveRecord::RecordNotFound unless records.size == ids.size && ids.all? { records.key?(it) }
 
     records
@@ -263,7 +268,7 @@ class Journal
 
     allowed = Shot.editable_attributes(user).reject { it == :image }
     allowed = allowed.reject { BAG_FIELDS.include?(it.to_s) } if user.coffee_management_enabled? && !restoring
-    allowed += %i[start_time duration] if shot.manual?
+    allowed += %i[start_time duration] if (attributes.keys & %w[start_time duration]).any? && shot.manual?
     permitted = ActionController::Parameters.new(attributes).permit(*allowed).to_h
     raise InvalidChange, "Some fields are not editable" unless (attributes.keys - permitted.keys).empty?
 

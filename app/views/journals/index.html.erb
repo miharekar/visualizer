@@ -1,6 +1,6 @@
 <% content_for(:html_title) { "Visualizer | Your Shots" } %>
 <% content_for(:head) { tag.meta(name: "turbo-cache-control", content: "no-cache") } %>
-<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop modal" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-cells-url-value="<%= journal_cells_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-journal-search-id-value="<%= @journal_search_id %>" data-journal-query-value="<%= params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).to_json %>" data-journal-max-batch-value="<%= Journal::MAX_BATCH %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream turbo:before-morph-element->journal#beforeMorph turbo:before-morph-attribute->journal#beforeMorphAttribute turbo:morph-element->journal#afterMorph resize@window->journal#sizeViewport keydown@window->journal#undoShortcut">
+<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop modal" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-cells-url-value="<%= journal_cells_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-journal-search-id-value="<%= @journal_search_id %>" data-journal-query-value="<%= params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).to_json %>" data-journal-max-batch-value="<%= Journal::MAX_BATCH %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream turbo:before-morph-element->journal#beforeMorph turbo:before-morph-attribute->journal#beforeMorphAttribute turbo:morph-element->journal#afterMorph resize@window->journal#sizeViewport keydown@window->journal#undoShortcut modal:closed->journal#resumeSearch">
   <%= render "shared/modal" %>
   <div data-upload-drop-target="overlay" class="bg-oxford-blue-500/50 fixed inset-0 z-99 hidden items-center justify-center backdrop-blur-sm">
     <div class="text-center">
@@ -44,8 +44,8 @@
       <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
       <button type="button" class="button-white hidden! px-4 py-2" data-journal-target="undo" data-action="journal#undo"><span data-journal-target="undoLabel">Undo last change</span></button>
     <% end %>
-    <p class="hidden mb-3 text-right text-sm text-red-600 dark:text-red-400" data-journal-target="undoError" role="alert"></p>
-    <p class="hidden mb-3 text-sm text-neutral-500" data-journal-target="searchNotice" role="status"></p>
+    <p class="mb-3 hidden text-right text-sm text-red-600 dark:text-red-400" data-journal-target="undoError" role="alert"></p>
+    <p class="mb-3 hidden text-sm text-neutral-500" data-journal-target="searchNotice" role="status"></p>
     <div class="fixed inset-x-4 top-20 z-30 mx-auto hidden w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-lg bg-white/95 px-4 py-3 shadow-lg ring-1 ring-neutral-200 backdrop-blur dark:bg-neutral-800/95 dark:ring-neutral-700" data-journal-target="bulkBar">
       <span data-journal-target="selection">0 selected</span>
       <span class="text-sm text-neutral-500" data-journal-target="selectionNotice"></span>
@@ -55,8 +55,8 @@
       <button type="button" class="standard-link hidden cursor-pointer" data-journal-target="compare" data-action="journal#compare">Compare</button>
     </div>
     <div class="border-terracotta-300 mb-4 hidden rounded border p-4" data-journal-target="draft">
-      <p class="hidden mb-3 text-sm text-red-600 dark:text-red-400" data-journal-target="draftError" role="alert"></p>
-      <a class="standard-link hidden mb-3 text-sm" data-journal-target="savedShot">Open saved shot</a>
+      <p class="mb-3 hidden text-sm text-red-600 dark:text-red-400" data-journal-target="draftError" role="alert"></p>
+      <a class="standard-link mb-3 hidden text-sm" data-journal-target="savedShot">Open saved shot</a>
       <form data-journal-target="draftForm" data-action="submit->journal#create" class="grid gap-3 sm:grid-cols-3">
         <div class="space-y-3"><%= render "journals/coffee_fields", prefix: "draft" %></div>
         <div class="space-y-3">

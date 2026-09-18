@@ -31,5 +31,4 @@ class JournalsController < ApplicationController
     data = journal_response(Current.journal.for_list.where(id: shots.map(&:id)))
     render json: data.merge(undo:).compact
   end
-
 end
