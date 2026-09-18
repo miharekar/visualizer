@@ -14,14 +14,13 @@ class ShotsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html { render "journals/index" if @journal }
-      format.turbo_stream { render "journals/index" if @journal }
+      format.any(:html, :turbo_stream) { render(Current.user.journal_enabled? ? "journals/index" : "shots/index") }
       format.json { render_api_endpoint_error }
     end
   end
 
   def search
-    render(@journal ? "journals/index" : :index)
+    render(Current.user.journal_enabled? ? "journals/index" : "shots/index")
   end
 
   def show
@@ -105,10 +104,9 @@ class ShotsController < ApplicationController
   private
 
   def create_manual_shot
-    @journal = Journal.new(Current.user)
-    shot = @journal.create(params.expect(shot: {}).to_h, params[:entry_id])
+    shot = Current.journal.create(params.expect(shot: {}).to_h, params[:entry_id])
     query = params.slice(:query).permit(query: %i[q coffee_bag tags]).fetch(:query, {})
-    matches = @journal.search(query)
+    matches = Current.journal.search(query)
     render json: {rows: journal_rows([shot]), count: matches.count, matches: matches.exists?(id: shot.id)}, status: :created
   rescue Journal::Conflict => error
     render json: {error: error.message, shot_id: params[:entry_id]}, status: :conflict
@@ -178,13 +176,12 @@ class ShotsController < ApplicationController
   end
 
   def load_journal
-    @journal = Journal.new(Current.user)
     @journal_search_id = params[:journal_search_id].presence || SecureRandom.uuid
-    shots = @journal.search(params)
+    shots = Current.journal.search(params)
     @shots_count = shots.count
-    @shots, @cursor = @journal.page(shots, params)
-    @columns = @journal.ordered_columns
-    @visible_columns = @journal.visible_columns
+    @shots, @cursor = Current.journal.page(shots, params)
+    @columns = Current.journal.ordered_columns
+    @visible_columns = Current.journal.visible_columns
     @coffee_bags = Current.user.coffee_management_enabled? ? Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name : []
   rescue Journal::InvalidChange => error
     redirect_to shots_path, alert: error.message
