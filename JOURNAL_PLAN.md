@@ -48,6 +48,7 @@ community discovery.
   is inside this container; standard page footer remains reachable below it.
   Height uses measured space above table and footer height, not a fixed pixel
   allowance; resize observation keeps it correct as panels open or close.
+  A 32rem (512px) minimum keeps the table usable in short viewports/devtools.
   Table links disable Turbo hover prefetch, including newly loaded rows.
 - Premium search is instant and preserves focus; no Search button. Free users
   submit search explicitly. Search field fills remaining header-row width.
@@ -63,6 +64,12 @@ community discovery.
   buttons; pointer dragging and arrow-key reordering save account preferences.
   Escape cancels dragging. Reset persists SQL NULL and restores default order
   and visibility immediately.
+- Column configuration separates Visible and Hidden groups without checkboxes
+  or group backgrounds. Cross-group drops change visibility; within-group drops
+  reorder columns. A floating chip follows pointer, with a faded placeholder
+  and no orange drag outline. Picker labels omit units.
+- Reordering updates only the moved table column and skips unchanged DOM
+  positions. Preference requests are deferred until after a browser paint.
 - Column updates and Reset save quietly; failures still show retry feedback.
 - Existing-row edits save immediately on commit, with session-scoped per-cell
   revert and bulk undo. Undo restores preceding saved value, not original value
