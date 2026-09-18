@@ -12,6 +12,7 @@ CI.run do
   step "Security: Gitleaks audit", "bin/gitleaks-audit"
 
   step "Tests: Rails", "bin/rails test"
+  step "Tests: JavaScript", "node --test test/javascript/*_test.mjs"
   step "Tests: Seeds", "env RAILS_ENV=test bin/rails db:seed:replant"
 
   # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.

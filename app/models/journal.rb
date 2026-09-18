@@ -4,6 +4,7 @@ class Journal
 
   PAGE_SIZE = 30
   MAX_BATCH = 100
+  UUID_PATTERN = /\A[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\z/i
   DEFAULT_COLUMNS = %w[espresso_enjoyment start_time coffee profile_title bean_weight drink_weight duration grinder_setting espresso_notes].freeze
   LABELS = {
     "start_time" => "Brewed", "coffee" => "Coffee", "profile_title" => "Profile",
@@ -89,22 +90,21 @@ class Journal
 
   def page(shots, params)
     if params[:before].present?
-      raise InvalidChange, "Invalid journal cursor" unless params[:before].is_a?(String)
+      raise InvalidChange, "Invalid journal cursor" unless params[:before].is_a?(String) && params[:before_id].is_a?(String) && params[:before_id].match?(UUID_PATTERN)
 
-      cursor = verifier.verified(params[:before], purpose: "journal-page:#{user.id}")
-      raise InvalidChange, "Invalid journal cursor" unless cursor.is_a?(Hash) && cursor["time"].present? && cursor["id"].present?
-
-      shots = shots.where("(start_time, shots.id) < (?, ?)", cursor["time"], cursor["id"])
+      shots = shots.where("(start_time, shots.id) < (?, ?)", Time.iso8601(params[:before]), params[:before_id])
     end
     records = shots.reorder(start_time: :desc, id: :desc).with_notes.includes(:tags, :information).limit(PAGE_SIZE + 1).to_a
     if records.size > PAGE_SIZE
       records.pop
       last = records.last
-      cursor = verifier.generate({"time" => last.start_time.utc.iso8601(6), "id" => last.id}, purpose: "journal-page:#{user.id}", expires_in: 1.day)
+      cursor = {before: last.start_time.utc.iso8601(6), before_id: last.id}
     else
       cursor = nil
     end
     [records, cursor]
+  rescue ArgumentError
+    raise InvalidChange, "Invalid journal cursor"
   end
 
   def value(shot, field)
@@ -133,12 +133,13 @@ class Journal
         check_version(shot, change["version"])
         attributes = permitted_attributes(shot, change["attributes"])
         metadata_keys = change["attributes"]["metadata"]&.keys
+        absent_metadata_keys = Array(metadata_keys) - shot.metadata.keys
         before = snapshot(shot, attributes, metadata_keys:)
         shot.assign_attributes(attributes)
         shot.updated_at = Time.current
         shot.save!
         shot.reload
-        previous << {"id" => shot.id, "attributes" => before, "after" => snapshot(shot, attributes, metadata_keys:)}
+        previous << {"id" => shot.id, "attributes" => before, "after" => snapshot(shot, attributes, metadata_keys:), "absent_metadata_keys" => absent_metadata_keys}
         shots << shot
       end
     end
@@ -160,6 +161,7 @@ class Journal
         raise Conflict, "These fields changed since saving. Reload before reverting." unless current == change["after"]
 
         attributes = permitted_attributes(shot, change["attributes"])
+        attributes["metadata"] = attributes["metadata"].except(*change.fetch("absent_metadata_keys", [])) if attributes.key?("metadata")
         # Persist assignment callbacks first, then restore exact signed snapshot.
         shot.update!(attributes)
         shot.assign_attributes(attributes)
@@ -172,18 +174,19 @@ class Journal
   end
 
   def create(attributes, entry_id)
-    raise InvalidChange, "Invalid draft identifier" unless entry_id.is_a?(String) && entry_id.match?(/\A[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\z/i)
+    raise InvalidChange, "Invalid draft identifier" unless entry_id.is_a?(String) && entry_id.match?(UUID_PATTERN)
 
     user.with_lock do
       existing = scope.find_by(id: entry_id)
       if existing
         raise InvalidChange, "This identifier already belongs to an imported shot" unless existing.manual?
+        raise Conflict, "This shot was already saved with different values. Your draft is still here; open the saved shot to review it." unless existing.sha == creation_sha(attributes)
 
         scope.find(existing.id)
       else
         raise ActiveRecord::RecordNotFound if Shot.exists?(id: entry_id)
 
-        shot = user.shots.new(id: entry_id, sha: "manual:#{SecureRandom.uuid}", public: user.public, start_time: Time.current)
+        shot = user.shots.new(id: entry_id, sha: creation_sha(attributes), public: user.public, start_time: Time.current)
         shot.assign_attributes(permitted_attributes(shot, attributes))
         shot.save!
         shot
@@ -192,6 +195,12 @@ class Journal
   end
 
   private
+
+  def creation_sha(attributes)
+    canonical = attributes.deep_stringify_keys
+    canonical["metadata"] = canonical["metadata"].sort.to_h if canonical["metadata"].is_a?(Hash)
+    "manual:#{Digest::SHA256.hexdigest(canonical.sort.to_h.to_json)}"
+  end
 
   def locked_shots(ids)
     records = scope.where(id: ids).order(:id).lock.with_notes.includes(:information, :tags, coffee_bag: :roaster).index_by(&:id)
@@ -239,7 +248,7 @@ class Journal
       if NOTES.include?(field)
         shot.rich_text_html(field)
       elsif field == "metadata"
-        shot.metadata.slice(*metadata_keys)
+        metadata_keys.index_with { shot.metadata[it] }
       elsif field == "start_time"
         shot.start_time.iso8601(6)
       else

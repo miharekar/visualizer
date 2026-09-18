@@ -123,7 +123,7 @@ class Shot < ApplicationRecord
 
   def daily_limit
     return if user.premium?
-    return if self.class.where(user_id:).where("start_time > NOW() - INTERVAL '1 day'").count < DAILY_LIMIT
+    return if self.class.where(user_id:).where(created_at: 24.hours.ago..).count < DAILY_LIMIT
 
     errors.add(:base, :over_daily_limit, message: "You've reached your daily limit of #{DAILY_LIMIT} shots. Please consider upgrading to a premium account.")
   end

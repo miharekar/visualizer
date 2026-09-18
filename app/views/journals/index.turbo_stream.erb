@@ -1,8 +1,12 @@
-<%= turbo_stream.action(params[:fresh_search] == "1" ? :update : :append, "journal-rows") do %>
-  <%= render partial: "journals/row", collection: @shots, as: :shot, locals: {columns: @columns, visible_columns: @visible_columns} %>
-<% end %>
-<%= turbo_stream.update "shots-count", pluralize(@shots_count, "Shot") %>
-<%= turbo_stream.update "journal-empty", (@shots_count.zero? ? "No matching shots." : "") %>
-<%= turbo_stream.replace "cursor" do %>
-  <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
-<% end %>
+<turbo-stream action="<%= params[:fresh_search] == '1' ? 'update' : 'append' %>" target="journal-rows" data-journal-search-id="<%= @journal_search_id %>" data-journal-fresh-search="<%= params[:fresh_search] == '1' %>">
+  <template><%= render partial: "journals/row", formats: [:html], collection: @shots, as: :shot, locals: {columns: @columns, visible_columns: @visible_columns} %></template>
+</turbo-stream>
+<turbo-stream action="update" target="shots-count" data-journal-search-id="<%= @journal_search_id %>" data-journal-fresh-search="<%= params[:fresh_search] == '1' %>">
+  <template><%= pluralize(@shots_count, "Shot") %></template>
+</turbo-stream>
+<turbo-stream action="update" target="journal-empty" data-journal-search-id="<%= @journal_search_id %>" data-journal-fresh-search="<%= params[:fresh_search] == '1' %>">
+  <template><%= "No matching shots." if @shots_count.zero? %></template>
+</turbo-stream>
+<turbo-stream action="replace" target="cursor" data-journal-search-id="<%= @journal_search_id %>" data-journal-fresh-search="<%= params[:fresh_search] == '1' %>">
+  <template><%= render partial: "shared/cursor_loader", formats: [:html], locals: {cursor: @cursor, path: shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(@cursor || {}).merge(journal_search_id: @journal_search_id, format: :turbo_stream))} %></template>
+</turbo-stream>

@@ -19,6 +19,24 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "td[data-column='bean_weight'] [data-display]", count: 0
     assert_select "lexxy-editor", minimum: 2
     assert_select "form[action='/shots'][method='get']"
+    assert_select "form[data-journal-target='search'] button[data-journal-target='undo'][class~='hidden!']"
+    assert_select "[data-revert], [data-action='journal#retry']", count: 0
+    assert_select "[data-push-notifications-target='bell']"
+  end
+
+  test "all journal columns are available without lazy SQL loads" do
+    @user.update!(shot_metadata_fields: %w[basket water])
+    journal = Journal.new(@user)
+    shots, = journal.page(journal.scope, {})
+    queries = []
+    capture = ->(*args) { queries << args.last[:sql] unless args.last[:name] == "SCHEMA" }
+    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
+      shots.each do |shot|
+        journal.columns.each_key { journal.value(shot, it) }
+        shot.manual?
+      end
+    end
+    assert_empty queries
   end
 
   test "single and batch changes preserve notes and undo exact coffee fields" do
@@ -103,6 +121,32 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
   end
 
+  test "undo removes a newly added metadata key and preserves unrelated edits" do
+    @user.update!(shot_metadata_fields: %w[basket water])
+    @shot.update!(metadata: {water: "soft"})
+    patch journal_url, params: {changes: [change(@shot, metadata: {basket: "IMS"})]}, as: :json
+    assert_response :success
+    undo = response.parsed_body.fetch("undo")
+    @shot.reload.update!(metadata: @shot.metadata.merge("water" => "hard"))
+    patch journal_url, params: {undo:}, as: :json
+    assert_response :success
+    assert_equal({"water" => "hard"}, @shot.reload.metadata)
+  end
+
+  test "multiple signed changes can be undone in reverse order" do
+    undos = []
+    ["19", "20", "21"].each do |value|
+      patch journal_url, params: {changes: [change(@shot, bean_weight: value)]}, as: :json
+      assert_response :success
+      undos << response.parsed_body.fetch("undo")
+    end
+    undos.reverse.zip(%w[20 19 18]).each do |undo, expected|
+      patch journal_url, params: {undo:}, as: :json
+      assert_response :success
+      assert_equal expected, @shot.reload.bean_weight
+    end
+  end
+
   test "manual creation is retry safe supports backdating and requires no telemetry" do
     id = SecureRandom.uuid
     attributes = {start_time: "2026-01-01T08:30:00", bean_weight: "18", espresso_notes: "<p>Peach</p>"}
@@ -130,6 +174,29 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     get api_shot_profile_url(shot, format: :json)
     assert_response :unprocessable_content
+  end
+
+  test "creation replay with changed values conflicts rather than discarding changes" do
+    id = SecureRandom.uuid
+    post shots_url, params: {entry_id: id, shot: {bean_weight: "18"}}, as: :json
+    assert_response :created
+    assert_no_difference "Shot.count" do
+      post shots_url, params: {entry_id: id, shot: {bean_weight: "19"}}, as: :json
+      assert_response :conflict
+    end
+    assert_equal id, response.parsed_body.fetch("shot_id")
+    assert_equal "18", @user.shots.find(id).bean_weight
+  end
+
+  test "creation returns matching count and identifies a pinned nonmatching row" do
+    post shots_url, params: {entry_id: SecureRandom.uuid, shot: {bean_type: "Gesha"}, query: {q: "Gesha"}}, as: :json
+    assert_response :created
+    assert_equal 1, response.parsed_body.fetch("count")
+    assert response.parsed_body.fetch("matches")
+    post shots_url, params: {entry_id: SecureRandom.uuid, shot: {bean_type: "Bourbon"}, query: {q: "Gesha"}}, as: :json
+    assert_response :created
+    assert_equal 1, response.parsed_body.fetch("count")
+    assert_not response.parsed_body.fetch("matches")
   end
 
   test "manual creation without duration renders existing shot views" do
@@ -252,6 +319,15 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "backdating manual shots does not bypass daily creation limit" do
+    @user.update!(premium_expires_at: nil)
+    create_list(:shot, Shot::DAILY_LIMIT - 1, user: @user, start_time: 1.year.ago)
+    assert_no_difference "Shot.count" do
+      post shots_url, params: {entry_id: SecureRandom.uuid, shot: {start_time: 1.year.ago.iso8601}}, as: :json
+      assert_response :unprocessable_content
+    end
+  end
+
   test "infinite loading handles tied timestamps" do
     timestamp = Time.current.change(usec: 0)
     @shot.update!(start_time: timestamp)
@@ -261,13 +337,25 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal Journal::PAGE_SIZE, first_ids.size
     next_url = css_select("turbo-frame#cursor").first["src"]
     assert next_url.present?
+    cursor = Rack::Utils.parse_query(URI.parse(next_url).query)
+    assert_equal timestamp.utc.iso8601(6), cursor.fetch("before")
+    assert_equal first_ids.last, cursor.fetch("before_id")
     get next_url
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
     assert_select "turbo-stream[action='append'][target='journal-rows']"
+    assert_select "turbo-stream[data-journal-search-id='#{cursor.fetch('journal_search_id')}']", count: 4
     second_ids = css_select("tr[data-shot-id]").pluck("data-shot-id")
     assert_empty(first_ids & second_ids)
     assert_equal @user.shots.count, (first_ids + second_ids).size
+  end
+
+  test "fresh searches render HTML rows inside generation-tagged streams" do
+    search_id = SecureRandom.uuid
+    get shots_url(format: :turbo_stream, fresh_search: "1", journal_search_id: search_id)
+    assert_response :success
+    assert_select "turbo-stream[action='update'][target='journal-rows'][data-journal-search-id='#{search_id}'][data-journal-fresh-search='true']"
+    assert_select "tr[data-shot-id='#{@shot.id}']"
   end
 
   test "premium search is instant and enjoyment is first by default" do
