@@ -3,10 +3,7 @@ module Shots
     private
 
     def update_shot_params
-      allowed = [:profile_title, :barista, :bean_weight, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
-      allowed += [:image, :private_notes, *Shot::TASTING_ASSESSMENT_ATTRIBUTES, :tag_list, {tag_list: [], metadata: Current.user.shot_metadata_fields}] if Current.user.premium?
-      allowed << :coffee_bag_id if Current.user.coffee_management_enabled?
-      params.expect(shot: allowed)
+      params.expect(shot: Shot.editable_attributes(Current.user))
     end
 
     def apply_brewdata_updates

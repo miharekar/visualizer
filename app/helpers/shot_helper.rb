@@ -66,9 +66,9 @@ module ShotHelper
     if weights.any?
       weight_part = weights.join(":")
       weight_part << " (1:#{ratio.round(1)})" if ratio&.positive? && ratio&.finite?
-      weight_part << " in #{shot.duration.round(1)}s"
+      weight_part << " in #{shot.duration.round(1)}s" if shot.duration
       parts << weight_part
-    else
+    elsif shot.duration
       parts << "in #{shot.duration.round(1)}s"
     end
 

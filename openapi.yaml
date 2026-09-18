@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.17.1"
+  version: "1.17.2"
   description: |
     REST API for Visualizer.
 
@@ -359,7 +359,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "422":
-          description: Shot has no profile.
+          description: Shot has no profile, including manually logged shots without telemetry.
           content:
             application/json:
               schema:
