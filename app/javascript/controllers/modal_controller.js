@@ -42,6 +42,7 @@ export default class extends Controller {
       this.toggleableTargets.forEach(element => leave(element))
     }
     this.modalShown = false
+    this.dispatch("closed")
   }
 
   performClick() {

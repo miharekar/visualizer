@@ -273,6 +273,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "column choices and defaults follow coffee management mode" do
+    assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
     get shots_url
     assert_select "[data-column-choice='coffee']", count: 0
     assert_select "th[data-column='bean_brand']:not(.hidden)"
@@ -280,6 +281,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "actions", Journal.new(@user).default_columns.last
 
     @user.update!(coffee_management_enabled: true)
+    assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
     get shots_url
     assert_select "[data-column-choice='bean_brand'], [data-column-choice='bean_type']", count: 0
     assert_select "th[data-column='coffee']:not(.hidden)"

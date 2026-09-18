@@ -3,7 +3,7 @@
     <div>
       <%= label_tag "#{prefix}_coffee_bag", "Coffee bag", class: "standard-label" %>
       <%= render "shared/combobox", input_name: "#{prefix}_coffee_bag", hidden_input_name: "coffee_bag_id", hidden_id: "#{prefix}_coffee_bag_id", selected: nil, collection: @coffee_bags, name_method: :full_display_name, preserve_order: true, hidden_data: {shot_field: true} %>
-      <button type="button" class="standard-link mt-2 text-sm" data-action="journal#clearCoffee">Clear coffee bag</button>
+      <button type="button" class="standard-link mt-2 cursor-pointer text-sm" data-action="journal#clearCoffee">Clear coffee bag</button>
     </div>
   <% else %>
     <div data-controller="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path %>" data-autocomplete-min-length-value="<%= CanonicalCoffeeBag::MIN_TERM_LENGTH %>" role="combobox">
