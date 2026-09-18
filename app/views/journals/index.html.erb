@@ -18,10 +18,10 @@
             <div class="flex min-h-14 flex-wrap gap-2 p-2" data-column-visibility="<%= visibility %>" data-journal-target="<%= visibility == 'visible' ? 'visibleColumns' : 'hiddenColumns' %>">
               <% @columns.select { @visible_columns.include?(it) == (visibility == "visible") }.each do |field| %>
                 <div data-column-choice="<%= field %>" class="flex items-center gap-2 rounded border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-800">
-                  <button type="button" class="focus-visible:ring-terracotta-500 cursor-grab touch-none rounded p-1 text-neutral-500 focus-visible:ring-2 active:cursor-grabbing" data-action="pointerdown->journal#startColumnDrag keydown->journal#moveColumn" aria-label="Reorder <%= @journal.columns[field] %>">
+                  <button type="button" class="focus-visible:ring-terracotta-500 cursor-grab touch-none rounded p-1 text-neutral-500 focus-visible:ring-2 active:cursor-grabbing" data-action="pointerdown->journal#startColumnDrag keydown->journal#moveColumn" aria-label="Reorder <%= Current.journal.columns[field] %>">
                     <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" aria-hidden="true"><circle cx="5" cy="3" r="1.5" /><circle cx="11" cy="3" r="1.5" /><circle cx="5" cy="8" r="1.5" /><circle cx="11" cy="8" r="1.5" /><circle cx="5" cy="13" r="1.5" /><circle cx="11" cy="13" r="1.5" /></svg>
                   </button>
-                  <span data-column-label><%= @journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %></span>
+                  <span data-column-label><%= Current.journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %></span>
                 </div>
               <% end %>
             </div>
@@ -61,7 +61,7 @@
         <div class="space-y-3">
           <label class="standard-label">Brewed<%= datetime_local_field_tag :start_time, Time.current.strftime("%Y-%m-%dT%H:%M:%S"), required: true, step: 1, class: "standard-input mt-1", data: {shot_field: true} %></label>
           <% %w[profile_title bean_weight drink_weight duration grinder_setting espresso_enjoyment].each do |field| %>
-            <label class="standard-label"><%= @journal.columns[field] %><input name="<%= field %>" type="<%= journal_input_type(field) %>" step="any" data-shot-field class="standard-input mt-1"></label>
+            <label class="standard-label"><%= Current.journal.columns[field] %><input name="<%= field %>" type="<%= journal_input_type(field) %>" step="any" data-shot-field class="standard-input mt-1"></label>
           <% end %>
         </div>
         <div><label for="draft_notes" class="standard-label">Notes</label><%= rich_text_area_tag :espresso_notes, nil, id: "draft_notes", data: {shot_field: true} %></div>
@@ -75,7 +75,7 @@
           <tr>
             <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800"><input type="checkbox" aria-label="Select up to <%= Journal::MAX_BATCH %> loaded shots" data-action="journal#selectAll" class="standard-checkbox size-4"></th>
             <% @columns.each do |field| %>
-              <th scope="col" data-column="<%= field %>" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %> <%= 'hidden' unless @visible_columns.include?(field) %>"><%= @journal.columns[field] %></th>
+              <th scope="col" data-column="<%= field %>" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %> <%= 'hidden' unless @visible_columns.include?(field) %>"><%= Current.journal.columns[field] %></th>
             <% end %>
           </tr>
         </thead>
@@ -91,7 +91,7 @@
       <form data-journal-target="dialogForm" data-action="submit->journal#saveDialog" class="space-y-4">
         <div data-journal-target="coffeeFields" class="space-y-3"><%= render "journals/coffee_fields" %></div>
         <div data-journal-target="fieldFields" class="space-y-3">
-          <label class="standard-label">Field<select name="field" class="standard-input mt-1"><% @journal.columns.except("coffee", *Journal::NOTES).each do |field, label| %><option value="<%= field %>"><%= label %><%= " (manual shots only)" if %w[start_time duration].include?(field) %></option><% end %></select></label>
+          <label class="standard-label">Field<select name="field" class="standard-input mt-1"><% Current.journal.columns.except("coffee", *Journal::NOTES).each do |field, label| %><option value="<%= field %>"><%= label %><%= " (manual shots only)" if %w[start_time duration].include?(field) %></option><% end %></select></label>
           <label class="standard-label">Value<input name="value" class="standard-input mt-1"></label>
         </div>
         <div data-journal-target="tagFields" class="space-y-3"><label class="standard-label">Action<select name="tag_action" class="standard-input"><option value="add">Add tags</option><option value="remove">Remove tags</option></select></label><label class="standard-label">Tags<input name="tags" class="standard-input" placeholder="Comma-separated tags"></label></div>

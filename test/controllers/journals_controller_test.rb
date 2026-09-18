@@ -135,7 +135,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "multiple signed changes can be undone in reverse order" do
     undos = []
-    ["19", "20", "21"].each do |value|
+    %w[19 20 21].each do |value|
       patch journal_url, params: {changes: [change(@shot, bean_weight: value)]}, as: :json
       assert_response :success
       undos << response.parsed_body.fetch("undo")

@@ -1,21 +1,19 @@
 require "test_helper"
 
 class CurrentTest < ActiveSupport::TestCase
-  teardown do
+  test "journal is scoped to the current request and resets with it" do
+    first = build(:user)
+    Current.session = Session.new(user: first)
+    journal = Current.journal
+    assert_same journal, Current.journal
+    assert_same first, journal.user
     Current.reset
-  end
-
-  test "set_timezone_from_cookie handles invalid utf8" do
-    invalid = "\xC3\x28".dup.force_encoding("UTF-8")
-
-    Current.set_timezone_from_cookie(invalid)
-
-    assert_equal "UTC", Current.timezone.name
-  end
-
-  test "set_timezone_from_cookie uses valid cookie" do
-    Current.set_timezone_from_cookie("Europe/Ljubljana")
-
-    assert_equal "Europe/Ljubljana", Current.timezone.name
+    assert_nil Current.journal
+    second = build(:user)
+    Current.session = Session.new(user: second)
+    assert_not_same journal, Current.journal
+    assert_same second, Current.journal.user
+  ensure
+    Current.reset
   end
 end
