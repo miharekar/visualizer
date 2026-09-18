@@ -202,7 +202,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "Turbo profile save redirects to HTML shots view with notice" do
     headers = {"Accept" => "text/vnd.turbo-stream.html, text/html"}
-    patch profile_url, params: {user: {skin: "Dark"}}, headers: headers
+    patch(profile_url, params: {user: {skin: "Dark"}}, headers:)
     assert_redirected_to shots_path(format: :html)
     assert_equal "Dark", @user.reload.skin
     follow_redirect!(headers:)
@@ -276,6 +276,20 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "espresso_enjoyment", css_select("thead th[data-column]").first["data-column"]
     assert_select "th", text: "Details", count: 0
     assert_select "select[name='sort'], select[name='direction'], input[type='submit'][value='Search']", count: 0
+  end
+
+  test "single search combines coffee tags and brew date in user timezone" do
+    shot = create(:shot, user: @user, bean_type: "Gesha", start_time: Time.utc(2026, 9, 17, 22, 15), tag_list: "daily")
+    get shots_url(q: "Gesha daily 2026-09-18")
+    assert_response :success
+    assert_select "tr[data-shot-id='#{shot.id}']"
+    assert_select "tr[data-shot-id='#{@shot.id}']", count: 0
+    assert_select "form[data-journal-target='search'] [name='start_date'], form[data-journal-target='search'] [name='coffee_bag'], form[data-journal-target='search'] [name='tags']", count: 0
+    get shots_url(q: "Gesha 18.09.2026")
+    assert_response :success
+    assert_select "tr[data-shot-id='#{shot.id}']"
+    get shots_url(q: "Gesha daily 2026-09-17")
+    assert_select "tr[data-shot-id]", count: 0
   end
 
   private

@@ -68,11 +68,18 @@ class Journal
 
   def search(params)
     shots = scope
-    if params[:q].present?
-      query = "%#{Shot.sanitize_sql_like(params[:q])}%"
-      fields = %w[profile_title bean_brand bean_type grinder_model espresso_notes bean_notes]
+    params[:q].to_s.split.each do |term|
+      query = "%#{Shot.sanitize_sql_like(term)}%"
+      fields = %w[profile_title bean_brand bean_type grinder_model espresso_notes bean_notes roast_date]
       fields << "private_notes" if user.premium?
-      shots = shots.where(fields.map { "#{it} ILIKE :query" }.join(" OR "), query:)
+      conditions = fields.map { "#{it} ILIKE :query" }
+      conditions << "TO_CHAR(start_time AT TIME ZONE 'UTC' AT TIME ZONE :timezone, :date_format) ILIKE :query"
+      matches = scope.where(conditions.join(" OR "), query:, timezone: Current.timezone.tzinfo.name, date_format: "YYYY-MM-DD DD.MM.YYYY MM.DD.YYYY YYYY.MM.DD Mon DD YYYY HH24:MI")
+      if user.premium?
+        tags = user.tags.where("name ILIKE ?", query).select(:id)
+        matches = matches.or(scope.where(id: ShotTag.where(tag_id: tags).select(:shot_id)))
+      end
+      shots = shots.merge(matches)
     end
     shots = shots.where(coffee_bag_id: user.coffee_bags.find(params[:coffee_bag]).id) if params[:coffee_bag].present? && user.coffee_management_enabled?
     shots = shots.with_all_tag_slugs(params[:tags]) if user.premium? && params[:tags].present?

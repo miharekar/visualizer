@@ -64,3 +64,25 @@ test("failed requests can be retried without replaying successful saves", async 
   assert.equal(journal.failures.size, 0)
   assert.equal(journal.pending.size, 0)
 })
+
+test("column saves are quiet but failures remain visible", async () => {
+  const journal = controller()
+  const target = () => ({ classList: { toggle() {}, add() {}, remove() {} } })
+  journal.saveBarTarget = target()
+  journal.retryTarget = target()
+  journal.reloadTarget = target()
+  journal.rowsTarget = { querySelectorAll: () => [] }
+  journal.refreshStatus = JournalController.prototype.refreshStatus.bind(journal)
+  journal.enqueue(async () => {}, [], "columns")
+  await settled()
+  assert.equal(journal.statusTarget.textContent, "")
+  journal.enqueue(
+    async () => {
+      throw new Error("Network unavailable")
+    },
+    [],
+    "columns"
+  )
+  await settled()
+  assert.match(journal.statusTarget.textContent, /Couldn't save: Network unavailable/)
+})
