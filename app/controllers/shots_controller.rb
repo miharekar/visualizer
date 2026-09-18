@@ -2,6 +2,7 @@ class ShotsController < ApplicationController
   include Filterable
   include Paginatable
   include Shots::Editing
+  include Shots::JournalRows
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
   before_action :load_shot, only: %i[show compare share beanconqueror]
@@ -13,14 +14,14 @@ class ShotsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html
-      format.turbo_stream
+      format.html { render "journals/index" if @journal }
+      format.turbo_stream { render "journals/index" if @journal }
       format.json { render_api_endpoint_error }
     end
   end
 
   def search
-    render :index
+    render(@journal ? "journals/index" : :index)
   end
 
   def show
@@ -35,7 +36,11 @@ class ShotsController < ApplicationController
 
   def compare
     @comparison = Shot.find(params[:comparison])
-    @chart = ShotChartCompare.new(@shot, @comparison, Current.user) if @shot.information && @comparison.information
+    if @shot.information && @comparison.information
+      @chart = ShotChartCompare.new(@shot, @comparison, Current.user)
+    else
+      redirect_to @shot, alert: "Both shots need chart data to compare."
+    end
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
@@ -57,25 +62,10 @@ class ShotsController < ApplicationController
   end
 
   def create
-    files = Array(params[:files])
-    shots = files.map { |file| Shot.from_file(Current.user, file.read) }
-
-    if shots.all?(&:save)
-      flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
+    if request.format.json?
+      create_manual_shot
     else
-      flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
-        "You uploaded a profile file, not a history file. Please upload a history file."
-      else
-        {heading: "Could not save the provided #{"file".pluralize(files.count)}", text: shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}
-      end
-    end
-  rescue StandardError => e
-    flash[:alert] = "Something went wrong: #{e.message}"
-  ensure
-    if params.key?(:drag)
-      head :ok
-    else
-      redirect_to action: :index, format: :html
+      upload_files
     end
   end
 
@@ -114,6 +104,39 @@ class ShotsController < ApplicationController
 
   private
 
+  def create_manual_shot
+    @journal = Journal.new(Current.user)
+    shot = @journal.create(params.expect(shot: {}).to_h, params[:entry_id])
+    render json: {rows: journal_rows([shot])}, status: :created
+  rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error
+    render json: {error: error.message}, status: :unprocessable_content
+  rescue ActiveRecord::RecordNotFound
+    render json: {error: "Shot or coffee not available"}, status: :not_found
+  end
+
+  def upload_files
+    files = Array(params[:files])
+    shots = files.map { |file| Shot.from_file(Current.user, file.read) }
+
+    if shots.all?(&:save)
+      flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
+    else
+      flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
+        "You uploaded a profile file, not a history file. Please upload a history file."
+      else
+        {heading: "Could not save the provided #{"file".pluralize(files.count)}", text: shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}
+      end
+    end
+  rescue StandardError => e
+    flash[:alert] = "Something went wrong: #{e.message}"
+  ensure
+    if params.key?(:drag)
+      head :ok
+    else
+      redirect_to action: :index, format: :html
+    end
+  end
+
   def load_shot
     @shot = Shot.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -127,6 +150,8 @@ class ShotsController < ApplicationController
   end
 
   def load_users_shots
+    return load_journal if Current.user.journal_enabled?
+
     @shots = Current.user.shots.with_attached_image
     @tag_slugs = params[:tags].to_s.split(",")
 
@@ -146,6 +171,18 @@ class ShotsController < ApplicationController
     @shots_count = @shots.count
 
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
+  end
+
+  def load_journal
+    @journal = Journal.new(Current.user)
+    shots = @journal.search(params)
+    @count = @shots_count = shots.count
+    @shots, @cursor = @journal.page(shots, params)
+    @columns = @journal.ordered_columns
+    @visible_columns = @journal.visible_columns
+    @coffee_bags = Current.user.coffee_management_enabled? ? Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name : []
+  rescue Journal::InvalidChange => error
+    redirect_to shots_path, alert: error.message
   end
 
   def load_related_shots

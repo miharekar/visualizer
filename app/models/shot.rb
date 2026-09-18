@@ -46,6 +46,13 @@ class Shot < ApplicationRecord
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
   scope :with_notes, -> { with_rich_text_bean_notes_and_embeds.with_rich_text_espresso_notes_and_embeds.with_rich_text_private_notes_and_embeds }
 
+  def self.editable_attributes(user)
+    allowed = [:profile_title, :barista, :bean_weight, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
+    allowed += [:image, :private_notes, *TASTING_ASSESSMENT_ATTRIBUTES, :tag_list, {tag_list: [], metadata: user.shot_metadata_fields}] if user.premium?
+    allowed << :coffee_bag_id if user.coffee_management_enabled?
+    allowed
+  end
+
   def self.from_file(user, file_content)
     return Shot.new(user:) if file_content.blank?
 
@@ -57,6 +64,10 @@ class Shot < ApplicationRecord
     return all if slugs.empty?
 
     where(id: ShotTag.joins(:tag).where(tags: {slug: slugs}).group(:shot_id).having("COUNT(DISTINCT tags.slug) = ?", slugs.size).select(:shot_id))
+  end
+
+  def manual?
+    information.nil?
   end
 
   def metadata
@@ -180,8 +191,8 @@ end
 # Indexes
 #
 #  index_shots_on_airtable_id              (airtable_id)
-#  index_shots_on_bean_brand               (bean_brand) USING gin
-#  index_shots_on_bean_type                (bean_type) USING gin
+#  index_shots_on_bean_brand               (bean_brand gin_trgm_ops) USING gin
+#  index_shots_on_bean_type                (bean_type gin_trgm_ops) USING gin
 #  index_shots_on_canonical_coffee_bag_id  (canonical_coffee_bag_id)
 #  index_shots_on_coffee_bag_id            (coffee_bag_id)
 #  index_shots_on_created_at               (created_at)

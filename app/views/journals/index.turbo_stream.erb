@@ -1,0 +1,7 @@
+<%= turbo_stream.action(params[:fresh_search] == "1" ? :update : :append, "journal-rows") do %>
+  <%= render partial: "journals/row", collection: @shots, as: :shot, locals: {columns: @columns, visible_columns: @visible_columns} %>
+<% end %>
+<%= turbo_stream.update "shots-count", pluralize(@count, "Shot") %>
+<%= turbo_stream.replace "cursor" do %>
+  <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :start_date, :coffee_bag, :tags).permit(:q, :start_date, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
+<% end %>

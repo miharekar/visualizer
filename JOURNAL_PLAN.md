@@ -1,266 +1,162 @@
 # Journal implementation plan
 
-Status: scope refined; implementation not started.
+Status: implemented; final verification in progress.
 
 ## Goal
 
-Make Visualizer a useful coffee journal: manage imported brews, record taste,
-recover successful recipes, and compare dialing-in attempts from one page.
-First concrete acceptance scenario: seven shots using three coffees can be
-assigned their coffees, rated, and annotated without visiting seven edit pages.
-Second acceptance scenario: log a manual brew as a new row, with coffee,
-brew time, dose, yield, duration, enjoyment, and notes, without leaving Journal.
+Make Visualizer a useful coffee journal: manage imported brews, log manual
+brews, record taste, recover successful recipes, and review dialing-in attempts.
 
-Vladimir's September 2026 feedback supplies longer-term direction: recording
-every shot becomes a chore once users know their preferences. Learning from
-others brewing the same coffee could make history useful again, particularly
-for the first shots from a new bag. Lower logging friction now; preserve
-structured coffee identity for future community discovery.
+Acceptance scenarios:
+
+1. Seven shots using three coffees can be assigned coffees, rated, and annotated
+   without visiting seven edit pages.
+2. A manual brew can be created and subsequently edited without leaving list.
+
+Vladimir's September 2026 feedback supplies longer-term direction: logging
+becomes a chore once users know their preferences. Learning from others brewing
+the same coffee could make history useful again, especially with a new bag.
+Reduce logging friction now; preserve structured coffee identity for future
+community discovery.
 
 ## Confirmed decisions
 
-- Name: **Journal**, separate `/journal` resource.
-- Available to everyone. No beta gate.
-- Add account setting to show Journal instead of existing shot index; default
-  off. This supersedes initial beta-only rollout and deferred setting proposal.
-- Existing shot index remains available.
-- Create manual shots directly in Journal through an inline new-row workflow.
-- Desktop-first; usable on mobile. No double-tap requirement for core editing.
-- Immediate saving with session-scoped revert to immediately preceding saved
-  value. A bulk operation is one undoable action. Undo does not survive reload
-  or navigation; durable revision history is outside initial scope.
-- Free users can sort and submit searches. Preserve submitted-search behavior
-  rather than enabling premium-style instant filtering for free users.
-- Free users cannot view or edit old shots through Journal. Preserve existing
-  history cutoff and field entitlements.
-- Essentials first; column visibility and order persist on user account and
-  follow user across browsers/devices from initial release.
-- Use existing Rails, Turbo, Stimulus, and Tailwind stack. No third-party grid
-  or spreadsheet JavaScript dependency.
+- Journal is an optional **view of `/shots`**, not a separate destination.
+- Account setting defaults off and is available to everyone. No beta gate.
+- Main navigation still says **Shots** and stays active in either view.
+- Reuse classic shot-index width, spacing, count heading, push notification
+  button, Upload button/panel, and drag-and-drop upload behavior. Add **Create
+  a shot** beside those controls.
+- No Journal heading or instructional subtitle.
+- Rails/Turbo/Stimulus/Tailwind only; no grid/spreadsheet dependency.
+- Desktop-first, usable on mobile with single-tap controls.
+- Ordinary cells are inputs all along, styled as text until focused. No
+  duplicated text display and hidden input.
+- **Enjoyment first by default**, with existing red-to-green color treatment.
+- Brewed time links to existing shot page. No Details column or details panel.
+- Always newest-to-oldest; no Sort/Order controls or alternate row ordering.
+- Infinite loading, using existing lazy Turbo-frame pattern. Cursor uses brew
+  timestamp and shot UUID so equal timestamps do not skip rows.
+- Premium search is instant and preserves focus; no Search button. Free users
+  submit search explicitly. Search field fills remaining header-row width.
+- Free users cannot read/edit old shots through Journal. Existing cutoff is
+  based on upload `created_at`, not brew time. Premium field entitlements apply.
+- Column visibility and order persist on account from initial rollout.
+  `journal_columns = NULL` means default layout; empty settings also fall back.
+- Existing-row edits save immediately on commit, with session-scoped per-cell
+  revert and bulk undo. Undo restores preceding saved value, not original value
+  from page load, and preserves unrelated later edits.
+- Notes use rich-text dialog with explicit **Save notes**. Cancel/Escape saves
+  nothing. This supersedes initial delayed-autosave proposal for notes.
 
-## Initial interface
+## Columns and workflows
 
-Coffee-aware table using familiar spreadsheet interactions and existing
-Visualizer styling. Display values normally; activate editors when needed.
+Default columns, in order:
 
-- Inline editing and row selection.
-- **Add shot** opens an inline draft row; no separate creation page.
-- Selected-row toolbar: assign coffee, set field, add/remove tags where allowed.
-- Search/filter/sort across accessible history, not only loaded rows.
-- Sticky selection/date context during horizontal scrolling.
-- Notes previews and rich-text editing in expandable details/side panel.
-- Links to existing chart and comparison workflows.
-- Column show/hide and reorder, persisted to user account.
-- Single-tap editing on mobile with visible controls.
+1. Enjoyment
+2. Brewed
+3. Coffee
+4. Profile
+5. Dose
+6. Yield
+7. Time
+8. Grind
+9. Notes
 
-Rectangular selection, multi-cell paste, and fill-down remain exploratory:
-implement only if needed to make initial workflows effective. Start with a
-semantic HTML table and small Stimulus interactions, not a general spreadsheet
-engine.
+Additional columns: grinder, roaster, coffee name, barista, roast date/level,
+TDS/EY, bean notes, tags, private notes, tasting assessments, custom metadata.
+Premium entitlements govern availability independently of saved column choices.
 
-### Proposed default columns
+Coffee assignment uses own bags when coffee management is enabled; otherwise
+canonical coffee search and manual roaster/name fields. Assignment preserves
+measurements. Bulk toolbar supports coffee assignment, setting individual
+fields, adding/removing tags, and entering existing two-shot comparison.
 
-| Column | Behavior |
-| --- | --- |
-| Brewed | Brew date/time; editable for manual shots, imported shots read-only initially |
-| Coffee | Roaster and coffee; searchable assignment editor |
-| Profile | Existing profile title; editable |
-| Dose | Editable |
-| Yield | Editable |
-| Time | Duration; editable for manual shots, imported shots read-only initially |
-| Grind | Editable setting |
-| Enjoyment | Existing 0–100 score and color treatment |
-| Notes | Shot-note preview; rich-text editor |
+Manual shots:
 
-Additional columns: grinder, tags, barista, roast date/level, TDS/EY, tasting
-assessments, and custom metadata, subject to existing entitlements. Bean notes
-and private notes available in details. Final default layout needs validation
-against realistic data and viewport widths.
+- **Create a shot** opens inline creation panel without “New shot” heading.
+- Brew time defaults to now in user's configured time zone; backdating allowed.
+- Coffee, profile, measurements, enjoyment, and rich notes can be entered.
+- Cancel and Add shot are right-aligned; Add shot is rightmost.
+- No record until Add shot succeeds. Cancel abandons draft.
+- Absence of `ShotInformation` identifies manual entry; no manual-origin column.
+- Draft keeps one ordinary shot UUID across retries, preventing duplicate
+  creation. Required `sha` generated server-side.
+- No telemetry/profile required; measurements optional. Manual duration can be
+  edited in row; manual brew time through Set field. Imported timestamp and
+  duration stay read-only.
+- Existing free daily creation limit and premium field entitlements apply.
+- Creation is separate from field undo; use existing shot deletion if needed.
 
-Coffee assignment follows existing modes: own bags when coffee management is
-enabled; canonical coffee search and manual roaster/coffee fields otherwise.
-Never overwrite dose/yield or other measurements when assigning coffee.
+## Persistence and safety
 
-## Manual shot creation
-
-Proposed interaction:
-
-- **Add shot** opens a draft row, even when history is empty. Focus coffee picker;
-  default brewed time to now in user's time zone. Allow backdating.
-- Enter available details without requiring a profile, telemetry, or an upload.
-  Measurements and notes are optional; never fabricate defaults for them.
-- Explicit **Add shot** commits draft; Cancel removes it without creating a
-  record. Existing-row edits continue to autosave. This avoids persisting an
-  empty shot merely because user entered or tabbed through a new row.
-- Once created, row uses normal autosave/revert. Keep it visible long enough to
-  finish editing even if current filters or sort would place it elsewhere;
-  indicate when it does not match current filters.
-- Failed creation retains draft and field errors. Repeated submissions/retries
-  must not create duplicate shots.
-- Manual brew date/time and duration remain editable after creation. Represent
-  manual origin explicitly, rather than inferring it from missing chart data.
-- Respect existing free daily creation limit and premium field entitlements.
-- Chart/profile actions are unavailable when no corresponding data exists;
-  manual rows still support ordinary journal and coffee-management workflows.
-
-Creation is separate from field revert: cancel works before creation; after
-creation, use existing single-shot deletion behavior if row needs removing.
-Do not imply that session undo automatically deletes a newly created shot.
-
-## Saving and undo
-
-- Ordinary cells commit on Enter, Tab, or blur; Escape cancels uncommitted edit.
-- Notes save after typing pause; preserve rich-text formatting.
-- Show Saving / Saved / Couldn't save without disruptive notifications.
-- Send only changed fields; distinguish omitted values from explicit clearing.
-- Failed saves retain entered values and offer retry.
-- Per-cell Revert shows and restores preceding saved value through server save.
-- Bulk Undo restores complete operation, including coffee fields changed by
-  model callbacks. Restore original values separately for each affected shot.
-- Check concurrency for edits and undo; never overwrite newer changes silently.
-- Serialize/coalesce overlapping saves so older responses cannot replace newer
-  input. Do not refresh editable rows in ways that discard active edits.
-- Bulk operations commit atomically or return actionable field/row errors.
-
-## Existing code and constraints
-
-- `app/controllers/shots_controller.rb`: current listing, search, editing,
-  coffee-bag loading, history handling.
-- `app/controllers/shots/editing.rb`: shared permitted fields and premium rules.
-- `app/models/shot.rb`: coffee assignment callbacks, tags, metadata, history scopes.
-- `app/javascript/controllers/shot_copier_controller.js`: highlight/revert UX
-  reference. Existing revert modifies an unsaved form; Journal undo must persist.
-- `app/views/shots/_form.html.erb`: field editors and entitlement-specific UI.
-
-Important implementation constraints:
-
-- Current free history uses `created_at` within one month, not brew `start_time`.
-  Existing direct owner edit does not enforce that cutoff. Journal must enforce
-  it for both reads and writes, including direct requests and undo.
-- Authenticate and owner-scope all requested shots and own coffee bags.
-- Preserve premium rules for coffee management, tags, custom metadata, private
-  notes, and tasting assessments. Review read serialization as well as writes.
-- Numeric-looking values such as grinder setting and weights are often strings.
-  Preserve legitimate existing values rather than coercing indiscriminately.
-- Coffee assignment changes related fields. Return authoritative updated rows.
-- Rich notes must not be flattened by unrelated cell saves.
-- Merge individual metadata edits without dropping untouched keys.
-- Tag setters mutate associations during assignment; transactions must cover
-  assignment as well as save.
-- Use model saves, not `update_all`, to preserve validation and integrations.
-- Stable pagination/sorting must handle equal timestamps.
-- Existing shot-card live broadcasts cannot replace Journal rows directly.
-- Manual creation must satisfy `Shot` identity requirements (`sha`, owner,
-  `start_time`) server-side without pretending to be an uploaded file. Inspect
-  identity/deduplication callers before choosing representation.
-- Audit source detection, chart rendering, exports, notifications, and Airtable
-  sync for shots without `ShotInformation`. Keep ordinary model callbacks.
-- Validate manual timestamps and duration server-side, including time zones and
-  blank/invalid values. Creation-only fields must not silently become editable
-  on imported shots through a generic batch payload.
-- Keep web Journal separate from public API. Check OpenAPI impact if shared
-  behavior changes; bump `info.version` whenever `openapi.yaml` changes.
+- `GET /shots` renders classic index or Journal based on account preference.
+- `POST /shots` creates manual shot via JSON or handles existing file uploads.
+- `PATCH /shots/journal` saves bounded batches
+  or reverts signed snapshots. These are internal session-authenticated writes.
+- `PATCH /profile/journal_columns` persists account layout.
+- Share editable-field rules through `Shot.editable_attributes(user)`.
+- Owner-scope shots and own coffee bags. Recheck history and premium access on
+  every write, including undo.
+- Maximum 100 distinct shots per atomic batch. Use model saves to preserve
+  validation, tag/note setters, coffee callbacks, broadcasts, and Airtable sync.
+- Preserve string-valued measurements/grinder settings, omitted fields,
+  untouched metadata, and rich-text formatting.
+- Serialize client saves; retain failed edits independently and continue saving
+  other cells. Correcting a failed value replaces its failed operation. Offer
+  retry/reload without making validation errors block the entire editor.
+- Lock records and check versions for edits. Signed undo snapshots check
+  affected values, preserving unrelated later edits and rejecting conflicts.
+- Coffee undo includes related fields changed by assignment callbacks.
+- New rows remain visible until next search; background uploads do not replace
+  actively edited rows. Infinite loading skips already-present row IDs.
+- Existing chartless shot views tolerate missing duration; profile download
+  returns documented 422 for manual shots. OpenAPI version bumped accordingly.
 
 ## Implementation checklist
 
-### 1. Validate native table and interaction design
+- [x] Inspect routes, preferences, editing rules, parsers, callbacks, and tests.
+- [x] Add default-off Journal setting and nullable account column preferences.
+- [x] Select interface at `/shots`; preserve Shots navigation and settings flow.
+- [x] Share classic index header, sizing, notification and upload controls.
+- [x] Implement native table, text-styled inputs, enjoyment colors, coffee picker.
+- [x] Add atomic bulk editing, tag operations, version checks, signed undo.
+- [x] Add rich-note editing with explicit save and Escape cancellation.
+- [x] Add manual creation, retry identity, timestamp/duration support.
+- [x] Add account column visibility/order controls and NULL reset fallback.
+- [x] Add newest-first infinite loading with timestamp/UUID cursor.
+- [x] Add submitted free search and focus-preserving premium instant search.
+- [x] Keep existing chart/comparison entry points; handle chartless manual shots.
+- [ ] Finish controller/model regression checks and browser smoke checks against
+      latest UI changes, including settings enablement, NULL preferences,
+      cancellation, pagination, failed saves, keyboard and mobile use.
+- [ ] Format templates with rustywind/htmlbeautifier and JavaScript with Prettier.
+- [ ] Run RuboCop and relevant security checks; record final results below.
 
-- [ ] Build server-rendered semantic table using existing Rails/Turbo patterns;
-      use Stimulus for inline editors, selection, keyboard handling, and undo.
-- [ ] Validate coffee and rich-text editors, dark mode, accessible column
-      controls, and mobile interaction with existing components.
-- [ ] Confirm default columns using seven-shot/three-coffee scenario.
-- [ ] Validate inline manual creation, including empty history and active filters.
+## Verification log
 
-Third-party grids were explored during discovery; implementation uses native
-HTML and existing Hotwire stack. Keep behavior specific to Journal workflows.
+- Earlier targeted run: 79 tests, 334 assertions, no failures/errors; subsequent
+  UI refinements require rerun.
+- Chromium smoke checks have exercised inline save/revert, bulk assignment,
+  note save/Escape cancellation, manual creation, column persistence, infinite
+  loading, premium search retaining focus, and mobile coffee editing.
+- Default parallel Rails test execution exhausted local Postgres connections;
+  use `PARALLEL_WORKERS=1` for remaining checks.
+- Temporary browser tooling installed outside repository; no app dependency.
 
-### 2. Account preference and navigation
+## Concrete follow-up
 
-- [ ] Add persisted preference, default false, and profile settings control.
-- [ ] Persist column visibility/order on user account using stable identifiers;
-      validate allowed columns, preserve sensible defaults for newly added
-      columns, and apply premium entitlements independently of preferences.
-- [ ] Trace default landing page, navigation, and redirects; honor preference
-      consistently without redirect loops or changing chart/detail URLs.
-- [ ] Keep explicit access to both Journal and existing shot index.
-- [ ] Test default-off behavior and setting persistence for free/premium users.
-
-### 3. Journal resource and data access
-
-- [ ] Add `GET /journal` for page and bounded/paginated row data.
-- [ ] Add `PATCH /journal` for bounded batches of changed fields.
-- [ ] Add a RESTful manual-shot creation endpoint, separate from file-upload
-      handling; choose resource path consistently with repository conventions.
-- [ ] Implement explicit manual origin and server-generated identity after
-      tracing existing parser/source/deduplication behavior.
-- [ ] Support manual brew timestamp/duration on create and subsequent edits.
-- [ ] Preserve creation limits and prevent duplicate creation on retries.
-- [ ] Share existing editable-field rules without copying controller logic.
-- [ ] Enforce ownership, history cutoff, and premium entitlements server-side.
-- [ ] Implement submitted search/sorting for free users and preserve premium
-      instant-filter behavior; inspect current search paths before sharing them.
-- [ ] Validate payload shape, fields, IDs, and batch limits before mutation.
-- [ ] Add atomic bulk updates and concurrency checks under appropriate locks.
-- [ ] Return updated rows and useful validation/conflict errors.
-
-### 4. Journal editing interface
-
-- [ ] Render table, keyboard-accessible editors, selection, and bulk toolbar.
-- [ ] Add inline draft row, create/cancel controls, and transition to saved row.
-- [ ] Implement coffee assignment with existing coffee-management modes.
-- [ ] Add enjoyment, measurement, and rich-note editing.
-- [ ] Add save states, retry, per-cell revert, and bulk undo.
-- [ ] Add details panel and chart/comparison entry points.
-- [ ] Add column visibility/order controls backed by account preferences.
-- [ ] Preserve active edits during search, pagination, navigation, and failures.
-
-### 5. Verification and completion
-
-- [ ] Verify seven shots / three coffees can be managed without leaving Journal.
-- [ ] Verify manual creation and subsequent edits without telemetry, including
-      time zones, backdating, optional measurements, validation failures,
-      cancellation, duplicate retries, and free-user creation limits.
-- [ ] Verify manual shots work in existing index/details, coffee management,
-      exports, notifications, and integrations; omit unsupported chart actions.
-- [ ] Test unauthenticated requests, foreign shot/bag IDs, old free-history
-      records, premium fields, malformed requests, and direct endpoint access.
-- [ ] Test multi-row success, rollback, clears, stale edits, and undo side effects.
-- [ ] Verify rich notes and untouched metadata survive unrelated edits.
-- [ ] Verify pagination ties and history-wide search/sorting.
-- [ ] Verify column preferences persist across sessions/devices and remain
-      valid when available columns or premium entitlements change.
-- [ ] Exercise rapid edits, failed saves, keyboard-only use, and mobile tapping.
-- [ ] Run relevant Rails tests and RuboCop; format changed templates with
-      rustywind/htmlbeautifier and JavaScript with Prettier.
-- [ ] If dependencies change, run required security/dependency checks.
-- [ ] Update this checklist and record final interaction decisions.
-
-## Concrete follow-ups
-
-- **Community discovery by coffee:** explore other users' successful brews with
-  same coffee, particularly for dialing in a new bag. Separate product discovery;
-  does not depend on recruiting roasters to publish recipes.
-
-Other features require a concrete user workflow before entering this plan.
-Manual creation is part of initial delivery.
+Community discovery by coffee: find other users' successful brews with same
+coffee, particularly for dialing in a new bag. Separate product discovery;
+does not depend on recruiting roasters to publish recipes.
 
 ## Research references
 
-- [Visualizer #77: bulk field editing](https://github.com/miharekar/visualizer/issues/77)
-  — assign common coffee details across many shots; previously deferred to Airtable.
-- [Visualizer #71: streamline data entry](https://github.com/miharekar/visualizer/issues/71)
-  — fewer repeated interactions matter more than keyboard support alone.
-- [Visualizer #242: copied yield overwrites measurement](https://github.com/miharekar/visualizer/issues/242)
-  — preserve imported measurements unless explicitly edited.
+- [Visualizer #77: bulk editing](https://github.com/miharekar/visualizer/issues/77)
+- [Visualizer #71: data-entry friction](https://github.com/miharekar/visualizer/issues/71)
+- [Visualizer #242: preserve measured yield](https://github.com/miharekar/visualizer/issues/242)
 - [Visualizer #162: preparation-method search](https://github.com/miharekar/visualizer/issues/162)
-  — interest extends beyond machine-specific espresso profiles.
 - [Beanconqueror](https://beanconqueror.com/) and [Filtru](https://filtru.coffee/)
-  — examples of bean-centered history, taste notes, and repeatable brewing.
-- [Tabulator range interactions](https://tabulator.info/docs/6.3/range)
-  and [license](https://tabulator.info/docs/6.3/license).
-- [AG Grid Community vs Enterprise](https://www.ag-grid.com/javascript-data-grid/community-vs-enterprise/).
 
-Reddit access was blocked and forum searches yielded no usable evidence;
-community-demand conclusions above rely on linked Visualizer issues, not
-unverified forum claims.
+Reddit request returned HTTP 403; forum searches yielded no usable evidence.
+Demand conclusions rely on linked Visualizer issues and supplied user feedback.
