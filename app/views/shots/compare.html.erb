@@ -17,13 +17,13 @@
 <% if tasting_series.any? %>
   <%= render "tasting_assessment", categories: tasting_assessment_categories, series: tasting_series, show_legend: true %>
 <% end %>
-<% if @chart %>
+<% if @chart&.has_data? %>
   <div data-controller="shot-charts"
        data-shot-charts-shot-data-value="<%= (@chart.shot_chart || []).to_json %>"
        data-shot-charts-shot-stages-value="[]"
        data-shot-charts-temperature-data-value="<%= (@chart.temperature_chart || []).to_json %>"
        data-shot-charts-comparison-data-value="<%= (@chart.comparison_data || {}).to_json %>">
-    <% if Current.user&.premium? %>
+    <% if Current.user&.premium? && @chart.both_have_data? %>
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="text-center text-lg text-neutral-900 dark:text-neutral-100">
           Adjust comparison timing

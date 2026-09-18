@@ -1,11 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
+import { Turbo } from "@hotwired/turbo-rails"
 
 export default class extends Controller {
-  static targets = ["rows", "row", "table", "tableViewport", "selection", "selectionNotice", "bulkBar", "undo", "undoLabel", "undoShortcutHint", "undoError", "search", "searchNotice", "columnsPanel", "columnsButton", "columnsError", "columnList", "visibleColumns", "hiddenColumns", "draft", "draftForm", "draftError", "savedShot", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
-  static values = { url: String, createUrl: String, columnsUrl: String, timezone: String, searchId: String, query: Object, maxBatch: Number }
+  static targets = ["rows", "row", "table", "tableViewport", "selection", "selectionNotice", "bulkBar", "compare", "undo", "undoLabel", "undoError", "search", "searchNotice", "columnsPanel", "columnsButton", "columnsError", "columnList", "visibleColumns", "hiddenColumns", "draft", "draftForm", "draftError", "savedShot", "dialog", "dialogForm", "dialogError", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
+  static values = { url: String, cellsUrl: String, createUrl: String, columnsUrl: String, timezone: String, searchId: String, query: Object, maxBatch: Number }
 
   connect() {
     this.queue = []
+    this.disconnected = false
+    this.pendingRenders = new Map()
+    this.partialRows = new Set()
     this.pending = new Map()
     this.busy = false
     this.failures = new Map()
@@ -13,7 +17,7 @@ export default class extends Controller {
     this.undoHistory = []
     this.editEpoch = 0
     this.searchEpoch = 0
-    if (this.hasUndoShortcutHintTarget) this.undoShortcutHintTarget.textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘ Z" : "Ctrl Z"
+    this.dialogLoadVersion = 0
     if (this.hasTableViewportTarget) {
       this.viewportObserver = new ResizeObserver(() => this.sizeViewport())
       ;[this.element, document.querySelector("body > header"), document.querySelector("body > footer")].filter(Boolean).forEach(element => this.viewportObserver.observe(element))
@@ -22,6 +26,9 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.disconnected = true
+    this.pendingRenders.forEach(({ reject }) => reject(new Error("Page changed before rendering completed")))
+    this.pendingRenders.clear()
     clearTimeout(this.searchTimer)
     cancelAnimationFrame(this.columnSaveFrame)
     this.viewportObserver?.disconnect()
@@ -31,7 +38,9 @@ export default class extends Controller {
   sizeViewport() {
     const viewport = this.tableViewportTarget
     const footerHeight = document.querySelector("body > footer")?.offsetHeight || 0
-    const available = window.innerHeight - viewport.getBoundingClientRect().top - window.scrollY - footerHeight
+    const bounds = viewport.getBoundingClientRect()
+    const afterTable = Math.max(0, this.element.getBoundingClientRect().bottom - bounds.bottom)
+    const available = window.innerHeight - bounds.top - window.scrollY - footerHeight - afterTable
     viewport.style.maxHeight = `${Math.max(0, available)}px`
   }
 
@@ -58,6 +67,7 @@ export default class extends Controller {
     this.selectionNoticeTarget.textContent = count === this.maxBatchValue ? `Maximum ${this.maxBatchValue} shots per edit` : ""
     this.bulkBarTarget.classList.toggle("hidden", count === 0)
     this.bulkBarTarget.classList.toggle("flex", count > 0)
+    this.compareTarget.classList.toggle("hidden", count !== 2)
   }
 
   selectAll(event) {
@@ -73,6 +83,10 @@ export default class extends Controller {
     const field = cell.dataset.column
     if (field === "coffee") return this.openDialog("coffee", [row.dataset.shotId])
     if (["espresso_notes", "bean_notes", "private_notes"].includes(field)) return this.openNote(row, field)
+    if (field === "tag_list") {
+      return this.openDialog("tags", [row.dataset.shotId])
+    }
+    this.openDialog("field", [row.dataset.shotId], field)
   }
 
   focus(event) {
@@ -90,10 +104,14 @@ export default class extends Controller {
       event.target.blur()
     } else if (event.key === "Enter") {
       event.preventDefault()
-      const inputs = [...this.tableTarget.querySelectorAll("td:not(.hidden) [data-editor]")]
-      const index = inputs.indexOf(event.target)
+      const cell = event.target.closest("[data-column]")
+      const rows = this.rowTargets
+      const index = rows.indexOf(cell.closest("[data-shot-id]"))
+      const nextRow = rows[index + (event.shiftKey ? -1 : 1)]
+      const next = nextRow && this.cell(nextRow, cell.dataset.column)?.querySelector("[data-editor], [data-display]")
       event.target.blur()
-      inputs[index + (event.shiftKey ? -1 : 1)]?.focus()
+      next?.focus()
+      next?.select?.()
     }
   }
 
@@ -123,7 +141,7 @@ export default class extends Controller {
       operation.changes = changes
       const result = await this.request(this.urlValue, "PATCH", { changes })
       this.finishPending(keys)
-      this.renderRows(result.rows)
+      await this.renderStreams(result)
       this.undoHistory.push({ token: result.undo, ids, field })
     }
     this.enqueue(operation, keys)
@@ -149,7 +167,7 @@ export default class extends Controller {
   }
 
   async drain() {
-    if (this.busy || !this.queue.length) return
+    if (this.disconnected || this.busy || !this.queue.length) return
     this.busy = true
     const operation = this.queue.shift()
     this.currentOperation = operation
@@ -158,6 +176,7 @@ export default class extends Controller {
     try {
       await operation()
     } catch (error) {
+      if (this.disconnected) return
       this.finishPending(operation.keys)
       operation.error = error.message
       operation.details = error.details
@@ -167,9 +186,11 @@ export default class extends Controller {
       this.finishPending(operation.keys)
       this.busy = false
       this.currentOperation = null
-      this.refreshErrors()
-      this.drain()
-      this.resumeSearch()
+      if (!this.disconnected) {
+        this.refreshErrors()
+        this.drain()
+        this.resumeSearch()
+      }
     }
   }
 
@@ -207,7 +228,7 @@ export default class extends Controller {
   }
 
   refreshErrors() {
-    for (const [key, target] of [["create", this.draftErrorTarget], ["columns", this.columnsErrorTarget], ["undo", this.undoErrorTarget]]) {
+    for (const [key, target] of [["create", this.draftErrorTarget], ["columns", this.columnsErrorTarget], ["undo", this.undoErrorTarget], ["dialog", this.dialogErrorTarget]]) {
       const failure = this.failures.get(key)
       target.textContent = failure ? `Couldn't save: ${failure.error}` : ""
       target.classList.toggle("hidden", !failure)
@@ -276,39 +297,61 @@ export default class extends Controller {
     return data
   }
 
-  renderRows(rows, { insert = false } = {}) {
-    rows.forEach(({ id, html }) => {
-      const fragment = document.createElement("template")
-      fragment.innerHTML = `<table><tbody>${html}</tbody></table>`
-      const incoming = fragment.content.querySelector("tr")
-      const current = this.row(id)
-      if (!current) {
-        if (insert) {
-          this.rowsTarget.prepend(incoming)
-          this.tableViewportTarget.scrollTop = 0
-        }
-      } else {
-        Object.assign(current.dataset, incoming.dataset)
-        incoming.querySelectorAll("[data-column]").forEach(cell => {
-          const previous = this.cell(current, cell.dataset.column)
-          if (!previous) {
-            cell.classList.add("hidden")
-            current.append(cell)
-            return
-          }
-          const input = previous.querySelector("[data-editor]")
-          const active = input === document.activeElement
-          const dirty = active && input.value !== input.dataset.original
-          const key = `${id}:${cell.dataset.column}`
-          if (!this.pending.has(key) && !this.failureForCell(key) && !dirty) {
-            previous.replaceWith(cell)
-            if (active) cell.querySelector("[data-editor]")?.focus()
-          } else previous.dataset.value = cell.dataset.value
-        })
-      }
-    })
+  async renderStreams(result) {
+    if (this.disconnected || !this.element.isConnected) throw new Error("Page changed before rendering completed")
+    if (!result.stream?.trim()) return
+    const rendered = new Promise((resolve, reject) => this.pendingRenders.set(result.render_id, { resolve, reject }))
+    Turbo.renderStreamMessage(result.stream)
+    await rendered
     this.applyColumns()
     this.select()
+  }
+
+  beforeMorph(event) {
+    const element = event.target
+    const incoming = event.detail.newElement
+    if (element.matches("[data-shot-id]")) {
+      if (incoming?.dataset.journalPartial === "true") this.partialRows.add(element.dataset.shotId)
+      return
+    }
+    if (element.matches("[data-selection]")) event.preventDefault()
+    const row = element.closest("[data-shot-id]")
+    const cell = element.closest("[data-column]")
+    if (!row || !cell) return
+    const key = `${row.dataset.shotId}:${cell.dataset.column}`
+    const editor = cell.querySelector("[data-editor]")
+    const dirty = editor === document.activeElement && editor.value !== editor.dataset.original
+    if (element === cell && ((this.partialRows.has(row.dataset.shotId) && incoming?.dataset.unloaded) || this.pending.has(key) || this.failureForCell(key) || dirty)) event.preventDefault()
+    if (element.matches("[data-editor]") && element === document.activeElement && element.value !== element.dataset.original) event.preventDefault()
+  }
+
+  beforeMorphAttribute(event) {
+    if (this.partialRows.has(event.target.dataset.shotId)) event.preventDefault()
+  }
+
+  afterMorph(event) {
+    if (event.target.matches("[data-shot-id]")) this.partialRows.delete(event.target.dataset.shotId)
+    if (event.target.matches("[data-editor]") && event.target === document.activeElement) event.target.dataset.original = event.target.value
+  }
+
+  async loadCells(ids, fields) {
+    if (!ids.length || !fields.length) return
+    for (let offset = 0; offset < ids.length; offset += this.maxBatchValue) {
+      const url = new URL(this.cellsUrlValue, window.location.origin)
+      ids.slice(offset, offset + this.maxBatchValue).forEach(id => url.searchParams.append("ids[]", id))
+      fields.forEach(field => url.searchParams.append("fields[]", field))
+      const result = await this.request(url, "GET")
+      await this.renderStreams(result)
+      if (result.tags && this.tagEditor()) this.tagEditor().tagify.settings.whitelist = result.tags
+    }
+    this.applyColumns()
+  }
+
+  async loadVisibleCells() {
+    const fields = [...this.visibleColumnsTarget.children].map(item => item.dataset.columnChoice)
+    const ids = this.rowTargets.filter(row => fields.some(field => this.cell(row, field)?.dataset.unloaded)).map(row => row.dataset.shotId)
+    const missing = fields.filter(field => ids.some(id => this.cell(this.row(id), field)?.dataset.unloaded))
+    await this.loadCells(ids, missing)
   }
 
   undo() {
@@ -332,7 +375,7 @@ export default class extends Controller {
       if (this.lastOperation === operation) {
         this.undoHistory.pop()
       }
-      this.renderRows(result.rows)
+      await this.renderStreams(result)
       if (Object.values(this.queryValue).some(Boolean)) this.searchPending = true
     }, [], "undo")
   }
@@ -356,27 +399,98 @@ export default class extends Controller {
     this.openDialog(mode, ids)
   }
 
-  openDialog(mode, ids) {
+  openDialog(mode, ids, field = "profile_title") {
+    this.dialogLoadVersion++
     this.dialogMode = mode
     this.dialogIds = ids
     this.dialogFormTarget.reset()
+    this.resetComboboxes(this.dialogFormTarget)
+    this.dialogTarget.classList.toggle("overflow-y-auto", mode !== "tags")
+    this.dialogTarget.classList.toggle("overflow-visible", mode === "tags")
     for (const [name, target] of Object.entries({ coffee: this.coffeeFieldsTarget, field: this.fieldFieldsTarget, tags: this.tagFieldsTarget, note: this.noteFieldsTarget })) {
       target.classList.toggle("hidden", name !== mode)
     }
-    this.applyTarget.textContent = mode === "note" ? "Save notes" : "Apply to selected shots"
-    this.dialogTitleTarget.textContent = { coffee: "Assign coffee", field: "Set field", tags: "Add/remove tags", note: "Notes" }[mode]
+    this.applyTarget.textContent = mode === "note" ? "Save notes" : ids.length === 1 ? "Save" : `Apply to ${ids.length} shots`
+    this.dialogTitleTarget.textContent = { coffee: "Assign coffee", field: "Set field", tags: "Tags", note: "Notes" }[mode]
+    if (mode === "field") {
+      const select = this.dialogFormTarget.elements.field
+      ;[...select.options].forEach(option => { option.disabled = ["start_time", "duration"].includes(option.value) && ids.some(id => this.row(id).dataset.manual === "false") })
+      select.value = field
+      this.fieldChanged()
+    }
+    if (mode === "tags") {
+      this.tagEditor()?.tagify.removeAllTags()
+      this.readForDialog(["tag_list"], () => {
+        const lists = ids.map(id => (this.cell(this.row(id), "tag_list").dataset.value || "").split(",").filter(Boolean))
+        this.tagEditor()?.tagify.addTags(lists[0].filter(tag => lists.every(tags => tags.includes(tag))))
+      }, true)
+    }
     if (mode === "coffee" && ids.length === 1) {
-      const row = this.row(ids[0])
-      const attempted = this.failureForCell(`${ids[0]}:coffee`)?.changes?.find(change => change.id === ids[0])?.attributes || {}
+      const fields = this.coffeeFieldsTarget.querySelector('[name="bean_brand"]') ? ["bean_brand", "bean_type"] : []
+      this.readForDialog(fields, () => this.fillCoffee(ids[0]))
+    }
+    if (!this.dialogTarget.open) this.dialogTarget.showModal()
+  }
+
+  fillCoffee(id) {
+      const row = this.row(id)
+      const attempted = this.failureForCell(`${id}:coffee`)?.changes?.find(change => change.id === id)?.attributes || {}
       for (const name of ["coffee_bag_id", "canonical_coffee_bag_id", "bean_brand", "bean_type"]) {
         const input = this.coffeeFieldsTarget.querySelector(`[name="${name}"]`)
-        if (input) input.value = attempted[name] ?? (name === "coffee_bag_id" ? row.dataset.coffeeBagId : name === "canonical_coffee_bag_id" ? row.dataset.canonicalCoffeeBagId : this.cell(row, name)?.dataset.value || "")
+        if (input) {
+          input.value = attempted[name] ?? (name === "coffee_bag_id" ? row.dataset.coffeeBagId : name === "canonical_coffee_bag_id" ? row.dataset.canonicalCoffeeBagId : this.cell(row, name)?.dataset.value || "")
+          this.combobox(input.closest('[data-controller~="combobox"]'))?.reset(input.value)
+        }
       }
       const canonical = this.coffeeFieldsTarget.querySelector('[name="canonical_coffee_bag_id"]')
       const search = this.coffeeFieldsTarget.querySelector('input[type="search"]')
-      if (search) search.value = canonical.value ? this.cell(row, "coffee").dataset.value : ""
-    }
-    if (!this.dialogTarget.open) this.dialogTarget.showModal()
+      if (search) search.value = canonical.value ? [this.cell(row, "bean_brand")?.dataset.value, this.cell(row, "bean_type")?.dataset.value].filter(Boolean).join(" / ") : ""
+  }
+
+  readForDialog(fields, ready, force = false) {
+    const version = ++this.dialogLoadVersion
+    const ids = [...this.dialogIds]
+    this.dialogFormTarget.inert = true
+    this.enqueue(async () => {
+      try {
+        const missing = fields.filter(field => force || ids.some(id => !this.cell(this.row(id), field) || this.cell(this.row(id), field).dataset.unloaded))
+        await this.loadCells(ids, missing)
+        if (version === this.dialogLoadVersion) ready()
+      } catch (error) {
+        if (version === this.dialogLoadVersion) throw error
+      } finally {
+        if (version === this.dialogLoadVersion) this.dialogFormTarget.inert = false
+      }
+    }, [], "dialog")
+  }
+
+  combobox(element) {
+    return element && this.application.getControllerForElementAndIdentifier(element, "combobox")
+  }
+
+  resetComboboxes(container) {
+    container.querySelectorAll('[data-controller~="combobox"]').forEach(element => this.combobox(element)?.reset())
+  }
+
+  tagEditor() {
+    const element = this.tagFieldsTarget.querySelector('[data-controller~="tags"]')
+    return element && this.application.getControllerForElementAndIdentifier(element, "tags")
+  }
+
+  fieldChanged() {
+    const field = this.dialogFormTarget.elements.field.value
+    const dropdown = this.fieldFieldsTarget.querySelector(`[data-dropdown-field="${CSS.escape(field)}"]`)
+    this.fieldFieldsTarget.querySelectorAll("[data-dropdown-field]").forEach(element => element.classList.toggle("hidden", element !== dropdown))
+    this.fieldFieldsTarget.querySelector("[data-plain-field]").classList.toggle("hidden", !!dropdown)
+    this.readForDialog(this.dialogIds.length === 1 ? [field] : [], () => {
+      const row = this.dialogIds.length === 1 && this.row(this.dialogIds[0])
+      const value = row ? this.cell(row, field)?.dataset.value || "" : ""
+      if (dropdown) this.combobox(dropdown.querySelector('[data-controller~="combobox"]'))?.reset(value)
+      const input = this.dialogFormTarget.elements.value
+      input.type = field === "start_time" ? "datetime-local" : "text"
+      input.step = "1"
+      input.value = value
+    })
   }
 
   saveDialog(event) {
@@ -388,7 +502,7 @@ export default class extends Controller {
       if (value !== this.noteValue) this.save([...this.dialogIds], field, () => this.attributes(field, value))
     } else if (this.dialogMode === "coffee") {
       const attributes = {}
-      this.coffeeFieldsTarget.querySelectorAll("[name]").forEach(input => {
+      this.coffeeFieldsTarget.querySelectorAll("[data-shot-field]").forEach(input => {
         attributes[input.name] = input.value
       })
       if (attributes.canonical_coffee_bag_id) {
@@ -398,22 +512,22 @@ export default class extends Controller {
       this.save(this.dialogIds, "coffee", () => attributes)
     } else if (this.dialogMode === "field") {
       const field = data.get("field")
-      this.save(this.dialogIds, field, () => this.attributes(field, data.get("value")))
+      const dropdown = this.fieldFieldsTarget.querySelector(`[data-dropdown-field="${CSS.escape(field)}"] [data-combobox-target="input"]`)
+      const attributes = this.attributes(field, dropdown ? dropdown.value : data.get("value"))
+      if (["bean_brand", "bean_type"].includes(field)) attributes.canonical_coffee_bag_id = ""
+      this.save(this.dialogIds, field, () => attributes)
     } else if (this.dialogMode === "tags") {
-      const names = data
-        .get("tags")
+      const names = (data.get("tags") || "")
         .split(",")
         .map(name =>
           name
             .trim()
             .toLowerCase()
             .replace(/[^\w\s-]/g, "")
+            .replace(/\s+/g, " ")
         )
         .filter(Boolean)
-      this.save(this.dialogIds, "tag_list", row => {
-        const current = (this.cell(row, "tag_list").dataset.value || "").split(",").filter(Boolean)
-        return { tag_list: data.get("tag_action") === "add" ? [...new Set([...current, ...names])] : current.filter(name => !names.includes(name)) }
-      })
+      this.save(this.dialogIds, "tag_list", () => ({ tag_list: names }))
     }
     this.closeDialog()
   }
@@ -431,8 +545,12 @@ export default class extends Controller {
 
   closeDialog(event) {
     event?.preventDefault()
+    this.dialogLoadVersion++
+    this.failures.delete("dialog")
+    this.dialogFormTarget.inert = false
     this.dialogTarget.close()
     this.dialogMode = null
+    this.refreshErrors()
     this.resumeSearch()
   }
 
@@ -450,14 +568,20 @@ export default class extends Controller {
     const fields = event.currentTarget
     fields.querySelector('[name="bean_brand"]').value = event.detail.selected.dataset.roaster || ""
     fields.querySelector('[name="bean_type"]').value = event.detail.selected.dataset.coffeeBag || ""
+    fields.querySelectorAll('[data-controller~="combobox"]').forEach(element => {
+      const combo = this.combobox(element)
+      combo?.reset(combo.inputTarget.value)
+    })
+  }
+
+  clearCoffee(event) {
+    const fields = event.target.closest("[data-coffee-fields]")
+    this.combobox(fields.querySelector('[data-controller~="combobox"]'))?.reset()
   }
 
   compare() {
     const rows = this.selectedRows
-    if (rows.length !== 2 || rows.some(row => row.dataset.chart !== "true")) {
-      this.selectionNoticeTarget.textContent = "Select two shots with chart data to compare"
-      return
-    }
+    if (rows.length !== 2) return
     if (this.hasUnsavedChanges() && !window.confirm("Changes are still pending. Leave Journal?")) return
     window.location.assign(`/shots/${rows[0].dataset.shotId}/compare/${rows[1].dataset.shotId}`)
   }
@@ -466,6 +590,7 @@ export default class extends Controller {
     if (this.draftTarget.classList.contains("hidden")) {
       this.entryId = crypto.randomUUID()
       this.draftFormTarget.reset()
+      this.resetComboboxes(this.draftFormTarget)
       const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: this.timezoneValue, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }).formatToParts(new Date()).map(part => [part.type, part.value]))
       this.draftFormTarget.elements.start_time.value = `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`
     }
@@ -510,19 +635,31 @@ export default class extends Controller {
       } finally {
         this.draftFormTarget.inert = false
       }
-      this.renderRows(result.rows, { insert: true })
-      document.getElementById("shots-count").textContent = `${result.count} ${result.count === 1 ? "Shot" : "Shots"}`
-      document.getElementById("journal-empty").textContent = ""
-      const row = this.row(result.rows[0].id)
-      const label = document.createElement("span")
-      label.className = "block px-2 text-xs text-neutral-500"
-      label.textContent = result.matches ? "New · pinned until next search" : "New · outside current search"
-      this.cell(row, "start_time").append(label)
+      await this.renderStreams(result)
+      this.tableViewportTarget.scrollTop = 0
       this.creating = false
       this.creationOperation = null
       this.cancelDraft()
     }
     this.enqueue(this.creationOperation, [], "create")
+  }
+
+  deleteShot(event) {
+    if (event.defaultPrevented) return
+    event.preventDefault()
+    const row = event.currentTarget.closest("[data-shot-id]")
+    const id = row.dataset.shotId
+    const url = event.currentTarget.dataset.deleteUrl
+    this.editEpoch++
+    this.enqueue(async () => {
+      const result = await this.request(url, "DELETE", { query: this.queryValue })
+      await this.renderStreams(result)
+      this.rowsTarget.querySelector(`[data-error-for="${id}"]`)?.remove()
+      const keys = [...this.failures.values()].flatMap(failure => failure.keys.filter(key => key.startsWith(`${id}:`)))
+      this.supersedeFailures(keys, "undo")
+      this.undoHistory = this.undoHistory.filter(operation => !operation.ids.includes(id))
+      this.select()
+    }, [`${id}:actions`], `delete:${id}`)
   }
 
   columns(movedField = null) {
@@ -532,7 +669,10 @@ export default class extends Controller {
     this.columnSaveFrame = requestAnimationFrame(() => {
       this.columnSaveFrame = requestAnimationFrame(() => {
         this.columnSaveFrame = null
-        this.enqueue(() => this.request(this.columnsUrlValue, "PATCH", { columns }), [], "columns")
+        this.enqueue(async () => {
+          await this.request(this.columnsUrlValue, "PATCH", { columns })
+          await this.loadVisibleCells()
+        }, [], "columns")
       })
     })
   }
@@ -560,6 +700,7 @@ export default class extends Controller {
           group.append(item)
         })
         this.applyColumns()
+        await this.loadVisibleCells()
       },
       [],
       "columns"
@@ -667,6 +808,8 @@ export default class extends Controller {
 
   arrangeColumns(row, choices, movedField = null) {
     const cells = new Map([...row.querySelectorAll("[data-column]")].map(cell => [cell.dataset.column, cell]))
+    const known = new Set(choices.map(item => item.dataset.columnChoice))
+    cells.forEach((cell, field) => { if (!known.has(field)) cell.classList.add("hidden") })
     let previous = row.firstElementChild
     choices.forEach(item => {
       const field = item.dataset.columnChoice
@@ -678,11 +821,26 @@ export default class extends Controller {
       }
       previous = cell
     })
-    row.querySelector("[data-open-shot]")?.classList.toggle("hidden", choices.some(item => item.dataset.columnChoice === "start_time" && item.parentElement === this.visibleColumnsTarget))
   }
 
   beforeStream(event) {
     const stream = event.target
+    const renderId = stream.dataset.journalRenderId
+    if (renderId && this.pendingRenders.has(renderId)) {
+      const render = event.detail.render
+      event.detail.render = async element => {
+        try {
+          if (!this.disconnected) await render(element)
+          if (stream.dataset.journalFinal === "true") {
+            this.pendingRenders.get(renderId)?.resolve()
+            this.pendingRenders.delete(renderId)
+          }
+        } catch (error) {
+          this.pendingRenders.get(renderId)?.reject(error)
+          this.pendingRenders.delete(renderId)
+        }
+      }
+    }
     const searchId = stream.dataset.journalSearchId
     if (searchId && searchId !== this.searchIdValue) {
       event.preventDefault()

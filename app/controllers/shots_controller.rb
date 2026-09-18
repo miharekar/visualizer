@@ -35,11 +35,7 @@ class ShotsController < ApplicationController
 
   def compare
     @comparison = Shot.find(params[:comparison])
-    if @shot.information && @comparison.information
-      @chart = ShotChartCompare.new(@shot, @comparison, Current.user)
-    else
-      redirect_to @shot, alert: "Both shots need chart data to compare."
-    end
+    @chart = ShotChartCompare.new(@shot, @comparison, Current.user)
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
@@ -92,6 +88,7 @@ class ShotsController < ApplicationController
         flash[:notice] = "Shot successfully deleted."
         redirect_to action: :index
       end
+      format.json { render json: journal_response([@shot], action: :remove, count: journal_results.count).merge(id: @shot.id) }
     end
   end
 
@@ -105,15 +102,19 @@ class ShotsController < ApplicationController
 
   def create_manual_shot
     shot = Current.journal.create(params.expect(shot: {}).to_h, params[:entry_id])
-    query = params.slice(:query).permit(query: %i[q coffee_bag tags]).fetch(:query, {})
-    matches = Current.journal.search(query)
-    render json: {rows: journal_rows([shot]), count: matches.count, matches: matches.exists?(id: shot.id)}, status: :created
+    matches = journal_results
+    render json: journal_response(Current.journal.for_list.where(id: shot.id), action: :prepend, count: matches.count, matches: matches.exists?(id: shot.id)), status: :created
   rescue Journal::Conflict => error
     render json: {error: error.message, shot_id: params[:entry_id]}, status: :conflict
   rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error
     render json: {error: error.message}, status: :unprocessable_content
   rescue ActiveRecord::RecordNotFound
     render json: {error: "Shot or coffee not available"}, status: :not_found
+  end
+
+  def journal_results
+    query = params.slice(:query).permit(query: %i[q coffee_bag tags]).fetch(:query, {})
+    Current.journal.search(query)
   end
 
   def upload_files

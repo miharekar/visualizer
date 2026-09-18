@@ -31,6 +31,30 @@ class ShotChartTest < ActiveSupport::TestCase
     assert_includes chart.comparison_data.keys, "Temperature Mix Comparison"
   end
 
+  test "manual comparisons retain whichever side has chart data" do
+    manual = build(:shot)
+    user = build_stubbed(:user)
+    chart = ShotChartCompare.new(manual, shot_from_fixture, user)
+    assert chart.has_data?
+    assert_not chart.both_have_data?
+    assert_includes chart.comparison_data.keys, "Pressure Comparison"
+    assert_nil chart.stages
+
+    chart = ShotChartCompare.new(shot_from_fixture, manual, user)
+    assert chart.has_data?
+    assert_not chart.both_have_data?
+    assert_includes chart.shot_chart.pluck(:name), "Pressure Base"
+    assert_empty chart.comparison_data
+  end
+
+  test "two manual shots have no chart but can still be compared" do
+    chart = ShotChartCompare.new(build(:shot), build(:shot), build_stubbed(:user))
+    assert_not chart.has_data?
+    assert_empty chart.shot_chart
+    assert_empty chart.temperature_chart
+    assert_empty chart.comparison_data
+  end
+
   test "temperature chart tooltip uses fahrenheit suffix for fahrenheit users" do
     user = build_stubbed(:user, temperature_unit: "Fahrenheit")
     chart = ShotChart.new(shot_from_fixture, user)

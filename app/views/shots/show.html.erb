@@ -14,7 +14,6 @@
   <div class="flex flex-col md:flex-row">
     <div class="<%= (show_tasting_assessment || show_image) ? "md:w-1/2" : "md:w-full" %>">
       <%= render "details", shot: @shot, name: false %>
-      <% if @chart %>
         <h3 class="text-l mt-3 dark:text-neutral-300">Compare</h3>
         <div class="mt-3 flex flex-col" data-controller="related-shots" data-related-shots-shot-id-value="<%= @shot.id %>">
           <% if Current.user %>
@@ -35,7 +34,6 @@
             <input class="standard-input" type="text" data-action="related-shots#urlCompare" placeholder="With any shot via its URL" autocomplete="off">
           </div>
         </div>
-      <% end %>
     </div>
     <% if show_tasting_assessment || show_image %>
       <div class="mt-3 md:mt-0 md:ml-3 md:w-1/2">

@@ -1,6 +1,7 @@
 <% content_for(:html_title) { "Visualizer | Your Shots" } %>
 <% content_for(:head) { tag.meta(name: "turbo-cache-control", content: "no-cache") } %>
-<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-journal-search-id-value="<%= @journal_search_id %>" data-journal-query-value="<%= params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).to_json %>" data-journal-max-batch-value="<%= Journal::MAX_BATCH %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream resize@window->journal#sizeViewport keydown@window->journal#undoShortcut">
+<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop modal" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-cells-url-value="<%= journal_cells_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-journal-search-id-value="<%= @journal_search_id %>" data-journal-query-value="<%= params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).to_json %>" data-journal-max-batch-value="<%= Journal::MAX_BATCH %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream turbo:before-morph-element->journal#beforeMorph turbo:before-morph-attribute->journal#beforeMorphAttribute turbo:morph-element->journal#afterMorph resize@window->journal#sizeViewport keydown@window->journal#undoShortcut">
+  <%= render "shared/modal" %>
   <div data-upload-drop-target="overlay" class="bg-oxford-blue-500/50 fixed inset-0 z-99 hidden items-center justify-center backdrop-blur-sm">
     <div class="text-center">
       <h3 class="mb-2 text-2xl font-medium text-white">Drop anywhere to upload</h3>
@@ -17,7 +18,7 @@
             <h3 class="mb-2 text-sm font-medium text-neutral-500 dark:text-neutral-400"><%= visibility.capitalize %></h3>
             <div class="flex min-h-14 flex-wrap gap-2 p-2" data-column-visibility="<%= visibility %>" data-journal-target="<%= visibility == 'visible' ? 'visibleColumns' : 'hiddenColumns' %>">
               <% @columns.select { @visible_columns.include?(it) == (visibility == "visible") }.each do |field| %>
-                <div data-column-choice="<%= field %>" class="flex items-center gap-2 rounded border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-800">
+                <div data-column-choice="<%= field %>" class="flex items-center gap-2 rounded border border-neutral-200 bg-white p-2 pr-4 dark:border-neutral-700 dark:bg-neutral-800">
                   <button type="button" class="focus-visible:ring-terracotta-500 cursor-grab touch-none rounded p-1 text-neutral-500 focus-visible:ring-2 active:cursor-grabbing" data-action="pointerdown->journal#startColumnDrag keydown->journal#moveColumn" aria-label="Reorder <%= Current.journal.columns[field] %>">
                     <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" aria-hidden="true"><circle cx="5" cy="3" r="1.5" /><circle cx="11" cy="3" r="1.5" /><circle cx="5" cy="8" r="1.5" /><circle cx="11" cy="8" r="1.5" /><circle cx="5" cy="13" r="1.5" /><circle cx="11" cy="13" r="1.5" /></svg>
                   </button>
@@ -32,7 +33,7 @@
       <p class="hidden text-sm text-red-600 dark:text-red-400" data-journal-target="columnsError" role="alert"></p>
     </div>
   </div>
-  <div class="mt-4 w-full min-w-0 px-4 sm:px-6 lg:px-8">
+  <div class="mt-4 w-full min-w-0 px-4 pb-6 sm:px-6 lg:px-8">
     <% unless Current.user.premium? %>
       <p class="mb-4 text-sm text-neutral-500">Showing shots uploaded in the last month. <%= link_to "Premium", premium_index_path, class: "standard-link" %> includes older history.</p>
     <% end %>
@@ -41,28 +42,32 @@
       <%= f.hidden_field :journal_search_id, value: @journal_search_id %>
       <label class="standard-label min-w-48 flex-1">Search<%= f.search_field :q, value: params[:q], class: "standard-input mt-1", placeholder: "Coffee, notes, tags…" %></label>
       <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
-      <button type="button" class="button-white hidden! items-center gap-2 px-4 py-2" data-journal-target="undo" data-action="journal#undo"><span data-journal-target="undoLabel">Undo last change</span><kbd class="text-xs opacity-60" data-journal-target="undoShortcutHint">Ctrl Z</kbd></button>
+      <button type="button" class="button-white hidden! px-4 py-2" data-journal-target="undo" data-action="journal#undo"><span data-journal-target="undoLabel">Undo last change</span></button>
     <% end %>
     <p class="hidden mb-3 text-right text-sm text-red-600 dark:text-red-400" data-journal-target="undoError" role="alert"></p>
     <p class="hidden mb-3 text-sm text-neutral-500" data-journal-target="searchNotice" role="status"></p>
     <div class="fixed inset-x-4 top-20 z-30 mx-auto hidden w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-lg bg-white/95 px-4 py-3 shadow-lg ring-1 ring-neutral-200 backdrop-blur dark:bg-neutral-800/95 dark:ring-neutral-700" data-journal-target="bulkBar">
       <span data-journal-target="selection">0 selected</span>
       <span class="text-sm text-neutral-500" data-journal-target="selectionNotice"></span>
-      <button type="button" class="standard-link" data-action="journal#bulkCoffee">Assign coffee</button>
-      <button type="button" class="standard-link" data-action="journal#bulkField">Set field</button>
-      <% if Current.user.premium? %><button type="button" class="standard-link" data-action="journal#bulkTags">Add/remove tags</button><% end %>
-      <button type="button" class="standard-link" data-action="journal#compare">Compare</button>
+      <button type="button" class="standard-link cursor-pointer" data-action="journal#bulkCoffee">Assign coffee</button>
+      <button type="button" class="standard-link cursor-pointer" data-action="journal#bulkField">Set field</button>
+      <% if Current.user.premium? %><button type="button" class="standard-link cursor-pointer" data-action="journal#bulkTags">Tags</button><% end %>
+      <button type="button" class="standard-link hidden cursor-pointer" data-journal-target="compare" data-action="journal#compare">Compare</button>
     </div>
     <div class="border-terracotta-300 mb-4 hidden rounded border p-4" data-journal-target="draft">
       <p class="hidden mb-3 text-sm text-red-600 dark:text-red-400" data-journal-target="draftError" role="alert"></p>
       <a class="standard-link hidden mb-3 text-sm" data-journal-target="savedShot">Open saved shot</a>
       <form data-journal-target="draftForm" data-action="submit->journal#create" class="grid gap-3 sm:grid-cols-3">
-        <div class="space-y-3"><%= render "journals/coffee_fields" %></div>
+        <div class="space-y-3"><%= render "journals/coffee_fields", prefix: "draft" %></div>
         <div class="space-y-3">
-          <label class="standard-label">Brewed<%= datetime_local_field_tag :start_time, Time.current.strftime("%Y-%m-%dT%H:%M:%S"), required: true, step: 1, class: "standard-input mt-1", data: {shot_field: true} %></label>
+          <label class="standard-label">Made at<%= datetime_local_field_tag :start_time, Time.current.strftime("%Y-%m-%dT%H:%M:%S"), required: true, step: 1, class: "standard-input mt-1", data: {shot_field: true} %></label>
           <% %w[profile_title bean_weight drink_weight duration grinder_setting espresso_enjoyment].each do |field| %>
             <label class="standard-label"><%= Current.journal.columns[field] %><input name="<%= field %>" type="<%= journal_input_type(field) %>" step="any" data-shot-field class="standard-input mt-1"></label>
           <% end %>
+          <div>
+            <%= label_tag "draft_grinder_model", "Grinder", class: "standard-label" %>
+            <%= render "shared/combobox", input_name: "grinder_model", input_id: "draft_grinder_model", hidden_input_name: "_draft_grinder_model", selected: nil, collection: Current.journal.dropdown_values("grinder_model"), name_method: :itself, id_method: :itself, allow_custom: true, input_data: {shot_field: true} %>
+          </div>
         </div>
         <div><label for="draft_notes" class="standard-label">Notes</label><%= rich_text_area_tag :espresso_notes, nil, id: "draft_notes", data: {shot_field: true} %></div>
         <div class="flex justify-end gap-3 sm:col-span-3"><button type="button" class="button-white px-4 py-2" data-action="journal#cancelDraft">Cancel</button><button class="button-terracotta px-4 py-2">Add shot</button></div>
@@ -73,7 +78,7 @@
         <caption class="sr-only">Coffee journal. Select rows for bulk edits, or activate a cell to edit it.</caption>
         <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
           <tr>
-            <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800"><input type="checkbox" aria-label="Select up to <%= Journal::MAX_BATCH %> loaded shots" data-action="journal#selectAll" class="standard-checkbox size-4"></th>
+            <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800"><input type="checkbox" name="select_loaded_shots" aria-label="Select up to <%= Journal::MAX_BATCH %> loaded shots" data-action="journal#selectAll" class="standard-checkbox size-4"></th>
             <% @columns.each do |field| %>
               <th scope="col" data-column="<%= field %>" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %> <%= 'hidden' unless @visible_columns.include?(field) %>"><%= Current.journal.columns[field] %></th>
             <% end %>
@@ -89,12 +94,26 @@
         <h2 data-journal-target="dialogTitle" class="text-xl font-semibold"></h2>
         <button type="button" class="button-white px-3 py-2" data-action="journal#closeDialog">Cancel</button></div>
       <form data-journal-target="dialogForm" data-action="submit->journal#saveDialog" class="space-y-4">
-        <div data-journal-target="coffeeFields" class="space-y-3"><%= render "journals/coffee_fields" %></div>
+        <p class="hidden text-sm text-red-600 dark:text-red-400" data-journal-target="dialogError" role="alert"></p>
+        <div data-journal-target="coffeeFields" class="space-y-3"><%= render "journals/coffee_fields", prefix: "dialog" %></div>
         <div data-journal-target="fieldFields" class="space-y-3">
-          <label class="standard-label">Field<select name="field" class="standard-input mt-1"><% Current.journal.columns.except("coffee", *Journal::NOTES).each do |field, label| %><option value="<%= field %>"><%= label %><%= " (manual shots only)" if %w[start_time duration].include?(field) %></option><% end %></select></label>
-          <label class="standard-label">Value<input name="value" class="standard-input mt-1"></label>
+          <label class="standard-label">Field<select name="field" class="standard-input mt-1" data-action="change->journal#fieldChanged"><% Current.journal.editable_columns.except("coffee", "tag_list", *Journal::NOTES).each do |field, label| %><option value="<%= field %>"><%= label %><%= " (manual shots only)" if %w[start_time duration].include?(field) %></option><% end %></select></label>
+          <div data-plain-field><label class="standard-label">Value<input name="value" class="standard-input mt-1"></label></div>
+          <% (Journal::DROPDOWN_FIELDS & Current.journal.editable_columns.keys).each do |field| %>
+            <div class="hidden" data-dropdown-field="<%= field %>">
+              <%= label_tag "field_value_#{field}", "Value", class: "standard-label" %>
+              <%= render "shared/combobox", input_name: "field_value_#{field}", hidden_input_name: "_field_value_#{field}", selected: nil, collection: Current.journal.dropdown_values(field), name_method: :itself, id_method: :itself, allow_custom: true %>
+            </div>
+          <% end %>
         </div>
-        <div data-journal-target="tagFields" class="space-y-3"><label class="standard-label">Action<select name="tag_action" class="standard-input"><option value="add">Add tags</option><option value="remove">Remove tags</option></select></label><label class="standard-label">Tags<input name="tags" class="standard-input" placeholder="Comma-separated tags"></label></div>
+        <div data-journal-target="tagFields" class="space-y-3">
+          <% if Current.user.premium? %>
+            <div data-controller="tags" data-tags-user-tags-value="[]">
+              <label for="journal_tags" class="standard-label">Tags</label>
+              <input id="journal_tags" name="tags" class="standard-input mt-1" placeholder="Add tags…" data-tags-target="input">
+            </div>
+          <% end %>
+        </div>
         <div data-journal-target="noteFields"><label for="journal_note" class="standard-label">Notes · Escape discards changes</label><%= rich_text_area_tag :note, nil, id: "journal_note" %></div>
         <button data-journal-target="apply" class="button-terracotta px-4 py-2">Apply to selected shots</button>
       </form>

@@ -5,17 +5,20 @@ class Journal
   PAGE_SIZE = 30
   MAX_BATCH = 100
   UUID_PATTERN = /\A[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\z/i
-  DEFAULT_COLUMNS = %w[espresso_enjoyment start_time coffee profile_title bean_weight drink_weight duration grinder_setting espresso_notes].freeze
+  DEFAULT_COLUMNS = %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions].freeze
   LABELS = {
-    "start_time" => "Brewed", "coffee" => "Coffee", "profile_title" => "Profile",
+    "start_time" => "Made at", "coffee" => "Coffee", "profile_title" => "Profile",
     "bean_weight" => "Dose (g)", "drink_weight" => "Yield (g)", "duration" => "Time (s)",
     "grinder_setting" => "Grind", "espresso_enjoyment" => "Enjoyment", "espresso_notes" => "Notes",
-    "grinder_model" => "Grinder", "bean_brand" => "Roaster", "bean_type" => "Coffee name",
+    "grinder_model" => "Grinder", "bean_brand" => "Roaster", "bean_type" => "Coffee bag",
     "barista" => "Barista", "roast_date" => "Roast date", "roast_level" => "Roast level",
-    "drink_tds" => "TDS", "drink_ey" => "EY", "bean_notes" => "Bean notes"
+    "drink_tds" => "TDS", "drink_ey" => "EY", "bean_notes" => "Bean notes", "ratio" => "Ratio", "image" => "Photo", "actions" => "Actions"
   }.freeze
   NOTES = %w[espresso_notes bean_notes private_notes].freeze
   COFFEE_FIELDS = %w[coffee_bag_id canonical_coffee_bag_id bean_brand bean_type roast_date roast_level].freeze
+  BAG_FIELDS = %w[bean_brand bean_type roast_date roast_level].freeze
+  DROPDOWN_FIELDS = %w[grinder_model bean_brand bean_type].freeze
+  ROW_ATTRIBUTES = %w[id user_id start_time updated_at coffee_bag_id canonical_coffee_bag_id].freeze
 
   attr_reader :user
 
@@ -29,6 +32,11 @@ class Journal
 
   def columns
     labels = LABELS.dup
+    if user.coffee_management_enabled?
+      labels.except!("bean_brand", "bean_type")
+    else
+      labels.delete("coffee")
+    end
     if user.premium?
       labels["tag_list"] = "Tags"
       labels["private_notes"] = "Private notes"
@@ -40,13 +48,27 @@ class Journal
 
   def ordered_columns
     saved = Array(user.journal_columns["order"]) & columns.keys
-    saved + (DEFAULT_COLUMNS - saved) + (columns.keys - saved - DEFAULT_COLUMNS)
+    saved + (default_columns - saved) + (columns.keys - saved - default_columns)
+  end
+
+  def default_columns
+    DEFAULT_COLUMNS.flat_map { it == "coffee" && !user.coffee_management_enabled? ? %w[bean_brand bean_type] : it } & columns.keys
+  end
+
+  def editable_columns
+    editable = columns.except("actions", "ratio", "image")
+    user.coffee_management_enabled? ? editable.except(*BAG_FIELDS) : editable
+  end
+
+  def dropdown_values(field)
+    @dropdown_values ||= {}
+    @dropdown_values[field] ||= DropdownValue.visible.for(user, field).pluck(:value)
   end
 
   def visible_columns
     hidden = Array(user.journal_columns["hidden"])
     if user.journal_columns.empty?
-      DEFAULT_COLUMNS
+      default_columns
     else
       ordered_columns - hidden
     end
@@ -94,7 +116,7 @@ class Journal
 
       shots = shots.where("(start_time, shots.id) < (?, ?)", Time.iso8601(params[:before]), params[:before_id])
     end
-    records = shots.reorder(start_time: :desc, id: :desc).with_notes.includes(:tags, :information).limit(PAGE_SIZE + 1).to_a
+    records = for_list(shots).reorder(start_time: :desc, id: :desc).limit(PAGE_SIZE + 1).to_a
     if records.size > PAGE_SIZE
       records.pop
       last = records.last
@@ -107,8 +129,35 @@ class Journal
     raise InvalidChange, "Invalid journal cursor"
   end
 
+  def for_list(shots = scope, fields: visible_columns)
+    attributes = ROW_ATTRIBUTES + (fields & Shot.column_names)
+    attributes += %w[bean_brand bean_type] if fields.include?("coffee")
+    attributes += %w[bean_weight drink_weight] if fields.include?("ratio")
+    attributes << "metadata" if fields.any? { it.start_with?("metadata:") }
+    shots = shots.select(attributes.uniq)
+    shots = shots.select(Shot::INFORMATION_PRESENCE_SQL) if fields.include?("duration")
+    (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
+    shots = shots.with_attached_image if fields.include?("image")
+    shots = shots.includes(:tags) if fields.include?("tag_list")
+    shots
+  end
+
+  def cells(ids, fields)
+    raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(UUID_PATTERN) }
+    raise InvalidChange, "Unknown columns" unless fields.is_a?(Array) && fields.present? && (fields - columns.keys).empty?
+
+    shots = for_list(scope.where(id: ids), fields: fields.uniq).to_a
+    raise ActiveRecord::RecordNotFound unless shots.size == ids.size
+
+    shots
+  end
+
   def value(shot, field)
-    if NOTES.include?(field)
+    if %w[actions image].include?(field)
+      nil
+    elsif field == "ratio"
+      "1:#{shot.weight_ratio.round(1)}" if shot.bean_weight_f.positive? && shot.drink_weight_f.positive?
+    elsif NOTES.include?(field)
       shot.rich_text_html(field)
     elsif field.start_with?("metadata:")
       shot.metadata[field.delete_prefix("metadata:")]
@@ -160,7 +209,7 @@ class Journal
         current = snapshot(shot, change["attributes"], metadata_keys: change["attributes"]["metadata"]&.keys)
         raise Conflict, "These fields changed since saving. Reload before reverting." unless current == change["after"]
 
-        attributes = permitted_attributes(shot, change["attributes"])
+        attributes = permitted_attributes(shot, change["attributes"], restoring: true)
         attributes["metadata"] = attributes["metadata"].except(*change.fetch("absent_metadata_keys", [])) if attributes.key?("metadata")
         # Persist assignment callbacks first, then restore exact signed snapshot.
         shot.update!(attributes)
@@ -203,16 +252,17 @@ class Journal
   end
 
   def locked_shots(ids)
-    records = scope.where(id: ids).order(:id).lock.with_notes.includes(:information, :tags, coffee_bag: :roaster).index_by(&:id)
+    records = scope.where(id: ids).order(:id).lock.with_information_presence.with_notes.includes(:tags, coffee_bag: :roaster).index_by(&:id)
     raise ActiveRecord::RecordNotFound unless records.size == ids.size && ids.all? { records.key?(it) }
 
     records
   end
 
-  def permitted_attributes(shot, attributes)
+  def permitted_attributes(shot, attributes, restoring: false)
     raise InvalidChange, "Missing changed fields" unless attributes.is_a?(Hash) && attributes.present?
 
     allowed = Shot.editable_attributes(user).reject { it == :image }
+    allowed = allowed.reject { BAG_FIELDS.include?(it.to_s) } if user.coffee_management_enabled? && !restoring
     allowed += %i[start_time duration] if shot.manual?
     permitted = ActionController::Parameters.new(attributes).permit(*allowed).to_h
     raise InvalidChange, "Some fields are not editable" unless (attributes.keys - permitted.keys).empty?

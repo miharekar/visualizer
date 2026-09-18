@@ -5,9 +5,9 @@ class Current < ActiveSupport::CurrentAttributes
   resets { Time.zone = nil }
 
   def journal
-    if user
-      super || (self.journal = Journal.new(user))
-    end
+    return unless user
+
+    super || (self.journal = Journal.new(user))
   end
 
   def set_timezone_from_cookie(cookie_zone)

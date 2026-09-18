@@ -67,4 +67,13 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "<p><strong>Chocolate</strong></p>", @shot.reload.rich_text_html(:bean_notes)
     assert_equal "<p>Balanced</p>", @shot.rich_text_html(:espresso_notes)
   end
+
+  test "manual shots can be compared without charts" do
+    comparison = create(:shot, user: @user, bean_weight: "18", duration: 30)
+    get "/shots/#{@shot.id}/compare/#{comparison.id}"
+    assert_response :success
+    assert_select "#shot-chart", count: 0
+    assert_select "#compare-range", count: 0
+    assert_includes response.body, "Comparison"
+  end
 end

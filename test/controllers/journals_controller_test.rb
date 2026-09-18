@@ -14,7 +14,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     get shots_url
     assert_response :success
     assert_select "tr[data-shot-id='#{@shot.id}']"
-    assert_select "td[data-column='start_time'] a[href='#{shot_path(@shot)}']"
+    assert_select "td[data-column='start_time'] a", count: 0
+    assert_select "td[data-column='actions'] a[href='#{shot_path(@shot)}'][title='View shot']"
+    assert_select "td[data-column='actions'] a[href='#{edit_shot_path(@shot)}'][title='Edit shot']"
+    assert_select "td[data-column='actions'] button[data-action*='modal#confirm']"
     assert_select "td[data-column='bean_weight'] input[data-editor]"
     assert_select "td[data-column='bean_weight'] [data-display]", count: 0
     assert_select "lexxy-editor", minimum: 2
@@ -27,7 +30,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   test "all journal columns are available without lazy SQL loads" do
     @user.update!(shot_metadata_fields: %w[basket water])
     journal = Journal.new(@user)
+    @user.update!(journal_columns: {order: journal.columns.keys, hidden: []})
     shots, = journal.page(journal.scope, {})
+    assert_not shots.first.manual?
+    assert_not shots.first.association(:information).loaded?
     queries = []
     capture = ->(*args) { queries << args.last[:sql] unless args.last[:name] == "SCHEMA" }
     ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
@@ -37,6 +43,34 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
       end
     end
     assert_empty queries
+  end
+
+  test "default list skips hidden attributes and associations" do
+    journal = Journal.new(@user)
+    shots, = journal.page(journal.scope, {})
+    shot = shots.first
+    assert_not shot.has_attribute?(:barista)
+    assert_not shot.has_attribute?(:espresso_notes)
+    assert_not shot.has_attribute?(:metadata)
+    assert_not shot.association(:rich_text_espresso_notes).loaded?
+    assert_not shot.association(:tags).loaded?
+    assert_not shot.association(:image_attachment).loaded?
+    assert_not shot.association(:information).loaded?
+  end
+
+  test "hidden cells are fetched on demand with ownership and entitlement checks" do
+    @shot.update!(tag_list: "daily")
+    get journal_cells_url, params: {ids: [@shot.id], fields: ["tag_list"]}, as: :json
+    assert_response :success
+    assert_equal ["daily"], response.parsed_body.fetch("tags")
+    assert_includes response.parsed_body.fetch("stream"), "daily"
+    assert_not_includes response.parsed_body.fetch("stream"), "Sweet"
+    foreign = create(:shot)
+    get journal_cells_url, params: {ids: [foreign.id], fields: ["tag_list"]}, as: :json
+    assert_response :not_found
+    @user.update!(premium_expires_at: nil)
+    get journal_cells_url, params: {ids: [@shot.id], fields: ["private_notes"]}, as: :json
+    assert_response :unprocessable_content
   end
 
   test "single and batch changes preserve notes and undo exact coffee fields" do
@@ -221,9 +255,9 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "column preferences are account scoped and validated" do
-    patch profile_journal_columns_url, params: {columns: {order: %w[coffee start_time], hidden: %w[duration]}}, as: :json
+    patch profile_journal_columns_url, params: {columns: {order: %w[bean_type start_time], hidden: %w[duration]}}, as: :json
     assert_response :no_content
-    assert_equal %w[coffee start_time], @user.reload.journal_columns["order"]
+    assert_equal %w[bean_type start_time], @user.reload.journal_columns["order"]
     get shots_url
     assert_select "th[data-column='duration'].hidden"
     patch profile_journal_columns_url, params: {columns: {order: ["user_id"], hidden: []}}, as: :json
@@ -231,11 +265,44 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     patch profile_journal_columns_url, params: {columns: nil}, as: :json
     assert_response :success
     assert_nil @user.reload[:journal_columns]
-    assert_equal Journal::DEFAULT_COLUMNS, response.parsed_body.fetch("visible")
+    assert_equal Journal.new(@user).default_columns, response.parsed_body.fetch("visible")
     get shots_url
     assert_response :success
-    assert_equal Journal::DEFAULT_COLUMNS, Journal.new(@user.reload).visible_columns
+    assert_equal Journal.new(@user).default_columns, Journal.new(@user.reload).visible_columns
     assert_equal "espresso_enjoyment", css_select("thead th[data-column]").first["data-column"]
+  end
+
+  test "column choices and defaults follow coffee management mode" do
+    get shots_url
+    assert_select "[data-column-choice='coffee']", count: 0
+    assert_select "th[data-column='bean_brand']:not(.hidden)"
+    assert_select "th[data-column='bean_type']:not(.hidden)"
+    assert_equal "actions", Journal.new(@user).default_columns.last
+
+    @user.update!(coffee_management_enabled: true)
+    get shots_url
+    assert_select "[data-column-choice='bean_brand'], [data-column-choice='bean_type']", count: 0
+    assert_select "th[data-column='coffee']:not(.hidden)"
+    assert_select "[data-controller='combobox'] [name='coffee_bag_id']", minimum: 2
+    patch journal_url, params: {changes: [change(@shot, bean_brand: "Override")]}, as: :json
+    assert_response :unprocessable_content
+  end
+
+  test "journal reuses combobox and tag editors and names all table inputs" do
+    get shots_url
+    assert_select "[data-controller='combobox'] [name='bean_brand']", minimum: 2
+    assert_select "[data-controller='combobox'] [name='bean_type']", minimum: 2
+    assert_select "[data-controller='combobox'] [name='field_value_grinder_model']"
+    assert_select "[data-controller='tags'] [data-tags-target='input']"
+    assert_select "table input:not([id]):not([name])", count: 0
+  end
+
+  test "JSON deletion removes owned shot and returns current query count" do
+    delete shot_url(@shot), params: {query: {q: "Sweet"}}, as: :json
+    assert_response :success
+    assert_equal @shot.id, response.parsed_body.fetch("id")
+    assert_equal 0, response.parsed_body.fetch("count")
+    assert_not Shot.exists?(@shot.id)
   end
 
   test "preference defaults off and switches interface at same URL" do
