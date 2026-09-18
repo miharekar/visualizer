@@ -37,7 +37,7 @@
     <% end %>
     <%= form_with url: shots_path, method: :get, class: "mb-4 flex flex-wrap items-end gap-3", data: { turbo_stream: true, journal_target: "search", action: ("input->journal#search change->journal#search" if Current.user.premium?) } do |f| %>
       <%= f.hidden_field :fresh_search, value: "1" %>
-      <label class="standard-label min-w-48 flex-1">Search<%= f.search_field :q, value: params[:q], class: "standard-input mt-1", placeholder: "Coffee, notes, tags, brew date…" %></label>
+      <label class="standard-label min-w-48 flex-1">Search<%= f.search_field :q, value: params[:q], class: "standard-input mt-1", placeholder: "Coffee, notes, tags…" %></label>
       <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
     <% end %>
     <div class="fixed inset-x-4 top-20 z-30 mx-auto hidden w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-lg bg-white/95 px-4 py-3 shadow-lg ring-1 ring-neutral-200 backdrop-blur dark:bg-neutral-800/95 dark:ring-neutral-700" data-journal-target="bulkBar">
@@ -80,7 +80,7 @@
         <tbody id="journal-rows" data-journal-target="rows"><%= render partial: "journals/row", collection: @shots, as: :shot, locals: {columns: @columns, visible_columns: @visible_columns} %></tbody>
       </table>
       <p id="journal-empty" class="my-6 text-center text-neutral-500 empty:hidden"><%= "No matching shots." if @shots_count.zero? %></p>
-      <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :start_date, :coffee_bag, :tags).permit(:q, :start_date, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
+      <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
     </div>
     <dialog data-journal-target="dialog" data-action="cancel->journal#closeDialog" class="m-auto max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white p-6 text-neutral-900 shadow-xl backdrop:bg-black/40 dark:bg-neutral-900 dark:text-neutral-100">
       <div class="mb-4 flex items-center justify-between">
