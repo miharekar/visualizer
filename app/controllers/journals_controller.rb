@@ -30,5 +30,4 @@ class JournalsController < ApplicationController
   def set_journal
     @journal = Journal.new(Current.user)
   end
-
 end

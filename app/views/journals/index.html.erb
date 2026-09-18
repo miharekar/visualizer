@@ -1,15 +1,30 @@
 <% content_for(:html_title) { "Visualizer | Your Shots" } %>
 <% content_for(:head) { tag.meta(name: "turbo-cache-control", content: "no-cache") } %>
-<div class="mx-auto flex max-w-7xl flex-col text-neutral-900 sm:px-6 lg:px-8 dark:text-neutral-100" data-controller="journal panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream">
+<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream">
   <div data-upload-drop-target="overlay" class="bg-oxford-blue-500/50 fixed inset-0 z-99 hidden items-center justify-center backdrop-blur-sm">
     <div class="text-center">
       <h3 class="mb-2 text-2xl font-medium text-white">Drop anywhere to upload</h3>
       <p class="text-white/90">Release your files to start the upload</p>
     </div>
   </div>
-  <%= render "shots/index_header" %>
-  <%= render "shots/upload_form", show_form: false %>
-  <div class="mt-4 px-4 sm:px-0">
+  <div class="mx-auto w-full max-w-7xl sm:px-6 lg:px-8">
+    <%= render "shots/index_header" %>
+    <%= render "shots/upload_form", show_form: false %>
+    <div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-target="columnsPanel">
+      <div class="flex flex-wrap gap-2" data-journal-target="columnList" data-action="pointermove->journal#dragColumn pointerup->journal#finishColumnDrag pointercancel->journal#cancelColumnDrag keydown.esc@window->journal#cancelColumnDrag">
+        <% @columns.each do |field| %>
+          <div data-column-choice="<%= field %>" class="flex items-center gap-2 rounded border border-neutral-200 p-2 dark:border-neutral-700">
+            <button type="button" class="touch-none cursor-grab rounded p-1 text-neutral-500 active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-terracotta-500" data-action="pointerdown->journal#startColumnDrag keydown->journal#moveColumn" aria-label="Reorder <%= @journal.columns[field] %>">
+              <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" aria-hidden="true"><circle cx="5" cy="3" r="1.5" /><circle cx="11" cy="3" r="1.5" /><circle cx="5" cy="8" r="1.5" /><circle cx="11" cy="8" r="1.5" /><circle cx="5" cy="13" r="1.5" /><circle cx="11" cy="13" r="1.5" /></svg>
+            </button>
+            <label class="flex items-center gap-2"><%= check_box_tag "visible_columns[]", field, @visible_columns.include?(field), id: nil, data: {action: "journal#columns"}, class: "standard-checkbox size-4" %><%= @journal.columns[field] %></label>
+          </div>
+        <% end %>
+      </div>
+      <div class="mt-3 flex justify-end"><button type="button" class="button-white px-3 py-2" data-action="journal#resetColumns">Reset</button></div>
+    </div>
+  </div>
+  <div class="mt-4 w-full min-w-0 px-4 sm:px-6 lg:px-8">
     <% unless Current.user.premium? %>
       <p class="mb-4 text-sm text-neutral-500">Showing shots uploaded in the last month. <%= link_to "Premium", premium_index_path, class: "standard-link" %> includes older history.</p>
     <% end %>
@@ -25,25 +40,14 @@
       <% end %>
       <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
     <% end %>
-    <details class="mb-4 rounded border border-neutral-200 p-3 dark:border-neutral-700">
-      <summary class="cursor-pointer font-medium">Columns</summary>
-      <p class="my-2 text-sm text-neutral-500">Visibility and order follow your account across devices.</p>
-      <div class="flex flex-wrap gap-2" data-journal-target="columnList">
-        <% @columns.each do |field| %>
-          <div data-column-choice="<%= field %>" class="flex items-center gap-2 rounded border border-neutral-200 p-2 dark:border-neutral-700">
-            <label class="flex items-center gap-2"><%= check_box_tag "visible_columns[]", field, @visible_columns.include?(field), id: nil, data: {action: "journal#columns"}, class: "standard-checkbox size-4" %><%= @journal.columns[field] %></label>
-            <button type="button" data-action="journal#moveColumn" data-direction="-1" aria-label="Move <%= @journal.columns[field] %> earlier">←</button>
-            <button type="button" data-action="journal#moveColumn" data-direction="1" aria-label="Move <%= @journal.columns[field] %> later">→</button>
-          </div>
-        <% end %>
-      </div>
-    </details>
-    <div class="sticky top-0 z-20 mb-3 flex flex-wrap items-center gap-3 rounded bg-neutral-100 p-3 dark:bg-neutral-800">
+    <div class="fixed inset-x-4 top-20 z-30 mx-auto hidden w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-lg bg-white/95 px-4 py-3 shadow-lg ring-1 ring-neutral-200 backdrop-blur dark:bg-neutral-800/95 dark:ring-neutral-700" data-journal-target="bulkBar">
       <span data-journal-target="selection">0 selected</span>
       <button type="button" class="standard-link" data-action="journal#bulkCoffee">Assign coffee</button>
       <button type="button" class="standard-link" data-action="journal#bulkField">Set field</button>
       <% if Current.user.premium? %><button type="button" class="standard-link" data-action="journal#bulkTags">Add/remove tags</button><% end %>
       <button type="button" class="standard-link" data-action="journal#compare">Compare</button>
+    </div>
+    <div class="mb-3 hidden flex-wrap items-center gap-3 text-sm" data-journal-target="saveBar">
       <button type="button" class="standard-link hidden" data-journal-target="undo" data-action="journal#undo">Undo last change</button>
       <span role="status" aria-live="polite" data-journal-target="status" class="text-sm"></span>
       <button type="button" class="standard-link hidden" data-journal-target="retry" data-action="journal#retry">Retry</button>
@@ -63,7 +67,7 @@
       </form>
     </div>
     <div class="overflow-x-auto rounded border border-neutral-200 dark:border-neutral-700">
-      <table class="w-full text-sm" data-journal-target="table">
+      <table class="w-max min-w-full text-sm" data-journal-target="table">
         <caption class="sr-only">Coffee journal. Select rows for bulk edits, or activate a cell to edit it.</caption>
         <thead class="bg-neutral-50 dark:bg-neutral-800">
           <tr>
@@ -76,9 +80,7 @@
         <tbody id="journal-rows" data-journal-target="rows"><%= render partial: "journals/row", collection: @shots, as: :shot, locals: {columns: @columns, visible_columns: @visible_columns} %></tbody>
       </table>
     </div>
-    <% if @shots.empty? %>
-      <p class="my-6 text-center text-neutral-500">No matching shots. Add a shot or adjust your search.</p>
-    <% end %>
+    <p id="journal-empty" class="my-6 text-center text-neutral-500 empty:hidden"><%= "No matching shots." if @shots_count.zero? %></p>
     <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :start_date, :coffee_bag, :tags).permit(:q, :start_date, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
     <dialog data-journal-target="dialog" data-action="cancel->journal#closeDialog" class="m-auto max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white p-6 text-neutral-900 shadow-xl backdrop:bg-black/40 dark:bg-neutral-900 dark:text-neutral-100">
       <div class="mb-4 flex items-center justify-between">

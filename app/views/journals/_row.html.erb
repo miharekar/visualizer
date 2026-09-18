@@ -4,7 +4,7 @@
   </td>
   <% columns.each do |field| %>
     <% editable = field != "duration" || shot.manual? %>
-    <td data-column="<%= field %>" data-value="<%= @journal.value(shot, field) %>" class="p-1 <%= field == 'espresso_enjoyment' ? 'w-20 text-center' : 'max-w-64 min-w-32' %> <%= 'hidden' unless visible_columns.include?(field) %>">
+    <td data-column="<%= field %>" data-value="<%= @journal.value(shot, field) %>" class="max-w-64 p-1 <%= 'text-center' if field == 'espresso_enjoyment' %> <%= 'hidden' unless visible_columns.include?(field) %>">
       <% if field == "start_time" %>
         <%= link_to journal_display(@journal, shot, field), shot_path(shot), class: "standard-link block whitespace-nowrap px-2 py-3", aria: {label: "Open shot from #{shot.start_time.in_time_zone(Current.timezone).to_formatted_s(:long)}"} %>
       <% elsif field == "coffee" || Journal::NOTES.include?(field) %>
@@ -16,7 +16,7 @@
           <%= number_field_tag nil, shot.espresso_enjoyment, min: 0, max: 100, step: 1, inputmode: "numeric", placeholder: "—", aria: {label: "Enjoyment"}, style: ("background-color: #{enjoyment_hex(shot.espresso_enjoyment)};" if shot.espresso_enjoyment.present?), class: "h-6 w-9! rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white [appearance:textfield] focus:ring-2 focus:ring-terracotta-500 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none", data: {editor: true, range_target: "color", action: "focus->journal#focus input->range#update blur->journal#commit keydown->journal#key"} %>
         </div>
       <% elsif editable %>
-        <input type="<%= journal_input_type(field) %>" value="<%= @journal.value(shot, field) %>" aria-label="<%= @journal.columns[field] %>" placeholder="—" step="<%= field == 'duration' ? 'any' : '1' %>" class="focus:border-terracotta-500 focus:ring-terracotta-500 w-full min-w-24 rounded border border-transparent bg-transparent px-2 py-3 text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800" data-editor data-action="focus->journal#focus blur->journal#commit keydown->journal#key">
+        <input type="<%= journal_input_type(field) %>" value="<%= @journal.value(shot, field) %>" aria-label="<%= @journal.columns[field] %>" placeholder="—" step="<%= field == 'duration' ? 'any' : '1' %>" style="width: <%= [@journal.value(shot, field).to_s.length, 1].max + 3 %>ch" class="focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-3 text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800" data-editor data-action="focus->journal#focus input->journal#resizeInput blur->journal#commit keydown->journal#key">
       <% else %>
         <span class="block px-2 py-3"><%= journal_display(@journal, shot, field).presence || "—" %></span>
       <% end %>

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["rows", "row", "table", "selection", "status", "undo", "retry", "reload", "search", "columnList", "draft", "draftForm", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
+  static targets = ["rows", "row", "table", "selection", "bulkBar", "saveBar", "status", "undo", "retry", "reload", "search", "columnsPanel", "columnsButton", "columnList", "draft", "draftForm", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
   static values = { url: String, createUrl: String, columnsUrl: String, timezone: String }
 
   connect() {
@@ -15,6 +15,7 @@ export default class extends Controller {
 
   disconnect() {
     clearTimeout(this.searchTimer)
+    this.cancelColumnDrag()
   }
 
   get selectedRows() {
@@ -30,7 +31,10 @@ export default class extends Controller {
   }
 
   select() {
-    this.selectionTarget.textContent = `${this.selectedRows.length} selected`
+    const count = this.selectedRows.length
+    this.selectionTarget.textContent = `${count} selected`
+    this.bulkBarTarget.classList.toggle("hidden", count === 0)
+    this.bulkBarTarget.classList.toggle("flex", count > 0)
   }
 
   selectAll(event) {
@@ -50,6 +54,10 @@ export default class extends Controller {
 
   focus(event) {
     event.target.dataset.original = event.target.value
+  }
+
+  resizeInput(event) {
+    event.currentTarget.style.width = `${Math.max(event.currentTarget.value.length, 1) + 3}ch`
   }
 
   key(event) {
@@ -114,6 +122,8 @@ export default class extends Controller {
     this.currentOperation = operation
     this.failures.delete(operation.key)
     this.statusTarget.textContent = "Saving…"
+    this.saveBarTarget.classList.remove("hidden")
+    this.saveBarTarget.classList.add("flex")
     try {
       await operation()
     } catch (error) {
@@ -378,7 +388,13 @@ export default class extends Controller {
         delete shot.bean_brand
         delete shot.bean_type
       }
-      const result = await this.request(this.createUrlValue, "POST", { shot, entry_id })
+      this.draftFormTarget.inert = true
+      let result
+      try {
+        result = await this.request(this.createUrlValue, "POST", { shot, entry_id })
+      } finally {
+        this.draftFormTarget.inert = false
+      }
       this.renderRows(result.rows)
       this.creating = false
       this.creationOperation = null
@@ -395,11 +411,78 @@ export default class extends Controller {
     this.enqueue(() => this.request(this.columnsUrlValue, "PATCH", { columns }), [], "columns")
   }
 
+  toggleColumns() {
+    const hidden = this.columnsPanelTarget.classList.toggle("hidden")
+    this.columnsButtonTarget.setAttribute("aria-expanded", String(!hidden))
+    if (hidden) this.cancelColumnDrag()
+  }
+
+  resetColumns() {
+    this.cancelColumnDrag()
+    this.enqueue(async () => {
+      const settings = await this.request(this.columnsUrlValue, "PATCH", { columns: null })
+      settings.order.forEach(field => {
+        const item = this.columnListTarget.querySelector(`[data-column-choice="${CSS.escape(field)}"]`)
+        item.querySelector("input").checked = settings.visible.includes(field)
+        this.columnListTarget.append(item)
+      })
+      this.applyColumns()
+    }, [], "columns")
+  }
+
+  startColumnDrag(event) {
+    if (event.button !== 0 || !event.isPrimary) return
+    event.preventDefault()
+    this.draggedColumn = event.currentTarget.closest("[data-column-choice]")
+    this.columnOrderBeforeDrag = [...this.columnListTarget.children]
+    this.columnPointerId = event.pointerId
+    this.draggedColumn.classList.add("ring-2", "ring-terracotta-500")
+    this.columnListTarget.setPointerCapture(event.pointerId)
+    event.currentTarget.focus()
+  }
+
+  dragColumn(event) {
+    if (!this.draggedColumn || event.pointerId !== this.columnPointerId) return
+    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest("[data-column-choice]")
+    if (!target || target === this.draggedColumn || !this.columnListTarget.contains(target)) return
+    const items = [...this.columnListTarget.children]
+    if (items.indexOf(this.draggedColumn) < items.indexOf(target)) target.after(this.draggedColumn)
+    else target.before(this.draggedColumn)
+  }
+
+  finishColumnDrag(event) {
+    if (!this.draggedColumn || event.pointerId !== this.columnPointerId) return
+    const item = this.draggedColumn
+    const changed = [...this.columnListTarget.children].some((column, index) => column !== this.columnOrderBeforeDrag[index])
+    this.endColumnDrag()
+    if (changed) this.columns()
+    item.querySelector("button").focus()
+  }
+
+  cancelColumnDrag(event) {
+    if (!this.draggedColumn) return
+    event?.preventDefault()
+    this.columnListTarget.append(...this.columnOrderBeforeDrag)
+    this.endColumnDrag()
+  }
+
+  endColumnDrag() {
+    this.draggedColumn.classList.remove("ring-2", "ring-terracotta-500")
+    this.draggedColumn = null
+    if (this.columnListTarget.hasPointerCapture(this.columnPointerId)) this.columnListTarget.releasePointerCapture(this.columnPointerId)
+    this.columnOrderBeforeDrag = null
+    this.columnPointerId = null
+  }
+
   moveColumn(event) {
+    const direction = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[event.key]
+    if (!direction || this.draggedColumn) return
+    event.preventDefault()
     const item = event.currentTarget.closest("[data-column-choice]")
-    const direction = Number(event.currentTarget.dataset.direction)
-    if (direction < 0 && item.previousElementSibling) item.previousElementSibling.before(item)
-    if (direction > 0 && item.nextElementSibling) item.nextElementSibling.after(item)
+    const neighbor = direction < 0 ? item.previousElementSibling : item.nextElementSibling
+    if (!neighbor) return
+    if (direction < 0) neighbor.before(item)
+    else neighbor.after(item)
     this.columns()
     event.currentTarget.focus()
   }
@@ -426,6 +509,9 @@ export default class extends Controller {
       this.lastOperation = null
       this.undoTarget.classList.add("hidden")
       this.selectionTarget.textContent = "0 selected"
+      this.bulkBarTarget.classList.add("hidden")
+      this.bulkBarTarget.classList.remove("flex")
+      this.tableTarget.querySelector("thead input[type=checkbox]").checked = false
       return
     }
     stream.templateElement.content.querySelectorAll("[data-shot-id]").forEach(row => {

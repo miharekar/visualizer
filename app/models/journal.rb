@@ -52,6 +52,8 @@ class Journal
   end
 
   def save_columns(settings)
+    return user.with_lock { user.update!(journal_columns: nil) } if settings.nil?
+
     order = settings["order"]
     hidden = settings["hidden"]
     raise InvalidChange, "Unknown columns" unless order.is_a?(Array) && hidden.is_a?(Array) && order.all? { it.is_a?(String) } && hidden.all? { it.is_a?(String) } && (order + hidden - columns.keys).empty?
