@@ -43,8 +43,17 @@ community discovery.
 - Always newest-to-oldest; no Sort/Order controls or alternate row ordering.
 - Infinite loading, using existing lazy Turbo-frame pattern. Cursor uses brew
   timestamp and shot UUID so equal timestamps do not skip rows.
+- Table sits in a bounded, viewport-relative scroll container with native
+  horizontal/vertical scrollbars and sticky headers. Infinite-loading sentinel
+  is inside this container; standard page footer remains reachable below it.
+  Height uses measured space above table and footer height, not a fixed pixel
+  allowance; resize observation keeps it correct as panels open or close.
+  Table links disable Turbo hover prefetch, including newly loaded rows.
 - Premium search is instant and preserves focus; no Search button. Free users
   submit search explicitly. Search field fills remaining header-row width.
+- Single search box covers coffee, notes, profiles, tags (premium), and brew
+  dates in user's timezone. Combined terms match across fields; no separate
+  date/coffee/tag search controls.
 - Free users cannot read/edit old shots through Journal. Existing cutoff is
   based on upload `created_at`, not brew time. Premium field entitlements apply.
 - Column visibility and order persist on account from initial rollout.
@@ -54,6 +63,7 @@ community discovery.
   buttons; pointer dragging and arrow-key reordering save account preferences.
   Escape cancels dragging. Reset persists SQL NULL and restores default order
   and visibility immediately.
+- Column updates and Reset save quietly; failures still show retry feedback.
 - Existing-row edits save immediately on commit, with session-scoped per-cell
   revert and bulk undo. Undo restores preceding saved value, not original value
   from page load, and preserves unrelated later edits.

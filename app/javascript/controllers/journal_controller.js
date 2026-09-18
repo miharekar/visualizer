@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["rows", "row", "table", "selection", "bulkBar", "saveBar", "status", "undo", "retry", "reload", "search", "columnsPanel", "columnsButton", "columnList", "draft", "draftForm", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
+  static targets = ["rows", "row", "table", "tableViewport", "selection", "bulkBar", "saveBar", "status", "undo", "retry", "reload", "search", "columnsPanel", "columnsButton", "columnList", "visibleColumns", "hiddenColumns", "draft", "draftForm", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
   static values = { url: String, createUrl: String, columnsUrl: String, timezone: String }
 
   connect() {
@@ -11,11 +11,24 @@ export default class extends Controller {
     this.busy = false
     this.failures = new Map()
     this.dialogIds = []
+    if (this.hasTableViewportTarget) {
+      this.viewportObserver = new ResizeObserver(() => this.sizeViewport())
+      ;[this.element, document.querySelector("body > header"), document.querySelector("body > footer")].filter(Boolean).forEach(element => this.viewportObserver.observe(element))
+      this.sizeViewport()
+    }
   }
 
   disconnect() {
     clearTimeout(this.searchTimer)
+    this.viewportObserver?.disconnect()
     this.cancelColumnDrag()
+  }
+
+  sizeViewport() {
+    const viewport = this.tableViewportTarget
+    const footerHeight = document.querySelector("body > footer")?.offsetHeight || 0
+    const available = window.innerHeight - viewport.getBoundingClientRect().top - window.scrollY - footerHeight
+    viewport.style.maxHeight = `${Math.max(0, available)}px`
   }
 
   get selectedRows() {
@@ -121,9 +134,11 @@ export default class extends Controller {
     const operation = this.queue.shift()
     this.currentOperation = operation
     this.failures.delete(operation.key)
-    this.statusTarget.textContent = "Saving…"
-    this.saveBarTarget.classList.remove("hidden")
-    this.saveBarTarget.classList.add("flex")
+    if (operation.key !== "columns") {
+      this.statusTarget.textContent = "Saving…"
+      this.saveBarTarget.classList.remove("hidden")
+      this.saveBarTarget.classList.add("flex")
+    }
     try {
       await operation()
     } catch (error) {
@@ -134,7 +149,7 @@ export default class extends Controller {
       this.finishPending(operation.keys)
       this.busy = false
       this.currentOperation = null
-      this.refreshStatus()
+      this.refreshStatus(operation.key === "columns" ? "" : "Saved")
       this.drain()
       if (this.searchPending && !this.hasUnsavedChanges()) this.search()
     }
@@ -154,9 +169,12 @@ export default class extends Controller {
     return [...this.failures.values()].find(operation => operation.keys.includes(key))
   }
 
-  refreshStatus() {
+  refreshStatus(message = "Saved") {
     const failures = [...this.failures.values()]
-    this.statusTarget.textContent = failures.length ? `Couldn't save: ${failures[0].error}. Correct the value or retry.` : "Saved"
+    this.statusTarget.textContent = failures.length ? `Couldn't save: ${failures[0].error}. Correct the value or retry.` : message
+    const visible = failures.length > 0 || !!this.lastOperation || !!message
+    this.saveBarTarget.classList.toggle("hidden", !visible)
+    this.saveBarTarget.classList.toggle("flex", visible)
     this.retryTarget.classList.toggle("hidden", !failures.length)
     this.reloadTarget.classList.toggle("hidden", !failures.length)
     this.rowsTarget.querySelectorAll("[data-editor]").forEach(input => {
@@ -197,6 +215,7 @@ export default class extends Controller {
       const current = this.row(id)
       if (!current) {
         this.rowsTarget.prepend(incoming)
+        this.tableViewportTarget.scrollTop = 0
       } else {
         Object.assign(current.dataset, incoming.dataset)
         incoming.querySelectorAll("[data-column]").forEach(cell => {
@@ -330,7 +349,7 @@ export default class extends Controller {
     const editor = this.noteFieldsTarget.querySelector("lexxy-editor")
     editor.value = value
     this.noteValue = value
-    this.dialogTitleTarget.textContent = this.columnListTarget.querySelector(`[data-column-choice="${field}"] label`).textContent.trim()
+    this.dialogTitleTarget.textContent = this.columnListTarget.querySelector(`[data-column-choice="${field}"] [data-column-label]`).textContent.trim()
   }
 
   closeDialog(event) {
@@ -406,9 +425,12 @@ export default class extends Controller {
 
   columns() {
     this.applyColumns()
-    const choices = [...this.columnListTarget.children]
-    const columns = { order: choices.map(item => item.dataset.columnChoice), hidden: choices.filter(item => !item.querySelector("input").checked).map(item => item.dataset.columnChoice) }
+    const columns = { order: this.columnItems.map(item => item.dataset.columnChoice), hidden: [...this.hiddenColumnsTarget.children].map(item => item.dataset.columnChoice) }
     this.enqueue(() => this.request(this.columnsUrlValue, "PATCH", { columns }), [], "columns")
+  }
+
+  get columnItems() {
+    return [...this.columnListTarget.querySelectorAll("[data-column-choice]")]
   }
 
   toggleColumns() {
@@ -419,22 +441,26 @@ export default class extends Controller {
 
   resetColumns() {
     this.cancelColumnDrag()
-    this.enqueue(async () => {
-      const settings = await this.request(this.columnsUrlValue, "PATCH", { columns: null })
-      settings.order.forEach(field => {
-        const item = this.columnListTarget.querySelector(`[data-column-choice="${CSS.escape(field)}"]`)
-        item.querySelector("input").checked = settings.visible.includes(field)
-        this.columnListTarget.append(item)
-      })
-      this.applyColumns()
-    }, [], "columns")
+    this.enqueue(
+      async () => {
+        const settings = await this.request(this.columnsUrlValue, "PATCH", { columns: null })
+        settings.order.forEach(field => {
+          const item = this.columnListTarget.querySelector(`[data-column-choice="${CSS.escape(field)}"]`)
+          const group = settings.visible.includes(field) ? this.visibleColumnsTarget : this.hiddenColumnsTarget
+          group.append(item)
+        })
+        this.applyColumns()
+      },
+      [],
+      "columns"
+    )
   }
 
   startColumnDrag(event) {
     if (event.button !== 0 || !event.isPrimary) return
     event.preventDefault()
     this.draggedColumn = event.currentTarget.closest("[data-column-choice]")
-    this.columnOrderBeforeDrag = [...this.columnListTarget.children]
+    this.columnGroupsBeforeDrag = [this.visibleColumnsTarget, this.hiddenColumnsTarget].map(group => [group, [...group.children]])
     this.columnPointerId = event.pointerId
     this.draggedColumn.classList.add("ring-2", "ring-terracotta-500")
     this.columnListTarget.setPointerCapture(event.pointerId)
@@ -443,17 +469,28 @@ export default class extends Controller {
 
   dragColumn(event) {
     if (!this.draggedColumn || event.pointerId !== this.columnPointerId) return
-    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest("[data-column-choice]")
-    if (!target || target === this.draggedColumn || !this.columnListTarget.contains(target)) return
-    const items = [...this.columnListTarget.children]
-    if (items.indexOf(this.draggedColumn) < items.indexOf(target)) target.after(this.draggedColumn)
-    else target.before(this.draggedColumn)
+    const hit = document.elementFromPoint(event.clientX, event.clientY)
+    const group = hit?.closest("[data-column-visibility]")
+    if (!group || !this.columnListTarget.contains(group)) return
+    const target = hit.closest("[data-column-choice]")
+    if (target === this.draggedColumn) return
+    if (!target) {
+      group.append(this.draggedColumn)
+    } else if (target.parentElement !== this.draggedColumn.parentElement) {
+      const bounds = target.getBoundingClientRect()
+      if (event.clientX < bounds.left + bounds.width / 2) target.before(this.draggedColumn)
+      else target.after(this.draggedColumn)
+    } else {
+      const items = [...group.children]
+      if (items.indexOf(this.draggedColumn) < items.indexOf(target)) target.after(this.draggedColumn)
+      else target.before(this.draggedColumn)
+    }
   }
 
   finishColumnDrag(event) {
     if (!this.draggedColumn || event.pointerId !== this.columnPointerId) return
     const item = this.draggedColumn
-    const changed = [...this.columnListTarget.children].some((column, index) => column !== this.columnOrderBeforeDrag[index])
+    const changed = this.columnGroupsBeforeDrag.some(([group, items]) => group.children.length !== items.length || [...group.children].some((item, index) => item !== items[index]))
     this.endColumnDrag()
     if (changed) this.columns()
     item.querySelector("button").focus()
@@ -462,7 +499,7 @@ export default class extends Controller {
   cancelColumnDrag(event) {
     if (!this.draggedColumn) return
     event?.preventDefault()
-    this.columnListTarget.append(...this.columnOrderBeforeDrag)
+    this.columnGroupsBeforeDrag.forEach(([group, items]) => group.append(...items))
     this.endColumnDrag()
   }
 
@@ -470,7 +507,7 @@ export default class extends Controller {
     this.draggedColumn.classList.remove("ring-2", "ring-terracotta-500")
     this.draggedColumn = null
     if (this.columnListTarget.hasPointerCapture(this.columnPointerId)) this.columnListTarget.releasePointerCapture(this.columnPointerId)
-    this.columnOrderBeforeDrag = null
+    this.columnGroupsBeforeDrag = null
     this.columnPointerId = null
   }
 
@@ -479,10 +516,16 @@ export default class extends Controller {
     if (!direction || this.draggedColumn) return
     event.preventDefault()
     const item = event.currentTarget.closest("[data-column-choice]")
-    const neighbor = direction < 0 ? item.previousElementSibling : item.nextElementSibling
-    if (!neighbor) return
-    if (direction < 0) neighbor.before(item)
-    else neighbor.after(item)
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      const group = direction < 0 ? this.visibleColumnsTarget : this.hiddenColumnsTarget
+      if (item.parentElement === group) return
+      group.append(item)
+    } else {
+      const neighbor = direction < 0 ? item.previousElementSibling : item.nextElementSibling
+      if (!neighbor) return
+      if (direction < 0) neighbor.before(item)
+      else neighbor.after(item)
+    }
     this.columns()
     event.currentTarget.focus()
   }
@@ -493,10 +536,10 @@ export default class extends Controller {
 
   rowTargetConnected(row) {
     if (!this.hasColumnListTarget) return
-    ;[...this.columnListTarget.children].forEach(item => {
+    this.columnItems.forEach(item => {
       const cell = this.cell(row, item.dataset.columnChoice)
       if (!cell) return
-      cell.classList.toggle("hidden", !item.querySelector("input").checked)
+      cell.classList.toggle("hidden", item.parentElement === this.hiddenColumnsTarget)
       row.append(cell)
     })
   }
@@ -505,6 +548,7 @@ export default class extends Controller {
     const stream = event.target
     if (stream.getAttribute("target") !== "journal-rows") return
     if (stream.getAttribute("action") === "update") {
+      this.tableViewportTarget.scrollTop = 0
       this.reverts.clear()
       this.lastOperation = null
       this.undoTarget.classList.add("hidden")
