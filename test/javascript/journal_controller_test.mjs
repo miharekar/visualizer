@@ -15,6 +15,7 @@ function controller() {
   const controller = new JournalController()
   controller.connect()
   controller.statusTarget = {}
+  controller.saveBarTarget = { classList: { add() {}, remove() {} } }
   controller.refreshStatus = () => {}
   controller.hasUnsavedChanges = () => controller.busy || controller.queue.length > 0 || controller.failures.size > 0
   return controller
@@ -25,14 +26,20 @@ const settled = () => new Promise(resolve => setImmediate(resolve))
 test("validation failure permits other saves and correction replaces failed edit", async () => {
   const journal = controller()
   const saved = []
-  journal.enqueue(async () => { throw new Error("Enjoyment must be between 0 and 100") }, ["shot:enjoyment"])
-  journal.enqueue(async () => { saved.push("dose") }, ["shot:dose"])
+  journal.enqueue(async () => {
+    throw new Error("Enjoyment must be between 0 and 100")
+  }, ["shot:enjoyment"])
+  journal.enqueue(async () => {
+    saved.push("dose")
+  }, ["shot:dose"])
   await settled()
   assert.deepEqual(saved, ["dose"])
   assert.equal(journal.failures.size, 1)
   assert.equal(journal.pending.size, 0)
 
-  journal.enqueue(async () => { saved.push("enjoyment:90") }, ["shot:enjoyment"])
+  journal.enqueue(async () => {
+    saved.push("enjoyment:90")
+  }, ["shot:enjoyment"])
   await settled()
   assert.deepEqual(saved, ["dose", "enjoyment:90"])
   assert.equal(journal.failures.size, 0)
@@ -43,8 +50,12 @@ test("failed requests can be retried without replaying successful saves", async 
   const journal = controller()
   let attempts = 0
   let otherSaves = 0
-  journal.enqueue(async () => { if (++attempts === 1) throw new Error("Network unavailable") }, ["shot:notes"])
-  journal.enqueue(async () => { otherSaves++ }, ["shot:dose"])
+  journal.enqueue(async () => {
+    if (++attempts === 1) throw new Error("Network unavailable")
+  }, ["shot:notes"])
+  journal.enqueue(async () => {
+    otherSaves++
+  }, ["shot:dose"])
   await settled()
   journal.retry()
   await settled()

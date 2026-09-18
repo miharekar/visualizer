@@ -1,6 +1,6 @@
 # Journal implementation plan
 
-Status: implemented; final verification in progress.
+Status: implemented and verified.
 
 ## Goal
 
@@ -24,15 +24,21 @@ community discovery.
 - Journal is an optional **view of `/shots`**, not a separate destination.
 - Account setting defaults off and is available to everyone. No beta gate.
 - Main navigation still says **Shots** and stays active in either view.
-- Reuse classic shot-index width, spacing, count heading, push notification
+- Reuse classic shot-index header width, count heading, push notification
   button, Upload button/panel, and drag-and-drop upload behavior. Add **Create
-  a shot** beside those controls.
+  a shot** beside those controls. Header, Upload, and Columns panels remain
+  narrow; search/table container uses full screen width with responsive gutters,
+  including ultrawide screens.
+- All columns size from content without compact/non-compact categories. Inputs
+  grow while typing, capped for long text. Table fills its container when content
+  is narrow and scrolls horizontally when content is wider.
 - No Journal heading or instructional subtitle.
 - Rails/Turbo/Stimulus/Tailwind only; no grid/spreadsheet dependency.
 - Desktop-first, usable on mobile with single-tap controls.
 - Ordinary cells are inputs all along, styled as text until focused. No
   duplicated text display and hidden input.
-- **Enjoyment first by default**, with existing red-to-green color treatment.
+- **Enjoyment first by default**, with existing red-to-green color treatment in
+  a compact 36px editable badge centered in its cell.
 - Brewed time links to existing shot page. No Details column or details panel.
 - Always newest-to-oldest; no Sort/Order controls or alternate row ordering.
 - Infinite loading, using existing lazy Turbo-frame pattern. Cursor uses brew
@@ -43,6 +49,11 @@ community discovery.
   based on upload `created_at`, not brew time. Premium field entitlements apply.
 - Column visibility and order persist on account from initial rollout.
   `journal_columns = NULL` means default layout; empty settings also fall back.
+- Columns button sits immediately left of Upload; configuration panel is hidden
+  until opened, above search, with no outer border. Drag handles replace arrow
+  buttons; pointer dragging and arrow-key reordering save account preferences.
+  Escape cancels dragging. Reset persists SQL NULL and restores default order
+  and visibility immediately.
 - Existing-row edits save immediately on commit, with session-scoped per-cell
   revert and bulk undo. Undo restores preceding saved value, not original value
   from page load, and preserves unrelated later edits.
@@ -71,6 +82,9 @@ Coffee assignment uses own bags when coffee management is enabled; otherwise
 canonical coffee search and manual roaster/name fields. Assignment preserves
 measurements. Bulk toolbar supports coffee assignment, setting individual
 fields, adding/removing tags, and entering existing two-shot comparison.
+Selection toolbar is hidden with no selection and floats 5rem below viewport top
+when rows are selected, without moving table layout. Save/error status remains
+separate from selection controls.
 
 Manual shots:
 
@@ -95,6 +109,9 @@ Manual shots:
 - `PATCH /shots/journal` saves bounded batches
   or reverts signed snapshots. These are internal session-authenticated writes.
 - `PATCH /profile/journal_columns` persists account layout.
+- Profile saves explicitly redirect to HTML so Turbo navigates and shows flash
+  notice instead of treating destination as a list-update stream. Shots navigation
+  uses controller/action matching, remaining active on `/shots.html` too.
 - Share editable-field rules through `Shot.editable_attributes(user)`.
 - Owner-scope shots and own coffee bags. Recheck history and premium access on
   every write, including undo.
@@ -127,19 +144,28 @@ Manual shots:
 - [x] Add newest-first infinite loading with timestamp/UUID cursor.
 - [x] Add submitted free search and focus-preserving premium instant search.
 - [x] Keep existing chart/comparison entry points; handle chartless manual shots.
-- [ ] Finish controller/model regression checks and browser smoke checks against
+- [x] Finish controller/model regression checks and browser smoke checks against
       latest UI changes, including settings enablement, NULL preferences,
       cancellation, pagination, failed saves, keyboard and mobile use.
-- [ ] Format templates with rustywind/htmlbeautifier and JavaScript with Prettier.
-- [ ] Run RuboCop and relevant security checks; record final results below.
+- [x] Format templates with rustywind/htmlbeautifier and JavaScript with Prettier.
+- [x] Run RuboCop and relevant security checks; record final results below.
 
 ## Verification log
 
-- Earlier targeted run: 79 tests, 334 assertions, no failures/errors; subsequent
-  UI refinements require rerun.
+- `PARALLEL_WORKERS=1 bin/rails test`: 308 tests, 1,358 assertions, no failures,
+  errors, or skips.
+- `node --test test/javascript/journal_controller_test.mjs`: two passing native
+  Node tests for validation recovery, independent saves, and retry behavior.
+- Brakeman: no security warnings or scan errors.
+- RuboCop: 260 files, no offenses. Gitleaks: no leaks.
+- Latest focused rerun after UI refinements: 24 Rails tests, 155 assertions,
+  plus both JavaScript queue tests passing.
 - Chromium smoke checks have exercised inline save/revert, bulk assignment,
   note save/Escape cancellation, manual creation, column persistence, infinite
   loading, premium search retaining focus, and mobile coffee editing.
+- Chromium reproduced invalid Enjoyment `101`, verified another field still
+  saves, then corrected score to `90` without reloading. Verified badge's width
+  and horizontal centering through actual computed geometry.
 - Default parallel Rails test execution exhausted local Postgres connections;
   use `PARALLEL_WORKERS=1` for remaining checks.
 - Temporary browser tooling installed outside repository; no app dependency.

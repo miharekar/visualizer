@@ -161,7 +161,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "th[data-column='duration'].hidden"
     patch profile_journal_columns_url, params: {columns: {order: ["user_id"], hidden: []}}, as: :json
     assert_response :unprocessable_entity
-    @user.update!(journal_columns: nil)
+    patch profile_journal_columns_url, params: {columns: nil}, as: :json
+    assert_response :success
+    assert_nil @user.reload[:journal_columns]
+    assert_equal Journal::DEFAULT_COLUMNS, response.parsed_body.fetch("visible")
     get shots_url
     assert_response :success
     assert_equal Journal::DEFAULT_COLUMNS, Journal.new(@user.reload).visible_columns
@@ -176,12 +179,12 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     get edit_profile_url
     assert_select "input[name='user[journal_enabled]'][checked]"
     patch profile_url, params: {user: {journal_enabled: "0"}}
-    assert_redirected_to shots_path
+    assert_redirected_to shots_path(format: :html)
     assert_not @user.reload.journal_enabled?
     get shots_url
     assert_select "[data-controller~='journal']", count: 0
     patch profile_url, params: {user: {journal_enabled: "1"}}
-    assert_redirected_to shots_path
+    assert_redirected_to shots_path(format: :html)
     follow_redirect!
     assert_response :success
     assert_select "[data-controller~='journal']"
@@ -195,6 +198,18 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     patch journal_url, params: {changes: [change(@shot, bean_weight: "20")]}, as: :json
     assert_redirected_to new_session_url
     assert_equal "18", @shot.reload.bean_weight
+  end
+
+  test "Turbo profile save redirects to HTML shots view with notice" do
+    headers = {"Accept" => "text/vnd.turbo-stream.html, text/html"}
+    patch profile_url, params: {user: {skin: "Dark"}}, headers: headers
+    assert_redirected_to shots_path(format: :html)
+    assert_equal "Dark", @user.reload.skin
+    follow_redirect!(headers:)
+    assert_response :success
+    assert_equal "text/html", response.media_type
+    assert_includes response.body, "Profile successfully updated."
+    assert_select "[data-controller~='journal']"
   end
 
   test "malformed changes and duplicate ids are rejected" do

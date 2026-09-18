@@ -176,7 +176,7 @@ class ShotsController < ApplicationController
   def load_journal
     @journal = Journal.new(Current.user)
     shots = @journal.search(params)
-    @count = @shots_count = shots.count
+    @shots_count = shots.count
     @shots, @cursor = @journal.page(shots, params)
     @columns = @journal.ordered_columns
     @visible_columns = @journal.visible_columns
