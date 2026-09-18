@@ -107,7 +107,11 @@ class ShotsController < ApplicationController
   def create_manual_shot
     @journal = Journal.new(Current.user)
     shot = @journal.create(params.expect(shot: {}).to_h, params[:entry_id])
-    render json: {rows: journal_rows([shot])}, status: :created
+    query = params.slice(:query).permit(query: %i[q coffee_bag tags]).fetch(:query, {})
+    matches = @journal.search(query)
+    render json: {rows: journal_rows([shot]), count: matches.count, matches: matches.exists?(id: shot.id)}, status: :created
+  rescue Journal::Conflict => error
+    render json: {error: error.message, shot_id: params[:entry_id]}, status: :conflict
   rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error
     render json: {error: error.message}, status: :unprocessable_content
   rescue ActiveRecord::RecordNotFound
@@ -175,6 +179,7 @@ class ShotsController < ApplicationController
 
   def load_journal
     @journal = Journal.new(Current.user)
+    @journal_search_id = params[:journal_search_id].presence || SecureRandom.uuid
     shots = @journal.search(params)
     @shots_count = shots.count
     @shots, @cursor = @journal.page(shots, params)

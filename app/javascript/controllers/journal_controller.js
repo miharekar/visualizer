@@ -1,16 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["rows", "row", "table", "tableViewport", "selection", "bulkBar", "saveBar", "status", "undo", "retry", "reload", "search", "columnsPanel", "columnsButton", "columnList", "visibleColumns", "hiddenColumns", "draft", "draftForm", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
-  static values = { url: String, createUrl: String, columnsUrl: String, timezone: String }
+  static targets = ["rows", "row", "table", "tableViewport", "selection", "selectionNotice", "bulkBar", "undo", "undoLabel", "undoShortcutHint", "undoError", "search", "searchNotice", "columnsPanel", "columnsButton", "columnsError", "columnList", "visibleColumns", "hiddenColumns", "draft", "draftForm", "draftError", "savedShot", "dialog", "dialogForm", "dialogTitle", "coffeeFields", "fieldFields", "tagFields", "noteFields", "apply"]
+  static values = { url: String, createUrl: String, columnsUrl: String, timezone: String, searchId: String, query: Object, maxBatch: Number }
 
   connect() {
     this.queue = []
-    this.reverts = new Map()
     this.pending = new Map()
     this.busy = false
     this.failures = new Map()
     this.dialogIds = []
+    this.undoHistory = []
+    this.editEpoch = 0
+    this.searchEpoch = 0
+    if (this.hasUndoShortcutHintTarget) this.undoShortcutHintTarget.textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘ Z" : "Ctrl Z"
     if (this.hasTableViewportTarget) {
       this.viewportObserver = new ResizeObserver(() => this.sizeViewport())
       ;[this.element, document.querySelector("body > header"), document.querySelector("body > footer")].filter(Boolean).forEach(element => this.viewportObserver.observe(element))
@@ -33,7 +36,11 @@ export default class extends Controller {
   }
 
   get selectedRows() {
-    return [...this.rowsTarget.querySelectorAll("tr")].filter(row => row.querySelector("[data-selection]").checked)
+    return this.rowTargets.filter(row => row.querySelector("[data-selection]").checked)
+  }
+
+  get lastOperation() {
+    return this.undoHistory.at(-1)
   }
 
   row(id) {
@@ -44,16 +51,18 @@ export default class extends Controller {
     return row.querySelector(`[data-column="${CSS.escape(field)}"]`)
   }
 
-  select() {
+  select(event) {
+    if (event?.target.checked && this.selectedRows.length > this.maxBatchValue) event.target.checked = false
     const count = this.selectedRows.length
     this.selectionTarget.textContent = `${count} selected`
+    this.selectionNoticeTarget.textContent = count === this.maxBatchValue ? `Maximum ${this.maxBatchValue} shots per edit` : ""
     this.bulkBarTarget.classList.toggle("hidden", count === 0)
     this.bulkBarTarget.classList.toggle("flex", count > 0)
   }
 
   selectAll(event) {
-    this.rowsTarget.querySelectorAll("[data-selection]").forEach(input => {
-      input.checked = event.target.checked
+    this.rowsTarget.querySelectorAll("[data-selection]").forEach((input, index) => {
+      input.checked = event.target.checked && index < this.maxBatchValue
     })
     this.select()
   }
@@ -91,7 +100,11 @@ export default class extends Controller {
   commit(event) {
     const input = event.target
     const cell = input.closest("td")
-    if (input.value === input.dataset.original) return
+    const key = `${cell.closest("tr").dataset.shotId}:${cell.dataset.column}`
+    if (input.value === input.dataset.original && !this.failureForCell(key)) {
+      queueMicrotask(() => this.resumeSearch())
+      return
+    }
     const value = input.value
     const field = cell.dataset.column
     input.dataset.original = value
@@ -103,24 +116,21 @@ export default class extends Controller {
   }
 
   save(ids, field, attributes) {
+    this.editEpoch++
     const keys = ids.map(id => `${id}:${field}`)
-    this.enqueue(async () => {
-      const previous = Object.fromEntries(ids.map(id => [id, this.cell(this.row(id), field)?.dataset.value || ""]))
+    const operation = async () => {
       const changes = ids.map(id => ({ id, version: this.row(id).dataset.version, attributes: attributes(this.row(id)) }))
+      operation.changes = changes
       const result = await this.request(this.urlValue, "PATCH", { changes })
       this.finishPending(keys)
       this.renderRows(result.rows)
-      const operation = { token: result.undo, ids, field, previous }
-      keys.forEach(key => this.reverts.set(key, operation))
-      this.lastOperation = operation
-      this.undoTarget.classList.remove("hidden")
-      this.undoTarget.textContent = ids.length > 1 ? `Undo change to ${ids.length} shots` : "Undo last change"
-      this.refreshReverts()
-    }, keys)
+      this.undoHistory.push({ token: result.undo, ids, field })
+    }
+    this.enqueue(operation, keys)
   }
 
   enqueue(operation, keys = [], key = keys.join("|") || crypto.randomUUID()) {
-    this.failures.delete(key)
+    this.supersedeFailures(keys, key)
     operation.keys = keys
     operation.key = key
     operation.settled = false
@@ -129,30 +139,37 @@ export default class extends Controller {
     this.drain()
   }
 
+  supersedeFailures(keys, key) {
+    this.failures.delete(key)
+    for (const [failedKey, failure] of this.failures) {
+      if (!failure.keys.length) continue
+      failure.keys = failure.keys.filter(cell => !keys.includes(cell))
+      if (!failure.keys.length) this.failures.delete(failedKey)
+    }
+  }
+
   async drain() {
     if (this.busy || !this.queue.length) return
     this.busy = true
     const operation = this.queue.shift()
     this.currentOperation = operation
-    this.failures.delete(operation.key)
-    if (operation.key !== "columns") {
-      this.statusTarget.textContent = "Saving…"
-      this.saveBarTarget.classList.remove("hidden")
-      this.saveBarTarget.classList.add("flex")
-    }
+    this.supersedeFailures(operation.keys, operation.key)
+    this.refreshErrors()
     try {
       await operation()
     } catch (error) {
       this.finishPending(operation.keys)
       operation.error = error.message
+      operation.details = error.details
       this.failures.set(operation.key, operation)
+      this.restoreFailedValues(operation)
     } finally {
       this.finishPending(operation.keys)
       this.busy = false
       this.currentOperation = null
-      this.refreshStatus(operation.key === "columns" ? "" : "Saved")
+      this.refreshErrors()
       this.drain()
-      if (this.searchPending && !this.hasUnsavedChanges()) this.search()
+      this.resumeSearch()
     }
   }
 
@@ -170,30 +187,77 @@ export default class extends Controller {
     return [...this.failures.values()].find(operation => operation.keys.includes(key))
   }
 
-  refreshStatus(message = "Saved") {
-    const failures = [...this.failures.values()]
-    this.statusTarget.textContent = failures.length ? `Couldn't save: ${failures[0].error}. Correct the value or retry.` : message
-    const visible = failures.length > 0 || !!this.lastOperation || !!message
-    this.saveBarTarget.classList.toggle("hidden", !visible)
-    this.saveBarTarget.classList.toggle("flex", visible)
-    this.retryTarget.classList.toggle("hidden", !failures.length)
-    this.reloadTarget.classList.toggle("hidden", !failures.length)
-    this.rowsTarget.querySelectorAll("[data-editor]").forEach(input => {
-      const cell = input.closest("td")
-      const failure = this.failureForCell(`${cell.closest("tr").dataset.shotId}:${cell.dataset.column}`)
-      input.setAttribute("aria-invalid", failure ? "true" : "false")
-      input.title = failure?.error || ""
+  restoreFailedValues(operation) {
+    for (const key of operation.keys) {
+      if (this.pending.has(key)) continue
+      const separator = key.indexOf(":")
+      const id = key.slice(0, separator)
+      const field = key.slice(separator + 1)
+      const row = this.row(id)
+      const input = row && this.cell(row, field)?.querySelector("[data-editor]")
+      const attributes = operation.changes?.find(change => change.id === id)?.attributes
+      if (!input || !attributes || input === document.activeElement) continue
+      const value = field.startsWith("metadata:") ? attributes.metadata?.[field.slice(9)] : attributes[field]
+      if (value !== undefined) {
+        input.value = value ?? ""
+        input.dataset.original = input.value
+        input.dispatchEvent(new Event("input", { bubbles: true }))
+      }
+    }
+  }
+
+  refreshErrors() {
+    for (const [key, target] of [["create", this.draftErrorTarget], ["columns", this.columnsErrorTarget], ["undo", this.undoErrorTarget]]) {
+      const failure = this.failures.get(key)
+      target.textContent = failure ? `Couldn't save: ${failure.error}` : ""
+      target.classList.toggle("hidden", !failure)
+    }
+    const savedId = this.failures.get("create")?.details?.shot_id
+    this.savedShotTarget.classList.toggle("hidden", !savedId)
+    if (savedId) this.savedShotTarget.href = `/shots/${encodeURIComponent(savedId)}`
+    this.undoTarget.disabled = this.busy || this.queue.length > 0
+    this.undoTarget.classList.toggle("hidden!", !this.lastOperation)
+    this.undoLabelTarget.textContent = this.lastOperation?.ids.length > 1 ? `Undo change to ${this.lastOperation.ids.length} shots` : "Undo last change"
+    this.undoTarget.title = `${this.undoHistory.length} changes available to undo`
+
+    this.rowTargets.forEach(row => {
+      const messages = []
+      row.querySelectorAll('[aria-invalid="true"]').forEach(input => input.removeAttribute("aria-invalid"))
+      row.querySelectorAll("[data-field-error]").forEach(cell => {
+        cell.classList.remove("bg-red-50", "dark:bg-red-950", "ring-1", "ring-inset", "ring-red-500")
+        delete cell.dataset.fieldError
+      })
+      for (const failure of this.failures.values()) {
+        failure.keys.filter(key => key.startsWith(`${row.dataset.shotId}:`)).forEach(key => {
+          const field = key.slice(row.dataset.shotId.length + 1)
+          const label = this.columnListTarget.querySelector(`[data-column-choice="${CSS.escape(field)}"] [data-column-label]`)?.textContent || field
+          messages.push(`${label}: ${failure.error}`)
+          const cell = this.cell(row, field)
+          if (cell) {
+            cell.dataset.fieldError = "true"
+            cell.classList.add("bg-red-50", "dark:bg-red-950")
+            cell.querySelector("[data-editor]")?.setAttribute("aria-invalid", "true")
+          }
+        })
+      }
+      let errorRow = this.rowsTarget.querySelector(`[data-error-for="${row.dataset.shotId}"]`)
+      if (messages.length) {
+        if (!errorRow) {
+          errorRow = document.createElement("tr")
+          errorRow.dataset.errorFor = row.dataset.shotId
+          errorRow.className = "bg-red-50 text-sm text-red-700 dark:bg-red-950 dark:text-red-300"
+          const cell = document.createElement("td")
+          cell.className = "px-3 py-2"
+          cell.setAttribute("role", "alert")
+          errorRow.append(cell)
+          row.after(errorRow)
+        }
+        errorRow.firstElementChild.colSpan = this.visibleColumnsTarget.children.length + 1
+        errorRow.firstElementChild.textContent = `Couldn't save. ${[...new Set(messages)].join(" ")} Edit the value and press Enter to save again.`
+      } else {
+        errorRow?.remove()
+      }
     })
-  }
-
-  retry() {
-    ;[...this.failures.values()].forEach(operation => this.enqueue(operation, operation.keys, operation.key))
-  }
-
-  reload() {
-    if (!window.confirm("Discard pending changes and reload saved values?")) return
-    this.leaving = true
-    window.location.reload()
   }
 
   async request(url, method, body) {
@@ -204,66 +268,73 @@ export default class extends Controller {
     })
     if (response.status === 204) return {}
     const data = await response.json().catch(() => ({}))
-    if (!response.ok || response.redirected) throw new Error(data.error || "Request failed. Reload if your session has expired.")
+    if (!response.ok || response.redirected) {
+      const error = new Error(data.error || "Request failed. Reload if your session has expired.")
+      error.details = data
+      throw error
+    }
     return data
   }
 
-  renderRows(rows) {
+  renderRows(rows, { insert = false } = {}) {
     rows.forEach(({ id, html }) => {
       const fragment = document.createElement("template")
       fragment.innerHTML = `<table><tbody>${html}</tbody></table>`
       const incoming = fragment.content.querySelector("tr")
       const current = this.row(id)
       if (!current) {
-        this.rowsTarget.prepend(incoming)
-        this.tableViewportTarget.scrollTop = 0
+        if (insert) {
+          this.rowsTarget.prepend(incoming)
+          this.tableViewportTarget.scrollTop = 0
+        }
       } else {
         Object.assign(current.dataset, incoming.dataset)
         incoming.querySelectorAll("[data-column]").forEach(cell => {
           const previous = this.cell(current, cell.dataset.column)
-          const active = previous.querySelector("[data-editor]") === document.activeElement
+          if (!previous) {
+            cell.classList.add("hidden")
+            current.append(cell)
+            return
+          }
+          const input = previous.querySelector("[data-editor]")
+          const active = input === document.activeElement
+          const dirty = active && input.value !== input.dataset.original
           const key = `${id}:${cell.dataset.column}`
-          if (!this.pending.has(key) && !this.failureForCell(key) && !active) previous.replaceWith(cell)
-          else previous.dataset.value = cell.dataset.value
+          if (!this.pending.has(key) && !this.failureForCell(key) && !dirty) {
+            previous.replaceWith(cell)
+            if (active) cell.querySelector("[data-editor]")?.focus()
+          } else previous.dataset.value = cell.dataset.value
         })
       }
     })
     this.applyColumns()
-    this.refreshReverts()
     this.select()
-  }
-
-  refreshReverts() {
-    this.rowsTarget.querySelectorAll("[data-revert]").forEach(button => {
-      const cell = button.closest("td")
-      const key = `${cell.closest("tr").dataset.shotId}:${cell.dataset.column}`
-      button.classList.toggle("hidden", !this.reverts.has(key))
-      const operation = this.reverts.get(key)
-      const value = operation?.previous[cell.closest("tr").dataset.shotId]
-      button.title = `Restore previous value: ${value || "empty"}`
-    })
-  }
-
-  revert(event) {
-    const cell = event.currentTarget.closest("td")
-    this.performUndo(this.reverts.get(`${cell.closest("tr").dataset.shotId}:${cell.dataset.column}`))
   }
 
   undo() {
     this.performUndo(this.lastOperation)
   }
 
+  undoShortcut(event) {
+    if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey || event.key.toLowerCase() !== "z") return
+    const input = event.target.closest?.("[data-editor]")
+    if (input ? input.value !== input.dataset.original : event.target.closest?.("input, textarea, [contenteditable], lexxy-editor")) return
+    if (!this.lastOperation || this.busy || this.queue.length || this.dialogTarget.open) return
+    event.preventDefault()
+    this.undo()
+  }
+
   performUndo(operation) {
     if (!operation) return
+    this.editEpoch++
     this.enqueue(async () => {
       const result = await this.request(this.urlValue, "PATCH", { undo: operation.token })
-      for (const [key, value] of this.reverts) if (value === operation) this.reverts.delete(key)
       if (this.lastOperation === operation) {
-        this.lastOperation = null
-        this.undoTarget.classList.add("hidden")
+        this.undoHistory.pop()
       }
       this.renderRows(result.rows)
-    })
+      if (Object.values(this.queryValue).some(Boolean)) this.searchPending = true
+    }, [], "undo")
   }
 
   bulkCoffee() {
@@ -279,7 +350,7 @@ export default class extends Controller {
   openSelected(mode) {
     const ids = this.selectedRows.map(row => row.dataset.shotId)
     if (!ids.length) {
-      this.statusTarget.textContent = "Select shots first"
+      this.selectionNoticeTarget.textContent = "Select shots first"
       return
     }
     this.openDialog(mode, ids)
@@ -296,10 +367,14 @@ export default class extends Controller {
     this.dialogTitleTarget.textContent = { coffee: "Assign coffee", field: "Set field", tags: "Add/remove tags", note: "Notes" }[mode]
     if (mode === "coffee" && ids.length === 1) {
       const row = this.row(ids[0])
+      const attempted = this.failureForCell(`${ids[0]}:coffee`)?.changes?.find(change => change.id === ids[0])?.attributes || {}
       for (const name of ["coffee_bag_id", "canonical_coffee_bag_id", "bean_brand", "bean_type"]) {
         const input = this.coffeeFieldsTarget.querySelector(`[name="${name}"]`)
-        if (input) input.value = name === "coffee_bag_id" ? row.dataset.coffeeBagId : name === "canonical_coffee_bag_id" ? row.dataset.canonicalCoffeeBagId : this.cell(row, name)?.dataset.value || ""
+        if (input) input.value = attempted[name] ?? (name === "coffee_bag_id" ? row.dataset.coffeeBagId : name === "canonical_coffee_bag_id" ? row.dataset.canonicalCoffeeBagId : this.cell(row, name)?.dataset.value || "")
       }
+      const canonical = this.coffeeFieldsTarget.querySelector('[name="canonical_coffee_bag_id"]')
+      const search = this.coffeeFieldsTarget.querySelector('input[type="search"]')
+      if (search) search.value = canonical.value ? this.cell(row, "coffee").dataset.value : ""
     }
     if (!this.dialogTarget.open) this.dialogTarget.showModal()
   }
@@ -346,7 +421,8 @@ export default class extends Controller {
   openNote(row, field) {
     this.openDialog("note", [row.dataset.shotId])
     this.noteField = field
-    const value = this.cell(row, field).dataset.value
+    const attempted = this.failureForCell(`${row.dataset.shotId}:${field}`)?.changes?.find(change => change.id === row.dataset.shotId)?.attributes[field]
+    const value = attempted ?? this.cell(row, field).dataset.value
     const editor = this.noteFieldsTarget.querySelector("lexxy-editor")
     editor.value = value
     this.noteValue = value
@@ -357,12 +433,29 @@ export default class extends Controller {
     event?.preventDefault()
     this.dialogTarget.close()
     this.dialogMode = null
+    this.resumeSearch()
+  }
+
+  canonicalSearchChanged(event) {
+    event.target.closest("[data-coffee-fields]").querySelector('[name="canonical_coffee_bag_id"]').value = ""
+  }
+
+  manualCoffeeChanged(event) {
+    const fields = event.target.closest("[data-coffee-fields]")
+    fields.querySelector('[name="canonical_coffee_bag_id"]').value = ""
+    fields.querySelector('input[type="search"]').value = ""
+  }
+
+  canonicalCoffeeSelected(event) {
+    const fields = event.currentTarget
+    fields.querySelector('[name="bean_brand"]').value = event.detail.selected.dataset.roaster || ""
+    fields.querySelector('[name="bean_type"]').value = event.detail.selected.dataset.coffeeBag || ""
   }
 
   compare() {
     const rows = this.selectedRows
     if (rows.length !== 2 || rows.some(row => row.dataset.chart !== "true")) {
-      this.statusTarget.textContent = "Select two shots with chart data to compare"
+      this.selectionNoticeTarget.textContent = "Select two shots with chart data to compare"
       return
     }
     if (this.hasUnsavedChanges() && !window.confirm("Changes are still pending. Leave Journal?")) return
@@ -390,8 +483,9 @@ export default class extends Controller {
     this.creating = false
     this.draftTarget.classList.add("hidden")
     this.draftFormTarget.reset()
-    this.refreshStatus()
+    this.refreshErrors()
     this.drain()
+    this.resumeSearch()
   }
 
   create(event) {
@@ -401,6 +495,7 @@ export default class extends Controller {
       return
     }
     this.creating = true
+    this.editEpoch++
     const entry_id = this.entryId
     this.creationOperation = async () => {
       const shot = Object.fromEntries([...this.draftFormTarget.querySelectorAll("[data-shot-field]")].map(input => [input.name, input.value]))
@@ -411,15 +506,21 @@ export default class extends Controller {
       this.draftFormTarget.inert = true
       let result
       try {
-        result = await this.request(this.createUrlValue, "POST", { shot, entry_id })
+        result = await this.request(this.createUrlValue, "POST", { shot, entry_id, query: this.queryValue })
       } finally {
         this.draftFormTarget.inert = false
       }
-      this.renderRows(result.rows)
+      this.renderRows(result.rows, { insert: true })
+      document.getElementById("shots-count").textContent = `${result.count} ${result.count === 1 ? "Shot" : "Shots"}`
+      document.getElementById("journal-empty").textContent = ""
+      const row = this.row(result.rows[0].id)
+      const label = document.createElement("span")
+      label.className = "block px-2 text-xs text-neutral-500"
+      label.textContent = result.matches ? "New · pinned until next search" : "New · outside current search"
+      this.cell(row, "start_time").append(label)
       this.creating = false
       this.creationOperation = null
       this.cancelDraft()
-      this.statusTarget.textContent = "Shot added; pinned here until next search"
     }
     this.enqueue(this.creationOperation, [], "create")
   }
@@ -577,17 +678,34 @@ export default class extends Controller {
       }
       previous = cell
     })
+    row.querySelector("[data-open-shot]")?.classList.toggle("hidden", choices.some(item => item.dataset.columnChoice === "start_time" && item.parentElement === this.visibleColumnsTarget))
   }
 
   beforeStream(event) {
     const stream = event.target
+    const searchId = stream.dataset.journalSearchId
+    if (searchId && searchId !== this.searchIdValue) {
+      event.preventDefault()
+      return
+    }
+    if (stream.dataset.journalFreshSearch === "true" && this.acceptedSearchId !== searchId) {
+      if (this.searchBlocked || this.searchEpoch !== this.editEpoch || this.hasUnsavedChanges() || this.rowsTarget.querySelector("[data-editor]:focus")) {
+        event.preventDefault()
+        this.searchBlocked = true
+        this.searchPending = true
+        this.showSearchNotice("Search paused while you finish editing.")
+        this.resumeSearch()
+        return
+      }
+      this.acceptedSearchId = searchId
+      this.queryValue = this.pendingQuery || this.queryValue
+      this.showSearchNotice("")
+    }
     if (stream.getAttribute("target") !== "journal-rows") return
     if (stream.getAttribute("action") === "update") {
       this.tableViewportTarget.scrollTop = 0
-      this.reverts.clear()
-      this.lastOperation = null
-      this.undoTarget.classList.add("hidden")
       this.selectionTarget.textContent = "0 selected"
+      this.selectionNoticeTarget.textContent = ""
       this.bulkBarTarget.classList.add("hidden")
       this.bulkBarTarget.classList.remove("flex")
       this.tableTarget.querySelector("thead input[type=checkbox]").checked = false
@@ -602,18 +720,29 @@ export default class extends Controller {
     this.searchPending = true
     clearTimeout(this.searchTimer)
     this.searchTimer = setTimeout(() => {
-      if (!this.hasUnsavedChanges()) {
+      if (!this.hasUnsavedChanges() && !this.rowsTarget.querySelector("[data-editor]:focus")) {
         this.searchPending = false
         this.searchTarget.requestSubmit()
+      } else {
+        this.showSearchNotice("Search paused while you finish editing.")
       }
     }, 300)
+  }
+
+  resumeSearch() {
+    if (this.searchPending && !this.hasUnsavedChanges() && !this.rowsTarget.querySelector("[data-editor]:focus")) this.search()
+  }
+
+  showSearchNotice(message) {
+    this.searchNoticeTarget.textContent = message
+    this.searchNoticeTarget.classList.toggle("hidden", !message)
   }
 
   hasUnsavedChanges() {
     const editing = this.rowsTarget.querySelector("[data-editor]:focus")
     const dirtyCell = editing && editing.value !== editing.dataset.original
     const dirtyNote = this.dialogMode === "note" && this.noteFieldsTarget.querySelector("lexxy-editor").value !== this.noteValue
-    return !!this.columnSaveFrame || this.busy || this.queue.length > 0 || this.failures.size > 0 || !this.draftTarget.classList.contains("hidden") || dirtyCell || dirtyNote
+    return !!this.columnSaveFrame || this.busy || this.queue.length > 0 || this.failures.size > 0 || !this.draftTarget.classList.contains("hidden") || this.dialogTarget.open || dirtyCell || dirtyNote
   }
 
   beforeVisit(event) {
@@ -624,13 +753,21 @@ export default class extends Controller {
     if (event.target !== this.searchTarget) return
     if (this.hasUnsavedChanges()) {
       event.preventDefault()
-      this.statusTarget.textContent = "Finish or cancel pending edits before searching"
-      this.searchPending = this.queue.length > 0
+      this.showSearchNotice("Finish or cancel pending edits before searching.")
+      this.searchPending = true
+    } else {
+      this.searchIdValue = crypto.randomUUID()
+      this.searchTarget.elements.journal_search_id.value = this.searchIdValue
+      this.searchEpoch = this.editEpoch
+      this.searchBlocked = false
+      this.acceptedSearchId = null
+      this.pendingQuery = { q: this.searchTarget.elements.q.value }
+      this.showSearchNotice("")
     }
   }
 
   beforeUnload(event) {
-    if (this.leaving || !this.hasUnsavedChanges()) return
+    if (!this.hasUnsavedChanges()) return
     event.preventDefault()
     event.returnValue = ""
   }

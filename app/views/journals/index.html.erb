@@ -1,6 +1,6 @@
 <% content_for(:html_title) { "Visualizer | Your Shots" } %>
 <% content_for(:head) { tag.meta(name: "turbo-cache-control", content: "no-cache") } %>
-<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream resize@window->journal#sizeViewport">
+<div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal panel upload-drop" data-upload-drop-upload-outlet="#shot-upload-form" data-journal-url-value="<%= journal_path %>" data-journal-create-url-value="<%= shots_path %>" data-journal-columns-url-value="<%= profile_journal_columns_path %>" data-journal-timezone-value="<%= Current.timezone.tzinfo.name %>" data-journal-search-id-value="<%= @journal_search_id %>" data-journal-query-value="<%= params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).to_json %>" data-journal-max-batch-value="<%= Journal::MAX_BATCH %>" data-action="turbo:before-visit@document->journal#beforeVisit beforeunload@window->journal#beforeUnload submit->journal#beforeSubmit turbo:before-stream-render@document->journal#beforeStream resize@window->journal#sizeViewport keydown@window->journal#undoShortcut">
   <div data-upload-drop-target="overlay" class="bg-oxford-blue-500/50 fixed inset-0 z-99 hidden items-center justify-center backdrop-blur-sm">
     <div class="text-center">
       <h3 class="mb-2 text-2xl font-medium text-white">Drop anywhere to upload</h3>
@@ -29,6 +29,7 @@
         <% end %>
       </div>
       <div class="mt-3 flex justify-end"><button type="button" class="button-white px-3 py-2" data-action="journal#resetColumns">Reset</button></div>
+      <p class="hidden text-sm text-red-600 dark:text-red-400" data-journal-target="columnsError" role="alert"></p>
     </div>
   </div>
   <div class="mt-4 w-full min-w-0 px-4 sm:px-6 lg:px-8">
@@ -37,23 +38,24 @@
     <% end %>
     <%= form_with url: shots_path, method: :get, class: "mb-4 flex flex-wrap items-end gap-3", data: { turbo_stream: true, journal_target: "search", action: ("input->journal#search change->journal#search" if Current.user.premium?) } do |f| %>
       <%= f.hidden_field :fresh_search, value: "1" %>
+      <%= f.hidden_field :journal_search_id, value: @journal_search_id %>
       <label class="standard-label min-w-48 flex-1">Search<%= f.search_field :q, value: params[:q], class: "standard-input mt-1", placeholder: "Coffee, notes, tags…" %></label>
       <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
+      <button type="button" class="button-white hidden! items-center gap-2 px-4 py-2" data-journal-target="undo" data-action="journal#undo"><span data-journal-target="undoLabel">Undo last change</span><kbd class="text-xs opacity-60" data-journal-target="undoShortcutHint">Ctrl Z</kbd></button>
     <% end %>
+    <p class="hidden mb-3 text-right text-sm text-red-600 dark:text-red-400" data-journal-target="undoError" role="alert"></p>
+    <p class="hidden mb-3 text-sm text-neutral-500" data-journal-target="searchNotice" role="status"></p>
     <div class="fixed inset-x-4 top-20 z-30 mx-auto hidden w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-lg bg-white/95 px-4 py-3 shadow-lg ring-1 ring-neutral-200 backdrop-blur dark:bg-neutral-800/95 dark:ring-neutral-700" data-journal-target="bulkBar">
       <span data-journal-target="selection">0 selected</span>
+      <span class="text-sm text-neutral-500" data-journal-target="selectionNotice"></span>
       <button type="button" class="standard-link" data-action="journal#bulkCoffee">Assign coffee</button>
       <button type="button" class="standard-link" data-action="journal#bulkField">Set field</button>
       <% if Current.user.premium? %><button type="button" class="standard-link" data-action="journal#bulkTags">Add/remove tags</button><% end %>
       <button type="button" class="standard-link" data-action="journal#compare">Compare</button>
     </div>
-    <div class="mb-3 hidden flex-wrap items-center gap-3 text-sm" data-journal-target="saveBar">
-      <button type="button" class="standard-link hidden" data-journal-target="undo" data-action="journal#undo">Undo last change</button>
-      <span role="status" aria-live="polite" data-journal-target="status" class="text-sm"></span>
-      <button type="button" class="standard-link hidden" data-journal-target="retry" data-action="journal#retry">Retry</button>
-      <button type="button" class="standard-link hidden" data-journal-target="reload" data-action="journal#reload">Reload saved values</button>
-    </div>
     <div class="border-terracotta-300 mb-4 hidden rounded border p-4" data-journal-target="draft">
+      <p class="hidden mb-3 text-sm text-red-600 dark:text-red-400" data-journal-target="draftError" role="alert"></p>
+      <a class="standard-link hidden mb-3 text-sm" data-journal-target="savedShot">Open saved shot</a>
       <form data-journal-target="draftForm" data-action="submit->journal#create" class="grid gap-3 sm:grid-cols-3">
         <div class="space-y-3"><%= render "journals/coffee_fields" %></div>
         <div class="space-y-3">
@@ -71,7 +73,7 @@
         <caption class="sr-only">Coffee journal. Select rows for bulk edits, or activate a cell to edit it.</caption>
         <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
           <tr>
-            <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800"><input type="checkbox" aria-label="Select all loaded shots" data-action="journal#selectAll" class="standard-checkbox size-4"></th>
+            <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800"><input type="checkbox" aria-label="Select up to <%= Journal::MAX_BATCH %> loaded shots" data-action="journal#selectAll" class="standard-checkbox size-4"></th>
             <% @columns.each do |field| %>
               <th scope="col" data-column="<%= field %>" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %> <%= 'hidden' unless @visible_columns.include?(field) %>"><%= @journal.columns[field] %></th>
             <% end %>
@@ -80,7 +82,7 @@
         <tbody id="journal-rows" data-journal-target="rows"><%= render partial: "journals/row", collection: @shots, as: :shot, locals: {columns: @columns, visible_columns: @visible_columns} %></tbody>
       </table>
       <p id="journal-empty" class="my-6 text-center text-neutral-500 empty:hidden"><%= "No matching shots." if @shots_count.zero? %></p>
-      <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
+      <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(@cursor || {}).merge(journal_search_id: @journal_search_id, format: :turbo_stream)) %>
     </div>
     <dialog data-journal-target="dialog" data-action="cancel->journal#closeDialog" class="m-auto max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white p-6 text-neutral-900 shadow-xl backdrop:bg-black/40 dark:bg-neutral-900 dark:text-neutral-100">
       <div class="mb-4 flex items-center justify-between">

@@ -33,6 +33,7 @@ Create a user at `/registrations/new` (Turnstile verification only runs in produ
 
 ```bash
 bin/rails test                          # full Minitest suite (parallelized)
+node --test test/javascript/*_test.mjs   # native JavaScript tests (Node 22.15+)
 bin/rails test test/models/shot_test.rb # single file
 bin/rails test test/models/shot_test.rb:123 # single test by line number
 bin/rails test test/models/shot_test.rb -n /test_name/ # single test by name

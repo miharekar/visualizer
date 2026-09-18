@@ -1,3 +1,4 @@
+<div class="space-y-3" data-coffee-fields data-action="autocomplete.change->journal#canonicalCoffeeSelected">
 <% if Current.user.coffee_management_enabled? %>
   <label class="standard-label">Coffee bag
     <select name="coffee_bag_id" data-shot-field class="standard-input mt-1">
@@ -10,12 +11,13 @@
 <% else %>
   <div data-controller="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path %>" data-autocomplete-min-length-value="<%= CanonicalCoffeeBag::MIN_TERM_LENGTH %>" role="combobox">
     <label class="standard-label">Search coffee database
-      <input type="search" class="standard-input mt-1" data-autocomplete-target="input" placeholder="Roaster or coffee name">
+      <input type="search" class="standard-input mt-1" data-autocomplete-target="input" data-action="input->journal#canonicalSearchChanged" placeholder="Roaster or coffee name">
     </label>
     <input type="hidden" name="canonical_coffee_bag_id" data-shot-field data-autocomplete-target="hidden">
     <ul data-autocomplete-target="results" class="max-h-48 overflow-auto"></ul>
   </div>
-  <p class="text-sm text-neutral-500">Or enter coffee details manually. Clear search selection to use manual details.</p>
-  <label class="standard-label">Roaster<input name="bean_brand" data-shot-field class="standard-input mt-1"></label>
-  <label class="standard-label">Coffee name<input name="bean_type" data-shot-field class="standard-input mt-1"></label>
+  <p class="text-sm text-neutral-500">Edit roaster or coffee name to use manual details.</p>
+  <label class="standard-label">Roaster<input name="bean_brand" data-shot-field data-action="input->journal#manualCoffeeChanged" class="standard-input mt-1"></label>
+  <label class="standard-label">Coffee name<input name="bean_type" data-shot-field data-action="input->journal#manualCoffeeChanged" class="standard-input mt-1"></label>
 <% end %>
+</div>
