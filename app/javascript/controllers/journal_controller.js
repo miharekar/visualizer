@@ -20,6 +20,7 @@ export default class extends Controller {
 
   disconnect() {
     clearTimeout(this.searchTimer)
+    cancelAnimationFrame(this.columnSaveFrame)
     this.viewportObserver?.disconnect()
     this.cancelColumnDrag()
   }
@@ -423,10 +424,16 @@ export default class extends Controller {
     this.enqueue(this.creationOperation, [], "create")
   }
 
-  columns() {
-    this.applyColumns()
+  columns(movedField = null) {
+    this.applyColumns(movedField)
     const columns = { order: this.columnItems.map(item => item.dataset.columnChoice), hidden: [...this.hiddenColumnsTarget.children].map(item => item.dataset.columnChoice) }
-    this.enqueue(() => this.request(this.columnsUrlValue, "PATCH", { columns }), [], "columns")
+    cancelAnimationFrame(this.columnSaveFrame)
+    this.columnSaveFrame = requestAnimationFrame(() => {
+      this.columnSaveFrame = requestAnimationFrame(() => {
+        this.columnSaveFrame = null
+        this.enqueue(() => this.request(this.columnsUrlValue, "PATCH", { columns }), [], "columns")
+      })
+    })
   }
 
   get columnItems() {
@@ -441,6 +448,8 @@ export default class extends Controller {
 
   resetColumns() {
     this.cancelColumnDrag()
+    cancelAnimationFrame(this.columnSaveFrame)
+    this.columnSaveFrame = null
     this.enqueue(
       async () => {
         const settings = await this.request(this.columnsUrlValue, "PATCH", { columns: null })
@@ -462,13 +471,22 @@ export default class extends Controller {
     this.draggedColumn = event.currentTarget.closest("[data-column-choice]")
     this.columnGroupsBeforeDrag = [this.visibleColumnsTarget, this.hiddenColumnsTarget].map(group => [group, [...group.children]])
     this.columnPointerId = event.pointerId
-    this.draggedColumn.classList.add("ring-2", "ring-terracotta-500")
+    const bounds = this.draggedColumn.getBoundingClientRect()
+    this.columnDragOffset = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }
+    this.columnDragPreview = this.draggedColumn.cloneNode(true)
+    this.columnDragPreview.removeAttribute("data-column-choice")
+    this.columnDragPreview.dataset.journalDragPreview = ""
+    this.columnDragPreview.classList.add("shadow-lg")
+    Object.assign(this.columnDragPreview.style, { position: "fixed", left: "0", top: "0", width: `${bounds.width}px`, height: `${bounds.height}px`, pointerEvents: "none", zIndex: "100" })
+    document.body.append(this.columnDragPreview)
+    this.moveColumnPreview(event)
+    this.draggedColumn.classList.add("opacity-30")
     this.columnListTarget.setPointerCapture(event.pointerId)
-    event.currentTarget.focus()
   }
 
   dragColumn(event) {
     if (!this.draggedColumn || event.pointerId !== this.columnPointerId) return
+    this.moveColumnPreview(event)
     const hit = document.elementFromPoint(event.clientX, event.clientY)
     const group = hit?.closest("[data-column-visibility]")
     if (!group || !this.columnListTarget.contains(group)) return
@@ -487,12 +505,16 @@ export default class extends Controller {
     }
   }
 
+  moveColumnPreview(event) {
+    this.columnDragPreview.style.transform = `translate(${event.clientX - this.columnDragOffset.x}px, ${event.clientY - this.columnDragOffset.y}px)`
+  }
+
   finishColumnDrag(event) {
     if (!this.draggedColumn || event.pointerId !== this.columnPointerId) return
     const item = this.draggedColumn
     const changed = this.columnGroupsBeforeDrag.some(([group, items]) => group.children.length !== items.length || [...group.children].some((item, index) => item !== items[index]))
     this.endColumnDrag()
-    if (changed) this.columns()
+    if (changed) this.columns(item.dataset.columnChoice)
     item.querySelector("button").focus()
   }
 
@@ -504,7 +526,9 @@ export default class extends Controller {
   }
 
   endColumnDrag() {
-    this.draggedColumn.classList.remove("ring-2", "ring-terracotta-500")
+    this.draggedColumn.classList.remove("opacity-30")
+    this.columnDragPreview.remove()
+    this.columnDragPreview = null
     this.draggedColumn = null
     if (this.columnListTarget.hasPointerCapture(this.columnPointerId)) this.columnListTarget.releasePointerCapture(this.columnPointerId)
     this.columnGroupsBeforeDrag = null
@@ -526,21 +550,32 @@ export default class extends Controller {
       if (direction < 0) neighbor.before(item)
       else neighbor.after(item)
     }
-    this.columns()
+    this.columns(item.dataset.columnChoice)
     event.currentTarget.focus()
   }
 
-  applyColumns() {
-    this.tableTarget.querySelectorAll("tr").forEach(row => this.rowTargetConnected(row))
+  applyColumns(movedField = null) {
+    const choices = this.columnItems
+    this.tableTarget.querySelectorAll("tr").forEach(row => this.arrangeColumns(row, choices, movedField))
   }
 
   rowTargetConnected(row) {
     if (!this.hasColumnListTarget) return
-    this.columnItems.forEach(item => {
-      const cell = this.cell(row, item.dataset.columnChoice)
+    this.arrangeColumns(row, this.columnItems)
+  }
+
+  arrangeColumns(row, choices, movedField = null) {
+    const cells = new Map([...row.querySelectorAll("[data-column]")].map(cell => [cell.dataset.column, cell]))
+    let previous = row.firstElementChild
+    choices.forEach(item => {
+      const field = item.dataset.columnChoice
+      const cell = cells.get(field)
       if (!cell) return
-      cell.classList.toggle("hidden", item.parentElement === this.hiddenColumnsTarget)
-      row.append(cell)
+      if (!movedField || movedField === field) {
+        cell.classList.toggle("hidden", item.parentElement === this.hiddenColumnsTarget)
+        if (previous.nextElementSibling !== cell) previous.after(cell)
+      }
+      previous = cell
     })
   }
 
@@ -578,7 +613,7 @@ export default class extends Controller {
     const editing = this.rowsTarget.querySelector("[data-editor]:focus")
     const dirtyCell = editing && editing.value !== editing.dataset.original
     const dirtyNote = this.dialogMode === "note" && this.noteFieldsTarget.querySelector("lexxy-editor").value !== this.noteValue
-    return this.busy || this.queue.length > 0 || this.failures.size > 0 || !this.draftTarget.classList.contains("hidden") || dirtyCell || dirtyNote
+    return !!this.columnSaveFrame || this.busy || this.queue.length > 0 || this.failures.size > 0 || !this.draftTarget.classList.contains("hidden") || dirtyCell || dirtyNote
   }
 
   beforeVisit(event) {
