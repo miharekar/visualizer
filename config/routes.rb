@@ -60,7 +60,9 @@ Rails.application.routes.draw do
   end
 
   scope :shots do
-    resource :journal, only: :update
+    resource :journal, only: :update do
+      resource :cells, only: :show, controller: :journals
+    end
   end
 
   resources :shots, except: [:new] do

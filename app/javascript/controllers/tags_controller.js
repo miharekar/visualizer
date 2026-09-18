@@ -21,6 +21,7 @@ export default class extends Controller {
       },
       originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(",")
     })
+    if (this.inputTarget.closest("dialog")) this.tagify.settings.dropdown.appendTarget = this.tagify.DOM.scope
   }
 
   disconnect() {

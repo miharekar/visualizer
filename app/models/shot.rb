@@ -8,6 +8,7 @@ class Shot < ApplicationRecord
   include VariableImageAttachment
 
   DAILY_LIMIT = 50
+  INFORMATION_PRESENCE_SQL = "EXISTS (SELECT 1 FROM shot_informations WHERE shot_informations.shot_id = shots.id) AS has_information".freeze
   TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
   LIST_ATTRIBUTES = %i[id user_id start_time updated_at profile_title bean_weight drink_weight drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
@@ -45,6 +46,7 @@ class Shot < ApplicationRecord
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
   scope :with_notes, -> { with_rich_text_bean_notes_and_embeds.with_rich_text_espresso_notes_and_embeds.with_rich_text_private_notes_and_embeds }
+  scope :with_information_presence, -> { select("shots.*", INFORMATION_PRESENCE_SQL) }
 
   def self.editable_attributes(user)
     allowed = [:profile_title, :barista, :bean_weight, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
@@ -67,7 +69,11 @@ class Shot < ApplicationRecord
   end
 
   def manual?
-    information.nil?
+    if has_attribute?(:has_information) && !association(:information).loaded?
+      !self[:has_information]
+    else
+      information.nil?
+    end
   end
 
   def metadata

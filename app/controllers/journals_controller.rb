@@ -12,16 +12,24 @@ class JournalsController < ApplicationController
     render json: {error: "Shot or coffee not available"}, status: :not_found
   end
 
+  def show
+    ids, fields = params.slice(:ids, :fields).expect(ids: [], fields: [])
+    shots = Current.journal.cells(ids, fields)
+    data = journal_response(shots, fields:)
+    data[:tags] = Current.user.tags.pluck(:name) if fields.include?("tag_list")
+    render json: data
+  end
+
   def update
     if params[:undo].present?
       shots = Current.journal.undo(params[:undo])
-      render json: {rows: journal_rows(shots)}
     else
       changes = params[:changes]
       changes = changes.map { it.is_a?(ActionController::Parameters) ? it.to_unsafe_h : it } if changes.is_a?(Array)
       shots, undo = Current.journal.update(changes)
-      render json: {rows: journal_rows(shots), undo:}
     end
+    data = journal_response(Current.journal.for_list.where(id: shots.map(&:id)))
+    render json: data.merge(undo:).compact
   end
 
 end

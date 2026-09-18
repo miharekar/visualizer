@@ -4,9 +4,11 @@
 <% input_data = input_data || {} %>
 <% extra_text_field_classes = extra_text_field_classes || "" %>
 <% allow_custom = false unless allow_custom %>
+<% input_options = local_assigns.key?(:input_id) ? {id: input_id} : {} %>
+<% hidden_options = local_assigns.key?(:hidden_id) ? {id: hidden_id} : {} %>
 <div class="relative" data-controller="combobox"<% if allow_custom %> data-combobox-allow-custom-value="true"<% end %><% if local_assigns[:preserve_order] %> data-combobox-preserve-order-value="true"<% end %>>
-  <%= text_field_tag input_name, selected&.send(name_method), class: "mt-1 standard-input #{extra_text_field_classes}", autocomplete: "off", data: input_data.merge({ action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input"}) %>
-  <%= hidden_field_tag hidden_input_name, selected&.send(id_method), data: hidden_data.merge({ combobox_target: "hiddenInput" }) %>
+  <%= text_field_tag input_name, selected&.send(name_method), **input_options, class: "mt-1 standard-input #{extra_text_field_classes}", autocomplete: "off", data: input_data.merge({ action: "focus->combobox#show blur->combobox#blur keydown.down->combobox#highlightNext:stop keydown.up->combobox#highlightPrevious:stop keydown.enter->combobox#select keydown.esc->combobox#hide input->combobox#filter click@window->combobox#windowClick", combobox_target: "input"}) %>
+  <%= hidden_field_tag hidden_input_name, selected&.send(id_method), **hidden_options, data: hidden_data.merge({ combobox_target: "hiddenInput" }) %>
   <button type="button" class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none" data-action="click->combobox#toggle" tabindex="-1">
     <svg class="size-5 text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
       <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />

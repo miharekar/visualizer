@@ -5,6 +5,7 @@ import { test } from "node:test"
 registerHooks({
   resolve(specifier, context, next) {
     if (specifier === "@hotwired/stimulus") return { url: "data:text/javascript,export class Controller {}", shortCircuit: true }
+    if (specifier === "@hotwired/turbo-rails") return { url: "data:text/javascript,export const Turbo = {}", shortCircuit: true }
     return next(specifier, context)
   }
 })
@@ -18,7 +19,7 @@ function target() {
 function controller() {
   const controller = new JournalController()
   controller.connect()
-  for (const name of ["draftError", "columnsError", "undoError", "undo", "undoLabel", "savedShot", "selection", "selectionNotice", "bulkBar", "searchNotice"]) controller[`${name}Target`] = target()
+  for (const name of ["draftError", "columnsError", "dialogError", "undoError", "undo", "undoLabel", "savedShot", "selection", "selectionNotice", "bulkBar", "compare", "searchNotice"]) controller[`${name}Target`] = target()
   controller.rowTargets = []
   controller.queryValue = {}
   controller.dialogTarget = { open: false }
@@ -137,7 +138,7 @@ test("Undo walks backwards through successful session changes", async () => {
   journal.undoHistory.push({ token: "first", ids: ["shot"] }, { token: "second", ids: ["shot"] })
   const tokens = []
   journal.request = async (_url, _method, body) => { tokens.push(body.undo); return { rows: [] } }
-  journal.renderRows = () => {}
+  journal.renderStreams = async () => {}
   journal.undo()
   await settled()
   assert.equal(journal.lastOperation.token, "first")
@@ -164,4 +165,23 @@ test("undo shortcut preserves native editing and works from unchanged cells", ()
   assert.equal(undos, 1, "Rich text editors retain native undo")
   journal.undoShortcut({ ...event, ctrlKey: false, metaKey: true, target: { closest: () => null } })
   assert.equal(undos, 2)
+})
+
+test("Enter moves to the same field on the next row and selects its value", () => {
+  const journal = controller()
+  const first = {}, second = {}
+  journal.rowTargets = [first, second]
+  const focused = []
+  journal.cell = (row, field) => {
+    assert.equal(field, "espresso_enjoyment")
+    return { querySelector: () => ({ focus() { focused.push(row) }, select() { focused.push("selected") } }) }
+  }
+  const event = { key: "Enter", preventDefault() {}, target: { blur() {}, closest: () => ({ dataset: { column: "espresso_enjoyment" }, closest: () => first }) } }
+  journal.key(event)
+  assert.deepEqual(focused, [second, "selected"])
+  focused.length = 0
+  event.shiftKey = true
+  event.target.closest = () => ({ dataset: { column: "espresso_enjoyment" }, closest: () => second })
+  journal.key(event)
+  assert.deepEqual(focused, [first, "selected"])
 })
