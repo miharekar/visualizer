@@ -4,5 +4,5 @@
 <%= turbo_stream.update "shots-count", pluralize(@shots_count, "Shot") %>
 <%= turbo_stream.update "journal-empty", (@shots_count.zero? ? "No matching shots." : "") %>
 <%= turbo_stream.replace "cursor" do %>
-  <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :start_date, :coffee_bag, :tags).permit(:q, :start_date, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
+  <%= render "shared/cursor_loader", cursor: @cursor, path: shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(before: @cursor, format: :turbo_stream)) %>
 <% end %>

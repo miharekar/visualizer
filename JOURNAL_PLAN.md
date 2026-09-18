@@ -52,9 +52,9 @@ community discovery.
   Table links disable Turbo hover prefetch, including newly loaded rows.
 - Premium search is instant and preserves focus; no Search button. Free users
   submit search explicitly. Search field fills remaining header-row width.
-- Single search box covers coffee, notes, profiles, tags (premium), and brew
-  dates in user's timezone. Combined terms match across fields; no separate
-  date/coffee/tag search controls.
+- Single search box covers coffee, notes, profiles, tags (premium), and other
+  text fields. Combined terms match across fields. Brew timestamps are excluded:
+  no date formatting/timezone conversion or separate date/coffee/tag controls.
 - Free users cannot read/edit old shots through Journal. Existing cutoff is
   based on upload `created_at`, not brew time. Premium field entitlements apply.
 - Column visibility and order persist on account from initial rollout.
@@ -169,17 +169,21 @@ Manual shots:
 
 ## Verification log
 
-- `PARALLEL_WORKERS=1 bin/rails test`: 308 tests, 1,358 assertions, no failures,
+- `PARALLEL_WORKERS=1 bin/rails test`: 310 tests, 1,378 assertions, no failures,
   errors, or skips.
-- `node --test test/javascript/journal_controller_test.mjs`: two passing native
-  Node tests for validation recovery, independent saves, and retry behavior.
+- `node --test test/javascript/journal_controller_test.mjs`: three passing native
+  Node tests for validation recovery, independent saves, retry behavior, and
+  quiet column saves with visible failure feedback.
 - Brakeman: no security warnings or scan errors.
 - RuboCop: 260 files, no offenses. Gitleaks: no leaks.
-- Latest focused rerun after UI refinements: 24 Rails tests, 155 assertions,
-  plus both JavaScript queue tests passing.
 - Chromium smoke checks have exercised inline save/revert, bulk assignment,
   note save/Escape cancellation, manual creation, column persistence, infinite
   loading, premium search retaining focus, and mobile coffee editing.
+- Later Chromium checks verified profile theme-save navigation/notice, drag
+  preview, cross-group visibility changes, persisted reordering, Escape
+  cancellation, NULL Reset, and top-positioned selection toolbar. Verified
+  contained infinite loading leaves footer/table height unchanged and preserves
+  horizontal scroll; 512px minimum holds in a short viewport.
 - Chromium reproduced invalid Enjoyment `101`, verified another field still
   saves, then corrected score to `90` without reloading. Verified badge's width
   and horizontal centering through actual computed geometry.

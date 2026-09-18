@@ -70,12 +70,13 @@ class Journal
     shots = scope
     params[:q].to_s.split.each do |term|
       query = "%#{Shot.sanitize_sql_like(term)}%"
-      fields = %w[profile_title bean_brand bean_type grinder_model espresso_notes bean_notes roast_date]
-      fields << "private_notes" if user.premium?
-      conditions = fields.map { "#{it} ILIKE :query" }
-      conditions << "TO_CHAR(start_time AT TIME ZONE 'UTC' AT TIME ZONE :timezone, :date_format) ILIKE :query"
-      matches = scope.where(conditions.join(" OR "), query:, timezone: Current.timezone.tzinfo.name, date_format: "YYYY-MM-DD DD.MM.YYYY MM.DD.YYYY YYYY.MM.DD Mon DD YYYY HH24:MI")
+      matches = scope.where(<<~SQL.squish, query:)
+        profile_title ILIKE :query OR bean_brand ILIKE :query OR bean_type ILIKE :query
+        OR grinder_model ILIKE :query OR espresso_notes ILIKE :query
+        OR bean_notes ILIKE :query OR roast_date ILIKE :query
+      SQL
       if user.premium?
+        matches = matches.or(scope.where("private_notes ILIKE ?", query))
         tags = user.tags.where("name ILIKE ?", query).select(:id)
         matches = matches.or(scope.where(id: ShotTag.where(tag_id: tags).select(:shot_id)))
       end
@@ -83,13 +84,7 @@ class Journal
     end
     shots = shots.where(coffee_bag_id: user.coffee_bags.find(params[:coffee_bag]).id) if params[:coffee_bag].present? && user.coffee_management_enabled?
     shots = shots.with_all_tag_slugs(params[:tags]) if user.premium? && params[:tags].present?
-    if params[:start_date].present?
-      date = Date.iso8601(params[:start_date])
-      shots = shots.where(start_time: date.in_time_zone.all_day)
-    end
     shots
-  rescue Date::Error
-    raise InvalidChange, "Choose a valid brew date"
   end
 
   def page(shots, params)
