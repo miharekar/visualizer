@@ -1,0 +1,6 @@
+<%= turbo_stream.append "journal-rows-#{@journal_search_id}" do %>
+  <%= render partial: "journals/row", formats: [:html], collection: @shots, as: :shot, locals: {visible_columns: @visible_columns} %>
+<% end %>
+<%= turbo_stream.replace "journal-cursor-#{@journal_search_id}" do %>
+  <%= render partial: "journals/cursor", formats: [:html] %>
+<% end %>

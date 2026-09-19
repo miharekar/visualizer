@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_31_112853) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_18_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -340,6 +340,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_112853) do
     t.string "email", default: "", null: false
     t.string "github"
     t.boolean "hide_shot_times", default: false, null: false
+    t.jsonb "journal_columns"
+    t.boolean "journal_enabled", default: false, null: false
     t.datetime "last_read_change"
     t.string "lemon_squeezy_customer_id"
     t.string "name"

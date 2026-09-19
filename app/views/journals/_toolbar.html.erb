@@ -1,0 +1,11 @@
+<div class="fixed inset-x-4 top-20 z-30 mx-auto hidden w-fit max-w-full flex-wrap items-center justify-center gap-3 rounded-lg bg-white/95 px-4 py-3 shadow-lg ring-1 ring-neutral-200 backdrop-blur dark:bg-neutral-800/95 dark:ring-neutral-700" data-journal-selection-target="toolbar">
+  <span data-journal-selection-target="count">0 selected</span>
+  <span class="text-sm text-neutral-500" data-journal-selection-target="notice"></span>
+  <%= form_with url: edit_journal_path, method: :get, id: "journal-bulk-form", class: "flex flex-wrap items-center gap-3", data: {turbo_frame: "journal-editor"} do |f| %>
+    <%= f.select :field, journal.editable_columns.map { |field, label| [label, field] }, {}, id: "journal-bulk-field", title: "Field", class: "standard-input w-auto! max-w-40" %>
+    <%= f.submit "Set field", class: "button-white px-3 py-2" %>
+  <% end %>
+  <a class="standard-link hidden" data-journal-selection-target="compare" data-turbo-frame="_top">Compare</a>
+  <button type="button" class="standard-link" data-action="journal-selection#reset">Clear selection</button>
+</div>
+<span id="journal-selection-reset" class="hidden" data-journal-selection-target="reset"></span>

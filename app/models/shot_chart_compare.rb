@@ -8,8 +8,18 @@ class ShotChartCompare < ShotChart
   SUFFIX = "_comparison".freeze
 
   def initialize(shot, comparison, user)
-    @parsed_comparison = ParsedShot.new(comparison)
-    super(shot, user)
+    @parsed_shot = parse_available_data(shot)
+    @parsed_comparison = parse_available_data(comparison)
+    @user = user
+    prepare_chart_data
+  end
+
+  def has_data?
+    @processed_shot_data.any?
+  end
+
+  def both_have_data?
+    @processed_shot_data.keys.any? { it.end_with?(SUFFIX) } && @processed_shot_data.keys.any? { !it.end_with?(SUFFIX) }
   end
 
   def comparison_data
@@ -19,6 +29,8 @@ class ShotChartCompare < ShotChart
   end
 
   memo_wise def timestep
+    return unless has_data?
+
     longest_timeframe ||= @processed_shot_data.max_by { |_k, v| v.size }.second.map(&:first)
     ((longest_timeframe.last - longest_timeframe.first) / longest_timeframe.size).round
   end
@@ -29,6 +41,12 @@ class ShotChartCompare < ShotChart
 
   private
 
+  def parse_available_data(shot)
+    ParsedShot.new(shot)
+  rescue ParsedShot::NoData
+    nil
+  end
+
   def for_highcharts(data)
     super.map do |series|
       side = series[:comparison] == true ? COMPARISON_LABEL : BASE_LABEL
@@ -37,8 +55,12 @@ class ShotChartCompare < ShotChart
   end
 
   def prepare_chart_data
-    super
-    @processed_shot_data = @processed_shot_data.merge(process_data(parsed_comparison, label_suffix: SUFFIX))
+    if parsed_shot
+      super
+    else
+      @processed_shot_data = {}
+    end
+    @processed_shot_data.merge!(process_data(parsed_comparison, label_suffix: SUFFIX)) if parsed_comparison
 
     if @processed_shot_data["espresso_pressure_comparison"].present?
       @processed_shot_data["espresso_resistance_comparison"] = resistance_chart(@processed_shot_data["espresso_pressure_comparison"], @processed_shot_data["espresso_flow_comparison"]) if @processed_shot_data["espresso_pressure_comparison"].present? && @processed_shot_data["espresso_flow_comparison"].present?
@@ -46,7 +68,7 @@ class ShotChartCompare < ShotChart
       @processed_shot_data["espresso_conductance_derivative_comparison"] = conductance_derivative_chart(@processed_shot_data["espresso_conductance_comparison"]) if @processed_shot_data["espresso_conductance_comparison"].present?
     end
 
-    normalize_processed_shot_data
+    normalize_processed_shot_data if both_have_data?
   end
 
   def normalize_processed_shot_data

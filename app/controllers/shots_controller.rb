@@ -13,14 +13,13 @@ class ShotsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html
-      format.turbo_stream
+      format.any(:html, :turbo_stream) { render(Current.user.journal_enabled? ? "journals/index" : "shots/index") }
       format.json { render_api_endpoint_error }
     end
   end
 
   def search
-    render :index
+    render(Current.user.journal_enabled? ? "journals/index" : "shots/index")
   end
 
   def show
@@ -35,7 +34,7 @@ class ShotsController < ApplicationController
 
   def compare
     @comparison = Shot.find(params[:comparison])
-    @chart = ShotChartCompare.new(@shot, @comparison, Current.user) if @shot.information && @comparison.information
+    @chart = ShotChartCompare.new(@shot, @comparison, Current.user)
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
@@ -52,11 +51,96 @@ class ShotsController < ApplicationController
     redirect_to "https://beanconqueror.com?visualizerShare=#{@shared_shot.code}", allow_other_host: true
   end
 
+  def new
+    @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public)
+    load_coffee_bags_for_form
+  end
+
   def edit
     authorize! @shot
   end
 
   def create
+    if request.format.json?
+      render_api_endpoint_error
+    elsif params.key?(:shot)
+      @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public, sha: "manual:#{SecureRandom.uuid}")
+      if save_form_shot
+        redirect_to @shot, notice: "Shot successfully created.", status: :see_other
+      else
+        load_coffee_bags_for_form
+        render :new, status: :unprocessable_content
+      end
+    else
+      upload_files
+    end
+  end
+
+  def update
+    authorize! @shot
+    if save_form_shot
+      apply_brewdata_updates
+      redirect_to @shot, notice: "Shot successfully updated.", status: :see_other
+    else
+      load_coffee_bags_for_form
+      load_related_shots
+      render :edit, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    return render_api_endpoint_error if request.format.json?
+
+    authorize! @shot
+    @shot.destroy!
+
+    respond_to do |format|
+      format.turbo_stream do
+        if params[:journal].present?
+          streams = [turbo_stream.remove("journal-shot-#{@shot.id}")]
+          if params.key?(:query)
+            query = params.permit(query: %i[q coffee_bag tags]).fetch(:query, {})
+            count = journal.search(query).count
+            streams << turbo_stream.update("journal-count-#{params[:journal_search_id]}", count.zero? ? "No Shots" : helpers.pluralize(count, "Shot"))
+            streams << turbo_stream.update("journal-empty-#{params[:journal_search_id]}", count.zero? ? "No matching shots." : "")
+          end
+          render turbo_stream: streams
+        else
+          render turbo_stream: turbo_stream.remove(@shot)
+        end
+      end
+      format.html do
+        flash[:notice] = "Shot successfully deleted."
+        redirect_to action: :index
+      end
+    end
+  end
+
+  def remove_image
+    authorize! @shot
+    @shot.image.purge
+    render turbo_stream: turbo_stream.remove("shot-image")
+  end
+
+  private
+
+  def save_form_shot
+    allowed = Shot.editable_attributes(Current.user)
+    allowed += %i[start_time duration] if @shot.manual?
+    attributes = params.expect(shot: allowed)
+    attributes[:coffee_bag_id] = Current.user.coffee_bags.find(attributes[:coffee_bag_id]).id if attributes[:coffee_bag_id].present?
+    saved = false
+    Shot.transaction(requires_new: true) do
+      @shot.lock! if @shot.persisted?
+      # Tag assignment writes associations immediately, so validation must roll it back too.
+      @shot.assign_attributes(attributes)
+      saved = @shot.save(context: [@shot.new_record? ? :create : :update, :shot_form])
+      raise ActiveRecord::Rollback unless saved
+    end
+    saved
+  end
+
+  def upload_files
     files = Array(params[:files])
     shots = files.map { |file| Shot.from_file(Current.user, file.read) }
 
@@ -79,41 +163,6 @@ class ShotsController < ApplicationController
     end
   end
 
-  def update
-    authorize! @shot
-    if @shot.update(update_shot_params)
-      apply_brewdata_updates
-      flash[:notice] = "Shot successfully updated."
-    else
-      flash[:alert] = @shot.errors.full_messages.to_sentence
-    end
-  ensure
-    redirect_to action: :show
-  end
-
-  def destroy
-    authorize! @shot
-    @shot.destroy!
-
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.remove(@shot)
-      end
-      format.html do
-        flash[:notice] = "Shot successfully deleted."
-        redirect_to action: :index
-      end
-    end
-  end
-
-  def remove_image
-    authorize! @shot
-    @shot.image.purge
-    render turbo_stream: turbo_stream.remove("shot-image")
-  end
-
-  private
-
   def load_shot
     @shot = Shot.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -127,6 +176,8 @@ class ShotsController < ApplicationController
   end
 
   def load_users_shots
+    return load_journal if Current.user.journal_enabled?
+
     @shots = Current.user.shots.with_attached_image
     @tag_slugs = params[:tags].to_s.split(",")
 
@@ -148,8 +199,19 @@ class ShotsController < ApplicationController
     @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before])
   end
 
+  def load_journal
+    @journal_search_id = params[:journal_search_id].presence || SecureRandom.uuid
+    shots = journal.search(params)
+    @shots_count = shots.count
+    @shots, @cursor = journal.page(shots, params)
+    @columns = journal.ordered_columns
+    @visible_columns = journal.visible_columns
+  rescue Journal::InvalidChange => error
+    redirect_to shots_path, alert: error.message
+  end
+
   def load_related_shots
-    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).sort_by { it[3] }.reverse
+    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).reject { it[3].nil? }.sort_by { it[3] }.reverse
   end
 
   def load_coffee_bags_for_form

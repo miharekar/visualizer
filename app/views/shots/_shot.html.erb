@@ -30,7 +30,7 @@
               <span class="text-base font-semibold md:text-lg">
                 <%= link_to shot_path(shot), data: { action: "click->shot-compare#view" } do %>
                   <span class="absolute inset-x-0 -top-px bottom-0"></span>
-                  <%= shot.profile_title %>
+                  <%= shot.profile_title.presence || "Shot" %>
                 <% end %>
               </span>
             </div>
@@ -89,7 +89,7 @@
                   <span>(1:<%= ratio.round(1) %>)</span>
                 <% end %>
               <% end %>
-              <span>in <%= shot.duration.round(1) %>s</span>
+              <% if shot.duration %><span>in <%= shot.duration.round(1) %>s</span><% end %>
             </div>
           <% end %>
           <% if (shot.grinder_setting.present? && shot.grinder_setting != "0" && shot.grinder_setting != "0.0") || shot.grinder_model.present? %>

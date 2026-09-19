@@ -110,6 +110,10 @@ class User < ApplicationRecord
     super.presence || []
   end
 
+  def journal_columns
+    super.presence || {}
+  end
+
   def unsubscribed_from
     super.presence || []
   end
@@ -179,6 +183,8 @@ end
 #  email                      :string           default(""), not null
 #  github                     :string
 #  hide_shot_times            :boolean          default(FALSE), not null
+#  journal_columns            :jsonb
+#  journal_enabled            :boolean          default(FALSE), not null
 #  last_read_change           :datetime
 #  name                       :string
 #  password_digest            :string           default(""), not null

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.17.1"
+  version: "1.17.5"
   description: |
     REST API for Visualizer.
 
@@ -49,6 +49,7 @@ info:
     - Some read endpoints are public (`/shots`, `/shots/{id}`, `/shots/shared`)
     - Write endpoints require authenticated users and write scope (OAuth)
     - Roaster/Coffee Bag writes also require premium access
+    - Non-premium users have a best-effort limit of 30 new shot records in a rolling 24-hour period, counted by upload/creation time rather than brew time. Requests at the limit return 422; concurrent uploads may exceed it. Updating existing shots does not count toward it.
   contact:
     email: miha@visualizer.coffee
 servers:
@@ -227,6 +228,7 @@ paths:
     patch:
       tags: [Shots]
       summary: Update shot
+      description: Updates are atomic. Failed validation leaves the shot and its tags unchanged.
       operationId: updateShot
       security:
         - OAuth2: [write]
@@ -359,7 +361,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         "422":
-          description: Shot has no profile.
+          description: Shot has no profile, including manually logged shots without telemetry.
           content:
             application/json:
               schema:

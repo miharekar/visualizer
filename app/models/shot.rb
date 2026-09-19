@@ -7,7 +7,8 @@ class Shot < ApplicationRecord
   include SanitizedRichText
   include VariableImageAttachment
 
-  DAILY_LIMIT = 50
+  DAILY_LIMIT = 30
+  INFORMATION_PRESENCE_SQL = "EXISTS (SELECT 1 FROM shot_informations WHERE shot_informations.shot_id = shots.id) AS has_information".freeze
   TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
   LIST_ATTRIBUTES = %i[id user_id start_time updated_at profile_title bean_weight drink_weight drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze
 
@@ -28,6 +29,8 @@ class Shot < ApplicationRecord
   end
 
   validates :start_time, :sha, :user, presence: true
+  validates :duration, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: Float::MAX}, allow_nil: true, on: :shot_form, if: :manual?
+  validates :espresso_enjoyment, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100}, allow_nil: true, on: :shot_form
   validates(*TASTING_ASSESSMENT_ATTRIBUTES, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 15}, allow_nil: true)
   validates_variable_image :image
   validate :daily_limit, on: :create
@@ -45,6 +48,14 @@ class Shot < ApplicationRecord
   scope :premium, -> { where(created_at: ..1.month.ago) }
   scope :non_premium, -> { where(created_at: 1.month.ago..) }
   scope :with_notes, -> { with_rich_text_bean_notes_and_embeds.with_rich_text_espresso_notes_and_embeds.with_rich_text_private_notes_and_embeds }
+  scope :with_information_presence, -> { select("shots.*", INFORMATION_PRESENCE_SQL) }
+
+  def self.editable_attributes(user)
+    allowed = [:profile_title, :barista, :bean_weight, :canonical_coffee_bag_id, *Parsers::Base::EXTRA_DATA_METHODS]
+    allowed += [:image, :private_notes, *TASTING_ASSESSMENT_ATTRIBUTES, :tag_list, {tag_list: [], metadata: user.shot_metadata_fields}] if user.premium?
+    allowed << :coffee_bag_id if user.coffee_management_enabled?
+    allowed
+  end
 
   def self.from_file(user, file_content)
     return Shot.new(user:) if file_content.blank?
@@ -57,6 +68,16 @@ class Shot < ApplicationRecord
     return all if slugs.empty?
 
     where(id: ShotTag.joins(:tag).where(tags: {slug: slugs}).group(:shot_id).having("COUNT(DISTINCT tags.slug) = ?", slugs.size).select(:shot_id))
+  end
+
+  def manual?
+    if new_record? || association(:information).loaded?
+      information.nil?
+    elsif has_attribute?(:has_information)
+      !self[:has_information]
+    else
+      !ShotInformation.exists?(shot_id: id)
+    end
   end
 
   def metadata
@@ -112,7 +133,7 @@ class Shot < ApplicationRecord
 
   def daily_limit
     return if user.premium?
-    return if self.class.where(user_id:).where("start_time > NOW() - INTERVAL '1 day'").count < DAILY_LIMIT
+    return if self.class.where(user_id:).where(created_at: 24.hours.ago..).count < DAILY_LIMIT
 
     errors.add(:base, :over_daily_limit, message: "You've reached your daily limit of #{DAILY_LIMIT} shots. Please consider upgrading to a premium account.")
   end
@@ -180,8 +201,8 @@ end
 # Indexes
 #
 #  index_shots_on_airtable_id              (airtable_id)
-#  index_shots_on_bean_brand               (bean_brand) USING gin
-#  index_shots_on_bean_type                (bean_type) USING gin
+#  index_shots_on_bean_brand               (bean_brand gin_trgm_ops) USING gin
+#  index_shots_on_bean_type                (bean_type gin_trgm_ops) USING gin
 #  index_shots_on_canonical_coffee_bag_id  (canonical_coffee_bag_id)
 #  index_shots_on_coffee_bag_id            (coffee_bag_id)
 #  index_shots_on_created_at               (created_at)

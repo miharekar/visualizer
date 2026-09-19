@@ -1,0 +1,39 @@
+<% editable = journal.editable_columns.key?(field) && (!%w[start_time duration].include?(field) || shot.manual?) %>
+<% if field == "actions" %>
+  <div class="flex items-center gap-1 text-neutral-500 dark:text-neutral-300">
+    <%= link_to shot_path(shot), title: "View shot", class: "rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_frame: "_top"} do %>
+      <%= inline_svg_tag "eye.svg", class: "size-4" %>
+    <% end %>
+    <%= link_to edit_shot_path(shot), title: "Edit shot", class: "rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_frame: "_top"} do %>
+      <%= inline_svg_tag "pencil.svg", class: "size-4" %>
+    <% end %>
+    <%= button_to shot_path(shot, journal: 1, journal_search_id: @journal_search_id, query: params.slice(:coffee_bag, :tags).permit(:coffee_bag, :tags).merge(q: params[:q].to_s)), method: :delete, title: "Delete shot", form: {data: {turbo_stream: true}}, class: "rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
+      <%= inline_svg_tag "trash.svg", class: "size-4" %>
+    <% end %>
+  </div>
+<% elsif field == "image" %>
+  <% if shot.image.attached? && shot.image.variable? %>
+    <%= image_tag shot.image.variant(:thumb), class: "h-8 w-10 rounded object-cover", alt: "Shot photo", loading: "lazy" %>
+  <% end %>
+<% elsif editable && (field == "coffee" || field == "tag_list" || Journal::NOTES.include?(field) || Journal::DROPDOWN_FIELDS.include?(field)) %>
+  <%= link_to edit_journal_path(ids: [shot.id], field: field), title: "Edit #{journal.columns[field]}", class: "focus:ring-terracotta-500 block w-full rounded px-2 py-1 text-left hover:bg-neutral-100 focus:ring-2 dark:hover:bg-neutral-800", data: {turbo_frame: "journal-editor", journal_cell_control: true} do %>
+    <span class="block truncate"><%= journal_display(shot, field).presence || "—" %></span>
+  <% end %>
+<% elsif editable %>
+  <% value = local_assigns.fetch(:value) { journal.value(shot, field) } %>
+  <%= form_with url: journal_path, method: :patch, data: {turbo_stream: true, unsaved: ("" if local_assigns[:error].present?), controller: "journal-cell#{' range' if field == 'espresso_enjoyment'}", action: "input->journal-cell#dirty change->journal-cell#submit keydown->journal-cell#navigate turbo:submit-end->journal-cell#complete"} do |f| %>
+    <%= hidden_field_tag "ids[]", shot.id, id: nil %>
+    <%= f.hidden_field :field, value: field, id: nil %>
+    <% if field == "espresso_enjoyment" %>
+      <%= f.number_field :value, value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], min: 0, max: 100, step: 1, inputmode: "numeric", placeholder: "—", style: ("background-color: #{enjoyment_hex(value.to_i)};" if value.present?), class: "focus:ring-terracotta-500 h-6 w-9! rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white [appearance:textfield] focus:ring-2 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none", data: {journal_cell_control: true, journal_cell_target: "input", range_target: "color", action: "input->range#update"} %>
+    <% else %>
+      <%= f.text_field :value, type: journal_input_type(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], step: field == "duration" ? "any" : "1", placeholder: "—", style: "width: #{[value.to_s.length, 1].max + 3}ch", class: "focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800", data: {journal_cell_control: true, journal_cell_target: "input"} %>
+    <% end %>
+    <p class="text-sm text-red-600 empty:hidden dark:text-red-400" data-journal-cell-target="error"></p>
+  <% end %>
+<% else %>
+  <span class="block px-2 py-1 whitespace-nowrap"><%= journal_display(shot, field).presence || "—" %></span>
+<% end %>
+<% if local_assigns[:error].present? %>
+  <p class="px-2 text-sm text-red-600 dark:text-red-400"><%= error %></p>
+<% end %>

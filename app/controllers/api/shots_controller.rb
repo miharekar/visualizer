@@ -28,7 +28,9 @@ module Api
 
     def profile
       with_shot do |shot|
-        if params[:format] == "csv"
+        if shot.information.nil?
+          render json: {error: "Shot does not have a profile"}, status: :unprocessable_content
+        elsif params[:format] == "csv"
           send_data shot.information.csv_profile, filename: "#{shot.profile_title} from Visualizer.csv", type: "text/csv", disposition: "attachment"
         elsif params[:format] != "json" && shot.information.tcl_profile_fields.present?
           send_data shot.information.tcl_profile, filename: "#{shot.profile_title} from Visualizer.tcl", type: "application/x-tcl", disposition: "attachment"
@@ -55,7 +57,7 @@ module Api
 
     def upload
       shot = Shot.from_file(Current.user, @file_content)
-      if shot&.save
+      if shot.save
         render json: {id: shot.id}
       else
         render json: {error: "Could not save the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_content
@@ -65,7 +67,13 @@ module Api
     def update
       raise ActionController::UnknownFormat unless request.format.json?
 
-      if @shot.update(update_shot_params)
+      saved = false
+      Shot.transaction(requires_new: true) do
+        @shot.lock!
+        saved = @shot.update(update_shot_params)
+        raise ActiveRecord::Rollback unless saved
+      end
+      if saved
         render json: @shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
       else
         render json: {error: @shot.errors.full_messages.join(", ")}, status: :unprocessable_content

@@ -14,7 +14,7 @@ class PremiumController < ApplicationController
       "Fine-tune shot comparisons with precise timing control",
       "Customize chart colors",
       "Add photos to your shots",
-      "Upload over 50 shots per day",
+      "Upload over #{Shot::DAILY_LIMIT} shots per day",
       "Support Visualizer's development and keep the coffee flowing"
     ]
 

@@ -59,7 +59,11 @@ Rails.application.routes.draw do
     get :feed, on: :member
   end
 
-  resources :shots, except: [:new] do
+  scope :shots do
+    resource :journal, only: %i[edit update]
+  end
+
+  resources :shots do
     member do
       delete :remove_image
       get :share
@@ -108,6 +112,7 @@ Rails.application.routes.draw do
   get "/search", to: redirect("/community")
 
   resource :profile, only: %i[edit update] do
+    resource :journal_columns, only: :update
     get :reset_chart_settings
     delete :disconnect_airtable
   end

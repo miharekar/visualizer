@@ -13,10 +13,12 @@ class ShotChart
 
     def initialize(shot)
       @shot = shot
+      @timeframe = []
+      @data = {}
 
-      if shot.information.chart_data?
-        @timeframe = shot.information.timeframe
-        @data = shot.information.data
+      if shot.information&.chart_data?
+        @timeframe = shot.information.timeframe || []
+        @data = shot.information.data || {}
       else
         parse_brew_flow
       end
@@ -33,13 +35,13 @@ class ShotChart
     end
 
     def has_data?
-      data.values.any? { |series| series.respond_to?(:size) && series.size > 1 }
+      timeframe.size > 1 && data.values.any? { |series| series.respond_to?(:size) && series.size > 1 }
     end
 
     private
 
     def parse_brew_flow
-      brew_flow = shot.information.brewdata.try(:[], "brewFlow")
+      brew_flow = shot.information&.brewdata.try(:[], "brewFlow")
       return if brew_flow.blank?
 
       @timeframe = []
