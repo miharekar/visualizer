@@ -13,7 +13,7 @@ module JournalHelper
     end
   end
 
-  def journal_display(journal, shot, field)
+  def journal_display(shot, field)
     if Journal::NOTES.include?(field)
       shot.rich_text_plain_text(field).to_s.truncate(90)
     elsif field == "start_time"

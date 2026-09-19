@@ -4,7 +4,7 @@
   <%= form_with url: edit_journal_path, method: :get, id: "journal-bulk-form", class: "flex flex-wrap items-center gap-3", data: {turbo_frame: "journal-editor"} do |f| %>
     <%= f.hidden_field :editor, value: "true" %>
     <%= f.label :field, "Field", class: "sr-only", for: "journal-bulk-field" %>
-    <%= f.select :field, Current.journal.editable_columns.map { |field, label| [label, field] }, {}, id: "journal-bulk-field", class: "standard-input w-auto! max-w-40" %>
+    <%= f.select :field, journal.editable_columns.map { |field, label| [label, field] }, {}, id: "journal-bulk-field", class: "standard-input w-auto! max-w-40" %>
     <%= f.submit "Set field", class: "button-white px-3 py-2" %>
   <% end %>
   <a class="standard-link hidden" data-journal-selection-target="compare" data-turbo-frame="_top">Compare</a>

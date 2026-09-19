@@ -17,11 +17,11 @@ class JournalsController < ApplicationController
     @attributes = {}
     if params[:ids].present?
       load_field
-      @shots = Current.journal.shots(params[:ids], fields: [@field])
+      @shots = journal.shots(params[:ids], fields: [@field])
       @value = if @field == "tag_list"
         @shots.map { it.tags.map(&:name) }.reduce(:&).sort.join(",")
       elsif @shots.one?
-        Current.journal.value(@shots.first, @field)
+        journal.value(@shots.first, @field)
       end
       @attributes = @shots.one? ? @shots.first.attributes.slice(*Journal::COFFEE_FIELDS) : {}
     end
@@ -32,7 +32,7 @@ class JournalsController < ApplicationController
     @value = params[:value]
     @attributes = params[:attributes].present? ? params.expect(attributes: Journal::COFFEE_FIELDS).to_h : {}
     load_field
-    @shots = Current.journal.shots(params[:ids], fields: [@field])
+    @shots = journal.shots(params[:ids], fields: [@field])
     attributes = if @field == "coffee"
       @attributes
     elsif @field.start_with?("metadata:")
@@ -40,10 +40,10 @@ class JournalsController < ApplicationController
     else
       {@field => @value}
     end
-    @shots = Current.journal.update(params[:ids], attributes)
+    @shots = journal.update(params[:ids], attributes)
     @fields = [@field]
     @fields << "ratio" if %w[bean_weight drink_weight].include?(@field)
-    @fields |= Journal::BAG_FIELDS & Current.journal.columns.keys if @field == "coffee"
+    @fields |= Journal::BAG_FIELDS & journal.columns.keys if @field == "coffee"
     render :update, formats: [:turbo_stream]
   end
 
@@ -51,7 +51,7 @@ class JournalsController < ApplicationController
 
   def load_field
     @field = params[:field]
-    raise Journal::InvalidChange, "Some fields are not editable" unless Current.journal.editable_columns.key?(@field)
+    raise Journal::InvalidChange, "Some fields are not editable" unless journal.editable_columns.key?(@field)
 
     @coffee_bags = Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name if @field == "coffee"
   end

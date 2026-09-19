@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "journal-editor" do %>
   <% if shots.present? || local_assigns[:error].present? %>
-    <dialog title="<%= Current.journal.columns[field] %>" data-controller="journal-dialog" data-action="close->journal-dialog#remove" closedby="any" class="m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-xl rounded-lg bg-white p-6 text-neutral-900 shadow-xl backdrop:bg-black/40 dark:bg-neutral-900 dark:text-neutral-100 <%= field == 'tag_list' || Journal::NOTES.include?(field) ? 'overflow-y-auto' : 'overflow-visible' %>">
+    <dialog title="<%= journal.columns[field] %>" data-controller="journal-dialog" data-action="close->journal-dialog#remove" closedby="any" class="m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-xl rounded-lg bg-white p-6 text-neutral-900 shadow-xl backdrop:bg-black/40 dark:bg-neutral-900 dark:text-neutral-100 <%= field == 'tag_list' || Journal::NOTES.include?(field) ? 'overflow-y-auto' : 'overflow-visible' %>">
       <% if shots.blank? %>
         <p class="text-sm text-red-600 dark:text-red-400"><%= error %></p>
         <div class="mt-4 flex justify-end"><button type="button" class="button-white px-4 py-2" data-action="journal-dialog#close">Cancel</button></div>
@@ -15,7 +15,7 @@
           <% if field == "coffee" %>
             <%= render "journals/coffee_fields", attributes: attributes || {} %>
           <% elsif Journal::NOTES.include?(field) %>
-            <%= f.label :value, Current.journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
+            <%= f.label :value, journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
             <%= rich_text_area_tag :value, value, id: "journal-editor-value", class: "mt-2" %>
           <% elsif field == "tag_list" %>
             <div data-controller="tags" data-tags-user-tags-value="<%= Current.user.tags.pluck(:name).to_json %>">
@@ -23,10 +23,10 @@
               <%= f.text_field :value, value: value, id: "journal-editor-value", class: "standard-input mt-1", data: {tags_target: "input"} %>
             </div>
           <% elsif Journal::DROPDOWN_FIELDS.include?(field) %>
-            <%= f.label :value, Current.journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
-            <%= render "shared/combobox", input_name: "value", input_id: "journal-editor-value", hidden_input_name: "_value", selected: value, collection: Current.journal.dropdown_values(field), name_method: :itself, id_method: :itself, allow_custom: true %>
+            <%= f.label :value, journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
+            <%= render "shared/combobox", input_name: "value", input_id: "journal-editor-value", hidden_input_name: "_value", selected: value, collection: journal.dropdown_values(field), name_method: :itself, id_method: :itself, allow_custom: true %>
           <% else %>
-            <%= f.label :value, Current.journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
+            <%= f.label :value, journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
             <%= f.text_field :value, type: journal_input_type(field), value: value, id: "journal-editor-value", step: field == "duration" ? "any" : "1", class: "standard-input mt-1" %>
           <% end %>
           <div class="flex justify-end gap-3">

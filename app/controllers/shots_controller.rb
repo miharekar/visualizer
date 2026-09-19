@@ -100,7 +100,7 @@ class ShotsController < ApplicationController
           streams = [turbo_stream.remove("journal-shot-#{@shot.id}")]
           if params.key?(:query)
             query = params.permit(query: %i[q coffee_bag tags]).fetch(:query, {})
-            count = Current.journal.search(query).count
+            count = journal.search(query).count
             streams << turbo_stream.update("journal-count", count.zero? ? "No Shots" : helpers.pluralize(count, "Shot"))
             streams << turbo_stream.update("journal-empty-#{params[:journal_search_id]}", count.zero? ? "No matching shots." : "")
           end
@@ -202,11 +202,11 @@ class ShotsController < ApplicationController
 
   def load_journal
     @journal_search_id = params[:journal_search_id].presence || SecureRandom.uuid
-    shots = Current.journal.search(params)
+    shots = journal.search(params)
     @shots_count = shots.count
-    @shots, @cursor = Current.journal.page(shots, params)
-    @columns = Current.journal.ordered_columns
-    @visible_columns = Current.journal.visible_columns
+    @shots, @cursor = journal.page(shots, params)
+    @columns = journal.ordered_columns
+    @visible_columns = journal.visible_columns
   rescue Journal::InvalidChange => error
     redirect_to shots_path, alert: error.message
   end

@@ -46,6 +46,8 @@ Existing premium fields, coffee management, and free-history restrictions apply.
 
 ## Rails and Hotwire
 
+- One memoized controller helper supplies `journal` to controllers and views;
+  `Current` holds session/timezone context, not the journal query object.
 - `GET /shots`: classic index or journal according to user preference.
 - Results frame wraps table, selection toolbar, empty state, and pagination.
 - Cell frames sit inside `<td>` elements. No frames or forms wrap table rows.
