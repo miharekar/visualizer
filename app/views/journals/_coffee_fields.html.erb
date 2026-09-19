@@ -1,3 +1,2 @@
 <%= label_tag "journal-coffee-bag", "Coffee bag", class: "standard-label" %>
 <%= render "shared/combobox", input_name: "coffee_bag", input_id: "journal-coffee-bag", hidden_input_name: "attributes[coffee_bag_id]", selected: @coffee_bags.find { it.id == attributes["coffee_bag_id"] }, collection: @coffee_bags, name_method: :full_display_name, preserve_order: true %>
-<label class="flex items-center gap-2 text-sm"><%= check_box_tag "attributes[coffee_bag_id]", "", false, id: "journal-clear-coffee", class: "standard-checkbox size-4" %>Clear coffee bag</label>

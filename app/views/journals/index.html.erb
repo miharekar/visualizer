@@ -28,7 +28,7 @@
     <%= turbo_frame_tag "journal-results", data: {controller: "journal-selection", turbo_action: "advance"} do %>
       <%= turbo_stream.update "journal-count" do %><%= @shots_count.zero? ? "No Shots" : pluralize(@shots_count, "Shot") %><% end %>
       <%= render "journals/toolbar" %>
-      <div class="max-h-[70dvh] min-h-64 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
+      <div class="relative max-h-[70dvh] min-h-64 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
         <table class="w-max min-w-full text-sm" data-turbo-prefetch="false">
           <caption class="sr-only">Coffee journal. Select rows for bulk edits, or activate a cell to edit it.</caption>
           <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">

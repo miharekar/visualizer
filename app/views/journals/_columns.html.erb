@@ -1,24 +1,35 @@
-<div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel">
-  <%= form_with url: profile_journal_columns_path, method: :patch do |f| %>
-    <p class="mb-2 text-sm text-neutral-500">Drag columns or use arrow keys to reorder. Uncheck columns to hide them.</p>
-    <div class="flex flex-wrap gap-2" data-journal-columns-target="list" data-action="pointermove->journal-columns#drag pointerup->journal-columns#finish pointercancel->journal-columns#finish">
-      <% @columns.each do |field| %>
-        <div data-column="<%= field %>" class="flex items-center gap-2 rounded border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-800">
-          <%= hidden_field_tag "order[]", field, id: nil %>
-          <button type="button" class="cursor-grab touch-none rounded p-1 text-neutral-500 focus-visible:ring-2 active:cursor-grabbing" data-action="pointerdown->journal-columns#start keydown->journal-columns#move">
-            <span class="sr-only">Reorder <%= Current.journal.columns[field] %></span>
-            <svg viewBox="0 0 16 16" fill="currentColor" class="size-4"><circle cx="5" cy="3" r="1.5" /><circle cx="11" cy="3" r="1.5" /><circle cx="5" cy="8" r="1.5" /><circle cx="11" cy="8" r="1.5" /><circle cx="5" cy="13" r="1.5" /><circle cx="11" cy="13" r="1.5" /></svg>
-          </button>
-          <label class="flex items-center gap-2">
-            <%= check_box_tag nil, "1", @visible_columns.include?(field), class: "standard-checkbox size-4", data: {action: "journal-columns#visibility"} %>
-            <%= Current.journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %>
-          </label>
-          <%= hidden_field_tag "hidden[]", field, id: nil, disabled: @visible_columns.include?(field) %>
-        </div>
+<div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= Current.journal.default_columns.to_json %>" data-action="pointermove->journal-columns#drag pointerup->journal-columns#finish pointercancel->journal-columns#finish lostpointercapture->journal-columns#finish">
+  <%= form_with url: profile_journal_columns_path, method: :patch, data: {journal_columns_target: "form", action: "submit->journal-columns#serialize"} do |f| %>
+    <%= hidden_field_tag "reset", "1", disabled: true, data: {journal_columns_target: "reset"} %>
+    <div class="space-y-3">
+      <% ["Visible", "Hidden"].each do |group| %>
+        <section class="min-w-0">
+          <h3 class="mb-2 text-sm font-medium"><%= group %></h3>
+          <div class="flex min-h-14 flex-wrap content-start gap-2 p-2" data-journal-columns-target="list" data-hidden="<%= group == "Hidden" %>">
+            <% @columns.select { @visible_columns.include?(it) == (group == "Visible") }.each do |field| %>
+              <div data-column="<%= field %>" class="flex max-w-full items-center rounded border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
+                <%= hidden_field_tag "order[]", field, id: nil %>
+                <div class="flex cursor-grab touch-none items-center gap-1 rounded p-2 text-left text-sm select-none active:cursor-grabbing [&_*]:pointer-events-none" data-action="pointerdown->journal-columns#start">
+                  <svg class="size-4 shrink-0 text-neutral-400" viewBox="0 0 16 16" fill="currentColor">
+                    <circle cx="5" cy="3" r="1.5" />
+                    <circle cx="11" cy="3" r="1.5" />
+                    <circle cx="5" cy="8" r="1.5" />
+                    <circle cx="11" cy="8" r="1.5" />
+                    <circle cx="5" cy="13" r="1.5" />
+                    <circle cx="11" cy="13" r="1.5" />
+                  </svg>
+                  <span><%= Current.journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %></span>
+                </div>
+                <%= hidden_field_tag "hidden[]", field, id: nil, disabled: group == "Visible" %>
+              </div>
+            <% end %>
+          </div>
+        </section>
       <% end %>
     </div>
     <div class="mt-3 flex justify-end gap-3">
-      <%= f.button "Reset", name: "reset", value: "1", class: "button-white px-3 py-2" %>
+      <button type="button" class="button-white mr-auto px-3 py-2" data-action="journal-columns#reset">Reset to defaults</button>
+      <button type="button" class="button-white px-3 py-2" data-action="journal-columns#cancel">Cancel</button>
       <%= f.submit "Apply", class: "button-terracotta px-3 py-2" %>
     </div>
   <% end %>
