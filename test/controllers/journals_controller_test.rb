@@ -183,7 +183,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "bulk imported restriction rolls back manual shot changes" do
     manual = create(:shot, user: @user)
-    original = manual.start_time
+    original = manual.reload.start_time
     update_field("start_time", "2026-01-01T08:30:00", ids: [manual.id, @shot.id], editor: true)
     assert_response :unprocessable_content
     assert_equal original, manual.reload.start_time

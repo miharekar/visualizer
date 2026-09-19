@@ -151,7 +151,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 32, @shot.duration
 
     imported = create(:shot, :with_information, user: @user, duration: 25)
-    original_time = imported.start_time
+    original_time = imported.reload.start_time
     get edit_shot_url(imported)
     assert_response :success
     assert_select "input[name='shot[start_time]']", count: 0

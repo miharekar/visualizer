@@ -158,8 +158,10 @@ class Journal
       shot.roast_date.present? ? "#{name} (#{shot.roast_date})" : name
     elsif field == "start_time"
       shot.start_time.in_time_zone(Current.timezone).strftime("%Y-%m-%dT%H:%M:%S")
+    elsif field == "tag_list"
+      shot.tag_list
     else
-      shot.public_send(field)
+      shot[field]
     end
   end
 
