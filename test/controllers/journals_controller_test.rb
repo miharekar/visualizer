@@ -10,30 +10,318 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     sign_in(@user)
   end
 
-  test "journal replaces shots index without beta and renders editors" do
+  test "initial index renders framed results and only visible cells without morphing" do
     get shots_url
     assert_response :success
-    assert_select "tr[data-shot-id='#{@shot.id}']"
-    assert_select "td[data-column='start_time'] a", count: 0
-    assert_select "td[data-column='actions'] a[href='#{shot_path(@shot)}'][title='View shot']"
-    assert_select "td[data-column='actions'] a[href='#{edit_shot_path(@shot)}'][title='Edit shot']"
-    assert_select "td[data-column='actions'] button[data-action*='modal#confirm']"
-    assert_select "td[data-column='bean_weight'] input[data-editor]"
-    assert_select "td[data-column='bean_weight'] [data-display]", count: 0
-    assert_select "lexxy-editor", minimum: 2
-    assert_select "form[action='/shots'][method='get']"
-    assert_select "form[data-journal-target='search'] button[data-journal-target='undo'][class~='hidden!']"
-    assert_select "[data-revert], [data-action='journal#retry']", count: 0
-    assert_select "[data-push-notifications-target='bell']"
+    assert_equal "text/html", response.media_type
+    assert_select "turbo-frame#journal-editor", count: 1
+    assert_select "turbo-frame#journal-results", count: 1
+    assert_select "form[action='#{shots_path}'][method='get'][data-turbo-frame='journal-results'] input[name='q']"
+    assert_select "form[action='#{edit_journal_path}'][method='get'][data-turbo-frame='journal-editor']"
+    assert_select "turbo-frame#journal-results tr#journal-shot-#{@shot.id}" do
+      assert_equal Journal.new(@user).visible_columns, css_select("td[data-column]").pluck("data-column")
+      Journal.new(@user).visible_columns.each do |field|
+        assert_select "turbo-frame##{cell_id(@shot, field)}", count: 1
+      end
+    end
+    assert_select "td[data-column='espresso_notes'], td[data-column='private_notes'], td[data-column='tag_list']", count: 0
+    assert_select "[method='morph'], [refresh='morph'], meta[name='turbo-refresh-method'][content='morph']", count: 0
   end
 
-  test "all journal columns are available without lazy SQL loads" do
+  test "GET searches return HTML results and pagination targets their search scoped IDs" do
+    matching = create_list(:shot, Journal::PAGE_SIZE + 1, user: @user, bean_type: "Gesha")
+    get shots_url, params: {q: "Gesha"}, headers: {"Turbo-Frame" => "journal-results"}
+    assert_response :success
+    assert_equal "text/html", response.media_type
+    assert_select "turbo-frame#journal-results", count: 1
+    assert_select "turbo-stream[action='append']", count: 0
+    assert_select "tr#journal-shot-#{@shot.id}", count: 0
+    first_ids = css_select("tbody tr").pluck("id")
+    assert_equal Journal::PAGE_SIZE, first_ids.size
+    rows_id = css_select("tbody").first["id"]
+    cursor = css_select("turbo-frame[id^='journal-cursor-']").first
+    cursor_id = cursor["id"]
+    next_url = cursor["src"]
+    query = Rack::Utils.parse_query(URI.parse(next_url).query)
+    assert_equal "Gesha", query.fetch("q")
+    assert_equal "journal-rows-#{query.fetch('journal_search_id')}", rows_id
+    assert_equal "journal-cursor-#{query.fetch('journal_search_id')}", cursor_id
+
+    get shots_url, params: {q: "No matching coffee"}, headers: {"Turbo-Frame" => "journal-results"}
+    assert_response :success
+    new_rows_id = css_select("tbody").first["id"]
+    assert_not_equal rows_id, new_rows_id
+    assert_select "turbo-frame#journal-results tbody tr", count: 0
+
+    get next_url, headers: {"Turbo-Frame" => cursor_id}
+    assert_response :success
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    assert_select "turbo-stream", count: 2
+    assert_select "turbo-stream[action='append'][target='#{rows_id}']", count: 1
+    assert_select "turbo-stream[action='replace'][target='#{cursor_id}']", count: 1
+    assert_select "turbo-stream[target='#{new_rows_id}'], turbo-stream[target='journal-rows']", count: 0
+    assert_select "turbo-frame##{cursor_id}[src]", count: 0
+    second_ids = css_select("tr").pluck("id")
+    assert_empty first_ids & second_ids
+    assert_equal matching.map { "journal-shot-#{it.id}" }.sort, (first_ids + second_ids).sort
+  end
+
+  test "editor loads owned shots and cancel returns an empty frame" do
+    get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
+    assert_response :success
+    assert_select "turbo-frame#journal-editor"
+    assert_includes response.body, "Sweet"
+
+    get edit_journal_url
+    assert_response :success
+    assert_select "turbo-frame#journal-editor" do |frames|
+      assert_empty frames.first.text.strip
+    end
+    get edit_journal_url, params: {ids: [create(:shot).id], field: "espresso_notes"}
+    assert_response :not_found
+  end
+
+  test "cell updates only submitted field and dependent ratio" do
+    update_field("bean_weight", "20")
+    assert_response :success
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'bean_weight')}']"
+    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'ratio')}']"
+    assert_select "turbo-stream[target='#{cell_id(@shot, 'drink_weight')}']", count: 0
+    assert_select "turbo-stream[action='replace']", count: 0
+    assert_equal "20", @shot.reload.bean_weight
+    assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
+  end
+
+  test "same field is last write wins and neighboring edits survive" do
+    @shot.update!(bean_weight: "19", drink_weight: "42")
+    update_field("bean_weight", "20")
+    assert_response :success
+    update_field("bean_weight", "21")
+    assert_response :success
+    assert_equal "21", @shot.reload.bean_weight
+    assert_equal "42", @shot.drink_weight
+  end
+
+  test "invalid cell keeps attempted value and returns a direct 422 stream" do
+    update_field("espresso_enjoyment", "101")
+    assert_response :unprocessable_content
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'espresso_enjoyment')}']"
+    assert_includes response.body, "101"
+    assert_includes response.body, "Enjoyment must be between 0 and 100"
+  end
+
+  test "editor bulk save clears editor and preserves unrelated fields" do
+    other = create(:shot, user: @user)
+    update_field("tag_list", "daily", ids: [@shot.id, other.id], editor: true)
+    assert_response :success
+    assert_select "turbo-stream[action='update'][target='journal-editor']"
+    assert_equal "daily", @shot.reload.tag_list
+    assert_equal "daily", other.reload.tag_list
+    assert_equal "18", @shot.bean_weight
+  end
+
+  test "bulk tags editor starts with the shared intersection" do
+    @shot.update!(tag_list: "sweet,daily,first")
+    other = create(:shot, user: @user, tag_list: "daily,sweet,second")
+    get edit_journal_url, params: {ids: [@shot.id, other.id], field: "tag_list"}, headers: {"Turbo-Frame" => "journal-editor"}
+    assert_response :success
+    assert_select "turbo-frame#journal-editor input[name='value'][value='daily,sweet']"
+    assert_select "input[name='ids[]']", count: 2
+
+    other.update!(tag_list: "second")
+    get edit_journal_url, params: {ids: [@shot.id, other.id], field: "tag_list"}
+    assert_response :success
+    assert_equal "", css_select("input[name='value']").first["value"].to_s
+    assert_equal "daily,first,sweet", @shot.reload.tag_list
+    assert_equal "second", other.reload.tag_list
+  end
+
+  test "bulk transaction rolls back eager tag assignments and earlier shots" do
+    other = create(:shot, user: @user)
+    first, last = [@shot, other].sort_by(&:id)
+    last.update_columns(acidity: 99) # rubocop:disable Rails/SkipsModelValidations -- exercise rollback when a later shot fails validation
+    assert_raises ActiveRecord::RecordInvalid do
+      Journal.new(@user).update([first.id, last.id], {tag_list: "test", bean_weight: "20"})
+    end
+    assert_equal "18", @shot.reload.bean_weight
+    assert_empty first.reload.tags
+    assert_empty last.reload.tags
+    assert_empty @user.tags
+  end
+
+  test "bulk imported restriction rolls back manual shot changes" do
+    manual = create(:shot, user: @user)
+    original = manual.start_time
+    update_field("start_time", "2026-01-01T08:30:00", ids: [manual.id, @shot.id], editor: true)
+    assert_response :unprocessable_content
+    assert_equal original, manual.reload.start_time
+  end
+
+  test "foreign shots and coffee bags are rejected" do
+    update_field("bean_weight", "20", ids: [@shot.id, create(:shot).id])
+    assert_response :not_found
+    assert_equal "18", @shot.reload.bean_weight
+
+    @user.update!(coffee_management_enabled: true)
+    patch journal_url, params: {ids: [@shot.id], field: "coffee", attributes: {coffee_bag_id: create(:coffee_bag).id}, editor: true}, headers: stream_headers
+    assert_response :not_found
+  end
+
+  test "coffee saves refresh bag fields and their cells" do
+    @user.update!(coffee_management_enabled: true)
+    bag = create(:coffee_bag, roaster: create(:roaster, user: @user))
+    patch journal_url, params: {ids: [@shot.id], field: "coffee", attributes: {coffee_bag_id: bag.id}, editor: true}, headers: stream_headers
+    assert_response :success
+    assert_equal bag.id, @shot.reload.coffee_bag_id
+    assert_equal bag.name, @shot.bean_type
+    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'coffee')}']"
+    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'roast_date')}']"
+    assert_select "turbo-stream[target='#{cell_id(@shot, 'bean_weight')}']", count: 0
+    assert_equal "#{@shot.bean_type} - #{@shot.bean_brand} (#{@shot.roast_date})", Journal.new(@user).value(@shot, "coffee")
+    update_field("bean_brand", "Override")
+    assert_response :unprocessable_content
+  end
+
+  test "unmanaged coffee field edits clear canonical association without overwriting neighboring fields" do
+    roaster = CanonicalRoaster.create!(name: "Original roaster")
+    bag = CanonicalCoffeeBag.create!(name: "Original coffee", canonical_roaster: roaster)
+    assert_not @user.coffee_management_enabled?
+    %w[bean_brand bean_type].each do |field|
+      @shot.update!(canonical_coffee_bag: bag)
+      neighbor = field == "bean_brand" ? "bean_type" : "bean_brand"
+      original_neighbor = @shot.public_send(neighbor)
+      update_field(field, "Custom #{field}", editor: true)
+      assert_response :success
+      assert_nil @shot.reload.canonical_coffee_bag_id
+      assert_equal "Custom #{field}", @shot.public_send(field)
+      assert_equal original_neighbor, @shot.public_send(neighbor)
+      assert_equal "18", @shot.bean_weight
+    end
+  end
+
+  test "free users cannot access old shots or premium fields" do
+    @shot.update!(created_at: 2.months.ago)
+    recent = create(:shot, user: @user, profile_title: "Matching brew", start_time: 1.year.ago)
+    @user.update!(premium_expires_at: nil)
+    assert_equal [recent.id], Journal.new(@user).search(q: "Matching").pluck(:id)
+    update_field("bean_weight", "20")
+    assert_response :not_found
+    update_field("private_notes", "Secret", ids: [recent.id])
+    assert_response :unprocessable_content
+    get edit_journal_url, params: {ids: [recent.id], field: "private_notes"}
+    assert_response :unprocessable_content
+  end
+
+  test "clearing and metadata merge preserve untouched values" do
+    @user.update!(shot_metadata_fields: %w[basket water])
+    @shot.update!(metadata: {basket: "VST", water: "soft"})
+    update_field("metadata:basket", "IMS")
+    assert_response :success
+    update_field("bean_weight", "")
+    assert_response :success
+    assert_equal "", @shot.reload.bean_weight
+    assert_equal({"basket" => "IMS", "water" => "soft"}, @shot.metadata)
+    update_field("metadata:unknown", "bad")
+    assert_response :unprocessable_content
+    assert_equal({"basket" => "IMS", "water" => "soft"}, @shot.reload.metadata)
+  end
+
+  test "rich notes retain formatting and can be cleared" do
+    update_field("espresso_notes", "<p><em>Peach</em></p>", editor: true)
+    assert_response :success
+    assert_equal "<p><em>Peach</em></p>", @shot.reload.rich_text_html(:espresso_notes)
+    update_field("espresso_notes", "", editor: true)
+    assert_response :success
+    assert_nil @shot.reload.rich_text_html(:espresso_notes)
+  end
+
+  test "manual date and duration edits validate input" do
+    manual = create(:shot, user: @user)
+    update_field("start_time", "2026-01-01T08:30:00", ids: [manual.id])
+    assert_response :success
+    assert_equal Time.utc(2026, 1, 1, 7, 30), manual.reload.start_time
+    update_field("duration", "30.5", ids: [manual.id])
+    assert_response :success
+    assert_equal 30.5, manual.reload.duration
+    %w[-1 no].each do |value|
+      update_field("duration", value, ids: [manual.id])
+      assert_response :unprocessable_content
+    end
+    update_field("start_time", "bad", ids: [manual.id])
+    assert_response :unprocessable_content
+    update_field("duration", "30")
+    assert_response :unprocessable_content
+  end
+
+  test "column preferences accept forms and reset with redirects" do
+    headers = {"Accept" => "text/vnd.turbo-stream.html, text/html"}
+    patch(profile_journal_columns_url, params: {order: %w[bean_type start_time], hidden: %w[duration]}, headers:)
+    assert_response :see_other
+    assert_redirected_to shots_path(format: :html)
+    assert_equal %w[bean_type start_time], @user.reload.journal_columns["order"]
+    follow_redirect!(headers:)
+    assert_equal "text/html", response.media_type
+    assert_select "turbo-frame#journal-results table", count: 1
+    assert_select "td[data-column='duration'], turbo-stream[action='append']", count: 0
+    patch(profile_journal_columns_url, params: {order: ["user_id"]}, headers:)
+    assert_redirected_to shots_path(format: :html)
+    assert_equal "Unknown columns", flash[:alert]
+    assert_equal %w[bean_type start_time], @user.reload.journal_columns["order"]
+    patch(profile_journal_columns_url, params: {reset: "1"}, headers:)
+    assert_response :see_other
+    assert_redirected_to shots_path(format: :html)
+    assert_nil @user.reload[:journal_columns]
+    journal = Journal.new(@user)
+    assert_equal journal.default_columns, journal.visible_columns
+    follow_redirect!(headers:)
+    assert_equal "text/html", response.media_type
+    assert_select "turbo-frame#journal-results td[data-column='duration']", count: 1
+    assert_select "turbo-stream[action='append']", count: 0
+  end
+
+  test "column defaults follow coffee management mode" do
+    assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
+    @user.update!(coffee_management_enabled: true)
+    assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
+  end
+
+  test "guests cannot read or write journal" do
+    delete session_url
+    get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
+    assert_redirected_to new_session_url
+    update_field("bean_weight", "20")
+    assert_redirected_to new_session_url
+    assert_equal "18", @shot.reload.bean_weight
+  end
+
+  test "malformed duplicate and oversized selections are rejected" do
+    [[], "bad", [@shot.id] * 2, ["bad"], Array.new(Journal::MAX_BATCH + 1) { SecureRandom.uuid }].each do |ids|
+      update_field("bean_weight", "20", ids:)
+      assert_response :unprocessable_content
+    end
+  end
+
+  test "list loads full shot columns without telemetry or unused associations" do
+    journal = Journal.new(@user)
+    shots, = journal.page(journal.scope, {})
+    shot = shots.first
+    assert shot.has_attribute?(:barista)
+    assert shot.has_attribute?(:espresso_notes)
+    assert shot.has_attribute?(:metadata)
+    assert_not shot.association(:rich_text_espresso_notes).loaded?
+    assert_not shot.association(:tags).loaded?
+    assert_not shot.association(:image_attachment).loaded?
+    assert_not shot.association(:information).loaded?
+    assert_not shot.manual?
+  end
+
+  test "visible rich text tags and images are preloaded without lazy SQL" do
     @user.update!(shot_metadata_fields: %w[basket water])
     journal = Journal.new(@user)
     @user.update!(journal_columns: {order: journal.columns.keys, hidden: []})
     shots, = journal.page(journal.scope, {})
-    assert_not shots.first.manual?
-    assert_not shots.first.association(:information).loaded?
     queries = []
     capture = ->(*args) { queries << args.last[:sql] unless args.last[:name] == "SCHEMA" }
     ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
@@ -45,411 +333,40 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_empty queries
   end
 
-  test "default list skips hidden attributes and associations" do
-    journal = Journal.new(@user)
-    shots, = journal.page(journal.scope, {})
-    shot = shots.first
-    assert_not shot.has_attribute?(:barista)
-    assert_not shot.has_attribute?(:espresso_notes)
-    assert_not shot.has_attribute?(:metadata)
-    assert_not shot.association(:rich_text_espresso_notes).loaded?
-    assert_not shot.association(:tags).loaded?
-    assert_not shot.association(:image_attachment).loaded?
-    assert_not shot.association(:information).loaded?
-  end
-
-  test "hidden cells are fetched on demand with ownership and entitlement checks" do
-    @shot.update!(tag_list: "daily")
-    get journal_cells_url, params: {ids: [@shot.id], fields: ["tag_list"]}, as: :json
-    assert_response :success
-    assert_equal ["daily"], response.parsed_body.fetch("tags")
-    assert_includes response.parsed_body.fetch("stream"), "daily"
-    assert_not_includes response.parsed_body.fetch("stream"), "Sweet"
-    foreign = create(:shot)
-    get journal_cells_url, params: {ids: [foreign.id], fields: ["tag_list"]}, as: :json
-    assert_response :not_found
-    @user.update!(premium_expires_at: nil)
-    get journal_cells_url, params: {ids: [@shot.id], fields: ["private_notes"]}, as: :json
-    assert_response :unprocessable_content
-  end
-
-  test "single and batch changes preserve notes and undo exact coffee fields" do
-    @user.update!(coffee_management_enabled: true)
-    roaster = create(:roaster, user: @user)
-    bag = create(:coffee_bag, roaster:)
-    other = create(:shot, user: @user, bean_brand: "Original", roast_date: "2026-01-01")
-    original = [@shot, other].map { it.attributes.slice(*Journal::COFFEE_FIELDS) }
-
-    patch journal_url, params: {changes: [change(@shot, coffee_bag_id: bag.id), change(other, coffee_bag_id: bag.id)]}, as: :json
-    assert_response :success
-    undo = response.parsed_body.fetch("undo")
-    assert_equal bag.id, @shot.reload.coffee_bag_id
-    assert_equal "18", @shot.bean_weight
-    assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
-
-    patch journal_url, params: {undo:}, as: :json
-    assert_response :success
-    assert_equal original, [@shot, other].map { it.reload.attributes.slice(*Journal::COFFEE_FIELDS) }
-  end
-
-  test "batch is atomic including tag assignments" do
-    other = create(:shot, user: @user)
-    patch journal_url, params: {changes: [change(@shot, tag_list: "test", bean_weight: "20"), change(other, acidity: 99)]}, as: :json
-    assert_response :unprocessable_entity
-    assert_equal "18", @shot.reload.bean_weight
-    assert_empty @shot.tags
-    assert_empty @user.tags
-  end
-
-  test "stale edits and stale undo do not overwrite new values" do
-    stale = change(@shot, bean_weight: "20")
-    @shot.update!(bean_weight: "19")
-    patch journal_url, params: {changes: [stale]}, as: :json
-    assert_response :conflict
-    assert_equal "19", @shot.reload.bean_weight
-
-    patch journal_url, params: {changes: [change(@shot, bean_weight: "21")]}, as: :json
-    undo = response.parsed_body.fetch("undo")
-    @shot.update!(bean_weight: "22")
-    patch journal_url, params: {undo:}, as: :json
-    assert_response :conflict
-    assert_equal "22", @shot.reload.bean_weight
-  end
-
-  test "foreign shots and coffee bags are rejected" do
-    foreign = create(:shot)
-    patch journal_url, params: {changes: [change(@shot, bean_weight: "20"), change(foreign, bean_weight: "20")]}, as: :json
-    assert_response :not_found
-    assert_equal "18", @shot.reload.bean_weight
-
-    @user.update!(coffee_management_enabled: true)
-    bag = create(:coffee_bag)
-    patch journal_url, params: {changes: [change(@shot, coffee_bag_id: bag.id)]}, as: :json
-    assert_response :not_found
-  end
-
-  test "free users can search but cannot access old shots or premium fields" do
-    @shot.update!(created_at: 2.months.ago)
-    recent = create(:shot, user: @user, profile_title: "Matching brew", start_time: 1.year.ago)
-    @user.update!(premium_expires_at: nil)
-    get shots_url(q: "Matching")
-    assert_response :success
-    assert_select "tr[data-shot-id='#{recent.id}']"
-    assert_select "tr[data-shot-id='#{@shot.id}']", count: 0
-    assert_select "[data-column='private_notes']", count: 0
-    assert_select "form[data-action*='journal#search']", count: 0
-
-    patch journal_url, params: {changes: [change(@shot, bean_weight: "20")]}, as: :json
-    assert_response :not_found
-    patch journal_url, params: {changes: [change(recent, private_notes: "Secret")]}, as: :json
-    assert_response :unprocessable_entity
-  end
-
-  test "clearing and metadata merge preserve untouched values" do
-    @user.update!(shot_metadata_fields: %w[basket water])
-    @shot.update!(metadata: {basket: "VST", water: "soft"})
-    patch journal_url, params: {changes: [change(@shot, bean_weight: "", metadata: {basket: "IMS"})]}, as: :json
-    assert_response :success
-    assert_equal "", @shot.reload.bean_weight
-    assert_equal({"basket" => "IMS", "water" => "soft"}, @shot.metadata)
-    assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
-  end
-
-  test "undo removes a newly added metadata key and preserves unrelated edits" do
-    @user.update!(shot_metadata_fields: %w[basket water])
-    @shot.update!(metadata: {water: "soft"})
-    patch journal_url, params: {changes: [change(@shot, metadata: {basket: "IMS"})]}, as: :json
-    assert_response :success
-    undo = response.parsed_body.fetch("undo")
-    @shot.reload.update!(metadata: @shot.metadata.merge("water" => "hard"))
-    patch journal_url, params: {undo:}, as: :json
-    assert_response :success
-    assert_equal({"water" => "hard"}, @shot.reload.metadata)
-  end
-
-  test "multiple signed changes can be undone in reverse order" do
-    undos = []
-    %w[19 20 21].each do |value|
-      patch journal_url, params: {changes: [change(@shot, bean_weight: value)]}, as: :json
-      assert_response :success
-      undos << response.parsed_body.fetch("undo")
-    end
-    undos.reverse.zip(%w[20 19 18]).each do |undo, expected|
-      patch journal_url, params: {undo:}, as: :json
-      assert_response :success
-      assert_equal expected, @shot.reload.bean_weight
-    end
-  end
-
-  test "manual creation is retry safe supports backdating and requires no telemetry" do
-    id = SecureRandom.uuid
-    attributes = {start_time: "2026-01-01T08:30:00", bean_weight: "18", espresso_notes: "<p>Peach</p>"}
-    assert_difference "@user.shots.count", 1 do
-      2.times do
-        post shots_url, params: {entry_id: id, shot: attributes}, as: :json
-        assert_response :created
-      end
-    end
-    shot = @user.shots.find(id)
-    assert shot.manual?
-    assert_nil shot.information
-    assert_nil shot.duration
-    assert_equal Time.utc(2026, 1, 1, 7, 30), shot.start_time
-    assert shot.sha.present?
-
-    patch journal_url, params: {changes: [change(shot, duration: "30.5", start_time: "2026-01-02T09:00:00")]}, as: :json
-    assert_response :success
-    assert_equal 30.5, shot.reload.duration
-    get shot_url(shot)
-    assert_response :success
-    get shots_url
-    assert_response :success
-    get api_shot_url(shot, format: :json)
-    assert_response :success
-    get api_shot_profile_url(shot, format: :json)
-    assert_response :unprocessable_content
-  end
-
-  test "creation replay with changed values conflicts rather than discarding changes" do
-    id = SecureRandom.uuid
-    post shots_url, params: {entry_id: id, shot: {bean_weight: "18"}}, as: :json
-    assert_response :created
-    assert_no_difference "Shot.count" do
-      post shots_url, params: {entry_id: id, shot: {bean_weight: "19"}}, as: :json
-      assert_response :conflict
-    end
-    assert_equal id, response.parsed_body.fetch("shot_id")
-    assert_equal "18", @user.shots.find(id).bean_weight
-  end
-
-  test "creation returns matching count and identifies a pinned nonmatching row" do
-    post shots_url, params: {entry_id: SecureRandom.uuid, shot: {bean_type: "Gesha"}, query: {q: "Gesha"}}, as: :json
-    assert_response :created
-    assert_equal 1, response.parsed_body.fetch("count")
-    assert response.parsed_body.fetch("matches")
-    post shots_url, params: {entry_id: SecureRandom.uuid, shot: {bean_type: "Bourbon"}, query: {q: "Gesha"}}, as: :json
-    assert_response :created
-    assert_equal 1, response.parsed_body.fetch("count")
-    assert_not response.parsed_body.fetch("matches")
-  end
-
-  test "manual creation without duration renders existing shot views" do
-    post shots_url, params: {entry_id: SecureRandom.uuid, shot: {bean_weight: "18"}}, as: :json
-    assert_response :created
-    id = response.parsed_body.fetch("rows").first.fetch("id")
-    get shot_url(id)
-    assert_response :success
-    get shots_url
-    assert_response :success
-  end
-
-  test "invalid manual inputs and imported date edits are rejected" do
-    [{start_time: "bad"}, {duration: "-1"}, {duration: "no"}, {espresso_enjoyment: "101"}].each do |attributes|
-      assert_no_difference "Shot.count" do
-        post shots_url, params: {entry_id: SecureRandom.uuid, shot: attributes}, as: :json
-        assert_response :unprocessable_entity
-      end
-    end
-    patch journal_url, params: {changes: [change(@shot, start_time: Time.current.iso8601)]}, as: :json
-    assert_response :unprocessable_entity
-  end
-
-  test "column preferences are account scoped and validated" do
-    patch profile_journal_columns_url, params: {columns: {order: %w[bean_type start_time], hidden: %w[duration]}}, as: :json
-    assert_response :no_content
-    assert_equal %w[bean_type start_time], @user.reload.journal_columns["order"]
-    get shots_url
-    assert_select "th[data-column='duration'].hidden"
-    patch profile_journal_columns_url, params: {columns: {order: ["user_id"], hidden: []}}, as: :json
-    assert_response :unprocessable_entity
-    patch profile_journal_columns_url, params: {columns: nil}, as: :json
-    assert_response :success
-    assert_nil @user.reload[:journal_columns]
-    assert_equal Journal.new(@user).default_columns, response.parsed_body.fetch("visible")
-    get shots_url
-    assert_response :success
-    assert_equal Journal.new(@user).default_columns, Journal.new(@user.reload).visible_columns
-    assert_equal "espresso_enjoyment", css_select("thead th[data-column]").first["data-column"]
-  end
-
-  test "column choices and defaults follow coffee management mode" do
-    assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
-    get shots_url
-    assert_select "[data-column-choice='coffee']", count: 0
-    assert_select "th[data-column='bean_brand']:not(.hidden)"
-    assert_select "th[data-column='bean_type']:not(.hidden)"
-    assert_equal "actions", Journal.new(@user).default_columns.last
-
-    @user.update!(coffee_management_enabled: true)
-    assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
-    get shots_url
-    assert_select "[data-column-choice='bean_brand'], [data-column-choice='bean_type']", count: 0
-    assert_select "th[data-column='coffee']:not(.hidden)"
-    assert_select "[data-controller='combobox'] [name='coffee_bag_id']", minimum: 2
-    patch journal_url, params: {changes: [change(@shot, bean_brand: "Override")]}, as: :json
-    assert_response :unprocessable_content
-  end
-
-  test "journal reuses combobox and tag editors and names all table inputs" do
-    get shots_url
-    assert_select "[data-controller='combobox'] [name='bean_brand']", minimum: 2
-    assert_select "[data-controller='combobox'] [name='bean_type']", minimum: 2
-    assert_select "[data-controller='combobox'] [name='field_value_grinder_model']"
-    assert_select "[data-controller='tags'] [data-tags-target='input']"
-    assert_select "table input:not([id]):not([name])", count: 0
-  end
-
-  test "JSON deletion removes owned shot and returns current query count" do
-    delete shot_url(@shot), params: {query: {q: "Sweet"}}, as: :json
-    assert_response :success
-    assert_equal @shot.id, response.parsed_body.fetch("id")
-    assert_equal 0, response.parsed_body.fetch("count")
-    assert_not Shot.exists?(@shot.id)
-  end
-
-  test "preference defaults off and switches interface at same URL" do
-    assert_not User.new.journal_enabled?
-    delete session_url
-    sign_in(@user)
-    assert_redirected_to shots_url
-    get edit_profile_url
-    assert_select "input[name='user[journal_enabled]'][checked]"
-    patch profile_url, params: {user: {journal_enabled: "0"}}
-    assert_redirected_to shots_path(format: :html)
-    assert_not @user.reload.journal_enabled?
-    get shots_url
-    assert_select "[data-controller~='journal']", count: 0
-    patch profile_url, params: {user: {journal_enabled: "1"}}
-    assert_redirected_to shots_path(format: :html)
-    follow_redirect!
-    assert_response :success
-    assert_select "[data-controller~='journal']"
-    assert_select "a[href='/shots'].border-terracotta-500", text: "Shots"
-  end
-
-  test "guests cannot read or write journal" do
-    delete session_url
-    get shots_url
-    assert_redirected_to new_session_url
-    patch journal_url, params: {changes: [change(@shot, bean_weight: "20")]}, as: :json
-    assert_redirected_to new_session_url
-    assert_equal "18", @shot.reload.bean_weight
-  end
-
-  test "Turbo profile save redirects to HTML shots view with notice" do
-    headers = {"Accept" => "text/vnd.turbo-stream.html, text/html"}
-    patch(profile_url, params: {user: {skin: "Dark"}}, headers:)
-    assert_redirected_to shots_path(format: :html)
-    assert_equal "Dark", @user.reload.skin
-    follow_redirect!(headers:)
-    assert_response :success
-    assert_equal "text/html", response.media_type
-    assert_includes response.body, "Profile successfully updated."
-    assert_select "[data-controller~='journal']"
-  end
-
-  test "malformed changes and duplicate ids are rejected" do
-    [[], {}, ["bad"], [change(@shot, bean_weight: "20")] * 2].each do |changes|
-      patch journal_url, params: {changes:}, as: :json
-      assert_response :unprocessable_entity
-    end
-  end
-
-  test "undo of one field preserves later edits to other fields" do
-    patch journal_url, params: {changes: [change(@shot, bean_weight: "20")]}, as: :json
-    assert_response :success
-    undo = response.parsed_body.fetch("undo")
-    patch journal_url, params: {changes: [change(@shot, drink_weight: "42")]}, as: :json
-    assert_response :success
-    patch journal_url, params: {undo:}, as: :json
-    assert_response :success
-    assert_equal "18", @shot.reload.bean_weight
-    assert_equal "42", @shot.drink_weight
-  end
-
-  test "rich notes can be saved cleared and reverted without formatting loss" do
-    patch journal_url, params: {changes: [change(@shot, espresso_notes: "<p><em>Peach</em></p>")]}, as: :json
-    assert_response :success
-    patch journal_url, params: {changes: [change(@shot, espresso_notes: "")]}, as: :json
-    assert_response :success
-    undo = response.parsed_body.fetch("undo")
-    assert_nil @shot.reload.rich_text_html(:espresso_notes)
-    patch journal_url, params: {undo:}, as: :json
-    assert_response :success
-    assert_equal "<p><em>Peach</em></p>", @shot.reload.rich_text_html(:espresso_notes)
-  end
-
-  test "manual shots respect free daily creation limit" do
-    @user.update!(premium_expires_at: nil)
-    create_list(:shot, Shot::DAILY_LIMIT - 1, user: @user)
-    assert_no_difference "Shot.count" do
-      post shots_url, params: {entry_id: SecureRandom.uuid, shot: {bean_weight: "18"}}, as: :json
-      assert_response :unprocessable_content
-    end
-  end
-
-  test "backdating manual shots does not bypass daily creation limit" do
-    @user.update!(premium_expires_at: nil)
-    create_list(:shot, Shot::DAILY_LIMIT - 1, user: @user, start_time: 1.year.ago)
-    assert_no_difference "Shot.count" do
-      post shots_url, params: {entry_id: SecureRandom.uuid, shot: {start_time: 1.year.ago.iso8601}}, as: :json
-      assert_response :unprocessable_content
-    end
-  end
-
-  test "infinite loading handles tied timestamps" do
+  test "cursor pagination handles tied timestamps" do
     timestamp = Time.current.change(usec: 0)
     @shot.update!(start_time: timestamp)
     create_list(:shot, Journal::PAGE_SIZE + 1, user: @user, start_time: timestamp)
-    get shots_url
-    first_ids = css_select("tr[data-shot-id]").pluck("data-shot-id")
-    assert_equal Journal::PAGE_SIZE, first_ids.size
-    next_url = css_select("turbo-frame#cursor").first["src"]
-    assert next_url.present?
-    cursor = Rack::Utils.parse_query(URI.parse(next_url).query)
-    assert_equal timestamp.utc.iso8601(6), cursor.fetch("before")
-    assert_equal first_ids.last, cursor.fetch("before_id")
-    get next_url
-    assert_response :success
-    assert_equal "text/vnd.turbo-stream.html", response.media_type
-    assert_select "turbo-stream[action='append'][target='journal-rows']"
-    assert_select "turbo-stream[data-journal-search-id='#{cursor.fetch('journal_search_id')}']", count: 4
-    second_ids = css_select("tr[data-shot-id]").pluck("data-shot-id")
-    assert_empty(first_ids & second_ids)
-    assert_equal @user.shots.count, (first_ids + second_ids).size
+    journal = Journal.new(@user)
+    first, cursor = journal.page(journal.scope, {})
+    assert_equal Journal::PAGE_SIZE, first.size
+    assert_equal timestamp.utc.iso8601(6), cursor.fetch(:before)
+    assert_equal first.last.id, cursor.fetch(:before_id)
+    second, cursor = journal.page(journal.scope, cursor)
+    assert_nil cursor
+    assert_empty(first.map(&:id) & second.map(&:id))
+    assert_equal @user.shots.count, (first + second).size
+    assert_raises(Journal::InvalidChange) { journal.page(journal.scope, before: "bad", before_id: @shot.id) }
   end
 
-  test "fresh searches render HTML rows inside generation-tagged streams" do
-    search_id = SecureRandom.uuid
-    get shots_url(format: :turbo_stream, fresh_search: "1", journal_search_id: search_id)
-    assert_response :success
-    assert_select "turbo-stream[action='update'][target='journal-rows'][data-journal-search-id='#{search_id}'][data-journal-fresh-search='true']"
-    assert_select "tr[data-shot-id='#{@shot.id}']"
-  end
-
-  test "premium search is instant and enjoyment is first by default" do
-    get shots_url
-    assert_select "form[data-action*='input->journal#search']"
-    assert_equal "espresso_enjoyment", css_select("thead th[data-column]").first["data-column"]
-    assert_select "th", text: "Details", count: 0
-    assert_select "select[name='sort'], select[name='direction'], input[type='submit'][value='Search']", count: 0
-  end
-
-  test "single search combines coffee and tags without matching brew timestamps" do
+  test "search combines coffee and tags without matching brew timestamps" do
     shot = create(:shot, user: @user, bean_type: "Gesha", start_time: Time.utc(2026, 9, 17, 22, 15), tag_list: "daily")
-    get shots_url(q: "Gesha daily")
-    assert_response :success
-    assert_select "tr[data-shot-id='#{shot.id}']"
-    assert_select "tr[data-shot-id='#{@shot.id}']", count: 0
-    assert_select "form[data-journal-target='search'] [name='start_date'], form[data-journal-target='search'] [name='coffee_bag'], form[data-journal-target='search'] [name='tags']", count: 0
-    get shots_url(q: "Gesha daily 2026-09-17")
-    assert_response :success
-    assert_select "tr[data-shot-id]", count: 0
+    journal = Journal.new(@user)
+    assert_equal [shot.id], journal.search(q: "Gesha daily").pluck(:id)
+    assert_empty journal.search(q: "Gesha daily 2026-09-17")
   end
 
   private
 
-  def change(shot, **attributes)
-    {id: shot.id, version: shot.reload.updated_at.utc.iso8601(6), attributes:}
+  def stream_headers
+    {"Accept" => "text/vnd.turbo-stream.html"}
+  end
+
+  def update_field(field, value, ids: [@shot.id], editor: false)
+    patch journal_url, params: {ids:, field:, value:, editor:}, headers: stream_headers
+  end
+
+  def cell_id(shot, field)
+    ApplicationController.helpers.journal_cell_id(shot, field)
   end
 end

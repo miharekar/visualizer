@@ -1,6 +1,5 @@
 class Journal
   class InvalidChange < StandardError; end
-  class Conflict < InvalidChange; end
 
   PAGE_SIZE = 30
   MAX_BATCH = 100
@@ -18,7 +17,6 @@ class Journal
   COFFEE_FIELDS = %w[coffee_bag_id canonical_coffee_bag_id bean_brand bean_type roast_date roast_level].freeze
   BAG_FIELDS = %w[bean_brand bean_type roast_date roast_level].freeze
   DROPDOWN_FIELDS = %w[grinder_model bean_brand bean_type].freeze
-  ROW_ATTRIBUTES = %w[id user_id start_time updated_at coffee_bag_id canonical_coffee_bag_id].freeze
 
   attr_reader :user
 
@@ -130,21 +128,15 @@ class Journal
   end
 
   def for_list(shots = scope, fields: visible_columns)
-    attributes = ROW_ATTRIBUTES + (fields & Shot.column_names)
-    attributes += %w[bean_brand bean_type] if fields.include?("coffee")
-    attributes += %w[bean_weight drink_weight] if fields.include?("ratio")
-    attributes << "metadata" if fields.any? { it.start_with?("metadata:") }
-    shots = shots.select(attributes.uniq)
-    shots = shots.select(Shot::INFORMATION_PRESENCE_SQL) if fields.include?("duration")
+    shots = shots.with_information_presence
     (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
     shots = shots.with_attached_image if fields.include?("image")
     shots = shots.includes(:tags) if fields.include?("tag_list")
     shots
   end
 
-  def cells(ids, fields)
+  def shots(ids, fields: visible_columns)
     raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(UUID_PATTERN) }
-    raise InvalidChange, "Unknown columns" unless fields.is_a?(Array) && fields.present? && (fields - columns.keys).empty?
 
     shots = for_list(scope.where(id: ids), fields: fields.uniq).to_a
     raise ActiveRecord::RecordNotFound unless shots.size == ids.size
@@ -162,7 +154,8 @@ class Journal
     elsif field.start_with?("metadata:")
       shot.metadata[field.delete_prefix("metadata:")]
     elsif field == "coffee"
-      [shot.bean_brand, shot.bean_type].compact_blank.join(" / ")
+      name = [shot.bean_type, shot.bean_brand].compact_blank.join(" - ")
+      shot.roast_date.present? ? "#{name} (#{shot.roast_date})" : name
     elsif field == "start_time"
       shot.start_time.in_time_zone(Current.timezone).strftime("%Y-%m-%dT%H:%M:%S")
     else
@@ -170,107 +163,32 @@ class Journal
     end
   end
 
-  def update(changes)
-    raise InvalidChange, "Choose between 1 and #{MAX_BATCH} distinct shots" unless changes.is_a?(Array) && changes.size.between?(1, MAX_BATCH) && changes.all? { it.is_a?(Hash) } && changes.pluck("id").uniq.size == changes.size
-
-    previous = []
-    shots = []
-    user.with_lock do
-      fields = changes.flat_map { it["attributes"].is_a?(Hash) ? it["attributes"].keys : [] }
-      records = locked_shots(changes.pluck("id"), fields:)
-      changes.sort_by { it["id"].to_s }.each do |change|
-        shot = records.fetch(change["id"])
-        check_version(shot, change["version"])
-        attributes = permitted_attributes(shot, change["attributes"])
-        metadata_keys = change["attributes"]["metadata"]&.keys
-        absent_metadata_keys = metadata_keys ? metadata_keys - shot.metadata.keys : []
-        before = snapshot(shot, attributes, metadata_keys:)
-        shot.assign_attributes(attributes)
-        shot.updated_at = Time.current
-        shot.save!
-        shot.reload
-        previous << {"id" => shot.id, "attributes" => before, "after" => snapshot(shot, attributes, metadata_keys:), "absent_metadata_keys" => absent_metadata_keys}
-        shots << shot
-      end
-    end
-    [shots, verifier.generate(previous, purpose: "journal:#{user.id}", expires_in: 12.hours)]
-  end
-
-  def undo(token)
-    raise InvalidChange, "Invalid undo" unless token.is_a?(String)
-
-    previous = verifier.verified(token, purpose: "journal:#{user.id}")
-    raise InvalidChange, "Undo expired; reload to see current values" unless previous.is_a?(Array)
-
-    shots = []
-    user.with_lock do
-      records = locked_shots(previous.pluck("id"), fields: previous.flat_map { it["attributes"].keys })
-      previous.sort_by { it["id"] }.each do |change|
-        shot = records.fetch(change["id"])
-        current = snapshot(shot, change["attributes"], metadata_keys: change["attributes"]["metadata"]&.keys)
-        raise Conflict, "These fields changed since saving. Reload before reverting." unless current == change["after"]
-
-        attributes = permitted_attributes(shot, change["attributes"], restoring: true)
-        attributes["metadata"] = attributes["metadata"].except(*change.fetch("absent_metadata_keys", [])) if attributes.key?("metadata")
-        # Persist assignment callbacks first, then restore exact signed snapshot.
-        shot.update!(attributes)
-        shot.assign_attributes(attributes)
-        shot.updated_at = Time.current
-        shot.save!
-        shots << shot
-      end
-    end
-    shots
-  end
-
-  def create(attributes, entry_id)
-    raise InvalidChange, "Invalid draft identifier" unless entry_id.is_a?(String) && entry_id.match?(UUID_PATTERN)
+  def update(ids, attributes)
+    raise InvalidChange, "Missing changed fields" unless attributes.is_a?(Hash) && attributes.present?
 
     user.with_lock do
-      existing = scope.find_by(id: entry_id)
-      if existing
-        raise InvalidChange, "This identifier already belongs to an imported shot" unless existing.manual?
-        raise Conflict, "This shot was already saved with different values. Your draft is still here; open the saved shot to review it." unless existing.sha == creation_sha(attributes)
-
-        scope.find(existing.id)
-      else
-        raise ActiveRecord::RecordNotFound if Shot.exists?(id: entry_id)
-
-        shot = user.shots.new(id: entry_id, sha: creation_sha(attributes), public: user.public, start_time: Time.current)
-        shot.assign_attributes(permitted_attributes(shot, attributes))
-        shot.save!
-        shot
+      records = shots(ids).sort_by(&:id)
+      records.each do |shot|
+        shot.lock!
+        # Tag assignment writes immediately, so assignment must stay inside this transaction.
+        shot.update!(permitted_attributes(shot, attributes.deep_stringify_keys))
       end
+      records
     end
   end
 
   private
 
-  def creation_sha(attributes)
-    canonical = attributes.deep_stringify_keys
-    canonical["metadata"] = canonical["metadata"].sort.to_h if canonical["metadata"].is_a?(Hash)
-    "manual:#{Digest::SHA256.hexdigest(canonical.sort.to_h.to_json)}"
-  end
-
-  def locked_shots(ids, fields:)
-    shots = scope.where(id: ids).order(:id).lock
-    shots = shots.with_information_presence if (fields & %w[start_time duration]).any?
-    (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
-    shots = shots.includes(:tags) if fields.include?("tag_list")
-    records = shots.index_by(&:id)
-    raise ActiveRecord::RecordNotFound unless records.size == ids.size && ids.all? { records.key?(it) }
-
-    records
-  end
-
-  def permitted_attributes(shot, attributes, restoring: false)
+  def permitted_attributes(shot, attributes)
     raise InvalidChange, "Missing changed fields" unless attributes.is_a?(Hash) && attributes.present?
 
     allowed = Shot.editable_attributes(user).reject { it == :image }
-    allowed = allowed.reject { BAG_FIELDS.include?(it.to_s) } if user.coffee_management_enabled? && !restoring
+    allowed = allowed.reject { BAG_FIELDS.include?(it.to_s) } if user.coffee_management_enabled?
     allowed += %i[start_time duration] if (attributes.keys & %w[start_time duration]).any? && shot.manual?
     permitted = ActionController::Parameters.new(attributes).permit(*allowed).to_h
     raise InvalidChange, "Some fields are not editable" unless (attributes.keys - permitted.keys).empty?
+
+    permitted["canonical_coffee_bag_id"] = nil if !user.coffee_management_enabled? && (attributes.keys & %w[bean_brand bean_type]).any?
 
     if permitted.key?("metadata")
       raise InvalidChange, "Unknown custom field" unless attributes["metadata"].is_a?(Hash) && (attributes["metadata"].keys - user.shot_metadata_fields).empty?
@@ -293,30 +211,5 @@ class Journal
     permitted
   rescue ArgumentError, TypeError
     raise InvalidChange, "Invalid date or numeric value"
-  end
-
-  def snapshot(shot, attributes, metadata_keys: nil)
-    keys = attributes.keys
-    keys |= COFFEE_FIELDS if (keys & %w[coffee_bag_id canonical_coffee_bag_id]).any?
-    keys -= ["coffee_bag_id"] unless user.coffee_management_enabled?
-    keys.index_with do |field|
-      if NOTES.include?(field)
-        shot.rich_text_html(field)
-      elsif field == "metadata"
-        metadata_keys.index_with { shot.metadata[it] }
-      elsif field == "start_time"
-        shot.start_time.iso8601(6)
-      else
-        shot.public_send(field)
-      end
-    end
-  end
-
-  def check_version(shot, version)
-    raise Conflict, "Shot changed elsewhere. Reload before editing or reverting." unless version == shot.updated_at.utc.iso8601(6)
-  end
-
-  def verifier
-    Rails.application.message_verifier(:journal_undo)
   end
 end

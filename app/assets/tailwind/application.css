@@ -441,10 +441,6 @@ a:hover .logo-steam path {
   @apply text-base sm:text-sm py-1 bg-white dark:bg-neutral-800 shadow-lg rounded-md border border-neutral-300 dark:border-neutral-600 max-h-60 overflow-auto ring-1 ring-black/5 focus:outline-none;
 }
 
-dialog .tagify__dropdown__wrapper {
-  max-height: min(15rem, 30dvh);
-}
-
 .tagify__dropdown__item {
   @apply text-neutral-700 dark:text-neutral-200 py-2 pl-3 pr-9 cursor-default select-none;
 }

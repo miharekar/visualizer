@@ -1,13 +1,13 @@
-<% shots.each_with_index do |shot, index| %>
-  <turbo-stream action="<%= action %>" target="<%= action == :prepend ? 'journal-rows' : "journal-shot-#{shot.id}" %>" method="morph" data-journal-render-id="<%= render_id %>" data-journal-final="<%= count.nil? && index == shots.length - 1 %>">
-    <template>
-      <% unless action == :remove %>
-        <%= render partial: "journals/row", formats: [:html], locals: {shot:, columns: Current.journal.ordered_columns, visible_columns: fields || Current.journal.visible_columns, partial_update: fields.present?, pinned: action == :prepend, matches:} %>
-      <% end %>
-    </template>
-  </turbo-stream>
+<% shots.each do |shot| %>
+  <% fields.each do |field| %>
+    <%= turbo_stream.update journal_cell_id(shot, field) do %>
+      <%= render partial: "journals/cell", formats: [:html], locals: {shot: shot, field: field} %>
+    <% end %>
+  <% end %>
 <% end %>
-<% unless count.nil? %>
-  <turbo-stream action="update" target="shots-count" data-journal-render-id="<%= render_id %>"><template><%= count.zero? ? "No Shots" : pluralize(count, "Shot") %></template></turbo-stream>
-  <turbo-stream action="update" target="journal-empty" data-journal-render-id="<%= render_id %>" data-journal-final="true"><template><%= "No matching shots." if count.zero? && action != :prepend %></template></turbo-stream>
+<% if local_assigns[:editor] %>
+  <%= turbo_stream.update "journal-editor", "" %>
+  <%= turbo_stream.replace "journal-selection-reset" do %>
+    <span id="journal-selection-reset" class="hidden" data-journal-selection-target="reset"></span>
+  <% end %>
 <% end %>

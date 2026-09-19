@@ -2,7 +2,6 @@ class ShotsController < ApplicationController
   include Filterable
   include Paginatable
   include Shots::Editing
-  include Shots::JournalRows
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
   before_action :load_shot, only: %i[show compare share beanconqueror]
@@ -52,13 +51,26 @@ class ShotsController < ApplicationController
     redirect_to "https://beanconqueror.com?visualizerShare=#{@shared_shot.code}", allow_other_host: true
   end
 
+  def new
+    @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public)
+    load_coffee_bags_for_form
+  end
+
   def edit
     authorize! @shot
   end
 
   def create
     if request.format.json?
-      create_manual_shot
+      render_api_endpoint_error
+    elsif params.key?(:shot)
+      @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public, sha: "manual:#{SecureRandom.uuid}")
+      if save_form_shot
+        redirect_to @shot, notice: "Shot successfully created.", status: :see_other
+      else
+        load_coffee_bags_for_form
+        render :new, status: :unprocessable_content
+      end
     else
       upload_files
     end
@@ -66,29 +78,41 @@ class ShotsController < ApplicationController
 
   def update
     authorize! @shot
-    if @shot.update(update_shot_params)
+    if save_form_shot
       apply_brewdata_updates
-      flash[:notice] = "Shot successfully updated."
+      redirect_to @shot, notice: "Shot successfully updated.", status: :see_other
     else
-      flash[:alert] = @shot.errors.full_messages.to_sentence
+      load_coffee_bags_for_form
+      load_related_shots
+      render :edit, status: :unprocessable_content
     end
-  ensure
-    redirect_to action: :show
   end
 
   def destroy
+    return render_api_endpoint_error if request.format.json?
+
     authorize! @shot
     @shot.destroy!
 
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.remove(@shot)
+        if params[:journal].present?
+          streams = [turbo_stream.remove("journal-shot-#{@shot.id}")]
+          if params.key?(:query)
+            query = params.permit(query: %i[q coffee_bag tags]).fetch(:query, {})
+            count = Current.journal.search(query).count
+            streams << turbo_stream.update("journal-count", count.zero? ? "No Shots" : helpers.pluralize(count, "Shot"))
+            streams << turbo_stream.update("journal-empty-#{params[:journal_search_id]}", count.zero? ? "No matching shots." : "")
+          end
+          render turbo_stream: streams
+        else
+          render turbo_stream: turbo_stream.remove(@shot)
+        end
       end
       format.html do
         flash[:notice] = "Shot successfully deleted."
         redirect_to action: :index
       end
-      format.json { render json: journal_response([@shot], action: :remove, count: journal_results.count).merge(id: @shot.id) }
     end
   end
 
@@ -100,28 +124,28 @@ class ShotsController < ApplicationController
 
   private
 
-  def create_manual_shot
-    shot = Current.journal.create(params.expect(shot: {}).to_h, params[:entry_id])
-    matches = journal_results
-    render json: journal_response(Current.journal.for_list.where(id: shot.id), action: :prepend, count: matches.count, matches: matches.exists?(id: shot.id)), status: :created
-  rescue Journal::Conflict => error
-    render json: {error: error.message, shot_id: params[:entry_id]}, status: :conflict
-  rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error
-    render json: {error: error.message}, status: :unprocessable_content
-  rescue ActiveRecord::RecordNotFound
-    render json: {error: "Shot or coffee not available"}, status: :not_found
-  end
-
-  def journal_results
-    query = params.slice(:query).permit(query: %i[q coffee_bag tags]).fetch(:query, {})
-    Current.journal.search(query)
+  def save_form_shot
+    allowed = Shot.editable_attributes(Current.user)
+    allowed += %i[start_time duration] if @shot.manual?
+    attributes = params.expect(shot: allowed)
+    attributes[:coffee_bag_id] = Current.user.coffee_bags.find(attributes[:coffee_bag_id]).id if attributes[:coffee_bag_id].present?
+    saved = false
+    Current.user.with_lock do
+      # Tag assignment writes associations immediately, so validation must roll it back too.
+      Shot.transaction(requires_new: true) do
+        @shot.assign_attributes(attributes)
+        saved = @shot.save(context: [@shot.new_record? ? :create : :update, :shot_form])
+        raise ActiveRecord::Rollback unless saved
+      end
+    end
+    saved
   end
 
   def upload_files
     files = Array(params[:files])
     shots = files.map { |file| Shot.from_file(Current.user, file.read) }
 
-    if shots.all?(&:save)
+    if Current.user.with_lock { shots.all?(&:save) }
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }
@@ -183,13 +207,12 @@ class ShotsController < ApplicationController
     @shots, @cursor = Current.journal.page(shots, params)
     @columns = Current.journal.ordered_columns
     @visible_columns = Current.journal.visible_columns
-    @coffee_bags = Current.user.coffee_management_enabled? ? Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name : []
   rescue Journal::InvalidChange => error
     redirect_to shots_path, alert: error.message
   end
 
   def load_related_shots
-    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).sort_by { it[3] }.reverse
+    @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).reject { it[3].nil? }.sort_by { it[3] }.reverse
   end
 
   def load_coffee_bags_for_form

@@ -119,17 +119,6 @@ export default class extends Controller {
     this.applySelection(selectedItem, { preventDefault() {}, stopPropagation() {} })
   }
 
-  reset(value = "") {
-    this.shown = false
-    this.selected = this.allItems.find(item => item.dataset.id === value) || null
-    this.active = this.selected
-    this.hiddenInputTarget.value = this.selected?.dataset.id || ""
-    this.inputTarget.value = this.selected?.dataset.name || (this.allowCustomValue ? value : "")
-    this.initialValue = this.inputTarget.value
-    this.listTarget.classList.add(this.hiddenClassValue)
-    this.markAllAsUnselected()
-  }
-
   applySelection(active, event) {
     this.active = active
     if (active !== this.selected) {
