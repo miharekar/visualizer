@@ -58,7 +58,6 @@ export default class extends Controller {
 
     this.markAllAsUnselected()
     this.listTarget.classList.add(this.hiddenClassValue)
-    this.inputTarget.blur()
   }
 
   windowClick(event) {
@@ -88,9 +87,7 @@ export default class extends Controller {
     if (this.preserveOrderValue) options.sorter = matches => matches.sort((a, b) => a.index - b.index)
     const sortedMatches = matchSorter(this.allItems, this.inputTarget.value, options)
 
-    const matchesHtml = sortedMatches.map(el => this.listTarget.appendChild(el).outerHTML).join("")
-
-    this.listTarget.innerHTML = matchesHtml
+    this.listTarget.replaceChildren(...sortedMatches)
 
     if (this.active && !sortedMatches.includes(this.active)) {
       this.active = null
@@ -121,9 +118,9 @@ export default class extends Controller {
 
   applySelection(active, event) {
     this.active = active
+    this.inputTarget.value = active.dataset.name
     if (active !== this.selected) {
       this.selected = active
-      this.inputTarget.value = this.selected.dataset.name
       this.hiddenInputTarget.value = this.selected.dataset.id
       this.hiddenInputTarget.dispatchEvent(new Event("change"))
     }
@@ -138,6 +135,7 @@ export default class extends Controller {
 
   highlightNext(event) {
     event.preventDefault()
+    this.show()
 
     if (this.active) {
       this.markAsActive(this.findNextVisibleElement())
@@ -148,6 +146,7 @@ export default class extends Controller {
 
   highlightPrevious(event) {
     event.preventDefault()
+    this.show()
     this.markAsActive(this.findPreviousVisibleElement())
   }
 
@@ -164,7 +163,7 @@ export default class extends Controller {
   }
 
   markAllAsInactive() {
-    this.listTarget.querySelectorAll("li").forEach(el => {
+    this.allItems.forEach(el => {
       el.classList.add(...this.inactiveClassesValue)
       el.classList.remove(...this.activeClassesValue)
     })
@@ -187,8 +186,8 @@ export default class extends Controller {
   }
 
   getActive() {
-    let activeId = this.active?.dataset.id
-    if (activeId) return this.listTarget.querySelector(`[data-id="${activeId}"]`)
+    const activeId = this.active?.dataset.id
+    if (activeId != null) return Array.from(this.listTarget.children).find(item => item.dataset.id === activeId)
     return this.listTarget.querySelector(`li:not(.${this.hiddenClassValue})`)
   }
 

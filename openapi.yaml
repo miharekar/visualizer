@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.17.3"
+  version: "1.17.4"
   description: |
     REST API for Visualizer.
 
@@ -228,6 +228,7 @@ paths:
     patch:
       tags: [Shots]
       summary: Update shot
+      description: Updates are atomic. Failed validation leaves the shot and its tags unchanged.
       operationId: updateShot
       security:
         - OAuth2: [write]

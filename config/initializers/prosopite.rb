@@ -6,6 +6,6 @@ if Rails.env.local?
     /action_controller\/metal\/rate_limiting\.rb/,
     /mission_control\/jobs/,
     # Bounded Journal writes intentionally run each shot's validations and callbacks.
-    /Journal#(?:update|undo|create)/
+    /Journal#update/
   ]
 end

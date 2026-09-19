@@ -178,15 +178,18 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "18", @shot.reload.bean_weight
     assert_empty first.reload.tags
     assert_empty last.reload.tags
-    assert_empty @user.tags
+    assert_empty @user.reload.tags
   end
 
-  test "bulk imported restriction rolls back manual shot changes" do
+  test "journal dates are readonly for manual and imported shots" do
     manual = create(:shot, user: @user)
     original = manual.reload.start_time
     update_field("start_time", "2026-01-01T08:30:00", ids: [manual.id, @shot.id], editor: true)
     assert_response :unprocessable_content
     assert_equal original, manual.reload.start_time
+    get edit_journal_url, params: {ids: [manual.id], field: "start_time"}
+    assert_response :unprocessable_content
+    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([manual.id], {start_time: "2026-01-01T08:30:00"}) }
   end
 
   test "foreign shots and coffee bags are rejected" do
@@ -211,6 +214,49 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-stream[target='#{cell_id(@shot, 'bean_weight')}']", count: 0
     assert_equal "#{@shot.bean_type} - #{@shot.bean_brand} (#{@shot.roast_date})", Journal.new(@user).value(@shot, "coffee")
     update_field("bean_brand", "Override")
+    assert_response :unprocessable_content
+  end
+
+  test "coffee modal only accepts bag ID and blank bulk selection cannot detach bags" do
+    @user.update!(coffee_management_enabled: true)
+    bag = create(:coffee_bag, roaster: create(:roaster, user: @user))
+    @shot.update!(coffee_bag: bag)
+    other = create(:shot, user: @user, coffee_bag: bag)
+    get edit_journal_url, params: {ids: [@shot.id], field: "coffee"}
+    assert_response :success
+    assert_select "input[name='attributes[coffee_bag_id]'][value='#{bag.id}']"
+    assert_select "input[name='attributes[bean_brand]'], input[name='attributes[canonical_coffee_bag_id]']", count: 0
+
+    [nil, ""].each do |id|
+      patch journal_url, params: {ids: [@shot.id, other.id], field: "coffee", attributes: {coffee_bag_id: id}, editor: true}, headers: stream_headers
+      assert_response :unprocessable_content
+      assert_select "turbo-stream[target='journal-editor'] input[name='ids[]']", count: 2
+      assert_equal bag.id, @shot.reload.coffee_bag_id
+      assert_equal bag.id, other.reload.coffee_bag_id
+    end
+
+    patch journal_url, params: {ids: [@shot.id], field: "coffee", attributes: {coffee_bag_id: bag.id, bean_brand: "Override", roast_date: "Wrong", canonical_coffee_bag_id: SecureRandom.uuid}}, headers: stream_headers
+    assert_response :success
+    assert_equal bag.roaster.name, @shot.reload.bean_brand
+    assert_not_equal "Wrong", @shot.roast_date
+    assert_nil @shot.canonical_coffee_bag_id
+  end
+
+  test "expired premium text edits detach managed and canonical bags internally" do
+    canonical = CanonicalCoffeeBag.create!(name: "Canonical coffee", canonical_roaster: CanonicalRoaster.create!(name: "Canonical roaster"))
+    bag = create(:coffee_bag, roaster: create(:roaster, user: @user), canonical_coffee_bag: canonical)
+    @user.update!(coffee_management_enabled: true, premium_expires_at: 1.day.ago)
+    %w[bean_brand bean_type].each do |field|
+      @shot.update!(coffee_bag: bag)
+      assert_equal canonical.id, @shot.canonical_coffee_bag_id
+      update_field(field, "Custom #{field}")
+      assert_response :success
+      assert_equal "Custom #{field}", @shot.reload[field]
+      assert_nil @shot.coffee_bag_id
+      assert_nil @shot.canonical_coffee_bag_id
+    end
+    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([@shot.id], {coffee_bag_id: bag.id}) }
+    update_field("coffee", bag.id)
     assert_response :unprocessable_content
   end
 
@@ -258,6 +304,17 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal({"basket" => "IMS", "water" => "soft"}, @shot.reload.metadata)
   end
 
+  test "metadata merge reads fresh locked row rather than editor snapshot" do
+    @user.update!(shot_metadata_fields: %w[basket water])
+    @shot.update!(metadata: {basket: "VST", water: "soft"})
+    journal = Journal.new(@user)
+    snapshot = journal.shots([@shot.id]).first
+    @shot.update!(metadata: {basket: "VST", water: "hard"})
+    journal.update([snapshot.id], {metadata: {basket: "IMS"}})
+    assert_equal({"basket" => "IMS", "water" => "hard"}, @shot.reload.metadata)
+    assert_equal "soft", snapshot.metadata["water"]
+  end
+
   test "rich notes retain formatting and can be cleared" do
     update_field("espresso_notes", "<p><em>Peach</em></p>", editor: true)
     assert_response :success
@@ -267,11 +324,12 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_nil @shot.reload.rich_text_html(:espresso_notes)
   end
 
-  test "manual date and duration edits validate input" do
+  test "manual duration edits validate input while dates remain readonly" do
     manual = create(:shot, user: @user)
+    original = manual.reload.start_time
     update_field("start_time", "2026-01-01T08:30:00", ids: [manual.id])
-    assert_response :success
-    assert_equal Time.utc(2026, 1, 1, 7, 30), manual.reload.start_time
+    assert_response :unprocessable_content
+    assert_equal original, manual.reload.start_time
     update_field("duration", "30.5", ids: [manual.id])
     assert_response :success
     assert_equal 30.5, manual.reload.duration
@@ -315,6 +373,43 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
     @user.update!(coffee_management_enabled: true)
     assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
+  end
+
+  test "column redirects preserve only permitted submitted filters on save reset and error" do
+    query = {q: "Gesha", coffee_bag: SecureRandom.uuid, tags: "daily"}
+    [{order: ["duration"]}, {reset: "1"}, {order: ["destroy!"]}].each do |settings|
+      patch profile_journal_columns_url, params: settings.merge(query: query.merge(format: "json", before: "old", user_id: SecureRandom.uuid))
+      assert_response :see_other
+      assert_redirected_to shots_path(**query, format: :html)
+    end
+  end
+
+  test "readonly dispatch never invokes shot methods" do
+    journal = Journal.new(@user)
+    %w[destroy! touch reload save!].each do |field|
+      assert_nil journal.value(@shot, field)
+      update_field(field, "bad")
+      assert_response :unprocessable_content
+      get edit_journal_url, params: {ids: [@shot.id], field:}
+      assert_response :unprocessable_content
+    end
+    assert Shot.exists?(@shot.id)
+    @shot.update!(tag_list: "daily")
+    assert_equal "daily", journal.value(@shot, "tag_list")
+    assert_equal "18", journal.value(@shot, "bean_weight")
+  end
+
+  test "bulk update locks sorted shot rows before writes without user first lock" do
+    other = create(:shot, user: @user)
+    queries = []
+    capture = ->(*args) { queries << args.last[:sql] }
+    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
+      Journal.new(@user).update([other.id, @shot.id], {bean_weight: "20"}, fields: [])
+    end
+    locks = queries.grep(/FOR UPDATE/)
+    assert_equal 1, locks.size
+    assert_match(/FROM "shots".*ORDER BY "shots"\."id" ASC.*FOR UPDATE/, locks.first)
+    assert_operator queries.index(locks.first), :<, queries.index { it.start_with?('UPDATE "shots"') }
   end
 
   test "guests cannot read or write journal" do

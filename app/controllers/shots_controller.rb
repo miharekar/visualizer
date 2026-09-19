@@ -101,7 +101,7 @@ class ShotsController < ApplicationController
           if params.key?(:query)
             query = params.permit(query: %i[q coffee_bag tags]).fetch(:query, {})
             count = journal.search(query).count
-            streams << turbo_stream.update("journal-count", count.zero? ? "No Shots" : helpers.pluralize(count, "Shot"))
+            streams << turbo_stream.update("journal-count-#{params[:journal_search_id]}", count.zero? ? "No Shots" : helpers.pluralize(count, "Shot"))
             streams << turbo_stream.update("journal-empty-#{params[:journal_search_id]}", count.zero? ? "No matching shots." : "")
           end
           render turbo_stream: streams
@@ -130,13 +130,12 @@ class ShotsController < ApplicationController
     attributes = params.expect(shot: allowed)
     attributes[:coffee_bag_id] = Current.user.coffee_bags.find(attributes[:coffee_bag_id]).id if attributes[:coffee_bag_id].present?
     saved = false
-    Current.user.with_lock do
+    Shot.transaction(requires_new: true) do
+      @shot.new_record? ? Current.user.lock! : @shot.lock!
       # Tag assignment writes associations immediately, so validation must roll it back too.
-      Shot.transaction(requires_new: true) do
-        @shot.assign_attributes(attributes)
-        saved = @shot.save(context: [@shot.new_record? ? :create : :update, :shot_form])
-        raise ActiveRecord::Rollback unless saved
-      end
+      @shot.assign_attributes(attributes)
+      saved = @shot.save(context: [@shot.new_record? ? :create : :update, :shot_form])
+      raise ActiveRecord::Rollback unless saved
     end
     saved
   end
@@ -145,7 +144,8 @@ class ShotsController < ApplicationController
     files = Array(params[:files])
     shots = files.map { |file| Shot.from_file(Current.user, file.read) }
 
-    if Current.user.with_lock { shots.all?(&:save) }
+    saved = shots.all? { |shot| shot.new_record? ? Current.user.with_lock { shot.save } : shot.save }
+    if saved
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }

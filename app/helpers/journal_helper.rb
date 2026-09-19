@@ -4,9 +4,7 @@ module JournalHelper
   end
 
   def journal_input_type(field)
-    if field == "start_time"
-      "datetime-local"
-    elsif %w[duration espresso_enjoyment].include?(field) || Shot::TASTING_ASSESSMENT_ATTRIBUTES.map(&:to_s).include?(field)
+    if %w[duration espresso_enjoyment].include?(field) || Shot::TASTING_ASSESSMENT_ATTRIBUTES.map(&:to_s).include?(field)
       "number"
     else
       "text"
@@ -20,9 +18,6 @@ module JournalHelper
       shot.start_time.in_time_zone(Current.timezone).strftime("%b %-d, %H:%M")
     elsif field == "duration"
       shot.duration&.round(1).to_s
-    elsif %w[bean_weight drink_weight drink_tds drink_ey].include?(field)
-      value = journal.value(shot, field).to_s
-      value.match?(/\A[+-]?(?:\d+(?:\.\d*)?|\.\d+)\z/) && value.to_f.finite? ? value.to_f.truncate(4).to_s : value
     else
       journal.value(shot, field).to_s
     end

@@ -57,7 +57,8 @@ module Api
 
     def upload
       shot = Shot.from_file(Current.user, @file_content)
-      if shot&.save
+      saved = shot.new_record? ? Current.user.with_lock { shot.save } : shot.save
+      if saved
         render json: {id: shot.id}
       else
         render json: {error: "Could not save the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_content
@@ -67,7 +68,13 @@ module Api
     def update
       raise ActionController::UnknownFormat unless request.format.json?
 
-      if @shot.update(update_shot_params)
+      saved = false
+      Shot.transaction(requires_new: true) do
+        @shot.lock!
+        saved = @shot.update(update_shot_params)
+        raise ActiveRecord::Rollback unless saved
+      end
+      if saved
         render json: @shot.to_api_json(format: params[:format], include_information: !params[:essentials].presence)
       else
         render json: {error: @shot.errors.full_messages.join(", ")}, status: :unprocessable_content

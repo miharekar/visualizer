@@ -23,24 +23,23 @@ class JournalsController < ApplicationController
       elsif @shots.one?
         journal.value(@shots.first, @field)
       end
-      @attributes = @shots.one? ? @shots.first.attributes.slice(*Journal::COFFEE_FIELDS) : {}
+      @attributes = @shots.one? ? @shots.first.attributes.slice("coffee_bag_id") : {}
     end
   end
 
   def update
     @editor = ActiveModel::Type::Boolean.new.cast(params[:editor])
     @value = params[:value]
-    @attributes = params[:attributes].present? ? params.expect(attributes: Journal::COFFEE_FIELDS).to_h : {}
+    @attributes = params.permit(attributes: [:coffee_bag_id]).to_h.fetch("attributes", {})
     load_field
-    @shots = journal.shots(params[:ids], fields: [@field])
     attributes = if @field == "coffee"
-      @attributes
+      {"coffee_bag_id" => @attributes["coffee_bag_id"]}
     elsif @field.start_with?("metadata:")
       {"metadata" => {@field.delete_prefix("metadata:") => @value}}
     else
       {@field => @value}
     end
-    @shots = journal.update(params[:ids], attributes)
+    @shots = journal.update(params[:ids], attributes, fields: [@field]) { @shots = it }
     @fields = [@field]
     @fields << "ratio" if %w[bean_weight drink_weight].include?(@field)
     @fields |= Journal::BAG_FIELDS & journal.columns.keys if @field == "coffee"

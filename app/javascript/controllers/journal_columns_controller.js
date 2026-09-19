@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["panel", "form", "list", "reset"]
+  static targets = ["panel", "form", "list", "reset", "fields", "error"]
 
   connect() {
     this.snapshot = this.formTarget.innerHTML
@@ -12,17 +12,20 @@ export default class extends Controller {
   }
 
   toggle() {
+    if (this.saving) return
     if (this.panelTarget.classList.contains("hidden")) this.panelTarget.classList.remove("hidden")
     else this.cancel()
   }
 
   cancel() {
+    if (this.saving) return
     this.finish()
     this.formTarget.innerHTML = this.snapshot
     this.panelTarget.classList.add("hidden")
   }
 
   reset() {
+    if (this.saving) return
     this.finish()
     const [visible, hidden] = this.listTargets
     const items = [...this.formTarget.querySelectorAll("[data-column]")]
@@ -37,13 +40,29 @@ export default class extends Controller {
     for (const input of this.formTarget.querySelectorAll('[name="hidden[]"]')) {
       input.disabled = input.closest('[data-journal-columns-target="list"]').dataset.hidden !== "true"
     }
+    const query = new URL(window.location.href).searchParams
+    for (const input of this.formTarget.querySelectorAll("[data-journal-filter]")) input.value = query.get(input.dataset.journalFilter) || ""
+  }
+
+  savingStarted() {
+    this.finish()
+    this.saving = true
+    this.fieldsTarget.disabled = true
+    this.fieldsTarget.inert = true
+  }
+
+  savingEnded(event) {
+    if (event.detail.success) return
+    this.saving = false
+    this.fieldsTarget.disabled = false
+    this.fieldsTarget.inert = false
+    this.errorTarget.textContent = "Not saved. Please try again."
   }
 
   start(event) {
-    if (event.button !== 0 || !event.isPrimary) return
+    if (this.saving || event.button !== 0 || !event.isPrimary) return
     event.preventDefault()
     this.finish()
-    this.resetTarget.disabled = true
     this.dragged = event.currentTarget.closest("[data-column]")
     this.pointerId = event.pointerId
     const bounds = this.dragged.getBoundingClientRect()
@@ -72,8 +91,11 @@ export default class extends Controller {
       const bounds = item.getBoundingClientRect()
       return event.clientY < bounds.top || (event.clientY <= bounds.bottom && event.clientX < bounds.left + bounds.width / 2)
     })
-    if (next) next.before(this.dragged)
-    else list.append(this.dragged)
+    if (this.dragged.parentElement !== list || this.dragged.nextElementSibling !== (next || null)) {
+      this.resetTarget.disabled = true
+      if (next) next.before(this.dragged)
+      else list.append(this.dragged)
+    }
   }
 
   movePreview(event) {
