@@ -7,7 +7,7 @@ class Shot < ApplicationRecord
   include SanitizedRichText
   include VariableImageAttachment
 
-  DAILY_LIMIT = 50
+  DAILY_LIMIT = 30
   INFORMATION_PRESENCE_SQL = "EXISTS (SELECT 1 FROM shot_informations WHERE shot_informations.shot_id = shots.id) AS has_information".freeze
   TASTING_ASSESSMENT_ATTRIBUTES = %i[fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel].freeze
   LIST_ATTRIBUTES = %i[id user_id start_time updated_at profile_title bean_weight drink_weight drink_tds drink_ey espresso_enjoyment barista bean_brand bean_type duration grinder_model grinder_setting].freeze

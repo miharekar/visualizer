@@ -47,8 +47,8 @@ Existing premium fields, coffee management, and free-history restrictions apply.
 - Coffee labels use `Coffee name - Roaster (roast date)`, omitting absent parts.
 - Coffee assignment requires a selected bag; a blank bulk editor cannot clear bags.
 - Delete uses existing confirmation UI and explicit removal/count streams.
-- No journal-specific ARIA state machinery. Native labels and named controls
-  provide basic accessibility.
+- No journal-specific ARIA state machinery or screen-reader-only markup. Visible
+  labels and native control titles identify inputs and icon actions.
 
 ## Rails and Hotwire
 
@@ -70,8 +70,9 @@ Existing premium fields, coffee management, and free-history restrictions apply.
   associations. Telemetry JSON is not loaded for journal rendering.
 - Cursor uses brew timestamp plus UUID for stable pagination across tied times.
 - Updates retain model callbacks and transactional tag assignment. No `update_all`.
-  Existing-shot writes lock shots before touching users; new web/API uploads lock
-  the user while checking creation quota. Bulk journal edits lock shots in ID order.
+  Existing-shot writes lock shots before touching users. Bulk journal edits lock
+  shots in ID order. Creation quota is a best-effort 30 records per rolling 24 hours;
+  new uploads do not lock users to serialize that check.
 - Only submitted fields change. Concurrent writes to the same field use ordinary
   last-write-wins behavior; no custom cross-tab version protocol.
 

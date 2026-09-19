@@ -163,7 +163,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Allowed", imported.profile_title
   end
 
-  test "existing form edits lock shot rather than user and creates lock user" do
+  test "existing form edits lock shot while creates do not lock user" do
     queries = []
     capture = ->(*args) { queries << args.last[:sql] }
     ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
@@ -176,10 +176,10 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
 
     queries.clear
     ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-      post shots_url, params: {shot: {profile_title: "Locked create"}}
+      post shots_url, params: {shot: {profile_title: "Manual create"}}
     end
     assert_response :see_other
-    assert_match(/FROM "users"/, queries.grep(/FOR UPDATE/).first)
+    assert_empty queries.grep(/FOR UPDATE/)
   end
 
   test "manual create enforces daily limit by creation date" do
@@ -190,7 +190,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
       post shots_url, params: {shot: {start_time: "2020-01-01T12:00:00Z"}}
     end
     assert_response :unprocessable_content
-    assert_includes response.body, "daily limit"
+    assert_includes response.body, "daily limit of 30 shots"
   end
 
   test "form coffee bags are scoped to owner and include selected archived bag" do

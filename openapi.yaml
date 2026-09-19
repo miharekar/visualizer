@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.17.4"
+  version: "1.17.5"
   description: |
     REST API for Visualizer.
 
@@ -49,7 +49,7 @@ info:
     - Some read endpoints are public (`/shots`, `/shots/{id}`, `/shots/shared`)
     - Write endpoints require authenticated users and write scope (OAuth)
     - Roaster/Coffee Bag writes also require premium access
-    - Non-premium users can create up to 50 new shot records in a rolling 24-hour period, counted by upload/creation time rather than brew time. Exceeding this limit returns 422; updating existing shots does not count toward it.
+    - Non-premium users have a best-effort limit of 30 new shot records in a rolling 24-hour period, counted by upload/creation time rather than brew time. Requests at the limit return 422; concurrent uploads may exceed it. Updating existing shots does not count toward it.
   contact:
     email: miha@visualizer.coffee
 servers:
