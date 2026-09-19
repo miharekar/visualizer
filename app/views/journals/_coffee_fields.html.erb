@@ -1,23 +1,3 @@
-<div class="space-y-3" data-coffee-fields data-action="autocomplete.change->journal#canonicalCoffeeSelected">
-  <% if Current.user.coffee_management_enabled? %>
-    <div>
-      <%= label_tag "#{prefix}_coffee_bag", "Coffee bag", class: "standard-label" %>
-      <%= render "shared/combobox", input_name: "#{prefix}_coffee_bag", hidden_input_name: "coffee_bag_id", hidden_id: "#{prefix}_coffee_bag_id", selected: nil, collection: @coffee_bags, name_method: :full_display_name, preserve_order: true, hidden_data: {shot_field: true} %>
-      <button type="button" class="standard-link mt-2 cursor-pointer text-sm" data-action="journal#clearCoffee">Clear coffee bag</button>
-    </div>
-  <% else %>
-    <div data-controller="autocomplete" data-autocomplete-url-value="<%= autocomplete_coffee_bags_canonical_index_path %>" data-autocomplete-min-length-value="<%= CanonicalCoffeeBag::MIN_TERM_LENGTH %>" role="combobox">
-      <label class="standard-label">Search coffee database
-        <input type="search" id="<%= prefix %>_canonical_search" class="standard-input mt-1" data-autocomplete-target="input" data-action="input->journal#canonicalSearchChanged" placeholder="Roaster or coffee name">
-      </label>
-      <input type="hidden" name="canonical_coffee_bag_id" data-shot-field data-autocomplete-target="hidden">
-      <ul data-autocomplete-target="results" class="max-h-48 overflow-auto"></ul>
-    </div>
-    <% %w[bean_brand bean_type].each do |field| %>
-      <div data-action="input->journal#manualCoffeeChanged">
-        <%= label_tag "#{prefix}_#{field}", Current.journal.columns[field], class: "standard-label" %>
-        <%= render "shared/combobox", input_name: field, input_id: "#{prefix}_#{field}", hidden_input_name: "_#{field}", hidden_id: "#{prefix}_#{field}_value", selected: nil, collection: Current.journal.dropdown_values(field), name_method: :itself, id_method: :itself, allow_custom: true, input_data: {shot_field: true}, hidden_data: {action: "change->journal#manualCoffeeChanged"} %>
-      </div>
-    <% end %>
-  <% end %>
-</div>
+<%= label_tag "journal-coffee-bag", "Coffee bag", class: "standard-label" %>
+<%= render "shared/combobox", input_name: "coffee_bag", input_id: "journal-coffee-bag", hidden_input_name: "attributes[coffee_bag_id]", selected: @coffee_bags.find { it.id == attributes["coffee_bag_id"] }, collection: @coffee_bags, name_method: :full_display_name, preserve_order: true %>
+<label class="flex items-center gap-2 text-sm"><%= check_box_tag "attributes[coffee_bag_id]", "", false, id: "journal-clear-coffee", class: "standard-checkbox size-4" %>Clear coffee bag</label>

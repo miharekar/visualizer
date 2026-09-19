@@ -1,34 +1,58 @@
 class JournalsController < ApplicationController
-  include Shots::JournalRows
   before_action :require_authentication
 
   rescue_from Journal::InvalidChange, ActiveRecord::RecordInvalid do |error|
-    render json: {error: error.message}, status: :unprocessable_content
-  end
-  rescue_from Journal::Conflict do |error|
-    render json: {error: error.message}, status: :conflict
+    @error = error.message
+    @fields = [@field]
+    @shots ||= []
+    render(action_name == "update" ? :update : :edit, formats: [action_name == "update" ? :turbo_stream : :html], status: :unprocessable_content)
   end
   rescue_from ActiveRecord::RecordNotFound do
-    render json: {error: "Shot or coffee not available"}, status: :not_found
+    head :not_found
   end
 
-  def show
-    ids, fields = params.slice(:ids, :fields).expect(ids: [], fields: [])
-    shots = Current.journal.cells(ids, fields)
-    data = journal_response(shots, fields:)
-    data[:tags] = Current.user.tags.pluck(:name) if fields.include?("tag_list")
-    render json: data
+  def edit
+    @editor = true
+    @shots = []
+    @attributes = {}
+    if params[:ids].present?
+      load_field
+      @shots = Current.journal.shots(params[:ids], fields: [@field])
+      @value = if @field == "tag_list"
+        @shots.map { it.tags.map(&:name) }.reduce(:&).sort.join(",")
+      elsif @shots.one?
+        Current.journal.value(@shots.first, @field)
+      end
+      @attributes = @shots.one? ? @shots.first.attributes.slice(*Journal::COFFEE_FIELDS) : {}
+    end
   end
 
   def update
-    if params[:undo].present?
-      shots = Current.journal.undo(params[:undo])
+    @editor = ActiveModel::Type::Boolean.new.cast(params[:editor])
+    @value = params[:value]
+    @attributes = params[:attributes].present? ? params.expect(attributes: Journal::COFFEE_FIELDS).to_h : {}
+    load_field
+    @shots = Current.journal.shots(params[:ids], fields: [@field])
+    attributes = if @field == "coffee"
+      @attributes
+    elsif @field.start_with?("metadata:")
+      {"metadata" => {@field.delete_prefix("metadata:") => @value}}
     else
-      changes = params[:changes]
-      changes = changes.map { it.is_a?(ActionController::Parameters) ? it.to_unsafe_h : it } if changes.is_a?(Array)
-      shots, undo = Current.journal.update(changes)
+      {@field => @value}
     end
-    data = journal_response(Current.journal.for_list.where(id: shots.map(&:id)))
-    render json: data.merge(undo:).compact
+    @shots = Current.journal.update(params[:ids], attributes)
+    @fields = [@field]
+    @fields << "ratio" if %w[bean_weight drink_weight].include?(@field)
+    @fields |= Journal::BAG_FIELDS & Current.journal.columns.keys if @field == "coffee"
+    render :update, formats: [:turbo_stream]
+  end
+
+  private
+
+  def load_field
+    @field = params[:field]
+    raise Journal::InvalidChange, "Some fields are not editable" unless Current.journal.editable_columns.key?(@field)
+
+    @coffee_bags = Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name if @field == "coffee"
   end
 end

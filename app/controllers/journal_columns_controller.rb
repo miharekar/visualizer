@@ -2,14 +2,10 @@ class JournalColumnsController < ApplicationController
   before_action :require_authentication
 
   def update
-    settings = (params.key?(:columns) && params[:columns].nil?) ? nil : params.expect(columns: {}).to_h
+    settings = params[:reset].present? ? nil : {"order" => params.fetch(:order, []), "hidden" => params.fetch(:hidden, [])}
     Current.journal.save_columns(settings)
-    if settings.nil?
-      render json: {order: Current.journal.ordered_columns, visible: Current.journal.visible_columns}
-    else
-      head :no_content
-    end
-  rescue Journal::InvalidChange => error
-    render json: {error: error.message}, status: :unprocessable_content
+    redirect_to shots_path(format: :html), status: :see_other
+  rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error
+    redirect_to shots_path(format: :html), status: :see_other, alert: error.message
   end
 end

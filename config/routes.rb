@@ -60,12 +60,10 @@ Rails.application.routes.draw do
   end
 
   scope :shots do
-    resource :journal, only: :update do
-      resource :cells, only: :show, controller: :journals
-    end
+    resource :journal, only: %i[edit update]
   end
 
-  resources :shots, except: [:new] do
+  resources :shots do
     member do
       delete :remove_image
       get :share

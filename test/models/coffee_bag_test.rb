@@ -8,6 +8,13 @@ class CoffeeBagTest < ActiveSupport::TestCase
     @roaster = FactoryBot.create(:roaster, user:)
   end
 
+  test "full display name puts coffee first with separate date and archive annotations" do
+    bag = build(:coffee_bag, name: "Bourbon", roaster: build(:roaster, name: "Roaster"), roast_date: Date.new(2026, 1, 12), archived_at: Time.current)
+    assert_equal "Bourbon - Roaster (January 12, 2026) (Archived)", bag.full_display_name
+    bag.assign_attributes(name: "", roaster: nil, roast_date: nil, archived_at: nil)
+    assert_equal "Unnamed coffee", bag.full_display_name
+  end
+
   test ".for_roaster_by_name_and_date creates a new CoffeeBag if one does not exist" do
     shot = FactoryBot.build_stubbed(:shot, user:, bean_type: "Ethiopian", roast_date: "2023-10-01", roast_level: "Medium")
 

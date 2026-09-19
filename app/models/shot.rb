@@ -29,6 +29,8 @@ class Shot < ApplicationRecord
   end
 
   validates :start_time, :sha, :user, presence: true
+  validates :duration, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: Float::MAX}, allow_nil: true, on: :shot_form, if: :manual?
+  validates :espresso_enjoyment, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100}, allow_nil: true, on: :shot_form
   validates(*TASTING_ASSESSMENT_ATTRIBUTES, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 15}, allow_nil: true)
   validates_variable_image :image
   validate :daily_limit, on: :create

@@ -1,0 +1,15 @@
+<% if @error.present? %>
+  <% if @editor || @shots.empty? %>
+    <%= turbo_stream.replace "journal-editor" do %>
+      <%= render partial: "journals/editor", formats: [:html], locals: {shots: @shots, field: @field, value: @value, attributes: @attributes, error: @error} %>
+    <% end %>
+  <% else %>
+    <% @shots.each do |shot| %>
+      <%= turbo_stream.update journal_cell_id(shot, @field) do %>
+        <%= render partial: "journals/cell", formats: [:html], locals: {shot: shot, field: @field, value: @value, error: @error} %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= render partial: "journals/updates", locals: {shots: @shots, fields: @fields, editor: @editor} %>
+<% end %>
