@@ -1,49 +1,93 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["panel", "list"]
+  static targets = ["panel", "form", "list", "reset"]
 
-  toggle() {
-    this.panelTarget.classList.toggle("hidden")
+  connect() {
+    this.snapshot = this.formTarget.innerHTML
   }
 
-  visibility(event) {
-    event.target.closest("[data-column]").querySelector('[name="hidden[]"]').disabled = event.target.checked
+  disconnect() {
+    this.finish()
+  }
+
+  toggle() {
+    if (this.panelTarget.classList.contains("hidden")) this.panelTarget.classList.remove("hidden")
+    else this.cancel()
+  }
+
+  cancel() {
+    this.finish()
+    this.formTarget.innerHTML = this.snapshot
+    this.panelTarget.classList.add("hidden")
+  }
+
+  reset() {
+    this.finish()
+    const [visible, hidden] = this.listTargets
+    const items = [...this.formTarget.querySelectorAll("[data-column]")]
+    items.forEach(item => hidden.append(item))
+    for (const field of JSON.parse(this.panelTarget.dataset.defaults)) {
+      visible.append(items.find(item => item.dataset.column === field))
+    }
+    this.resetTarget.disabled = false
+  }
+
+  serialize() {
+    for (const input of this.formTarget.querySelectorAll('[name="hidden[]"]')) {
+      input.disabled = input.closest('[data-journal-columns-target="list"]').dataset.hidden !== "true"
+    }
   }
 
   start(event) {
     if (event.button !== 0 || !event.isPrimary) return
     event.preventDefault()
+    this.finish()
+    this.resetTarget.disabled = true
     this.dragged = event.currentTarget.closest("[data-column]")
+    this.pointerId = event.pointerId
+    const bounds = this.dragged.getBoundingClientRect()
+    this.offset = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }
+    this.preview = this.dragged.cloneNode(true)
+    this.preview.removeAttribute("data-column")
+    this.preview.inert = true
+    this.preview.classList.add("fixed", "top-0", "left-0", "z-50", "pointer-events-none", "shadow-lg")
+    Object.assign(this.preview.style, { width: `${bounds.width}px`, height: `${bounds.height}px` })
+    document.body.append(this.preview)
+    this.movePreview(event)
     this.dragged.classList.add("opacity-50")
-    this.listTarget.setPointerCapture(event.pointerId)
+    this.dragPanel = this.panelTarget
+    this.dragPanel.setPointerCapture(event.pointerId)
   }
 
   drag(event) {
-    if (!this.dragged) return
-    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest("[data-column]")
-    if (!target || target === this.dragged || !this.listTarget.contains(target)) return
-    const items = [...this.listTarget.children]
-    if (items.indexOf(this.dragged) < items.indexOf(target)) target.after(this.dragged)
-    else target.before(this.dragged)
+    if (!this.dragged || event.pointerId !== this.pointerId) return
+    this.movePreview(event)
+    const element = document.elementFromPoint(event.clientX, event.clientY)
+    const list = element?.closest('[data-journal-columns-target="list"]')
+    if (!this.listTargets.includes(list)) return
+    if (element.closest("[data-column]") === this.dragged) return
+    const next = [...list.children].find(item => {
+      if (item === this.dragged) return false
+      const bounds = item.getBoundingClientRect()
+      return event.clientY < bounds.top || (event.clientY <= bounds.bottom && event.clientX < bounds.left + bounds.width / 2)
+    })
+    if (next) next.before(this.dragged)
+    else list.append(this.dragged)
+  }
+
+  movePreview(event) {
+    this.preview.style.transform = `translate(${event.clientX - this.offset.x}px, ${event.clientY - this.offset.y}px)`
   }
 
   finish(event) {
-    if (!this.dragged) return
+    if (!this.dragged || (event && event.pointerId !== this.pointerId)) return
     this.dragged.classList.remove("opacity-50")
-    this.dragged.querySelector("button").focus()
+    this.preview.remove()
+    this.preview = null
     this.dragged = null
-    if (this.listTarget.hasPointerCapture(event.pointerId)) this.listTarget.releasePointerCapture(event.pointerId)
-  }
-
-  move(event) {
-    const direction = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[event.key]
-    if (!direction) return
-    event.preventDefault()
-    const item = event.currentTarget.closest("[data-column]")
-    const neighbor = direction < 0 ? item.previousElementSibling : item.nextElementSibling
-    if (direction < 0) neighbor?.before(item)
-    else neighbor?.after(item)
-    event.currentTarget.focus()
+    if (this.dragPanel.hasPointerCapture(this.pointerId)) this.dragPanel.releasePointerCapture(this.pointerId)
+    this.dragPanel = null
+    this.pointerId = null
   }
 }

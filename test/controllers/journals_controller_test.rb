@@ -16,6 +16,14 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/html", response.media_type
     assert_select "turbo-frame#journal-editor", count: 1
     assert_select "turbo-frame#journal-results", count: 1
+    assert_select "#journal-results > div.relative.overflow-auto", count: 1
+    assert_select "[data-journal-selection-target='toolbar'].fixed", count: 1
+    assert_select "#journal-columns-panel input[type='checkbox']", count: 0
+    assert_select "#journal-columns-panel button[data-action='journal-columns#cancel']", text: "Cancel"
+    assert_select "#journal-columns-panel button[data-action='journal-columns#reset']", text: "Reset to defaults"
+    assert_select "#journal-columns-panel [data-action*='keydown']", count: 0
+    assert_select "#journal-columns-panel [data-journal-columns-target='list'][data-hidden='false']", count: 1
+    assert_select "#journal-columns-panel [data-journal-columns-target='list'][data-hidden='true']", count: 1
     assert_select "form[action='#{shots_path}'][method='get'][data-turbo-frame='journal-results'] input[name='q']"
     assert_select "form[action='#{edit_journal_path}'][method='get'][data-turbo-frame='journal-editor']"
     assert_select "turbo-frame#journal-results tr#journal-shot-#{@shot.id}" do
@@ -70,6 +78,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
     assert_response :success
     assert_select "turbo-frame#journal-editor"
+    assert_select "turbo-frame#journal-editor dialog[data-controller='journal-dialog']" do
+      assert_select "form .flex.justify-end > button[data-action='journal-dialog#close'] + input[type='submit']"
+      assert_select "form[action='#{journal_path}']"
+    end
     assert_includes response.body, "Sweet"
 
     get edit_journal_url
@@ -91,6 +103,15 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-stream[action='replace']", count: 0
     assert_equal "20", @shot.reload.bean_weight
     assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
+  end
+
+  test "coffee and grinder dropdowns can overflow their dialog" do
+    @user.update!(coffee_management_enabled: true)
+    %w[coffee grinder_model].each do |field|
+      get edit_journal_url, params: {ids: [@shot.id], field:}
+      assert_response :success
+      assert_select "dialog.overflow-visible [data-combobox-target='list']"
+    end
   end
 
   test "same field is last write wins and neighboring edits survive" do
@@ -120,6 +141,15 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "daily", @shot.reload.tag_list
     assert_equal "daily", other.reload.tag_list
     assert_equal "18", @shot.bean_weight
+  end
+
+  test "invalid editor save renders its attempted value in a replacement dialog" do
+    update_field("espresso_enjoyment", "101", editor: true)
+    assert_response :unprocessable_content
+    assert_select "turbo-stream[action='replace'][target='journal-editor'] dialog" do
+      assert_select "input[name='value'][value='101']"
+      assert_select "p", text: /Enjoyment must be between 0 and 100/
+    end
   end
 
   test "bulk tags editor starts with the shared intersection" do
