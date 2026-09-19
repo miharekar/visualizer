@@ -15,12 +15,6 @@ Acceptance scenarios:
 3. Errors, delayed searches, retries, and changes in another tab must not silently
    discard edits or overwrite newer values.
 
-Vladimir's September 2026 feedback supplies longer-term direction: logging
-becomes a chore once users know their preferences. Learning from others brewing
-the same coffee could make history useful again, especially with a new bag.
-Reduce logging friction now; preserve structured coffee identity for future
-community discovery.
-
 ## Confirmed interface
 
 - Optional view of **`/shots`**, controlled by a default-off profile setting.
@@ -184,7 +178,7 @@ community discovery.
 
 ## Latest verification
 
-- `PARALLEL_WORKERS=1 bin/rails test`: **324 tests, 1,495 assertions**, no failures
+- `bin/rails test`: **324 tests, 1,495 assertions**, no failures
   or errors.
 - `node --test test/javascript/*_test.mjs`: **11 passing tests**.
 - RuboCop: **260 files**, no offenses. Changed templates formatted with
@@ -200,13 +194,7 @@ community discovery.
 - Browser-test account and its records were removed after verification.
 
 Temporary browser tooling and fixtures live outside repository; no new runtime
-JavaScript dependency. Use `PARALLEL_WORKERS=1` locally to avoid exhausting
 Postgres connections with default parallel worker count.
-
-## Future product work
-
-Community discovery by coffee: find others' successful brews with same coffee,
-particularly for dialing in a new bag. Does not depend on recruiting roasters.
 
 ## Research references
 
