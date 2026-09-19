@@ -1,6 +1,6 @@
 <tr id="journal-shot-<%= shot.id %>" class="border-b border-neutral-200 dark:border-neutral-700">
   <td class="sticky left-0 z-10 bg-white px-3 py-1 dark:bg-neutral-900">
-    <label><span class="sr-only">Select shot from <%= shot.start_time %></span><input type="checkbox" name="ids[]" value="<%= shot.id %>" form="journal-bulk-form" data-action="journal-selection#select" class="standard-checkbox size-4" data-journal-selection-target="checkbox"></label>
+    <input type="checkbox" title="Select shot from <%= shot.start_time %>" name="ids[]" value="<%= shot.id %>" form="journal-bulk-form" data-action="journal-selection#select" class="standard-checkbox size-4" data-journal-selection-target="checkbox">
   </td>
   <% visible_columns.each do |field| %>
     <td data-column="<%= field %>" class="max-w-64 p-1 <%= 'text-center' if field == 'espresso_enjoyment' %>">

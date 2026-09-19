@@ -131,7 +131,7 @@ class ShotsController < ApplicationController
     attributes[:coffee_bag_id] = Current.user.coffee_bags.find(attributes[:coffee_bag_id]).id if attributes[:coffee_bag_id].present?
     saved = false
     Shot.transaction(requires_new: true) do
-      @shot.new_record? ? Current.user.lock! : @shot.lock!
+      @shot.lock! if @shot.persisted?
       # Tag assignment writes associations immediately, so validation must roll it back too.
       @shot.assign_attributes(attributes)
       saved = @shot.save(context: [@shot.new_record? ? :create : :update, :shot_form])
@@ -144,8 +144,7 @@ class ShotsController < ApplicationController
     files = Array(params[:files])
     shots = files.map { |file| Shot.from_file(Current.user, file.read) }
 
-    saved = shots.all? { |shot| shot.new_record? ? Current.user.with_lock { shot.save } : shot.save }
-    if saved
+    if shots.all?(&:save)
       flash[:notice] = "#{"Shot".pluralize(shots.count)} successfully uploaded."
     else
       flash[:alert] = if shots.any? { |shot| shot.errors[:base].present? && shot.errors.details[:base].any? { |e| e[:error] == :profile_file } }

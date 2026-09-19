@@ -117,7 +117,7 @@ bin/ci                 # full CI pipeline
 
 - Sessions are cookie-based (`Session` records); login via password, registration, and passkeys (WebAuthn).
 - Doorkeeper manages OAuth applications/tokens; `AuthConstraint.admin?` gates Mission Control Jobs and PgHero.
-- Action Policy governs shot ownership for updates/destroys; non-premium users have a 50 shots/day creation cap and only see recent history.
+- Action Policy governs shot ownership for updates/destroys; non-premium users have a best-effort 30 shots/day creation cap and only see recent history.
 
 ### Background jobs
 

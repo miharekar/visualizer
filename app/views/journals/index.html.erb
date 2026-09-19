@@ -30,11 +30,10 @@
       <%= render "journals/toolbar" %>
       <div class="relative max-h-[70dvh] min-h-64 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
         <table class="w-max min-w-full text-sm" data-turbo-prefetch="false">
-          <caption class="sr-only">Coffee journal. Select rows for bulk edits, or activate a cell to edit it.</caption>
           <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
             <tr>
               <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800">
-                <label><span class="sr-only">Select up to 100 loaded shots</span><input type="checkbox" data-journal-selection-target="all" data-action="journal-selection#selectAll" class="standard-checkbox size-4"></label>
+                <input type="checkbox" title="Select up to 100 loaded shots" data-journal-selection-target="all" data-action="journal-selection#selectAll" class="standard-checkbox size-4">
               </th>
               <% @visible_columns.each do |field| %>
                 <th scope="col" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %>"><%= journal.columns[field] %></th>

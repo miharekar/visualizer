@@ -57,8 +57,7 @@ module Api
 
     def upload
       shot = Shot.from_file(Current.user, @file_content)
-      saved = shot.new_record? ? Current.user.with_lock { shot.save } : shot.save
-      if saved
+      if shot.save
         render json: {id: shot.id}
       else
         render json: {error: "Could not save the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_content

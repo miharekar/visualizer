@@ -323,7 +323,7 @@ module Api
       assert_equal user.id, shot.user_id
     end
 
-    test "upload locks user for daily quota and rejects uploads at limit" do
+    test "upload checks daily quota without locking user and rejects uploads at limit" do
       queries = []
       capture = ->(*args) { queries << args.last[:sql] }
       file_content = JSON.parse(Rails.root.join("test/files/beanconqueror.json").read)
@@ -331,13 +331,13 @@ module Api
         post upload_api_shots_url, headers: auth_headers(user), params: file_content, as: :json
       end
       assert_response :success
-      assert_match(/FROM "users"/, queries.grep(/FOR UPDATE/).first)
+      assert_empty queries.grep(/FOR UPDATE/)
       create_list(:shot, Shot::DAILY_LIMIT - user.shots.count, user:)
       assert_no_difference "Shot.count" do
         post upload_api_shots_url, headers: auth_headers(user), params: {file: fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")}
       end
       assert_response :unprocessable_content
-      assert_includes response.parsed_body["error"], "daily limit"
+      assert_includes response.parsed_body["error"], "daily limit of 30 shots"
 
       queries.clear
       assert_no_difference "Shot.count" do

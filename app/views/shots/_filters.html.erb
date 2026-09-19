@@ -35,8 +35,8 @@
               </span>
             </div>
             <div class="enjoyment-range mt-1">
-              <%= f.range_field :min_enjoyment, in: 0..100, value: min, class: "enjoyment-range-input", aria: {label: "Minimum enjoyment"}, data: {action: "input->dual-range#update input->search#submit", dual_range_target: "min"} %>
-              <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "enjoyment-range-input", aria: {label: "Maximum enjoyment"}, data: {action: "input->dual-range#update input->search#submit", dual_range_target: "max"} %>
+              <%= f.range_field :min_enjoyment, in: 0..100, value: min, class: "enjoyment-range-input", title: "Minimum enjoyment", data: {action: "input->dual-range#update input->search#submit", dual_range_target: "min"} %>
+              <%= f.range_field :max_enjoyment, in: 0..100, value: max, class: "enjoyment-range-input", title: "Maximum enjoyment", data: {action: "input->dual-range#update input->search#submit", dual_range_target: "max"} %>
             </div>
           </div>
         </div>
