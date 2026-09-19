@@ -16,10 +16,13 @@ Existing premium fields, coffee management, and free-history restrictions apply.
   Yield, Time, Actions. Without coffee management, Roaster and Coffee bag replace
   Coffee.
 - Simple cells are Rails forms. Changes save on change/blur; Enter submits and
-  moves down the column, Shift+Enter moves up. Pending inputs are readonly.
+  moves down the column, Shift+Enter moves up. Invalid inputs retain focus. Pending
+  inputs stay readonly until Turbo replaces them, not merely until headers arrive.
+  Made at stays display-only; manual brew dates use the full shot edit form.
 - Coffee, grinder, tags, and notes open a server-rendered popup with Save/Cancel.
   Native dialogs handle modal focus and Escape; existing combobox, Tagify, and
-  rich-text widgets are reused. Cancel/Escape discards the editor without saving.
+  rich-text widgets are reused. Cancel/Escape discards an unsubmitted editor.
+  Pending submissions disable editing and dismissal until their response renders.
   Footer places Cancel immediately left of Save. Coffee/grinder suggestions can
   extend outside the dialog; long notes and tag forms scroll within it.
 - Select up to 100 shots for an atomic bulk field edit. Tags replace the selected
@@ -27,7 +30,9 @@ Existing premium fields, coffee management, and free-history restrictions apply.
   expose Compare. Selection toolbar floats above the page without moving the table.
 - Search targets the results frame and updates browser history. Premium users
   get debounced search; free users submit Search. Editor frame sits outside results;
-  modal dialogs prevent background interaction while editing.
+  modal dialogs prevent background interaction while editing. Search waits for
+  pending cell saves and asks before discarding failed edits. Results are inert
+  during search. Existing rows remain visible after edits until the next search.
 - Infinite pagination stays inside the scroll container. Pagination targets are
   scoped to each results instance so old pages cannot append into a newer search.
 - Columns have Visible and Hidden groups, with no checkboxes. Drag within or
@@ -35,11 +40,12 @@ Existing premium fields, coffee management, and free-history restrictions apply.
   reordering or instructional text. Cancel discards staged changes. Reset to
   defaults sits separately on the left and stages defaults until Apply stores
   SQL NULL. A separate controller handles picker movement only. Apply reloads
-  results, clearing selection and loaded pages.
+  results, clearing selection and loaded pages but preserving search and filters.
 - Create, full Edit, and View use Turbo Drive. `/shots/new` renders the existing
   shot form, not an inline draft. Manual brew time and duration are editable;
   imported values stay read-only. Failed validation keeps form values.
 - Coffee labels use `Coffee name - Roaster (roast date)`, omitting absent parts.
+- Coffee assignment requires a selected bag; a blank bulk editor cannot clear bags.
 - Delete uses existing confirmation UI and explicit removal/count streams.
 - No journal-specific ARIA state machinery. Native labels and named controls
   provide basic accessibility.
@@ -53,8 +59,8 @@ Existing premium fields, coffee management, and free-history restrictions apply.
 - Cell frames sit inside `<td>` elements. No frames or forms wrap table rows.
 - `GET /shots/journal/edit`: renders one field editor for owned selected shots
   inside a native dialog. Successful saves clear the editor frame to close it.
-- `PATCH /shots/journal`: accepts selected IDs and one field/value, or coffee
-  attributes. Returns actual Turbo Streams, never JSON-wrapped stream HTML.
+- `PATCH /shots/journal`: accepts selected IDs and one field/value, or a coffee
+  bag ID. Returns actual Turbo Streams, never JSON-wrapped stream HTML.
 - Successful saves update affected cells and dependent read-only values, not
   whole rows. Other cell edits remain untouched. Bulk success clears selection.
 - Validation errors return 422 streams with attempted values and local errors.
@@ -64,6 +70,8 @@ Existing premium fields, coffee management, and free-history restrictions apply.
   associations. Telemetry JSON is not loaded for journal rendering.
 - Cursor uses brew timestamp plus UUID for stable pagination across tied times.
 - Updates retain model callbacks and transactional tag assignment. No `update_all`.
+  Existing-shot writes lock shots before touching users; new web/API uploads lock
+  the user while checking creation quota. Bulk journal edits lock shots in ID order.
 - Only submitted fields change. Concurrent writes to the same field use ordinary
   last-write-wins behavior; no custom cross-tab version protocol.
 
@@ -76,7 +84,7 @@ Existing premium fields, coffee management, and free-history restrictions apply.
 - Client-generated draft IDs, creation fingerprints, replay conflict recovery,
   and newly created rows pinned outside current search.
 - Hidden-cell hydration and live table surgery when changing columns.
-- Search pause/replay machinery and exact header/footer viewport measurement.
+- Search generation/replay machinery and exact header/footer viewport measurement.
 
 Keep ownership, coffee ownership, premium allowlists, ordinary validation, rich
 text sanitation, atomic bounded bulk saves, and creation-time-based daily limits.
@@ -96,4 +104,6 @@ Regression coverage targets observable behavior rather than removed protocols:
 Chromium checks cover rapid overlapping cell saves, network retry, 422 errors,
 bulk tags, notes across searches, coffee assignment, columns, and manual creation.
 Mobile checks use a 390px touch-emulated viewport; real iOS Safari is not covered.
-Temporary browser scripts and fixtures live outside the repository.
+Committed browser regressions live in `test/browser`; Playwright is installed
+outside the repository. See `test/browser/README.md` for running and fixture cleanup.
+GitHub Actions runs Rails and native JS checks; browser checks run separately.

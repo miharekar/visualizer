@@ -14,7 +14,6 @@ class Journal
     "drink_tds" => "TDS", "drink_ey" => "EY", "bean_notes" => "Bean notes", "ratio" => "Ratio", "image" => "Photo", "actions" => "Actions"
   }.freeze
   NOTES = %w[espresso_notes bean_notes private_notes].freeze
-  COFFEE_FIELDS = %w[coffee_bag_id canonical_coffee_bag_id bean_brand bean_type roast_date roast_level].freeze
   BAG_FIELDS = %w[bean_brand bean_type roast_date roast_level].freeze
   DROPDOWN_FIELDS = %w[grinder_model bean_brand bean_type].freeze
 
@@ -54,13 +53,12 @@ class Journal
   end
 
   def editable_columns
-    editable = columns.except("actions", "ratio", "image")
+    editable = columns.except("actions", "ratio", "image", "start_time")
     user.coffee_management_enabled? ? editable.except(*BAG_FIELDS) : editable
   end
 
   def dropdown_values(field)
-    @dropdown_values ||= {}
-    @dropdown_values[field] ||= DropdownValue.visible.for(user, field).pluck(:value)
+    DropdownValue.visible.for(user, field).pluck(:value)
   end
 
   def visible_columns
@@ -135,10 +133,10 @@ class Journal
     shots
   end
 
-  def shots(ids, fields: visible_columns)
+  def shots(ids, fields: visible_columns, lock: false)
     raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(UUID_PATTERN) }
 
-    shots = for_list(scope.where(id: ids), fields: fields.uniq).to_a
+    shots = for_list(scope.where(id: ids).reorder(:id).lock(lock), fields: fields.uniq).to_a
     raise ActiveRecord::RecordNotFound unless shots.size == ids.size
 
     shots
@@ -165,15 +163,16 @@ class Journal
     end
   end
 
-  def update(ids, attributes)
+  def update(ids, attributes, fields: visible_columns)
     raise InvalidChange, "Missing changed fields" unless attributes.is_a?(Hash) && attributes.present?
 
-    user.with_lock do
-      records = shots(ids).sort_by(&:id)
+    attributes = attributes.deep_stringify_keys
+    Shot.transaction do
+      records = shots(ids, fields:, lock: true)
+      yield records if block_given?
       records.each do |shot|
-        shot.lock!
         # Tag assignment writes immediately, so assignment must stay inside this transaction.
-        shot.update!(permitted_attributes(shot, attributes.deep_stringify_keys))
+        shot.update!(permitted_attributes(shot, attributes))
       end
       records
     end
@@ -182,24 +181,27 @@ class Journal
   private
 
   def permitted_attributes(shot, attributes)
-    raise InvalidChange, "Missing changed fields" unless attributes.is_a?(Hash) && attributes.present?
-
-    allowed = Shot.editable_attributes(user).reject { it == :image }
+    allowed = Shot.editable_attributes(user).reject { %i[image start_time canonical_coffee_bag_id].include?(it) }
     allowed = allowed.reject { BAG_FIELDS.include?(it.to_s) } if user.coffee_management_enabled?
-    allowed += %i[start_time duration] if (attributes.keys & %w[start_time duration]).any? && shot.manual?
+    allowed << :duration if attributes.key?("duration") && shot.manual?
     permitted = ActionController::Parameters.new(attributes).permit(*allowed).to_h
     raise InvalidChange, "Some fields are not editable" unless (attributes.keys - permitted.keys).empty?
 
-    permitted["canonical_coffee_bag_id"] = nil if !user.coffee_management_enabled? && (attributes.keys & %w[bean_brand bean_type]).any?
+    if !user.coffee_management_enabled? && (attributes.keys & %w[bean_brand bean_type]).any?
+      permitted["coffee_bag_id"] = nil
+      permitted["canonical_coffee_bag_id"] = nil
+    end
 
     if permitted.key?("metadata")
       raise InvalidChange, "Unknown custom field" unless attributes["metadata"].is_a?(Hash) && (attributes["metadata"].keys - user.shot_metadata_fields).empty?
 
       permitted["metadata"] = shot.metadata.merge(permitted["metadata"])
     end
-    user.coffee_bags.find(permitted["coffee_bag_id"]) if permitted["coffee_bag_id"].present?
-    CanonicalCoffeeBag.find(permitted["canonical_coffee_bag_id"]) if permitted["canonical_coffee_bag_id"].present?
-    permitted["start_time"] = Time.find_zone!(Current.timezone.name).iso8601(permitted["start_time"].to_s) if permitted.key?("start_time")
+    if attributes.key?("coffee_bag_id")
+      raise InvalidChange, "Choose a coffee bag" if permitted["coffee_bag_id"].blank?
+
+      user.coffee_bags.find(permitted["coffee_bag_id"])
+    end
     if permitted["duration"].present?
       duration = Float(permitted["duration"])
       raise InvalidChange, "Duration must be a nonnegative number" unless duration.finite? && duration >= 0

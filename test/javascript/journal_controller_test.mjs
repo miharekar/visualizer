@@ -12,41 +12,97 @@ const { default: Cell } = await import("../../app/javascript/controllers/journal
 const { default: Selection } = await import("../../app/javascript/controllers/journal_selection_controller.js")
 const { default: Columns } = await import("../../app/javascript/controllers/journal_columns_controller.js")
 const { default: Dialog } = await import("../../app/javascript/controllers/journal_dialog_controller.js")
+const { default: Navigation } = await import("../../app/javascript/controllers/journal_navigation_controller.js")
 
 test("editor uses native modal lifecycle without submitting on dismissal", () => {
   const dialog = new Dialog()
   const calls = []
-  dialog.element = { showModal: () => calls.push("open"), close: () => calls.push("close"), remove: () => calls.push("remove") }
+  dialog.element = { showModal: () => calls.push("open"), close: () => calls.push("close"), remove: () => calls.push("remove"), setAttribute() {} }
+  dialog.fieldsTarget = {}
+  dialog.errorTarget = {}
   dialog.connect()
+  dialog.start()
+  dialog.close()
+  dialog.cancel({ preventDefault: () => calls.push("blocked") })
+  assert.equal(dialog.fieldsTarget.disabled, true)
+  dialog.complete({ detail: { fetchResponse: { contentType: "text/vnd.turbo-stream.html" } } })
+  assert.equal(dialog.fieldsTarget.disabled, true)
+  dialog.complete({ detail: { success: false } })
+  assert.equal(dialog.fieldsTarget.disabled, false)
   dialog.close()
   dialog.remove()
-  assert.deepEqual(calls, ["open", "close", "remove"])
+  assert.deepEqual(calls, ["open", "blocked", "close", "remove"])
 })
 
 test("cell changes submit ordinary forms; Enter navigates without duplicate submission", () => {
   const cell = new Cell()
   let submissions = 0
   let focused = 0
-  let blurred = 0
   const control = { focus: () => focused++, select() {} }
   const neighbor = { querySelector: () => control }
   const row = { previousElementSibling: neighbor, nextElementSibling: neighbor }
-  cell.element = { reportValidity: () => true, requestSubmit: () => submissions++, closest: () => ({ dataset: { column: "dose" }, closest: () => row }) }
+  cell.element = { dataset: {}, reportValidity: () => true, requestSubmit: () => submissions++, closest: () => ({ dataset: { column: "dose" }, closest: () => row }) }
   cell.inputTarget = {}
   cell.errorTarget = {}
   globalThis.CSS = { escape: value => value }
   cell.submit()
-  for (const shiftKey of [false, true]) cell.navigate({ key: "Enter", shiftKey, preventDefault() {}, target: { blur: () => blurred++ } })
+  for (const shiftKey of [false, true]) cell.navigate({ key: "Enter", shiftKey, preventDefault() {} })
   cell.navigate({ key: "Enter", isComposing: true })
   assert.equal(submissions, 1)
   assert.equal(focused, 2)
-  assert.equal(blurred, 2)
+  cell.complete({ detail: { fetchResponse: { contentType: "text/vnd.turbo-stream.html" } } })
   assert.equal(cell.inputTarget.readOnly, true)
+  assert.equal(cell.element.dataset.saving, "")
   cell.complete({ detail: { success: false } })
   assert.equal(cell.inputTarget.readOnly, false)
+  assert.equal(cell.element.dataset.unsaved, "")
   assert.match(cell.errorTarget.textContent, /Press Enter to retry/)
   cell.navigate({ key: "Enter", preventDefault() {}, target: { blur() {} } })
   assert.equal(submissions, 2)
+  cell.complete({ detail: {} })
+  cell.element.reportValidity = () => false
+  cell.navigate({ key: "Enter", preventDefault() {} })
+  assert.equal(focused, 3)
+  assert.equal(submissions, 2)
+})
+
+test("search waits for stream replacement and asks before discarding failed input", t => {
+  const navigation = new Navigation()
+  let saving = true
+  let unsaved = true
+  let submitted = 0
+  let prevented = 0
+  navigation.resultsTarget = { querySelector: selector => (selector === "[data-saving]" ? saving : unsaved) }
+  navigation.searchTarget = { requestSubmit: () => submitted++ }
+  const event = { preventDefault: () => prevented++ }
+  navigation.search(event)
+  assert.equal(prevented, 1)
+  navigation.resume()
+  assert.equal(submitted, 0)
+  saving = false
+  navigation.resume()
+  assert.equal(submitted, 1)
+  globalThis.confirm = () => false
+  t.after(() => delete globalThis.confirm)
+  navigation.search(event)
+  assert.equal(prevented, 2)
+  unsaved = false
+  navigation.search(event)
+  assert.equal(navigation.resultsTarget.inert, true)
+  navigation.search(event)
+  assert.equal(navigation.waiting, true)
+  navigation.resume()
+  assert.equal(submitted, 1)
+  navigation.complete({ detail: { success: true } })
+  assert.equal(navigation.resultsTarget.inert, true)
+  navigation.loaded({ target: navigation.resultsTarget })
+  assert.equal(submitted, 2)
+  navigation.search(event)
+  navigation.complete({ detail: { success: false } })
+  assert.equal(navigation.resultsTarget.inert, false)
+  navigation.search(event)
+  navigation.loaded({ target: navigation.resultsTarget })
+  assert.equal(navigation.resultsTarget.inert, false)
 })
 
 test("selection caps at 100, builds compare link, and resets after server marker replacement", () => {
@@ -135,12 +191,15 @@ test("columns stage reset, drag with a floating preview, and discard changes on 
   columns.formTarget = {
     innerHTML: "saved form HTML",
     querySelectorAll: selector => {
+      if (selector === "[data-journal-filter]") return []
       const items = [...visible.children, ...hidden.children]
       return selector === "[data-column]" ? items : items.map(column => column.input)
     },
     requestSubmit: () => assert.fail("Changes must remain staged")
   }
   let captured = false
+  globalThis.window = { location: { href: "http://localhost/shots?q=coffee" } }
+  t.after(() => delete globalThis.window)
   columns.panelTarget = {
     classList: classes(),
     dataset: { defaults: JSON.stringify(["yield"]) },
@@ -166,7 +225,7 @@ test("columns stage reset, drag with a floating preview, and discard changes on 
   const pointer = { button: 0, isPrimary: true, pointerId: 1, clientX: 110, clientY: 30, preventDefault() {}, currentTarget: first.grip }
   columns.start(pointer)
   assert.equal(captured, true)
-  assert.equal(columns.resetTarget.disabled, true)
+  assert.equal(columns.resetTarget.disabled, false)
   assert.equal(previews.length, 1)
   assert.equal(previews[0].classList.contains("pointer-events-none"), true)
   assert.equal(previews[0].classList.contains("z-50"), true)
@@ -174,6 +233,7 @@ test("columns stage reset, drag with a floating preview, and discard changes on 
   assert.equal(first.classList.contains("opacity-50"), true)
   destination = second
   columns.drag({ ...pointer, clientX: 160, clientY: 50 })
+  assert.equal(columns.resetTarget.disabled, true)
   assert.equal(previews[0].style.transform, "translate(150px, 40px)")
   assert.deepEqual(visible.children, [second, first])
   columns.drag({ ...pointer, clientX: 160, clientY: 50 })
@@ -213,4 +273,12 @@ test("columns stage reset, drag with a floating preview, and discard changes on 
   columns.disconnect()
   assert.equal(previews.length, 0)
   assert.equal(captured, false)
+  columns.fieldsTarget = {}
+  columns.errorTarget = {}
+  columns.savingStarted()
+  columns.cancel()
+  assert.equal(columns.fieldsTarget.disabled, true)
+  assert.equal(columns.panelTarget.classList.contains("hidden"), false)
+  columns.savingEnded({ detail: { success: false } })
+  assert.equal(columns.fieldsTarget.disabled, false)
 })

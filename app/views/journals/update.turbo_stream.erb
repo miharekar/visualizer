@@ -11,5 +11,17 @@
     <% end %>
   <% end %>
 <% else %>
-  <%= render partial: "journals/updates", locals: {shots: @shots, fields: @fields, editor: @editor} %>
+  <% @shots.each do |shot| %>
+    <% @fields.each do |field| %>
+      <%= turbo_stream.update journal_cell_id(shot, field) do %>
+        <%= render partial: "journals/cell", formats: [:html], locals: {shot: shot, field: field} %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if @editor %>
+    <%= turbo_stream.update "journal-editor", "" %>
+    <%= turbo_stream.replace "journal-selection-reset" do %>
+      <span id="journal-selection-reset" class="hidden" data-journal-selection-target="reset"></span>
+    <% end %>
+  <% end %>
 <% end %>

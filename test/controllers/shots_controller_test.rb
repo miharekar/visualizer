@@ -163,6 +163,25 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Allowed", imported.profile_title
   end
 
+  test "existing form edits lock shot rather than user and creates lock user" do
+    queries = []
+    capture = ->(*args) { queries << args.last[:sql] }
+    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
+      patch shot_url(@shot), params: {shot: {profile_title: "Locked edit"}}
+    end
+    assert_response :see_other
+    locks = queries.grep(/FOR UPDATE/)
+    assert_equal 1, locks.size
+    assert_match(/FROM "shots"/, locks.first)
+
+    queries.clear
+    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
+      post shots_url, params: {shot: {profile_title: "Locked create"}}
+    end
+    assert_response :see_other
+    assert_match(/FROM "users"/, queries.grep(/FOR UPDATE/).first)
+  end
+
   test "manual create enforces daily limit by creation date" do
     @user.update!(premium_expires_at: nil)
     @shot.update!(start_time: 2.years.ago)
@@ -203,7 +222,8 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     delete shot_url(@shot), params: {journal: true, journal_search_id: "instance", query: {q: ""}}, as: :turbo_stream
     assert_response :success
     assert_select "turbo-stream[action='remove'][target='journal-shot-#{@shot.id}']"
-    assert_select "turbo-stream[action='update'][target='journal-count'] template", text: "No Shots"
+    assert_select "turbo-stream[action='update'][target='journal-count-instance'] template", text: "No Shots"
+    assert_select "turbo-stream[target='journal-count']", count: 0
     assert_select "turbo-stream[action='update'][target='journal-empty-instance'] template", text: "No matching shots."
 
     shot = create(:shot, user: @user)
