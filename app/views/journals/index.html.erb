@@ -37,7 +37,7 @@
                 <label><span class="sr-only">Select up to 100 loaded shots</span><input type="checkbox" data-journal-selection-target="all" data-action="journal-selection#selectAll" class="standard-checkbox size-4"></label>
               </th>
               <% @visible_columns.each do |field| %>
-                <th scope="col" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %>"><%= Current.journal.columns[field] %></th>
+                <th scope="col" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %>"><%= journal.columns[field] %></th>
               <% end %>
             </tr>
           </thead>

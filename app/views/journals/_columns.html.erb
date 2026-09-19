@@ -1,4 +1,4 @@
-<div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= Current.journal.default_columns.to_json %>" data-action="pointermove->journal-columns#drag pointerup->journal-columns#finish pointercancel->journal-columns#finish lostpointercapture->journal-columns#finish">
+<div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= journal.default_columns.to_json %>" data-action="pointermove->journal-columns#drag pointerup->journal-columns#finish pointercancel->journal-columns#finish lostpointercapture->journal-columns#finish">
   <%= form_with url: profile_journal_columns_path, method: :patch, data: {journal_columns_target: "form", action: "submit->journal-columns#serialize"} do |f| %>
     <%= hidden_field_tag "reset", "1", disabled: true, data: {journal_columns_target: "reset"} %>
     <div class="space-y-3">
@@ -18,7 +18,7 @@
                     <circle cx="5" cy="13" r="1.5" />
                     <circle cx="11" cy="13" r="1.5" />
                   </svg>
-                  <span><%= Current.journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %></span>
+                  <span><%= journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %></span>
                 </div>
                 <%= hidden_field_tag "hidden[]", field, id: nil, disabled: group == "Visible" %>
               </div>

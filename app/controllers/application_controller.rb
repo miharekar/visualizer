@@ -5,7 +5,13 @@ class ApplicationController < ActionController::Base
   before_action :set_timezone
   before_action :set_skin
 
+  helper_method :journal
+
   private
+
+  def journal
+    @journal ||= Journal.new(Current.user)
+  end
 
   def render_api_endpoint_error
     render json: {error: "This is not an API endpoint.", api_docs: "https://apidocs.visualizer.coffee"}, status: :not_acceptable
