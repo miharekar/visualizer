@@ -38,9 +38,6 @@ class ShotsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Comparison shot not found!"
     redirect_to(@shot || :root)
-  rescue ShotChart::ParsedShot::NoData
-    flash[:alert] = "This shot does not have enough chart data to compare."
-    redirect_back_or_to default_path
   end
 
   def share
@@ -202,7 +199,7 @@ class ShotsController < ApplicationController
   def load_journal
     @journal_search_id = params[:journal_search_id].presence || SecureRandom.uuid
     shots = journal.search(params)
-    @shots_count = shots.count
+    @shots_count = shots.count unless request.format.turbo_stream?
     @shots, @cursor = journal.page(shots, params)
     @columns = journal.ordered_columns
     @visible_columns = journal.visible_columns

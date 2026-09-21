@@ -31,15 +31,10 @@ class JournalsController < ApplicationController
     @editor = ActiveModel::Type::Boolean.new.cast(params[:editor])
     @value = params[:value]
     @attributes = params.permit(attributes: [:coffee_bag_id]).to_h.fetch("attributes", {})
-    load_field
-    attributes = if @field == "coffee"
-      {"coffee_bag_id" => @attributes["coffee_bag_id"]}
-    elsif @field.start_with?("metadata:")
-      {"metadata" => {@field.delete_prefix("metadata:") => @value}}
-    else
-      {@field => @value}
-    end
-    @shots = journal.update(params[:ids], attributes, fields: [@field]) { @shots = it }
+    @field = params[:field]
+    load_coffee_bags
+    value = @field == "coffee" ? @attributes["coffee_bag_id"] : @value
+    @shots = journal.update(params[:ids], field: @field, value:) { @shots = it }
     @fields = [@field]
     @fields << "ratio" if %w[bean_weight drink_weight].include?(@field)
     @fields |= Journal::BAG_FIELDS & journal.columns.keys if @field == "coffee"
@@ -52,6 +47,10 @@ class JournalsController < ApplicationController
     @field = params[:field]
     raise Journal::InvalidChange, "Some fields are not editable" unless journal.editable_columns.key?(@field)
 
+    load_coffee_bags
+  end
+
+  def load_coffee_bags
     @coffee_bags = Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name if @field == "coffee"
   end
 end

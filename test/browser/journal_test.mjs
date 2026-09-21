@@ -38,7 +38,8 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       const text = Response.prototype.text
       Response.prototype.text = async function () {
         const body = await text.call(this)
-        if (window.holdJournalBody && this.headers.get("content-type")?.includes("turbo-stream")) {
+        const selectedResponse = window.holdJournalBody === "pagination" ? this.url.includes("before=") : new URL(this.url).pathname === "/shots/journal"
+        if (window.holdJournalBody && selectedResponse && this.headers.get("content-type")?.includes("turbo-stream")) {
           window.holdJournalBody = false
           await new Promise(resolve => {
             window.releaseJournalBody = resolve
@@ -49,6 +50,14 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       document.addEventListener("turbo:submit-end", () => {
         window.journalSubmitEnded = true
       })
+      window.journalRenderedTargets = []
+      document.addEventListener("turbo:before-stream-render", event => {
+        const render = event.detail.render
+        event.detail.render = async stream => {
+          await render(stream)
+          window.journalRenderedTargets.push(stream.target)
+        }
+      })
     })
     await page.goto("/session/new")
     await page.locator("#email").fill(env.JOURNAL_BROWSER_EMAIL)
@@ -58,11 +67,12 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     const ratings = page.locator('td[data-column="espresso_enjoyment"] input[type="number"]')
     const dialog = page.locator("#journal-editor dialog")
     const search = page.locator('input[name="q"]')
-    const holdBody = () =>
-      page.evaluate(() => {
-        window.holdJournalBody = true
+    const holdBody = (kind = "journal") =>
+      page.evaluate(kind => {
+        window.holdJournalBody = kind
         window.journalSubmitEnded = false
-      })
+        window.releaseJournalBody = null
+      }, kind)
     const bodyHeld = () => page.waitForFunction(() => window.releaseJournalBody && window.journalSubmitEnded)
     const releaseBody = () => page.evaluate(() => window.releaseJournalBody?.())
     const check = async (name, fn) => {
@@ -109,6 +119,12 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await bodyHeld()
       assert.equal(await oldInput.evaluate(el => el.readOnly), true, "cell unlocked before stream replacement")
       assert.equal(await oldInput.evaluate(el => el.form.hasAttribute("data-saving")), true, "pending form lost data-saving")
+      await page.getByRole("button", { name: "Columns", exact: true }).click()
+      const panel = page.locator("#journal-columns-panel")
+      await panel.getByRole("button", { name: "Apply", exact: true }).click()
+      await panel.getByText("Wait for pending saves or search to finish, then Apply.").waitFor()
+      assert.equal(await oldInput.evaluate(el => el.isConnected), true)
+      await panel.getByRole("button", { name: "Cancel", exact: true }).click()
       await search.fill("Browser Journal 0")
       // Longer than search debounce: prove no request while save is pending.
       await page.waitForTimeout(1200)
@@ -126,6 +142,44 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await ratings.first().inputValue(), "81")
       await page.reload()
       assert.equal(await ratings.first().inputValue(), "81")
+    })
+
+    await check("overlapping cell saves preserve neighboring values when responses reverse", async () => {
+      const row = page.locator("tbody tr").first()
+      const dose = row.locator('td[data-column="bean_weight"] input[name="value"]')
+      const yieldInput = row.locator('td[data-column="drink_weight"] input[name="value"]')
+      await holdBody()
+      const oldDose = await dose.elementHandle()
+      await dose.fill("20")
+      await dose.press("Enter")
+      await bodyHeld()
+      const oldYield = await yieldInput.elementHandle()
+      await yieldInput.fill("42")
+      await yieldInput.press("Enter")
+      await page.waitForFunction(el => !el.isConnected, oldYield)
+      assert.equal(await oldDose.evaluate(el => el.isConnected && el.readOnly), true)
+      await releaseBody()
+      await page.waitForFunction(el => !el.isConnected, oldDose)
+      assert.equal(await dose.inputValue(), "20")
+      assert.equal(await yieldInput.inputValue(), "42")
+      await page.reload()
+      assert.equal(await dose.inputValue(), "20")
+      assert.equal(await yieldInput.inputValue(), "42")
+    })
+
+    await check("stale pagination body cannot append into newer search results", async () => {
+      const oldRows = await page.locator("tbody").getAttribute("id")
+      await holdBody("pagination")
+      await page.locator("#journal-results > div.relative.overflow-auto").evaluate(el => (el.scrollTop = el.scrollHeight))
+      await page.waitForFunction(() => window.releaseJournalBody)
+      await search.fill("Browser Journal 34")
+      await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 1)
+      const newRows = await page.locator("tbody").getAttribute("id")
+      assert.notEqual(newRows, oldRows)
+      await releaseBody()
+      await page.waitForFunction(target => window.journalRenderedTargets.includes(target), oldRows)
+      assert.equal(await page.locator("tbody tr").count(), 1)
+      assert.equal(await page.locator('td[data-column="profile_title"] input[name="value"]').inputValue(), "Browser Journal 34")
     })
 
     await check("searches serialize and keep results inert until latest query renders", async () => {
@@ -149,6 +203,11 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         await page.waitForTimeout(1200)
         assert.deepEqual(queries, ["Browser Journal 34"], "overlapping search request")
         assert.equal(await results.evaluate(el => el.inert), true)
+        await page.getByRole("button", { name: "Columns", exact: true }).click()
+        const panel = page.locator("#journal-columns-panel")
+        await panel.getByRole("button", { name: "Apply", exact: true }).click()
+        await panel.getByText("Wait for pending saves or search to finish, then Apply.").waitFor()
+        await panel.getByRole("button", { name: "Cancel", exact: true }).click()
         const second = page.waitForRequest(req => new URL(req.url()).searchParams.get("q") === "Browser Journal 33")
         releases[0]()
         await second
@@ -180,6 +239,14 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await ratings.first().inputValue(), "87")
       assert.equal(await ratings.first().evaluate(el => el.readOnly), false)
       assert.equal(await ratings.first().evaluate(el => el.form.hasAttribute("data-unsaved")), true, "failed value must mark form data-unsaved")
+      await page.getByRole("button", { name: "Columns", exact: true }).click()
+      const panel = page.locator("#journal-columns-panel")
+      const keepEdit = page.waitForEvent("dialog").then(prompt => prompt.dismiss())
+      await panel.getByRole("button", { name: "Apply", exact: true }).click()
+      await keepEdit
+      assert.equal(await ratings.first().inputValue(), "87")
+      assert.equal(await panel.isVisible(), true)
+      await panel.getByRole("button", { name: "Cancel", exact: true }).click()
       const declined = page.waitForEvent("dialog").then(async prompt => {
         assert.equal(prompt.type(), "confirm")
         await prompt.dismiss()
@@ -193,6 +260,37 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await accepted
       await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 1)
       assert.equal(await ratings.first().inputValue(), "50")
+    })
+
+    await check("server 422 preserves attempted input and focus without stealing newer focus", async () => {
+      await page.locator("#journal-results > div.relative.overflow-auto").evaluate(el => (el.scrollTop = el.scrollHeight))
+      await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 35)
+      for (const last of [true, false]) {
+        await page.route("**/journal", route => {
+          const body = new URLSearchParams(route.request().postData())
+          body.set("value", "101")
+          return route.continue({ postData: body.toString() })
+        })
+        const input = page.locator(`#${await (last ? ratings.last() : ratings.first()).getAttribute("id")}`)
+        const oldInput = await input.elementHandle()
+        await holdBody()
+        await input.fill("60")
+        await input.press("Enter")
+        await bodyHeld()
+        const expectedFocus = await (last ? input : ratings.nth(1)).getAttribute("id")
+        await releaseBody()
+        await page.waitForFunction(el => !el.isConnected, oldInput)
+        await page.waitForFunction(id => document.activeElement?.id === id, expectedFocus)
+        assert.equal(await input.inputValue(), "101")
+        assert.equal(await input.evaluate(el => el.readOnly), false)
+        await input.locator("xpath=ancestor::td").getByText("Espresso enjoyment must be less than or equal to 100").waitFor()
+        await page.unrouteAll({ behavior: "wait" })
+        const failedInput = await input.elementHandle()
+        await input.fill("70")
+        await input.press("Enter")
+        await page.waitForFunction(el => !el.isConnected, failedInput)
+        assert.equal(await input.inputValue(), "70")
+      }
     })
 
     await check("coffee popup saves; pending Save blocks Cancel and Escape", async () => {
@@ -325,6 +423,44 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await ratings.first().inputValue(), "101")
       assert.equal(await ratings.first().evaluate(el => el.readOnly || el.form.hasAttribute("data-saving")), false)
       assert.equal(saves, 0)
+      await ratings.first().fill("70")
+      const duration = page.locator('td[data-column="duration"] input[name="value"]').first()
+      await duration.fill("-1")
+      await duration.press("Enter")
+      assert.equal(await duration.evaluate(el => el === document.activeElement && el.validity.rangeUnderflow), true)
+      await duration.fill("30")
+      await duration.press("Enter")
+      await page.waitForFunction(() => !document.querySelector("[data-saving]"))
+      await page.locator('[data-journal-selection-target="checkbox"]').first().check()
+      await page.locator("#journal-bulk-field").selectOption("acidity")
+      await page.getByRole("button", { name: "Set field", exact: true }).click()
+      await dialog.locator('input[name="value"]').fill("16")
+      const before = saves
+      await dialog.getByRole("button", { name: "Save", exact: true }).click()
+      assert.equal(await dialog.locator('input[name="value"]').evaluate(el => el.validity.rangeOverflow), true)
+      assert.equal(saves, before)
+      await dialog.getByRole("button", { name: "Cancel", exact: true }).click()
+    })
+
+    await check("notes remain searchable after popup save and manual form creates a shot", async () => {
+      await page.locator('[data-journal-selection-target="checkbox"]').first().check()
+      await page.locator("#journal-bulk-field").selectOption("espresso_notes")
+      await page.getByRole("button", { name: "Set field", exact: true }).click()
+      await dialog.locator('lexxy-editor [contenteditable="true"]').fill("Peach browser tasting")
+      await dialog.getByRole("button", { name: "Save", exact: true }).click()
+      await dialog.waitFor({ state: "detached" })
+      await search.fill("Peach browser tasting")
+      await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 1)
+      await page.reload()
+      assert.equal(await page.locator("tbody tr").count(), 1)
+      await page.getByRole("link", { name: "Create", exact: true }).click()
+      await page.locator('input[name="shot[profile_title]"]').fill("Browser Manual Creation")
+      await page.locator('input[name="shot[duration]"]').fill("32.5")
+      await page.getByRole("button", { name: "Save", exact: true }).click()
+      await page.waitForURL(/\/shots\/[0-9a-f-]+$/)
+      await page.goto("/shots?q=Browser+Manual+Creation")
+      assert.equal(await page.locator("tbody tr").count(), 1)
+      assert.equal(await page.locator('td[data-column="duration"] input[name="value"]').inputValue(), "32.5")
     })
 
     await check("confirmation Cancel activated by native Enter does not delete", async () => {

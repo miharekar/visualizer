@@ -16,12 +16,30 @@ export default class extends Controller {
     if (this.loading || this.resultsTarget.querySelector("[data-saving]")) {
       event.preventDefault()
       this.waiting = true
-    } else if (this.resultsTarget.querySelector("[data-unsaved]") && !confirm("Discard unsaved changes and search?")) {
+    } else if (!this.discardUnsavedChanges()) {
       event.preventDefault()
     } else {
       this.loading = true
       this.resultsTarget.inert = true
     }
+  }
+
+  apply(event) {
+    if (this.loading || this.resultsTarget.querySelector("[data-saving]")) {
+      event.preventDefault()
+      event.target.querySelector('[data-journal-columns-target="error"]').textContent = "Wait for pending saves or search to finish, then Apply."
+    } else if (!this.discardUnsavedChanges()) {
+      event.preventDefault()
+    } else {
+      const query = new FormData(this.searchTarget)
+      for (const input of event.target.querySelectorAll("[data-journal-filter]")) input.value = query.get(input.dataset.journalFilter) || ""
+      this.loading = true
+      this.resultsTarget.inert = true
+    }
+  }
+
+  discardUnsavedChanges() {
+    return !this.resultsTarget.querySelector("[data-unsaved]") || confirm("Discard unsaved changes?")
   }
 
   resume() {

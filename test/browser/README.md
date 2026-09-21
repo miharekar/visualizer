@@ -8,7 +8,7 @@ Rails environment/database matches the runner. Never run against production.
 Install browser tooling outside this repository (once):
 
 ```sh
-npm install --prefix /tmp/visualizer-browser playwright
+npm install --prefix /tmp/visualizer-browser playwright@1.63.0
 /tmp/visualizer-browser/node_modules/.bin/playwright install chromium
 ```
 
@@ -23,8 +23,8 @@ PLAYWRIGHT_MODULE=/tmp/visualizer-browser/node_modules/playwright \
 normal Node resolution of `playwright`. `JOURNAL_BROWSER_URL` defaults to
 `http://localhost:3000`; `RAILS_ENV` defaults to `development`. For isolated CI,
 prepare the test database, start Rails with `RAILS_ENV=test`, and run this command
-with `RAILS_ENV=test` and matching URL. Workflow/server ownership stays outside
-this harness.
+with `RAILS_ENV=test` and matching URL. GitHub Actions runs this suite after Rails
+and native JS tests, builds Tailwind, and starts a test-environment Rails server.
 
 Each run creates a random `journal-browser-<UUID>@example.invalid` account and
 password, 35 shots, one coffee bag/roaster, and one tag. Setup rejects existing
@@ -44,12 +44,14 @@ JOURNAL_BROWSER_EMAIL=journal-browser-REPLACE-WITH-UUID@example.invalid \
 ```
 
 Checks run sequentially in one browser session with separate Node subtest results:
-native Turbo pending-cell replacement, Enter/change/blur duplication, search
-deferral, serialized latest-query searches with inert results, failed-value discard
-confirmation, coffee/tag popups, pending-dialog
+native Turbo pending-cell replacement, overlapping saves, stale pagination,
+server 422 values/focus, Enter/change/blur duplication, search deferral,
+serialized latest-query searches with inert results, failed-value discard
+confirmation for search and columns Apply, coffee/tag popups, pending-dialog
 dismissal and transport retry, staged column preferences/drag ghost, pending columns
-Apply dismissal/filter retention, invalid Enter focus, confirmation Cancel via
-native Enter, and selection toolbar geometry at desktop/390px widths. Delayed-body checks hold
+Apply dismissal/filter retention, numeric bounds, notes search, manual creation,
+confirmation Cancel via native Enter, and selection toolbar geometry at
+desktop/390px widths. Delayed-body checks hold
 `Response.text()` after headers arrive, without dispatching synthetic Turbo events
 or replacing controllers. Columns Apply holds its request before delivery because
 that endpoint redirects to HTML rather than returning a Turbo stream.

@@ -1,5 +1,5 @@
 <div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= journal.default_columns.to_json %>" data-action="pointermove->journal-columns#drag pointerup->journal-columns#finish pointercancel->journal-columns#finish lostpointercapture->journal-columns#finish">
-  <%= form_with url: profile_journal_columns_path, method: :patch, data: {journal_columns_target: "form", action: "submit->journal-columns#serialize turbo:submit-start->journal-columns#savingStarted turbo:submit-end->journal-columns#savingEnded"} do |f| %>
+  <%= form_with url: profile_journal_columns_path, method: :patch, data: {journal_columns_target: "form", action: "submit->journal-navigation#apply submit->journal-columns#serialize turbo:submit-start->journal-columns#savingStarted turbo:submit-end->journal-columns#savingEnded turbo:submit-end->journal-navigation#complete"} do |f| %>
     <fieldset data-journal-columns-target="fields">
       <% %w[q coffee_bag tags].each do |filter| %>
         <%= hidden_field_tag "query[#{filter}]", params[filter], data: {journal_filter: filter} %>

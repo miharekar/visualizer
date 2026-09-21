@@ -40,8 +40,6 @@ export default class extends Controller {
     for (const input of this.formTarget.querySelectorAll('[name="hidden[]"]')) {
       input.disabled = input.closest('[data-journal-columns-target="list"]').dataset.hidden !== "true"
     }
-    const query = new URL(window.location.href).searchParams
-    for (const input of this.formTarget.querySelectorAll("[data-journal-filter]")) input.value = query.get(input.dataset.journalFilter) || ""
   }
 
   savingStarted() {

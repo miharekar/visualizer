@@ -1,4 +1,4 @@
-<% editable = journal.editable_columns.key?(field) && (!%w[start_time duration].include?(field) || shot.manual?) %>
+<% editable = journal.editable_columns.key?(field) && (field != "duration" || shot.manual?) %>
 <% if field == "actions" %>
   <div class="flex items-center gap-1 text-neutral-500 dark:text-neutral-300">
     <%= link_to shot_path(shot), title: "View shot", class: "rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_frame: "_top"} do %>
@@ -25,9 +25,9 @@
     <%= hidden_field_tag "ids[]", shot.id, id: nil %>
     <%= f.hidden_field :field, value: field, id: nil %>
     <% if field == "espresso_enjoyment" %>
-      <%= f.number_field :value, value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], min: 0, max: 100, step: 1, inputmode: "numeric", placeholder: "—", style: ("background-color: #{enjoyment_hex(value.to_i)};" if value.present?), class: "focus:ring-terracotta-500 h-6 w-9! rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white [appearance:textfield] focus:ring-2 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none", data: {journal_cell_control: true, journal_cell_target: "input", range_target: "color", action: "input->range#update"} %>
+      <%= f.number_field :value, **journal_input_options(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], inputmode: "numeric", placeholder: "—", style: ("background-color: #{enjoyment_hex(value.to_i)};" if value.present?), class: "focus:ring-terracotta-500 h-6 w-9! rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white [appearance:textfield] focus:ring-2 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none", data: {journal_cell_control: true, journal_cell_target: "input", range_target: "color", action: "input->range#update"} %>
     <% else %>
-      <%= f.text_field :value, type: journal_input_type(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], step: field == "duration" ? "any" : "1", placeholder: "—", style: "width: #{[value.to_s.length, 1].max + 3}ch", class: "focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800", data: {journal_cell_control: true, journal_cell_target: "input"} %>
+      <%= f.text_field :value, **journal_input_options(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], placeholder: "—", style: "width: #{[value.to_s.length, 1].max + 3}ch", class: "focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800", data: {journal_cell_control: true, journal_cell_target: "input"} %>
     <% end %>
     <p class="text-sm text-red-600 empty:hidden dark:text-red-400" data-journal-cell-target="error"></p>
   <% end %>

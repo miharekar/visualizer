@@ -29,7 +29,7 @@
               <%= render "shared/combobox", input_name: "value", input_id: "journal-editor-value", hidden_input_name: "_value", selected: value, collection: journal.dropdown_values(field), name_method: :itself, id_method: :itself, allow_custom: true %>
             <% else %>
               <%= f.label :value, journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
-              <%= f.text_field :value, type: journal_input_type(field), value: value, id: "journal-editor-value", step: field == "duration" ? "any" : "1", class: "standard-input mt-1" %>
+              <%= f.text_field :value, **journal_input_options(field), value: value, id: "journal-editor-value", class: "standard-input mt-1" %>
             <% end %>
             <p class="text-sm text-red-600 empty:hidden dark:text-red-400" data-journal-dialog-target="error"></p>
             <div class="flex justify-end gap-3">

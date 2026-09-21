@@ -163,6 +163,17 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Allowed", imported.profile_title
   end
 
+  test "failed imported edit keeps submitted brewdata including blank values" do
+    imported = create(:shot, :with_information, user: @user)
+    imported.information.update!(brewdata: {settings: {temperature: "93", pressure: "9"}})
+    patch shot_url(imported), params: {shot: {espresso_enjoyment: "101", brewdata: {"settings/temperature" => "94", "settings/pressure" => ""}}}
+    assert_response :unprocessable_content
+    assert_select "input[name='shot[brewdata][settings/temperature]'][value='94']"
+    assert_select "input[name='shot[brewdata][settings/pressure]'][value='']"
+    assert_equal "93", imported.information.reload.brewdata.dig("settings", "temperature")
+    assert_equal "9", imported.information.brewdata.dig("settings", "pressure")
+  end
+
   test "existing form edits lock shot while creates do not lock user" do
     queries = []
     capture = ->(*args) { queries << args.last[:sql] }

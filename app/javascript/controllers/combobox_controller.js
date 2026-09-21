@@ -192,9 +192,6 @@ export default class extends Controller {
   }
 
   markAllAsUnselected() {
-    this.listTarget.querySelectorAll("li").forEach(el => {
-      el.classList.remove(this.selectedClassValue)
-    })
     this.allItems.forEach(item => {
       item.classList[item.dataset.id === this.selected?.dataset.id ? "add" : "remove"](this.selectedClassValue)
     })

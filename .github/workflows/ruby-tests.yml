@@ -90,3 +90,20 @@ jobs:
 
       - name: Run JavaScript tests
         run: node --test test/javascript/*_test.mjs
+
+      - name: Install browser tooling
+        run: |
+          npm install --prefix "$RUNNER_TEMP/journal-browser" playwright@1.63.0
+          "$RUNNER_TEMP/journal-browser/node_modules/.bin/playwright" install --with-deps chromium
+
+      - name: Run browser regressions
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/journal-browser/node_modules/playwright
+          JOURNAL_BROWSER_URL: http://localhost:3000
+        run: |
+          bin/rails tailwindcss:build
+          bin/rails server -p 3000 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          curl --fail --retry 30 --retry-connrefused --retry-delay 1 http://localhost:3000/up
+          node --test test/browser/journal_test.mjs

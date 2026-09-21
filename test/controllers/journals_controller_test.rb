@@ -72,6 +72,9 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     second_ids = css_select("tr").pluck("id")
     assert_empty first_ids & second_ids
     assert_equal matching.map { "journal-shot-#{it.id}" }.sort, (first_ids + second_ids).sort
+    get shots_url(format: :html), params: query
+    assert_response :success
+    assert_select "turbo-frame#journal-results tbody tr", count: 1
   end
 
   test "editor loads owned shots and cancel returns an empty frame" do
@@ -130,7 +133,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/vnd.turbo-stream.html", response.media_type
     assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'espresso_enjoyment')}']"
     assert_includes response.body, "101"
-    assert_includes response.body, "Enjoyment must be between 0 and 100"
+    assert_includes response.body, "Espresso enjoyment must be less than or equal to 100"
   end
 
   test "editor bulk save clears editor and preserves unrelated fields" do
@@ -148,7 +151,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
     assert_select "turbo-stream[action='replace'][target='journal-editor'] dialog" do
       assert_select "input[name='value'][value='101']"
-      assert_select "p", text: /Enjoyment must be between 0 and 100/
+      assert_select "p", text: /Espresso enjoyment must be less than or equal to 100/
     end
   end
 
@@ -173,7 +176,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     first, last = [@shot, other].sort_by(&:id)
     last.update_columns(acidity: 99) # rubocop:disable Rails/SkipsModelValidations -- exercise rollback when a later shot fails validation
     assert_raises ActiveRecord::RecordInvalid do
-      Journal.new(@user).update([first.id, last.id], {tag_list: "test", bean_weight: "20"})
+      Journal.new(@user).update([first.id, last.id], field: "tag_list", value: "test")
     end
     assert_equal "18", @shot.reload.bean_weight
     assert_empty first.reload.tags
@@ -189,7 +192,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal original, manual.reload.start_time
     get edit_journal_url, params: {ids: [manual.id], field: "start_time"}
     assert_response :unprocessable_content
-    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([manual.id], {start_time: "2026-01-01T08:30:00"}) }
+    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([manual.id], field: "start_time", value: "2026-01-01T08:30:00") }
   end
 
   test "foreign shots and coffee bags are rejected" do
@@ -255,7 +258,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
       assert_nil @shot.coffee_bag_id
       assert_nil @shot.canonical_coffee_bag_id
     end
-    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([@shot.id], {coffee_bag_id: bag.id}) }
+    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([@shot.id], field: "coffee", value: bag.id) }
     update_field("coffee", bag.id)
     assert_response :unprocessable_content
   end
@@ -310,7 +313,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     journal = Journal.new(@user)
     snapshot = journal.shots([@shot.id]).first
     @shot.update!(metadata: {basket: "VST", water: "hard"})
-    journal.update([snapshot.id], {metadata: {basket: "IMS"}})
+    journal.update([snapshot.id], field: "metadata:basket", value: "IMS")
     assert_equal({"basket" => "IMS", "water" => "hard"}, @shot.reload.metadata)
     assert_equal "soft", snapshot.metadata["water"]
   end
@@ -333,7 +336,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     update_field("duration", "30.5", ids: [manual.id])
     assert_response :success
     assert_equal 30.5, manual.reload.duration
-    %w[-1 no].each do |value|
+    %w[-1 no NaN Infinity 1e999].each do |value|
       update_field("duration", value, ids: [manual.id])
       assert_response :unprocessable_content
     end
@@ -341,6 +344,39 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
     update_field("duration", "30")
     assert_response :unprocessable_content
+  end
+
+  test "score validation is shared without rejecting unrelated legacy values" do
+    @shot.update!(espresso_enjoyment: 101)
+    update_field("profile_title", "Unrelated change")
+    assert_response :success
+    %w[-1 101 2.5 NaN nope].each do |value|
+      update_field("espresso_enjoyment", value)
+      assert_response :unprocessable_content
+      assert_equal 101, @shot.reload.espresso_enjoyment
+    end
+    update_field("espresso_enjoyment", "")
+    assert_response :success
+    assert_nil @shot.reload.espresso_enjoyment
+    update_field("profile_title", %w[not scalar])
+    assert_response :unprocessable_content
+    assert_equal "Unrelated change", @shot.reload.profile_title
+  end
+
+  test "cells and bulk editors expose matching numeric constraints" do
+    manual = create(:shot, user: @user)
+    @user.update!(journal_columns: {order: %w[duration acidity espresso_enjoyment], hidden: []})
+    get shots_url
+    assert_select "tr#journal-shot-#{manual.id}" do
+      assert_select "td[data-column='duration'] input[type='number'][min='0'][step='any']"
+      assert_select "td[data-column='acidity'] input[type='number'][min='0'][max='15'][step='1']"
+    end
+    {duration: nil, acidity: 15, espresso_enjoyment: 100}.each do |field, max|
+      get edit_journal_url, params: {ids: [manual.id], field:}
+      assert_select "input#journal-editor-value[type='number'][min='0']" do |inputs|
+        assert_equal max.to_s, inputs.first["max"].to_s
+      end
+    end
   end
 
   test "column preferences accept forms and reset with redirects" do
@@ -404,7 +440,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     queries = []
     capture = ->(*args) { queries << args.last[:sql] }
     ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-      Journal.new(@user).update([other.id, @shot.id], {bean_weight: "20"}, fields: [])
+      Journal.new(@user).update([other.id, @shot.id], field: "bean_weight", value: "20")
     end
     locks = queries.grep(/FOR UPDATE/)
     assert_equal 1, locks.size
@@ -442,17 +478,21 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_not shot.manual?
   end
 
-  test "visible rich text tags and images are preloaded without lazy SQL" do
+  test "list previews use plain notes without loading rich text" do
     @user.update!(shot_metadata_fields: %w[basket water])
     journal = Journal.new(@user)
     @user.update!(journal_columns: {order: journal.columns.keys, hidden: []})
     shots, = journal.page(journal.scope, {})
+    helper = Object.new.extend(JournalHelper)
+    helper.define_singleton_method(:journal) { journal }
     queries = []
     capture = ->(*args) { queries << args.last[:sql] unless args.last[:name] == "SCHEMA" }
     ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
       shots.each do |shot|
-        journal.columns.each_key { journal.value(shot, it) }
+        journal.columns.each_key { helper.journal_display(shot, it) }
         shot.manual?
+        assert_not shot.association(:rich_text_espresso_notes).loaded?
+        assert_equal "Sweet", helper.journal_display(shot, "espresso_notes")
       end
     end
     assert_empty queries
