@@ -94,7 +94,7 @@ class ShotsController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         if params[:journal].present?
-          streams = [turbo_stream.remove("journal-shot-#{@shot.id}")]
+          streams = [turbo_stream.remove(helpers.dom_id(@shot, :journal))]
           if params.key?(:query)
             query = params.permit(query: %i[q coffee_bag tags]).fetch(:query, {})
             count = journal.search(query).count
@@ -131,7 +131,7 @@ class ShotsController < ApplicationController
       @shot.lock! if @shot.persisted?
       # Tag assignment writes associations immediately, so validation must roll it back too.
       @shot.assign_attributes(attributes)
-      saved = @shot.save(context: [@shot.new_record? ? :create : :update, :shot_form])
+      saved = @shot.save(context: [@shot.new_record? ? :create : :update, :manual_edit])
       raise ActiveRecord::Rollback unless saved
     end
     saved

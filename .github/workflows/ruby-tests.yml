@@ -91,6 +91,57 @@ jobs:
       - name: Run JavaScript tests
         run: node --test test/javascript/*_test.mjs
 
+  browser_tests:
+    name: Browser Tests
+    runs-on: ubuntu-latest
+    env:
+      PGHOST: 127.0.0.1
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGPORT: 5432
+      RAILS_ENV: test
+
+    services:
+      postgres:
+        image: postgres:18
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Start system dependency installation
+        run: |
+          sudo systemd-run --unit=install-ci-dependencies --no-block \
+            --property=Type=oneshot --property=RemainAfterExit=yes \
+            /bin/bash -e -c 'apt-get update && apt-get install --no-install-recommends -y libpq-dev libvips'
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Wait for system dependency installation
+        run: |
+          sudo systemctl start install-ci-dependencies.service
+          sudo journalctl --unit=install-ci-dependencies --no-pager
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Setup database
+        run: bin/rails db:test:prepare
+
       - name: Install browser tooling
         run: |
           npm install --prefix "$RUNNER_TEMP/journal-browser" playwright@1.63.0

@@ -16,7 +16,10 @@ class JournalsController < ApplicationController
     @shots = []
     @attributes = {}
     if params[:ids].present?
-      load_field
+      @field = params[:field]
+      raise Journal::InvalidChange, "Some fields are not editable" unless journal.editable_columns.key?(@field)
+
+      load_coffee_bags
       @shots = journal.shots(params[:ids], fields: [@field])
       @value = if @field == "tag_list"
         @shots.map { it.tags.map(&:name) }.reduce(:&).sort.join(",")
@@ -42,13 +45,6 @@ class JournalsController < ApplicationController
   end
 
   private
-
-  def load_field
-    @field = params[:field]
-    raise Journal::InvalidChange, "Some fields are not editable" unless journal.editable_columns.key?(@field)
-
-    load_coffee_bags
-  end
 
   def load_coffee_bags
     @coffee_bags = Current.user.coffee_bags.includes(:roaster).by_brewability.by_roast_date.by_name if @field == "coffee"

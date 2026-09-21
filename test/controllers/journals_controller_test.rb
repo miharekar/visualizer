@@ -1,6 +1,8 @@
 require "test_helper"
 
 class JournalsControllerTest < ActionDispatch::IntegrationTest
+  include ActionView::RecordIdentifier
+
   setup do
     Rails.cache.clear
     host! "visualizer.test"
@@ -26,7 +28,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#journal-columns-panel [data-journal-columns-target='list'][data-hidden='true']", count: 1
     assert_select "form[action='#{shots_path}'][method='get'][data-turbo-frame='journal-results'] input[name='q']"
     assert_select "form[action='#{edit_journal_path}'][method='get'][data-turbo-frame='journal-editor']"
-    assert_select "turbo-frame#journal-results tr#journal-shot-#{@shot.id}" do
+    assert_select "turbo-frame#journal-results tr##{dom_id(@shot, :journal)}" do
       assert_equal Journal.new(@user).visible_columns, css_select("td[data-column]").pluck("data-column")
       Journal.new(@user).visible_columns.each do |field|
         assert_select "turbo-frame##{cell_id(@shot, field)}", count: 1
@@ -43,7 +45,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/html", response.media_type
     assert_select "turbo-frame#journal-results", count: 1
     assert_select "turbo-stream[action='append']", count: 0
-    assert_select "tr#journal-shot-#{@shot.id}", count: 0
+    assert_select "tr##{dom_id(@shot, :journal)}", count: 0
     first_ids = css_select("tbody tr").pluck("id")
     assert_equal Journal::PAGE_SIZE, first_ids.size
     rows_id = css_select("tbody").first["id"]
@@ -71,7 +73,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame##{cursor_id}[src]", count: 0
     second_ids = css_select("tr").pluck("id")
     assert_empty first_ids & second_ids
-    assert_equal matching.map { "journal-shot-#{it.id}" }.sort, (first_ids + second_ids).sort
+    assert_equal matching.map { dom_id(it, :journal) }.sort, (first_ids + second_ids).sort
     get shots_url(format: :html), params: query
     assert_response :success
     assert_select "turbo-frame#journal-results tbody tr", count: 1
@@ -367,7 +369,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     manual = create(:shot, user: @user)
     @user.update!(journal_columns: {order: %w[duration acidity espresso_enjoyment], hidden: []})
     get shots_url
-    assert_select "tr#journal-shot-#{manual.id}" do
+    assert_select "tr##{dom_id(manual, :journal)}" do
       assert_select "td[data-column='duration'] input[type='number'][min='0'][step='any']"
       assert_select "td[data-column='acidity'] input[type='number'][min='0'][max='15'][step='1']"
     end
@@ -376,6 +378,19 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
       assert_select "input#journal-editor-value[type='number'][min='0']" do |inputs|
         assert_equal max.to_s, inputs.first["max"].to_s
       end
+    end
+  end
+
+  test "manual editing validates invalid input even when its cast value is unchanged" do
+    manual = create(:shot, user: @user, duration: 0, espresso_enjoyment: 2)
+    {"espresso_enjoyment" => ["2.5", 2], "duration" => ["nope", 0]}.each do |field, (input, stored)|
+      update_field(field, input, ids: [manual.id])
+      assert_response :unprocessable_content
+      assert_equal stored, manual.reload[field]
+
+      patch shot_url(manual), params: {shot: {field => input}}
+      assert_response :unprocessable_content
+      assert_equal stored, manual.reload[field]
     end
   end
 
@@ -409,6 +424,17 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
     @user.update!(coffee_management_enabled: true)
     assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
+  end
+
+  test "saving columns replaces preferences for unavailable premium fields" do
+    @user.update!(journal_columns: {order: %w[private_notes profile_title], hidden: %w[private_notes]}, premium_expires_at: 1.day.ago)
+    get shots_url
+    assert_response :success
+    assert_select "td[data-column='private_notes']", count: 0
+
+    patch profile_journal_columns_url, params: {order: %w[profile_title start_time], hidden: %w[duration]}
+    assert_response :see_other
+    assert_equal({"order" => %w[profile_title start_time], "hidden" => %w[duration]}, @user.reload.journal_columns)
   end
 
   test "column redirects preserve only permitted submitted filters on save reset and error" do

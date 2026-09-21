@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["search", "results"]
+  static targets = ["search", "results", "error"]
 
   connect() {
     this.observer = new MutationObserver(() => this.resume())
@@ -27,7 +27,7 @@ export default class extends Controller {
   apply(event) {
     if (this.loading || this.resultsTarget.querySelector("[data-saving]")) {
       event.preventDefault()
-      event.target.querySelector('[data-journal-columns-target="error"]').textContent = "Wait for pending saves or search to finish, then Apply."
+      this.errorTarget.textContent = "Wait for pending saves or search to finish, then Apply."
     } else if (!this.discardUnsavedChanges()) {
       event.preventDefault()
     } else {

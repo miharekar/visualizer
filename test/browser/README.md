@@ -23,8 +23,9 @@ PLAYWRIGHT_MODULE=/tmp/visualizer-browser/node_modules/playwright \
 normal Node resolution of `playwright`. `JOURNAL_BROWSER_URL` defaults to
 `http://localhost:3000`; `RAILS_ENV` defaults to `development`. For isolated CI,
 prepare the test database, start Rails with `RAILS_ENV=test`, and run this command
-with `RAILS_ENV=test` and matching URL. GitHub Actions runs this suite after Rails
-and native JS tests, builds Tailwind, and starts a test-environment Rails server.
+with `RAILS_ENV=test` and matching URL. GitHub Actions runs this suite in its own
+job alongside Rails/native JS tests, builds Tailwind, and starts a test-environment
+Rails server.
 
 Each run creates a random `journal-browser-<UUID>@example.invalid` account and
 password, 35 shots, one coffee bag/roaster, and one tag. Setup rejects existing

@@ -71,18 +71,13 @@ class Journal
   end
 
   def save_columns(settings)
-    return user.with_lock { user.update!(journal_columns: nil) } if settings.nil?
+    return user.update!(journal_columns: nil) if settings.nil?
 
     order = settings["order"]
     hidden = settings["hidden"]
     raise InvalidChange, "Unknown columns" unless order.is_a?(Array) && hidden.is_a?(Array) && order.all? { it.is_a?(String) } && hidden.all? { it.is_a?(String) } && (order + hidden - columns.keys).empty?
 
-    user.with_lock do
-      # Preserve preferences for premium columns while subscription is inactive.
-      unavailable_order = Array(user.journal_columns["order"]) - columns.keys
-      unavailable_hidden = Array(user.journal_columns["hidden"]) - columns.keys
-      user.update!(journal_columns: {order: order.uniq + unavailable_order, hidden: hidden.uniq + unavailable_hidden})
-    end
+    user.update!(journal_columns: {order: order.uniq, hidden: hidden.uniq})
   end
 
   def search(params)
@@ -179,7 +174,7 @@ class Journal
 
         # Tag assignment writes immediately, so assignment must stay inside this transaction.
         shot.assign_attributes(attributes_for(shot, field, value))
-        shot.save!(context: [:update, field.to_sym])
+        shot.save!(context: %i[update manual_edit])
       end
       records
     end

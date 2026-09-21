@@ -1,6 +1,8 @@
 require "test_helper"
 
 class ShotsControllerTest < ActionDispatch::IntegrationTest
+  include ActionView::RecordIdentifier
+
   setup do
     Rails.cache.clear
     host! "example.com"
@@ -144,6 +146,15 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal "Retained", @shot.profile_title
   end
 
+  test "manual edit allows untouched legacy numeric values" do
+    @shot.update!(espresso_enjoyment: 101, duration: -1)
+    patch shot_url(@shot), params: {shot: {profile_title: "Unrelated edit"}}
+    assert_response :see_other
+    assert_equal "Unrelated edit", @shot.reload.profile_title
+    assert_equal 101, @shot.espresso_enjoyment
+    assert_equal(-1, @shot.duration)
+  end
+
   test "manual edit accepts date and duration but imported edit protects them" do
     patch shot_url(@shot), params: {shot: {start_time: "2025-01-01T12:00:00Z", duration: "32"}}
     assert_response :see_other
@@ -232,7 +243,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   test "journal delete returns direct scoped streams and ordinary delete removes card" do
     delete shot_url(@shot), params: {journal: true, journal_search_id: "instance", query: {q: ""}}, as: :turbo_stream
     assert_response :success
-    assert_select "turbo-stream[action='remove'][target='journal-shot-#{@shot.id}']"
+    assert_select "turbo-stream[action='remove'][target='#{dom_id(@shot, :journal)}']"
     assert_select "turbo-stream[action='update'][target='journal-count-instance'] template", text: "No Shots"
     assert_select "turbo-stream[target='journal-count']", count: 0
     assert_select "turbo-stream[action='update'][target='journal-empty-instance'] template", text: "No matching shots."
