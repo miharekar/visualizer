@@ -481,15 +481,24 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await page.locator("tbody tr").first().getAttribute("id"), rowId)
     })
 
-    await check("selection toolbar stays inside desktop and narrow viewports", async () => {
-      for (const width of [1440, 390]) {
-        await page.setViewportSize({ width, height: 844 })
+    await check("table, footer, and selection toolbar fit narrow and tall viewports", async () => {
+      for (const [width, height] of [
+        [1440, 844],
+        [390, 844],
+        [1440, 1800]
+      ]) {
+        await page.setViewportSize({ width, height })
+        const table = await page.locator("#journal-results > div.overflow-auto").boundingBox()
+        const footer = await page.locator("footer").boundingBox()
+        assert.ok(table.height > 0 && table.y + table.height <= footer.y, "table overlaps footer")
+        assert.ok(footer.y + footer.height <= height, "footer outside viewport")
+        if (height === 1800) assert.ok(table.height > height * 0.7, "table does not use tall viewport")
         await page.locator('[data-journal-selection-target="checkbox"]').first().check()
         const toolbar = page.locator('[data-journal-selection-target="toolbar"]')
         await toolbar.waitFor()
         const box = await toolbar.boundingBox()
         assert.ok(box.x >= 0 && box.x + box.width <= width, `toolbar overflows ${width}px`)
-        assert.ok(box.y >= 0 && box.y + box.height <= 844)
+        assert.ok(box.y >= 0 && box.y + box.height <= height)
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
         await toolbar.getByRole("button", { name: "Clear selection", exact: true }).click()
         await toolbar.waitFor({ state: "hidden" })

@@ -22,13 +22,13 @@
     <%= stylesheet_link_tag "tailwind", "lexxy", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="flex h-full flex-col overflow-y-scroll bg-white text-neutral-900 dark:bg-neutral-950 dark:text-white <%= @skin %>" data-controller="local-time">
-    <header><%= render "shared/header" %></header>
-    <main class="grow dark:bg-neutral-900 dark:text-white">
+  <body class="flex flex-col bg-white text-neutral-900 dark:bg-neutral-950 dark:text-white <%= content_for?(:contained_layout) ? 'h-dvh overflow-hidden' : 'h-full overflow-y-scroll' %> <%= @skin %>" data-controller="local-time">
+    <header class="shrink-0"><%= render "shared/header" %></header>
+    <main class="grow dark:bg-neutral-900 dark:text-white <%= 'flex min-h-0 flex-col' if content_for?(:contained_layout) %>">
       <%= render "shared/notifications" %>
       <%= yield %>
     </main>
-    <footer>
+    <footer class="shrink-0">
       <%= inline_svg_tag "logo-bars-clip.svg", class: "size-0" %>
       <%= render "shared/footer" %>
     </footer>
