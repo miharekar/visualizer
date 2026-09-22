@@ -2,6 +2,7 @@ require "test_helper"
 
 class JournalsControllerTest < ActionDispatch::IntegrationTest
   include ActionView::RecordIdentifier
+  include Paginatable
 
   setup do
     Rails.cache.clear
@@ -178,7 +179,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     first, last = [@shot, other].sort_by(&:id)
     last.update_columns(acidity: 99) # rubocop:disable Rails/SkipsModelValidations -- exercise rollback when a later shot fails validation
     assert_raises ActiveRecord::RecordInvalid do
-      Journal.new(@user).update([first.id, last.id], field: "tag_list", value: "test")
+      Journal.new(@user).update([first, last], field: "tag_list", value: "test")
     end
     assert_equal "18", @shot.reload.bean_weight
     assert_empty first.reload.tags
@@ -203,14 +204,14 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "18", @shot.reload.bean_weight
 
     @user.update!(coffee_management_enabled: true)
-    patch journal_url, params: {ids: [@shot.id], field: "coffee", attributes: {coffee_bag_id: create(:coffee_bag).id}, editor: true}, headers: stream_headers
+    patch journal_url, params: {ids: [@shot.id], field: "coffee", value: create(:coffee_bag).id, editor: true}, headers: stream_headers
     assert_response :not_found
   end
 
   test "coffee saves refresh bag fields and their cells" do
     @user.update!(coffee_management_enabled: true)
     bag = create(:coffee_bag, roaster: create(:roaster, user: @user))
-    patch journal_url, params: {ids: [@shot.id], field: "coffee", attributes: {coffee_bag_id: bag.id}, editor: true}, headers: stream_headers
+    patch journal_url, params: {ids: [@shot.id], field: "coffee", value: bag.id, editor: true}, headers: stream_headers
     assert_response :success
     assert_equal bag.id, @shot.reload.coffee_bag_id
     assert_equal bag.name, @shot.bean_type
@@ -229,18 +230,18 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     other = create(:shot, user: @user, coffee_bag: bag)
     get edit_journal_url, params: {ids: [@shot.id], field: "coffee"}
     assert_response :success
-    assert_select "input[name='attributes[coffee_bag_id]'][value='#{bag.id}']"
+    assert_select "input[name='value'][value='#{bag.id}']"
     assert_select "input[name='attributes[bean_brand]'], input[name='attributes[canonical_coffee_bag_id]']", count: 0
 
     [nil, ""].each do |id|
-      patch journal_url, params: {ids: [@shot.id, other.id], field: "coffee", attributes: {coffee_bag_id: id}, editor: true}, headers: stream_headers
+      patch journal_url, params: {ids: [@shot.id, other.id], field: "coffee", value: id, editor: true}, headers: stream_headers
       assert_response :unprocessable_content
       assert_select "turbo-stream[target='journal-editor'] input[name='ids[]']", count: 2
       assert_equal bag.id, @shot.reload.coffee_bag_id
       assert_equal bag.id, other.reload.coffee_bag_id
     end
 
-    patch journal_url, params: {ids: [@shot.id], field: "coffee", attributes: {coffee_bag_id: bag.id, bean_brand: "Override", roast_date: "Wrong", canonical_coffee_bag_id: SecureRandom.uuid}}, headers: stream_headers
+    patch journal_url, params: {ids: [@shot.id], field: "coffee", value: bag.id, attributes: {bean_brand: "Override", roast_date: "Wrong", canonical_coffee_bag_id: SecureRandom.uuid}}, headers: stream_headers
     assert_response :success
     assert_equal bag.roaster.name, @shot.reload.bean_brand
     assert_not_equal "Wrong", @shot.roast_date
@@ -309,13 +310,14 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal({"basket" => "IMS", "water" => "soft"}, @shot.reload.metadata)
   end
 
-  test "metadata merge reads fresh locked row rather than editor snapshot" do
+  test "metadata merge uses current request rather than editor snapshot" do
     @user.update!(shot_metadata_fields: %w[basket water])
     @shot.update!(metadata: {basket: "VST", water: "soft"})
     journal = Journal.new(@user)
     snapshot = journal.shots([@shot.id]).first
     @shot.update!(metadata: {basket: "VST", water: "hard"})
-    journal.update([snapshot.id], field: "metadata:basket", value: "IMS")
+    update_field("metadata:basket", "IMS")
+    assert_response :success
     assert_equal({"basket" => "IMS", "water" => "hard"}, @shot.reload.metadata)
     assert_equal "soft", snapshot.metadata["water"]
   end
@@ -406,9 +408,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "td[data-column='duration'], turbo-stream[action='append']", count: 0
     patch(profile_journal_columns_url, params: {columns: ["user_id"]}, headers:)
     assert_redirected_to shots_path(format: :html)
-    assert_equal "Unknown columns", flash[:alert]
-    assert_equal %w[bean_type start_time], @user.reload.journal_columns
-    patch(profile_journal_columns_url, params: {reset: "1"}, headers:)
+    assert_equal [], @user.reload.journal_columns
+    patch(profile_journal_columns_url, params: {columns: Journal.new(@user).default_columns}, headers:)
     assert_response :see_other
     assert_redirected_to shots_path(format: :html)
     assert_nil @user.reload[:journal_columns]
@@ -450,7 +451,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "column redirects preserve only permitted submitted filters on save reset and error" do
     query = {q: "Gesha", coffee_bag: SecureRandom.uuid, tags: "daily"}
-    [{columns: ["duration"]}, {reset: "1"}, {columns: ["destroy!"]}].each do |settings|
+    [{columns: ["duration"]}, {columns: Journal.new(@user).default_columns}, {columns: "invalid"}].each do |settings|
       patch profile_journal_columns_url, params: settings.merge(query: query.merge(format: "json", before: "old", user_id: SecureRandom.uuid))
       assert_response :see_other
       assert_redirected_to shots_path(**query, format: :html)
@@ -472,19 +473,6 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "18", journal.value(@shot, "bean_weight")
   end
 
-  test "bulk update locks sorted shot rows before writes without user first lock" do
-    other = create(:shot, user: @user)
-    queries = []
-    capture = ->(*args) { queries << args.last[:sql] }
-    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-      Journal.new(@user).update([other.id, @shot.id], field: "bean_weight", value: "20")
-    end
-    locks = queries.grep(/FOR UPDATE/)
-    assert_equal 1, locks.size
-    assert_match(/FROM "shots".*ORDER BY "shots"\."id" ASC.*FOR UPDATE/, locks.first)
-    assert_operator queries.index(locks.first), :<, queries.index { it.start_with?('UPDATE "shots"') }
-  end
-
   test "guests cannot read or write journal" do
     delete session_url
     get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
@@ -503,7 +491,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "list loads full shot columns without telemetry or unused associations" do
     journal = Journal.new(@user)
-    shots, = journal.page(journal.scope, {})
+    shots = journal.for_list.to_a
     shot = shots.first
     assert shot.has_attribute?(:barista)
     assert shot.has_attribute?(:espresso_notes)
@@ -519,7 +507,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     @user.update!(shot_metadata_fields: %w[basket water])
     journal = Journal.new(@user)
     @user.update!(journal_columns: journal.columns.keys)
-    shots, = journal.page(journal.scope, {})
+    shots = journal.for_list.to_a
     helper = Object.new.extend(JournalHelper)
     helper.define_singleton_method(:journal) { journal }
     queries = []
@@ -540,15 +528,18 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     @shot.update!(start_time: timestamp)
     create_list(:shot, Journal::PAGE_SIZE + 1, user: @user, start_time: timestamp)
     journal = Journal.new(@user)
-    first, cursor = journal.page(journal.scope, {})
+    first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time)
     assert_equal Journal::PAGE_SIZE, first.size
     assert_equal timestamp.utc.iso8601(6), cursor.fetch(:before)
     assert_equal first.last.id, cursor.fetch(:before_id)
-    second, cursor = journal.page(journal.scope, cursor)
+    second, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, **cursor)
     assert_nil cursor
     assert_empty(first.map(&:id) & second.map(&:id))
     assert_equal @user.shots.count, (first + second).size
-    assert_raises(Journal::InvalidChange) { journal.page(journal.scope, before: "bad", before_id: @shot.id) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, before: "bad", before_id: @shot.id) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, before: timestamp.iso8601, before_id: "bad") }
+    legacy, = paginate_with_cursor(journal.for_list, by: :start_time, before: timestamp.iso8601)
+    assert_equal 20, legacy.size
   end
 
   test "search combines coffee and tags without matching brew timestamps" do

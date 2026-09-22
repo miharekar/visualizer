@@ -32,17 +32,18 @@ Create a user at `/registrations/new` (Turnstile verification only runs in produ
 ### Testing
 
 ```bash
-bin/rails test                          # full Minitest suite (parallelized)
+PARALLEL_WORKERS=10 bin/rails test      # full Minitest suite (10 workers)
 node --test test/javascript/*_test.mjs   # native JavaScript tests (Node 22.15+)
 bin/rails test test/models/shot_test.rb # single file
 bin/rails test test/models/shot_test.rb:123 # single test by line number
 bin/rails test test/models/shot_test.rb -n /test_name/ # single test by name
 bin/ci                                  # CI pipeline (style, security, tests, seeds)
 env RAILS_ENV=test bin/rails db:seed:replant # must pass in CI
-PARALLEL_WORKERS=1 bin/rails test       # use if parallelization causes issues
+PARALLEL_WORKERS=10 bin/rails test      # cap workers to avoid exhausting Postgres connections
 ```
 
 `bin/ci` runs: bin/setup --skip-server, RuboCop, bundler-audit, importmap audit, Brakeman, Gitleaks audit, Rails tests, and `db:seed:replant`.
+Use `PARALLEL_WORKERS=10` for Rails test runs and `bin/ci`; default CPU-count parallelism can exhaust local Postgres connections.
 Parser fixtures for upload/tests live in `test/files/`.
 
 ### Database

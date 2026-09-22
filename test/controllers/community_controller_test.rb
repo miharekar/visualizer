@@ -47,7 +47,8 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     assert_equal "turbo_stream", query["format"]
     assert_equal user.id, query["user_id"]
     assert_equal "Search", query["commit"]
-    assert_equal shots.last.start_time.to_i, Time.iso8601(query["before"]).to_i
+    assert_equal shots[-2].start_time.to_i, Time.iso8601(query["before"]).to_i
+    assert_equal shots[-2].id, query["before_id"]
 
     get frames.first["src"], headers: {"Turbo-Frame" => "cursor"}
 

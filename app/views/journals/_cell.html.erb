@@ -7,7 +7,7 @@
     <%= link_to edit_shot_path(shot), title: "Edit shot", class: "rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_frame: "_top"} do %>
       <%= inline_svg_tag "pencil.svg", class: "size-4" %>
     <% end %>
-    <%= button_to shot_path(shot, journal: 1, journal_search_id: @journal_search_id, query: params.slice(:coffee_bag, :tags).permit(:coffee_bag, :tags).merge(q: params[:q].to_s)), method: :delete, title: "Delete shot", form: {data: {turbo_stream: true}}, class: "rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
+    <%= button_to shot_path(shot, journal: 1), method: :delete, title: "Delete shot", form: {data: {turbo_stream: true}}, class: "rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
       <%= inline_svg_tag "trash.svg", class: "size-4" %>
     <% end %>
   </div>

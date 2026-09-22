@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :shot do
     user
-    sha { SecureRandom.hex(20) }
+    sha { "manual:#{SecureRandom.uuid}" }
     start_time { Time.current }
     public { false }
 
@@ -11,6 +11,7 @@ FactoryBot.define do
     end
 
     trait :with_information do
+      sha { SecureRandom.hex(20) }
       information factory: :shot_information
     end
   end

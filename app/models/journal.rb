@@ -69,11 +69,10 @@ class Journal
   end
 
   def save_columns(settings)
-    return user.update!(journal_columns: nil) if settings.nil?
+    raise InvalidChange, "Invalid columns" unless settings.is_a?(Array) && settings.all? { it.is_a?(String) }
 
-    raise InvalidChange, "Unknown columns" unless settings.is_a?(Array) && (settings - columns.keys).empty?
-
-    user.update!(journal_columns: settings.uniq)
+    settings &= columns.keys
+    user.update!(journal_columns: settings == default_columns ? nil : settings)
   end
 
   def search(params)
@@ -97,36 +96,16 @@ class Journal
     shots
   end
 
-  def page(shots, params)
-    if params[:before].present?
-      raise InvalidChange, "Invalid journal cursor" unless params[:before].is_a?(String) && params[:before_id].is_a?(String) && params[:before_id].match?(UUID_PATTERN)
-
-      shots = shots.where("(start_time, shots.id) < (?, ?)", Time.iso8601(params[:before]), params[:before_id])
-    end
-    records = for_list(shots).reorder(start_time: :desc, id: :desc).limit(PAGE_SIZE + 1).to_a
-    if records.size > PAGE_SIZE
-      records.pop
-      last = records.last
-      cursor = {before: last.start_time.utc.iso8601(6), before_id: last.id}
-    else
-      cursor = nil
-    end
-    [records, cursor]
-  rescue ArgumentError
-    raise InvalidChange, "Invalid journal cursor"
-  end
-
   def for_list(shots = scope, fields: visible_columns)
-    shots = shots.with_information_presence
     shots = shots.with_attached_image if fields.include?("image")
     shots = shots.includes(:tags) if fields.include?("tag_list")
     shots
   end
 
-  def shots(ids, fields: visible_columns, lock: false)
+  def shots(ids, fields: visible_columns)
     raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(UUID_PATTERN) }
 
-    shots = for_list(scope.where(id: ids).reorder(:id).lock(lock), fields: fields.uniq)
+    shots = for_list(scope.where(id: ids).reorder(:id), fields: fields.uniq)
     (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
     shots = shots.to_a
     raise ActiveRecord::RecordNotFound unless shots.size == ids.size
@@ -153,13 +132,12 @@ class Journal
     end
   end
 
-  def update(ids, field:, value:)
+  def update(records, field:, value:)
     raise InvalidChange, "Some fields are not editable" unless editable_columns.key?(field)
     raise InvalidChange, "Invalid field value" unless value.nil? || value.is_a?(String)
 
+    # ponytail: overlapping metadata/tag writes may lose edits; add row locks if needed.
     Shot.transaction do
-      records = shots(ids, fields: [field], lock: true)
-      yield records if block_given?
       if field == "coffee"
         raise InvalidChange, "Choose a coffee bag" if value.blank?
 

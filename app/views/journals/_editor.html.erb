@@ -15,7 +15,7 @@
             <% end %>
             <% if field == "coffee" %>
               <%= label_tag "journal-coffee-bag", "Coffee bag", class: "standard-label" %>
-              <%= render "shared/combobox", input_name: "coffee_bag", input_id: "journal-coffee-bag", hidden_input_name: "attributes[coffee_bag_id]", selected: @coffee_bags.find { it.id == attributes["coffee_bag_id"] }, collection: @coffee_bags, name_method: :full_display_name, preserve_order: true %>
+              <%= render "shared/combobox", input_name: "_coffee_bag", input_id: "journal-coffee-bag", hidden_input_name: "value", selected: @coffee_bags.find { it.id == value }, collection: @coffee_bags, name_method: :full_display_name, preserve_order: true %>
             <% elsif Journal::NOTES.include?(field) %>
               <%= f.label :value, journal.columns[field], for: "journal-editor-value", class: "standard-label" %>
               <%= rich_text_area_tag :value, value, id: "journal-editor-value", class: "mt-2" %>

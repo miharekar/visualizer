@@ -9,5 +9,5 @@
   <div id="updates" class="flex flex-col gap-y-8 md:gap-y-20">
     <%= render @updates %>
   </div>
-  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(before: @cursor, format: :turbo_stream) } %>
+  <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: updates_path(**(@cursor || {}), format: :turbo_stream) } %>
 </div>

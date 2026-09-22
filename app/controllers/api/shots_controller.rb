@@ -69,7 +69,6 @@ module Api
 
       saved = false
       Shot.transaction(requires_new: true) do
-        @shot.lock!
         saved = @shot.update(update_shot_params)
         raise ActiveRecord::Rollback unless saved
       end

@@ -340,15 +340,10 @@ module Api
       assert_equal user.id, shot.user_id
     end
 
-    test "upload checks daily quota without locking user and rejects uploads at limit" do
-      queries = []
-      capture = ->(*args) { queries << args.last[:sql] }
+    test "upload rejects new shots at daily limit but accepts existing shots" do
       file_content = JSON.parse(Rails.root.join("test/files/beanconqueror.json").read)
-      ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-        post upload_api_shots_url, headers: auth_headers(user), params: file_content, as: :json
-      end
+      post upload_api_shots_url, headers: auth_headers(user), params: file_content, as: :json
       assert_response :success
-      assert_empty queries.grep(/FOR UPDATE/)
       create_list(:shot, Shot::DAILY_LIMIT - user.shots.count, user:)
       assert_no_difference "Shot.count" do
         post upload_api_shots_url, headers: auth_headers(user), params: {file: fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")}
@@ -356,14 +351,10 @@ module Api
       assert_response :unprocessable_content
       assert_includes response.parsed_body["error"], "daily limit of 30 shots"
 
-      queries.clear
       assert_no_difference "Shot.count" do
-        ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-          post upload_api_shots_url, headers: auth_headers(user), params: file_content, as: :json
-        end
+        post upload_api_shots_url, headers: auth_headers(user), params: file_content, as: :json
       end
       assert_response :success
-      assert_empty queries.grep(/FROM "users".*FOR UPDATE/)
     end
 
     test "upload returns error when no file content is provided" do
@@ -451,21 +442,14 @@ module Api
       assert_empty shot.reload.tags
     end
 
-    test "failed update rolls back eager tags and locks shot without user lock" do
+    test "failed update rolls back eager tags" do
       shot = create(:shot, user: premium_user, tag_list: "original")
-      queries = []
-      capture = ->(*args) { queries << args.last[:sql] }
       assert_no_difference ["Tag.count", "ShotTag.count"] do
-        ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-          patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {tag_list: ["replacement"], acidity: 99}}, as: :json
-        end
+        patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {tag_list: ["replacement"], acidity: 99}}, as: :json
       end
       assert_response :unprocessable_content
       assert_equal "original", shot.reload.tag_list
       assert_nil shot.acidity
-      locks = queries.grep(/FOR UPDATE/)
-      assert_equal 1, locks.size
-      assert_match(/FROM "shots"/, locks.first)
     end
 
     test "update rejects non-owner" do

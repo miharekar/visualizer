@@ -2,12 +2,7 @@
 <% content_for(:head) { tag.meta(name: "turbo-cache-control", content: "no-cache") } %>
 <div class="flex w-full min-w-0 flex-col text-neutral-900 dark:text-neutral-100" data-controller="journal-columns journal-navigation panel upload-drop modal" data-upload-drop-upload-outlet="#shot-upload-form">
   <%= render "shared/modal" %>
-  <div data-upload-drop-target="overlay" class="bg-oxford-blue-500/50 fixed inset-0 z-99 hidden items-center justify-center backdrop-blur-sm">
-    <div class="text-center">
-      <h3 class="mb-2 text-2xl font-medium text-white">Drop anywhere to upload</h3>
-      <p class="text-white/90">Release your files to start the upload</p>
-    </div>
-  </div>
+  <%= render "shots/upload_overlay" %>
   <div class="mx-auto w-full max-w-7xl sm:px-6 lg:px-8">
     <%= render "shots/index_header" %>
     <%= render "shots/upload_form", show_form: false %>

@@ -29,7 +29,7 @@
         <%= render @shots %>
       </div>
     </div>
-    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: person_path(@user.slug, before: @cursor, format: :turbo_stream) } %>
+    <%= render partial: "shared/cursor_loader", locals: { cursor: @cursor, path: person_path(@user.slug, **(@cursor || {}), format: :turbo_stream) } %>
   <% else %>
     <div class="my-8 px-6 text-center text-neutral-500 sm:px-8">
       <% if @premium_count.to_i > 0 %>

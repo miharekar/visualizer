@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["panel", "form", "list", "reset", "fields", "error"]
+  static targets = ["panel", "form", "list", "fields", "error"]
 
   connect() {
     this.snapshot = this.formTarget.innerHTML
@@ -33,7 +33,6 @@ export default class extends Controller {
     for (const field of JSON.parse(this.panelTarget.dataset.defaults)) {
       visible.append(items.find(item => item.dataset.column === field))
     }
-    this.resetTarget.disabled = false
   }
 
   serialize() {
@@ -78,7 +77,6 @@ export default class extends Controller {
       return event.clientY < bounds.top || (event.clientY <= bounds.bottom && event.clientX < bounds.left + bounds.width / 2)
     })
     if (this.dragged.parentElement !== list || this.dragged.nextElementSibling !== (next || null)) {
-      this.resetTarget.disabled = true
       if (next) next.before(this.dragged)
       else list.append(this.dragged)
     }

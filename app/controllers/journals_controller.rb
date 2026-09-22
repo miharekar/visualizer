@@ -14,7 +14,6 @@ class JournalsController < ApplicationController
   def edit
     @editor = true
     @shots = []
-    @attributes = {}
     if params[:ids].present?
       @field = params[:field]
       raise Journal::InvalidChange, "Some fields are not editable" unless journal.editable_columns.key?(@field)
@@ -23,21 +22,23 @@ class JournalsController < ApplicationController
       @shots = journal.shots(params[:ids], fields: [@field])
       @value = if @field == "tag_list"
         @shots.map { it.tags.map(&:name) }.reduce(:&).sort.join(",")
+      elsif @field == "coffee" && @shots.one?
+        @shots.first.coffee_bag_id
       elsif @shots.one?
         journal.value(@shots.first, @field)
       end
-      @attributes = @shots.one? ? @shots.first.attributes.slice("coffee_bag_id") : {}
     end
   end
 
   def update
     @editor = ActiveModel::Type::Boolean.new.cast(params[:editor])
     @value = params[:value]
-    @attributes = params.permit(attributes: [:coffee_bag_id]).to_h.fetch("attributes", {})
     @field = params[:field]
     load_coffee_bags
-    value = @field == "coffee" ? @attributes["coffee_bag_id"] : @value
-    @shots = journal.update(params[:ids], field: @field, value:) { @shots = it }
+    raise Journal::InvalidChange, "Some fields are not editable" unless journal.editable_columns.key?(@field)
+
+    @shots = journal.shots(params[:ids], fields: [@field])
+    journal.update(@shots, field: @field, value: @value)
     @fields = [@field]
     @fields << "ratio" if %w[bean_weight drink_weight].include?(@field)
     @fields |= Journal::BAG_FIELDS & journal.columns.keys if @field == "coffee"

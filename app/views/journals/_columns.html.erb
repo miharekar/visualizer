@@ -4,7 +4,6 @@
       <% %w[q coffee_bag tags].each do |filter| %>
         <%= hidden_field_tag "query[#{filter}]", params[filter], data: {journal_filter: filter} %>
       <% end %>
-      <%= hidden_field_tag "reset", "1", disabled: true, data: {journal_columns_target: "reset"} %>
       <div class="space-y-3">
         <% ["Visible", "Hidden"].each do |group| %>
           <section class="min-w-0">

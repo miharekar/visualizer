@@ -185,25 +185,6 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "9", imported.information.brewdata.dig("settings", "pressure")
   end
 
-  test "existing form edits lock shot while creates do not lock user" do
-    queries = []
-    capture = ->(*args) { queries << args.last[:sql] }
-    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-      patch shot_url(@shot), params: {shot: {profile_title: "Locked edit"}}
-    end
-    assert_response :see_other
-    locks = queries.grep(/FOR UPDATE/)
-    assert_equal 1, locks.size
-    assert_match(/FROM "shots"/, locks.first)
-
-    queries.clear
-    ActiveSupport::Notifications.subscribed(capture, "sql.active_record") do
-      post shots_url, params: {shot: {profile_title: "Manual create"}}
-    end
-    assert_response :see_other
-    assert_empty queries.grep(/FOR UPDATE/)
-  end
-
   test "manual create enforces daily limit by creation date" do
     @user.update!(premium_expires_at: nil)
     @shot.update!(start_time: 2.years.ago)
@@ -225,7 +206,10 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
 
     foreign_bag = create(:coffee_bag)
     patch shot_url(@shot), params: {shot: {coffee_bag_id: foreign_bag.id}}
-    assert_response :not_found
+    assert_response :unprocessable_content
+    assert_equal bag, @shot.reload.coffee_bag
+    patch shot_url(@shot), params: {shot: {coffee_bag_id: SecureRandom.uuid}}
+    assert_response :unprocessable_content
     assert_equal bag, @shot.reload.coffee_bag
   end
 
@@ -240,13 +224,11 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test "journal delete returns direct scoped streams and ordinary delete removes card" do
-    delete shot_url(@shot), params: {journal: true, journal_search_id: "instance", query: {q: ""}}, as: :turbo_stream
+  test "journal delete removes row and ordinary delete removes card" do
+    delete shot_url(@shot), params: {journal: true}, as: :turbo_stream
     assert_response :success
     assert_select "turbo-stream[action='remove'][target='#{dom_id(@shot, :journal)}']"
-    assert_select "turbo-stream[action='update'][target='journal-count-instance'] template", text: "No Shots"
-    assert_select "turbo-stream[target='journal-count']", count: 0
-    assert_select "turbo-stream[action='update'][target='journal-empty-instance'] template", text: "No matching shots."
+    assert_not Shot.exists?(@shot.id)
 
     shot = create(:shot, user: @user)
     delete shot_url(shot), as: :turbo_stream
