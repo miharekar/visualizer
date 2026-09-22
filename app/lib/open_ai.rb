@@ -1,7 +1,7 @@
 class OpenAi
   API_ENDPOINT = "https://api.openai.com/v1/responses".freeze
   API_KEY = Rails.application.credentials.dig(:open_ai, :api_key)
-  MODEL = "gpt-5.6-luna".freeze
+  MODEL = "gpt-6-luna".freeze
   SYSTEM_PROMPT = Rails.root.join("app/prompts/coffee_bag_scraper.txt").read.freeze
 
   def message(content, attempt: 1)
