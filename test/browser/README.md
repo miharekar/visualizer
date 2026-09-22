@@ -49,7 +49,7 @@ native Turbo pending-cell replacement, overlapping saves, stale pagination,
 server 422 values/focus, Enter/change/blur duplication, search deferral,
 serialized latest-query searches with inert results, failed-value discard
 confirmation for search and columns Apply, coffee/tag popups, pending-dialog
-dismissal and transport retry, native column dragging without upload-overlay interference, pending columns
+dismissal and transport retry, mouse and emulated-touch column dragging without upload-overlay interference, open-panel button styling, pending columns
 Apply dismissal/filter retention, numeric bounds, notes search, manual creation,
 confirmation Cancel via native Enter, Enter-to-confirm without duplicate deletion, and selection toolbar geometry at
 desktop/390px widths. Delayed-body checks hold
@@ -58,4 +58,4 @@ or replacing controllers. Columns Apply holds its request before delivery becaus
 that endpoint redirects to HTML rather than returning a Turbo stream.
 Explicit waits exceed search debounce to assert no
 premature request; other waits observe events or DOM state. Narrow viewport check
-is Chromium layout coverage, not real mobile Safari/touch coverage.
+includes Chromium touch emulation, not real mobile Safari coverage.

@@ -57,19 +57,35 @@ export default class extends Controller {
   }
 
   start(event) {
-    if (this.saving) return event.preventDefault()
+    if (this.saving || this.pointerId != null) return event.preventDefault()
     this.dragged = event.currentTarget.closest("[data-column]")
     event.dataTransfer.effectAllowed = "move"
     event.dataTransfer.setData("text/plain", this.dragged.dataset.column)
   }
 
+  touchStart(event) {
+    if (event.pointerType === "mouse" || !event.isPrimary || this.saving) return
+    this.dragged = event.currentTarget.closest("[data-column]")
+    this.dragged.classList.add("opacity-50")
+    this.pointerId = event.pointerId
+    this.panelTarget.setPointerCapture(event.pointerId)
+  }
+
+  touchMove(event) {
+    if (event.pointerId === this.pointerId) this.drag(event)
+  }
+
+  touchEnd(event) {
+    if (event.pointerId === this.pointerId) this.finish()
+  }
+
   drag(event) {
     if (!this.dragged) return
-    const element = event.target
+    const element = this.pointerId == null ? event.target : document.elementFromPoint(event.clientX, event.clientY)
     const list = element?.closest('[data-journal-columns-target="list"]')
     if (!this.listTargets.includes(list)) return
     event.preventDefault()
-    event.dataTransfer.dropEffect = "move"
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "move"
     if (element.closest("[data-column]") === this.dragged) return
     const next = [...list.children].find(item => {
       if (item === this.dragged) return false
@@ -89,6 +105,11 @@ export default class extends Controller {
   }
 
   finish() {
+    if (this.pointerId != null) {
+      if (this.panelTarget.hasPointerCapture(this.pointerId)) this.panelTarget.releasePointerCapture(this.pointerId)
+      this.pointerId = null
+    }
+    this.dragged?.classList.remove("opacity-50")
     this.dragged = null
   }
 }

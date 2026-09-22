@@ -1,4 +1,4 @@
-<div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= journal.default_columns.to_json %>" data-action="dragover->journal-columns#drag drop->journal-columns#drop dragend->journal-columns#finish">
+<div id="journal-columns-panel" class="mx-4 mt-4 hidden max-h-[50dvh] overflow-y-auto sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= journal.default_columns.to_json %>" data-action="dragover->journal-columns#drag drop->journal-columns#drop dragend->journal-columns#finish pointermove->journal-columns#touchMove pointerup->journal-columns#touchEnd pointercancel->journal-columns#touchEnd lostpointercapture->journal-columns#touchEnd">
   <%= form_with url: profile_journal_columns_path, method: :patch, data: {journal_columns_target: "form", action: "submit->journal-navigation#apply submit->journal-columns#serialize turbo:submit-start->journal-columns#savingStarted turbo:submit-end->journal-columns#savingEnded turbo:submit-end->journal-navigation#complete"} do |f| %>
     <fieldset data-journal-columns-target="fields">
       <% %w[q coffee_bag tags].each do |filter| %>
@@ -12,7 +12,7 @@
               <% @columns.select { @visible_columns.include?(it) == (group == "Visible") }.each do |field| %>
                 <div data-column="<%= field %>" class="flex max-w-full items-center rounded border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
                   <%= hidden_field_tag "columns[]", field, id: nil, disabled: group == "Hidden" %>
-                  <div draggable="true" class="flex cursor-grab items-center gap-1 rounded p-2 text-left text-sm select-none active:cursor-grabbing [&_*]:pointer-events-none" data-action="dragstart->journal-columns#start">
+                  <div draggable="true" class="flex cursor-grab touch-none items-center gap-1 rounded p-2 text-left text-sm select-none active:cursor-grabbing [&_*]:pointer-events-none" data-action="dragstart->journal-columns#start pointerdown->journal-columns#touchStart">
                     <svg class="size-4 shrink-0 text-neutral-400" viewBox="0 0 16 16" fill="currentColor">
                       <circle cx="5" cy="3" r="1.5" />
                       <circle cx="11" cy="3" r="1.5" />

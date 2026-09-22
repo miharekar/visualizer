@@ -29,6 +29,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     browser = await chromium.launch()
     const page = await browser.newPage({
       baseURL,
+      hasTouch: true,
       viewport: { width: 1440, height: 1000 }
     })
     page.setDefaultTimeout(8000)
@@ -370,6 +371,60 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await panel.getByRole("button", { name: "Reset to defaults", exact: true }).click()
       await panel.getByRole("button", { name: "Apply", exact: true }).click()
       await duration.first().waitFor()
+    })
+
+    await check("touch reorders columns within and between groups and Apply persists", async () => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      const client = await page.context().newCDPSession(page)
+      const panel = page.locator("#journal-columns-panel")
+      const open = () => page.getByRole("button", { name: "Columns", exact: true }).tap()
+      const drag = async (source, destination) => {
+        const from = await source.boundingBox()
+        const to = await destination.boundingBox()
+        await client.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: from.x + from.width / 2, y: from.y + from.height / 2 }] })
+        await client.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: to.x + 2, y: to.y + 2 }] })
+        // Chromium needs a settled touchMove before release, otherwise it suppresses the next tap.
+        await page.waitForTimeout(100)
+        await client.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] })
+      }
+      try {
+        await open()
+        const duration = panel.locator('[data-column="duration"] [draggable="true"]')
+        const visible = panel.locator('[data-hidden="false"]')
+        const hidden = panel.locator('[data-hidden="true"]')
+        await drag(duration, visible)
+        assert.equal(await visible.locator("[data-column]").first().getAttribute("data-column"), "duration")
+        await drag(duration, hidden)
+        assert.equal(await hidden.locator('[data-column="duration"]').count(), 1)
+        assert.equal(await page.locator('[data-upload-drop-target="overlay"]').isVisible(), false)
+        await panel.getByRole("button", { name: "Apply", exact: true }).tap()
+        await panel.waitFor({ state: "hidden" })
+        await page.reload()
+        assert.equal(await page.locator('td[data-column="duration"]').count(), 0)
+        await open()
+        await panel.getByRole("button", { name: "Reset to defaults", exact: true }).tap()
+        await panel.getByRole("button", { name: "Apply", exact: true }).tap()
+        await page.locator('td[data-column="duration"]').first().waitFor()
+      } finally {
+        await client.detach()
+        await page.setViewportSize({ width: 1440, height: 1000 })
+      }
+    })
+
+    await check("open panels keep their buttons depressed until closed", async () => {
+      for (const name of ["Columns", "Upload"]) {
+        const button = page.getByRole("button", { name, exact: true })
+        const background = () => button.evaluate(el => getComputedStyle(el).backgroundColor)
+        await page.mouse.move(0, 0)
+        const closed = await background()
+        await button.click()
+        await page.mouse.move(0, 0)
+        assert.notEqual(await background(), closed, `${name} button has no open state`)
+        if (name === "Columns") await page.locator("#journal-columns-panel").getByRole("button", { name: "Cancel", exact: true }).click()
+        else await button.click()
+        await page.mouse.move(0, 0)
+        assert.equal(await background(), closed, `${name} button remains depressed after closing`)
+      }
     })
 
     await check("pending columns Apply blocks Cancel and retains search", async () => {
