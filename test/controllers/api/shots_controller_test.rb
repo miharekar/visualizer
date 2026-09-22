@@ -13,6 +13,23 @@ module Api
       @premium_user = FactoryBot.create(:user, :premium)
     end
 
+    test "coffee assignment rejects another owner's bag atomically" do
+      premium_user.update!(coffee_management_enabled: true)
+      shot = create(:shot, user: premium_user, tag_list: "original")
+      other_bag = create(:coffee_bag)
+
+      patch api_shot_url(shot), params: {shot: {coffee_bag_id: other_bag.id, tag_list: "changed"}}, headers: auth_headers(premium_user), as: :json
+
+      assert_response :unprocessable_content
+      assert_nil shot.reload.coffee_bag_id
+      assert_equal "original", shot.tag_list
+
+      own_bag = create(:coffee_bag, roaster: create(:roaster, user: premium_user))
+      patch api_shot_url(shot), params: {shot: {coffee_bag_id: own_bag.id}}, headers: auth_headers(premium_user), as: :json
+      assert_response :success
+      assert_equal own_bag.id, shot.reload.coffee_bag_id
+    end
+
     test "index returns correct data for authenticated user" do
       FactoryBot.create_list(:shot, 5, user:, public: true)
 

@@ -28,6 +28,8 @@ class Journal
   end
 
   def columns
+    return @columns if @columns
+
     labels = LABELS.dup
     if user.coffee_management_enabled?
       labels.except!("bean_brand", "bean_type")
@@ -40,12 +42,11 @@ class Journal
       Shot::TASTING_ASSESSMENT_ATTRIBUTES.each { labels[it.to_s] = it.to_s.humanize }
       user.shot_metadata_fields.each { labels["metadata:#{it}"] = it.humanize }
     end
-    labels
+    @columns = labels
   end
 
   def ordered_columns
-    saved = Array(user.journal_columns["order"]) & columns.keys
-    saved + (default_columns - saved) + (columns.keys - saved - default_columns)
+    visible_columns + (columns.keys - visible_columns)
   end
 
   def default_columns
@@ -53,8 +54,10 @@ class Journal
   end
 
   def editable_columns
+    return @editable_columns if @editable_columns
+
     editable = columns.except("actions", "ratio", "image", "start_time")
-    user.coffee_management_enabled? ? editable.except(*BAG_FIELDS) : editable
+    @editable_columns = user.coffee_management_enabled? ? editable.except(*BAG_FIELDS) : editable
   end
 
   def dropdown_values(field)
@@ -62,22 +65,15 @@ class Journal
   end
 
   def visible_columns
-    hidden = Array(user.journal_columns["hidden"])
-    if user.journal_columns.empty?
-      default_columns
-    else
-      ordered_columns - hidden
-    end
+    user.journal_columns.nil? ? default_columns : user.journal_columns & columns.keys
   end
 
   def save_columns(settings)
     return user.update!(journal_columns: nil) if settings.nil?
 
-    order = settings["order"]
-    hidden = settings["hidden"]
-    raise InvalidChange, "Unknown columns" unless order.is_a?(Array) && hidden.is_a?(Array) && order.all? { it.is_a?(String) } && hidden.all? { it.is_a?(String) } && (order + hidden - columns.keys).empty?
+    raise InvalidChange, "Unknown columns" unless settings.is_a?(Array) && (settings - columns.keys).empty?
 
-    user.update!(journal_columns: {order: order.uniq, hidden: hidden.uniq})
+    user.update!(journal_columns: settings.uniq)
   end
 
   def search(params)
@@ -167,7 +163,7 @@ class Journal
       if field == "coffee"
         raise InvalidChange, "Choose a coffee bag" if value.blank?
 
-        user.coffee_bags.find(value)
+        value = user.coffee_bags.includes(:roaster).find(value)
       end
       records.each do |shot|
         raise InvalidChange, "Some fields are not editable" if field == "duration" && !shot.manual?
@@ -184,7 +180,7 @@ class Journal
 
   def attributes_for(shot, field, value)
     if field == "coffee"
-      {coffee_bag_id: value}
+      {coffee_bag: value}
     elsif field.start_with?("metadata:")
       {metadata: shot.metadata.merge(field.delete_prefix("metadata:") => value)}
     elsif %w[bean_brand bean_type].include?(field)

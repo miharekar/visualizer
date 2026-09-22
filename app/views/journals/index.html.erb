@@ -29,7 +29,7 @@
       <%= turbo_stream.update "journal-count" do %><span id="journal-count-<%= @journal_search_id %>"><%= @shots_count.zero? ? "No Shots" : pluralize(@shots_count, "Shot") %></span><% end %>
       <%= render "journals/toolbar" %>
       <div class="relative max-h-[70dvh] min-h-64 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
-        <table class="w-max min-w-full text-sm" data-turbo-prefetch="false">
+        <table class="w-max text-sm" data-turbo-prefetch="false">
           <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
             <tr>
               <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800">

@@ -37,8 +37,8 @@ export default class extends Controller {
   }
 
   serialize() {
-    for (const input of this.formTarget.querySelectorAll('[name="hidden[]"]')) {
-      input.disabled = input.closest('[data-journal-columns-target="list"]').dataset.hidden !== "true"
+    for (const input of this.formTarget.querySelectorAll('[name="columns[]"]')) {
+      input.disabled = input.closest('[data-journal-columns-target="list"]').dataset.hidden === "true"
     }
   }
 
@@ -58,31 +58,19 @@ export default class extends Controller {
   }
 
   start(event) {
-    if (this.saving || event.button !== 0 || !event.isPrimary) return
-    event.preventDefault()
-    this.finish()
+    if (this.saving) return event.preventDefault()
     this.dragged = event.currentTarget.closest("[data-column]")
-    this.pointerId = event.pointerId
-    const bounds = this.dragged.getBoundingClientRect()
-    this.offset = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }
-    this.preview = this.dragged.cloneNode(true)
-    this.preview.removeAttribute("data-column")
-    this.preview.inert = true
-    this.preview.classList.add("fixed", "top-0", "left-0", "z-50", "pointer-events-none", "shadow-lg")
-    Object.assign(this.preview.style, { width: `${bounds.width}px`, height: `${bounds.height}px` })
-    document.body.append(this.preview)
-    this.movePreview(event)
-    this.dragged.classList.add("opacity-50")
-    this.dragPanel = this.panelTarget
-    this.dragPanel.setPointerCapture(event.pointerId)
+    event.dataTransfer.effectAllowed = "move"
+    event.dataTransfer.setData("text/plain", this.dragged.dataset.column)
   }
 
   drag(event) {
-    if (!this.dragged || event.pointerId !== this.pointerId) return
-    this.movePreview(event)
-    const element = document.elementFromPoint(event.clientX, event.clientY)
+    if (!this.dragged) return
+    const element = event.target
     const list = element?.closest('[data-journal-columns-target="list"]')
     if (!this.listTargets.includes(list)) return
+    event.preventDefault()
+    event.dataTransfer.dropEffect = "move"
     if (element.closest("[data-column]") === this.dragged) return
     const next = [...list.children].find(item => {
       if (item === this.dragged) return false
@@ -96,18 +84,13 @@ export default class extends Controller {
     }
   }
 
-  movePreview(event) {
-    this.preview.style.transform = `translate(${event.clientX - this.offset.x}px, ${event.clientY - this.offset.y}px)`
+  drop(event) {
+    if (!this.dragged) return
+    event.preventDefault()
+    this.finish()
   }
 
-  finish(event) {
-    if (!this.dragged || (event && event.pointerId !== this.pointerId)) return
-    this.dragged.classList.remove("opacity-50")
-    this.preview.remove()
-    this.preview = null
+  finish() {
     this.dragged = null
-    if (this.dragPanel.hasPointerCapture(this.pointerId)) this.dragPanel.releasePointerCapture(this.pointerId)
-    this.dragPanel = null
-    this.pointerId = null
   }
 }

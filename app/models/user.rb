@@ -110,10 +110,6 @@ class User < ApplicationRecord
     super.presence || []
   end
 
-  def journal_columns
-    super.presence || {}
-  end
-
   def unsubscribed_from
     super.presence || []
   end

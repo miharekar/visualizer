@@ -3,7 +3,7 @@ class JournalColumnsController < ApplicationController
 
   def update
     query = params.permit(query: %i[q coffee_bag tags]).to_h.fetch("query", {})
-    settings = params[:reset].present? ? nil : {"order" => params.fetch(:order, []), "hidden" => params.fetch(:hidden, [])}
+    settings = params[:reset].present? ? nil : params.fetch(:columns, [])
     journal.save_columns(settings)
     redirect_to shots_path(**query, format: :html), status: :see_other
   rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error

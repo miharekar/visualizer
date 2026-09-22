@@ -4,6 +4,12 @@ export default class extends Controller {
   static targets = ["overlay"]
   static outlets = ["upload"]
 
+  initialize() {
+    this.showOverlay = this.showOverlay.bind(this)
+    this.hideOverlay = this.hideOverlay.bind(this)
+    this.handleDrop = this.handleDrop.bind(this)
+  }
+
   connect() {
     this.bindEvents()
   }
@@ -17,9 +23,9 @@ export default class extends Controller {
       document.addEventListener(eventName, this.preventDefaults, false)
     })
 
-    document.addEventListener("dragenter", this.showOverlay.bind(this))
-    this.overlayTarget.addEventListener("dragleave", this.hideOverlay.bind(this))
-    this.overlayTarget.addEventListener("drop", this.handleDrop.bind(this))
+    document.addEventListener("dragenter", this.showOverlay)
+    this.overlayTarget.addEventListener("dragleave", this.hideOverlay)
+    this.overlayTarget.addEventListener("drop", this.handleDrop)
   }
 
   unbindEvents() {
@@ -27,18 +33,19 @@ export default class extends Controller {
       document.removeEventListener(eventName, this.preventDefaults, false)
     })
 
-    document.removeEventListener("dragenter", this.showOverlay.bind(this))
-    this.overlayTarget.removeEventListener("dragleave", this.hideOverlay.bind(this))
-    this.overlayTarget.removeEventListener("drop", this.handleDrop.bind(this))
+    document.removeEventListener("dragenter", this.showOverlay)
+    this.overlayTarget.removeEventListener("dragleave", this.hideOverlay)
+    this.overlayTarget.removeEventListener("drop", this.handleDrop)
   }
 
   preventDefaults(e) {
+    if (!e.dataTransfer.types.includes("Files")) return
     e.preventDefault()
     e.stopPropagation()
   }
 
   showOverlay(e) {
-    if (e.target === this.overlayTarget) return
+    if (!e.dataTransfer.types.includes("Files") || e.target === this.overlayTarget) return
 
     this.overlayTarget.classList.remove("hidden")
     this.overlayTarget.classList.add("flex")
@@ -52,6 +59,7 @@ export default class extends Controller {
   }
 
   handleDrop(e) {
+    if (!e.dataTransfer.types.includes("Files")) return
     this.hideOverlay(e)
     this.uploadOutlet.handleDrop(e)
   }

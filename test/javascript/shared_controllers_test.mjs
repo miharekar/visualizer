@@ -69,7 +69,7 @@ test("Enter on Cancel leaves native activation alone; Escape still dismisses con
   modal.toggleableTargets = []
   modal.performClick = () => assert.fail("Cancel must never confirm deletion")
   modal.show()
-  const cancel = { tagName: "BUTTON", type: "button", click: () => modal.hide() }
+  const cancel = { closest: () => cancel, click: () => modal.hide() }
   modal.keydown({ key: "Enter", target: cancel, preventDefault: () => assert.fail("Native Cancel activation must remain available") })
   assert.equal(modal.modalShown, true)
   cancel.click()
@@ -79,6 +79,22 @@ test("Enter on Cancel leaves native activation alone; Escape still dismisses con
   escape.key = "Escape"
   modal.keydown(escape)
   assert.equal(escape.defaultPrevented, true)
+  assert.equal(modal.modalShown, false)
+})
+
+test("Enter confirms once from the original trigger; repeated keys do not confirm", () => {
+  const modal = new Modal()
+  modal.initialize()
+  modal.toggleableTargets = []
+  let clicks = 0
+  modal.currentTarget = { click: () => clicks++ }
+  modal.show()
+  const event = { key: "Enter", target: modal.currentTarget, preventDefault() {} }
+  modal.keydown({ ...event, repeat: true })
+  assert.equal(clicks, 0)
+  modal.keydown(event)
+  modal.keydown(event)
+  assert.equal(clicks, 1)
   assert.equal(modal.modalShown, false)
 })
 

@@ -49,9 +49,14 @@ export default class extends Controller {
   }
 
   keydown(event) {
-    if (!this.modalShown || event.key !== "Escape") return
+    if (!this.modalShown || event.isComposing || event.repeat) return
 
-    event.preventDefault()
-    this.hide()
+    if (event.key === "Escape") {
+      event.preventDefault()
+      this.hide()
+    } else if (event.key === "Enter" && (event.target === this.currentTarget || !event.target.closest("button, a, input, select, textarea, [contenteditable]"))) {
+      event.preventDefault()
+      this.performClick()
+    }
   }
 }

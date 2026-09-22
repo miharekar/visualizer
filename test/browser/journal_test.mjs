@@ -333,22 +333,20 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 2)
     })
 
-    await check("columns drag ghost; Apply persists; Reset and Cancel remain staged", async () => {
+    await check("native column dragging; Apply persists; Reset and Cancel remain staged", async () => {
       const panel = page.locator("#journal-columns-panel")
       const duration = page.locator('td[data-column="duration"]')
       const open = () => page.getByRole("button", { name: "Columns", exact: true }).click()
       const dragDuration = async () => {
-        const handle = panel.locator('[data-column="duration"] [data-action*="pointerdown"]')
+        const handle = panel.locator('[data-column="duration"] [draggable="true"]')
         const from = await handle.boundingBox()
         const to = await panel.locator('[data-hidden="true"]').boundingBox()
         await page.mouse.move(from.x + 10, from.y + 10)
         await page.mouse.down()
         await page.mouse.move(to.x + to.width - 4, to.y + to.height - 4, { steps: 5 })
-        const ghost = page.locator("body > [inert]")
-        assert.equal(await ghost.count(), 1)
-        assert.equal(await ghost.evaluate(el => getComputedStyle(el).pointerEvents), "none")
+        assert.equal(await page.locator('[data-upload-drop-target="overlay"]').isVisible(), false)
+        assert.equal(await handle.isVisible(), true)
         await page.mouse.up()
-        assert.equal(await ghost.count(), 0)
         assert.equal(await panel.locator('[data-hidden="true"] [data-column="duration"]').count(), 1)
       }
       await open()
@@ -496,6 +494,23 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         await toolbar.getByRole("button", { name: "Clear selection", exact: true }).click()
         await toolbar.waitFor({ state: "hidden" })
       }
+    })
+
+    await check("Enter from the delete trigger confirms exactly once", async () => {
+      await page.setViewportSize({ width: 1440, height: 1000 })
+      let deletes = 0
+      await page.route("**/shots/*", async route => {
+        const request = route.request()
+        if (request.method() === "DELETE" || request.postData()?.includes("_method=delete")) deletes++
+        await route.continue()
+      })
+      const row = page.locator("tbody tr").first()
+      await row.getByRole("button", { name: "Delete shot", exact: true }).click()
+      const rowId = await row.getAttribute("id")
+      await page.locator('[data-action="click->modal#hide"]').waitFor()
+      await page.keyboard.press("Enter")
+      await page.locator(`#${rowId}`).waitFor({ state: "detached" })
+      assert.equal(deletes, 1)
     })
   } finally {
     try {

@@ -49,9 +49,9 @@ native Turbo pending-cell replacement, overlapping saves, stale pagination,
 server 422 values/focus, Enter/change/blur duplication, search deferral,
 serialized latest-query searches with inert results, failed-value discard
 confirmation for search and columns Apply, coffee/tag popups, pending-dialog
-dismissal and transport retry, staged column preferences/drag ghost, pending columns
+dismissal and transport retry, native column dragging without upload-overlay interference, pending columns
 Apply dismissal/filter retention, numeric bounds, notes search, manual creation,
-confirmation Cancel via native Enter, and selection toolbar geometry at
+confirmation Cancel via native Enter, Enter-to-confirm without duplicate deletion, and selection toolbar geometry at
 desktop/390px widths. Delayed-body checks hold
 `Response.text()` after headers arrive, without dispatching synthetic Turbo events
 or replacing controllers. Columns Apply holds its request before delivery because

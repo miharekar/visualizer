@@ -34,6 +34,7 @@ class Shot < ApplicationRecord
   validates(*TASTING_ASSESSMENT_ATTRIBUTES, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 15}, allow_nil: true)
   validates_variable_image :image
   validate :daily_limit, on: :create
+  validate :coffee_bag_owned_by_user, if: -> { coffee_bag_id_changed? || user_id_changed? }
 
   before_validation :refresh_coffee_bag_fields, if: -> { coffee_bag_id_changed? || canonical_coffee_bag_id_changed? }
   broadcasts_to ->(shot) { [shot.user, :shots] }, inserts_by: :prepend, locals: {user_override: true}
@@ -130,6 +131,10 @@ class Shot < ApplicationRecord
   end
 
   private
+
+  def coffee_bag_owned_by_user
+    errors.add(:coffee_bag, "must belong to the shot's owner") if coffee_bag_id.present? && (coffee_bag.nil? || coffee_bag.roaster.user_id != user_id)
+  end
 
   def daily_limit
     return if user.premium?

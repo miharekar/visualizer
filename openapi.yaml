@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.17.5"
+  version: "1.17.2"
   description: |
     REST API for Visualizer.
 
@@ -228,7 +228,7 @@ paths:
     patch:
       tags: [Shots]
       summary: Update shot
-      description: Updates are atomic. Failed validation leaves the shot and its tags unchanged.
+      description: Updates are atomic. Failed validation leaves the shot and its tags unchanged. Assigned coffee bags must belong to the shot's owner; invalid assignments return 422.
       operationId: updateShot
       security:
         - OAuth2: [write]

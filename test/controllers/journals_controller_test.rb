@@ -367,7 +367,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "cells and bulk editors expose matching numeric constraints" do
     manual = create(:shot, user: @user)
-    @user.update!(journal_columns: {order: %w[duration acidity espresso_enjoyment], hidden: []})
+    @user.update!(journal_columns: %w[duration acidity espresso_enjoyment])
     get shots_url
     assert_select "tr##{dom_id(manual, :journal)}" do
       assert_select "td[data-column='duration'] input[type='number'][min='0'][step='any']"
@@ -396,18 +396,18 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "column preferences accept forms and reset with redirects" do
     headers = {"Accept" => "text/vnd.turbo-stream.html, text/html"}
-    patch(profile_journal_columns_url, params: {order: %w[bean_type start_time], hidden: %w[duration]}, headers:)
+    patch(profile_journal_columns_url, params: {columns: %w[bean_type start_time]}, headers:)
     assert_response :see_other
     assert_redirected_to shots_path(format: :html)
-    assert_equal %w[bean_type start_time], @user.reload.journal_columns["order"]
+    assert_equal %w[bean_type start_time], @user.reload.journal_columns
     follow_redirect!(headers:)
     assert_equal "text/html", response.media_type
     assert_select "turbo-frame#journal-results table", count: 1
     assert_select "td[data-column='duration'], turbo-stream[action='append']", count: 0
-    patch(profile_journal_columns_url, params: {order: ["user_id"]}, headers:)
+    patch(profile_journal_columns_url, params: {columns: ["user_id"]}, headers:)
     assert_redirected_to shots_path(format: :html)
     assert_equal "Unknown columns", flash[:alert]
-    assert_equal %w[bean_type start_time], @user.reload.journal_columns["order"]
+    assert_equal %w[bean_type start_time], @user.reload.journal_columns
     patch(profile_journal_columns_url, params: {reset: "1"}, headers:)
     assert_response :see_other
     assert_redirected_to shots_path(format: :html)
@@ -420,6 +420,17 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-stream[action='append']", count: 0
   end
 
+  test "empty visible columns stay empty and new metadata stays hidden" do
+    patch profile_journal_columns_url, params: {columns: %w[profile_title start_time profile_title]}
+    assert_equal %w[profile_title start_time], @user.reload.journal_columns
+    @user.update!(shot_metadata_fields: ["basket"])
+    assert_equal %w[profile_title start_time], Journal.new(@user).visible_columns
+
+    patch profile_journal_columns_url
+    assert_equal [], @user.reload.journal_columns
+    assert_equal [], Journal.new(@user).visible_columns
+  end
+
   test "column defaults follow coffee management mode" do
     assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
     @user.update!(coffee_management_enabled: true)
@@ -427,19 +438,19 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "saving columns replaces preferences for unavailable premium fields" do
-    @user.update!(journal_columns: {order: %w[private_notes profile_title], hidden: %w[private_notes]}, premium_expires_at: 1.day.ago)
+    @user.update!(journal_columns: %w[private_notes profile_title], premium_expires_at: 1.day.ago)
     get shots_url
     assert_response :success
     assert_select "td[data-column='private_notes']", count: 0
 
-    patch profile_journal_columns_url, params: {order: %w[profile_title start_time], hidden: %w[duration]}
+    patch profile_journal_columns_url, params: {columns: %w[profile_title start_time]}
     assert_response :see_other
-    assert_equal({"order" => %w[profile_title start_time], "hidden" => %w[duration]}, @user.reload.journal_columns)
+    assert_equal %w[profile_title start_time], @user.reload.journal_columns
   end
 
   test "column redirects preserve only permitted submitted filters on save reset and error" do
     query = {q: "Gesha", coffee_bag: SecureRandom.uuid, tags: "daily"}
-    [{order: ["duration"]}, {reset: "1"}, {order: ["destroy!"]}].each do |settings|
+    [{columns: ["duration"]}, {reset: "1"}, {columns: ["destroy!"]}].each do |settings|
       patch profile_journal_columns_url, params: settings.merge(query: query.merge(format: "json", before: "old", user_id: SecureRandom.uuid))
       assert_response :see_other
       assert_redirected_to shots_path(**query, format: :html)
@@ -507,7 +518,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   test "list previews use plain notes without loading rich text" do
     @user.update!(shot_metadata_fields: %w[basket water])
     journal = Journal.new(@user)
-    @user.update!(journal_columns: {order: journal.columns.keys, hidden: []})
+    @user.update!(journal_columns: journal.columns.keys)
     shots, = journal.page(journal.scope, {})
     helper = Object.new.extend(JournalHelper)
     helper.define_singleton_method(:journal) { journal }
