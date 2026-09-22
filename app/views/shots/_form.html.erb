@@ -10,7 +10,7 @@
         <div class="grid grid-cols-6 gap-6" data-controller="ey-calculator">
           <% if @shot.manual? %>
             <div class="col-span-6 sm:col-span-3">
-              <%= f.label :start_time, "Made at", class: "standard-label" %>
+              <%= f.label :start_time, "Brewed at", class: "standard-label" %>
               <%= f.datetime_local_field :start_time, value: @shot.start_time&.in_time_zone(Current.timezone)&.strftime("%Y-%m-%dT%H:%M:%S"), required: true, step: 1, class: "mt-1 standard-input" %>
             </div>
             <div class="col-span-6 sm:col-span-3">

@@ -6,7 +6,7 @@ class Journal
   UUID_PATTERN = /\A[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\z/i
   DEFAULT_COLUMNS = %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions].freeze
   LABELS = {
-    "start_time" => "Made at", "coffee" => "Coffee", "profile_title" => "Profile",
+    "start_time" => "Brewed at", "coffee" => "Coffee", "profile_title" => "Profile",
     "bean_weight" => "Dose (g)", "drink_weight" => "Yield (g)", "duration" => "Time (s)",
     "grinder_setting" => "Grind", "espresso_enjoyment" => "Enjoyment", "espresso_notes" => "Notes",
     "grinder_model" => "Grinder", "bean_brand" => "Roaster", "bean_type" => "Coffee bag",
