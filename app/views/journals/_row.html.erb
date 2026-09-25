@@ -3,7 +3,7 @@
     <input type="checkbox" title="Select shot from <%= shot.start_time %>" name="ids[]" value="<%= shot.id %>" form="journal-bulk-form" data-action="journal-selection#select" class="standard-checkbox size-4" data-journal-selection-target="checkbox">
   </td>
   <% journal.visible_columns.each do |field| %>
-    <td data-column="<%= field %>" class="p-1 <%= {"coffee" => "min-w-96", "bean_type" => "w-80 min-w-80 max-w-80"}.fetch(field, "max-w-64") %> <%= 'text-center' if field == 'espresso_enjoyment' %>">
+    <td data-column="<%= field %>" class="p-1 <%= {"coffee" => "min-w-80", "bean_type" => "w-80 min-w-80 max-w-80"}.fetch(field, "max-w-64") %> <%= 'text-center' if field == 'espresso_enjoyment' %>">
       <%= turbo_frame_tag journal_cell_id(shot, field) do %>
         <%= render "journals/cell", shot: shot, field: field %>
       <% end %>
