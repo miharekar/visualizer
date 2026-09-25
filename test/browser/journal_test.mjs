@@ -386,6 +386,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       }
       try {
         await open()
+        assert.equal(await panel.evaluate(el => el.scrollHeight <= el.clientHeight), true, "columns panel scrolls instead of opening fully")
         const duration = panel.locator('[data-column="duration"] [draggable="true"]')
         const visible = panel.locator('[data-hidden="false"]')
         const hidden = panel.locator('[data-hidden="true"]')
@@ -398,7 +399,12 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         await panel.waitFor({ state: "hidden" })
         await page.reload()
         assert.equal(await page.locator('td[data-column="duration"]').count(), 0)
+        await page.setViewportSize({ width: 390, height: 600 })
         await open()
+        const heading = await panel.getByText("Hidden", { exact: true }).boundingBox()
+        await page.mouse.move(heading.x + 10, heading.y + heading.height / 2)
+        await page.mouse.wheel(0, 300)
+        await page.waitForFunction(() => [...document.querySelectorAll('#journal-columns-panel input[type="submit"]')].some(el => el.getBoundingClientRect().bottom <= innerHeight), null, { timeout: 2000 }).catch(() => assert.fail("scrolling cannot bring Apply into view on a short phone screen"))
         await panel.getByRole("button", { name: "Reset to defaults", exact: true }).tap()
         await panel.getByRole("button", { name: "Apply", exact: true }).tap()
         await page.locator('td[data-column="duration"]').first().waitFor()
