@@ -31,7 +31,7 @@
     <%= turbo_frame_tag "journal-results", class: "flex min-h-0 flex-1 flex-col", data: {turbo_action: "advance", journal_navigation_target: "results", action: "turbo:frame-load->journal-navigation#loaded"} do %>
       <%= turbo_stream.update "shots-count", @shots_count.zero? ? "No Shots" : pluralize(@shots_count, "Shot") %>
       <div class="relative min-h-0 flex-1 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
-        <table class="w-max min-w-full text-sm" data-turbo-prefetch="false">
+        <table class="w-full text-sm" data-turbo-prefetch="false">
           <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
             <tr>
               <th class="sticky left-0 z-10 w-px bg-neutral-50 p-3 dark:bg-neutral-800">
