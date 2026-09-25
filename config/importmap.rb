@@ -10,7 +10,7 @@ pin "lexxy", to: "lexxy.js"
 pin "@appsignal/javascript", to: "@appsignal--javascript.js" # @1.6.1
 pin "@appsignal/stimulus", to: "@appsignal--stimulus.js" # @1.0.21
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.13
-pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.38.0
+pin "@yaireo/tagify", to: "@yaireo--tagify.js" # @4.39.0
 pin "el-transition" # @0.0.7
 pin "highcharts" # @13.1.1
 pin "highcharts/highcharts-more", to: "highcharts--highcharts-more.js" # @13.1.1
