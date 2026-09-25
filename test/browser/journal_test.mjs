@@ -78,7 +78,6 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await t.test(name, async () => {
         await page.goto("/shots")
         await ratings.first().waitFor()
-        await page.waitForFunction(() => document.querySelectorAll("tbody tr").length > 30)
         try {
           await fn()
         } catch (error) {
@@ -166,10 +165,10 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     })
 
     await check("stale pagination body cannot append into newer search results", async () => {
-      await holdBody("pagination")
-      await search.fill("Browser Journal")
-      await page.waitForFunction(() => window.releaseJournalBody)
       const oldRows = await page.locator("tbody").getAttribute("id")
+      await holdBody("pagination")
+      await page.locator("#journal-results > div.relative.overflow-auto").evaluate(el => (el.scrollTop = el.scrollHeight))
+      await page.waitForFunction(() => window.releaseJournalBody)
       await search.fill("Browser Journal 34")
       await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 1)
       const newRows = await page.locator("tbody").getAttribute("id")
@@ -565,6 +564,9 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         const box = await toolbar.boundingBox()
         assert.ok(box.x >= 0 && box.x + box.width <= width, `toolbar overflows ${width}px`)
         assert.ok(box.y >= 0 && box.y + box.height <= height)
+        const gap = table.y - (box.y + box.height)
+        assert.ok(gap >= 0 && gap <= 24, `toolbar is ${gap}px above the table at ${width}px`)
+        assert.equal(await page.locator("#journal-results table").evaluate(el => el.offsetWidth >= el.parentElement.clientWidth), true, `table narrower than its container at ${width}px`)
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
         await toolbar.getByRole("button", { name: "Clear selection", exact: true }).click()
         await toolbar.waitFor({ state: "hidden" })

@@ -3,8 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     if (this.element.getAttribute("loading") == "lazy") {
-      const root = this.element.closest("[data-prefetch-lazy-root]")
-      this.observer = new IntersectionObserver(this.intersect.bind(this), { root, rootMargin: "0px 0px 1000px 0px" })
+      this.observer = new IntersectionObserver(this.intersect.bind(this), { rootMargin: "0px 0px 1000px 0px" })
       this.observer.observe(this.element)
     }
   }

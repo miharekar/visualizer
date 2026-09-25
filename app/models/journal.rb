@@ -38,8 +38,8 @@ class Journal
     if user.premium?
       labels["tag_list"] = "Tags"
       labels["private_notes"] = "Private notes"
-      Shot::TASTING_ASSESSMENT_ATTRIBUTES.each { labels[it.to_s] = it.to_s.humanize }
       user.shot_metadata_fields.each { labels["metadata:#{it}"] = it.humanize }
+      Shot::TASTING_ASSESSMENT_ATTRIBUTES.each { labels[it.to_s] = it.to_s.humanize }
     end
     @columns = labels
   end
@@ -128,6 +128,8 @@ class Journal
   def value(shot, field)
     if %w[actions image].include?(field)
       nil
+    elsif field == "espresso_enjoyment"
+      shot.espresso_enjoyment if shot.espresso_enjoyment.to_i.positive?
     elsif field == "ratio"
       "1:#{shot.weight_ratio.round(1)}" if shot.bean_weight_f.positive? && shot.drink_weight_f.positive?
     elsif NOTES.include?(field)

@@ -20,7 +20,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-editor", count: 1
     assert_select "turbo-frame#journal-results", count: 1
     assert_select "#journal-results > div.relative.overflow-auto", count: 1
-    assert_select "[data-journal-selection-target='toolbar'].fixed", count: 1
+    assert_select "[data-controller='journal-selection'] div.relative > [data-journal-selection-target='toolbar'].absolute", count: 1
+    assert_select "turbo-frame#journal-results [data-journal-selection-target='toolbar']", count: 0
     assert_select "#journal-columns-panel input[type='checkbox']", count: 0
     assert_select "#journal-columns-panel button[data-action='journal-columns#cancel']", text: "Cancel"
     assert_select "#journal-columns-panel button[data-action='journal-columns#reset']", text: "Reset to defaults"
@@ -427,6 +428,16 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "zero enjoyment renders as unrated" do
+    @shot.update!(espresso_enjoyment: 0)
+    get shots_url
+    assert_select "td[data-column='espresso_enjoyment'] input[name='value']:not([value]):not([style])", count: 1
+    get edit_journal_url, params: {ids: [@shot.id], field: "espresso_enjoyment"}
+    assert_select "input#journal-editor-value:not([value])", count: 1
+    @shot.update!(espresso_enjoyment: 85)
+    assert_equal 85, Journal.new(@user).value(@shot, "espresso_enjoyment")
+  end
+
   test "manual editing validates invalid input even when its cast value is unchanged" do
     manual = create(:shot, user: @user, duration: 0, espresso_enjoyment: 2)
     {"espresso_enjoyment" => ["2.5", 2], "duration" => ["nope", 0]}.each do |field, (input, stored)|
@@ -486,6 +497,13 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], journal.default_columns
     assert_equal %w[coffee profile_title], journal.visible_columns
     assert_empty journal.columns.keys & Journal::BAG_FIELDS
+  end
+
+  test "tasting assessment columns come after metadata fields" do
+    @user.update!(shot_metadata_fields: %w[basket])
+    columns = Journal.new(@user).columns.keys
+    assert_equal Shot::TASTING_ASSESSMENT_ATTRIBUTES.map(&:to_s), columns.last(Shot::TASTING_ASSESSMENT_ATTRIBUTES.size)
+    assert_includes columns, "metadata:basket"
   end
 
   test "saving columns replaces preferences for unavailable premium fields" do

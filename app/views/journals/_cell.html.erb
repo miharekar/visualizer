@@ -7,7 +7,7 @@
     <%= link_to edit_shot_path(shot), title: "Edit shot", class: "rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_frame: "_top"} do %>
       <%= inline_svg_tag "pencil.svg", class: "size-4" %>
     <% end %>
-    <%= button_to shot_path(shot), method: :delete, title: "Delete shot", class: "rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
+    <%= button_to shot_path(shot), method: :delete, title: "Delete shot", class: "cursor-pointer rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
       <%= inline_svg_tag "trash.svg", class: "size-4" %>
     <% end %>
   </div>
@@ -27,7 +27,7 @@
     <% if field == "espresso_enjoyment" %>
       <%= f.number_field :value, **journal_input_options(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], inputmode: "numeric", placeholder: "—", style: ("background-color: #{enjoyment_hex(value.to_i)};" if value.present?), class: "focus:ring-terracotta-500 h-6 w-9! rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white [appearance:textfield] focus:ring-2 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none", data: {journal_cell_control: true, journal_cell_target: "input", range_target: "color", action: "input->range#update"} %>
     <% else %>
-      <%= f.text_field :value, **journal_input_options(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], placeholder: "—", style: "width: #{[value.to_s.length, 1].max + 3}ch", class: "focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800", data: {journal_cell_control: true, journal_cell_target: "input"} %>
+      <%= f.text_field :value, **journal_input_options(field), value: value, id: "#{journal_cell_id(shot, field)}_value", title: journal.columns[field], placeholder: "—", style: "width: #{[value.to_s.length, 1].max + 3}ch", class: "focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-sm text-inherit shadow-none hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800", data: {journal_cell_control: true, journal_cell_target: "input"} %>
     <% end %>
     <p class="text-sm text-red-600 empty:hidden dark:text-red-400" data-journal-cell-target="error"></p>
   <% end %>
