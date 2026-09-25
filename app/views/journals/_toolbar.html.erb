@@ -1,7 +1,7 @@
 <div class="bg-oxford-blue-50 text-oxford-blue-950 ring-oxford-blue-200 dark:bg-oxford-blue-950 dark:text-oxford-blue-50 dark:ring-oxford-blue-800 absolute inset-x-0 bottom-0 z-30 hidden min-h-full flex-wrap content-center items-center gap-3 rounded-lg px-4 py-2 shadow-sm ring-1" data-journal-selection-target="toolbar">
   <span class="font-medium" data-journal-selection-target="count">0 selected</span>
-  <span class="text-oxford-blue-700 dark:text-oxford-blue-300 text-sm" data-journal-selection-target="notice"></span>
-  <%= form_with url: edit_journal_path, method: :get, id: "journal-bulk-form", class: "flex flex-wrap items-center gap-3", data: {turbo_frame: "journal-editor"} do |f| %>
+  <span class="text-oxford-blue-700 dark:text-oxford-blue-300 hidden text-sm sm:inline" data-journal-selection-target="notice"></span>
+  <%= form_with url: edit_journal_path, method: :get, id: "journal-bulk-form", class: "order-last flex flex-wrap items-center gap-3 sm:order-none", data: {turbo_frame: "journal-editor"} do |f| %>
     <%= f.select :field, journal.editable_columns.map { |field, label| [label, field] }, {}, id: "journal-bulk-field", title: "Field", class: "standard-input w-auto! max-w-40" %>
     <%= f.submit "Set field", class: "button-white px-3 py-2" %>
   <% end %>

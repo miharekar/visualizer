@@ -24,13 +24,17 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-results [data-journal-selection-target='toolbar']", count: 0
     assert_select "[data-controller='pull-refresh'][data-pull-refresh-browser-value='true'] [data-pull-refresh-target='indicator']", count: 1
     assert_select "body.overscroll-y-none", count: 1
+    assert_select "footer > div.hidden", count: 1
     assert_select "#journal-columns-panel input[type='checkbox']", count: 0
     assert_select "#journal-columns-panel button[data-action='journal-columns#cancel']", text: "Cancel"
     assert_select "#journal-columns-panel button[data-action='journal-columns#reset']", text: "Reset to defaults"
     assert_select "#journal-columns-panel [data-action*='keydown']", count: 0
     assert_select "#journal-columns-panel [data-journal-columns-target='list'][data-hidden='false']", count: 1
     assert_select "#journal-columns-panel [data-journal-columns-target='list'][data-hidden='true']", count: 1
-    assert_select "form[action='#{shots_path}'][method='get'][data-turbo-frame='journal-results'] input[name='q']"
+    assert_select "form[action='#{shots_path}'][method='get'][data-turbo-frame='journal-results']" do
+      assert_select "input[type='search'][name='q'][placeholder='Search coffee, notes, tags...']"
+      assert_select "label", count: 0
+    end
     assert_select "form[action='#{edit_journal_path}'][method='get'][data-turbo-frame='journal-editor']"
     assert_select "turbo-frame#journal-results tr##{dom_id(@shot, :journal)}" do
       assert_equal Journal.new(@user).visible_columns, css_select("td[data-column]").pluck("data-column")
@@ -597,7 +601,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-results, a[href='#{new_shot_path}']", count: 0
     assert_select "#shots"
     assert_select "[data-controller='pull-refresh'][data-pull-refresh-browser-value='false']", count: 1
-    assert_select "body.overscroll-y-none", count: 0
+    assert_select "body.overscroll-y-none, footer > div.hidden", count: 0
   end
 
   test "only admins can enable the journal" do

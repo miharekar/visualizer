@@ -56,7 +56,8 @@ open-panel button styling, pending columns
 Apply dismissal/filter retention, numeric bounds, unchanged-cell Enter and Shift+Enter
 navigation, notes search, manual creation,
 confirmation Cancel via native Enter, Enter-to-confirm without duplicate deletion, and
-selection toolbar placement just above a full-width table at desktop/390px widths.
+selection toolbar placement just above a full-width table at desktop/390px widths, with the
+page title and footer dropped, the table edge to edge, and the toolbar kept below the site header on phones.
 Delayed-body checks hold
 `Response.text()` after headers arrive, without dispatching synthetic Turbo events
 or replacing controllers. Columns Apply holds its request before delivery because

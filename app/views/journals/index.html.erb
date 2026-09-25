@@ -10,16 +10,16 @@
     <%= render "shots/upload_form", show_form: false %>
     <%= render "journals/columns" %>
   </div>
-  <div class="mt-4 flex min-h-0 w-full min-w-0 flex-1 flex-col px-4 pb-6 sm:px-6 lg:px-8" data-controller="journal-selection">
+  <div class="mt-4 flex min-h-0 w-full min-w-0 flex-1 flex-col px-4 pb-4 sm:px-6 sm:pb-6 lg:px-8" data-controller="journal-selection">
     <% unless Current.user.premium? %>
       <p class="mb-4 text-sm text-neutral-500">Showing shots uploaded in the last month. <%= link_to "Premium", premium_index_path, class: "standard-link" %> includes older history.</p>
     <% end %>
     <div class="relative mb-4">
-      <%= form_with url: shots_path, method: :get, class: "flex flex-wrap items-end gap-3", data: { turbo_frame: "journal-results", controller: "search", search_target: "form", journal_navigation_target: "search", action: "submit->journal-navigation#search turbo:submit-end->journal-navigation#complete #{'input->search#submit' if Current.user.premium?}" } do |f| %>
+      <%= form_with url: shots_path, method: :get, class: "flex flex-wrap gap-3", data: { turbo_frame: "journal-results", controller: "search", search_target: "form", journal_navigation_target: "search", action: "submit->journal-navigation#search turbo:submit-end->journal-navigation#complete #{'input->search#submit' if Current.user.premium?}" } do |f| %>
         <% %w[coffee_bag tags].each do |filter| %>
           <%= f.hidden_field filter, value: params[filter] if params[filter].present? %>
         <% end %>
-        <label class="standard-label min-w-48 flex-1">Search<%= f.search_field :q, value: params[:q], class: "standard-input mt-1", placeholder: "Coffee, notes, tags..." %></label>
+        <%= f.search_field :q, value: params[:q], class: "standard-input min-w-48 flex-1", placeholder: "Search coffee, notes, tags..." %>
         <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
       <% end %>
       <% filter_labels = journal.filter_labels(params) %>
@@ -31,7 +31,7 @@
     <%= turbo_frame_tag "journal-editor" %>
     <%= turbo_frame_tag "journal-results", class: "flex min-h-0 flex-1 flex-col", data: {turbo_action: "advance", journal_navigation_target: "results", action: "turbo:frame-load->journal-navigation#loaded"} do %>
       <%= turbo_stream.update "shots-count", @shots_count.zero? ? "No Shots" : pluralize(@shots_count, "Shot") %>
-      <div class="relative min-h-0 flex-1 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
+      <div class="relative -mx-4 min-h-0 flex-1 overflow-auto border-y border-neutral-200 sm:mx-0 sm:rounded sm:border dark:border-neutral-700">
         <table class="w-full text-sm" data-turbo-prefetch="false">
           <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
             <tr>
