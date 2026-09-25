@@ -49,7 +49,10 @@ native Turbo pending-cell replacement, overlapping saves, stale pagination,
 server 422 values/focus, Enter/change/blur duplication, search deferral,
 serialized latest-query searches with inert results, failed-value discard
 confirmation for search and columns Apply, coffee/tag popups, backdrop clicks and
-pending-dialog dismissal, transport retry, mouse and emulated-touch column dragging without upload-overlay interference, open-panel button styling, pending columns
+pending-dialog dismissal, transport retry, mouse and emulated-touch column dragging without upload-overlay interference,
+pull to refresh from the header, search field, or table top, but not while the table is scrolled,
+swiping sideways, dragging columns, or editing,
+open-panel button styling, pending columns
 Apply dismissal/filter retention, numeric bounds, unchanged-cell Enter and Shift+Enter
 navigation, notes search, manual creation,
 confirmation Cancel via native Enter, Enter-to-confirm without duplicate deletion, and
@@ -59,5 +62,7 @@ Delayed-body checks hold
 or replacing controllers. Columns Apply holds its request before delivery because
 that endpoint redirects to HTML rather than returning a Turbo stream.
 Explicit waits exceed search debounce to assert no
-premature request; other waits observe events or DOM state. Narrow viewport check
-includes Chromium touch emulation, not real mobile Safari coverage.
+premature request; other waits observe events or DOM state. The Journal runs its own pull
+to refresh in mobile browsers, so the session is a plain touch browser rather than an
+installed app. Narrow viewport checks include Chromium touch emulation, not real mobile
+Safari coverage.

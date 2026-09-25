@@ -408,6 +408,63 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       }
     })
 
+    await check("pull to refresh reloads from the header, search, or table top, but not while the table is scrolled, swiping sideways, dragging columns, or editing", async () => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      const client = await page.context().newCDPSession(page)
+      const indicator = page.locator('[data-pull-refresh-target="indicator"]')
+      const table = page.locator("#journal-results > div.relative.overflow-auto")
+      const touch = (type, x, y) => client.send("Input.dispatchTouchEvent", { type, touchPoints: ["touchEnd", "touchCancel"].includes(type) ? [] : [{ x, y }] })
+      const pull = async (x, y, dx, dy) => {
+        await touch("touchStart", x, y)
+        for (let step = 1; step <= 4; step++) await touch("touchMove", x + (dx * step) / 4, y + (dy * step) / 4)
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+        return indicator.evaluate(el => !el.classList.contains("opacity-0"))
+      }
+      const pullFrom = async locator => {
+        const box = await locator.boundingBox()
+        return pull(box.x + box.width / 2, box.y + box.height / 2, 0, 200)
+      }
+      const cancel = async () => {
+        await touch("touchCancel")
+        assert.equal(await indicator.evaluate(el => el.classList.contains("opacity-0")), true, "cancelled pull kept its indicator")
+      }
+      try {
+        const box = await table.boundingBox()
+        const x = box.x + box.width / 2
+        const y = box.y + 80
+        await table.evaluate(el => (el.scrollTop = 200))
+        assert.equal(await pull(x, y, 0, 200), false, "pull engaged while the table was scrolled")
+        await touch("touchEnd")
+        assert.equal(await pullFrom(search), true, "pull did not engage on the search field while the table was scrolled")
+        await cancel()
+        await table.evaluate(el => el.scrollTo(0, 0))
+        assert.equal(await pull(box.x + box.width - 30, y, -240, 170), false, "sideways swipe engaged pull")
+        await touch("touchEnd")
+        await page.getByRole("button", { name: "Columns", exact: true }).click()
+        const grip = await page.locator('#journal-columns-panel [draggable="true"]').first().boundingBox()
+        assert.equal(await pull(grip.x + grip.width / 2, grip.y + grip.height / 2, 0, 200), false, "pull engaged while dragging a column")
+        await touch("touchEnd")
+        await page.locator("#journal-columns-panel").getByRole("button", { name: "Cancel", exact: true }).click()
+        await page.locator('td[data-column="coffee"] a').first().click()
+        const label = await dialog.locator("label").first().boundingBox()
+        assert.equal(await pull(label.x + 10, label.y + label.height / 2, 0, 200), false, "pull engaged inside an editor")
+        await touch("touchEnd")
+        await dialog.getByRole("button", { name: "Cancel", exact: true }).click()
+        await dialog.waitFor({ state: "detached" })
+        await table.evaluate(el => el.scrollTo(0, 0))
+        assert.equal(await pull(x, y, 0, 200), true, "pull did not engage at the top of the table")
+        await cancel()
+        await table.evaluate(el => (el.scrollTop = 200))
+        assert.equal(await pullFrom(page.locator("body > header")), true, "pull did not engage on the header while the table was scrolled")
+        assert.equal(await indicator.evaluate(el => el.style.getPropertyValue("--pull-progress")), "1.000")
+        await Promise.all([page.waitForEvent("load"), touch("touchEnd")])
+        await ratings.first().waitFor()
+      } finally {
+        await client.detach()
+        await page.setViewportSize({ width: 1440, height: 1000 })
+      }
+    })
+
     await check("open panels keep their buttons depressed until closed", async () => {
       for (const name of ["Columns", "Upload"]) {
         const button = page.getByRole("button", { name, exact: true })

@@ -2,21 +2,23 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["indicator"]
-  static values = { threshold: { type: Number, default: 80 } }
+  static values = { threshold: { type: Number, default: 80 }, browser: Boolean }
 
   connect() {
-    this.enabled = this.#isStandalonePwa() && this.#supportsTouch()
+    this.enabled = (this.browserValue || this.#isStandalonePwa()) && this.#supportsTouch()
     this.dragging = false
     this.refreshing = false
+    this.startX = 0
     this.startY = 0
     this.pullDistance = 0
     this.#setProgress(0)
   }
 
   touchstart(event) {
-    if (!this.enabled || this.refreshing || !this.#isAtTop()) return
+    if (!this.enabled || this.refreshing || !this.#canPull(event.target)) return
 
     this.dragging = true
+    this.startX = event.touches[0].clientX
     this.startY = event.touches[0].clientY
     this.pullDistance = 0
   }
@@ -24,14 +26,15 @@ export default class extends Controller {
   touchmove(event) {
     if (!this.dragging || this.refreshing) return
 
-    const currentY = event.touches[0].clientY
-    const rawDistance = currentY - this.startY
+    const { clientX, clientY } = event.touches[0]
+    const rawDistance = clientY - this.startY
 
     if (rawDistance <= 0) return this.#reset()
 
-    if (!this.#isAtTop()) return this.#reset()
+    if (!this.#canPull(event.target)) return this.#reset()
 
-    this.pullDistance = Math.min(rawDistance * 0.5, this.thresholdValue * 1.5)
+    const sideways = Math.abs(clientX - this.startX) > rawDistance
+    this.pullDistance = sideways ? 0 : Math.min(rawDistance * 0.5, this.thresholdValue * 1.5)
     this.#render()
 
     if (this.pullDistance > 0) event.preventDefault()
@@ -72,8 +75,12 @@ export default class extends Controller {
     this.indicatorTarget.style.setProperty("--pull-progress", progress.toFixed(3))
   }
 
-  #isAtTop() {
-    return (document.scrollingElement?.scrollTop || window.scrollY || 0) <= 0
+  #canPull(element) {
+    if (element.closest("dialog, [draggable='true']")) return false
+    for (let node = element; node; node = node.parentElement) {
+      if (node.scrollTop > 0) return false
+    }
+    return true
   }
 
   #isStandalonePwa() {

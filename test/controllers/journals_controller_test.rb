@@ -22,6 +22,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#journal-results > div.relative.overflow-auto", count: 1
     assert_select "[data-controller='journal-selection'] div.relative > [data-journal-selection-target='toolbar'].absolute", count: 1
     assert_select "turbo-frame#journal-results [data-journal-selection-target='toolbar']", count: 0
+    assert_select "[data-controller='pull-refresh'][data-pull-refresh-browser-value='true'] [data-pull-refresh-target='indicator']", count: 1
+    assert_select "body.overscroll-y-none", count: 1
     assert_select "#journal-columns-panel input[type='checkbox']", count: 0
     assert_select "#journal-columns-panel button[data-action='journal-columns#cancel']", text: "Cancel"
     assert_select "#journal-columns-panel button[data-action='journal-columns#reset']", text: "Reset to defaults"
@@ -594,6 +596,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "turbo-frame#journal-results, a[href='#{new_shot_path}']", count: 0
     assert_select "#shots"
+    assert_select "[data-controller='pull-refresh'][data-pull-refresh-browser-value='false']", count: 1
+    assert_select "body.overscroll-y-none", count: 0
   end
 
   test "only admins can enable the journal" do
