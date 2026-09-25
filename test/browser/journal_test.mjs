@@ -66,6 +66,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     const ratings = page.locator('td[data-column="espresso_enjoyment"] input[type="number"]')
     const dialog = page.locator("#journal-editor dialog")
     const search = page.locator('input[name="q"]')
+    const journalUpdates = url => url.pathname === "/shots/journal"
     const holdBody = (kind = "journal") =>
       page.evaluate(kind => {
         window.holdJournalBody = kind
@@ -103,7 +104,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     await check("pending cell stays readonly; Enter/blur submits once; search waits", async () => {
       let saves = 0
       let searches = 0
-      await page.route("**/journal", async route => {
+      await page.route(journalUpdates, async route => {
         saves++
         await route.continue()
       })
@@ -228,7 +229,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     })
 
     await check("transport failure retains value; search requires discard consent", async () => {
-      await page.route("**/journal", route => route.abort("failed"))
+      await page.route(journalUpdates, route => route.abort("failed"))
       await ratings.first().fill("87")
       await ratings.first().press("Enter")
       await page.getByText("Not saved. Press Enter to retry.", { exact: true }).waitFor()
@@ -262,7 +263,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await page.locator("#journal-results > div.relative.overflow-auto").evaluate(el => (el.scrollTop = el.scrollHeight))
       await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 35)
       for (const last of [true, false]) {
-        await page.route("**/journal", route => {
+        await page.route(journalUpdates, route => {
           const body = new URLSearchParams(route.request().postData())
           body.set("value", "101")
           return route.continue({ postData: body.toString() })
@@ -316,7 +317,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await dialog.locator(".tagify__input").fill("browser")
       await dialog.locator(".tagify__dropdown__item").filter({ hasText: "browser-tag" }).click()
       assert.equal(await page.locator("#journal-editor-value").inputValue(), "browser-tag")
-      await page.route("**/journal", route => route.abort("failed"))
+      await page.route(journalUpdates, route => route.abort("failed"))
       await dialog.getByRole("button", { name: "Save", exact: true }).click()
       await page.waitForFunction(() => {
         const save = document.querySelector('#journal-editor input[type="submit"]')
@@ -461,7 +462,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
 
     await check("invalid Enter retains focus and does not submit", async () => {
       let saves = 0
-      await page.route("**/journal", async route => {
+      await page.route(journalUpdates, async route => {
         saves++
         await route.continue()
       })
@@ -493,7 +494,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
 
     await check("Enter on an unchanged cell moves without saving; Shift+Enter moves up", async () => {
       let saves = 0
-      await page.route("**/journal", async route => {
+      await page.route(journalUpdates, async route => {
         saves++
         await route.continue()
       })

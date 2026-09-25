@@ -438,6 +438,27 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 85, Journal.new(@user).value(@shot, "espresso_enjoyment")
   end
 
+  test "cell forms keep their shot and field in the URL and rely on Turbo's CSRF header" do
+    ActionController::Base.allow_forgery_protection = true
+    get shots_url
+    assert_select "td[data-column='bean_weight'] form[action='#{journal_path(ids: [@shot.id], field: 'bean_weight')}']" do
+      assert_select "input", count: 2
+      assert_select "input[name='_method'][value='patch']"
+      assert_select "input[name='value'][value='18']"
+    end
+    assert_select "td form input[name='authenticity_token']", count: 0
+    token = css_select("meta[name='csrf-token']").first["content"]
+
+    patch journal_url(ids: [@shot.id], field: "bean_weight"), params: {value: "19"}, headers: stream_headers
+    assert_response :unprocessable_content
+    assert_equal "18", @shot.reload.bean_weight
+    patch journal_url(ids: [@shot.id], field: "bean_weight"), params: {value: "19"}, headers: stream_headers.merge("X-CSRF-Token" => token)
+    assert_response :success
+    assert_equal "19", @shot.reload.bean_weight
+  ensure
+    ActionController::Base.allow_forgery_protection = false
+  end
+
   test "manual editing validates invalid input even when its cast value is unchanged" do
     manual = create(:shot, user: @user, duration: 0, espresso_enjoyment: 2)
     {"espresso_enjoyment" => ["2.5", 2], "duration" => ["nope", 0]}.each do |field, (input, stored)|

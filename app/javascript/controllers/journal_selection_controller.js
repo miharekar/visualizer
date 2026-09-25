@@ -8,17 +8,27 @@ export default class extends Controller {
   }
 
   checkboxTargetConnected() {
-    this.select()
+    this.queueSelect()
   }
 
   checkboxTargetDisconnected() {
-    this.select()
+    this.queueSelect()
+  }
+
+  queueSelect() {
+    if (this.selectQueued) return
+    this.selectQueued = true
+    queueMicrotask(() => {
+      this.selectQueued = false
+      this.select()
+    })
   }
 
   select(event) {
     if (!this.hasCountTarget || !this.hasAllTarget) return
     if (event?.target.checked && this.selected.length > 100) event.target.checked = false
-    const selected = this.selected
+    const checkboxes = this.checkboxTargets
+    const selected = checkboxes.filter(input => input.checked)
     const count = selected.length
     this.countTarget.textContent = `${count} selected`
     this.noticeTarget.textContent = count === 100 ? "Maximum 100 shots per edit" : ""
@@ -26,8 +36,8 @@ export default class extends Controller {
     this.toolbarTarget.classList.toggle("flex", count > 0)
     this.compareTarget.classList.toggle("hidden", count !== 2)
     if (count === 2) this.compareTarget.href = `/shots/${selected[0].value}/compare/${selected[1].value}`
-    this.allTarget.checked = count > 0 && count === this.checkboxTargets.length
-    this.allTarget.indeterminate = count > 0 && count < this.checkboxTargets.length
+    this.allTarget.checked = count > 0 && count === checkboxes.length
+    this.allTarget.indeterminate = count > 0 && count < checkboxes.length
   }
 
   selectAll(event) {
