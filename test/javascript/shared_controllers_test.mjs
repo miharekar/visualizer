@@ -18,6 +18,7 @@ registerHooks({
 })
 const { default: Modal } = await import("../../app/javascript/controllers/modal_controller.js")
 const { default: Combobox } = await import("../../app/javascript/controllers/combobox_controller.js")
+const { default: Search } = await import("../../app/javascript/controllers/search_controller.js")
 
 function combobox(ids = ["Zulu", "Alpha"]) {
   const controller = new Combobox()
@@ -62,6 +63,26 @@ function combobox(ids = ["Zulu", "Alpha"]) {
   controller.connect()
   return controller
 }
+
+test("native submit cancels a pending debounced search", t => {
+  t.mock.timers.enable({ apis: ["setTimeout"] })
+  const search = new Search()
+  let submits = 0
+  search.element = new EventTarget()
+  search.formTarget = { requestSubmit: () => submits++ }
+  search.connect()
+  search.submit()
+  search.element.dispatchEvent(new Event("submit"))
+  t.mock.timers.tick(200)
+  assert.equal(submits, 0)
+  search.submit()
+  t.mock.timers.tick(200)
+  assert.equal(submits, 1)
+  search.submit()
+  search.disconnect()
+  t.mock.timers.tick(200)
+  assert.equal(submits, 1)
+})
 
 test("Enter on Cancel leaves native activation alone; Escape still dismisses confirmation", () => {
   const modal = new Modal()

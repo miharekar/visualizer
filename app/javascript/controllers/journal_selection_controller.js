@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["checkbox", "all", "toolbar", "count", "notice", "compare", "reset"]
+  static targets = ["checkbox", "all", "toolbar", "count", "notice", "compare"]
 
   get selected() {
     return this.checkboxTargets.filter(input => input.checked)
@@ -13,10 +13,6 @@ export default class extends Controller {
 
   checkboxTargetDisconnected() {
     this.select()
-  }
-
-  resetTargetConnected() {
-    this.reset()
   }
 
   select(event) {

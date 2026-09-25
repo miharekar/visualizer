@@ -20,25 +20,29 @@
       <label class="standard-label min-w-48 flex-1">Search<%= f.search_field :q, value: params[:q], class: "standard-input mt-1", placeholder: "Coffee, notes, tags..." %></label>
       <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
     <% end %>
+    <% filter_labels = journal.filter_labels(params) %>
+    <% if filter_labels.any? %>
+      <p class="-mt-2 mb-4 text-sm text-neutral-500">Filtered by <%= filter_labels.to_sentence %>. <%= link_to "Clear filters", shots_path(q: params[:q].presence), class: "standard-link" %></p>
+    <% end %>
     <%= turbo_frame_tag "journal-editor" %>
     <%= turbo_frame_tag "journal-results", class: "flex min-h-0 flex-1 flex-col", data: {controller: "journal-selection", turbo_action: "advance", journal_navigation_target: "results", action: "turbo:frame-load->journal-navigation#loaded"} do %>
-      <%= turbo_stream.update "journal-count" do %><span id="journal-count-<%= @journal_search_id %>"><%= @shots_count.zero? ? "No Shots" : pluralize(@shots_count, "Shot") %></span><% end %>
+      <%= turbo_stream.update "shots-count", @shots_count.zero? ? "No Shots" : pluralize(@shots_count, "Shot") %>
       <%= render "journals/toolbar" %>
-      <div class="relative min-h-0 flex-1 overflow-auto rounded border border-neutral-200 dark:border-neutral-700">
+      <div class="relative min-h-0 flex-1 overflow-auto rounded border border-neutral-200 dark:border-neutral-700" data-prefetch-lazy-root>
         <table class="w-max text-sm" data-turbo-prefetch="false">
           <thead class="sticky top-0 z-20 bg-neutral-50 dark:bg-neutral-800">
             <tr>
               <th class="sticky left-0 z-10 bg-neutral-50 p-3 dark:bg-neutral-800">
                 <input type="checkbox" title="Select up to 100 loaded shots" data-journal-selection-target="all" data-action="journal-selection#selectAll" class="standard-checkbox size-4">
               </th>
-              <% @visible_columns.each do |field| %>
-                <th scope="col" class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %>"><%= journal.columns[field] %></th>
+              <% journal.visible_columns.each do |field| %>
+                <th class="px-3 py-3 whitespace-nowrap <%= field == 'espresso_enjoyment' ? 'text-center' : 'text-left' %>"><%= journal.columns[field] %></th>
               <% end %>
             </tr>
           </thead>
-          <tbody id="journal-rows-<%= @journal_search_id %>"><%= render partial: "journals/row", collection: @shots, as: :shot, locals: {visible_columns: @visible_columns} %></tbody>
+          <tbody id="journal-rows-<%= @journal_search_id %>"><%= render partial: "journals/row", collection: @shots, as: :shot %></tbody>
         </table>
-        <p id="journal-empty-<%= @journal_search_id %>" class="my-6 text-center text-neutral-500 empty:hidden"><%= "No matching shots." if @shots_count.zero? %></p>
+        <p class="my-6 text-center text-neutral-500 empty:hidden"><%= "No matching shots." if @shots_count.zero? %></p>
         <%= render "journals/cursor" %>
       </div>
     <% end %>

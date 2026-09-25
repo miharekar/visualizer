@@ -7,7 +7,7 @@
     <%= link_to edit_shot_path(shot), title: "Edit shot", class: "rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800", data: {turbo_frame: "_top"} do %>
       <%= inline_svg_tag "pencil.svg", class: "size-4" %>
     <% end %>
-    <%= button_to shot_path(shot, journal: 1), method: :delete, title: "Delete shot", form: {data: {turbo_stream: true}}, class: "rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
+    <%= button_to shot_path(shot), method: :delete, title: "Delete shot", class: "rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950", data: {action: "modal#confirm", title: "Delete Shot", text: "Permanently delete this shot?"} do %>
       <%= inline_svg_tag "trash.svg", class: "size-4" %>
     <% end %>
   </div>
@@ -21,7 +21,7 @@
   <% end %>
 <% elsif editable %>
   <% value = local_assigns.fetch(:value) { journal.value(shot, field) } %>
-  <%= form_with url: journal_path, method: :patch, data: {turbo_stream: true, unsaved: ("" if local_assigns[:error].present?), controller: "journal-cell#{' range' if field == 'espresso_enjoyment'}", action: "input->journal-cell#dirty change->journal-cell#submit keydown->journal-cell#navigate turbo:submit-end->journal-cell#complete"} do |f| %>
+  <%= form_with url: journal_path, method: :patch, data: {unsaved: ("" if local_assigns[:error].present?), controller: "journal-cell#{' range' if field == 'espresso_enjoyment'}", action: "input->journal-cell#dirty change->journal-cell#submit keydown->journal-cell#navigate turbo:submit-end->journal-cell#complete"} do |f| %>
     <%= hidden_field_tag "ids[]", shot.id, id: nil %>
     <%= f.hidden_field :field, value: field, id: nil %>
     <% if field == "espresso_enjoyment" %>

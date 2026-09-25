@@ -76,7 +76,6 @@ module Api
     end
 
     test "index caps limit at 100" do
-      # Historical records do not count toward today's creation limit.
       FactoryBot.create_list(:shot, 101, user:, public: true, start_time: 2.days.ago, created_at: 2.days.ago)
 
       get api_shots_url, params: {items: 150}, headers: auth_headers(user), as: :json

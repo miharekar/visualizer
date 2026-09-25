@@ -20,8 +20,5 @@
   <% end %>
   <% if @editor %>
     <%= turbo_stream.update "journal-editor", "" %>
-    <%= turbo_stream.replace "journal-selection-reset" do %>
-      <span id="journal-selection-reset" class="hidden" data-journal-selection-target="reset"></span>
-    <% end %>
   <% end %>
 <% end %>

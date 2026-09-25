@@ -1,6 +1,6 @@
 <div class="flex flex-col px-4 sm:flex-row sm:items-center sm:justify-between sm:px-0">
   <div class="min-w-0 shrink">
-    <h1 class="truncate py-4 pr-2 font-serif text-3xl font-bold text-neutral-900 lining-nums sm:text-4xl dark:text-neutral-100" id="<%= Current.user.journal_enabled? ? 'journal-count' : 'shots-count' %>">
+    <h1 class="truncate py-4 pr-2 font-serif text-3xl font-bold text-neutral-900 lining-nums sm:text-4xl dark:text-neutral-100" id="shots-count">
       <% if @shots_count.to_i > 0 %>
         <%= pluralize(@shots_count, "Shot") %>
         <% if @coffee_bag.present? %>

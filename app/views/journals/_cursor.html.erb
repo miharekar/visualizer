@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "journal-cursor-#{@journal_search_id}", src: (@cursor && shots_path(params.slice(:q, :coffee_bag, :tags).permit(:q, :coffee_bag, :tags).merge(@cursor).merge(journal_search_id: @journal_search_id, format: :turbo_stream))), loading: :lazy, data: {controller: "prefetch-lazy"} do %>
+<%= turbo_frame_tag "journal-cursor-#{@journal_search_id}", src: (@cursor && shots_path(params.permit(:q, :coffee_bag, :tags).merge(@cursor).merge(journal_search_id: @journal_search_id, format: :turbo_stream))), loading: :lazy, data: {controller: "prefetch-lazy"} do %>
   <% if @cursor %>
     <div class="my-10 flex justify-center"><%= inline_svg_tag "logo-loading.svg", class: "logo-loading h-auto w-14 stroke-neutral-600 text-neutral-600 dark:stroke-neutral-400 dark:text-neutral-400" %></div>
   <% end %>

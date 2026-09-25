@@ -2,7 +2,7 @@ class JournalColumnsController < ApplicationController
   before_action :require_authentication
 
   def update
-    query = params.permit(query: %i[q coffee_bag tags]).to_h.fetch("query", {})
+    query = params.permit(query: %i[q coffee_bag tags]).to_h.fetch("query", {}).compact_blank
     journal.save_columns(params.fetch(:columns, []))
     redirect_to shots_path(**query, format: :html), status: :see_other
   rescue Journal::InvalidChange, ActiveRecord::RecordInvalid => error

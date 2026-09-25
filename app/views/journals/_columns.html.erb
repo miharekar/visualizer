@@ -9,7 +9,7 @@
           <section class="min-w-0">
             <h3 class="mb-2 text-sm font-medium"><%= group %></h3>
             <div class="flex min-h-14 flex-wrap content-start gap-2 p-2" data-journal-columns-target="list" data-hidden="<%= group == "Hidden" %>">
-              <% @columns.select { @visible_columns.include?(it) == (group == "Visible") }.each do |field| %>
+              <% journal.ordered_columns.select { journal.visible_columns.include?(it) == (group == "Visible") }.each do |field| %>
                 <div data-column="<%= field %>" class="flex max-w-full items-center rounded border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
                   <%= hidden_field_tag "columns[]", field, id: nil, disabled: group == "Hidden" %>
                   <div draggable="true" class="flex cursor-grab touch-none items-center gap-1 rounded p-2 text-left text-sm select-none active:cursor-grabbing [&_*]:pointer-events-none" data-action="dragstart->journal-columns#start pointerdown->journal-columns#touchStart">
@@ -21,7 +21,7 @@
                       <circle cx="5" cy="13" r="1.5" />
                       <circle cx="11" cy="13" r="1.5" />
                     </svg>
-                    <span><%= journal.columns[field].delete_suffix(" (g)").delete_suffix(" (s)") %></span>
+                    <span><%= journal.columns[field] %></span>
                   </div>
                 </div>
               <% end %>

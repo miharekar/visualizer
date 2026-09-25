@@ -33,8 +33,6 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       viewport: { width: 1440, height: 1000 }
     })
     page.setDefaultTimeout(8000)
-    // Keep Turbo's native fetch/events. Delay only reading a stream body,
-    // exposing the gap between response headers/submit-end and replacement.
     await page.addInitScript(() => {
       const text = Response.prototype.text
       Response.prototype.text = async function () {
@@ -80,6 +78,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await t.test(name, async () => {
         await page.goto("/shots")
         await ratings.first().waitFor()
+        await page.waitForFunction(() => document.querySelectorAll("tbody tr").length > 30)
         try {
           await fn()
         } catch (error) {
@@ -127,14 +126,12 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await oldInput.evaluate(el => el.isConnected), true)
       await panel.getByRole("button", { name: "Cancel", exact: true }).click()
       await search.fill("Browser Journal 0")
-      // Longer than search debounce: prove no request while save is pending.
       await page.waitForTimeout(1200)
       assert.equal(searches, 0)
       assert.equal(saves, 1, "Enter plus native change/blur duplicated save")
       await releaseBody()
       await page.waitForFunction(el => !el.isConnected, oldInput)
       try {
-        // Search terms are substrings: 0 also matches fixture rows 10, 20, 30.
         await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 4)
       } finally {
         t.diagnostic(`Pending search: ${saves} saves, ${searches} searches`)
@@ -169,10 +166,10 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     })
 
     await check("stale pagination body cannot append into newer search results", async () => {
-      const oldRows = await page.locator("tbody").getAttribute("id")
       await holdBody("pagination")
-      await page.locator("#journal-results > div.relative.overflow-auto").evaluate(el => (el.scrollTop = el.scrollHeight))
+      await search.fill("Browser Journal")
       await page.waitForFunction(() => window.releaseJournalBody)
+      const oldRows = await page.locator("tbody").getAttribute("id")
       await search.fill("Browser Journal 34")
       await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 1)
       const newRows = await page.locator("tbody").getAttribute("id")
@@ -200,7 +197,6 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         await search.fill("Browser Journal 34")
         await first
         await search.fill("Browser Journal 33")
-        // Let the latest query's debounce expire while the first GET is held.
         await page.waitForTimeout(1200)
         assert.deepEqual(queries, ["Browser Journal 34"], "overlapping search request")
         assert.equal(await results.evaluate(el => el.inert), true)
@@ -294,9 +290,11 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       }
     })
 
-    await check("coffee popup saves; pending Save blocks Cancel and Escape", async () => {
+    await check("coffee popup saves; backdrop clicks and pending Save keep it open", async () => {
       await page.locator('td[data-column="coffee"] a').first().click()
       await dialog.waitFor()
+      await page.mouse.click(5, 5)
+      assert.equal(await dialog.evaluate(el => el.open), true, "backdrop click discarded the editor")
       await page.locator("#journal-coffee-bag").fill("Browser Managed")
       await dialog.locator("li").filter({ hasText: "Browser Managed Coffee" }).click()
       await holdBody()
@@ -383,7 +381,6 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         const to = await destination.boundingBox()
         await client.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: from.x + from.width / 2, y: from.y + from.height / 2 }] })
         await client.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: to.x + 2, y: to.y + 2 }] })
-        // Chromium needs a settled touchMove before release, otherwise it suppresses the next tap.
         await page.waitForTimeout(100)
         await client.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] })
       }
@@ -493,6 +490,20 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await dialog.locator('input[name="value"]').evaluate(el => el.validity.rangeOverflow), true)
       assert.equal(saves, before)
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click()
+    })
+
+    await check("Enter on an unchanged cell moves without saving; Shift+Enter moves up", async () => {
+      let saves = 0
+      await page.route("**/journal", async route => {
+        saves++
+        await route.continue()
+      })
+      await ratings.nth(1).press("Enter")
+      assert.equal(await ratings.nth(2).evaluate(el => el === document.activeElement), true)
+      await ratings.nth(2).press("Shift+Enter")
+      assert.equal(await ratings.nth(1).evaluate(el => el === document.activeElement), true)
+      assert.equal(await page.locator("[data-saving]").count(), 0)
+      assert.equal(saves, 0)
     })
 
     await check("notes remain searchable after popup save and manual form creates a shot", async () => {

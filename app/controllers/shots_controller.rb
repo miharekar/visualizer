@@ -19,7 +19,7 @@ class ShotsController < ApplicationController
   end
 
   def search
-    render(Current.user.journal_enabled? ? "journals/index" : "shots/index")
+    index
   end
 
   def show
@@ -49,7 +49,7 @@ class ShotsController < ApplicationController
   end
 
   def new
-    @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public, sha: "manual:#{SecureRandom.uuid}")
+    build_manual_shot
     load_coffee_bags_for_form
   end
 
@@ -61,7 +61,7 @@ class ShotsController < ApplicationController
     if request.format.json?
       render_api_endpoint_error
     elsif params.key?(:shot)
-      @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public, sha: "manual:#{SecureRandom.uuid}")
+      build_manual_shot
       if save_form_shot
         redirect_to @shot, notice: "Shot successfully created.", status: :see_other
       else
@@ -93,11 +93,7 @@ class ShotsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream do
-        if params[:journal].present?
-          render turbo_stream: turbo_stream.remove(helpers.dom_id(@shot, :journal))
-        else
-          render turbo_stream: turbo_stream.remove(@shot)
-        end
+        render turbo_stream: [turbo_stream.remove(@shot), turbo_stream.remove(helpers.dom_id(@shot, :journal))]
       end
       format.html do
         flash[:notice] = "Shot successfully deleted."
@@ -114,13 +110,16 @@ class ShotsController < ApplicationController
 
   private
 
+  def build_manual_shot
+    @shot = Current.user.shots.build(start_time: Time.current, public: Current.user.public, sha: "manual:#{SecureRandom.uuid}")
+  end
+
   def save_form_shot
     allowed = Shot.editable_attributes(Current.user)
     allowed += %i[start_time duration] if @shot.manual?
     attributes = params.expect(shot: allowed)
     saved = false
     Shot.transaction(requires_new: true) do
-      # Tag assignment writes associations immediately, so validation must roll it back too.
       @shot.assign_attributes(attributes)
       saved = @shot.save(context: [@shot.new_record? ? :create : :update, :manual_edit])
       raise ActiveRecord::Rollback unless saved
@@ -184,18 +183,14 @@ class ShotsController < ApplicationController
     end
     @shots_count = @shots.count
 
-    @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time, before: params[:before], before_id: params[:before_id])
+    @shots, @cursor = paginate_with_cursor(@shots.for_list, by: :start_time)
   end
 
   def load_journal
     @journal_search_id = params[:journal_search_id].presence || SecureRandom.uuid
     shots = journal.search(params)
     @shots_count = shots.count unless request.format.turbo_stream?
-    @shots, @cursor = paginate_with_cursor(journal.for_list(shots), items: Journal::PAGE_SIZE, by: :start_time, before: params[:before], before_id: params[:before_id])
-    @columns = journal.ordered_columns
-    @visible_columns = journal.visible_columns
-  rescue Journal::InvalidChange => error
-    redirect_to shots_path, alert: error.message
+    @shots, @cursor = paginate_with_cursor(journal.for_list(shots), items: Journal::PAGE_SIZE, by: :start_time)
   end
 
   def load_related_shots
@@ -203,10 +198,7 @@ class ShotsController < ApplicationController
   end
 
   def load_coffee_bags_for_form
-    return unless Current.user.coffee_management_enabled?
-
-    @coffee_bags = Current.user.coffee_bags.active.by_brewability.by_roast_date.by_name.includes(:roaster).to_a
-    @coffee_bags = [@shot.coffee_bag, *@coffee_bags] if @shot&.coffee_bag && @coffee_bags.exclude?(@shot.coffee_bag)
+    @coffee_bags = Current.user.coffee_bags.selectable_for([@shot]).to_a if Current.user.coffee_management_enabled?
   end
 
   def create_shared_shot

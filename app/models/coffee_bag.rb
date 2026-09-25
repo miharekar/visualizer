@@ -39,6 +39,9 @@ class CoffeeBag < ApplicationRecord
       END
     SQL
   }
+  scope :selectable_for, ->(shots) {
+    active.or(where(id: shots.map(&:coffee_bag_id))).includes(:roaster).by_brewability.by_roast_date.by_name
+  }
 
   squishes(*%i[country elevation farm farmer harvest_time name processing quality_score region roast_level url variety tasting_notes place_of_purchase])
 
@@ -55,7 +58,7 @@ class CoffeeBag < ApplicationRecord
   end
 
   def full_display_name
-    label = [name.presence || "Unnamed coffee", roaster&.name.presence].compact.join(" - ")
+    label = "#{name} - #{roaster.name}"
     label += " (#{roast_date.to_fs(:long)})" if roast_date.present?
     label += " (Archived)" if archived?
     label

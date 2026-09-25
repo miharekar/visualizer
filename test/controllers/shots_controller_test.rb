@@ -204,9 +204,10 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, ERB::Util.html_escape(bag.full_display_name)
 
-    foreign_bag = create(:coffee_bag)
+    foreign_bag = create(:coffee_bag, name: "Foreign coffee")
     patch shot_url(@shot), params: {shot: {coffee_bag_id: foreign_bag.id}}
     assert_response :unprocessable_content
+    assert_not_includes response.body, "Foreign coffee"
     assert_equal bag, @shot.reload.coffee_bag
     patch shot_url(@shot), params: {shot: {coffee_bag_id: SecureRandom.uuid}}
     assert_response :unprocessable_content
@@ -224,16 +225,12 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test "journal delete removes row and ordinary delete removes card" do
-    delete shot_url(@shot), params: {journal: true}, as: :turbo_stream
+  test "delete removes both the journal row and the shot card" do
+    delete shot_url(@shot), as: :turbo_stream
     assert_response :success
     assert_select "turbo-stream[action='remove'][target='#{dom_id(@shot, :journal)}']"
+    assert_select "turbo-stream[action='remove'][target='#{dom_id(@shot)}']"
     assert_not Shot.exists?(@shot.id)
-
-    shot = create(:shot, user: @user)
-    delete shot_url(shot), as: :turbo_stream
-    assert_response :success
-    assert_select "turbo-stream[action='remove'][target='shot_#{shot.id}']"
   end
 
   test "web JSON create and destroy direct clients to API without changing shots" do

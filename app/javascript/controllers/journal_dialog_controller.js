@@ -19,7 +19,7 @@ export default class extends Controller {
     this.submitting = false
     this.fieldsTarget.disabled = false
     this.fieldsTarget.inert = false
-    this.element.setAttribute("closedby", "any")
+    this.element.setAttribute("closedby", "closerequest")
     this.errorTarget.textContent = "Not saved. Please try again."
   }
 

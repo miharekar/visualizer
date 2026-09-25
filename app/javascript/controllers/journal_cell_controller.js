@@ -8,9 +8,8 @@ export default class extends Controller {
   }
 
   submit() {
-    if (this.submitting) return true
+    if (this.element.hasAttribute("data-saving")) return true
     if (!this.element.reportValidity()) return false
-    this.submitting = true
     this.element.dataset.saving = ""
     this.inputTarget.readOnly = true
     this.errorTarget.textContent = ""
@@ -20,7 +19,6 @@ export default class extends Controller {
 
   complete(event) {
     if (event.detail.fetchResponse?.contentType?.includes("turbo-stream")) return
-    this.submitting = false
     delete this.element.dataset.saving
     this.dirty()
     this.inputTarget.readOnly = false
@@ -30,11 +28,10 @@ export default class extends Controller {
   navigate(event) {
     if (event.key !== "Enter" || event.isComposing) return
     event.preventDefault()
+    if (this.element.hasAttribute("data-unsaved") && !this.submit()) return
     const cell = this.element.closest("td")
-    const row = cell.closest("tr")
-    const next = event.shiftKey ? row.previousElementSibling : row.nextElementSibling
-    const control = next?.querySelector(`[data-column="${CSS.escape(cell.dataset.column)}"] [data-journal-cell-control]`)
-    if (!this.submit() || !control) return
+    const row = event.shiftKey ? cell.parentElement.previousElementSibling : cell.parentElement.nextElementSibling
+    const control = row?.querySelector(`[data-column="${CSS.escape(cell.dataset.column)}"] [data-journal-cell-control]`)
     control?.focus()
     control?.select?.()
   }

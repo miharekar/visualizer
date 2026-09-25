@@ -22,7 +22,7 @@
         </div>
         <div class="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
           <% first_set, second_set = @features.in_groups(2, false) %>
-          <ul role="list" class="divide-y divide-neutral-200">
+          <ul class="divide-y divide-neutral-200">
             <% first_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:py-0 md:pb-4" : "" %>">
                 <svg class="text-terracotta-500 size-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -32,7 +32,7 @@
               </li>
             <% end %>
           </ul>
-          <ul role="list" class="divide-y divide-neutral-200 border-t border-neutral-200 md:border-t-0">
+          <ul class="divide-y divide-neutral-200 border-t border-neutral-200 md:border-t-0">
             <% second_set.each_with_index do |feature, i| %>
               <li class="py-4 flex<%= i == 0 ? " md:border-t-0 md:py-0 md:pb-4" : "" %>">
                 <svg class="text-terracotta-500 size-6 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

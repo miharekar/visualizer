@@ -3,7 +3,6 @@ class Journal
 
   PAGE_SIZE = 30
   MAX_BATCH = 100
-  UUID_PATTERN = /\A[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\z/i
   DEFAULT_COLUMNS = %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions].freeze
   LABELS = {
     "start_time" => "Brewed at", "coffee" => "Coffee", "profile_title" => "Profile",
@@ -32,7 +31,7 @@ class Journal
 
     labels = LABELS.dup
     if user.coffee_management_enabled?
-      labels.except!("bean_brand", "bean_type")
+      labels.except!(*BAG_FIELDS)
     else
       labels.delete("coffee")
     end
@@ -50,14 +49,11 @@ class Journal
   end
 
   def default_columns
-    DEFAULT_COLUMNS.flat_map { it == "coffee" && !user.coffee_management_enabled? ? %w[bean_brand bean_type] : it } & columns.keys
+    with_coffee_columns(DEFAULT_COLUMNS) & columns.keys
   end
 
   def editable_columns
-    return @editable_columns if @editable_columns
-
-    editable = columns.except("actions", "ratio", "image", "start_time")
-    @editable_columns = user.coffee_management_enabled? ? editable.except(*BAG_FIELDS) : editable
+    @editable_columns ||= columns.except("actions", "ratio", "image", "start_time")
   end
 
   def dropdown_values(field)
@@ -65,7 +61,7 @@ class Journal
   end
 
   def visible_columns
-    user.journal_columns.nil? ? default_columns : user.journal_columns & columns.keys
+    @visible_columns ||= user.journal_columns.nil? ? default_columns : with_coffee_columns(user.journal_columns) & columns.keys
   end
 
   def save_columns(settings)
@@ -91,9 +87,15 @@ class Journal
       end
       shots = shots.merge(matches)
     end
-    shots = shots.where(coffee_bag_id: user.coffee_bags.find(params[:coffee_bag]).id) if params[:coffee_bag].present? && user.coffee_management_enabled?
-    shots = shots.with_all_tag_slugs(params[:tags]) if user.premium? && params[:tags].present?
+    coffee_bag = filtered_coffee_bag(params[:coffee_bag])
+    shots = shots.where(coffee_bag:) if coffee_bag
+    tags = filtered_tags(params[:tags])
+    shots = shots.with_all_tag_slugs(tags) if tags.any?
     shots
+  end
+
+  def filter_labels(params)
+    [filtered_coffee_bag(params[:coffee_bag])&.display_name, *filtered_tags(params[:tags])].compact
   end
 
   def for_list(shots = scope, fields: visible_columns)
@@ -103,7 +105,7 @@ class Journal
   end
 
   def shots(ids, fields: visible_columns)
-    raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(UUID_PATTERN) }
+    raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(ApplicationRecord::UUID_PATTERN) }
 
     shots = for_list(scope.where(id: ids).reorder(:id), fields: fields.uniq)
     (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
@@ -111,6 +113,16 @@ class Journal
     raise ActiveRecord::RecordNotFound unless shots.size == ids.size
 
     shots
+  end
+
+  def editor_value(shots, field)
+    if field == "tag_list"
+      shots.map { it.tags.map(&:name) }.reduce(:&).sort.join(",")
+    elsif field == "coffee" && shots.one?
+      shots.first.coffee_bag_id
+    elsif shots.one?
+      value(shots.first, field)
+    end
   end
 
   def value(shot, field)
@@ -123,8 +135,9 @@ class Journal
     elsif field.start_with?("metadata:")
       shot.metadata[field.delete_prefix("metadata:")]
     elsif field == "coffee"
-      name = [shot.bean_type, shot.bean_brand].compact_blank.join(" - ")
-      shot.roast_date.present? ? "#{name} (#{shot.roast_date})" : name
+      label = [shot.bean_type, shot.bean_brand].compact_blank.join(" - ")
+      date = shot.parsed_roast_date
+      date ? "#{label} (#{date.to_fs(:long)})".strip : label
     elsif field == "tag_list"
       shot.tag_list
     else
@@ -136,25 +149,38 @@ class Journal
     raise InvalidChange, "Some fields are not editable" unless editable_columns.key?(field)
     raise InvalidChange, "Invalid field value" unless value.nil? || value.is_a?(String)
 
-    # ponytail: overlapping metadata/tag writes may lose edits; add row locks if needed.
     Shot.transaction do
       if field == "coffee"
-        raise InvalidChange, "Choose a coffee bag" if value.blank?
-
-        value = user.coffee_bags.includes(:roaster).find(value)
+        value = user.coffee_bags.includes(:roaster).find_by(id: value)
+        raise InvalidChange, "Choose a coffee bag" unless value
       end
       records.each do |shot|
         raise InvalidChange, "Some fields are not editable" if field == "duration" && !shot.manual?
 
-        # Tag assignment writes immediately, so assignment must stay inside this transaction.
         shot.assign_attributes(attributes_for(shot, field, value))
         shot.save!(context: %i[update manual_edit])
       end
-      records
     end
+    %w[bean_weight drink_weight].include?(field) ? [field, "ratio"] : [field]
   end
 
   private
+
+  def with_coffee_columns(fields)
+    if user.coffee_management_enabled?
+      fields.map { BAG_FIELDS.include?(it) ? "coffee" : it }.uniq
+    else
+      fields.flat_map { it == "coffee" ? %w[bean_brand bean_type] : it }.uniq
+    end
+  end
+
+  def filtered_coffee_bag(id)
+    user.coffee_bags.find_by(id:) if id.present? && user.coffee_management_enabled?
+  end
+
+  def filtered_tags(tags)
+    user.premium? ? tags.to_s.split(",").compact_blank : []
+  end
 
   def attributes_for(shot, field, value)
     if field == "coffee"

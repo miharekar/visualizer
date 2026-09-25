@@ -80,21 +80,19 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-results tbody tr", count: 1
   end
 
-  test "editor loads owned shots and cancel returns an empty frame" do
+  test "editor loads owned shots and rejects missing selections" do
     get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
     assert_response :success
     assert_select "turbo-frame#journal-editor"
-    assert_select "turbo-frame#journal-editor dialog[data-controller='journal-dialog']" do
+    assert_select "turbo-frame#journal-editor dialog[data-controller='journal-dialog'][closedby='closerequest']:not([title])" do
       assert_select "form .flex.justify-end > button[data-action='journal-dialog#close'] + input[type='submit']"
       assert_select "form[action='#{journal_path}']"
     end
     assert_includes response.body, "Sweet"
 
-    get edit_journal_url
-    assert_response :success
-    assert_select "turbo-frame#journal-editor" do |frames|
-      assert_empty frames.first.text.strip
-    end
+    get edit_journal_url, params: {field: "espresso_notes"}
+    assert_response :unprocessable_content
+    assert_select "turbo-frame#journal-editor dialog p", text: /Choose up to/
     get edit_journal_url, params: {ids: [create(:shot).id], field: "espresso_notes"}
     assert_response :not_found
   end
@@ -177,7 +175,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   test "bulk transaction rolls back eager tag assignments and earlier shots" do
     other = create(:shot, user: @user)
     first, last = [@shot, other].sort_by(&:id)
-    last.update_columns(acidity: 99) # rubocop:disable Rails/SkipsModelValidations -- exercise rollback when a later shot fails validation
+    last.update_columns(acidity: 99) # rubocop:disable Rails/SkipsModelValidations
     assert_raises ActiveRecord::RecordInvalid do
       Journal.new(@user).update([first, last], field: "tag_list", value: "test")
     end
@@ -198,17 +196,20 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_raises(Journal::InvalidChange) { Journal.new(@user).update([manual.id], field: "start_time", value: "2026-01-01T08:30:00") }
   end
 
-  test "foreign shots and coffee bags are rejected" do
+  test "foreign shots return plain 404s and foreign coffee bags are rejected" do
     update_field("bean_weight", "20", ids: [@shot.id, create(:shot).id])
     assert_response :not_found
+    assert_equal "text/plain", response.media_type
     assert_equal "18", @shot.reload.bean_weight
 
     @user.update!(coffee_management_enabled: true)
     patch journal_url, params: {ids: [@shot.id], field: "coffee", value: create(:coffee_bag).id, editor: true}, headers: stream_headers
-    assert_response :not_found
+    assert_response :unprocessable_content
+    assert_select "turbo-stream[action='replace'][target='journal-editor'] p", text: "Choose a coffee bag"
+    assert_nil @shot.reload.coffee_bag_id
   end
 
-  test "coffee saves refresh bag fields and their cells" do
+  test "coffee saves refresh only the coffee cell" do
     @user.update!(coffee_management_enabled: true)
     bag = create(:coffee_bag, roaster: create(:roaster, user: @user))
     patch journal_url, params: {ids: [@shot.id], field: "coffee", value: bag.id, editor: true}, headers: stream_headers
@@ -216,11 +217,25 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal bag.id, @shot.reload.coffee_bag_id
     assert_equal bag.name, @shot.bean_type
     assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'coffee')}']"
-    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'roast_date')}']"
-    assert_select "turbo-stream[target='#{cell_id(@shot, 'bean_weight')}']", count: 0
-    assert_equal "#{@shot.bean_type} - #{@shot.bean_brand} (#{@shot.roast_date})", Journal.new(@user).value(@shot, "coffee")
+    assert_select "turbo-stream[target='#{cell_id(@shot, 'roast_date')}'], turbo-stream[target='#{cell_id(@shot, 'bean_weight')}']", count: 0
+    assert_equal "#{bag.name} - #{bag.roaster.name} (#{bag.roast_date.to_fs(:long)})", Journal.new(@user).value(@shot, "coffee")
     update_field("bean_brand", "Override")
     assert_response :unprocessable_content
+  end
+
+  test "coffee editor lists active bags plus current ones" do
+    @user.update!(coffee_management_enabled: true)
+    roaster = create(:roaster, user: @user)
+    current = create(:coffee_bag, roaster:, name: "Current", archived_at: Time.current)
+    active = create(:coffee_bag, roaster:, name: "Active")
+    archived = create(:coffee_bag, roaster:, name: "Archived", archived_at: Time.current)
+    @shot.update!(coffee_bag: current)
+    get edit_journal_url, params: {ids: [@shot.id], field: "coffee"}
+    assert_response :success
+    assert_select "input[name='value'][value='#{current.id}']"
+    assert_select "li[data-id='#{current.id}']"
+    assert_select "li[data-id='#{active.id}']"
+    assert_select "li[data-id='#{archived.id}']", count: 0
   end
 
   test "coffee modal only accepts bag ID and blank bulk selection cannot detach bags" do
@@ -292,8 +307,37 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
     update_field("private_notes", "Secret", ids: [recent.id])
     assert_response :unprocessable_content
+    assert_select "turbo-stream[action='update'][target='#{cell_id(recent, 'private_notes')}'] p", text: "Some fields are not editable"
+    assert_select "turbo-stream[target='journal-editor']", count: 0
     get edit_journal_url, params: {ids: [recent.id], field: "private_notes"}
     assert_response :unprocessable_content
+  end
+
+  test "premium search debounces while free users submit" do
+    get shots_url
+    assert_select "form[data-turbo-frame='journal-results'][data-action*='input->search#submit']"
+    assert_select "form[data-turbo-frame='journal-results'] input[type='submit']", count: 0
+
+    @user.update!(premium_expires_at: nil)
+    get shots_url
+    assert_select "form[data-turbo-frame='journal-results'][data-action*='input->search#submit']", count: 0
+    assert_select "form[data-turbo-frame='journal-results'] input[type='submit'][value='Search']"
+  end
+
+  test "coffee and tag filters are listed with a clear link and unknown bags are ignored" do
+    @user.update!(coffee_management_enabled: true)
+    bag = create(:coffee_bag, roaster: create(:roaster, user: @user))
+    @shot.update!(coffee_bag: bag, tag_list: "daily")
+    get shots_url, params: {coffee_bag: bag.id, tags: "daily", q: "Kenya"}
+    assert_response :success
+    assert_select "p", text: /Filtered by #{Regexp.escape(bag.display_name)} and daily\./
+    assert_select "a[href='#{shots_path(q: 'Kenya')}']", text: "Clear filters"
+    assert_select "tr##{dom_id(@shot, :journal)}"
+
+    get shots_url, params: {coffee_bag: SecureRandom.uuid}
+    assert_response :success
+    assert_select "a", text: "Clear filters", count: 0
+    assert_select "tr##{dom_id(@shot, :journal)}"
   end
 
   test "clearing and metadata merge preserve untouched values" do
@@ -432,10 +476,16 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [], Journal.new(@user).visible_columns
   end
 
-  test "column defaults follow coffee management mode" do
+  test "default and saved columns follow coffee management mode" do
     assert_equal %w[espresso_enjoyment start_time bean_brand bean_type profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
-    @user.update!(coffee_management_enabled: true)
-    assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], Journal.new(@user).default_columns
+    @user.update!(journal_columns: %w[coffee profile_title])
+    assert_equal %w[bean_brand bean_type profile_title], Journal.new(@user).visible_columns
+
+    @user.update!(coffee_management_enabled: true, journal_columns: %w[bean_brand profile_title roast_date bean_type])
+    journal = Journal.new(@user)
+    assert_equal %w[espresso_enjoyment start_time coffee profile_title bean_weight grinder_setting grinder_model drink_weight duration actions], journal.default_columns
+    assert_equal %w[coffee profile_title], journal.visible_columns
+    assert_empty journal.columns.keys & Journal::BAG_FIELDS
   end
 
   test "saving columns replaces preferences for unavailable premium fields" do
@@ -528,17 +578,17 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     @shot.update!(start_time: timestamp)
     create_list(:shot, Journal::PAGE_SIZE + 1, user: @user, start_time: timestamp)
     journal = Journal.new(@user)
-    first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time)
+    first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
     assert_equal Journal::PAGE_SIZE, first.size
     assert_equal timestamp.utc.iso8601(6), cursor.fetch(:before)
     assert_equal first.last.id, cursor.fetch(:before_id)
-    second, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, **cursor)
+    second, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor:)
     assert_nil cursor
     assert_empty(first.map(&:id) & second.map(&:id))
     assert_equal @user.shots.count, (first + second).size
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, before: "bad", before_id: @shot.id) }
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, before: timestamp.iso8601, before_id: "bad") }
-    legacy, = paginate_with_cursor(journal.for_list, by: :start_time, before: timestamp.iso8601)
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: "bad", before_id: @shot.id}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601, before_id: "bad"}) }
+    legacy, = paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601})
     assert_equal 20, legacy.size
   end
 

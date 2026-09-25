@@ -446,7 +446,6 @@ a:hover .logo-steam path {
   @apply text-base sm:text-sm py-1 bg-white dark:bg-neutral-800 shadow-lg rounded-md border border-neutral-300 dark:border-neutral-600 max-h-60 overflow-auto ring-1 ring-black/5 focus:outline-none;
 }
 
-/* Dialog suggestions use local coordinates, not the document scroll offset. */
 dialog .tagify__dropdown {
   left: -1px !important;
   top: 100% !important;

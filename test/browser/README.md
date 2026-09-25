@@ -45,14 +45,16 @@ JOURNAL_BROWSER_EMAIL=journal-browser-REPLACE-WITH-UUID@example.invalid \
 ```
 
 Checks run sequentially in one browser session with separate Node subtest results:
-native Turbo pending-cell replacement, overlapping saves, stale pagination,
+native Turbo pending-cell replacement, overlapping saves, stale prefetched pagination,
 server 422 values/focus, Enter/change/blur duplication, search deferral,
 serialized latest-query searches with inert results, failed-value discard
-confirmation for search and columns Apply, coffee/tag popups, pending-dialog
-dismissal and transport retry, mouse and emulated-touch column dragging without upload-overlay interference, open-panel button styling, pending columns
-Apply dismissal/filter retention, numeric bounds, notes search, manual creation,
+confirmation for search and columns Apply, coffee/tag popups, backdrop clicks and
+pending-dialog dismissal, transport retry, mouse and emulated-touch column dragging without upload-overlay interference, open-panel button styling, pending columns
+Apply dismissal/filter retention, numeric bounds, unchanged-cell Enter and Shift+Enter
+navigation, notes search, manual creation,
 confirmation Cancel via native Enter, Enter-to-confirm without duplicate deletion, and selection toolbar geometry at
-desktop/390px widths. Delayed-body checks hold
+desktop/390px widths. Each check waits for the prefetched second page before
+interacting. Delayed-body checks hold
 `Response.text()` after headers arrive, without dispatching synthetic Turbo events
 or replacing controllers. Columns Apply holds its request before delivery because
 that endpoint redirects to HTML rather than returning a Turbo stream.

@@ -10,7 +10,7 @@ registerHooks({
 })
 const { default: Selection } = await import("../../app/javascript/controllers/journal_selection_controller.js")
 
-test("selection caps at 100, builds compare link, and resets after server marker replacement", () => {
+test("selection caps at 100, builds compare link, and resets", () => {
   const selection = new Selection()
   const target = () => ({ classList: { toggle() {} } })
   selection.hasCountTarget = selection.hasAllTarget = true
@@ -22,7 +22,7 @@ test("selection caps at 100, builds compare link, and resets after server marker
   selection.checkboxTargets[100].checked = true
   selection.select({ target: selection.checkboxTargets[100] })
   assert.equal(selection.selected.length, 100)
-  selection.resetTargetConnected()
+  selection.reset()
   assert.equal(selection.selected.length, 0)
   selection.checkboxTargets[0].checked = selection.checkboxTargets[1].checked = true
   selection.select()

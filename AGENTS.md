@@ -39,10 +39,9 @@ bin/rails test test/models/shot_test.rb:123 # single test by line number
 bin/rails test test/models/shot_test.rb -n /test_name/ # single test by name
 bin/ci                                  # CI pipeline (style, security, tests, seeds)
 env RAILS_ENV=test bin/rails db:seed:replant # must pass in CI
-PARALLEL_WORKERS=10 bin/rails test      # cap workers to avoid exhausting Postgres connections
 ```
 
-`bin/ci` runs: bin/setup --skip-server, RuboCop, bundler-audit, importmap audit, Brakeman, Gitleaks audit, Rails tests, and `db:seed:replant`.
+`bin/ci` runs: bin/setup --skip-server, RuboCop, bundler-audit, importmap audit, Brakeman, Gitleaks audit, Rails tests, JavaScript tests, and `db:seed:replant`.
 Use `PARALLEL_WORKERS=10` for Rails test runs and `bin/ci`; default CPU-count parallelism can exhaust local Postgres connections.
 Parser fixtures for upload/tests live in `test/files/`.
 
@@ -194,6 +193,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 - For view edits, run `rustywind` and `htmlbeautifier` on changed templates.
 - Use Tailwind utility classes (no custom webpack). Respect existing component patterns.
 - Avoid time-dependent computed values (for example `Date.current`-based counters) inside cached list/card fragments; prefer persisted fields in cached UI.
+- Visualizer is not accessibility-focused: don't add `aria-*`, `role`, or table `scope` attributes, or screen-reader-only (`sr-only`) content. Keep only what a library needs to work (stimulus-autocomplete finds options via `role="option"`).
 - Run Prettier on changed JavaScript files.
 
 ## Cursor/Copilot rules
