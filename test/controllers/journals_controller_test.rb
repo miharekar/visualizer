@@ -428,6 +428,13 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "editor keeps each field's label and input in one block above the buttons" do
+    get edit_journal_url, params: {ids: [@shot.id], field: "bean_weight"}
+    assert_select "dialog fieldset > div > label + input#journal-editor-value", count: 1
+    get edit_journal_url, params: {ids: [@shot.id], field: "grinder_model"}
+    assert_select "dialog fieldset > div > label + div[data-controller='combobox'] input#journal-editor-value", count: 1
+  end
+
   test "zero enjoyment renders as unrated" do
     @shot.update!(espresso_enjoyment: 0)
     get shots_url
