@@ -1,5 +1,6 @@
 class JournalColumnsController < ApplicationController
   before_action :require_authentication
+  before_action :require_journal
 
   def update
     query = params.permit(query: %i[q coffee_bag tags]).to_h.fetch("query", {}).compact_blank

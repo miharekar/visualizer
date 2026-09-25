@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     @journal ||= Journal.new(Current.user)
   end
 
+  def require_journal
+    head :not_found, content_type: "text/plain" unless Current.user.journal_enabled?
+  end
+
   def render_api_endpoint_error
     render json: {error: "This is not an API endpoint.", api_docs: "https://apidocs.visualizer.coffee"}, status: :not_acceptable
   end

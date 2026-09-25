@@ -1,5 +1,6 @@
 class JournalsController < ApplicationController
   before_action :require_authentication
+  before_action :require_journal
 
   rescue_from Journal::InvalidChange, ActiveRecord::RecordInvalid do |error|
     @error = error.message

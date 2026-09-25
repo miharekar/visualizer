@@ -532,6 +532,39 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "18", @shot.reload.bean_weight
   end
 
+  test "journal stays hidden until it is enabled" do
+    @user.update!(journal_enabled: false)
+    get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
+    assert_response :not_found
+    update_field("bean_weight", "20")
+    assert_response :not_found
+    assert_equal "text/plain", response.media_type
+    patch profile_journal_columns_url, params: {columns: %w[profile_title]}
+    assert_response :not_found
+    assert_equal "18", @shot.reload.bean_weight
+    assert_nil @user.reload[:journal_columns]
+
+    get shots_url
+    assert_response :success
+    assert_select "turbo-frame#journal-results, a[href='#{new_shot_path}']", count: 0
+    assert_select "#shots"
+  end
+
+  test "only admins can enable the journal" do
+    @user.update!(journal_enabled: false)
+    get edit_profile_url
+    assert_select "input[name='user[journal_enabled]']", count: 0
+    patch profile_url, params: {user: {name: "Barista", journal_enabled: "1"}}
+    assert_equal "Barista", @user.reload.name
+    assert_not @user.journal_enabled?
+
+    @user.update!(admin: true)
+    get edit_profile_url
+    assert_select "input[type='checkbox'][name='user[journal_enabled]']"
+    patch profile_url, params: {user: {journal_enabled: "1"}}
+    assert @user.reload.journal_enabled?
+  end
+
   test "malformed duplicate and oversized selections are rejected" do
     [[], "bad", [@shot.id] * 2, ["bad"], Array.new(Journal::MAX_BATCH + 1) { SecureRandom.uuid }].each do |ids|
       update_field("bean_weight", "20", ids:)

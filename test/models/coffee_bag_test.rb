@@ -8,10 +8,12 @@ class CoffeeBagTest < ActiveSupport::TestCase
     @roaster = FactoryBot.create(:roaster, user:)
   end
 
-  test "full display name puts coffee first with separate date and archive annotations" do
+  test "full display name puts coffee first with date and archive in one annotation" do
     bag = build(:coffee_bag, name: "Bourbon", roaster: build(:roaster, name: "Roaster"), roast_date: Date.new(2026, 1, 12), archived_at: Time.current)
-    assert_equal "Bourbon - Roaster (January 12, 2026) (Archived)", bag.full_display_name
-    bag.assign_attributes(roast_date: nil, archived_at: nil)
+    assert_equal "Bourbon - Roaster (January 12, 2026, Archived)", bag.full_display_name
+    bag.roast_date = nil
+    assert_equal "Bourbon - Roaster (Archived)", bag.full_display_name
+    bag.archived_at = nil
     assert_equal "Bourbon - Roaster", bag.full_display_name
   end
 

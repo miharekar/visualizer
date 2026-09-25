@@ -4,6 +4,7 @@ class ShotsController < ApplicationController
   include Shots::Editing
 
   before_action :require_authentication, except: %i[show compare share beanconqueror]
+  before_action :require_journal, only: %i[new create], if: -> { action_name == "new" || params.key?(:shot) }
   before_action :load_shot, only: %i[show compare share beanconqueror]
   before_action :create_shared_shot, only: %i[share beanconqueror]
   before_action :load_users_shot, only: %i[edit update remove_image destroy]
