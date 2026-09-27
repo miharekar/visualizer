@@ -1,0 +1,35 @@
+<div id="<%= dom_id(coffee_bag, :grind_suggestion) %>" class="<%= "mt-8" if coffee_bag.grind_suggestion.present? %>">
+  <div class="prose-neutral prose dark:prose-invert">
+    <table>
+      <thead class="border-b-0">
+        <tr class="relative z-20">
+          <th colspan="2">
+            <% if coffee_bag.grind_suggestion.blank? %>
+              <%= link_to "Suggest grind", coffee_bag_grind_suggestion_path(coffee_bag), data: {turbo_method: :post} %>
+            <% else %>
+              Grind suggestions
+            <% end %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% coffee_bag.grind_suggestion.to_a.each do |suggestion| %>
+          <% low, high = suggestion["setting_range"] %>
+          <% details = if suggestion["based_on"]
+               "#{suggestion["relation"] || "Like"} #{suggestion["based_on"]}"
+             elsif low
+               "#{suggestion["label"]} → #{low == high ? low : "#{low}–#{high}"}"
+             else
+               suggestion["label"]
+             end %>
+          <tr>
+            <td class="whitespace-nowrap"><%= suggestion["profile"] %></td>
+            <td class="wrap-anywhere">
+              <%= suggestion["setting"] %><% if suggestion["grinder"].present? %> on <%= suggestion["grinder"] %><% end %><% if details.present? %> (<%= details %>)<% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

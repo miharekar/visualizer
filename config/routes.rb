@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   end
 
   resources :coffee_bags, except: [:show] do
+    resource :grind_suggestion, only: :create, module: :coffee_bags
     member do
       delete :remove_image
       post :archive

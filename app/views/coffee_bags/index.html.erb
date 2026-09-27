@@ -1,4 +1,5 @@
 <% content_for(:html_title) { "Visualizer | Coffee Bags" } %>
+<%= turbo_stream_from Current.user, :coffee_bag_grind_suggestions if @grind_suggestions %>
 <div class="mx-auto flex max-w-7xl flex-col sm:px-6 lg:px-8">
   <div class="flex flex-row items-center justify-between gap-2 px-4 sm:px-0">
     <div>
@@ -39,7 +40,7 @@
     <div data-controller="modal">
       <%= render "shared/modal" %>
       <div id="coffee-bags"  class="mx-auto mt-6 grid max-w-2xl grid-cols-1 gap-8 sm:mx-0 sm:max-w-none md:grid-cols-2 lg:grid-cols-3">
-        <%= render partial: "coffee_bag", collection: @coffee_bags, cached: true %>
+        <%= render partial: "coffee_bag", collection: @coffee_bags, cached: ->(coffee_bag) { [coffee_bag, @grind_suggestions] } %>
       </div>
       <%= render partial: "shared/offset_loader", locals: { offset: @offset, path: coffee_bags_path(params.permit(:roaster_id, :roaster, :coffee).merge(offset: @offset, format: :turbo_stream)) } %>
     </div>

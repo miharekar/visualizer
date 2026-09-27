@@ -3,6 +3,7 @@ class CoffeeBag < ApplicationRecord
   include Squishable
   include SanitizedRichText
   include VariableImageAttachment
+  include GrindSuggestable
 
   performs :refresh_shot_values
 
@@ -129,6 +130,7 @@ end
 #  farm                    :string
 #  farmer                  :string
 #  frozen_date             :date
+#  grind_suggestion        :jsonb
 #  harvest_time            :string
 #  metadata                :jsonb
 #  name                    :string           not null

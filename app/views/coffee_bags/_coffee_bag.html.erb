@@ -52,6 +52,9 @@
             <% end %>
           </table>
         </div>
+        <% if @grind_suggestions %>
+          <%= render "coffee_bags/grind_suggestion", coffee_bag: %>
+        <% end %>
         <% if coffee_bag.notes.present? %>
           <hr class="my-2 text-neutral-200 dark:text-neutral-700">
           <%= coffee_bag.notes %>

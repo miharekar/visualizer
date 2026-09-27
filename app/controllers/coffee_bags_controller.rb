@@ -120,6 +120,7 @@ class CoffeeBagsController < ApplicationController
     @coffee_bags = @coffee_bags.where("roasters.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:roaster])}%") if params[:roaster].present?
     @coffee_bags = @coffee_bags.where("coffee_bags.name ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[:coffee])}%") if params[:coffee].present?
     @coffee_bags, @offset = paginate_with_offset(@coffee_bags, items: 24, offset: params[:offset].to_i)
+    @grind_suggestions = Current.user.admin? && Current.user.shots.exists?
   end
 
   def load_roasters
