@@ -171,6 +171,10 @@ lexxy-toolbar {
   @apply bg-neutral-100 shadow-none inset-shadow-sm dark:bg-white/30;
 }
 
+body.h-dvh:has(#journal-columns-panel:not(.hidden), #shot-upload-form:not(.hidden), [data-controller="menu"] > [data-menu-target="toggleable"]:not(.hidden)) {
+  @apply max-sm:h-auto max-sm:overflow-visible;
+}
+
 .pull-refresh-indicator {
   --pull-progress: 0;
   background-image: linear-gradient(to right, var(--color-terracotta-200), var(--color-terracotta-400));

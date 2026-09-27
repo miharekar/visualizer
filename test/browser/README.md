@@ -51,6 +51,7 @@ serialized latest-query searches with inert results, failed-value discard
 confirmation for search and columns Apply, coffee/tag popups, backdrop clicks and
 pending-dialog dismissal, transport retry, mouse and emulated-touch column dragging without upload-overlay interference,
 the column picker opening in full with Apply reachable on short phone screens,
+open Columns, Upload, and site menu scrolling the whole page on phones,
 pull to refresh from the header, search field, or table top, but not while the table is scrolled,
 swiping sideways, dragging columns, or editing,
 open-panel button styling, pending columns

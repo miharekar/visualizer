@@ -405,6 +405,9 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         await page.mouse.move(heading.x + 10, heading.y + heading.height / 2)
         await page.mouse.wheel(0, 300)
         await page.waitForFunction(() => [...document.querySelectorAll('#journal-columns-panel input[type="submit"]')].some(el => el.getBoundingClientRect().bottom <= innerHeight), null, { timeout: 2000 }).catch(() => assert.fail("scrolling cannot bring Apply into view on a short phone screen"))
+        await panel.getByRole("button", { name: "Cancel", exact: true }).tap()
+        assert.equal(await page.evaluate(() => scrollY), 0, "page stays scrolled after the column picker closes")
+        await open()
         await panel.getByRole("button", { name: "Reset to defaults", exact: true }).tap()
         await panel.getByRole("button", { name: "Apply", exact: true }).tap()
         await page.locator('td[data-column="duration"]').first().waitFor()
@@ -484,6 +487,24 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         else await button.click()
         await page.mouse.move(0, 0)
         assert.equal(await background(), closed, `${name} button remains depressed after closing`)
+      }
+    })
+
+    await check("open columns, upload, and mobile menu scroll the whole page on phones", async () => {
+      await page.setViewportSize({ width: 390, height: 600 })
+      const root = page.locator('[data-controller~="journal-columns"]')
+      try {
+        for (const [name, button] of [
+          ["Columns", page.getByRole("button", { name: "Columns", exact: true })],
+          ["Upload", page.getByRole("button", { name: "Upload", exact: true })],
+          ["Menu", page.locator('[data-action="click->menu#toggle"]')]
+        ]) {
+          await button.click()
+          assert.equal(await root.evaluate(el => el.scrollHeight <= el.clientHeight && document.scrollingElement.scrollHeight > innerHeight), true, `open ${name} is squeezed into the fixed-height Journal instead of scrolling the page`)
+          await button.click()
+        }
+      } finally {
+        await page.setViewportSize({ width: 1440, height: 1000 })
       }
     })
 
