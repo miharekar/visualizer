@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[8.1].define(version: 2026_09_27_120000) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "dblink"
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -19,233 +20,233 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_120000) do
   enable_extension "unaccent"
 
   create_table "action_text_rich_texts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "body"
-    t.datetime "created_at", null: false
     t.string "name", null: false
-    t.uuid "record_id", null: false
+    t.text "body"
     t.string "record_type", null: false
+    t.uuid "record_id", null: false
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
-  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_attachments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.uuid "record_id", null: false
     t.uuid "blob_id", null: false
     t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.uuid "record_id", null: false
-    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "byte_size", null: false
-    t.string "checksum"
-    t.string "content_type"
-    t.datetime "created_at", null: false
-    t.string "filename", null: false
+  create_table "active_storage_blobs", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
     t.text "metadata"
     t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_variant_records", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "airtable_infos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "base_id"
-    t.datetime "created_at", null: false
     t.uuid "identity_id", null: false
-    t.integer "last_cursor"
-    t.integer "last_transaction"
-    t.jsonb "tables"
-    t.datetime "updated_at", null: false
+    t.string "base_id"
     t.string "webhook_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "last_transaction"
+    t.integer "last_cursor"
+    t.jsonb "tables"
     t.index ["identity_id"], name: "index_airtable_infos_on_identity_id"
   end
 
   create_table "canonical_coffee_bags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "canonical_roaster_id", null: false
+    t.string "name"
+    t.string "url"
     t.string "country"
-    t.datetime "created_at", null: false
+    t.string "region"
     t.string "elevation"
     t.string "farmer"
     t.string "harvest_time"
-    t.string "loffee_labs_id"
-    t.string "name"
     t.string "processing"
-    t.string "region"
     t.string "roast_level"
-    t.string "tasting_notes"
-    t.datetime "updated_at", null: false
-    t.string "url"
     t.string "variety"
+    t.string "tasting_notes"
+    t.string "loffee_labs_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["canonical_roaster_id"], name: "index_canonical_coffee_bags_on_canonical_roaster_id"
     t.index ["loffee_labs_id"], name: "index_canonical_coffee_bags_on_loffee_labs_id", unique: true
   end
 
   create_table "canonical_roasters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "address"
-    t.string "country"
-    t.datetime "created_at", null: false
-    t.string "loffee_labs_id"
     t.string "name"
-    t.datetime "updated_at", null: false
     t.string "website"
+    t.string "country"
+    t.string "address"
+    t.string "loffee_labs_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "changes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "body"
-    t.datetime "created_at", null: false
-    t.string "excerpt"
-    t.datetime "published_at"
-    t.string "slug"
+  create_table "changes", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
+    t.text "body"
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
+    t.string "excerpt"
     t.index ["slug"], name: "index_changes_on_slug", unique: true
   end
 
   create_table "coffee_bags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "airtable_id"
-    t.datetime "archived_at"
-    t.uuid "canonical_coffee_bag_id"
-    t.string "country"
-    t.datetime "created_at", null: false
-    t.date "defrosted_date"
-    t.string "elevation"
-    t.string "farm"
-    t.string "farmer"
-    t.date "frozen_date"
-    t.string "harvest_time"
-    t.jsonb "metadata"
+    t.uuid "roaster_id", null: false
     t.string "name", null: false
-    t.text "notes"
-    t.string "place_of_purchase"
-    t.string "processing"
-    t.string "quality_score"
-    t.string "region"
     t.date "roast_date"
     t.string "roast_level"
-    t.uuid "roaster_id", null: false
-    t.string "tasting_notes"
-    t.datetime "updated_at", null: false
-    t.string "url"
+    t.string "country"
+    t.string "region"
+    t.string "farm"
+    t.string "farmer"
     t.string "variety"
+    t.string "elevation"
+    t.string "processing"
+    t.string "harvest_time"
+    t.string "quality_score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "airtable_id"
+    t.string "url"
+    t.string "tasting_notes"
+    t.uuid "canonical_coffee_bag_id"
+    t.string "place_of_purchase"
+    t.datetime "archived_at"
+    t.text "notes"
+    t.date "frozen_date"
+    t.date "defrosted_date"
+    t.jsonb "metadata"
     t.index ["airtable_id"], name: "index_coffee_bags_on_airtable_id"
     t.index ["canonical_coffee_bag_id"], name: "index_coffee_bags_on_canonical_coffee_bag_id"
     t.index ["roaster_id"], name: "index_coffee_bags_on_roaster_id"
   end
 
   create_table "dropdown_values", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "hidden_at", precision: nil
-    t.string "kind", null: false
-    t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
+    t.string "kind", null: false
     t.string "value", null: false
+    t.datetime "hidden_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id", "kind", "value"], name: "index_dropdown_values_on_user_id_and_kind_and_value", unique: true
   end
 
   create_table "identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
     t.jsonb "blob"
-    t.datetime "created_at", null: false
     t.datetime "expires_at"
     t.string "provider", null: false
-    t.string "refresh_token"
-    t.string "token"
     t.string "uid", null: false
+    t.string "token"
+    t.string "refresh_token"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "user_id", null: false
     t.index ["provider", "uid"], name: "index_identities_on_provider_and_uid", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
   end
 
-  create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "oauth_access_grants", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "resource_owner_id", null: false
     t.uuid "application_id", null: false
-    t.datetime "created_at", null: false
+    t.string "token", null: false
     t.integer "expires_in", null: false
     t.text "redirect_uri", null: false
-    t.uuid "resource_owner_id", null: false
+    t.datetime "created_at", null: false
     t.datetime "revoked_at"
     t.string "scopes", default: "", null: false
-    t.string "token", null: false
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
-  create_table "oauth_access_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "application_id", null: false
-    t.datetime "created_at", null: false
-    t.integer "expires_in"
-    t.string "previous_refresh_token", default: "", null: false
-    t.string "refresh_token"
+  create_table "oauth_access_tokens", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "resource_owner_id"
-    t.datetime "revoked_at"
-    t.string "scopes"
+    t.uuid "application_id", null: false
     t.string "token", null: false
+    t.string "refresh_token"
+    t.integer "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
     t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
     t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
 
-  create_table "oauth_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", null: false
+  create_table "oauth_applications", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.uuid "owner_id", null: false
-    t.string "owner_type", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
-    t.string "secret", null: false
-    t.string "uid", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "owner_id", null: false
+    t.string "owner_type", null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
   create_table "push_subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "auth_key"
-    t.datetime "created_at", null: false
+    t.uuid "user_id", null: false
     t.string "endpoint"
     t.string "p256dh_key"
-    t.datetime "updated_at", null: false
+    t.string "auth_key"
     t.string "user_agent"
-    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
   end
 
   create_table "roasters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "name", null: false
+    t.string "website"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "airtable_id"
     t.uuid "canonical_roaster_id"
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "user_id", null: false
-    t.string "website"
     t.index ["airtable_id"], name: "index_roasters_on_airtable_id"
     t.index ["canonical_roaster_id"], name: "index_roasters_on_canonical_roaster_id"
     t.index ["user_id", "name"], name: "index_roasters_on_user_id_and_name", unique: true
   end
 
   create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "ip_address"
-    t.datetime "updated_at", null: false
-    t.string "user_agent"
     t.uuid "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "shared_shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "shared_shots", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "shot_id", null: false
     t.string "code", null: false
     t.datetime "created_at", null: false
-    t.uuid "shot_id", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["code"], name: "index_shared_shots_on_code", unique: true
@@ -253,13 +254,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_120000) do
     t.index ["user_id"], name: "index_shared_shots_on_user_id"
   end
 
-  create_table "shot_informations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.jsonb "brewdata"
+  create_table "shot_informations", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "shot_id", null: false
     t.jsonb "data"
     t.jsonb "extra"
     t.jsonb "profile_fields"
-    t.uuid "shot_id", null: false
     t.jsonb "timeframe"
+    t.jsonb "brewdata"
     t.index ["shot_id"], name: "index_shot_informations_on_shot_id"
   end
 
@@ -270,43 +271,43 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_120000) do
     t.index ["tag_id", "shot_id"], name: "index_shot_tags_on_tag_id_and_shot_id", unique: true
   end
 
-  create_table "shots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "acidity"
-    t.integer "aftertaste"
-    t.string "airtable_id"
-    t.integer "aroma"
-    t.string "barista"
-    t.string "bean_brand"
-    t.text "bean_notes"
-    t.string "bean_type"
-    t.string "bean_weight"
-    t.integer "bitterness"
-    t.uuid "canonical_coffee_bag_id"
-    t.uuid "coffee_bag_id"
+  create_table "shots", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "start_time", precision: nil, null: false
     t.datetime "created_at", null: false
-    t.string "drink_ey"
+    t.datetime "updated_at", null: false
+    t.string "profile_title"
+    t.uuid "user_id"
     t.string "drink_tds"
-    t.string "drink_weight"
-    t.float "duration"
+    t.string "drink_ey"
     t.integer "espresso_enjoyment"
-    t.text "espresso_notes"
-    t.integer "flavor"
-    t.integer "fragrance"
-    t.jsonb "grind_suggestion"
+    t.string "bean_weight"
+    t.string "drink_weight"
     t.string "grinder_model"
     t.string "grinder_setting"
-    t.jsonb "metadata"
-    t.integer "mouthfeel"
-    t.text "private_notes"
-    t.string "profile_title"
-    t.boolean "public", default: false, null: false
+    t.string "bean_brand"
+    t.string "bean_type"
     t.string "roast_date"
-    t.string "roast_level"
+    t.text "espresso_notes"
     t.string "sha", null: false
-    t.datetime "start_time", precision: nil, null: false
+    t.string "roast_level"
+    t.text "bean_notes"
+    t.string "barista"
+    t.text "private_notes"
+    t.float "duration"
+    t.jsonb "metadata"
+    t.string "airtable_id"
+    t.boolean "public", default: false, null: false
+    t.uuid "coffee_bag_id"
+    t.uuid "canonical_coffee_bag_id"
+    t.integer "fragrance"
+    t.integer "aroma"
+    t.integer "flavor"
+    t.integer "aftertaste"
+    t.integer "acidity"
     t.integer "sweetness"
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
+    t.integer "mouthfeel"
+    t.integer "bitterness"
+    t.jsonb "grind_suggestion"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
     t.index ["bean_brand"], name: "index_shots_on_bean_brand", opclass: :gin_trgm_ops, using: :gin
     t.index ["bean_type"], name: "index_shots_on_bean_type", opclass: :gin_trgm_ops, using: :gin
@@ -319,47 +320,47 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_120000) do
   end
 
   create_table "tags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.string "name", null: false
     t.string "slug", null: false
-    t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id", "slug"], name: "index_tags_on_user_id_and_slug", unique: true
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "admin", default: false, null: false
-    t.boolean "beta", default: false, null: false
-    t.jsonb "chart_settings"
-    t.jsonb "coffee_bag_metadata_fields"
-    t.boolean "coffee_management_enabled", default: false, null: false
-    t.jsonb "communication"
-    t.datetime "created_at", null: false
-    t.string "creem_customer_id"
-    t.string "date_format"
-    t.boolean "developer", default: false, null: false
+  create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
-    t.string "github"
-    t.boolean "hide_shot_times", default: false, null: false
-    t.jsonb "journal_columns"
-    t.boolean "journal_enabled", default: false, null: false
-    t.datetime "last_read_change"
-    t.string "lemon_squeezy_customer_id"
-    t.string "name"
     t.string "password_digest", default: "", null: false
-    t.datetime "premium_expires_at"
-    t.boolean "public", default: false, null: false
-    t.jsonb "shot_metadata_fields"
-    t.string "skin"
-    t.string "slug"
-    t.string "stripe_customer_id"
-    t.boolean "supporter", default: false, null: false
-    t.string "temperature_unit"
-    t.string "timezone"
-    t.boolean "unified_chart", default: false, null: false
-    t.jsonb "unsubscribed_from"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "skin"
+    t.string "name"
+    t.boolean "public", default: false, null: false
+    t.boolean "supporter", default: false, null: false
+    t.string "timezone"
+    t.boolean "admin", default: false, null: false
+    t.string "slug"
+    t.boolean "hide_shot_times", default: false, null: false
+    t.string "github"
+    t.jsonb "chart_settings"
+    t.datetime "last_read_change"
+    t.boolean "beta", default: false, null: false
+    t.string "stripe_customer_id"
+    t.datetime "premium_expires_at"
+    t.boolean "developer", default: false, null: false
+    t.string "temperature_unit"
+    t.jsonb "shot_metadata_fields"
+    t.jsonb "unsubscribed_from"
+    t.boolean "coffee_management_enabled", default: false, null: false
+    t.string "date_format"
+    t.string "lemon_squeezy_customer_id"
+    t.jsonb "communication"
     t.string "webauthn_id"
+    t.string "creem_customer_id"
+    t.jsonb "coffee_bag_metadata_fields"
+    t.boolean "unified_chart", default: false, null: false
+    t.boolean "journal_enabled", default: false, null: false
+    t.jsonb "journal_columns"
     t.index ["creem_customer_id"], name: "index_users_on_creem_customer_id", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["lemon_squeezy_customer_id"], name: "index_users_on_lemon_squeezy_customer_id", unique: true
@@ -367,14 +368,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_120000) do
   end
 
   create_table "webauthn_credentials", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "external_id", null: false
-    t.datetime "last_used_at"
-    t.string "nickname", null: false
-    t.string "public_key", null: false
-    t.integer "sign_count", default: 0, null: false
-    t.datetime "updated_at", null: false
     t.uuid "user_id", null: false
+    t.string "external_id", null: false
+    t.string "public_key", null: false
+    t.string "nickname", null: false
+    t.integer "sign_count", default: 0, null: false
+    t.datetime "last_used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["external_id"], name: "index_webauthn_credentials_on_external_id", unique: true
     t.index ["user_id"], name: "index_webauthn_credentials_on_user_id"
   end
