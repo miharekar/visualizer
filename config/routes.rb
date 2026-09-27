@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   end
 
   resources :shots do
+    resource :grind_suggestion, only: :create, module: :shots
     member do
       delete :remove_image
       get :share

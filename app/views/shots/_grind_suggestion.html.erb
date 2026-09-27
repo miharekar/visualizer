@@ -1,0 +1,9 @@
+<span id="<%= dom_id(shot, :grind_suggestion) %>">
+  <% suggestion = shot.grind_suggestion %>
+  <% if suggestion.present? %>
+    <% low, high = suggestion["setting_range"] %>
+    (<%= suggestion["label"] %><% if low %> → <%= low == high ? low : "#{low}–#{high}" %><% end %><% if suggestion["puck_issue"].to_f > 0.6 %>; check puck prep first<% end %>)
+  <% elsif shot.duration.to_f.positive? %>
+    (<%= link_to "Suggest grind", shot_grind_suggestion_path(shot), data: {turbo_method: :post}, class: "standard-link" %>)
+  <% end %>
+</span>
