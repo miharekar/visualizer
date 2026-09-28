@@ -18,6 +18,10 @@ class Journal
 
   attr_reader :user
 
+  def self.cell_id(shot, field)
+    "#{ActionView::RecordIdentifier.dom_id(shot, :journal)}_#{field.unpack1('H*')}"
+  end
+
   def initialize(user)
     @user = user
   end

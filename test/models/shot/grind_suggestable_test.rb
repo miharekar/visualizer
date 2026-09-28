@@ -60,6 +60,17 @@ class Shot::GrindSuggestableTest < ActiveSupport::TestCase
     assert_equal "Finer", shot.reload.grind_suggestion["label"]
   end
 
+  test "updates the journal grind suggestion cell" do
+    shot = create_shot(grinder_setting: "18", duration: 15)
+    stub_typesafe(1 => 0.9, 2 => 0.1)
+
+    shot.suggest_grind_now
+
+    broadcast = capture_turbo_stream_broadcasts([@user, :journal_grind_suggestions]).sole
+    assert_equal Journal.cell_id(shot, "grind_suggestion"), broadcast["target"]
+    assert_includes broadcast.to_html, "Finer"
+  end
+
   test "falls back to words when history disagrees with the direction" do
     create_shot(grinder_setting: "12", duration: 30, espresso_enjoyment: 60, start_time: 3.days.ago)
     create_shot(grinder_setting: "14", duration: 25, espresso_enjoyment: 85, start_time: 2.days.ago)

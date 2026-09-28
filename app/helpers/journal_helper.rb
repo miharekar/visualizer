@@ -1,6 +1,6 @@
 module JournalHelper
   def journal_cell_id(shot, field)
-    "#{dom_id(shot, :journal)}_#{field.unpack1('H*')}"
+    Journal.cell_id(shot, field)
   end
 
   def journal_input_options(field)
