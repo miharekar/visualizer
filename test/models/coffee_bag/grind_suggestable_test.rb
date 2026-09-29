@@ -9,7 +9,7 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
     create_shot(@kenya, "Adaptive", "1.2", enjoyment: 90, start_time: 3.days.ago)
     create_shot(@kenya, "Adaptive", "1.6", enjoyment: 40, start_time: 2.days.ago)
     create_shot(@brazil, "Adaptive", "2.4", start_time: 1.day.ago)
-    create_shot(@brazil, "Blooming", "2.0", start_time: 1.day.ago)
+    create_shot(@brazil, "Blooming", "2.0", start_time: 36.hours.ago)
   end
 
   test "enqueues suggestion for new admin bags only" do
@@ -30,14 +30,24 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
     ], bag.reload.grind_suggestion
   end
 
-  test "falls back to all-time top profiles when nothing was brewed in the past month" do
-    Shot.update_all(start_time: 2.months.ago) # rubocop:disable Rails/SkipsModelValidations
+  test "uses the last 3 profiles brewed" do
+    create_shot(@kenya, "Turbo", "1.0", start_time: 4.days.ago)
+    create_shot(@kenya, "Old", "1.0", start_time: 5.days.ago)
     bag = create(:coffee_bag, roaster: @roaster, name: "Ethiopia")
     stub_typesafe(similar: {"coffee_0" => 0.9, "coffee_1" => 0.1}, relative_0: 2, relative_1: 2)
 
     bag.suggest_grind
 
-    assert_equal %w[Adaptive Blooming], bag.reload.grind_suggestion.pluck("profile")
+    assert_equal %w[Adaptive Blooming Turbo], bag.reload.grind_suggestion.pluck("profile")
+  end
+
+  test "suggests nothing when the user has no profiles yet" do
+    Shot.delete_all
+    bag = create(:coffee_bag, roaster: @roaster, name: "Ethiopia")
+
+    bag.suggest_grind
+
+    assert_empty bag.reload.grind_suggestion
   end
 
   test "uses the bag's own latest shot once it has one" do

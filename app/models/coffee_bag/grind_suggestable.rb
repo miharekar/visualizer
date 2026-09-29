@@ -47,12 +47,8 @@ class CoffeeBag
     end
 
     def recent_profiles
-      brewed = user.shots.where.not(profile_title: [nil, ""])
-      recent = brewed.where(start_time: 1.month.ago..)
-      recent = brewed unless recent.exists?
-      titles = recent.group(:profile_title).order(Arel.sql("COUNT(*) DESC")).limit(PROFILE_LIMIT).count.keys
-      grinders = recent.where(profile_title: titles).select("DISTINCT ON (profile_title) profile_title, grinder_model").order(:profile_title, start_time: :desc).to_h { [it.profile_title, it.grinder_model] }
-      titles.map { {profile_title: it, grinder_model: grinders[it]} }
+      latest = user.shots.where.not(profile_title: [nil, ""]).select("DISTINCT ON (profile_title) profile_title, grinder_model, start_time").order(:profile_title, start_time: :desc)
+      Shot.from(latest, :shots).order(start_time: :desc).limit(PROFILE_LIMIT).map { {profile_title: it.profile_title, grinder_model: it.grinder_model} }
     end
 
     def dialed_in_shots(profiles)
