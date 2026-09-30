@@ -148,10 +148,7 @@ class Journal
     elsif field == "tag_list"
       shot.tag_list
     elsif field == "grind_suggestion"
-      suggestion = shot.grind_suggestion.to_h
-      low, high = suggestion["setting_range"]
-      range = low == high ? low : "#{low}–#{high}" if low
-      [suggestion["label"], range].compact.join(" → ").presence
+      shot.grind_suggestion.to_h["label"]
     else
       shot[field]
     end

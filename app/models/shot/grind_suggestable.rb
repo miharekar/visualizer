@@ -4,7 +4,7 @@ class Shot
 
     DIAL_IN_ATTRIBUTES = %w[bean_weight drink_weight duration espresso_enjoyment grinder_model grinder_setting profile_title coffee_bag_id bean_brand bean_type].freeze
     HISTORY_LIMIT = 5
-    REGRESSION_LIMIT = 20
+    REFERENCE_LIMIT = 20
     MIN_DIRECTION_PROBABILITY = 0.6
     DIRECTION_LEVELS = {"finer" => [0, 1, 2], "keep" => [3], "coarser" => [4, 5, 6]}.freeze
     ADJUSTMENT_LABELS = ["Much finer", "Finer", "Slightly finer", "Keep the grind", "Slightly coarser", "Coarser", "Much coarser"].freeze
@@ -39,7 +39,7 @@ class Shot
     def suggest_grind_now
       reference = reference_target
       response = TypeSafe.new.system_one(state: grind_suggestion_state(reference), questions: QUESTIONS)
-      update_column(:grind_suggestion, grind_suggestion_from(response, reference)) # rubocop:disable Rails/SkipsModelValidations
+      update_column(:grind_suggestion, grind_suggestion_from(response)) # rubocop:disable Rails/SkipsModelValidations
       broadcast_replace_to [self, :grind_suggestion], target: ActionView::RecordIdentifier.dom_id(self, :grind_suggestion), partial: "shots/grind_suggestion", locals: {shot: self}
       broadcast_journal_grind_suggestion
       coffee_bag&.suggest_grind_later
@@ -121,7 +121,7 @@ class Shot
       end
     end
 
-    def grind_suggestion_from(response, reference)
+    def grind_suggestion_from(response)
       probabilities = response.dig("answers", "adjustment", "probabilities").transform_keys(&:to_i)
       direction, probability = DIRECTION_LEVELS.transform_values { |levels| levels.sum { probabilities.fetch(it, 0) } }.max_by(&:last)
       suggestion = {
@@ -135,44 +135,8 @@ class Shot
         suggestion.merge("label" => "Not sure")
       else
         level = DIRECTION_LEVELS[direction].max_by { probabilities.fetch(it, 0) }
-        suggestion.merge("direction" => direction, "label" => ADJUSTMENT_LABELS[level], "setting_range" => setting_range(direction, reference))
+        suggestion.merge("direction" => direction, "label" => ADJUSTMENT_LABELS[level])
       end
-    end
-
-    # ponytail: straight-line fit of time vs setting, no outlier rejection; swap for a robust fit if ranges look noisy
-    def setting_range(direction, reference)
-      current = numeric_setting(grinder_setting)
-      shots = same_coffee_shots
-      return if direction == "keep" || current.nil? || grinder_model.blank? || reference.nil? || shots.nil?
-
-      rows = shots.where(profile_title:, grinder_model:).where(duration: 0.1..).by_start_time.limit(REGRESSION_LIMIT).pluck(:grinder_setting, :duration)
-      rows << [grinder_setting, duration]
-      points = rows.filter_map { |setting, time| [numeric_setting(setting), time] if numeric_setting(setting) }
-      return if points.size < 3 || points.map(&:first).uniq.size < 2
-
-      slope = time_per_setting(points)
-      return if slope.zero?
-
-      target = current + ((reference[:duration] - duration) / slope)
-      decimals = rows.map { |setting, _| setting.to_s[/[.,](\d+)/, 1].to_s.size }.max
-      resolution = 10.0**-decimals
-      coarser = (target > current) == slope.negative?
-      return if (target - current).abs < resolution || coarser != (direction == "coarser")
-
-      spread = [(target - current).abs * 0.25, resolution].max
-      [target - spread, target + spread].map { [it, 0].max.round(decimals).to_s }
-    end
-
-    def time_per_setting(points)
-      settings, times = points.transpose
-      setting_mean = settings.sum / settings.size
-      time_mean = times.sum / times.size
-      points.sum { |setting, time| (setting - setting_mean) * (time - time_mean) } / settings.sum { (it - setting_mean)**2 }
-    end
-
-    def numeric_setting(setting)
-      normalized = setting.to_s.strip.tr(",", ".")
-      normalized.to_f if normalized.match?(/\A\d+(\.\d+)?\z/)
     end
 
     def reference_target
@@ -187,7 +151,7 @@ class Shot
     end
 
     def typical_target
-      shots = prior_shots.where(profile_title:, duration: 0.1..).by_start_time.limit(REGRESSION_LIMIT).to_a
+      shots = prior_shots.where(profile_title:, duration: 0.1..).by_start_time.limit(REFERENCE_LIMIT).to_a
       return if shots.size < 3
 
       ratios = shots.map(&:weight_ratio).select { it.finite? && it.positive? }

@@ -14,14 +14,7 @@
       </thead>
       <tbody>
         <% coffee_bag.grind_suggestion.to_a.each do |suggestion| %>
-          <% low, high = suggestion["setting_range"] %>
-          <% details = if suggestion["based_on"]
-               "#{suggestion["relation"] || "Like"} #{suggestion["based_on"]}"
-             elsif low
-               "#{suggestion["label"]} → #{low == high ? low : "#{low}–#{high}"}"
-             else
-               suggestion["label"]
-             end %>
+          <% details = suggestion["based_on"] ? "#{suggestion["relation"] || "Like"} #{suggestion["based_on"]}" : suggestion["label"] %>
           <tr>
             <td class="whitespace-nowrap"><%= suggestion["profile"] %></td>
             <td class="wrap-anywhere">

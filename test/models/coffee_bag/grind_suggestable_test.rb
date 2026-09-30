@@ -57,7 +57,7 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
     @kenya.suggest_grind
 
     adaptive = @kenya.reload.grind_suggestion.find { it["profile"] == "Adaptive" }
-    assert_equal({"profile" => "Adaptive", "grinder" => "EG-1", "setting" => "1.3", "label" => "Finer", "setting_range" => %w[1.1 1.2]}, adaptive)
+    assert_equal({"profile" => "Adaptive", "grinder" => "EG-1", "setting" => "1.3", "label" => "Finer"}, adaptive)
   end
 
   private

@@ -88,7 +88,7 @@ class CoffeeBag
 
     def from_own_shot(profile, shot)
       suggestion = shot.grind_suggestion.to_h
-      base_suggestion(profile, shot).merge("label" => suggestion["label"], "setting_range" => suggestion["setting_range"])
+      base_suggestion(profile, shot).merge("label" => suggestion["label"])
     end
 
     def from_similar_bag(profile, shots, bags, answers)
