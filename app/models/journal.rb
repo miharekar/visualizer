@@ -27,7 +27,7 @@ class Journal
   end
 
   def scope
-    user.premium? ? user.shots : user.shots.non_premium
+    user.shots
   end
 
   def columns
@@ -39,12 +39,10 @@ class Journal
     else
       labels.delete("coffee")
     end
-    if user.premium?
-      labels["tag_list"] = "Tags"
-      labels["private_notes"] = "Private notes"
-      user.shot_metadata_fields.each { labels["metadata:#{it}"] = it.humanize }
-      Shot::TASTING_ASSESSMENT_ATTRIBUTES.each { labels[it.to_s] = it.to_s.humanize }
-    end
+    labels["tag_list"] = "Tags"
+    labels["private_notes"] = "Private notes"
+    user.shot_metadata_fields.each { labels["metadata:#{it}"] = it.humanize }
+    Shot::TASTING_ASSESSMENT_ATTRIBUTES.each { labels[it.to_s] = it.to_s.humanize }
     labels["grind_suggestion"] = "Grind suggestion" if user.admin?
     @columns = labels
   end
@@ -188,7 +186,7 @@ class Journal
   end
 
   def filtered_tags(tags)
-    user.premium? ? tags.to_s.split(",").compact_blank : []
+    tags.to_s.split(",").compact_blank
   end
 
   def attributes_for(shot, field, value)

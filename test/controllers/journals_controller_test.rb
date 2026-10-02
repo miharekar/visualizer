@@ -270,24 +270,6 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_nil @shot.canonical_coffee_bag_id
   end
 
-  test "expired premium text edits detach managed and canonical bags internally" do
-    canonical = CanonicalCoffeeBag.create!(name: "Canonical coffee", canonical_roaster: CanonicalRoaster.create!(name: "Canonical roaster"))
-    bag = create(:coffee_bag, roaster: create(:roaster, user: @user), canonical_coffee_bag: canonical)
-    @user.update!(coffee_management_enabled: true, premium_expires_at: 1.day.ago)
-    %w[bean_brand bean_type].each do |field|
-      @shot.update!(coffee_bag: bag)
-      assert_equal canonical.id, @shot.canonical_coffee_bag_id
-      update_field(field, "Custom #{field}")
-      assert_response :success
-      assert_equal "Custom #{field}", @shot.reload[field]
-      assert_nil @shot.coffee_bag_id
-      assert_nil @shot.canonical_coffee_bag_id
-    end
-    assert_raises(Journal::InvalidChange) { Journal.new(@user).update([@shot.id], field: "coffee", value: bag.id) }
-    update_field("coffee", bag.id)
-    assert_response :unprocessable_content
-  end
-
   test "unmanaged coffee field edits clear canonical association without overwriting neighboring fields" do
     roaster = CanonicalRoaster.create!(name: "Original roaster")
     bag = CanonicalCoffeeBag.create!(name: "Original coffee", canonical_roaster: roaster)
@@ -305,19 +287,19 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "free users cannot access old shots or premium fields" do
-    @shot.update!(created_at: 2.months.ago)
-    recent = create(:shot, user: @user, profile_title: "Matching brew", start_time: 1.year.ago)
+  test "journal needs premium" do
     @user.update!(premium_expires_at: nil)
-    assert_equal [recent.id], Journal.new(@user).search(q: "Matching").pluck(:id)
+    get shots_url
+    assert_select "turbo-frame#journal-results", count: 0
+    assert_select "#shots"
+    assert_select "input[type='checkbox'][name='journal']", count: 0
     update_field("bean_weight", "20")
     assert_response :not_found
-    update_field("private_notes", "Secret", ids: [recent.id])
-    assert_response :unprocessable_content
-    assert_select "turbo-stream[action='update'][target='#{cell_id(recent, 'private_notes')}'] p", text: "Some fields are not editable"
-    assert_select "turbo-stream[target='journal-editor']", count: 0
-    get edit_journal_url, params: {ids: [recent.id], field: "private_notes"}
-    assert_response :unprocessable_content
+    get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
+    assert_response :not_found
+    post journal_url
+    assert_response :not_found
+    assert_equal "18", @shot.reload.bean_weight
   end
 
   test "toggle switches between journal and standard view" do
@@ -340,15 +322,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-results"
   end
 
-  test "premium search debounces while free users submit" do
+  test "search debounces without a submit button" do
     get shots_url
     assert_select "form[data-turbo-frame='journal-results'][data-action*='input->search#submit']"
     assert_select "form[data-turbo-frame='journal-results'] input[type='submit']", count: 0
-
-    @user.update!(premium_expires_at: nil)
-    get shots_url
-    assert_select "form[data-turbo-frame='journal-results'][data-action*='input->search#submit']", count: 0
-    assert_select "form[data-turbo-frame='journal-results'] input[type='submit'][value='Search']"
   end
 
   test "coffee and tag filters are listed with a clear link and unknown bags are ignored" do
@@ -560,11 +537,11 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_includes columns, "metadata:basket"
   end
 
-  test "saving columns replaces preferences for unavailable premium fields" do
-    @user.update!(journal_columns: %w[private_notes profile_title], premium_expires_at: 1.day.ago)
+  test "saving columns replaces preferences for unavailable fields" do
+    @user.update!(journal_columns: %w[grind_suggestion profile_title])
     get shots_url
     assert_response :success
-    assert_select "td[data-column='private_notes']", count: 0
+    assert_select "td[data-column='grind_suggestion']", count: 0
 
     patch profile_journal_columns_url, params: {columns: %w[profile_title start_time]}
     assert_response :see_other
@@ -626,15 +603,15 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "body.overscroll-y-none, footer > div.hidden", count: 0
   end
 
-  test "only admins can enable the journal" do
-    @user.update!(journal_enabled: false)
+  test "only premium users can enable the journal" do
+    @user.update!(journal_enabled: false, premium_expires_at: nil)
     get edit_profile_url
     assert_select "input[name='user[journal_enabled]']", count: 0
     patch profile_url, params: {user: {name: "Barista", journal_enabled: "1"}}
     assert_equal "Barista", @user.reload.name
-    assert_not @user.journal_enabled?
+    assert_not @user[:journal_enabled]
 
-    @user.update!(admin: true)
+    @user.update!(premium_expires_at: 1.month.from_now)
     get edit_profile_url
     assert_select "input[type='checkbox'][name='user[journal_enabled]']"
     patch profile_url, params: {user: {journal_enabled: "1"}}

@@ -11,17 +11,13 @@
     <%= render "shots/upload_form", show_form: false %>
   </div>
   <div class="mt-4 flex min-h-0 w-full min-w-0 flex-1 flex-col px-4 pb-4 sm:px-6 sm:pb-6 lg:px-8" data-controller="journal-selection">
-    <% unless Current.user.premium? %>
-      <p class="mb-4 text-sm text-neutral-500">Showing shots uploaded in the last month. <%= link_to "Premium", premium_index_path, class: "standard-link" %> includes older history.</p>
-    <% end %>
     <div class="relative mb-4">
-      <%= form_with url: shots_path, method: :get, class: "flex flex-wrap gap-3", data: { turbo_frame: "journal-results", controller: "search", search_target: "form", journal_navigation_target: "search", action: "submit->journal-navigation#search turbo:submit-end->journal-navigation#complete #{'input->search#submit' if Current.user.premium?}" } do |f| %>
+      <%= form_with url: shots_path, method: :get, class: "flex flex-wrap gap-3", data: { turbo_frame: "journal-results", controller: "search", search_target: "form", journal_navigation_target: "search", action: "submit->journal-navigation#search turbo:submit-end->journal-navigation#complete input->search#submit" } do |f| %>
         <% %w[coffee_bag tags].each do |filter| %>
           <%= f.hidden_field filter, value: params[filter] if params[filter].present? %>
         <% end %>
         <button type="button" class="button-white px-3 py-2 text-sm" data-action="journal-columns#toggle">Columns</button>
         <%= f.search_field :q, value: params[:q], class: "standard-input min-w-48 flex-1 max-sm:py-1.5", placeholder: "Search coffee, notes, tags..." %>
-        <%= f.submit "Search", class: "button-white px-4 py-2" unless Current.user.premium? %>
       <% end %>
       <% filter_labels = journal.filter_labels(params) %>
       <% if filter_labels.any? %>

@@ -94,6 +94,10 @@ class User < ApplicationRecord
     premium? && coffee_management_enabled
   end
 
+  def journal_enabled?
+    premium? && journal_enabled
+  end
+
   def can_manage_premium?
     creem_customer_id.present? || lemon_squeezy_customer_id.present?
   end
