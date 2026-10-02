@@ -90,6 +90,10 @@ lexxy-toolbar {
     color: var(--lexxy-color-bold);
   }
 
+  :where(mark, .lexxy-content__highlight) :where(strong, .lexxy-content__bold) {
+    color: inherit;
+  }
+
   :where(blockquote) {
     color: var(--lexxy-color-quote);
   }
