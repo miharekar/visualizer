@@ -1,4 +1,4 @@
-<div id="journal-columns-panel" class="mx-4 mt-4 hidden sm:mx-0" data-journal-columns-target="panel" data-defaults="<%= journal.default_columns.to_json %>" data-action="dragover->journal-columns#drag drop->journal-columns#drop dragend->journal-columns#finish pointermove->journal-columns#touchMove pointerup->journal-columns#touchEnd pointercancel->journal-columns#touchEnd lostpointercapture->journal-columns#touchEnd">
+<div id="journal-columns-panel" class="mb-4 hidden" data-journal-columns-target="panel" data-defaults="<%= journal.default_columns.to_json %>" data-action="dragover->journal-columns#drag drop->journal-columns#drop dragend->journal-columns#finish pointermove->journal-columns#touchMove pointerup->journal-columns#touchEnd pointercancel->journal-columns#touchEnd lostpointercapture->journal-columns#touchEnd">
   <%= form_with url: profile_journal_columns_path, method: :patch, data: {journal_columns_target: "form", action: "submit->journal-navigation#apply submit->journal-columns#serialize turbo:submit-start->journal-columns#savingStarted turbo:submit-end->journal-columns#savingEnded turbo:submit-end->journal-navigation#complete"} do |f| %>
     <fieldset data-journal-columns-target="fields">
       <% %w[q coffee_bag tags].each do |filter| %>
@@ -30,9 +30,9 @@
         <% end %>
       </div>
       <div class="mt-3 flex justify-end gap-3">
-        <button type="button" class="button-white mr-auto px-3 py-2" data-action="journal-columns#reset">Reset to defaults</button>
-        <button type="button" class="button-white px-3 py-2" data-action="journal-columns#cancel">Cancel</button>
-        <%= f.submit "Apply", class: "button-terracotta px-3 py-2" %>
+        <button type="button" class="button-white mr-auto px-3 py-2 text-sm" data-action="journal-columns#reset">Reset to defaults</button>
+        <button type="button" class="button-white px-3 py-2 text-sm" data-action="journal-columns#cancel">Cancel</button>
+        <%= f.submit "Apply", class: "button-terracotta px-3 py-2 text-sm" %>
       </div>
       <p class="mt-2 text-sm text-red-600 empty:hidden dark:text-red-400" data-journal-columns-target="error" data-journal-navigation-target="error"></p>
     </fieldset>

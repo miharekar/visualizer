@@ -11,11 +11,8 @@
       <% end %>
     </h1>
   </div>
-  <div class="flex shrink-0 <%= journal_view? ? 'justify-center' : 'justify-between' %>">
+  <div class="flex shrink-0 <%= journal_view? ? 'justify-end' : 'justify-between' %>">
     <div class="flex gap-2" data-controller="push-notifications" data-push-notifications-vapid-key-value="<%= Rails.application.credentials.webpush&.public_key&.tr("_-", "/+") %>">
-      <% if journal_view? %>
-        <button type="button" class="button-white px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" data-action="journal-columns#toggle">Columns</button>
-      <% end %>
       <% if Current.user.journal_enabled? %>
         <%= form_with url: journal_path, method: journal_view? ? :delete : :post, class: "hidden items-center gap-2 sm:flex", data: {controller: "search", search_target: "form", action: "change->search#submit"} do |f| %>
           <%= f.label :journal, title: "Journal view", class: "cursor-pointer text-neutral-500 dark:text-neutral-400" do %>

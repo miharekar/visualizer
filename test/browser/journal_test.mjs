@@ -649,7 +649,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         assert.ok(footer.y + footer.height <= height, "footer outside viewport")
         if (phone) {
           assert.ok(Math.round(table.x) === 0 && Math.round(table.width) === width, `table is ${table.width}px wide at ${table.x}px, not edge to edge`)
-          assert.ok(Math.abs(buttons.x + buttons.width / 2 - width / 2) <= 1, "header buttons not centered")
+          assert.ok(Math.abs(buttons.x + buttons.width - (width - 16)) <= 1, "header buttons not right-aligned")
           const above = buttons.y - (nav.y + nav.height)
           const below = height - (table.y + table.height)
           assert.ok(above > 0 && Math.abs(below - above) <= 1, `table ends ${below}px above the page bottom, buttons sit ${above}px below the site header`)
