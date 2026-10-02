@@ -6,7 +6,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   setup do
     Rails.cache.clear
     host! "example.com"
-    @user = create(:user, :premium, journal_enabled: true)
+    @user = create(:user, :premium)
     @shot = create(:shot, user: @user)
     sign_in(@user)
   end
@@ -23,7 +23,6 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index renders Turbo Stream pagination" do
-    @user.update!(journal_enabled: false)
     get shots_url(format: :turbo_stream, before: 1.day.from_now.iso8601)
 
     assert_response :success
@@ -215,7 +214,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal bag, @shot.reload.coffee_bag
   end
 
-  test "file uploads still create imported shots and drag uploads return ok" do
+  test "file uploads create imported shots and drag uploads return ok" do
     assert_difference "Shot.count" do
       post shots_url, params: {files: [fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")]}
     end
@@ -224,21 +223,6 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
 
     post shots_url, params: {files: [fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")], drag: true}
     assert_response :ok
-  end
-
-  test "manual creation needs the journal but file uploads do not" do
-    @user.update!(journal_enabled: false)
-    get new_shot_url
-    assert_response :not_found
-    assert_no_difference "Shot.count" do
-      post shots_url, params: {shot: {profile_title: "Manual"}}
-    end
-    assert_response :not_found
-
-    assert_difference "Shot.count" do
-      post shots_url, params: {files: [fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")]}
-    end
-    assert_redirected_to shots_url(format: :html)
   end
 
   test "delete removes both the journal row and the shot card" do

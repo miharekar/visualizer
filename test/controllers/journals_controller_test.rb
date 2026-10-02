@@ -620,7 +620,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
     get shots_url
     assert_response :success
-    assert_select "turbo-frame#journal-results, a[href='#{new_shot_path}']", count: 0
+    assert_select "turbo-frame#journal-results", count: 0
     assert_select "#shots"
     assert_select "[data-controller='pull-refresh'][data-pull-refresh-browser-value='false']", count: 1
     assert_select "body.overscroll-y-none, footer > div.hidden", count: 0

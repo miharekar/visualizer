@@ -11,57 +11,53 @@
       <% end %>
     </h1>
   </div>
-  <% if @shots.any? || Current.user.journal_enabled? %>
-    <div class="flex shrink-0 <%= journal_view? ? 'justify-center' : 'justify-between' %>">
-      <div class="flex gap-2" data-controller="push-notifications" data-push-notifications-vapid-key-value="<%= Rails.application.credentials.webpush&.public_key&.tr("_-", "/+") %>">
-        <% if Current.user.journal_enabled? %>
-          <%= form_with url: journal_path, method: journal_view? ? :delete : :post, class: "hidden items-center gap-2 sm:flex", data: {controller: "search", search_target: "form", action: "change->search#submit"} do |f| %>
-            <%= f.label :journal, title: "Journal view", class: "cursor-pointer text-neutral-500 dark:text-neutral-400" do %>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                <path fill-rule="evenodd" d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 18.375V5.625ZM21 9.375A.375.375 0 0 0 20.625 9h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 0 0 .375-.375v-1.5Zm0 3.75a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 0 0 .375-.375v-1.5Zm0 3.75a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 0 0 .375-.375v-1.5ZM10.875 18.75a.375.375 0 0 0 .375-.375v-1.5a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5ZM3.375 15h7.5a.375.375 0 0 0 .375-.375v-1.5a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375Zm0-3.75h7.5a.375.375 0 0 0 .375-.375v-1.5A.375.375 0 0 0 10.875 9h-7.5A.375.375 0 0 0 3 9.375v1.5c0 .207.168.375.375.375Z" clip-rule="evenodd" />
-              </svg>
-            <% end %>
-            <div class="group outline-terracotta-500 has-checked:bg-terracotta-600 relative inline-flex w-11 shrink-0 rounded-full bg-neutral-200 p-0.5 inset-ring inset-ring-neutral-900/5 outline-offset-2 transition-colors duration-200 ease-in-out has-focus-visible:outline-2 dark:bg-white/5 dark:inset-ring-white/10">
-              <span class="relative size-5 rounded-full bg-white shadow-xs ring-1 ring-neutral-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-5">
-                <span class="absolute inset-0 flex size-full items-center justify-center opacity-100 transition-opacity duration-200 ease-in group-has-checked:opacity-0 group-has-checked:duration-100 group-has-checked:ease-out">
-                  <svg viewBox="0 0 12 12" fill="none" class="size-3 text-neutral-600">
-                    <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
-                <span class="absolute inset-0 flex size-full items-center justify-center opacity-0 transition-opacity duration-100 ease-out group-has-checked:opacity-100 group-has-checked:duration-200 group-has-checked:ease-in">
-                  <svg viewBox="0 0 12 12" fill="currentColor" class="text-terracotta-600 size-3">
-                    <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
-                  </svg>
-                </span>
-              </span>
-              <%= check_box_tag :journal, "1", journal_view?, class: "absolute inset-0 size-full cursor-pointer appearance-none border-0 bg-transparent bg-none focus:ring-0 focus:ring-offset-0 focus:outline-hidden" %>
-            </div>
-          <% end %>
-        <% end %>
-        <button type="button" title="Enable shot notifications" class="button-white flex hidden! items-center px-2 py-1.5 sm:px-3 sm:py-2" data-action="click->push-notifications#attemptToSubscribe" data-push-notifications-target="bell">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-            <path d="M4.214 3.227a.75.75 0 0 0-1.156-.955 8.97 8.97 0 0 0-1.856 3.825.75.75 0 0 0 1.466.316 7.47 7.47 0 0 1 1.546-3.186ZM16.942 2.272a.75.75 0 0 0-1.157.955 7.47 7.47 0 0 1 1.547 3.186.75.75 0 0 0 1.466-.316 8.971 8.971 0 0 0-1.856-3.825Z" />
-            <path fill-rule="evenodd" d="M10 2a6 6 0 0 0-6 6c0 1.887-.454 3.665-1.257 5.234a.75.75 0 0 0 .515 1.076 32.91 32.91 0 0 0 3.256.508 3.5 3.5 0 0 0 6.972 0 32.903 32.903 0 0 0 3.256-.508.75.75 0 0 0 .515-1.076A11.448 11.448 0 0 1 16 8a6 6 0 0 0-6-6Zm0 14.5a2 2 0 0 1-1.95-1.557 33.54 33.54 0 0 0 3.9 0A2 2 0 0 1 10 16.5Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-        <% if journal_view? %>
-          <button type="button" class="button-white px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" data-action="journal-columns#toggle">Columns</button>
-        <% end %>
-        <button type="button" class="button-white flex items-center px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" data-action="panel#toggleUploadForm">
-          Upload
-        </button>
-        <% if journal_view? %>
-          <%= link_to "Create", new_shot_path, class: "button-terracotta px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" %>
-        <% end %>
-      </div>
-      <% if Current.user.premium? && !journal_view? %>
-        <button type="button" class="button-white ml-2 flex items-center px-2.5 py-1.5 text-sm whitespace-nowrap sm:hidden!" data-action="panel#toggleInstantFilters">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="mr-1.5 -ml-1.5 size-5">
-            <path d="M10 3.75a2 2 0 10-4 0 2 2 0 004 0zM17.25 4.5a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM5 3.75a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 17a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM17.25 17a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM9 10a.75.75 0 01-.75.75h-5.5a.75.75 0 010-1.5h5.5A.75.75 0 019 10zM17.25 10.75a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM14 10a2 2 0 10-4 0 2 2 0 004 0zM10 16.25a2 2 0 10-4 0 2 2 0 004 0z" />
-          </svg>
-          Instant Filters
-        </button>
+  <div class="flex shrink-0 <%= journal_view? ? 'justify-center' : 'justify-between' %>">
+    <div class="flex gap-2" data-controller="push-notifications" data-push-notifications-vapid-key-value="<%= Rails.application.credentials.webpush&.public_key&.tr("_-", "/+") %>">
+      <% if journal_view? %>
+        <button type="button" class="button-white px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" data-action="journal-columns#toggle">Columns</button>
       <% end %>
+      <% if Current.user.journal_enabled? %>
+        <%= form_with url: journal_path, method: journal_view? ? :delete : :post, class: "hidden items-center gap-2 sm:flex", data: {controller: "search", search_target: "form", action: "change->search#submit"} do |f| %>
+          <%= f.label :journal, title: "Journal view", class: "cursor-pointer text-neutral-500 dark:text-neutral-400" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 18.375V5.625ZM21 9.375A.375.375 0 0 0 20.625 9h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 0 0 .375-.375v-1.5Zm0 3.75a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 0 0 .375-.375v-1.5Zm0 3.75a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 0 0 .375-.375v-1.5ZM10.875 18.75a.375.375 0 0 0 .375-.375v-1.5a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375h7.5ZM3.375 15h7.5a.375.375 0 0 0 .375-.375v-1.5a.375.375 0 0 0-.375-.375h-7.5a.375.375 0 0 0-.375.375v1.5c0 .207.168.375.375.375Zm0-3.75h7.5a.375.375 0 0 0 .375-.375v-1.5A.375.375 0 0 0 10.875 9h-7.5A.375.375 0 0 0 3 9.375v1.5c0 .207.168.375.375.375Z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
+          <div class="group outline-terracotta-500 has-checked:bg-terracotta-600 relative inline-flex w-11 shrink-0 rounded-full bg-neutral-200 p-0.5 inset-ring inset-ring-neutral-900/5 outline-offset-2 transition-colors duration-200 ease-in-out has-focus-visible:outline-2 dark:bg-white/5 dark:inset-ring-white/10">
+            <span class="relative size-5 rounded-full bg-white shadow-xs ring-1 ring-neutral-900/5 transition-transform duration-200 ease-in-out group-has-checked:translate-x-5">
+              <span class="absolute inset-0 flex size-full items-center justify-center opacity-100 transition-opacity duration-200 ease-in group-has-checked:opacity-0 group-has-checked:duration-100 group-has-checked:ease-out">
+                <svg viewBox="0 0 12 12" fill="none" class="size-3 text-neutral-600">
+                  <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="absolute inset-0 flex size-full items-center justify-center opacity-0 transition-opacity duration-100 ease-out group-has-checked:opacity-100 group-has-checked:duration-200 group-has-checked:ease-in">
+                <svg viewBox="0 0 12 12" fill="currentColor" class="text-terracotta-600 size-3">
+                  <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
+                </svg>
+              </span>
+            </span>
+            <%= check_box_tag :journal, "1", journal_view?, class: "absolute inset-0 size-full cursor-pointer appearance-none border-0 bg-transparent bg-none focus:ring-0 focus:ring-offset-0 focus:outline-hidden" %>
+          </div>
+        <% end %>
+      <% end %>
+      <button type="button" title="Enable shot notifications" class="button-white flex hidden! items-center px-2 py-1.5 sm:px-3 sm:py-2" data-action="click->push-notifications#attemptToSubscribe" data-push-notifications-target="bell">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+          <path d="M4.214 3.227a.75.75 0 0 0-1.156-.955 8.97 8.97 0 0 0-1.856 3.825.75.75 0 0 0 1.466.316 7.47 7.47 0 0 1 1.546-3.186ZM16.942 2.272a.75.75 0 0 0-1.157.955 7.47 7.47 0 0 1 1.547 3.186.75.75 0 0 0 1.466-.316 8.971 8.971 0 0 0-1.856-3.825Z" />
+          <path fill-rule="evenodd" d="M10 2a6 6 0 0 0-6 6c0 1.887-.454 3.665-1.257 5.234a.75.75 0 0 0 .515 1.076 32.91 32.91 0 0 0 3.256.508 3.5 3.5 0 0 0 6.972 0 32.903 32.903 0 0 0 3.256-.508.75.75 0 0 0 .515-1.076A11.448 11.448 0 0 1 16 8a6 6 0 0 0-6-6Zm0 14.5a2 2 0 0 1-1.95-1.557 33.54 33.54 0 0 0 3.9 0A2 2 0 0 1 10 16.5Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <button type="button" class="button-white flex items-center px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" data-action="panel#toggleUploadForm">
+        Upload
+      </button>
+      <%= link_to "Create", new_shot_path, class: "button-terracotta px-2.5 py-1.5 text-sm sm:px-3 sm:py-2" %>
     </div>
-  <% end %>
+    <% if Current.user.premium? && @shots.any? && !journal_view? %>
+      <button type="button" class="button-white ml-2 flex items-center px-2.5 py-1.5 text-sm whitespace-nowrap sm:hidden!" data-action="panel#toggleInstantFilters">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="mr-1.5 -ml-1.5 size-5">
+          <path d="M10 3.75a2 2 0 10-4 0 2 2 0 004 0zM17.25 4.5a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM5 3.75a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.25 17a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM17.25 17a.75.75 0 000-1.5h-5.5a.75.75 0 000 1.5h5.5zM9 10a.75.75 0 01-.75.75h-5.5a.75.75 0 010-1.5h5.5A.75.75 0 019 10zM17.25 10.75a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5h1.5zM14 10a2 2 0 10-4 0 2 2 0 004 0zM10 16.25a2 2 0 10-4 0 2 2 0 004 0z" />
+        </svg>
+        Instant Filters
+      </button>
+    <% end %>
+  </div>
 </div>
