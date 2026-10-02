@@ -298,8 +298,25 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     get edit_journal_url, params: {ids: [@shot.id], field: "espresso_notes"}
     assert_response :not_found
     post journal_url
-    assert_response :not_found
+    assert_redirected_to premium_index_url(anchor: "journal")
     assert_equal "18", @shot.reload.bean_weight
+  end
+
+  test "free users see the toggle until they click through to premium" do
+    @user.update!(journal_enabled: false, premium_expires_at: nil)
+    get shots_url
+    assert_select "form[action='#{journal_path}'][data-turbo='false'] input[type='checkbox'][name='journal']:not([checked])"
+
+    post journal_url
+    assert_redirected_to premium_index_url(anchor: "journal")
+    get shots_url
+    assert_select "#shots"
+    assert_select "input[type='checkbox'][name='journal']", count: 0
+
+    @user.update!(premium_expires_at: 1.month.from_now)
+    get shots_url
+    assert_select "turbo-frame#journal-results"
+    assert_select "input[type='checkbox'][name='journal'][checked]"
   end
 
   test "toggle switches between journal and standard view" do
@@ -601,6 +618,11 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#shots"
     assert_select "[data-controller='pull-refresh'][data-pull-refresh-browser-value='false']", count: 1
     assert_select "body.overscroll-y-none, footer > div.hidden", count: 0
+    assert_select "form[action='#{journal_path}'][data-turbo='true'] input[type='checkbox'][name='journal']:not([checked])"
+
+    post journal_url
+    assert_redirected_to shots_url(format: :html)
+    assert @user.reload.journal_enabled?
   end
 
   test "only premium users can enable the journal" do

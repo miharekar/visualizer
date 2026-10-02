@@ -1,6 +1,6 @@
 class JournalsController < ApplicationController
   before_action :require_authentication
-  before_action :require_journal
+  before_action :require_journal, except: :create
 
   rescue_from Journal::InvalidChange, ActiveRecord::RecordInvalid do |error|
     @error = error.message
@@ -22,8 +22,13 @@ class JournalsController < ApplicationController
   end
 
   def create
+    Current.user.update!(journal_enabled: true)
     cookies.delete(:journal)
-    redirect_to shots_path(format: :html), status: :see_other
+    if Current.user.premium?
+      redirect_to shots_path(format: :html), status: :see_other
+    else
+      redirect_to premium_index_path(anchor: "journal"), status: :see_other
+    end
   end
 
   def update
