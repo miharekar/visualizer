@@ -10,6 +10,7 @@ gem "bcrypt"
 gem "bootsnap", require: false
 gem "csv"
 gem "doorkeeper"
+gem "herb"
 gem "image_processing"
 gem "importmap-rails"
 gem "kramdown"
@@ -28,6 +29,7 @@ gem "inline_svg" # rubocop:disable Bundler/OrderedGems
 gem "puma"
 gem "rack-cors"
 gem "rails"
+gem "reactionview"
 gem "responders"
 gem "ruby-vips"
 gem "scalar_ruby"
@@ -57,12 +59,10 @@ group :development do
   gem "benchmark-ips"
   gem "brakeman", require: false
   gem "bundler-audit"
-  gem "herb"
   gem "hotwire-spark"
   gem "htmlbeautifier"
   gem "kamal"
   gem "letter_opener"
-  gem "reactionview"
   gem "rubocop-rails-omakase", require: false
   gem "ruby-lsp"
   gem "web-console"
