@@ -10,6 +10,11 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user:, shot:).shot_uploaded
   end
 
+  def newsletter
+    user = User.admin
+    UserMailer.with(user:).newsletter
+  end
+
   %i[black_friday cancelled_premium upcoming_renewal].each do |email|
     define_method(email) do
       user = User.order("RANDOM()").first

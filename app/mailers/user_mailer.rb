@@ -13,6 +13,11 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "See your new #{@shot.profile_title} shot 👀"
   end
 
+  def newsletter
+    @user = params[:user]
+    mail to: @user.email, subject: "Is this Visualizer v5?"
+  end
+
   def black_friday
     @user = params[:user]
     mail to: @user.email, subject: "A Different Kind of Black Friday on Visualizer"

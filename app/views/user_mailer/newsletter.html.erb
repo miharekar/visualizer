@@ -1,0 +1,43 @@
+<% content_for(:title) { "A massive update" } %>
+<% content_for(:preheader) { "Journal, manual shots, and Instant Filters for everyone." } %>
+<tr>
+  <td style="padding: 24px; background-color: #ffffff; border-radius: 16px">
+    <h1 style="margin: 0 0 24px; color: #171717; font-size: 28px; line-height: 36px">
+      A massive update
+    </h1>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      Hi!
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      I had planned to send these newsletters more often. And then I never did. 😅
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      But this update feels like a completely new version of Visualizer. I could probably call it v5. And I’m sure most of you would miss it if I only posted about it on the site, so here we are.
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      <strong>Journal.</strong> You can now view and edit your shots in a table, pick the columns you want, and update several shots at once. It’s available to <%= link_to "Premium users", premium_index_url(anchor: "journal"), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>.
+    </p>
+    <p style="margin: 0 0 24px">
+      <%= image_tag image_url("premium/journal.png", host: root_url), width: 552, alt: "Journal showing coffee bags, brew details, enjoyment scores, and tags", style: "display: block; width: 100%; max-width: 100%; height: auto; border: 0; border-radius: 8px" %>
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      <strong>Create shots.</strong> You can now add a shot without uploading a file. Handy for logging filter brews or espresso from a machine that doesn’t export shot data. This is available to everyone.
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      <strong>Instant Filters for everyone.</strong> These are no longer Premium-only. Search as you type and filter by date or enjoyment, even on a free account.
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      I encourage you to read the full update, where I go into all the details:
+    </p>
+    <p style="margin: 0 0 24px">
+      <%= link_to "Read the full update: Bending the Tables", update_url("bending-the-tables"), style: "display: inline-block; border-radius: 8px; background-color: #ee5b45; padding: 12px 20px; color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none", target: "_blank" %>
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      As always, feel free to reply to this email with any bugs, issues, feature suggestions, or whatever else you want to tell me. It comes straight to me, and I really do read every reply.
+    </p>
+    <p style="margin: 0; color: #525252; font-size: 16px; line-height: 24px">
+      Thank you for using Visualizer, and enjoy your weekend! ☕<br>
+      Miha
+    </p>
+  </td>
+</tr>
