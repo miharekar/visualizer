@@ -320,6 +320,26 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
+  test "toggle switches between journal and standard view" do
+    get shots_url
+    assert_select "turbo-frame#journal-results"
+    assert_select "form[action='#{journal_path}'] input[name='_method'][value='delete']"
+    assert_select "input[type='checkbox'][name='journal'][checked]"
+
+    delete journal_url
+    assert_redirected_to shots_url(format: :html)
+    get shots_url
+    assert_select "turbo-frame#journal-results", count: 0
+    assert_select "#shots"
+    assert_select "form[action='#{journal_path}'] input[name='_method']", count: 0
+    assert_select "input[type='checkbox'][name='journal']:not([checked])"
+
+    post journal_url
+    assert_redirected_to shots_url(format: :html)
+    get shots_url
+    assert_select "turbo-frame#journal-results"
+  end
+
   test "premium search debounces while free users submit" do
     get shots_url
     assert_select "form[data-turbo-frame='journal-results'][data-action*='input->search#submit']"
@@ -592,6 +612,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
     assert_equal "text/plain", response.media_type
     patch profile_journal_columns_url, params: {columns: %w[profile_title]}
+    assert_response :not_found
+    delete journal_url
     assert_response :not_found
     assert_equal "18", @shot.reload.bean_weight
     assert_nil @user.reload[:journal_columns]

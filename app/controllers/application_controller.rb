@@ -5,12 +5,16 @@ class ApplicationController < ActionController::Base
   before_action :set_timezone
   before_action :set_skin
 
-  helper_method :journal
+  helper_method :journal, :journal_view?
 
   private
 
   def journal
     @journal ||= Journal.new(Current.user)
+  end
+
+  def journal_view?
+    Current.user.journal_enabled? && cookies[:journal] != "0"
   end
 
   def require_journal

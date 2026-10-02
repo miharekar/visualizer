@@ -21,6 +21,11 @@ class JournalsController < ApplicationController
     @value = journal.editor_value(@shots, @field)
   end
 
+  def create
+    cookies.delete(:journal)
+    redirect_to shots_path(format: :html), status: :see_other
+  end
+
   def update
     @editor = ActiveModel::Type::Boolean.new.cast(params[:editor])
     @field = params[:field].to_s
@@ -28,5 +33,10 @@ class JournalsController < ApplicationController
     @shots = journal.shots(params[:ids], fields: [@field])
     @fields = journal.update(@shots, field: @field, value: @value)
     render :update, formats: :turbo_stream
+  end
+
+  def destroy
+    cookies.permanent[:journal] = "0"
+    redirect_to shots_path(format: :html), status: :see_other
   end
 end

@@ -14,7 +14,7 @@ class ShotsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.any(:html, :turbo_stream) { render(Current.user.journal_enabled? ? "journals/index" : "shots/index") }
+      format.any(:html, :turbo_stream) { render(journal_view? ? "journals/index" : "shots/index") }
       format.json { render_api_endpoint_error }
     end
   end
@@ -164,7 +164,7 @@ class ShotsController < ApplicationController
   end
 
   def load_users_shots
-    return load_journal if Current.user.journal_enabled?
+    return load_journal if journal_view?
 
     @shots = Current.user.shots.with_attached_image
     @tag_slugs = params[:tags].to_s.split(",")

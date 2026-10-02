@@ -60,7 +60,7 @@ Rails.application.routes.draw do
   end
 
   scope :shots do
-    resource :journal, only: %i[edit update]
+    resource :journal, only: %i[create edit update destroy]
   end
 
   resources :shots do
