@@ -14,6 +14,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def check_notification
     return unless params.try(:[], :user).is_a?(User)
+    return self.response_body = :do_not_deliver if params[:user].disabled?
     return unless notification_exists?
 
     if params[:user].notify?(action_name)

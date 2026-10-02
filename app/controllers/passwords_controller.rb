@@ -9,7 +9,7 @@ class PasswordsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:email])
-    PasswordsMailer.reset(user).deliver_later if user
+    PasswordsMailer.reset(user).deliver_later if user && !user.disabled?
 
     redirect_to new_session_url, notice: "Password reset instructions sent (if user with that email address exists)."
   end

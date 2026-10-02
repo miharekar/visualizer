@@ -10,7 +10,7 @@ module ApplicationCable
 
     def set_current_user
       session = Session.find_by(id: cookies.signed[:session_id])
-      if session
+      if session && !session.user.disabled?
         Current.session = session
         self.current_user = session.user
       end

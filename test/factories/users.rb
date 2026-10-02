@@ -14,6 +14,10 @@ FactoryBot.define do
       admin { true }
     end
 
+    trait :disabled do
+      disabled_at { Time.current }
+    end
+
     trait :public do
       name { "Premium User" }
       public { true }

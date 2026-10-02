@@ -40,6 +40,7 @@ class User < ApplicationRecord
 
   before_validation :set_webauthn_id
   before_validation :set_default_unsubscribed_from, on: :create
+  before_validation :make_private, if: :disabled?
   after_update_commit :reflect_public_to_shots, if: -> { saved_change_to_public? }
   after_update_commit :update_coffee_management, if: -> { saved_change_to_coffee_management_enabled? }
   after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
@@ -80,6 +81,10 @@ class User < ApplicationRecord
 
   def chart_settings
     super if premium?
+  end
+
+  def disabled?
+    disabled_at.present?
   end
 
   def premium?
@@ -149,6 +154,10 @@ class User < ApplicationRecord
     self.unsubscribed_from = OPT_IN_EMAIL_NOTIFICATIONS if self[:unsubscribed_from].nil?
   end
 
+  def make_private
+    self.public = false
+  end
+
   def generate_slug
     super if public?
   end
@@ -180,6 +189,7 @@ end
 #  communication              :jsonb
 #  date_format                :string
 #  developer                  :boolean          default(FALSE), not null
+#  disabled_at                :datetime
 #  email                      :string           default(""), not null
 #  github                     :string
 #  hide_shot_times            :boolean          default(FALSE), not null

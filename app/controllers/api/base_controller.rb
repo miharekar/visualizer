@@ -52,6 +52,10 @@ module Api
       doorkeeper_token ? doorkeeper_authorize!(:write) : verify_basic_user
     end
 
+    def render_disabled_user
+      render json: {error: "This account has been disabled. Contact miha@visualizer.coffee for more information."}, status: :forbidden
+    end
+
     def verify_basic_user
       head :unauthorized unless Current.user
     end

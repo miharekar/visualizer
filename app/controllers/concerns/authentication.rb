@@ -4,10 +4,19 @@ module Authentication
   included do
     before_action :resume_session
     before_action :tag_request
+    before_action :reject_disabled_user
     helper_method :authenticated?
   end
 
   private
+
+  def reject_disabled_user
+    render_disabled_user if Current.user&.disabled?
+  end
+
+  def render_disabled_user
+    render "sessions/disabled", formats: :html, status: :forbidden
+  end
 
   def default_path
     authenticated? ? shots_path : community_index_path
