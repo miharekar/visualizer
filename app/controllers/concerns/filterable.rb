@@ -14,6 +14,10 @@ module Filterable
 
       @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
     end
+    apply_date_and_enjoyment_filters
+  end
+
+  def apply_date_and_enjoyment_filters
     if params[:start_date].present?
       start_date = Date.iso8601(params[:start_date]) rescue nil
       @shots = @shots.where("DATE(start_time) = ?", start_date) if start_date

@@ -75,21 +75,7 @@ class Journal
   end
 
   def search(params)
-    shots = scope
-    params[:q].to_s.split.each do |term|
-      query = "%#{Shot.sanitize_sql_like(term)}%"
-      matches = scope.where(<<~SQL.squish, query:)
-        profile_title ILIKE :query OR bean_brand ILIKE :query OR bean_type ILIKE :query
-        OR grinder_model ILIKE :query OR espresso_notes ILIKE :query
-        OR bean_notes ILIKE :query OR roast_date ILIKE :query
-      SQL
-      if user.premium?
-        matches = matches.or(scope.where("private_notes ILIKE ?", query))
-        tags = user.tags.where("name ILIKE ?", query).select(:id)
-        matches = matches.or(scope.where(id: ShotTag.where(tag_id: tags).select(:shot_id)))
-      end
-      shots = shots.merge(matches)
-    end
+    shots = scope.search(params[:q], user)
     coffee_bag = filtered_coffee_bag(params[:coffee_bag])
     shots = shots.where(coffee_bag:) if coffee_bag
     tags = filtered_tags(params[:tags])

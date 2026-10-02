@@ -225,6 +225,30 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "free users can search shots and filter by date and enjoyment" do
+    @user.update!(premium_expires_at: nil)
+    match = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 30, 8))
+    low = create(:shot, user: @user, profile_title: "Blooming Kenya", espresso_enjoyment: 40, start_time: Time.utc(2026, 9, 30, 9))
+    other_day = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 29, 8))
+
+    get shots_url
+    assert_select "form[action='#{search_shots_path}'] input[name='q'][data-action='search#submit']"
+    assert_select "button[data-action='panel#toggleInstantFilters']"
+
+    post search_shots_url(format: :turbo_stream), params: {fresh_search: 1, q: "blooming gesha", start_date: "2026-09-30", min_enjoyment: 50}
+    assert_response :success
+    assert_select "turbo-stream[target='shots'] ##{dom_id(match)}"
+    [low, other_day, @shot].each { assert_select "turbo-stream[target='shots'] ##{dom_id(it)}", count: 0 }
+  end
+
+  test "tag filters are listed with a clear link" do
+    @shot.update!(tag_list: "daily")
+    get shots_url(tags: "daily")
+    assert_select "p", text: /Filtered by daily\./
+    assert_select "a[href='#{shots_path}']", text: "Clear filters"
+    assert_select "input[type='hidden'][name='tags'][value='daily']"
+  end
+
   test "delete removes both the journal row and the shot card" do
     delete shot_url(@shot), as: :turbo_stream
     assert_response :success

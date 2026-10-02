@@ -70,6 +70,23 @@ class Shot < ApplicationRecord
     where(id: ShotTag.joins(:tag).where(tags: {slug: slugs}).group(:shot_id).having("COUNT(DISTINCT tags.slug) = ?", slugs.size).select(:shot_id))
   end
 
+  def self.search(query, user)
+    query.to_s.split.reduce(all) do |shots, term|
+      pattern = "%#{sanitize_sql_like(term)}%"
+      matches = where(<<~SQL.squish, pattern:)
+        profile_title ILIKE :pattern OR bean_brand ILIKE :pattern OR bean_type ILIKE :pattern
+        OR grinder_model ILIKE :pattern OR espresso_notes ILIKE :pattern
+        OR bean_notes ILIKE :pattern OR roast_date ILIKE :pattern
+      SQL
+      if user.premium?
+        matches = matches.or(where("private_notes ILIKE ?", pattern))
+        tags = user.tags.where("name ILIKE ?", pattern).select(:id)
+        matches = matches.or(where(id: ShotTag.where(tag_id: tags).select(:shot_id)))
+      end
+      shots.merge(matches)
+    end
+  end
+
   def manual?
     sha.to_s.start_with?("manual:")
   end
