@@ -195,6 +195,7 @@ See `STYLE.md` for the canonical style rules. Key points for agents:
 - Avoid time-dependent computed values (for example `Date.current`-based counters) inside cached list/card fragments; prefer persisted fields in cached UI.
 - Visualizer is not accessibility-focused: don't add `aria-*`, `role`, or table `scope` attributes, or screen-reader-only (`sr-only`) content. Keep only what a library needs to work (stimulus-autocomplete finds options via `role="option"`).
 - Run Prettier on changed JavaScript files.
+- Optimize every new or changed web-served image with ImageOptim before committing: `/Applications/ImageOptim.app/Contents/MacOS/ImageOptim path/to/image.png` (rewrites the file in place; wait for the file size to drop).
 
 ## Cursor/Copilot rules
 
