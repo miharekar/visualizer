@@ -14,7 +14,7 @@
           <div class="col-span-6">
             <%= form.label :body, class: "standard-label" %>
             <div class="mt-1">
-              <%= form.rich_text_area :body, class: "lexxy-content min-h-96" %>
+              <%= form.rich_text_area :body, attachments: true, class: "lexxy-content min-h-96" %>
             </div>
           </div>
           <div class="col-span-6" data-controller="character-counter">

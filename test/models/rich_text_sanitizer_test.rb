@@ -57,10 +57,10 @@ class RichTextSanitizerTest < ActiveSupport::TestCase
   end
 
   test "model sanitizes rich text before saving" do
-    update = Update.create!(title: "Rich text", body: "<p>Words</p><img src=x>")
+    shot = create(:shot, bean_notes: "<p>Words</p><img src=x>")
 
-    assert_equal "<p>Words</p>", update.rich_text_html(:body)
-    assert_equal "Words", update[:body]
-    assert_empty update.body.embeds
+    assert_equal "<p>Words</p>", shot.rich_text_html(:bean_notes)
+    assert_equal "Words", shot[:bean_notes]
+    assert_empty shot.bean_notes.embeds
   end
 end

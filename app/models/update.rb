@@ -2,12 +2,11 @@ class Update < ApplicationRecord
   self.table_name = :changes
 
   include Sluggable
-  include SanitizedRichText
   include VariableImageAttachment
 
   slug_from :title
 
-  has_sanitized_rich_text :body
+  has_rich_text :body
 
   has_one_attached :image do |attachable|
     attachable.variant :social, resize_to_limit: [800, 500], format: :jpeg, saver: {strip: true}
