@@ -46,31 +46,29 @@
       </div>
     </div>
   </div>
-  <div class="overflow-hidden bg-white py-16 sm:py-24 dark:bg-black" id="coffee-bag-ai">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-        <div class="lg:ml-auto lg:pt-4 lg:pl-4">
-          <div class="lg:max-w-lg">
-            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-balance text-neutral-900 sm:text-4xl dark:text-white">AI Coffee Bag Details Import</p>
+  <div class="overflow-hidden bg-white py-16 sm:py-24 dark:bg-black" id="journal">
+    <div class="mx-auto max-w-7xl md:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
+        <div class="px-6 lg:px-0 lg:pt-4 lg:pr-4">
+          <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
+            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl dark:text-white">Journal</p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Adding coffee details should not feel like homework.
+              Your shot history deserves better than an endless scroll. Journal turns it into a clean brewing log, so a whole week of dialing in fits on a single screen.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Paste in a coffee URL and Visualizer pulls in the details for you: origin, process, variety, altitude, and more. You still decide what gets saved.
+              Pick the columns that matter to you and arrange them however you like. Tweak grind, dose, enjoyment, or notes right in the table, or select a batch of shots and update them all in one go.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              Less time copying fields around means more time brewing and enjoying coffee.
+              Spotting what actually worked takes seconds, and keeping proper notes finally feels quick enough to do after every single shot.
             </p>
-            <div class="mt-8">
-              <%= form_with( data:{turbo:"false"}) do |f| %>
-                <%= f.submit "Try it now!", class: "cursor-pointer inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
-              <% end %>
-            </div>
+          </div>
+          <div class="mx-auto mt-8 max-w-2xl lg:mx-0">
+            <%= form_with( data:{turbo:"false"}) do |f| %>
+              <%= f.submit "Start your Journal", class: "cursor-pointer inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
+            <% end %>
           </div>
         </div>
-        <div class="flex items-start justify-end lg:order-first">
-          <img src="https://update-images.visualizer.coffee/changelog/coffee_bag_scraping.gif" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem]" width="719" height="800" alt="Coffee bag scraping preview">
-        </div>
+        <%= image_tag "premium/journal.png", width: 1280, height: 681, class: "w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem] md:-ml-4 lg:ml-0", alt: "Journal preview" %>
       </div>
     </div>
   </div>
@@ -125,29 +123,31 @@
       </div>
     </div>
   </div>
-  <div class="overflow-hidden bg-white py-16 sm:py-24 dark:bg-black" id="instant-filters">
-    <div class="mx-auto max-w-7xl md:px-6 lg:px-8">
-      <div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
-        <div class="px-6 lg:px-0 lg:pt-4 lg:pr-4">
-          <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl dark:text-white">Instant Filters</p>
+  <div class="overflow-hidden bg-white py-16 sm:py-24 dark:bg-black" id="coffee-bag-ai">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+        <div class="lg:ml-auto lg:pt-4 lg:pl-4">
+          <div class="lg:max-w-lg">
+            <p class="mt-2 font-serif text-3xl font-bold tracking-tight text-balance text-neutral-900 sm:text-4xl dark:text-white">AI Coffee Bag Details Import</p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              When you want to find that coffee, grinder setting, or shot from a month ago, Instant Filters gets you there fast.
+              Adding coffee details should not feel like homework.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              No more digging through old history or trying to remember what worked. Just type a few letters and narrow things down immediately.
+              Paste in a coffee URL and Visualizer pulls in the details for you: origin, process, variety, altitude, and more. You still decide what gets saved.
             </p>
             <p class="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300">
-              It turns your shot history into something you can actually use while brewing, not just something you save and forget.
+              Less time copying fields around means more time brewing and enjoying coffee.
             </p>
-          </div>
-          <div class="flex justify-center">
-            <%= form_with( data:{turbo:"false"}) do |f| %>
-              <%= f.submit "Get them now!", class: "cursor-pointer mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:mt-10 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
-            <% end %>
+            <div class="mt-8">
+              <%= form_with( data:{turbo:"false"}) do |f| %>
+                <%= f.submit "Try it now!", class: "cursor-pointer inline-flex w-full items-center justify-center rounded-md border border-transparent bg-terracotta-600 py-3 px-5 text-base font-medium text-white hover:bg-terracotta-500 sm:w-auto hover:shadow-lg hover:shadow-terracotta-500/50" %>
+              <% end %>
+            </div>
           </div>
         </div>
-        <img src="https://update-images.visualizer.coffee/changelog/instant_filters.gif" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem] md:-ml-4 lg:ml-0" width="719" height="800" alt="Instant filters preview">
+        <div class="flex items-start justify-end lg:order-first">
+          <img src="https://update-images.visualizer.coffee/changelog/coffee_bag_scraping.gif" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-neutral-400/10 sm:w-[57rem]" width="719" height="800" alt="Coffee bag scraping preview">
+        </div>
       </div>
     </div>
   </div>

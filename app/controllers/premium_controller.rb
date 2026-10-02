@@ -4,7 +4,7 @@ class PremiumController < ApplicationController
   def index
     @features = [
       "Access your complete shot history",
-      "Find past shots quickly with Instant Filters",
+      "Dial in faster with an editable Journal of every shot",
       "Track coffee bags and update related shots in one go",
       "Add tags for another layer of organization",
       "Keep private notes for your future self",
