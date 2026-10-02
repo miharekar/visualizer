@@ -19,7 +19,7 @@ export default class extends Controller {
       }
     }
 
-    this.minValueTarget.textContent = this.minTarget.value
-    this.maxValueTarget.textContent = this.maxTarget.value
+    if (this.hasMinValueTarget) this.minValueTarget.textContent = this.minTarget.value
+    if (this.hasMaxValueTarget) this.maxValueTarget.textContent = this.maxTarget.value
   }
 }
