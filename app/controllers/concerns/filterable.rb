@@ -20,7 +20,7 @@ module Filterable
   def apply_date_and_enjoyment_filters
     if params[:start_date].present?
       start_date = Date.iso8601(params[:start_date]) rescue nil
-      @shots = @shots.where("DATE(start_time) = ?", start_date) if start_date
+      @shots = @shots.where(start_time: start_date.all_day) if start_date
     end
     @shots = @shots.where(espresso_enjoyment: (params[:min_enjoyment])..) if params[:min_enjoyment].to_i.positive?
     @shots = @shots.where(espresso_enjoyment: ..(params[:max_enjoyment])) if params[:max_enjoyment].present? && params[:max_enjoyment].to_i < 100

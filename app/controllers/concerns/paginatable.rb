@@ -7,11 +7,8 @@ module Paginatable
 
       value = Time.iso8601(before)
       column = scope.arel_table[by]
-      if before_id.present?
-        scope = scope.where(column.lt(value).or(column.eq(value).and(scope.arel_table[:id].lt(before_id))))
-      else
-        scope = scope.where(column.lteq(value))
-      end
+      scope = scope.where(column.lteq(value))
+      scope = scope.where(column.lt(value).or(scope.arel_table[:id].lt(before_id))) if before_id.present?
     end
     records = scope.reorder(by => :desc, id: :desc).limit(items + 1).to_a
     if records.size > items

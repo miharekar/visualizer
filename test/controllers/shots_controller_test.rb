@@ -226,10 +226,10 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "free users can search shots and filter by date and enjoyment" do
-    @user.update!(premium_expires_at: nil)
-    match = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 30, 8))
+    @user.update!(premium_expires_at: nil, timezone: "Tokyo")
+    match = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 29, 20))
     low = create(:shot, user: @user, profile_title: "Blooming Kenya", espresso_enjoyment: 40, start_time: Time.utc(2026, 9, 30, 9))
-    other_day = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 29, 8))
+    other_day = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 30, 16))
 
     get shots_url
     assert_select "form[action='#{search_shots_path}'] input[name='q'][data-action='search#submit']"
