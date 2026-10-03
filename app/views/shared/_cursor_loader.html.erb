@@ -5,5 +5,9 @@
     </div>
   <% end %>
 <% else %>
-  <%= turbo_frame_tag "cursor" %>
+  <%= turbo_frame_tag "cursor" do %>
+    <% if params[:before].present? %>
+      <div class="my-8 px-6 text-center text-neutral-500 sm:px-8">You've reached the end.</div>
+    <% end %>
+  <% end %>
 <% end %>

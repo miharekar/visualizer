@@ -55,7 +55,7 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
     assert_select "turbo-stream[action='append'][target='shots'] #shot_#{shots.last.id}"
-    assert_select "turbo-stream[action='replace'][target='cursor'] turbo-frame#cursor" do
+    assert_select "turbo-stream[action='replace'][target='cursor'] turbo-frame#cursor", text: "You've reached the end." do
       assert_select "[src]", count: 0
     end
   end
