@@ -460,6 +460,21 @@ module Api
       assert_equal "You are not authorized to perform this action.", response.parsed_body["error"]
     end
 
+    test "update uploads multipart image and removes it for premium user" do
+      shot = FactoryBot.create(:shot, user: premium_user)
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user).merge("HTTP_ACCEPT" => "application/json"), params: {shot: {image: fixture_file_upload(Rails.public_path.join("favicon-16x16.png"), "image/png")}}
+
+      assert_response :success
+      assert shot.reload.image.attached?
+      assert response.parsed_body["image_url"].present?
+
+      patch api_shot_url(shot), headers: auth_headers(premium_user), params: {shot: {image: nil}}, as: :json
+
+      assert_response :success
+      assert_not shot.reload.image.attached?
+    end
+
     test "update allows tasting assessment fields for premium users" do
       premium_user = FactoryBot.create(:user, :premium)
       shot = FactoryBot.create(:shot, user: premium_user)

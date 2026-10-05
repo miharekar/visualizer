@@ -45,7 +45,7 @@ module Api
     end
 
     def roaster_params
-      params.expect(roaster: %i[name website canonical_roaster_id])
+      params.expect(roaster: %i[name website image canonical_roaster_id])
     end
   end
 end

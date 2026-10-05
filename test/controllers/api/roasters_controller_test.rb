@@ -46,6 +46,22 @@ module Api
       assert_equal "After", roaster.reload.name
     end
 
+    test "update uploads and removes image" do
+      roaster = FactoryBot.create(:roaster, user: premium_user)
+
+      patch api_roaster_url(roaster), headers: auth_headers(premium_user), params: {roaster: {image: fixture_file_upload(Rails.public_path.join("favicon-16x16.png"), "image/png")}}
+
+      assert_response :success
+      assert roaster.reload.image.attached?
+      assert response.parsed_body["image_url"].present?
+
+      patch api_roaster_url(roaster), headers: auth_headers(premium_user), params: {roaster: {image: nil}}, as: :json
+
+      assert_response :success
+      assert_not roaster.reload.image.attached?
+      assert_not response.parsed_body.key?("image_url")
+    end
+
     test "update returns not found for unowned roaster" do
       roaster = FactoryBot.create(:roaster)
 

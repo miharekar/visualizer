@@ -113,6 +113,32 @@ module Api
       assert_nil response.parsed_body["archived_at"]
     end
 
+    test "update uploads and removes image" do
+      coffee_bag = FactoryBot.create(:coffee_bag, roaster: FactoryBot.create(:roaster, user: premium_user))
+
+      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {image: fixture_file_upload(Rails.public_path.join("favicon-16x16.png"), "image/png")}}
+
+      assert_response :success
+      assert coffee_bag.reload.image.attached?
+      assert response.parsed_body["image_url"].present?
+
+      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {image: nil}}, as: :json
+
+      assert_response :success
+      assert_not coffee_bag.reload.image.attached?
+      assert_not response.parsed_body.key?("image_url")
+    end
+
+    test "update rejects image that is not a file upload" do
+      coffee_bag = FactoryBot.create(:coffee_bag, roaster: FactoryBot.create(:roaster, user: premium_user))
+
+      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {image: "https://example.com/bag.jpg"}}, as: :json
+
+      assert_response :unprocessable_content
+      assert_equal "Image must be a file uploaded with multipart/form-data.", response.parsed_body["error"]
+      assert_not coffee_bag.reload.image.attached?
+    end
+
     test "update returns not found for unowned coffee bag" do
       coffee_bag = FactoryBot.create(:coffee_bag)
 
