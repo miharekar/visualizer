@@ -308,6 +308,16 @@ module Api
       assert_equal "Shared shot not found", json_response["error"]
     end
 
+    test "shared returns not found for authenticated user with invalid code" do
+      create(:shared_shot, user:)
+
+      get shared_api_shots_url(code: "INVALID"), headers: auth_headers(user), as: :json
+      assert_response :not_found
+
+      json_response = response.parsed_body
+      assert_equal "Shared shot not found", json_response["error"]
+    end
+
     test "upload accepts multipart/form-data with file parameter" do
       file_content = Rails.root.join("test/files/beanconqueror.json").read
       file = Tempfile.new(["sample_shot.json"])

@@ -46,7 +46,7 @@ module Api
       shared = SharedShot.find_by(code: params[:code].to_s.upcase)
       if shared
         render json: shared.shot.to_api_json(format: params[:format], include_information: params[:with_data].presence)
-      elsif Current.user.present?
+      elsif Current.user.present? && params[:code].blank?
         distinct_shots = Current.user.shared_shots.distinct.pluck(:shot_id)
         shots = Shot.where(id: distinct_shots).with_notes.includes(:information, :tags, :user, coffee_bag: :roaster, image_attachment: :blob)
         render json: shots.map { it.to_api_json(format: params[:format], include_information: params[:with_data].presence) }
