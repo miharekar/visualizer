@@ -56,6 +56,18 @@ module Api
       assert_equal "You must be a premium user to access this feature.", response.parsed_body["error"]
     end
 
+    test "index includes roaster, canonical coffee bag, and archive state" do
+      canonical_coffee_bag = CanonicalCoffeeBag.create!(name: "Kiambu", canonical_roaster: CanonicalRoaster.create!(name: "Luma"))
+      roaster = FactoryBot.create(:roaster, user: premium_user)
+      coffee_bag = FactoryBot.create(:coffee_bag, roaster:, canonical_coffee_bag:, archived_at: Time.zone.parse("2026-10-01 08:30"))
+
+      get api_coffee_bags_url, headers: auth_headers(premium_user), as: :json
+
+      assert_response :success
+      expected = {"id" => coffee_bag.id, "name" => coffee_bag.name, "roaster_id" => roaster.id, "canonical_coffee_bag_id" => canonical_coffee_bag.id, "archived_at" => coffee_bag.archived_at.as_json}
+      assert_equal [expected], response.parsed_body["data"]
+    end
+
     test "show includes roaster and canonical coffee bag ids" do
       canonical_roaster = CanonicalRoaster.create!(name: "Luma")
       canonical_coffee_bag = CanonicalCoffeeBag.create!(name: "Kiambu", canonical_roaster:)
@@ -82,6 +94,23 @@ module Api
       coffee_bag.reload
       assert_equal "After", coffee_bag.name
       assert_equal other_roaster.id, coffee_bag.roaster_id
+    end
+
+    test "update archives and restores coffee bag" do
+      coffee_bag = FactoryBot.create(:coffee_bag, roaster: FactoryBot.create(:roaster, user: premium_user))
+      archived_at = Time.zone.parse("2026-10-01 08:30")
+
+      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {archived_at: archived_at.iso8601}}, as: :json
+
+      assert_response :success
+      assert_equal archived_at, coffee_bag.reload.archived_at
+      assert_equal archived_at.as_json, response.parsed_body["archived_at"]
+
+      patch api_coffee_bag_url(coffee_bag), headers: auth_headers(premium_user), params: {coffee_bag: {archived_at: nil}}, as: :json
+
+      assert_response :success
+      assert_nil coffee_bag.reload.archived_at
+      assert_nil response.parsed_body["archived_at"]
     end
 
     test "update returns not found for unowned coffee bag" do

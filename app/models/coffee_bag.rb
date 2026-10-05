@@ -82,6 +82,10 @@ class CoffeeBag < ApplicationRecord
     end
   end
 
+  def to_api_summary_json
+    attributes.slice(*%w[id name roaster_id canonical_coffee_bag_id archived_at])
+  end
+
   def archived?
     archived_at.present?
   end
