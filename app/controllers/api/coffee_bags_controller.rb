@@ -2,9 +2,9 @@ module Api
   class CoffeeBagsController < Api::BaseController
     include CoffeeBags::Editing
 
-    before_action :check_premium!, only: %i[create update destroy]
     before_action :verify_read_access, only: %i[index show]
     before_action :verify_write_access, only: %i[create update destroy]
+    before_action :check_premium!, only: %i[create update destroy]
     before_action :load_coffee_bag, only: %i[show update destroy]
 
     def index

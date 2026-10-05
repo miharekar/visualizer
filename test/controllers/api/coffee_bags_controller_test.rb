@@ -65,6 +65,12 @@ module Api
       assert_equal "You must be a premium user to access this feature.", response.parsed_body["error"]
     end
 
+    test "create requires authentication" do
+      post api_coffee_bags_url, params: {coffee_bag: {name: "Kiambu"}}, as: :json
+
+      assert_response :unauthorized
+    end
+
     test "index includes roaster, canonical coffee bag, and archive state" do
       canonical_coffee_bag = CanonicalCoffeeBag.create!(name: "Kiambu", canonical_roaster: CanonicalRoaster.create!(name: "Luma"))
       roaster = FactoryBot.create(:roaster, user: premium_user)
