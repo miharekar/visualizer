@@ -312,7 +312,7 @@ GEM
       net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.2)
       net-protocol
-    net-ssh (7.3.3)
+    net-ssh (7.3.6)
     nio4r (2.7.5)
     nokogiri (1.19.4-aarch64-linux-gnu)
       racc (~> 1.4)
