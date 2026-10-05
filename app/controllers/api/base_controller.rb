@@ -62,6 +62,10 @@ module Api
       head :unauthorized unless Current.user
     end
 
+    def json_request?
+      true
+    end
+
     def render_bad_parameters(error)
       render json: {error: error.message}, status: :bad_request
     end

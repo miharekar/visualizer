@@ -460,6 +460,16 @@ module Api
       assert_equal "You are not authorized to perform this action.", response.parsed_body["error"]
     end
 
+    test "destroy rejects non-owner with JSON error without JSON accept header" do
+      shot = FactoryBot.create(:shot)
+
+      delete api_shot_url(shot), headers: auth_headers(user)
+
+      assert_response :forbidden
+      assert_equal "You are not authorized to perform this action.", response.parsed_body["error"]
+      assert Shot.exists?(shot.id)
+    end
+
     test "update uploads multipart image and removes it for premium user" do
       shot = FactoryBot.create(:shot, user: premium_user)
 

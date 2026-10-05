@@ -17,7 +17,7 @@ module Authorization
     return if Current.user.premium?
 
     message = "You must be a premium user to access this feature."
-    if request.format.json?
+    if json_request?
       render json: {error: message}, status: :forbidden
     else
       redirect_to premium_index_path, alert: message
@@ -26,10 +26,14 @@ module Authorization
 
   def user_not_authorized(exception)
     message = exception.result.message
-    if request.format.json?
+    if json_request?
       render json: {error: message}, status: :forbidden
     else
       redirect_back_or_to default_path, alert: message
     end
+  end
+
+  def json_request?
+    request.format.json?
   end
 end
