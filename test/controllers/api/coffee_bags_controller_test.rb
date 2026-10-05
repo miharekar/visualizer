@@ -83,6 +83,13 @@ module Api
       assert_equal [expected], response.parsed_body["data"]
     end
 
+    test "index falls back to default page size for non-positive items" do
+      get api_coffee_bags_url(items: -1), headers: auth_headers(premium_user), as: :json
+
+      assert_response :success
+      assert_equal 10, response.parsed_body.dig("paging", "limit")
+    end
+
     test "show includes roaster and canonical coffee bag ids" do
       canonical_roaster = CanonicalRoaster.create!(name: "Luma")
       canonical_coffee_bag = CanonicalCoffeeBag.create!(name: "Kiambu", canonical_roaster:)

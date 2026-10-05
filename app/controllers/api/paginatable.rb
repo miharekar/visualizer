@@ -3,7 +3,7 @@ module Api
     def paginate(relation, with_counts: true)
       page = [params[:page].to_i, 1].max
       limit = params[:items].presence.to_i
-      limit = 10 if limit.zero?
+      limit = 10 unless limit.positive?
       limit = [limit, 100].min
 
       if with_counts
