@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require "bundler"
 require "fileutils"
 
 APP_ROOT = File.expand_path("..", __dir__)
@@ -15,6 +16,10 @@ FileUtils.chdir APP_ROOT do
 
   puts "== Installing dependencies =="
   system("bundle check") || system!("bundle install")
+  Bundler.with_original_env do
+    hotcell = {"BUNDLE_GEMFILE" => "hotcell/Gemfile"}
+    system(hotcell, "bundle check") || system!(hotcell, "bundle install")
+  end
 
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")

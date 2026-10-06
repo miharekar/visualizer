@@ -2,3 +2,4 @@ web: RUBY_DEBUG_SESSION_NAME=rails bin/rails s -p 3000 -b 0.0.0.0
 css: bin/rails tailwindcss:watch
 solid_queue: OBJC_DISABLE_INITIALIZE_FORK_SAFETY=1 RUBY_DEBUG_SESSION_NAME=solidq bin/jobs
 herb: herb dev
+cell: BUNDLE_GEMFILE=$PWD/hotcell/Gemfile HOTCELL_CONFIG=$PWD/hotcell/config.rb HOTCELL_OPERATIONS=$PWD/hotcell/operations HOTCELL_DIR=$PWD/tmp/hotcell-sockets/active_storage bundle exec hotcell --development

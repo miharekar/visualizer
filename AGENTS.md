@@ -21,7 +21,7 @@ Respond like smart caveman. Cut all filler, keep technical substance.
 
 ```bash
 bin/setup              # install gems, prepare DB, clear logs/tmp, start bin/dev unless --skip-server
-bin/dev                # Overmind: Rails server on PORT (3000 default), tailwind watcher, SolidQueue worker
+bin/dev                # Overmind: Rails server on PORT (3000 default), tailwind watcher, SolidQueue worker, Hot Cell
 PORT=4000 bin/dev      # override port
 bin/jobs               # run SolidQueue supervisor/worker if you want it outside bin/dev
 ```
@@ -67,6 +67,24 @@ bin/gitleaks-audit
 bin/rails tailwindcss:watch # usually handled by bin/dev
 ```
 
+### Hot Cell
+
+Image variants run in the `hotcell` Kamal accessory, built from `hotcell/` and pushed as `ghcr.io/miharekar/visualizer-hotcell:latest`. App deploys never touch it. In development `bin/dev` runs it as the `cell` process; restart that after changing `hotcell/`.
+
+Rebuild and reboot it after changing `hotcell/` or `.ruby-version`, after bumping Hot Cell gems, and periodically for libvips and Debian security patches:
+
+```bash
+docker buildx build --pull --no-cache --platform linux/amd64,linux/arm64 --build-arg RUBY_VERSION=$(cat .ruby-version) -t ghcr.io/miharekar/visualizer-hotcell:latest --push hotcell
+bundle exec kamal accessory reboot hotcell   # pulls :latest and replaces the container; image calls fail for a few seconds
+bundle exec kamal accessory details hotcell  # expect "(healthy)" on hvapp and hvapp2
+```
+
+- `--pull --no-cache` takes the newest Ruby base image and reruns `apt-get upgrade`; a cached build ships the old libvips.
+- Changing only the accessory's settings in `config/deploy.yml` needs just the reboot.
+- Bumping Hot Cell: set one version for `hotcell-client` in `Gemfile` and for `hotcell-server` and `activestorage-hotcell-server` in `hotcell/Gemfile`, then run `bundle install` and `BUNDLE_GEMFILE=hotcell/Gemfile bundle install`. Dependabot only watches the root `Gemfile`, so never ship its `hotcell-client` bump without the cell side. Build the cell image, push to `main`, then reboot the cell as soon as the CI deploy finishes; until both sides match, a protocol change fails calls with transient `protocol` errors.
+- Updating the cell's other gems (ruby-vips, image_processing, ffi): `BUNDLE_GEMFILE=hotcell/Gemfile bundle update --all`, then rebuild and reboot.
+- On Rails 8.2: replace `hotcell-client` with `activestorage-hotcell-client` (same version), delete `HotCellImageTransformer` from `config/initializers/hotcell.rb` and the `hotcell.variant_transformer` initializer from `config/application.rb`, and set `config.active_storage.variant_processor = ActiveStorage::HotCell::Client::Transformers::Image::Vips` instead of `:disabled`.
+
 ### Build and lint quick picks
 
 ```bash
@@ -81,6 +99,7 @@ bin/ci                 # full CI pipeline
 
 - ActiveRecord primary DB is Postgres.
 - ActiveStorage uses local disk in development/test; S3 buckets configured in `config/storage.yml` for production.
+- Image variants are processed in a Hot Cell sidecar (`hotcell/`, Kamal accessory `hotcell`), never in the app; the app has no libvips. Updating, rebuilding, and rebooting it: see Hot Cell under Development Commands.
 - Solid Cache backs Rails caching; AppSignal handles monitoring/tracing.
 - All tables use UUID primary keys (see `db/schema.rb`).
 

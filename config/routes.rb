@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     mount PgHero::Engine, at: "/pghero"
   end
 
+  post "/rails/active_storage/direct_uploads", to: ->(_env) { [404, {}, []] }
+
   use_doorkeeper { controllers applications: "oauth/applications" }
 
   root to: "home#show"

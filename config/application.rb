@@ -27,9 +27,14 @@ module Visualizer
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_storage.analyzers = []
+    config.active_storage.variant_processor = :disabled
     config.exceptions_app = routes
     config.log_tags = %i[request_id remote_ip]
     config.middleware.insert_before Rack::MethodOverride, BadRequestMiddleware
     config.mission_control.jobs.http_basic_auth_enabled = false
+
+    initializer "hotcell.variant_transformer", after: "active_storage.configs" do
+      config.after_initialize { ActiveStorage.variant_transformer = HotCellImageTransformer }
+    end
   end
 end
