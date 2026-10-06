@@ -13,7 +13,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 sqlite3 ca-certificates postgresql-common && \
+  apt-get install --no-install-recommends -y curl libjemalloc2 ca-certificates postgresql-common && \
   ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
   /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   apt-get update -qq && \
-  apt-get install --no-install-recommends -y postgresql-client-18 libpq-dev
+  apt-get install --no-install-recommends -y postgresql-client-18
 
 # Set production environment variables and enable jemalloc for reduced memory usage and latency.
 ENV RAILS_ENV="production" \
@@ -36,7 +36,7 @@ FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config && \
+  apt-get install --no-install-recommends -y build-essential git libssl-dev libyaml-dev pkg-config && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems

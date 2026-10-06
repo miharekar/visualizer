@@ -51,21 +51,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Start system dependency installation
-        run: |
-          sudo systemd-run --unit=install-ci-dependencies --no-block \
-            --property=Type=oneshot --property=RemainAfterExit=yes \
-            /bin/bash -e -c 'apt-get update && apt-get install --no-install-recommends -y libpq-dev'
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-
-      - name: Wait for system dependency installation
-        run: |
-          sudo systemctl start install-ci-dependencies.service
-          sudo journalctl --unit=install-ci-dependencies --no-pager
 
       - name: Setup database
         run: bin/rails db:test:prepare
@@ -108,21 +97,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Start system dependency installation
-        run: |
-          sudo systemd-run --unit=install-ci-dependencies --no-block \
-            --property=Type=oneshot --property=RemainAfterExit=yes \
-            /bin/bash -e -c 'apt-get update && apt-get install --no-install-recommends -y libpq-dev'
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-
-      - name: Wait for system dependency installation
-        run: |
-          sudo systemctl start install-ci-dependencies.service
-          sudo journalctl --unit=install-ci-dependencies --no-pager
 
       - uses: actions/setup-node@v6
         with:
