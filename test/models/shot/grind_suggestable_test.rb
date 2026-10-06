@@ -28,7 +28,7 @@ class Shot::GrindSuggestableTest < ActiveSupport::TestCase
     create_shot(grinder_setting: "14", duration: 25, espresso_enjoyment: 85, start_time: 2.days.ago)
     create_shot(grinder_setting: "16", duration: 20, espresso_enjoyment: 50, start_time: 1.day.ago)
     shot = create_shot(grinder_setting: "18", duration: 15, espresso_enjoyment: 40)
-    stub = stub_typesafe(1 => 0.8, 2 => 0.15, 3 => 0.05)
+    stub = stub_system_one(1 => 0.8, 2 => 0.15, 3 => 0.05)
 
     shot.suggest_grind_now
 
@@ -41,7 +41,7 @@ class Shot::GrindSuggestableTest < ActiveSupport::TestCase
 
   test "suggests words for shots without a coffee" do
     shot = create_shot(bean_brand: nil, bean_type: nil, grinder_setting: "18", duration: 15)
-    stub_typesafe(1 => 0.9, 2 => 0.1)
+    stub_system_one(1 => 0.9, 2 => 0.1)
 
     shot.suggest_grind_now
 
@@ -50,7 +50,7 @@ class Shot::GrindSuggestableTest < ActiveSupport::TestCase
 
   test "updates the journal grind suggestion cell" do
     shot = create_shot(grinder_setting: "18", duration: 15)
-    stub_typesafe(1 => 0.9, 2 => 0.1)
+    stub_system_one(1 => 0.9, 2 => 0.1)
 
     shot.suggest_grind_now
 
@@ -61,7 +61,7 @@ class Shot::GrindSuggestableTest < ActiveSupport::TestCase
 
   test "is not sure when direction probability is split" do
     shot = create_shot(grinder_setting: "18", duration: 15)
-    stub_typesafe(1 => 0.4, 3 => 0.2, 5 => 0.4)
+    stub_system_one(1 => 0.4, 3 => 0.2, 5 => 0.4)
 
     shot.suggest_grind_now
 
@@ -85,9 +85,9 @@ class Shot::GrindSuggestableTest < ActiveSupport::TestCase
     create(:shot, user: @user, bean_brand: "Roaster", bean_type: "Ethiopia", profile_title: "Adaptive", grinder_model: "Niche", **attributes)
   end
 
-  def stub_typesafe(probabilities)
+  def stub_system_one(probabilities)
     probabilities = (0..6).to_h { [it.to_s, probabilities.fetch(it, 0.0)] }
-    body = {model: "jev-1.13.0", answers: {adjustment: {type: "score", probabilities:}, puck_issue: {type: "noul", noul: 0.1}}}
-    stub_request(:post, TypeSafe::API_ENDPOINT).to_return(status: 200, body: body.to_json)
+    result = {model: "clef", answers: {adjustment: {type: "score", probabilities:}, puck_issue: {type: "noul", noul: 0.1}}}
+    stub_request(:post, SystemOne::API_ENDPOINT).to_return(status: 200, body: {result:, success: true}.to_json)
   end
 end

@@ -38,7 +38,7 @@ class Shot
 
     def suggest_grind_now
       reference = reference_target
-      response = TypeSafe.new.system_one(state: grind_suggestion_state(reference), questions: QUESTIONS)
+      response = SystemOne.new.evaluate(state: grind_suggestion_state(reference), questions: QUESTIONS)
       update_column(:grind_suggestion, grind_suggestion_from(response)) # rubocop:disable Rails/SkipsModelValidations
       broadcast_replace_to [self, :grind_suggestion], target: ActionView::RecordIdentifier.dom_id(self, :grind_suggestion), partial: "shots/grind_suggestion", locals: {shot: self}
       broadcast_journal_grind_suggestion

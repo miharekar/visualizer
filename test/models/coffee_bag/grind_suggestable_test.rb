@@ -19,7 +19,7 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
 
   test "suggests a starting grind from the most similar earlier bag per recent profile" do
     bag = create(:coffee_bag, roaster: @roaster, name: "Ethiopia", roast_level: "Light")
-    stub = stub_typesafe(similar: {"coffee_0" => 0.1, "coffee_1" => 0.9}, relative_0: 2, relative_1: 1)
+    stub = stub_system_one(similar: {"coffee_0" => 0.1, "coffee_1" => 0.9}, relative_0: 2, relative_1: 1)
 
     bag.suggest_grind
 
@@ -34,7 +34,7 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
     create_shot(@kenya, "Turbo", "1.0", start_time: 4.days.ago)
     create_shot(@kenya, "Old", "1.0", start_time: 5.days.ago)
     bag = create(:coffee_bag, roaster: @roaster, name: "Ethiopia")
-    stub_typesafe(similar: {"coffee_0" => 0.9, "coffee_1" => 0.1}, relative_0: 2, relative_1: 2)
+    stub_system_one(similar: {"coffee_0" => 0.9, "coffee_1" => 0.1}, relative_0: 2, relative_1: 2)
 
     bag.suggest_grind
 
@@ -52,7 +52,7 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
 
   test "uses the bag's own latest shot once it has one" do
     create_shot(@kenya, "Adaptive", "1.3", start_time: 1.hour.ago, grind_suggestion: {"label" => "Finer", "setting_range" => %w[1.1 1.2]})
-    stub_typesafe(relative_0: 2)
+    stub_system_one(relative_0: 2)
 
     @kenya.suggest_grind
 
@@ -66,9 +66,9 @@ class CoffeeBag::GrindSuggestableTest < ActiveSupport::TestCase
     create(:shot, user: @user, coffee_bag:, profile_title:, grinder_setting:, grinder_model: "EG-1", espresso_enjoyment: enjoyment, **attributes)
   end
 
-  def stub_typesafe(similar: nil, **relatives)
+  def stub_system_one(similar: nil, **relatives)
     answers = relatives.transform_values { |level| {type: "score", probabilities: (0..4).to_h { [it.to_s, it == level ? 1.0 : 0.0] }} }
     answers[:similar] = {type: "choice", probabilities: similar} if similar
-    stub_request(:post, TypeSafe::API_ENDPOINT).to_return(status: 200, body: {model: "jev-1.13.0", answers:}.to_json)
+    stub_request(:post, SystemOne::API_ENDPOINT).to_return(status: 200, body: {result: {model: "clef", answers:}, success: true}.to_json)
   end
 end

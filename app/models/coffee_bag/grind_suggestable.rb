@@ -27,7 +27,7 @@ class CoffeeBag
       own = profiles.index_with { |profile| shots_by_profile[profile.values].to_a.find { it.coffee_bag_id == id } }
       candidates = profiles.reject { own[it] }.index_with { candidate_shots(shots_by_profile[it.values].to_a) }
       bags = candidates.values.flat_map { it.map(&:coffee_bag) }.uniq
-      answers = bags.any? ? TypeSafe.new.system_one(state: similarity_state(bags), questions: similarity_questions(bags))["answers"] : {}
+      answers = bags.any? ? SystemOne.new.evaluate(state: similarity_state(bags), questions: similarity_questions(bags))["answers"] : {}
 
       suggestions = profiles.filter_map do |profile|
         if own[profile]

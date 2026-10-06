@@ -7,7 +7,7 @@ class CoffeeBags::GrindSuggestionsControllerTest < ActionDispatch::IntegrationTe
     create(:shot, user: admin, coffee_bag: create(:coffee_bag, roaster:, name: "Kenya"), profile_title: "Adaptive", grinder_model: "EG-1", grinder_setting: "1.2")
     bag = create(:coffee_bag, roaster:, name: "Ethiopia")
     probabilities = (0..4).to_h { [it.to_s, it == 1 ? 1.0 : 0.0] }
-    stub_request(:post, TypeSafe::API_ENDPOINT).to_return(status: 200, body: {model: "jev-1.13.0", answers: {relative_0: {type: "score", probabilities:}}}.to_json)
+    stub_request(:post, SystemOne::API_ENDPOINT).to_return(status: 200, body: {result: {model: "clef", answers: {relative_0: {type: "score", probabilities:}}}, success: true}.to_json)
     sign_in admin
 
     post coffee_bag_grind_suggestion_path(bag), as: :turbo_stream
