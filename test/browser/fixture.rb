@@ -9,7 +9,7 @@ when "setup"
   raise "account already exists" if User.exists?(email:)
 
   User.transaction do
-    user = User.create!(email:, password: ENV.fetch("JOURNAL_BROWSER_PASSWORD"), name: "Journal Browser Fixture", supporter: true, journal_enabled: true, coffee_management_enabled: true, timezone: "UTC")
+    user = User.create!(email:, password: ENV.fetch("JOURNAL_BROWSER_PASSWORD"), name: "Journal Browser Fixture", confirmed_at: Time.current, supporter: true, journal_enabled: true, coffee_management_enabled: true, timezone: "UTC")
     now = Time.current
     35.times { |i| user.shots.create!(sha: "manual:#{SecureRandom.uuid}", start_time: now - i.minutes, profile_title: "Browser Journal #{i}", espresso_enjoyment: 50, bean_weight: "18", drink_weight: "36", duration: 30) }
     roaster = user.roasters.create!(name: "Browser Roaster")
