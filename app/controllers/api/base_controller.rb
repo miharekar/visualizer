@@ -1,7 +1,7 @@
 module Api
   class Api::BaseController < ActionController::Base # rubocop:disable Rails/ApplicationController
-    rate_limit to: 50, within: 1.minute, name: "api-ip-1-minute", by: -> { request.headers["CF-Connecting-IP"].presence || request.remote_ip }
-    rate_limit to: 200, within: 10.minutes, name: "api-ip-10-minutes", by: -> { request.headers["CF-Connecting-IP"].presence || request.remote_ip }
+    rate_limit to: 50, within: 1.minute, name: "api-ip-1-minute"
+    rate_limit to: 200, within: 10.minutes, name: "api-ip-10-minutes"
 
     include ActiveStorage::SetCurrent
     include Authentication
