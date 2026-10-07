@@ -1,3 +1,5 @@
+require "resolv"
+
 class User < ApplicationRecord
   include Sluggable
   include VariableImageAttachment
@@ -32,6 +34,7 @@ class User < ApplicationRecord
   end
 
   validates :email, presence: true, uniqueness: true, format: {with: /\A.*@.*\z/, message: "must be valid"}
+  validate :email_domain_must_receive_mail, on: :create, if: -> { Rails.env.production? }
   validates :password, length: {minimum: 8}, if: :password_digest_changed?
   validates :name, presence: true, if: :public?
   validates :lemon_squeezy_customer_id, uniqueness: true, allow_blank: true
@@ -69,6 +72,20 @@ class User < ApplicationRecord
     unsubscribed_from = (user.unsubscribed_from + [payload["notification"]]).uniq
     user.update!(unsubscribed_from:)
     payload["notification"]
+  end
+
+  def self.email_domain_receives_mail?(email)
+    domain = email.to_s[/@([^@]+)\z/, 1]
+    return true unless domain&.ascii_only?
+
+    config = Resolv::DNS::Config.default_config_hash.merge(raise_timeout_errors: true)
+    mx_records = Resolv::DNS.open(config) do |dns|
+      dns.timeouts = 3
+      dns.getresources("#{domain.chomp(".")}.", Resolv::DNS::Resource::IN::MX)
+    end
+    mx_records.any? { it.exchange.to_s.present? }
+  rescue Resolv::ResolvError
+    true
   end
 
   def display_name
@@ -154,6 +171,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def email_domain_must_receive_mail
+    errors.add(:email, "domain doesn't accept mail. Check for a typo.") unless self.class.email_domain_receives_mail?(email)
+  end
 
   def set_webauthn_id
     self.webauthn_id ||= WebAuthn.generate_user_id
