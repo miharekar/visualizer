@@ -26,4 +26,4 @@ class HotCellImageTransformer < ActiveStorage::Transformers::Transformer
   end
 end
 
-Rails.application.config.after_initialize { HotCell.describe_cells }
+Rails.application.config.after_initialize { HotCell.describe_cells if Rails.env.production? }
