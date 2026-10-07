@@ -5,6 +5,7 @@ module Authentication
     before_action :resume_session
     before_action :tag_request
     before_action :reject_disabled_user
+    before_action :reject_unconfirmed_user
     helper_method :authenticated?
   end
 
@@ -16,6 +17,14 @@ module Authentication
 
   def render_disabled_user
     render "sessions/disabled", formats: :html, status: :forbidden
+  end
+
+  def reject_unconfirmed_user
+    render_unconfirmed_user if Current.user && !Current.user.confirmed?
+  end
+
+  def render_unconfirmed_user
+    render "sessions/unconfirmed", formats: :html, status: :forbidden
   end
 
   def default_path

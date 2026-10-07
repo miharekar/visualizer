@@ -17,7 +17,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_nil User.find_by(email: "attacker@evil.com")
   end
 
-  test "create registers a user from nested params" do
+  test "create registers an unconfirmed user from nested params and sends confirmation email" do
     assert_difference ["User.count", "Session.count"], 1 do
       post registrations_url, params: {
         user: {
@@ -29,6 +29,8 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to root_url
-    assert_equal "new-user@example.com", User.order(:created_at).last.email
+    user = User.find_by!(email: "new-user@example.com")
+    assert_not user.confirmed?
+    assert_enqueued_email_with ConfirmationsMailer, :confirm, args: [user]
   end
 end

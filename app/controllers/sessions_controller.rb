@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   before_action :require_authentication, except: %i[new create]
-  skip_before_action :reject_disabled_user, only: :destroy
+  skip_before_action :reject_disabled_user, :reject_unconfirmed_user, only: :destroy
   rate_limit to: 10, within: 3.minutes, name: "sessions-create", only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
 
   def new; end

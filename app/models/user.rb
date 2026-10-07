@@ -46,6 +46,7 @@ class User < ApplicationRecord
   after_update_commit :update_date_format_on_shots, if: -> { coffee_management_enabled? && saved_change_to_date_format? }
 
   generates_token_for :unsubscribe
+  generates_token_for :email_confirmation, expires_in: 7.days
 
   scope :visible, -> { where(public: true) }
   scope :visible_or_id, ->(id) { id ? where(public: true).or(where(id:)) : where(public: true) }
@@ -85,6 +86,14 @@ class User < ApplicationRecord
 
   def disabled?
     disabled_at.present?
+  end
+
+  def confirmed?
+    confirmed_at.present?
+  end
+
+  def confirm
+    update!(confirmed_at: Time.current) unless confirmed?
   end
 
   def premium?
@@ -187,6 +196,7 @@ end
 #  coffee_bag_metadata_fields :jsonb
 #  coffee_management_enabled  :boolean          default(FALSE), not null
 #  communication              :jsonb
+#  confirmed_at               :datetime
 #  date_format                :string
 #  developer                  :boolean          default(FALSE), not null
 #  disabled_at                :datetime

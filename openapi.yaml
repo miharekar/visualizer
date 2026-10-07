@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.18.0"
+  version: "1.18.1"
   description: |
     REST API for Visualizer: upload and read espresso shots, and manage roasters and coffee bags.
 
@@ -54,7 +54,9 @@ info:
 
     Requests over a limit return `429`.
 
-    ## Disabled accounts
+    ## Unconfirmed and disabled accounts
+
+    Requests authenticated as an account that hasn't confirmed its email address return `403`. Accounts that aren't confirmed within 7 days are deleted.
 
     Requests authenticated as a disabled account return `403`. A disabled account's profile and shots are private: they're left out of public lists, but direct shot links and existing share codes keep working.
   contact:
@@ -977,7 +979,7 @@ components:
         Not allowed:
 
         - The OAuth token is missing a required scope. The body is empty; see the `WWW-Authenticate` header.
-        - The account is disabled, doesn't have premium, or doesn't own the shot. The body is a JSON error.
+        - The account is unconfirmed or disabled, doesn't have premium, or doesn't own the shot. The body is a JSON error.
       content:
         application/json:
           schema:

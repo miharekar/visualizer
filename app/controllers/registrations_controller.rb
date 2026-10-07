@@ -10,7 +10,8 @@ class RegistrationsController < ApplicationController
     if verify_turnstile
       if @user.save
         start_new_session_for(@user)
-        return redirect_to root_path, notice: "Welcome to Visualizer!"
+        ConfirmationsMailer.confirm(@user).deliver_later
+        return redirect_to root_path, notice: "Welcome to Visualizer! Check your email to confirm your account."
       end
     else
       flash.now[:alert] = "Human verification failed - make sure you're not a robot!"

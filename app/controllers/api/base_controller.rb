@@ -58,6 +58,10 @@ module Api
       render json: {error: "This account has been disabled. Contact miha@visualizer.coffee for more information."}, status: :forbidden
     end
 
+    def render_unconfirmed_user
+      render json: {error: "Confirm your email address first. Sign in at visualizer.coffee to resend the confirmation email."}, status: :forbidden
+    end
+
     def verify_basic_user
       head :unauthorized unless Current.user
     end

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   resource :session, only: %i[new create destroy]
   resources :passwords, param: :token, only: %i[new create edit update]
   resources :registrations, only: %i[new create]
+  resources :confirmations, param: :token, only: %i[show create]
 
   resources :passkeys, only: %i[create destroy] do
     collection do

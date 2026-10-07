@@ -9,6 +9,7 @@ FactoryBot.define do
     developer { false }
     coffee_management_enabled { false }
     unified_chart { false }
+    confirmed_at { Time.current }
 
     trait :admin do
       admin { true }
@@ -16,6 +17,10 @@ FactoryBot.define do
 
     trait :disabled do
       disabled_at { Time.current }
+    end
+
+    trait :unconfirmed do
+      confirmed_at { nil }
     end
 
     trait :public do

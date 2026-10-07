@@ -1,0 +1,9 @@
+<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8 text-center">
+    <%= inline_svg_tag "logo.svg", class: "w-auto h-16 mx-auto fill-current text-neutral-900 dark:text-neutral-200" %>
+    <h2 class="mt-10 text-3xl font-extrabold text-neutral-900 dark:text-neutral-200">Confirm your email</h2>
+    <p class="text-neutral-700 dark:text-neutral-300">I sent a confirmation link to <strong><%= Current.user.email %></strong>. Click it to start using Visualizer. Accounts that aren't confirmed within 7 days are deleted.</p>
+    <p class="text-neutral-700 dark:text-neutral-300">Wrong address? <%= link_to "Sign out", session_path, class: "standard-link", data: {turbo_method: :delete} %> and sign up again.</p>
+    <%= button_to "Resend confirmation email", confirmations_path, class: "button-terracotta px-4 py-2" %>
+  </div>
+</div>
