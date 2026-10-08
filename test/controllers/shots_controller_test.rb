@@ -214,7 +214,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_equal bag, @shot.reload.coffee_bag
   end
 
-  test "file uploads create imported shots and drag uploads return ok" do
+  test "file uploads create imported shots and drag uploads report failures" do
     assert_difference "Shot.count" do
       post shots_url, params: {files: [fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")]}
     end
@@ -223,6 +223,9 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
 
     post shots_url, params: {files: [fixture_file_upload(Rails.root.join("test/files/20210921T085910.shot"), "text/plain")], drag: true}
     assert_response :ok
+
+    post shots_url, params: {files: [fixture_file_upload(Rails.root.join("test/files/invalid_file.something"), "text/plain")], drag: true}
+    assert_response :unprocessable_content
   end
 
   test "free users can search shots and filter by date and enjoyment" do

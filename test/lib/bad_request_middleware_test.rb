@@ -13,10 +13,12 @@ class BadRequestMiddlewareTest < ActiveSupport::TestCase
     assert_equal ["Bad Request"], body
   end
 
-  test "oversized multipart boundaries still return bad request" do
-    app = BadRequestMiddleware.new(->(_env) { raise Rack::Multipart::BoundaryTooLongError })
+  test "malformed multipart requests return bad request" do
+    [Rack::Multipart::BoundaryTooLongError, Rack::Multipart::MultipartPartLimitError, Rack::Multipart::MultipartTotalPartLimitError].each do |error|
+      app = BadRequestMiddleware.new(->(_env) { raise error })
 
-    assert_equal 400, app.call(Rack::MockRequest.env_for("/"))[0]
+      assert_equal 400, app.call(Rack::MockRequest.env_for("/"))[0]
+    end
   end
 
   test "downstream exceptions are not swallowed" do

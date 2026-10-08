@@ -11,7 +11,7 @@ class BadRequestMiddleware
     end
 
     @app.call(env)
-  rescue Rack::Multipart::BoundaryTooLongError
+  rescue Rack::BadRequest
     bad_request
   end
 

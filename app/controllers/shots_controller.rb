@@ -144,7 +144,7 @@ class ShotsController < ApplicationController
     flash[:alert] = "Something went wrong: #{e.message}"
   ensure
     if params.key?(:drag)
-      head :ok
+      head(flash[:alert] ? :unprocessable_content : :ok)
     else
       redirect_to action: :index, format: :html
     end
