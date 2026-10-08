@@ -241,6 +241,17 @@ module Airtable
       assert_equal "receheiFe9F63F8EG", shot.airtable_id
     end
 
+    test "it does not upload the shot when its coffee bag fails to upload" do
+      roaster = create(:roaster, user: @user, airtable_id: "recRoaster")
+      @shot.update!(coffee_bag: create(:coffee_bag, roaster:))
+      stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Coffee Bags"]["id"]}")
+        .to_return(status: 422, body: {error: {type: "INVALID_VALUE_FOR_COLUMN", message: "Invalid"}}.to_json)
+      shot_stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
+
+      assert_raises(Airtable::DataError) { Airtable::Shots.new(@user).upload(@shot) }
+      assert_not_requested(shot_stub)
+    end
+
     test "it deletes in airtable after destroy" do
       perform_enqueued_jobs
 

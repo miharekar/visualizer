@@ -38,7 +38,7 @@ module Airtable
     end
 
     def set_base
-      bases = api_request("/meta/bases", method: :get)["bases"]
+      bases = api_request("/meta/bases", method: :get)["bases"].select { it["permissionLevel"] == "create" }
       if bases.any?
         bases.find { |b| b["name"] == "Visualizer" } || bases.first
       else

@@ -88,7 +88,7 @@ module Airtable
     end
 
     def upload_coffee_bag_to_airtable(shot)
-      AirtableUploadRecordJob.perform_now(shot.coffee_bag)
+      CoffeeBags.new(user).upload(shot.coffee_bag)
       shot.coffee_bag.reload
     end
   end
