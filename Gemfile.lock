@@ -103,7 +103,7 @@ GEM
       activesupport (>= 6.0.0)
     anonymous_loader (0.1.3)
       version_gem (~> 1.1, >= 1.1.14)
-    appsignal (5.0.2)
+    appsignal (5.0.4)
       logger
       rack (>= 2.0.0)
     ast (2.4.3)
@@ -258,7 +258,7 @@ GEM
       logger (~> 1.6)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
-    lexxy (1.0.0)
+    lexxy (1.0.1)
       railties (>= 8.0.2)
     lint_roller (1.1.0)
     listen (3.10.1)
