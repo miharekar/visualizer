@@ -1,5 +1,6 @@
 class ConfirmationsController < ApplicationController
   skip_before_action :reject_unconfirmed_user
+  skip_before_action :reject_disabled_user, only: :show
   before_action :require_authentication, only: :create
   rate_limit to: 3, within: 15.minutes, name: "confirmations-create", only: :create, by: -> { Current.user.id }, with: -> { redirect_to root_url, alert: "Try again later." }
 

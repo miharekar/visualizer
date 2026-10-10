@@ -19,6 +19,25 @@ class DisabledUserTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_url
   end
 
+  test "confirmation link re-enables unconfirmed disabled user" do
+    @user.update!(confirmed_at: nil)
+    sign_in(@user)
+    get confirmation_url(@user.generate_token_for(:email_confirmation))
+
+    assert_redirected_to shots_url
+    assert @user.reload.confirmed?
+    assert_not @user.disabled?
+
+    get shots_url
+    assert_response :success
+  end
+
+  test "confirmation link does not re-enable confirmed disabled user" do
+    get confirmation_url(@user.generate_token_for(:email_confirmation))
+
+    assert @user.reload.disabled?
+  end
+
   test "API rejects disabled user" do
     get api_me_url, headers: {"HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Basic.encode_credentials(@user.email, "password")}, as: :json
 

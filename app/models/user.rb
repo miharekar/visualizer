@@ -110,7 +110,7 @@ class User < ApplicationRecord
   end
 
   def confirm
-    update!(confirmed_at: Time.current) unless confirmed?
+    update!(confirmed_at: Time.current, disabled_at: nil) unless confirmed?
   end
 
   def premium?
