@@ -12,8 +12,8 @@ content_path = root.join("config/credentials/production.yml.enc")
 key_path.write(key)
 key_path.chmod(0o600)
 encrypted = ActiveSupport::EncryptedFile.new(
-  content_path: content_path,
-  key_path: key_path,
+  content_path:,
+  key_path:,
   env_key: "RAILS_MASTER_KEY",
   raise_if_missing_key: true
 )
