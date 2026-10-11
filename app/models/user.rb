@@ -114,6 +114,8 @@ class User < ApplicationRecord
   end
 
   def premium?
+    return true if ENV["VISUALIZER_SELF_HOSTED"] == "true"
+
     premium_expires_at&.future? || supporter
   end
 
@@ -122,15 +124,19 @@ class User < ApplicationRecord
   end
 
   def coffee_management_enabled?
-    premium? && coffee_management_enabled
+    premium? && (self_hosted? || coffee_management_enabled)
   end
 
   def journal_enabled?
-    premium? && journal_enabled
+    premium? && (self_hosted? || journal_enabled)
   end
 
   def can_manage_premium?
     creem_customer_id.present? || lemon_squeezy_customer_id.present?
+  end
+
+  def self_hosted?
+    ENV["VISUALIZER_SELF_HOSTED"] == "true"
   end
 
   def wants_fahrenheit?

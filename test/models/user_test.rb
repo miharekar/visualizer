@@ -61,6 +61,20 @@ class UserTest < ActiveSupport::TestCase
     assert_equal [], user.coffee_bag_metadata_fields
   end
 
+  test "self-hosted mode unlocks premium features without a subscription" do
+    user = create(:user, premium_expires_at: nil, supporter: false, coffee_management_enabled: false, journal_enabled: false)
+
+    previous = ENV["VISUALIZER_SELF_HOSTED"]
+    ENV["VISUALIZER_SELF_HOSTED"] = "true"
+    begin
+      assert user.premium?
+      assert user.coffee_management_enabled?
+      assert user.journal_enabled?
+    ensure
+      ENV["VISUALIZER_SELF_HOSTED"] = previous
+    end
+  end
+
   test "unified_chart follows the user preference" do
     user = build(:user)
     assert_not user.unified_chart?
