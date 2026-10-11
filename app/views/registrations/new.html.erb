@@ -13,7 +13,11 @@
   end
 %>
 <% self_hosted = User.self_hosted? %>
-<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8" <%= 'data-controller="turnstile" data-turnstile-site-key-value="%s"' % Rails.application.credentials.dig(:cloudflare, :site_key) unless self_hosted %>>
+<% if self_hosted %>
+<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+<% else %>
+<div class="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8" data-controller="turnstile" data-turnstile-site-key-value="<%= Rails.application.credentials.dig(:cloudflare, :site_key) %>">
+<% end %>
   <div class="w-full max-w-md space-y-8">
     <div>
       <%= inline_svg_tag "logo.svg", class: "w-auto h-16 mx-auto fill-current text-neutral-900 dark:text-neutral-200" %>
