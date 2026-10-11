@@ -11,6 +11,10 @@ class OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     ENV["OIDC_ISSUER"] = @previous_issuer
   end
 
+  test "allows the GET login link through OmniAuth" do
+    assert_includes OmniAuth.config.allowed_request_methods, :get
+  end
+
   test "signs in an identity matched by issuer and subject" do
     user = create(:user)
     create(:identity, user:, provider: "homelab_oidc", uid: "subject-1")

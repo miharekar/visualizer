@@ -9,7 +9,7 @@
     Store your shots, compare curves, keep the details that matter, and use it all to drink and enjoy better coffee.
   </p>
   <div class="mt-12 flex items-center justify-center gap-x-12">
-    <% path = authenticated? ? shots_path : new_registration_path %>
+    <% path = authenticated? ? shots_path : (oidc_only? ? new_session_path : new_registration_path) %>
     <%= link_to "Get started", path, class: "button-terracotta px-3.5 py-2.5" %>
   </div>
 </div>

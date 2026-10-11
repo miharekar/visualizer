@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
   before_action :set_timezone
   before_action :set_skin
 
-  helper_method :journal, :journal_view?
+  helper_method :journal, :journal_view?, :oidc_only?
+
+  def oidc_only?
+    ENV["OIDC_ONLY"].to_s.casecmp?("true")
+  end
 
   private
 

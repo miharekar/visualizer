@@ -1,6 +1,8 @@
 class RegistrationsController < ApplicationController
   include Turnstile
 
+  before_action :reject_public_registration, if: :oidc_only?
+
   rate_limit to: 10, within: 3.minutes, name: "registrations-create", only: :create, with: -> { redirect_to new_registration_url, alert: "Try again later." }
 
   def new
@@ -22,6 +24,10 @@ class RegistrationsController < ApplicationController
   end
 
   private
+
+  def reject_public_registration
+    head :not_found, content_type: "text/plain"
+  end
 
   def user_params
     params.expect(user: %i[email password password_confirmation])

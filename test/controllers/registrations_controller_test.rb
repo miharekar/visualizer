@@ -13,6 +13,20 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     ENV["VISUALIZER_SELF_HOSTED"] = previous
   end
 
+  test "OIDC-only mode rejects public registration routes" do
+    previous = ENV["OIDC_ONLY"]
+    ENV["OIDC_ONLY"] = "true"
+
+    get new_registration_url
+    assert_response :not_found
+
+    post registrations_url, params: {user: {email: "blocked@example.com", password: "password123", password_confirmation: "password123"}}
+    assert_response :not_found
+    assert_nil User.find_by(email: "blocked@example.com")
+  ensure
+    ENV["OIDC_ONLY"] = previous
+  end
+
   test "create uses nested form params instead of query params" do
     assert_difference ["User.count", "Session.count"], 1 do
       post registrations_url(email: "attacker@evil.com"), params: {
