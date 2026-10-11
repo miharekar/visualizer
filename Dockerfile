@@ -50,6 +50,11 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# Self-hosted builds do not contain upstream commercial credentials.  The
+# empty Rails credentials file keeps optional credential lookups safe; all
+# integrations use explicit runtime environment variables instead.
+RUN bundle exec ruby script/generate_self_hosted_credentials.rb
+
 # Precompile bootsnap code for faster boot times.
 RUN bundle exec bootsnap precompile app/ lib/
 
