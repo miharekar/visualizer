@@ -139,6 +139,10 @@ class User < ApplicationRecord
     ENV["VISUALIZER_SELF_HOSTED"] == "true"
   end
 
+  def self.self_hosted?
+    ENV["VISUALIZER_SELF_HOSTED"] == "true"
+  end
+
   def wants_fahrenheit?
     temperature_unit == "Fahrenheit"
   end

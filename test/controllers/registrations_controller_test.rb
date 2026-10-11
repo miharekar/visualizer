@@ -1,6 +1,18 @@
 require "test_helper"
 
 class RegistrationsControllerTest < ActionDispatch::IntegrationTest
+  test "self-hosted registration does not require upstream Turnstile credentials" do
+    previous = ENV["VISUALIZER_SELF_HOSTED"]
+    ENV["VISUALIZER_SELF_HOSTED"] = "true"
+
+    get new_registration_url
+
+    assert_response :success
+    assert_no_match(/data-controller="turnstile"/, response.body)
+  ensure
+    ENV["VISUALIZER_SELF_HOSTED"] = previous
+  end
+
   test "create uses nested form params instead of query params" do
     assert_difference ["User.count", "Session.count"], 1 do
       post registrations_url(email: "attacker@evil.com"), params: {
