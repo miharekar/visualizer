@@ -53,3 +53,14 @@ jobs:
             ghcr.io/maxrink/visualizer:${{ github.sha }}
             ghcr.io/maxrink/visualizer:latest
           push: true
+
+      - name: Build and push Hot Cell
+        uses: docker/build-push-action@v7
+        with:
+          context: hotcell
+          build-args: RUBY_VERSION=${{ steps.ruby-version.outputs.version }}
+          platforms: ${{ matrix.platform }}
+          tags: |
+            ghcr.io/maxrink/visualizer-hotcell:${{ github.sha }}
+            ghcr.io/maxrink/visualizer-hotcell:latest
+          push: true
