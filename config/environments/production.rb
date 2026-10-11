@@ -73,6 +73,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   if ENV["SMTP_ADDRESS"].present?
     config.action_mailer.delivery_method = :smtp
+    smtp_tls = %w[1 true yes].include?(ENV.fetch("SMTP_TLS", "false").downcase)
     config.action_mailer.smtp_settings = {
       address: ENV.fetch("SMTP_ADDRESS"),
       port: ENV.fetch("SMTP_PORT", "587"),
@@ -80,7 +81,8 @@ Rails.application.configure do
       user_name: ENV["SMTP_USERNAME"],
       password: ENV["SMTP_PASSWORD"],
       authentication: :plain,
-      enable_starttls_auto: true
+      ssl: smtp_tls,
+      enable_starttls_auto: !smtp_tls
     }
   else
     config.action_mailer.delivery_method = :postmark

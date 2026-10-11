@@ -2,9 +2,17 @@
 
 ENV["OTEL_TRACES_EXPORTER"] = "none"
 require "opentelemetry/sdk"
+require "opentelemetry/sdk/trace/export/in_memory_span_exporter"
+require "opentelemetry/sdk/trace/export/simple_span_processor"
 require_relative "../config/initializers/opentelemetry"
 
-tracer = OpenTelemetry.tracer_provider.tracer("visualizer-privacy-test")
+exporter = OpenTelemetry::SDK::Trace::Export::InMemorySpanExporter.new
+provider = OpenTelemetry::SDK::Trace::TracerProvider.new
+provider.add_span_processor(VisualizerPrivacySpanProcessor.new)
+provider.add_span_processor(
+  OpenTelemetry::SDK::Trace::Export::SimpleSpanProcessor.new(exporter)
+)
+tracer = provider.tracer("visualizer-privacy-test")
 span = tracer.start_span("fixture")
 span.add_attributes(
   "duration.ms" => 12,
@@ -17,7 +25,7 @@ span.add_attributes(
   "http.request.body" => "secret-request-body"
 )
 span.finish
-attributes = span.to_span_data.attributes
+attributes = exporter.finished_spans.first.attributes
 
 raise "privacy filter retained sensitive span data" unless (
   attributes.keys & VisualizerPrivacySpanProcessor::SENSITIVE_KEYS

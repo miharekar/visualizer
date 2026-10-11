@@ -33,6 +33,12 @@ end
 OpenTelemetry::SDK.configure do |config|
   config.service_name = ENV.fetch("OTEL_SERVICE_NAME", "visualizer")
   config.add_span_processor(VisualizerPrivacySpanProcessor.new)
+  if ENV.fetch("OTEL_TRACES_EXPORTER", "otlp") != "none"
+    exporter = OpenTelemetry::Exporter::OTLP::Exporter.new
+    config.add_span_processor(
+      OpenTelemetry::SDK::Trace::Export::BatchSpanProcessor.new(exporter)
+    )
+  end
   # Rails instrumentation covers request, controller, Active Record, Active
   # Job, Active Storage and mail timings. SQL/query, mail and URL content is
   # removed at span finalization before the exporter receives it.

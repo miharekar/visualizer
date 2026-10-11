@@ -1,7 +1,9 @@
 class ApplicationMailer < ActionMailer::Base
   before_action :check_notification
 
-  default from: email_address_with_name("miha@visualizer.coffee", "Miha from Visualizer"), message_stream: -> { notification_exists? ? "broadcast" : "outbound" }
+  MAIL_FROM = ENV.fetch("SMTP_FROM", ENV["VISUALIZER_SELF_HOSTED"] == "true" ? "auth@private-testumgebung.de" : "miha@visualizer.coffee")
+
+  default from: email_address_with_name(MAIL_FROM, "Miha from Visualizer"), message_stream: -> { notification_exists? ? "broadcast" : "outbound" }
   layout "mailer"
   helper_method :notification_exists?
 
@@ -19,7 +21,7 @@ class ApplicationMailer < ActionMailer::Base
 
     if params[:user].notify?(action_name)
       token = params[:user].unsubscribe_token_for(action_name)
-      headers["List-Unsubscribe"] = "<#{emails_unsubscribe_url(token:)}>, <mailto:miha@visualizer.coffee?subject=Unsubscribe>"
+      headers["List-Unsubscribe"] = "<#{emails_unsubscribe_url(token:)}>, <mailto:#{MAIL_FROM}?subject=Unsubscribe>"
       headers["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
     else
       self.response_body = :do_not_deliver
