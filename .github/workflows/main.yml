@@ -64,3 +64,38 @@ jobs:
             ghcr.io/maxrink/visualizer-hotcell:${{ github.sha }}
             ghcr.io/maxrink/visualizer-hotcell:latest
           push: true
+
+      # Keep a pull-independent, authenticated artifact for private homelabs
+      # whose GHCR policy does not permit public package pulls.  The NAS loads
+      # these tarballs through its native container/Arcane owner path.
+      - name: Build app artifact
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          build-args: RUBY_VERSION=${{ steps.ruby-version.outputs.version }}
+          platforms: linux/amd64
+          tags: visualizer-artifact:${{ github.sha }}
+          load: true
+
+      - name: Build Hot Cell artifact
+        uses: docker/build-push-action@v7
+        with:
+          context: hotcell
+          build-args: RUBY_VERSION=${{ steps.ruby-version.outputs.version }}
+          platforms: linux/amd64
+          tags: visualizer-hotcell-artifact:${{ github.sha }}
+          load: true
+
+      - name: Export authenticated homelab artifacts
+        run: |
+          docker save visualizer-artifact:${{ github.sha }} | gzip -1 > visualizer-${{ github.sha }}.tar.gz
+          docker save visualizer-hotcell-artifact:${{ github.sha }} | gzip -1 > visualizer-hotcell-${{ github.sha }}.tar.gz
+
+      - name: Upload homelab artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: visualizer-images-${{ github.sha }}-${{ matrix.artifact }}
+          path: |
+            visualizer-${{ github.sha }}.tar.gz
+            visualizer-hotcell-${{ github.sha }}.tar.gz
+          retention-days: 7
