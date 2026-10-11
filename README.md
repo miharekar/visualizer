@@ -33,3 +33,18 @@ You can read [the source code](/app/controllers/api) or [the LLM-generated API d
 
 No other services are required though S3 is expected in `config/storage.yml`.
 Feel free to override it for development purposes.
+
+## Self-hosted OpenID Connect
+
+The self-hosted fork can expose an OpenID Connect authorization-code login when
+`OIDC_ISSUER`, `OIDC_CLIENT_ID`, and `OIDC_CLIENT_SECRET` are set. Discovery,
+state, nonce, and PKCE are enabled by the strategy. Set
+`OIDC_REDIRECT_URI` to the exact HTTPS callback registered at the provider; the
+default is `${APP_PROTOCOL}://${APP_HOST}/auth/homelab_oidc/callback`.
+
+The callback links an identity by the provider issuer and immutable `sub`
+claim. It never links an account by email alone. An existing native session is
+required to link a new identity; otherwise a previously linked identity can
+sign in. Keep native password and passkey recovery enabled, and keep the OIDC
+client secret in the runtime secret store rather than in this repository or an
+image.
