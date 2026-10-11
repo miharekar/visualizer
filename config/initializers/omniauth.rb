@@ -1,3 +1,8 @@
+# The login button is a normal GET link. OmniAuth 2 defaults to POST-only
+# request phases, which otherwise falls through to Rails and resolves
+# /auth/homelab_oidc as the nonexistent AuthController.
+OmniAuth.config.allowed_request_methods = %i[get]
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider(
     :airtable,
