@@ -38,6 +38,7 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def homelab_oidc_method_not_allowed
+    response.set_header("Allow", "POST")
     head :method_not_allowed
   end
 

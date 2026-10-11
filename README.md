@@ -48,3 +48,7 @@ required to link a new identity; otherwise a previously linked identity can
 sign in. Keep native password and passkey recovery enabled, and keep the OIDC
 client secret in the runtime secret store rather than in this repository or an
 image.
+
+Set `OIDC_ONLY=true` after validating the native callback to disable public
+password registration and expose only the configured OIDC sign-in option to new
+users. Existing native recovery accounts remain available for recovery.

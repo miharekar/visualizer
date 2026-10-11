@@ -19,6 +19,7 @@ class OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     get "/auth/homelab_oidc"
 
     assert_response :method_not_allowed
+    assert_equal "POST", response.headers["Allow"]
   end
 
   test "signs in an identity matched by issuer and subject" do
