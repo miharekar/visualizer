@@ -15,6 +15,12 @@ class OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     assert_equal [:post], OmniAuth.config.allowed_request_methods
   end
 
+  test "rejects a direct GET without raising a missing controller error" do
+    get "/auth/homelab_oidc"
+
+    assert_response :method_not_allowed
+  end
+
   test "signs in an identity matched by issuer and subject" do
     user = create(:user)
     create(:identity, user:, provider: "homelab_oidc", uid: "subject-1")
