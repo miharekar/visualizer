@@ -73,3 +73,9 @@ group :test do
   gem "retest"
   gem "webmock"
 end
+
+gem "opentelemetry-sdk", "~> 1.13"
+
+gem "opentelemetry-instrumentation-rails", "~> 0.42.0"
+
+gem "opentelemetry-exporter-otlp", "~> 0.37.0"
