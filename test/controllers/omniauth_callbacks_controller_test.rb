@@ -41,6 +41,26 @@ class OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
     assert_not user.identities.exists?(provider: "homelab_oidc", uid: "new-subject")
   end
 
+  test "provisions a new confirmed user for an unrecognised OIDC subject" do
+    assert_difference ["User.count", "Identity.count", "Session.count"], 1 do
+      get homelab_oidc_callback_url, env: oidc_env("new-subject", "new@example.test")
+    end
+
+    user = User.find_by!(email: "new@example.test")
+    assert user.confirmed?
+    assert_redirected_to shots_url
+    assert_equal user.id, Session.order(:created_at).last.user_id
+    assert user.identities.exists?(provider: "homelab_oidc", uid: "new-subject")
+  end
+
+  test "does not provision an OIDC user without an email" do
+    assert_no_difference ["User.count", "Identity.count", "Session.count"] do
+      get homelab_oidc_callback_url, env: oidc_env("missing-email", "")
+    end
+
+    assert_redirected_to new_session_url
+  end
+
   private
 
   def oidc_env(subject, email = "user@example.test")
