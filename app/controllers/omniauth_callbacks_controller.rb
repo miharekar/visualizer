@@ -31,7 +31,17 @@ class OmniauthCallbacksController < ApplicationController
       Current.user.identities.create!(provider: "homelab_oidc", uid: subject, blob: auth)
       redirect_to shots_path, notice: "OpenID Connect account linked"
     else
-      oidc_failure("Sign in with the local account once before linking OpenID Connect.")
+      email = auth.dig("info", "email").to_s.strip.downcase
+      return oidc_failure("The identity provider did not return an email address.") if email.blank?
+      return oidc_failure("An account already uses this email address. Sign in locally once to link OpenID Connect.") if User.exists?(email:)
+
+      user = User.transaction do
+        user = provision_oidc_user(email)
+        user.identities.create!(provider: "homelab_oidc", uid: subject, blob: auth)
+        user
+      end
+      start_new_session_for(user)
+      redirect_to after_authentication_url
     end
   rescue ActiveRecord::RecordNotUnique
     oidc_failure("That OpenID Connect identity is already linked to another account.")
@@ -46,5 +56,9 @@ class OmniauthCallbacksController < ApplicationController
 
   def oidc_failure(message)
     redirect_to new_session_url, alert: message
+  end
+
+  def provision_oidc_user(email)
+    User.create!(email:, password: SecureRandom.base58(48), confirmed_at: Time.current)
   end
 end
