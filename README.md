@@ -43,12 +43,18 @@ state, nonce, and PKCE are enabled by the strategy. Set
 default is `${APP_PROTOCOL}://${APP_HOST}/auth/homelab_oidc/callback`.
 
 The callback links an identity by the provider issuer and immutable `sub`
-claim. It never links an account by email alone. An existing native session is
-required to link a new identity; otherwise a previously linked identity can
-sign in. Keep native password and passkey recovery enabled, and keep the OIDC
-client secret in the runtime secret store rather than in this repository or an
-image.
+claim. It never links an existing account by email alone. A previously linked
+identity can sign in; a new identity can either be linked from an existing
+native session or provision a new confirmed account from its OIDC email. If a
+local account already owns that email, the OIDC login stops and asks for one
+local sign-in before linking. Keep native password and passkey recovery
+enabled, and keep the OIDC client secret in the runtime secret store rather
+than in this repository or an image.
 
 Set `OIDC_ONLY=true` after validating the native callback to disable public
 password registration and expose only the configured OIDC sign-in option to new
-users. Existing native recovery accounts remain available for recovery.
+users. Existing native recovery accounts remain available for recovery. Classic
+upload clients should use the built-in Doorkeeper OAuth application flow and
+request the least-privilege `upload` scope; HTTP Basic remains available for
+local scripts where OAuth is impractical. OIDC provisioning does not create or
+expose upload credentials.
