@@ -16,6 +16,7 @@ class OmniauthCallbacksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "rejects a direct GET without raising a missing controller error" do
+    host! "example.com"
     get "/auth/homelab_oidc"
 
     assert_response :method_not_allowed
