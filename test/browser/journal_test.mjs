@@ -590,6 +590,22 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(saves, 0)
     })
 
+    await check("reverting an edit clears unsaved state and Enter does not save", async () => {
+      let saves = 0
+      await page.route(journalUpdates, async route => {
+        saves++
+        await route.continue()
+      })
+      const original = await ratings.nth(1).inputValue()
+      await ratings.nth(1).fill("99")
+      assert.equal(await page.locator("[data-unsaved]").count(), 1)
+      await ratings.nth(1).fill(original)
+      assert.equal(await page.locator("[data-unsaved]").count(), 0)
+      await ratings.nth(1).press("Enter")
+      assert.equal(await page.locator("[data-saving]").count(), 0)
+      assert.equal(saves, 0)
+    })
+
     await check("notes remain searchable after popup save and manual form creates a shot", async () => {
       await page.locator('[data-journal-selection-target="checkbox"]').first().check()
       await page.locator("#journal-bulk-field").selectOption("espresso_notes")

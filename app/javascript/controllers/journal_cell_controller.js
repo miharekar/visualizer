@@ -3,8 +3,12 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["input", "error"]
 
+  connect() {
+    this.failed = this.element.hasAttribute("data-unsaved")
+  }
+
   dirty() {
-    this.element.dataset.unsaved = ""
+    this.element.toggleAttribute("data-unsaved", this.failed || this.inputTarget.value !== this.inputTarget.defaultValue || this.inputTarget.validity.badInput)
   }
 
   submit() {
@@ -20,7 +24,8 @@ export default class extends Controller {
   complete(event) {
     if (event.detail.fetchResponse?.contentType?.includes("turbo-stream")) return
     delete this.element.dataset.saving
-    this.dirty()
+    this.failed = true
+    this.element.dataset.unsaved = ""
     this.inputTarget.readOnly = false
     this.errorTarget.textContent = "Not saved. Press Enter to retry."
   }
@@ -30,8 +35,10 @@ export default class extends Controller {
     event.preventDefault()
     if (this.element.hasAttribute("data-unsaved") && !this.submit()) return
     const cell = this.element.closest("td")
-    const row = event.shiftKey ? cell.parentElement.previousElementSibling : cell.parentElement.nextElementSibling
-    const control = row?.querySelector(`[data-column="${CSS.escape(cell.dataset.column)}"] [data-journal-cell-control]`)
+    const step = event.shiftKey ? "previousElementSibling" : "nextElementSibling"
+    const selector = `[data-column="${CSS.escape(cell.dataset.column)}"] [data-journal-cell-control]`
+    let control = null
+    for (let row = cell.parentElement[step]; row && !control; row = row[step]) control = row.querySelector(selector)
     control?.focus()
     control?.select?.()
   }
