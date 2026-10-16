@@ -251,6 +251,17 @@ module Api
       assert_not_includes json_response.keys, "private_notes"
     end
 
+    test "show does not expose private notes of an orphaned shot to anonymous callers" do
+      deleted_user = create(:user)
+      shot = FactoryBot.create(:shot, user: deleted_user, private_notes: "Only for me")
+      deleted_user.destroy!
+
+      get api_shot_url(shot), as: :json
+      assert_response :success
+
+      assert_not_includes response.parsed_body.keys, "private_notes"
+    end
+
     test "show returns 404 for non-existent shot" do
       get api_shot_url(id: "nonexistent"), as: :json
       assert_response :not_found
