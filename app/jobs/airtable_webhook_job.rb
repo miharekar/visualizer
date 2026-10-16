@@ -6,6 +6,8 @@ class AirtableWebhookJob < AirtableJob
   attr_reader :airtable_info, :last_transaction, :webhook_payloads, :payloads, :record_timestamps, :relevant_tables, :relevant_timestamps
 
   def perform(airtable_info)
+    return unless airtable_info.identity.user.premium?
+
     @airtable_info = airtable_info
     @last_transaction = airtable_info.last_transaction.to_i
 

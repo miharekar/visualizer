@@ -1,5 +1,7 @@
 class AirtableUploadAllJob < AirtableJob
   def perform(user, shot_ids = nil)
+    return unless user.premium?
+
     identity = user.identities.find_by(provider: "airtable")
     return unless identity
 

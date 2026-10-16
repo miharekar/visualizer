@@ -1,4 +1,7 @@
 class OmniauthCallbacksController < ApplicationController
+  before_action :require_authentication
+  before_action :check_premium!
+
   def airtable
     oauth = OauthWrapper.new(request.env["omniauth.auth"])
     identity = Identity.find_by(oauth.identifiers)
