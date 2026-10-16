@@ -1073,17 +1073,17 @@ components:
 
     ShotSummary:
       type: object
-      required: [id, clock, updated_at]
+      required: [id]
       properties:
         id:
           type: string
           format: uuid
         clock:
           type: integer
-          description: Start time as a Unix timestamp in seconds.
+          description: Start time as a Unix timestamp in seconds. Omitted in unauthenticated lists for shots of users who hide shot times.
         updated_at:
           type: integer
-          description: Last update as a Unix timestamp in seconds.
+          description: Last update as a Unix timestamp in seconds. Omitted in unauthenticated lists for shots of users who hide shot times.
 
     ShotListResponse:
       type: object
@@ -1110,7 +1110,7 @@ components:
       title: Default format
       type: object
       description: Optional fields are left out when they have no value.
-      required: [id, user_id, duration, profile_title, drink_tds, drink_ey, espresso_enjoyment, bean_weight, drink_weight, grinder_model, grinder_setting, bean_brand, bean_type, roast_date, roast_level, barista, bean_notes, espresso_notes, updated_at, tags]
+      required: [id, user_id, duration, profile_title, drink_tds, drink_ey, espresso_enjoyment, bean_weight, drink_weight, grinder_model, grinder_setting, bean_brand, bean_type, roast_date, roast_level, barista, bean_notes, espresso_notes, tags]
       properties:
         id:
           type: string
@@ -1124,7 +1124,7 @@ components:
           description: Left out when the owner hides shot times.
         updated_at:
           type: integer
-          description: Last update as a Unix timestamp in seconds.
+          description: Last update as a Unix timestamp in seconds. Left out for other people's shots when the owner hides shot times.
         duration:
           type: [number, "null"]
           description: Seconds.
@@ -1337,7 +1337,7 @@ components:
         visualizer:
           type: object
           description: Visualizer's fields for the shot. Notes are plain text. Fields without a value are left out.
-          required: [shot_id, updated_at, tags]
+          required: [shot_id, tags]
           properties:
             shot_id:
               type: string
@@ -1351,7 +1351,7 @@ components:
               description: Left out when the owner hides shot times.
             updated_at:
               type: integer
-              description: Last update as a Unix timestamp in seconds.
+              description: Last update as a Unix timestamp in seconds. Left out for other people's shots when the owner hides shot times.
             duration:
               type: number
               description: Seconds.
@@ -1440,7 +1440,7 @@ components:
 
     ShotBrewdata:
       type: [object, "null"]
-      description: The original Beanconqueror upload, plus a `parser` key. Returned instead of `timeframe` and `data` for Beanconqueror shots, and `null` for shots without telemetry.
+      description: The original Beanconqueror upload, plus a `parser` key. Returned instead of `timeframe` and `data` for Beanconqueror shots, and `null` for shots without telemetry. For other people's shots when the owner hides shot times, every `unix_timestamp`, `updated_at`, and `start_time` key is removed, and the `brewFlow` `timestamp` values are shifted so the earliest is `00:00:00.000`. Timestamps that aren't `HH:MM:SS.mmm` are removed.
       additionalProperties: true
 
     SharedShotsResponse:

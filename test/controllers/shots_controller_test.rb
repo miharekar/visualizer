@@ -23,7 +23,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index renders Turbo Stream pagination" do
-    get shots_url(format: :turbo_stream, before: 1.day.from_now.iso8601)
+    get shots_url(format: :turbo_stream, before: Paginatable.encrypt_time(1.day.from_now))
 
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
@@ -90,6 +90,23 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "select[data-action='related-shots#compare'] option[value='#{@shot.id}']"
     assert_select "option[value='#{other_owner_shot.id}']", count: 0
+  end
+
+  test "related shots hide times from other viewers of users who hide them" do
+    owner = create(:user, :public, hide_shot_times: true)
+    owner_shot = create(:shot, user: owner, public: true, profile_title: "Owner shot")
+    create(:shot, user: owner, public: true, profile_title: "Earlier shot", start_time: Time.utc(2020, 1, 2, 3, 4))
+
+    get shot_url(owner_shot)
+
+    assert_response :success
+    assert_select "select[data-action='related-shots#goTo'] option", text: "Earlier shot"
+    assert_no_match(/2020/, css_select("select[data-action='related-shots#goTo']").to_s)
+
+    sign_in(owner)
+    get shot_url(owner_shot)
+
+    assert_select "select[data-action='related-shots#goTo'] option", text: /Earlier shot @ .*2020/
   end
 
   test "new renders the shared manual form" do
