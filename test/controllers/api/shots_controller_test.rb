@@ -455,6 +455,20 @@ module Api
       assert_includes json_response["error"], "Could not save the provided file"
     end
 
+    test "upload returns 422 for invalid JSON files" do
+      post upload_api_shots_url, headers: auth_headers(user), params: {file: Rack::Test::UploadedFile.new(StringIO.new("{ invalid json"), "application/json", original_filename: "shot.json")}
+
+      assert_response :unprocessable_content
+      assert_equal "Could not save the provided file. Could not parse the file.", response.parsed_body["error"]
+    end
+
+    test "upload returns 422 for files that cannot be parsed" do
+      post upload_api_shots_url, headers: auth_headers(user), params: {file: Rack::Test::UploadedFile.new(StringIO.new("clock 1\nsettings {\n"), "text/plain", original_filename: "shot.shot")}
+
+      assert_response :unprocessable_content
+      assert_equal "Could not save the provided file. Could not parse the file.", response.parsed_body["error"]
+    end
+
     test "upload returns 422 for files with too many datapoints" do
       content = Rails.root.join("test/files/sharebrew_tsp.csv").read + "moment,1e400,1.0,,,,,,,,,sample: pressure\n"
 

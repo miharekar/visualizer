@@ -40,9 +40,9 @@ module Parsers
     def self.parse_json(file, retrying: false)
       JSON.parse(file)
     rescue JSON::ParserError
-      raise if retrying
+      raise InvalidFile, "Could not parse the file." if retrying
 
-      file = file.force_encoding("UTF-8").gsub(/[\u0000-\u001F\u007F-\u009F]/, "")
+      file = file.force_encoding("UTF-8").scrub.gsub(/[\u0000-\u001F\u007F-\u009F]/, "")
       retrying = true
       retry
     end
@@ -57,7 +57,7 @@ module Parsers
     end
 
     def build_shot(user)
-      parse
+      parse_or_reject
 
       shot = existing_shot(user) || Shot.find_or_initialize_by(user:, sha:)
       shot.start_time = start_time
@@ -79,11 +79,20 @@ module Parsers
 
     def parse
       nil
-    rescue SystemStackError, StandardError => e
-      Rails.env.development? ? raise(e) : new(file)
     end
 
     private
+
+    def parse_or_reject
+      parse
+    rescue InvalidFile
+      raise
+    rescue SystemStackError, StandardError => e
+      raise if Rails.env.development?
+
+      Appsignal.report_error(e)
+      raise InvalidFile, "Could not parse the file."
+    end
 
     memo_wise def sha
       Digest::SHA256.base64digest(data.sort.to_json) if timeframe.present? && data.values.any?(&:present?)

@@ -209,6 +209,12 @@ module Parsers
       assert_equal "a\\{b", parse_tcl("settings {\n\tbean_brand {a\\{b}\n}\n").extra["bean_brand"]
     end
 
+    test "rejects a malformed file as invalid" do
+      error = assert_raises(Parsers::Base::InvalidFile) { Shot.from_file(@user, "clock 1\nsettings {\n") }
+      assert_equal "Could not parse the file.", error.message
+      assert_instance_of Parsers::DecentTcl::Error, error.cause
+    end
+
     test "raises on unbalanced braces" do
       assert_raises(Parsers::DecentTcl::Error) { parse_tcl("clock 1\nsettings {\n") }
     end

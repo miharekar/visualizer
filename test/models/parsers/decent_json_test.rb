@@ -109,6 +109,11 @@ module Parsers
       assert_not shot.information.data.key?("espresso_temperature_mix_goal")
     end
 
+    test "rejects malformed JSON containing invalid UTF-8 bytes" do
+      error = assert_raises(Parsers::Base::InvalidFile) { Shot.from_file(@user, "{\"a\": \"\xff\x01\"".b) }
+      assert_equal "Could not parse the file.", error.message
+    end
+
     test "rejects an unsupported JSON shape" do
       payload = {
         author: "Pullograph",
