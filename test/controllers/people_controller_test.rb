@@ -32,4 +32,41 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :bad_request
   end
+
+  test "show redirects a public user's id to their slug" do
+    user = create(:user, :public)
+
+    get person_url(user.id)
+
+    assert_redirected_to person_url(user.slug)
+    assert_response :moved_permanently
+  end
+
+  test "show does not reveal the slug of a private user by id" do
+    user = create(:user, :public)
+    user.update!(public: false)
+
+    get person_url(user.id)
+
+    assert_redirected_to community_index_url
+    assert_not_includes response.location, user.slug
+  end
+
+  test "feed redirects a public user's id to their slug" do
+    user = create(:user, :public)
+
+    get feed_person_url(user.id)
+
+    assert_redirected_to feed_person_url(user.slug)
+    assert_response :moved_permanently
+  end
+
+  test "feed does not reveal the slug of a private user by id" do
+    user = create(:user, :public)
+    user.update!(public: false)
+
+    get feed_person_url(user.id)
+
+    assert_response :not_found
+  end
 end
