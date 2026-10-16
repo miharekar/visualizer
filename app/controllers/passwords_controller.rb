@@ -15,6 +15,8 @@ class PasswordsController < ApplicationController
   end
 
   def update
+    params.expect(:password, :password_confirmation)
+
     if @user.update(params.permit(:password, :password_confirmation))
       @user.sessions.destroy_all
       @user.access_grants.destroy_all
