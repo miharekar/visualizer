@@ -4,7 +4,7 @@ class PeopleController < ApplicationController
   def show
     @user = User.find_by(slug: params[:id])
     if @user.nil?
-      @user = User.find_by(id: params[:id])
+      @user = User.find_by(id: params[:id], public: true)
       if @user&.slug.present?
         redirect_to person_path(id: @user.slug), status: :moved_permanently
       else
@@ -25,7 +25,7 @@ class PeopleController < ApplicationController
   def feed
     @user = User.find_by(slug: params[:id])
     if @user.nil?
-      @user = User.find_by(id: params[:id])
+      @user = User.find_by(id: params[:id], public: true)
       if @user&.slug.present?
         redirect_to feed_person_path(id: @user.slug), status: :moved_permanently
       else
