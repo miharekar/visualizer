@@ -565,6 +565,23 @@ module Api
       assert_not_includes response.headers["Set-Cookie"].to_s, "session_id="
     end
 
+    test "tokens without read scope only see what anonymous requests see" do
+      token = create_access_token_for(user, scopes: "upload write")
+      shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
+      public_shot = FactoryBot.create(:shot, user: public_user, public: true)
+
+      get api_shots_url, headers: bearer_headers(token), as: :json
+      assert_response :success
+      assert_equal [public_shot.id], response.parsed_body["data"].pluck("id")
+
+      get api_shot_url(shot), headers: bearer_headers(token), as: :json
+      assert_response :success
+      assert_not_includes response.parsed_body.keys, "private_notes"
+
+      get shared_api_shots_url, headers: bearer_headers(token), as: :json
+      assert_response :not_found
+    end
+
     private
 
     def auth_headers(user)
@@ -575,9 +592,9 @@ module Api
       {"Authorization" => "Bearer #{token.token}"}
     end
 
-    def create_access_token_for(user)
+    def create_access_token_for(user, scopes: "read write upload")
       application = Doorkeeper::Application.create!(name: "Test App", owner: user, redirect_uri: "urn:ietf:wg:oauth:2.0:oob")
-      Doorkeeper::AccessToken.create!(application:, resource_owner_id: user.id, scopes: "read write upload", expires_in: 1.week)
+      Doorkeeper::AccessToken.create!(application:, resource_owner_id: user.id, scopes:, expires_in: 1.week)
     end
   end
 end
