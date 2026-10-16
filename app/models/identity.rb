@@ -8,7 +8,7 @@ class Identity < ApplicationRecord
   belongs_to :user
   has_one :airtable_info, dependent: :destroy
 
-  encrypts :token, :refresh_token, support_unencrypted_data: true
+  encrypts :token, :refresh_token
 
   validates :uid, :provider, presence: true
   validates :uid, uniqueness: {scope: :provider}
