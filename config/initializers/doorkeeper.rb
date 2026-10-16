@@ -271,7 +271,7 @@ Doorkeeper.configure do
   # Check out https://github.com/doorkeeper-gem/doorkeeper/wiki/Changing-how-clients-are-authenticated
   # for more information on customization
   #
-  # access_token_methods :from_bearer_authorization, :from_access_token_param, :from_bearer_param
+  access_token_methods :from_bearer_authorization
 
   # Forces the usage of the HTTPS protocol in non-native redirect uris (enabled
   # by default in non-development environments). OAuth2 delegates security in

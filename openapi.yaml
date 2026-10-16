@@ -14,6 +14,8 @@ info:
 
     Use OAuth for anything you distribute, so your app never handles Visualizer passwords. Access tokens expire after one week; use the refresh token to get a new one.
 
+    Send OAuth access tokens in the `Authorization: Bearer` header. Query-string and form parameters such as `access_token` aren't accepted.
+
     ### Scopes
 
     | Scope | Allows |
