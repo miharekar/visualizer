@@ -2,6 +2,7 @@ module Api
   class ShotsController < Api::BaseController
     include Shots::Editing
 
+    before_action :ignore_token_without_read_scope, except: %i[upload update destroy]
     before_action :verify_upload_access, only: %i[upload]
     before_action :verify_write_access, only: %i[destroy update]
     before_action :extract_file_content, only: %i[upload]
@@ -100,6 +101,10 @@ module Api
       raise ArgumentError unless params[:updated_after].match?(/\A\d+\z/)
 
       Time.zone.at(Integer(params[:updated_after]))
+    end
+
+    def ignore_token_without_read_scope
+      Current.session = nil if doorkeeper_token && !doorkeeper_token.includes_scope?("read")
     end
 
     def load_users_shot

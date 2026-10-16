@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.18.1"
+  version: "1.18.2"
   description: |
     REST API for Visualizer: upload and read espresso shots, and manage roasters and coffee bags.
 
@@ -24,7 +24,7 @@ info:
 
     Scopes don't include each other: a token with only `write` can't call endpoints that need `read`. Request every scope you need, for example `read write`.
 
-    Some endpoints also work without authentication: public shots, share codes, and canonical search. Authenticating changes their results (for example, `GET /shots` lists your own shots instead of public ones), and invalid credentials are ignored rather than rejected.
+    Some endpoints also work without authentication: public shots, share codes, and canonical search. Authenticating changes their results (for example, `GET /shots` lists your own shots instead of public ones), and invalid credentials, including OAuth tokens without `read`, are ignored rather than rejected.
 
     ## Requests
 
