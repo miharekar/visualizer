@@ -7,6 +7,14 @@ module ApplicationHelper
     end
   end
 
+  def web_link_to(url, **options)
+    if url.to_s.match?(%r{\Ahttps?://}i)
+      link_to(url, url, **options)
+    else
+      url
+    end
+  end
+
   def update_count
     @update_count ||= Update.where("published_at > ?", Current.user.last_read_change || Time.current).count
   end
