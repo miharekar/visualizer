@@ -25,6 +25,8 @@ default: &defaults
   #   - Interrupt
   #   - SystemExit
   #   - SystemStackError
+  ignore_errors:
+    - ActionController::BadRequest
 
   # See https://docs.appsignal.com/ruby/configuration/options.html for
   # all configuration options.
