@@ -1,4 +1,6 @@
 class LemonSqueezyWebhookHandler
+  EVENTS = %w[subscription_created subscription_updated].freeze
+
   attr_reader :payload
 
   def initialize(request)
@@ -13,7 +15,7 @@ class LemonSqueezyWebhookHandler
 
   def handle
     method = payload.dig("meta", "event_name")
-    __send__(method) if respond_to?(method, true)
+    __send__(method) if EVENTS.include?(method)
   end
 
   private

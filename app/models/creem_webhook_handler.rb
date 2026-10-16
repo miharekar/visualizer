@@ -1,4 +1,18 @@
 class CreemWebhookHandler
+  EVENTS = %w[
+    checkout_completed
+    subscription_paid
+    subscription_update
+    subscription_canceled
+    subscription_expired
+    subscription_trialing
+    subscription_scheduled_cancel
+    subscription_unpaid
+    subscription_active
+    subscription_paused
+    subscription_past_due
+  ].freeze
+
   attr_reader :payload
 
   def initialize(request)
@@ -10,7 +24,7 @@ class CreemWebhookHandler
 
   def handle
     method = payload["eventType"].to_s.tr(".", "_")
-    __send__(method) if respond_to?(method, true)
+    __send__(method) if EVENTS.include?(method)
   end
 
   private
