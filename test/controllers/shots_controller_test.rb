@@ -23,7 +23,7 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index renders Turbo Stream pagination" do
-    get shots_url(format: :turbo_stream, before: Paginatable.encrypt_time(1.day.from_now))
+    get shots_url(format: :turbo_stream, before: Paginatable.encrypt_time(1.day.from_now), before_id: SecureRandom.uuid)
 
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type

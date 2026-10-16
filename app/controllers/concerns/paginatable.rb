@@ -18,12 +18,12 @@ module Paginatable
     before = cursor[:before]
     before_id = cursor[:before_id]
     if before.present?
-      raise ActionController::BadRequest, "Invalid cursor" unless before.is_a?(String) && (before_id.nil? || before_id.is_a?(String) && before_id.match?(ApplicationRecord::UUID_PATTERN))
+      raise ActionController::BadRequest, "Invalid cursor" unless before.is_a?(String) && before_id.is_a?(String) && before_id.match?(ApplicationRecord::UUID_PATTERN)
 
       value = Paginatable.decrypt_time(before)
       column = scope.arel_table[by]
       scope = scope.where(column.lteq(value))
-      scope = scope.where(column.lt(value).or(scope.arel_table[:id].lt(before_id))) if before_id.present?
+      scope = scope.where(column.lt(value).or(scope.arel_table[:id].lt(before_id)))
     end
     records = scope.reorder(by => :desc, id: :desc).limit(items + 1).to_a
     if records.size > items

@@ -697,7 +697,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user.shots.count, (first + second).size
     assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: "bad", before_id: @shot.id}) }
     assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: encrypted_time, before_id: "bad"}) }
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: encrypted_time}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601, before_id: @shot.id}) }
   end
 
   test "cursor survives deletion of its last row" do

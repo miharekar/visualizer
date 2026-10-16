@@ -31,7 +31,7 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     shots = 21.times.map { create(:shot, user:, public: true, start_time: (it + 1).minutes.ago) }
     other_shot = create(:shot, public: true)
 
-    get community_index_url(format: :turbo_stream, commit: "Search", user_id: user.id, before: Paginatable.encrypt_time(Time.current)), headers: {"Turbo-Frame" => "cursor"}
+    get community_index_url(format: :turbo_stream, commit: "Search", user_id: user.id, before: Paginatable.encrypt_time(Time.current), before_id: SecureRandom.uuid), headers: {"Turbo-Frame" => "cursor"}
 
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
