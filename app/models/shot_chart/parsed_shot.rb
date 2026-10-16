@@ -87,30 +87,12 @@ class ShotChart
     end
 
     def detect_stages_from_data
-      indices = []
-      diff_threshold = 0.05
-
-      loop do
-        indices = []
-        data.slice(*STAGE_GOAL_LABELS).each_value do |d|
-          next if d.blank?
-
-          d = d.map(&:to_f)
-          d.each.with_index do |a, i|
-            next if i < 5
-
-            b = d[i - 1]
-            c = d[i - 2]
-            diff_2 = ((a - b) - (b - c))
-            indices << i if diff_2.abs > diff_threshold
-          end
-        end
-
-        break if indices.size <= shot.duration / 2
-        break if diff_threshold >= 500
-
-        diff_threshold += 0.05
+      diffs = data.slice(*STAGE_GOAL_LABELS).values.compact_blank.flat_map do |d|
+        d = d.map(&:to_f)
+        (5...d.size).map { |i| [i, ((d[i] - d[i - 1]) - (d[i - 1] - d[i - 2])).abs] }
       end
+      steps = (1..10_000).bsearch { |n| diffs.count { |_, diff| diff > n * 0.05 } <= shot.duration / 2 } || 10_000
+      indices = diffs.filter_map { |i, diff| i if diff > steps * 0.05 }
 
       if indices.any?
         indices = indices.sort.uniq

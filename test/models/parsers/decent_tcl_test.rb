@@ -15,6 +15,16 @@ module Parsers
       assert_not shot.valid?
     end
 
+    test "ignores files over the size limit" do
+      shot = Shot.from_file(@user, File.read("test/files/20210921T085910.shot") + (" " * Parsers::Base::MAX_FILE_SIZE))
+      assert_nil shot.information
+    end
+
+    test "extracts profile json when its last line has regex characters" do
+      shot = Shot.from_file(@user, File.read("test/files/20210921T085910.shot").sub(%("version": "2"\n}), %("version": "2+"\n})))
+      assert_equal "2+", shot.information.profile_fields["json"]["version"]
+    end
+
     test "extracts fields from .shot file" do
       path = "test/files/20210921T085910"
       shot = new_shot("#{path}.shot")
