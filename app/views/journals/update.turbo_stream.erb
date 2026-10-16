@@ -5,7 +5,7 @@
     <% end %>
   <% else %>
     <% @shots.each do |shot| %>
-      <%= turbo_stream.update journal_cell_id(shot, @field) do %>
+      <%= turbo_stream.update Journal.cell_id(shot, @field) do %>
         <%= render partial: "journals/cell", formats: [:html], locals: {shot: shot, field: @field, value: @value, error: @error} %>
       <% end %>
     <% end %>
@@ -13,7 +13,7 @@
 <% else %>
   <% @shots.each do |shot| %>
     <% @fields.each do |field| %>
-      <%= turbo_stream.update journal_cell_id(shot, field) do %>
+      <%= turbo_stream.update Journal.cell_id(shot, field) do %>
         <%= render partial: "journals/cell", formats: [:html], locals: {shot: shot, field: field} %>
       <% end %>
     <% end %>

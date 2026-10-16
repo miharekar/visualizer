@@ -1,8 +1,4 @@
 module JournalHelper
-  def journal_cell_id(shot, field)
-    Journal.cell_id(shot, field)
-  end
-
   def journal_input_options(field)
     if field == "duration"
       {type: "number", min: 0, step: "any"}

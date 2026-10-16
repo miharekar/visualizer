@@ -1,4 +1,6 @@
 class Journal
+  prepend MemoWise
+
   class InvalidChange < StandardError; end
 
   PAGE_SIZE = 30
@@ -86,21 +88,25 @@ class Journal
     [filtered_coffee_bag(params[:coffee_bag])&.display_name, *filtered_tags(params[:tags])].compact
   end
 
-  def for_list(shots = scope, fields: visible_columns)
+  def for_list(shots, fields: visible_columns)
     shots = shots.with_attached_image if fields.include?("image")
     shots = shots.includes(:tags) if fields.include?("tag_list")
     shots
   end
 
-  def shots(ids, fields: visible_columns)
+  def shots(ids, fields:)
     raise InvalidChange, "Choose up to #{MAX_BATCH} shots" unless ids.is_a?(Array) && ids.size.between?(1, MAX_BATCH) && ids.uniq.size == ids.size && ids.all? { it.is_a?(String) && it.match?(ApplicationRecord::UUID_PATTERN) }
 
-    shots = for_list(scope.where(id: ids).reorder(:id), fields: fields.uniq)
+    shots = for_list(scope.where(id: ids).reorder(:id), fields:)
     (fields & NOTES).each { shots = shots.public_send("with_rich_text_#{it}_and_embeds") }
     shots = shots.to_a
     raise ActiveRecord::RecordNotFound unless shots.size == ids.size
 
     shots
+  end
+
+  def editable?(shot, field)
+    editable_columns.key?(field) && (field != "duration" || shot.manual?)
   end
 
   def editor_value(shots, field)
@@ -145,7 +151,7 @@ class Journal
         raise InvalidChange, "Choose a coffee bag" unless value
       end
       records.each do |shot|
-        raise InvalidChange, "Some fields are not editable" if field == "duration" && !shot.manual?
+        raise InvalidChange, "Some fields are not editable" unless editable?(shot, field)
 
         shot.assign_attributes(attributes_for(shot, field, value))
         shot.save!(context: %i[update manual_edit])
@@ -164,7 +170,7 @@ class Journal
     end
   end
 
-  def filtered_coffee_bag(id)
+  memo_wise def filtered_coffee_bag(id)
     user.coffee_bags.find_by(id:) if id.present? && user.coffee_management_enabled?
   end
 

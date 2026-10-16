@@ -39,7 +39,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-results tr##{dom_id(@shot, :journal)}" do
       assert_equal Journal.new(@user).visible_columns, css_select("td[data-column]").pluck("data-column")
       Journal.new(@user).visible_columns.each do |field|
-        assert_select "turbo-frame##{cell_id(@shot, field)}", count: 1
+        assert_select "turbo-frame##{Journal.cell_id(@shot, field)}", count: 1
       end
     end
     assert_select "td[data-column='espresso_notes'], td[data-column='private_notes'], td[data-column='tag_list']", count: 0
@@ -108,9 +108,9 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     update_field("bean_weight", "20")
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
-    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'bean_weight')}']"
-    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'ratio')}']"
-    assert_select "turbo-stream[target='#{cell_id(@shot, 'drink_weight')}']", count: 0
+    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'bean_weight')}']"
+    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'ratio')}']"
+    assert_select "turbo-stream[target='#{Journal.cell_id(@shot, 'drink_weight')}']", count: 0
     assert_select "turbo-stream[action='replace']", count: 0
     assert_equal "20", @shot.reload.bean_weight
     assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
@@ -139,7 +139,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     update_field("espresso_enjoyment", "101")
     assert_response :unprocessable_content
     assert_equal "text/vnd.turbo-stream.html", response.media_type
-    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'espresso_enjoyment')}']"
+    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'espresso_enjoyment')}']"
     assert_includes response.body, "101"
     assert_includes response.body, "Espresso enjoyment must be less than or equal to 100"
   end
@@ -223,8 +223,8 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal bag.id, @shot.reload.coffee_bag_id
     assert_equal bag.name, @shot.bean_type
-    assert_select "turbo-stream[action='update'][target='#{cell_id(@shot, 'coffee')}']"
-    assert_select "turbo-stream[target='#{cell_id(@shot, 'roast_date')}'], turbo-stream[target='#{cell_id(@shot, 'bean_weight')}']", count: 0
+    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'coffee')}']"
+    assert_select "turbo-stream[target='#{Journal.cell_id(@shot, 'roast_date')}'], turbo-stream[target='#{Journal.cell_id(@shot, 'bean_weight')}']", count: 0
     assert_equal "#{bag.name} - #{bag.roaster.name} (#{bag.roast_date.to_fs(:long)})", Journal.new(@user).value(@shot, "coffee")
     update_field("bean_brand", "Override")
     assert_response :unprocessable_content
@@ -379,7 +379,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     @user.update!(shot_metadata_fields: %w[basket water])
     @shot.update!(metadata: {basket: "VST", water: "soft"})
     journal = Journal.new(@user)
-    snapshot = journal.shots([@shot.id]).first
+    snapshot = journal.shots([@shot.id], fields: journal.visible_columns).first
     @shot.update!(metadata: {basket: "VST", water: "hard"})
     update_field("metadata:basket", "IMS")
     assert_response :success
@@ -649,7 +649,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   test "list loads full shot columns without telemetry or unused associations" do
     journal = Journal.new(@user)
-    shots = journal.for_list.to_a
+    shots = journal.for_list(@user.shots).to_a
     shot = shots.first
     assert shot.has_attribute?(:barista)
     assert shot.has_attribute?(:espresso_notes)
@@ -665,7 +665,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     @user.update!(shot_metadata_fields: %w[basket water])
     journal = Journal.new(@user)
     @user.update!(journal_columns: journal.columns.keys)
-    shots = journal.for_list.to_a
+    shots = journal.for_list(@user.shots).to_a
     helper = Object.new.extend(JournalHelper)
     helper.define_singleton_method(:journal) { journal }
     queries = []
@@ -686,27 +686,27 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     @shot.update!(start_time: timestamp)
     create_list(:shot, Journal::PAGE_SIZE + 1, user: @user, start_time: timestamp)
     journal = Journal.new(@user)
-    first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
+    first, cursor = paginate_with_cursor(journal.for_list(@user.shots), items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
     assert_equal Journal::PAGE_SIZE, first.size
     assert_equal timestamp, Paginatable.decrypt_time(cursor.fetch(:before))
     assert_equal first.last.id, cursor.fetch(:before_id)
     encrypted_time = cursor.fetch(:before)
-    second, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor:)
+    second, cursor = paginate_with_cursor(journal.for_list(@user.shots), items: Journal::PAGE_SIZE, by: :start_time, cursor:)
     assert_nil cursor
     assert_empty(first.map(&:id) & second.map(&:id))
     assert_equal @user.shots.count, (first + second).size
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: "bad", before_id: @shot.id}) }
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: encrypted_time, before_id: "bad"}) }
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: encrypted_time}) }
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601, before_id: @shot.id}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list(@user.shots), by: :start_time, cursor: {before: "bad", before_id: @shot.id}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list(@user.shots), by: :start_time, cursor: {before: encrypted_time, before_id: "bad"}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list(@user.shots), by: :start_time, cursor: {before: encrypted_time}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list(@user.shots), by: :start_time, cursor: {before: timestamp.iso8601, before_id: @shot.id}) }
   end
 
   test "cursor survives deletion of its last row" do
     create_list(:shot, Journal::PAGE_SIZE + 1, user: @user)
     journal = Journal.new(@user)
-    first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
+    first, cursor = paginate_with_cursor(journal.for_list(@user.shots), items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
     Shot.find(cursor.fetch(:before_id)).destroy!
-    second, = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor:)
+    second, = paginate_with_cursor(journal.for_list(@user.shots), items: Journal::PAGE_SIZE, by: :start_time, cursor:)
     assert_not_empty second
     assert_empty(first.map(&:id) & second.map(&:id))
   end
@@ -726,9 +726,5 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
 
   def update_field(field, value, ids: [@shot.id], editor: false)
     patch journal_url, params: {ids:, field:, value:, editor:}, headers: stream_headers
-  end
-
-  def cell_id(shot, field)
-    ApplicationController.helpers.journal_cell_id(shot, field)
   end
 end
