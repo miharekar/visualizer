@@ -5,6 +5,8 @@ class WebPushJob < ApplicationJob
   rescue_from(WebPush::TooManyRequests, WebPush::PushServiceError) { retry_transient_failure }
 
   def perform(push_subscription, title:, body:, path: "/")
+    return push_subscription.destroy unless push_subscription.valid?
+
     WebPush.payload_send(
       message: {title:, body:, data: {path:}}.to_json,
       endpoint: push_subscription.endpoint,
@@ -14,7 +16,10 @@ class WebPushJob < ApplicationJob
         subject: CONTACT_EMAIL,
         public_key: Rails.application.credentials.webpush.public_key,
         private_key: Rails.application.credentials.webpush.private_key
-      }
+      },
+      open_timeout: 5,
+      read_timeout: 10,
+      ssl_timeout: 5
     )
   rescue WebPush::ExpiredSubscription, WebPush::InvalidSubscription, WebPush::Unauthorized
     push_subscription.destroy
