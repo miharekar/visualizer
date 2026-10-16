@@ -80,6 +80,18 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Comparison"
   end
 
+  test "compare select lists the viewer's shots, not the owner's" do
+    owner = create(:user)
+    owner_shot = create(:shot, user: owner)
+    other_owner_shot = create(:shot, user: owner)
+
+    get shot_url(owner_shot)
+
+    assert_response :success
+    assert_select "select[data-action='related-shots#compare'] option[value='#{@shot.id}']"
+    assert_select "option[value='#{other_owner_shot.id}']", count: 0
+  end
+
   test "new renders the shared manual form" do
     get "/shots/new"
 

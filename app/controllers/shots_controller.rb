@@ -10,6 +10,7 @@ class ShotsController < ApplicationController
   before_action :load_coffee_bags_for_form, only: :edit
   before_action :load_users_shots, only: %i[index search]
   before_action :load_related_shots, only: %i[show edit]
+  before_action :load_compare_shots, only: :show
 
   def index
     respond_to do |format|
@@ -191,6 +192,18 @@ class ShotsController < ApplicationController
 
   def load_related_shots
     @related_shots = @shot.related_shots.pluck(:id, :profile_title, :bean_type, :start_time).reject { it[3].nil? }.sort_by { it[3] }.reverse
+  end
+
+  def load_compare_shots
+    return unless Current.user
+
+    if @shot.user_id == Current.user.id
+      @compare_shots = @related_shots
+    else
+      shots = Current.user.shots.by_start_time.limit(15)
+      shots = shots.non_premium unless Current.user.premium?
+      @compare_shots = shots.pluck(:id, :profile_title, :bean_type, :start_time)
+    end
   end
 
   def load_coffee_bags_for_form

@@ -22,7 +22,7 @@
           <div class="mb-2 flex-1 <%= width_class %>">
             <select class="standard-input" data-action="related-shots#compare">
               <option>With one of your recent shots</option>
-              <% @related_shots.each do |id, title, bean_type, time| %>
+              <% @compare_shots.each do |id, title, bean_type, time| %>
                 <% next if id == @shot.id %>
                 <option value="<%= id %>">
                   <% title = "#{bean_type} (#{title})" if bean_type.present? %>
