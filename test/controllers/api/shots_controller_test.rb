@@ -586,6 +586,19 @@ module Api
       assert_response :unauthorized
     end
 
+    test "access tokens are only accepted in the authorization header" do
+      token = create_access_token_for(user)
+
+      get api_me_url(access_token: token.plaintext_token), as: :json
+      assert_response :unauthorized
+
+      get api_me_url, params: {bearer_token: token.plaintext_token}, as: :json
+      assert_response :unauthorized
+
+      get api_me_url, headers: bearer_headers(token), as: :json
+      assert_response :success
+    end
+
     test "tokens without read scope only see what anonymous requests see" do
       token = create_access_token_for(user, scopes: "upload write")
       shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
