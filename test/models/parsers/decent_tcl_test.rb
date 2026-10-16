@@ -16,8 +16,8 @@ module Parsers
     end
 
     test "ignores files over the size limit" do
-      shot = Shot.from_file(@user, File.read("test/files/20210921T085910.shot") + (" " * Parsers::Base::MAX_FILE_SIZE))
-      assert_nil shot.information
+      error = assert_raises(Parsers::Base::InvalidFile) { Shot.from_file(@user, File.read("test/files/20210921T085910.shot") + (" " * Parsers::Base::MAX_FILE_SIZE)) }
+      assert_match "10 MB", error.message
     end
 
     test "extracts profile json when its last line has regex characters" do

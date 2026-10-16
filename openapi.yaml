@@ -168,6 +168,8 @@ paths:
         | Decent (`.shot` TCL) | Text starting with `clock`, `sequence_id`, or `filename` (multipart only) |
         | Smart Espresso Profiler (CSV) | Text starting with `information_type` (multipart only) |
 
+        Files can be up to 10 MB.
+
         If the shot already exists, it's updated from the file and its ID is returned. Beanconqueror uploads are matched by `visualizerId` or `meta.visualizer.shot_id`, and other uploads by their telemetry.
       security:
         - OAuth2: [upload]
@@ -202,7 +204,7 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
         "422":
-          description: No file was sent, the file isn't a shot Visualizer can read, or the daily upload limit was reached.
+          description: No file was sent, the file isn't a shot Visualizer can read, the file is over 10 MB or has too many datapoints, or the daily upload limit was reached.
           content:
             application/json:
               schema:

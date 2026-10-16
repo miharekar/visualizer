@@ -257,6 +257,17 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
+  test "uploads over the size limit report the limit" do
+    content = File.read("test/files/20210921T085910.shot") + (" " * Parsers::Base::MAX_FILE_SIZE)
+
+    assert_no_difference "Shot.count" do
+      post shots_url, params: {files: [Rack::Test::UploadedFile.new(StringIO.new(content), "text/plain", original_filename: "shot.shot")]}
+    end
+
+    assert_redirected_to shots_url(format: :html)
+    assert_includes flash[:alert].to_json, "The limit is 10 MB"
+  end
+
   test "free users can search shots and filter by date and enjoyment" do
     @user.update!(premium_expires_at: nil, timezone: "Tokyo")
     match = create(:shot, user: @user, profile_title: "Blooming Gesha", espresso_enjoyment: 80, start_time: Time.utc(2026, 9, 29, 20))

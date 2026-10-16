@@ -8,11 +8,13 @@ module Parsers
     EXTRA_DATA_CAPTURE = (EXTRA_DATA_METHODS + %w[bean_weight DSx_bean_weight grinder_dose_weight enable_fahrenheit my_name skin sn]).freeze
     MAX_FILE_SIZE = 10.megabytes
 
+    class InvalidFile < StandardError; end
+
     attr_reader :file, :json, :start_time, :data, :extra, :brewdata, :timeframe, :profile_title, :profile_fields
 
     def self.parser_for(file)
       if file.bytesize > MAX_FILE_SIZE
-        new(file)
+        raise InvalidFile, "File is too large. The limit is #{ActiveSupport::NumberHelper.number_to_human_size(MAX_FILE_SIZE)}."
       elsif file.start_with?("{")
         json = parse_json(file)
         if json.key?("mill") || json.key?("brewFlow")
