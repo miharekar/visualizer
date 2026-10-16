@@ -63,6 +63,8 @@ module Api
       else
         render json: {error: "Could not save the provided file. #{shot.errors.full_messages.join(", ")}"}, status: :unprocessable_content
       end
+    rescue Parsers::Base::InvalidFile => e
+      render json: {error: "Could not save the provided file. #{e.message}"}, status: :unprocessable_content
     end
 
     def update

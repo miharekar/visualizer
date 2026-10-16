@@ -455,6 +455,24 @@ module Api
       assert_includes json_response["error"], "Could not save the provided file"
     end
 
+    test "upload returns 422 for files with too many datapoints" do
+      content = Rails.root.join("test/files/sharebrew_tsp.csv").read + "moment,1e400,1.0,,,,,,,,,sample: pressure\n"
+
+      post upload_api_shots_url, headers: auth_headers(user), params: {file: Rack::Test::UploadedFile.new(StringIO.new(content), "text/csv", original_filename: "shot.csv")}
+
+      assert_response :unprocessable_content
+      assert_equal "Could not save the provided file. Too many datapoints", response.parsed_body["error"]
+    end
+
+    test "upload returns 422 for files over the size limit" do
+      content = Rails.root.join("test/files/20210921T085910.shot").read + (" " * Parsers::Base::MAX_FILE_SIZE)
+
+      post upload_api_shots_url, headers: auth_headers(user), params: {file: Rack::Test::UploadedFile.new(StringIO.new(content), "text/plain", original_filename: "shot.shot")}
+
+      assert_response :unprocessable_content
+      assert_includes response.parsed_body["error"], "The limit is 10 MB"
+    end
+
     test "update returns updated shot for JSON request" do
       shot = FactoryBot.create(:shot, user:, profile_title: "Old title")
 

@@ -141,6 +141,8 @@ class ShotsController < ApplicationController
         {heading: "Could not save the provided #{"file".pluralize(files.count)}", text: shots.flat_map { |s| s.errors.full_messages.presence }.compact.uniq.join(" ")}
       end
     end
+  rescue Parsers::Base::InvalidFile => e
+    flash[:alert] = {heading: "Could not save the provided #{"file".pluralize(files.count)}", text: e.message}
   rescue StandardError => e
     flash[:alert] = "Something went wrong: #{e.message}"
   ensure
