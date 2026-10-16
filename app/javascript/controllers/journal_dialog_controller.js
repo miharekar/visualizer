@@ -28,7 +28,6 @@ export default class extends Controller {
   }
 
   close() {
-    if (this.submitting) return
     this.element.close()
   }
 

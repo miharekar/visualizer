@@ -12,8 +12,12 @@ export default class extends Controller {
     this.observer.disconnect()
   }
 
+  get busy() {
+    return this.loading || this.resultsTarget.querySelector("[data-saving]")
+  }
+
   search(event) {
-    if (this.loading || this.resultsTarget.querySelector("[data-saving]")) {
+    if (this.busy) {
       event.preventDefault()
       this.waiting = true
     } else if (!this.discardUnsavedChanges()) {
@@ -25,7 +29,7 @@ export default class extends Controller {
   }
 
   apply(event) {
-    if (this.loading || this.resultsTarget.querySelector("[data-saving]")) {
+    if (this.busy) {
       event.preventDefault()
       this.errorTarget.textContent = "Wait for pending saves or search to finish, then Apply."
     } else if (!this.discardUnsavedChanges()) {
@@ -43,20 +47,20 @@ export default class extends Controller {
   }
 
   resume() {
-    if (!this.waiting || this.loading || this.resultsTarget.querySelector("[data-saving]")) return
+    if (!this.waiting || this.busy) return
     this.waiting = false
     this.searchTarget.requestSubmit()
   }
 
   loaded(event) {
-    if (event.target !== this.resultsTarget) return
-    this.loading = false
-    this.resultsTarget.inert = false
-    this.resume()
+    if (event.target === this.resultsTarget) this.unlock()
   }
 
   complete(event) {
-    if (event.detail.success) return
+    if (!event.detail.success) this.unlock()
+  }
+
+  unlock() {
     this.loading = false
     this.resultsTarget.inert = false
     this.resume()

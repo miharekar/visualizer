@@ -7,10 +7,6 @@ export default class extends Controller {
     this.snapshot = this.formTarget.innerHTML
   }
 
-  disconnect() {
-    this.finish()
-  }
-
   toggle() {
     if (this.saving) return
     if (this.panelTarget.classList.contains("hidden")) this.panelTarget.classList.remove("hidden")
@@ -18,14 +14,12 @@ export default class extends Controller {
   }
 
   cancel() {
-    if (this.saving) return
     this.finish()
     this.formTarget.innerHTML = this.snapshot
     this.panelTarget.classList.add("hidden")
   }
 
   reset() {
-    if (this.saving) return
     this.finish()
     const [visible, hidden] = this.listTargets
     const items = [...this.formTarget.querySelectorAll("[data-column]")]
@@ -57,14 +51,14 @@ export default class extends Controller {
   }
 
   start(event) {
-    if (this.saving || this.pointerId != null) return event.preventDefault()
+    if (this.pointerId != null) return event.preventDefault()
     this.dragged = event.currentTarget.closest("[data-column]")
     event.dataTransfer.effectAllowed = "move"
     event.dataTransfer.setData("text/plain", this.dragged.dataset.column)
   }
 
   touchStart(event) {
-    if (event.pointerType === "mouse" || !event.isPrimary || this.saving) return
+    if (event.pointerType === "mouse" || !event.isPrimary) return
     this.dragged = event.currentTarget.closest("[data-column]")
     this.dragged.classList.add("opacity-50")
     this.pointerId = event.pointerId

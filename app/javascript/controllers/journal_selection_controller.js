@@ -8,27 +8,18 @@ export default class extends Controller {
   }
 
   checkboxTargetConnected() {
-    this.queueSelect()
+    this.select()
   }
 
   checkboxTargetDisconnected() {
-    this.queueSelect()
-  }
-
-  queueSelect() {
-    if (this.selectQueued) return
-    this.selectQueued = true
-    queueMicrotask(() => {
-      this.selectQueued = false
-      this.select()
-    })
+    this.select()
   }
 
   select(event) {
     if (!this.hasCountTarget || !this.hasAllTarget) return
     if (event?.target.checked && this.selected.length > 100) event.target.checked = false
     const checkboxes = this.checkboxTargets
-    const selected = checkboxes.filter(input => input.checked)
+    const selected = this.selected
     const count = selected.length
     this.countTarget.textContent = `${count} selected`
     this.noticeTarget.textContent = count === 100 ? "Maximum 100 shots per edit" : ""
