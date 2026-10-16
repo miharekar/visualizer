@@ -73,7 +73,7 @@ class Shot
 
       attributes[:start_time] = start_time unless user&.hide_shot_times
       attributes[:user_name] = user.display_name if user&.public?
-      attributes[:private_notes] = serialized_note(:private_notes, format: notes_format) if Current.user == user
+      attributes[:private_notes] = serialized_note(:private_notes, format: notes_format) if user && Current.user == user
       attributes[:profile_url] = Rails.application.routes.url_helpers.api_shot_profile_url(self) if information&.has_profile?
       attributes[:image_url] = image.url if image.attached?
 
