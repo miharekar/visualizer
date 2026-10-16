@@ -555,10 +555,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "saving columns replaces preferences for unavailable fields" do
-    @user.update!(journal_columns: %w[grind_suggestion profile_title])
+    @user.update!(journal_columns: %w[metadata:basket profile_title])
     get shots_url
     assert_response :success
-    assert_select "td[data-column='grind_suggestion']", count: 0
+    assert_select "td[data-column='metadata:basket']", count: 0
 
     patch profile_journal_columns_url, params: {columns: %w[profile_title start_time]}
     assert_response :see_other

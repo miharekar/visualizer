@@ -3,7 +3,6 @@ class Shot < ApplicationRecord
   include ShotPresenter
   include Airtablable
   include Jsonable
-  include GrindSuggestable
   include DateParseable
   include SanitizedRichText
   include VariableImageAttachment
@@ -194,7 +193,6 @@ end
 #  espresso_notes          :text
 #  flavor                  :integer
 #  fragrance               :integer
-#  grind_suggestion        :jsonb
 #  grinder_model           :string
 #  grinder_setting         :string
 #  metadata                :jsonb
