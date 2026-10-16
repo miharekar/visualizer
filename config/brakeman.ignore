@@ -45,50 +45,6 @@
         89
       ],
       "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "df9dc1372bf190a711c0a1e272f7a3f2cb5d6d21c618370822eba2822785a49a",
-      "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in `link_to` href",
-      "file": "app/views/roasters/_roaster.html.erb",
-      "line": 35,
-      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(Current.new.website, Current.new.website, :class => \"relative truncate standard-link\")",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "RoastersController",
-          "method": "index",
-          "line": 8,
-          "file": "app/controllers/roasters_controller.rb",
-          "rendered": {
-            "name": "roasters/index",
-            "file": "app/views/roasters/index.html.erb"
-          }
-        },
-        {
-          "type": "template",
-          "name": "roasters/index",
-          "line": 30,
-          "file": "app/views/roasters/index.html.erb",
-          "rendered": {
-            "name": "roasters/_roaster",
-            "file": "app/views/roasters/_roaster.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "roasters/_roaster"
-      },
-      "user_input": "Current.new.website",
-      "confidence": "Weak",
-      "cwe_id": [
-        79
-      ],
-      "note": ""
     }
   ],
   "brakeman_version": "8.0.1"

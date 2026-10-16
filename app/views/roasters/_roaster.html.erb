@@ -32,7 +32,7 @@
           <% end %>
           <% if roaster.website.present? %>
             <div class="text-neutral-500 dark:text-neutral-400">
-              <%= link_to roaster.website, roaster.website, class: "relative truncate standard-link" %>
+              <%= web_link_to roaster.website, class: "relative truncate standard-link" %>
             </div>
           <% end %>
         </div>
