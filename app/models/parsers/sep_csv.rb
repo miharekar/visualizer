@@ -89,6 +89,8 @@ module Parsers
       calculate_weight_flow
       @timeframe = []
       @datapoints = @datapoints.compact_blank
+      return if @datapoints.empty?
+
       relevant_keys = @datapoints.keys
       labels_map = DATA_LABELS_MAP.values_at(*relevant_keys)
       @data = labels_map.index_with { |_label| [] }
