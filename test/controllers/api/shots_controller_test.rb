@@ -565,6 +565,16 @@ module Api
       assert_not_includes response.headers["Set-Cookie"].to_s, "session_id="
     end
 
+    test "stored token hashes are not accepted as bearer tokens" do
+      token = create_access_token_for(user)
+
+      get api_me_url, headers: bearer_headers(token), as: :json
+      assert_response :success
+
+      get api_me_url, headers: {"Authorization" => "Bearer #{token.token}"}, as: :json
+      assert_response :unauthorized
+    end
+
     test "tokens without read scope only see what anonymous requests see" do
       token = create_access_token_for(user, scopes: "upload write")
       shot = FactoryBot.create(:shot, user:, private_notes: "Only for me")
@@ -589,7 +599,7 @@ module Api
     end
 
     def bearer_headers(token)
-      {"Authorization" => "Bearer #{token.token}"}
+      {"Authorization" => "Bearer #{token.plaintext_token}"}
     end
 
     def create_access_token_for(user, scopes: "read write upload")
