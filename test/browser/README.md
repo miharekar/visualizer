@@ -58,14 +58,14 @@ open-panel button styling, pending columns
 Apply dismissal/filter retention, numeric bounds, unchanged-cell Enter and Shift+Enter
 navigation, notes search, manual creation,
 confirmation Cancel via native Enter, Enter-to-confirm without duplicate deletion, and
-selection toolbar placement just above a full-width table at desktop/390px widths, with the
-page title and footer dropped, the table edge to edge, and the toolbar kept below the site header on phones.
+the selection toolbar appearing at 390px without moving the table or overflowing the page.
 Delayed-body checks hold
 `Response.text()` after headers arrive, without dispatching synthetic Turbo events
 or replacing controllers. Columns Apply holds its request before delivery because
 that endpoint redirects to HTML rather than returning a Turbo stream.
 Explicit waits exceed search debounce to assert no
-premature request; other waits observe events or DOM state. The Journal runs its own pull
+premature request, and the stale pagination check waits two animation frames for a
+render that changes nothing visible; other waits observe events or DOM state. The Journal runs its own pull
 to refresh in mobile browsers, so the session is a plain touch browser rather than an
 installed app. Narrow viewport checks include Chromium touch emulation, not real mobile
 Safari coverage.

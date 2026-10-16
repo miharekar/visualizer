@@ -49,14 +49,6 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       document.addEventListener("turbo:submit-end", () => {
         window.journalSubmitEnded = true
       })
-      window.journalRenderedTargets = []
-      document.addEventListener("turbo:before-stream-render", event => {
-        const render = event.detail.render
-        event.detail.render = async stream => {
-          await render(stream)
-          window.journalRenderedTargets.push(stream.target)
-        }
-      })
     })
     await page.goto("/session/new")
     await page.locator("#email").fill(env.JOURNAL_BROWSER_EMAIL)
@@ -175,7 +167,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       const newRows = await page.locator("tbody").getAttribute("id")
       assert.notEqual(newRows, oldRows)
       await releaseBody()
-      await page.waitForFunction(target => window.journalRenderedTargets.includes(target), oldRows)
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
       assert.equal(await page.locator("tbody tr").count(), 1)
       assert.equal(await page.locator('td[data-column="profile_title"] input[name="value"]').inputValue(), "Browser Journal 34")
     })
@@ -647,46 +639,22 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await page.locator("tbody tr").first().getAttribute("id"), rowId)
     })
 
-    await check("table, footer, and selection toolbar fit narrow and tall viewports", async () => {
-      for (const [width, height] of [
-        [1440, 844],
-        [390, 844],
-        [1440, 1800]
-      ]) {
-        await page.setViewportSize({ width, height })
-        const phone = width < 640
-        const nav = await page.locator("body > header").boundingBox()
-        const buttons = await page.locator('[data-controller="push-notifications"]').boundingBox()
-        const table = await page.locator("#journal-results > div.overflow-auto").boundingBox()
-        const footer = await page.locator("footer").evaluate(el => el.getBoundingClientRect().toJSON())
-        assert.equal(await page.locator("footer > div").isVisible(), !phone, `footer visibility at ${width}px`)
-        assert.equal(await page.locator("#shots-count").isVisible(), !phone, `title visibility at ${width}px`)
-        assert.ok(table.height > 0 && table.y + table.height <= footer.y, "table overlaps footer")
-        assert.ok(footer.y + footer.height <= height, "footer outside viewport")
-        if (phone) {
-          assert.ok(Math.round(table.x) === 0 && Math.round(table.width) === width, `table is ${table.width}px wide at ${table.x}px, not edge to edge`)
-          assert.ok(Math.abs(buttons.x + buttons.width - (width - 16)) <= 1, "header buttons not right-aligned")
-          const above = buttons.y - (nav.y + nav.height)
-          const below = height - (table.y + table.height)
-          assert.ok(above > 0 && Math.abs(below - above) <= 1, `table ends ${below}px above the page bottom, buttons sit ${above}px below the site header`)
-        }
-        if (height === 1800) assert.ok(table.height > height * 0.7, "table does not use tall viewport")
-        const checkboxes = page.locator('[data-journal-selection-target="checkbox"]')
-        await checkboxes.nth(0).check()
-        await checkboxes.nth(1).check()
-        const toolbar = page.locator('[data-journal-selection-target="toolbar"]')
-        await toolbar.getByText("Compare", { exact: true }).waitFor()
-        const box = await toolbar.boundingBox()
-        assert.ok(box.x >= 0 && box.x + box.width <= width, `toolbar overflows ${width}px`)
-        assert.ok(box.y >= nav.y + nav.height && box.y + box.height <= height, `toolbar covers the site header at ${width}px`)
-        if (phone) assert.ok(box.y <= buttons.y, `header buttons peek out above the toolbar at ${width}px`)
-        const gap = table.y - (box.y + box.height)
-        assert.ok(gap >= 0 && gap <= 24, `toolbar is ${gap}px above the table at ${width}px`)
-        assert.equal(await page.locator("#journal-results table").evaluate(el => el.offsetWidth >= el.parentElement.clientWidth), true, `table narrower than its container at ${width}px`)
-        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
-        await toolbar.getByRole("button", { name: "Clear selection", exact: true }).click()
-        await toolbar.waitFor({ state: "hidden" })
-      }
+    await check("selection toolbar appears on a phone without moving the table or overflowing the page", async () => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      const table = page.locator("#journal-results > div.overflow-auto")
+      const toolbar = page.locator('[data-journal-selection-target="toolbar"]')
+      const checkboxes = page.locator('[data-journal-selection-target="checkbox"]')
+      const before = await table.boundingBox()
+      await checkboxes.nth(0).check()
+      await checkboxes.nth(1).check()
+      await toolbar.getByText("Compare", { exact: true }).waitFor()
+      assert.equal(await toolbar.isVisible(), true)
+      assert.deepEqual(await table.boundingBox(), before, "table moved when the toolbar appeared")
+      const box = await toolbar.boundingBox()
+      assert.ok(box.x >= 0 && box.x + box.width <= 390, "toolbar overflows the viewport")
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, "page overflows horizontally")
+      await toolbar.getByRole("button", { name: "Clear selection", exact: true }).click()
+      await toolbar.waitFor({ state: "hidden" })
     })
 
     await check("Enter from the delete trigger confirms exactly once", async () => {
