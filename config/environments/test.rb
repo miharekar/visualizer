@@ -53,4 +53,8 @@ Rails.application.configure do
 
   config.time_zone = "UTC"
   config.webauthn_origin = "http://visualizer.localhost:3000"
+
+  config.active_record.encryption.primary_key = "test-primary-key"
+  config.active_record.encryption.deterministic_key = "test-deterministic-key"
+  config.active_record.encryption.key_derivation_salt = "test-key-derivation-salt"
 end

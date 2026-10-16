@@ -6,7 +6,7 @@ class OauthWrapper < SimpleDelegator
   end
 
   memo_wise def identifiers_with_blob
-    identifiers.merge(blob: self)
+    identifiers.merge(blob: except("credentials"))
   end
 
   memo_wise def identifiers_with_blob_and_token
