@@ -11,6 +11,7 @@ module Oauth
       @application.owner = Current.user
       if @application.save
         flash[:notice] = I18n.t("doorkeeper.flash.applications.create.notice")
+        flash[:application_secret] = @application.plaintext_secret
         redirect_to oauth_application_url(@application)
       else
         render :new
