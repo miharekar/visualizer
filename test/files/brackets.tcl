@@ -35,7 +35,7 @@ preinfusion_time 20
 pressure_end 4.0
 profile_filename manual_82
 profile_language en
-profile_notes {This profile simulates a Londinium R machines extraction style. This is an advanced profile with some added steps to assist with less than ideal puck prep. Christee-Lee described it as like having a milkshake with extra syrup. Great body and flavour range. By Damian Brakel https://www.diy.brakel.com.au/londinium-r-style-profile/
+profile_notes {This profile simulates a Londinium R machines extraction style. This is an advanced profile with some added steps to assist with less than ideal puck prep. Christee-Lee described it as like having a milkshake with extra syrup. Great body and flavour range.  By Damian Brakel https://www.diy.brakel.com.au/londinium-r-style-profile/
 
 Downloaded from Visualizer}
 profile_title {Visualizer/manual 82}

@@ -126,6 +126,98 @@ module Parsers
       assert_equal File.read("#{path}.json"), shot.information.json_profile
     end
 
+    def parse_tcl(string)
+      Parsers::DecentTcl.new(string).tap(&:parse)
+    end
+
+    test "unescapes bare words" do
+      assert_equal "a{b c", parse_tcl("clock 1\nsettings {\n\tbean_brand a\\{b\\ c\n}\n").extra["bean_brand"]
+    end
+
+    test "keeps braced values raw" do
+      parser = parse_tcl("settings {\n\tbean_notes {a [x] {b  c}\n\tline $2 \"q\"}\n\tbean_brand {}\n}\n")
+      assert_equal "a [x] {b  c}\n\tline $2 \"q\"", parser.extra["bean_notes"]
+      assert_equal "", parser.extra["bean_brand"]
+    end
+
+    test "treats quotes as ordinary bare word characters" do
+      assert_equal "\"1.37.0", parse_tcl("settings {\n bean_brand \"1.37.0\n}\n").extra["bean_brand"]
+    end
+
+    ["smile :}", "smile :{"].each do |notes|
+      test "parses profile json containing unbalanced brace #{notes.last}" do
+        original = parse_tcl(File.read("test/files/20210921T085910.shot"))
+        modified = File.read("test/files/20210921T085910.shot").sub(/^  "notes": .*\n/) { "  \"notes\": \"#{notes}\",\n" }
+        parser = parse_tcl(modified)
+        assert_equal notes, parser.profile_fields["json"]["notes"]
+        assert_equal original.profile_title, parser.profile_title
+        assert_equal original.extra, parser.extra
+        assert_equal original.data, parser.data
+        assert_equal original.timeframe, parser.timeframe
+      end
+    end
+
+    test "handles CRLF line endings" do
+      parser = parse_tcl("clock 1\r\nespresso_elapsed {0.1 0.2}\r\nsettings {\r\n\tbean_brand {Foo}\r\n}\r\n")
+      assert_equal %w[0.1 0.2], parser.timeframe
+      assert_equal "Foo", parser.extra["bean_brand"]
+    end
+
+    test "does not let a single-line profile swallow settings" do
+      parser = parse_tcl("clock 1\nprofile {\"title\":\"x\"}\nsettings {\n\tbean_brand Foo\n}\n")
+      assert_equal "Foo", parser.extra["bean_brand"]
+      assert_equal "x", parser.profile_fields["json"]["title"]
+    end
+
+    test "does not treat a settings profile key as the profile json" do
+      parser = parse_tcl("clock 1\nsettings {\n\tprofile {A B}\n\tprofile_notes {x\n}\n\tbean_brand Foo\n}\n")
+      assert_equal "x\n", parser.profile_fields["profile_notes"]
+      assert_equal "Foo", parser.extra["bean_brand"]
+    end
+
+    test "cuts a machine block with column-0 braces and keeps later top-level keys" do
+      parser = parse_tcl("clock 1\nsettings {\n\tbean_brand Foo\n}\nmachine {\n\tlog {a\n}\n\tfoo {\x01{\n\tbar 1\n}\nprofile {\n  \"title\": \"x\"\n}\n")
+      assert_equal "Foo", parser.extra["bean_brand"]
+      assert_equal "x", parser.profile_fields["json"]["title"]
+    end
+
+    test "truncates at the machine block when the targeted cut still fails" do
+      parser = parse_tcl("clock 1\nespresso_elapsed {0 1}\nespresso_pressure {1 2}\nsettings {\n\tbean_brand Foo\n}\nmachine {\n\tcmdstack {{\x01\nB\x02 {{{\x03}\n}\n")
+      assert_equal %w[1 2], parser.data["espresso_pressure"]
+      assert_equal "Foo", parser.extra["bean_brand"]
+      assert_equal %w[0 1], parser.timeframe
+    end
+
+    test "does not store json for an empty profile" do
+      assert_not parse_tcl("clock 1\nprofile {}\n").profile_fields.key?("json")
+    end
+
+    test "stores empty data vectors as empty arrays" do
+      parser = parse_tcl("clock 1\nespresso_elapsed {0.1 0.2}\nespresso_pressure {1 2}\nespresso_weight {}\n")
+      assert_equal [], parser.data["espresso_weight"]
+      assert_equal %w[1 2], parser.data["espresso_pressure"]
+    end
+
+    test "parses a braced value ending in a backslash" do
+      parser = parse_tcl("settings {\n\tprofile_title {Foo \\}\n\tdrink_weight 42.0\n}\nprofile {\n  \"title\": \"x\"\n}\n")
+      assert_equal "Foo \\", parser.profile_fields["profile_title"]
+      assert_equal "42.0", parser.extra["drink_weight"]
+      assert_equal "x", parser.profile_fields["json"]["title"]
+    end
+
+    test "keeps escaped braces raw in balanced braced values" do
+      assert_equal "a\\{b", parse_tcl("settings {\n\tbean_brand {a\\{b}\n}\n").extra["bean_brand"]
+    end
+
+    test "raises on unbalanced braces" do
+      assert_raises(Parsers::DecentTcl::Error) { parse_tcl("clock 1\nsettings {\n") }
+    end
+
+    test "drops an unbalanced machine block and still parses the profile" do
+      parser = parse_tcl("clock 1\nmachine {\n\x00[{ 1\n}\nprofile {\n\"title\": \"x\"\n}\n")
+      assert_equal "x", parser.profile_fields["json"]["title"]
+    end
+
     test "extracts roast date based on users date format" do
       user = create(:user, :with_coffee_management)
       shot = new_shot("test/files/20210921T085910.shot", user:)
