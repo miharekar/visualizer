@@ -5,6 +5,7 @@ class ShotInformation
     prepend MemoWise
 
     JSON_PROFILE_KEYS = %w[title author notes beverage_type steps tank_temperature target_weight target_volume target_volume_count_start legacy_profile_type type lang hidden reference_file changes_since_last_espresso version].freeze
+    TCL_ESCAPES = {"\n" => "\\n", "\t" => "\\t", "\r" => "\\r"}.freeze
     CSV_PROFILE_HEADERS = %w[information_type elapsed pressure current_total_shot_weight flow_in flow_out water_temperature_boiler water_temperature_in water_temperature_basket metatype metadata comment].freeze
 
     def has_profile?
@@ -24,10 +25,7 @@ class ShotInformation
 
       tcl_profile_fields.to_a.sort_by(&:first).map do |k, v|
         v = "#{v.to_s.gsub("Downloaded from Visualizer", "").strip}\n\nDownloaded from Visualizer" if k == "profile_notes"
-        v = "{}" if v.blank?
-        v = "{#{v}}" if /\s/.match?(v)
-
-        "#{k} #{v}"
+        "#{k} #{tcl_element(v)}"
       end.join("\n")
     end
 
@@ -73,6 +71,34 @@ class ShotInformation
 
     def data_point(key, index)
       data[key][index].to_f.round(5) if data[key].respond_to?(:[])
+    end
+
+    private
+
+    def tcl_element(value)
+      value = value.blank? ? "" : value.to_s
+
+      if value.blank?
+        "{}"
+      elsif !tcl_braceable?(value)
+        value.gsub(/[\\{}\[\]$";\s]/) { |char| TCL_ESCAPES.fetch(char, "\\#{char}") }
+      elsif /[\s\\]/.match?(value) || value.start_with?("{", '"')
+        "{#{value}}"
+      else
+        value
+      end
+    end
+
+    def tcl_braceable?(value)
+      return false if /\A(?:[^\\]|\\.)*\\\z/m.match?(value)
+
+      depth = 0
+      value.scan(/\\.|[{}]/m) do |token|
+        depth += 1 if token == "{"
+        depth -= 1 if token == "}"
+        return false if depth.negative?
+      end
+      depth.zero?
     end
   end
 end
