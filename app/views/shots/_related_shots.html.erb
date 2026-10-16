@@ -1,3 +1,4 @@
+<% hide_time = shot.user&.hide_shot_times? && shot.user_id != Current.user&.id %>
 <div class="flex-1" data-controller="related-shots">
   <select class="standard-input mt-0" data-action="related-shots#goTo">
     <% related_shots.each do |id, title, bean_type, time| %>
@@ -6,7 +7,7 @@
         <option value="<%= shot_path(id) %>" selected>Go to another shot</option>
       <% else %>
         <option value="<%= id %>">
-          <%= [title, time.in_time_zone(Current.timezone).to_formatted_s(:long)].join(" @ ") %>
+          <%= [title, (time.in_time_zone(Current.timezone).to_formatted_s(:long) unless hide_time)].compact.join(" @ ") %>
         </option>
       <% end %>
     <% end %>

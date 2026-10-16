@@ -31,7 +31,7 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     shots = 21.times.map { create(:shot, user:, public: true, start_time: (it + 1).minutes.ago) }
     other_shot = create(:shot, public: true)
 
-    get community_index_url(format: :turbo_stream, commit: "Search", user_id: user.id, before: Time.current.iso8601), headers: {"Turbo-Frame" => "cursor"}
+    get community_index_url(format: :turbo_stream, commit: "Search", user_id: user.id, before: Paginatable.encrypt_time(Time.current)), headers: {"Turbo-Frame" => "cursor"}
 
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
@@ -47,7 +47,8 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     assert_equal "turbo_stream", query["format"]
     assert_equal user.id, query["user_id"]
     assert_equal "Search", query["commit"]
-    assert_equal shots[-2].start_time.to_i, Time.iso8601(query["before"]).to_i
+    assert_no_match(/\d{4}-\d{2}-\d{2}/, query["before"])
+    assert_equal shots[-2].start_time.to_i, Paginatable.decrypt_time(query["before"]).to_i
     assert_equal shots[-2].id, query["before_id"]
 
     get frames.first["src"], headers: {"Turbo-Frame" => "cursor"}

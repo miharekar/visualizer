@@ -9,9 +9,9 @@ module Api
     before_action :load_users_shot, only: %i[update destroy]
 
     def index
-      shots = shots_for_index.select(:id, :start_time, :user_id, :updated_at)
+      shots = shots_for_index.select(:id, :start_time, :user_id, :updated_at).includes(:user)
       shots, paging = paginate(shots, with_counts: Current.user.present?)
-      data = shots.map { {clock: it.start_time.to_i, id: it.id, updated_at: it.updated_at.to_i} }
+      data = shots.map { shot_summary(it) }
       render json: {data:, paging:, user_id: Current.user&.id}
     rescue ArgumentError, RangeError
       render json: {error: "updated_after must be a Unix timestamp in seconds"}, status: :unprocessable_content
@@ -88,6 +88,14 @@ module Api
     end
 
     private
+
+    def shot_summary(shot)
+      if Current.user.nil? && shot.user&.hide_shot_times
+        {id: shot.id}
+      else
+        {clock: shot.start_time.to_i, id: shot.id, updated_at: shot.updated_at.to_i}
+      end
+    end
 
     def shots_for_index
       shots = Current.user.present? ? Current.user.shots : Shot.visible

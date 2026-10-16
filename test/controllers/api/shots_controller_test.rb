@@ -262,6 +262,67 @@ module Api
       assert_not_includes response.parsed_body.keys, "private_notes"
     end
 
+    test "anonymous index omits times of shots from users who hide them" do
+      hidden_user = FactoryBot.create(:user, :public, hide_shot_times: true)
+      hidden_shot = FactoryBot.create(:shot, user: hidden_user, public: true)
+      shown_shot = FactoryBot.create(:shot, user: public_user, public: true)
+
+      get api_shots_url, as: :json
+      assert_response :success
+
+      data = response.parsed_body["data"].index_by { it["id"] }
+      assert_equal ["id"], data[hidden_shot.id].keys
+      assert_equal %w[clock id updated_at], data[shown_shot.id].keys.sort
+    end
+
+    test "show hides times from other viewers of users who hide them" do
+      hidden_user = FactoryBot.create(:user, :public, hide_shot_times: true)
+      shot = Shot.from_file(hidden_user, Rails.root.join("test/files/beanconqueror.json").read)
+      shot.public = true
+      shot.save!
+
+      get api_shot_url(shot), as: :json
+      assert_response :success
+
+      json_response = response.parsed_body
+      assert_not_includes json_response.keys, "updated_at"
+      assert_not_includes json_response.to_json, "unix_timestamp"
+      assert_equal "00:00:00.000", json_response["brewdata"]["brewFlow"]["weight"].first["timestamp"]
+      assert_equal "00:00:00.107", json_response["brewdata"]["brewFlow"]["weight"].second["timestamp"]
+      assert_equal "00:00:00.001", json_response["brewdata"]["brewFlow"]["realtimeFlow"].first["timestamp"]
+      assert_includes shot.reload.information.brewdata.to_json, "unix_timestamp"
+      assert_equal "17:18:21.961", shot.information.brewdata["brewFlow"]["weight"].first["timestamp"]
+
+      get api_shot_url(shot), headers: auth_headers(hidden_user), as: :json
+      assert_response :success
+      assert_includes response.parsed_body.keys, "updated_at"
+      assert_includes response.parsed_body.to_json, "unix_timestamp"
+      assert_equal "17:18:21.961", response.parsed_body["brewdata"]["brewFlow"]["weight"].first["timestamp"]
+    end
+
+    test "show drops unparseable brewflow timestamps and exported time keys for other viewers" do
+      hidden_user = FactoryBot.create(:user, :public, hide_shot_times: true)
+      json = JSON.parse(Rails.root.join("test/files/beanconqueror.json").read)
+      json["brewFlow"]["weight"][1]["timestamp"] = "bad"
+      json["brewFlow"]["weight"][2]["timestamp"] = "10:00:00"
+      json["meta"] = {"visualizer" => {"shot_id" => "abc", "updated_at" => 1_773_043_980, "start_time" => "2026-03-09T08:12:00.000Z"}}
+      shot = Shot.from_file(hidden_user, json.to_json)
+      shot.public = true
+      shot.save!
+
+      get api_shot_url(shot), as: :json
+      assert_response :success
+
+      brewdata = response.parsed_body["brewdata"]
+      weight = brewdata["brewFlow"]["weight"]
+      assert_equal "00:00:00.000", weight.first["timestamp"]
+      assert_not_includes weight.second.keys, "timestamp"
+      assert_not_includes weight.third.keys, "timestamp"
+      assert_equal "abc", brewdata["meta"]["visualizer"]["shot_id"]
+      assert_not_includes brewdata.to_json, "updated_at"
+      assert_not_includes brewdata.to_json, "start_time"
+    end
+
     test "show returns 404 for non-existent shot" do
       get api_shot_url(id: "nonexistent"), as: :json
       assert_response :not_found

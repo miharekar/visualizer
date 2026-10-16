@@ -688,16 +688,26 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     journal = Journal.new(@user)
     first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
     assert_equal Journal::PAGE_SIZE, first.size
-    assert_equal timestamp.utc.iso8601(6), cursor.fetch(:before)
+    assert_equal timestamp, Paginatable.decrypt_time(cursor.fetch(:before))
     assert_equal first.last.id, cursor.fetch(:before_id)
+    encrypted_time = cursor.fetch(:before)
     second, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor:)
     assert_nil cursor
     assert_empty(first.map(&:id) & second.map(&:id))
     assert_equal @user.shots.count, (first + second).size
     assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: "bad", before_id: @shot.id}) }
-    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601, before_id: "bad"}) }
-    legacy, = paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601})
-    assert_equal 20, legacy.size
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: encrypted_time, before_id: "bad"}) }
+    assert_raises(ActionController::BadRequest) { paginate_with_cursor(journal.for_list, by: :start_time, cursor: {before: timestamp.iso8601}) }
+  end
+
+  test "cursor survives deletion of its last row" do
+    create_list(:shot, Journal::PAGE_SIZE + 1, user: @user)
+    journal = Journal.new(@user)
+    first, cursor = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor: {})
+    Shot.find(cursor.fetch(:before_id)).destroy!
+    second, = paginate_with_cursor(journal.for_list, items: Journal::PAGE_SIZE, by: :start_time, cursor:)
+    assert_not_empty second
+    assert_empty(first.map(&:id) & second.map(&:id))
   end
 
   test "search combines coffee and tags without matching brew timestamps" do
