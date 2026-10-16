@@ -17,7 +17,11 @@ class PasswordsController < ApplicationController
   def update
     if @user.update(params.permit(:password, :password_confirmation))
       @user.sessions.destroy_all
-      redirect_to new_session_url, notice: "Password has been reset."
+      @user.access_grants.destroy_all
+      @user.access_tokens.destroy_all
+      @user.webauthn_credentials.destroy_all
+      @user.push_subscriptions.destroy_all
+      redirect_to new_session_url, notice: "Password has been reset. You've been signed out everywhere, and your passkeys, push subscriptions, and app authorizations were removed."
     else
       redirect_to edit_password_url(params[:token]), alert: @user.errors.full_messages.join(", ")
     end
