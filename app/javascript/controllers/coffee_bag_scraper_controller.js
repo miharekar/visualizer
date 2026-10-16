@@ -71,12 +71,10 @@ export default class extends Controller {
   }
 
   showError(message) {
-    const template = document.getElementById("scraper-error-template")
-    const notificationHtml = template.innerHTML
-    const updatedNotification = notificationHtml.replace("Something went wrong", message)
+    const notification = document.getElementById("scraper-error-template").firstElementChild.cloneNode(true)
+    notification.querySelector("p:last-of-type").textContent = message
 
-    const notificationsContainer = document.getElementById("notifications-container")
-    notificationsContainer.insertAdjacentHTML("beforeend", updatedNotification)
+    document.getElementById("notifications-container").append(notification)
   }
 
   showProgress(step) {
