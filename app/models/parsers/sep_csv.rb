@@ -29,11 +29,14 @@ module Parsers
     end
 
     def parse
-      csv = CSV.parse(file, headers: true)
-      csv.each do |row|
-        if row["information_type"] == "meta"
+      headers, *rows = CSV.parse(file)
+      @columns = {}
+      headers&.each_with_index { |name, index| @columns[name] ||= index }
+      rows.each do |row|
+        type = field(row, "information_type")
+        if type == "meta"
           parse_extra(row)
-        elsif row["information_type"] == "moment"
+        elsif type == "moment"
           parse_data(row)
         end
       end
@@ -42,20 +45,27 @@ module Parsers
 
     private
 
-    def parse_extra(row)
-      return if row["metadata"].blank?
+    def field(row, name)
+      index = @columns[name]
+      row[index] if index
+    end
 
-      if MAPPING[row["metatype"]]
-        value = [@extra[MAPPING[row["metatype"]]], row["metadata"]].compact.join(" ")
-        @extra[MAPPING[row["metatype"]]] = value.strip
-      elsif row["metatype"] == "Name"
-        @profile_title = row["metadata"]
-      elsif row["metatype"] == "Date"
-        @start_time = Time.zone.iso8601(row["metadata"])
-      elsif row["metatype"] == "Roasting Date"
-        @extra["roast_date"] = row["metadata"]
+    def parse_extra(row)
+      metadata = field(row, "metadata")
+      return if metadata.blank?
+
+      metatype = field(row, "metatype")
+      if MAPPING[metatype]
+        value = [@extra[MAPPING[metatype]], metadata].compact.join(" ")
+        @extra[MAPPING[metatype]] = value.strip
+      elsif metatype == "Name"
+        @profile_title = metadata
+      elsif metatype == "Date"
+        @start_time = Time.zone.iso8601(metadata)
+      elsif metatype == "Roasting Date"
+        @extra["roast_date"] = metadata
       else
-        value = [@extra["espresso_notes"], "#{row["metatype"]}: #{row["metadata"]}"].compact.join("\n")
+        value = [@extra["espresso_notes"], "#{metatype}: #{metadata}"].compact.join("\n")
         @extra["espresso_notes"] = value
       end
     end
@@ -65,12 +75,13 @@ module Parsers
     end
 
     def parse_data(row)
-      if row["comment"] == "sample: weight" && row["current_total_shot_weight"].present?
-        @datapoints[:weight][row["elapsed"].to_f] = row["current_total_shot_weight"].to_f
-      elsif row["comment"] == "sample: pressure" && row["pressure"].present?
-        @datapoints[:pressure][row["elapsed"].to_f] = row["pressure"].to_f
-      elsif row["comment"] == "sample: temperature" && row["water_temperature_in"].present?
-        @datapoints[:temperature_mix][row["elapsed"].to_f] = row["water_temperature_in"].to_f
+      comment = field(row, "comment")
+      if comment == "sample: weight" && field(row, "current_total_shot_weight").present?
+        @datapoints[:weight][field(row, "elapsed").to_f] = field(row, "current_total_shot_weight").to_f
+      elsif comment == "sample: pressure" && field(row, "pressure").present?
+        @datapoints[:pressure][field(row, "elapsed").to_f] = field(row, "pressure").to_f
+      elsif comment == "sample: temperature" && field(row, "water_temperature_in").present?
+        @datapoints[:temperature_mix][field(row, "elapsed").to_f] = field(row, "water_temperature_in").to_f
       end
     end
 
