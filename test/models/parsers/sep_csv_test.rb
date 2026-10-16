@@ -30,6 +30,13 @@ module Parsers
       assert_equal "31.01", shot.drink_weight
     end
 
+    test "rejects timestamps that would expand into too many datapoints" do
+      file = File.read("test/files/sharebrew_tsp.csv") + "moment,1e400,1.0,,,,,,,,,sample: pressure\n"
+      Timeout.timeout(5) do
+        assert_raises(ArgumentError) { Shot.from_file(@user, file) }
+      end
+    end
+
     test "treats descriptions as plain text" do
       file = File.read("test/files/sharebrew_tsp.csv").sub("Description,,text", "Description,**Sweet** [coffee](https://example.com),text")
 

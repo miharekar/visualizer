@@ -130,6 +130,17 @@ class ParsedShotTest < ActiveSupport::TestCase
     end
   end
 
+  test "alternating stage goals parse without timing out" do
+    goals = Array.new(5_000) { it.even? ? 0 : 1000 }
+    data = {"espresso_pressure_goal" => goals, "espresso_flow_goal" => goals, "espresso_temperature_goal" => goals}
+    information = build_stubbed(:shot_information, data:, timeframe: Array.new(5_000, &:to_s), brewdata: {}, extra: {}, profile_fields: {})
+    shot = build_stubbed(:shot, duration: 0, information:)
+
+    Timeout.timeout(5) do
+      assert_equal 833, ShotChart::ParsedShot.new(shot).stage_indices.size
+    end
+  end
+
   test "mix temperature goal does not affect stage detection" do
     timeframe = Array.new(10) { |index| index.to_s }
     data = {

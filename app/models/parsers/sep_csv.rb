@@ -21,6 +21,7 @@ module Parsers
       "Weight" => "drink_weight",
       "Tds" => "drink_tds"
     }.freeze
+    MAX_DATAPOINTS = 20_000
 
     def initialize(file)
       super
@@ -84,6 +85,8 @@ module Parsers
       time_step = (@datapoints[most_data].keys.last - @datapoints[most_data].keys.first) / @datapoints[most_data].keys.size
       first_timestamp = @datapoints.min_by { |_k, v| v.keys.first }[1].keys.first
       last_timestamp = @datapoints.max_by { |_k, v| v.keys.last }[1].keys.last
+      raise ArgumentError, "Too many datapoints" unless ((last_timestamp - first_timestamp) / time_step).between?(0, MAX_DATAPOINTS)
+
       sorted_points = @datapoints.transform_values { |v| v.sort_by { |k, _v| k }.to_a }
       first_timestamp.step(last_timestamp, time_step).each do |time|
         @timeframe << time
