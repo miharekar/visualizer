@@ -1,6 +1,6 @@
 class AirtableJob < ApplicationJob
   queue_as :default
-  retry_on Airtable::TokenError, Airtable::DataError, Net::ReadTimeout, attempts: 4, wait: :polynomially_longer
+  retry_on Airtable::TokenError, Airtable::DataError, Net::OpenTimeout, Net::ReadTimeout, attempts: 4, wait: :polynomially_longer
 
   rescue_from Airtable::DataError do |airtable_error|
     if airtable_error.matches_error_type?("RATE_LIMIT_REACHED") && executions < 5
