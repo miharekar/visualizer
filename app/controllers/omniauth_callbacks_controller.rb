@@ -10,8 +10,11 @@ class OmniauthCallbacksController < ApplicationController
     else
       Current.user.identities.create!(oauth.identifiers_with_blob_and_token)
     end
+    Airtable::Base.new(Current.user)
     AirtableUploadAllJob.perform_later(Current.user)
 
     redirect_to shots_path, notice: "Successfully connected to Airtable"
+  rescue Airtable::BaseError
+    redirect_to shots_path, alert: "Airtable not connected. Visualizer needs access to a base where you're a Creator. Please connect again and pick one."
   end
 end
