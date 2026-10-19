@@ -220,6 +220,8 @@ end
 #  index_shots_on_canonical_coffee_bag_id  (canonical_coffee_bag_id)
 #  index_shots_on_coffee_bag_id            (coffee_bag_id)
 #  index_shots_on_created_at               (created_at)
+#  index_shots_on_grinder_model            (grinder_model gin_trgm_ops) USING gin
+#  index_shots_on_profile_title            (profile_title gin_trgm_ops) USING gin
 #  index_shots_on_sha                      (sha)
 #  index_shots_on_start_time               (start_time)
 #  index_shots_on_user_id_and_start_time   (user_id,start_time)

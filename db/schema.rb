@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_16_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_19_051534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "dblink"
   enable_extension "pg_catalog.plpgsql"
@@ -313,6 +313,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_16_140000) do
     t.index ["canonical_coffee_bag_id"], name: "index_shots_on_canonical_coffee_bag_id"
     t.index ["coffee_bag_id"], name: "index_shots_on_coffee_bag_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
+    t.index ["grinder_model"], name: "index_shots_on_grinder_model", opclass: :gin_trgm_ops, using: :gin
+    t.index ["profile_title"], name: "index_shots_on_profile_title", opclass: :gin_trgm_ops, using: :gin
     t.index ["sha"], name: "index_shots_on_sha"
     t.index ["start_time"], name: "index_shots_on_start_time"
     t.index ["user_id", "start_time"], name: "index_shots_on_user_id_and_start_time"
