@@ -8,8 +8,12 @@ module Filterable
     espresso_notes: {}
   }.freeze
 
-  def apply_standard_filters_to_shots
+  # indexed_only restricts to the autocomplete (gin_trgm-indexed) text columns —
+  # bean_notes/espresso_notes have no index, so a public, paginated API endpoint
+  # must not offer them as filters any caller could trigger a sequential scan with.
+  def apply_standard_filters_to_shots(indexed_only: false)
     FILTERS.each do |filter, options|
+      next if indexed_only && !options[:autocomplete]
       next if params[filter].blank?
 
       @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")

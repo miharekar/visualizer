@@ -66,6 +66,12 @@ module Api
       head :unauthorized unless Current.user
     end
 
+    # Shared by read endpoints that allow public access: a token lacking the read
+    # scope must be treated as unauthenticated rather than as its owner.
+    def ignore_token_without_read_scope
+      Current.session = nil if doorkeeper_token && !doorkeeper_token.includes_scope?("read")
+    end
+
     def json_request?
       true
     end

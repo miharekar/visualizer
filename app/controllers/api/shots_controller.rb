@@ -113,10 +113,6 @@ module Api
       Time.zone.at(Integer(params[:updated_after]))
     end
 
-    def ignore_token_without_read_scope
-      Current.session = nil if doorkeeper_token && !doorkeeper_token.includes_scope?("read")
-    end
-
     def load_users_shot
       @shot = Shot.with_notes.find_by(id: params[:id])
       return render json: {error: "Shot not found"}, status: :not_found unless @shot

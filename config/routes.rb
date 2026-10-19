@@ -50,6 +50,10 @@ Rails.application.routes.draw do
     resources :coffee_bags, only: %i[index show create update destroy]
     resources :canonical_roasters, only: %i[index]
     resources :canonical_coffee_bags, only: %i[index]
+
+    namespace :community do
+      resources :shots, only: %i[index]
+    end
   end
 
   get :heartbeat, to: "heartbeat#show"

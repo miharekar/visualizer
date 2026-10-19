@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.18.2"
+  version: "1.19.0"
   description: |
     REST API for Visualizer: upload and read espresso shots, and manage roasters and coffee bags.
 
@@ -79,6 +79,8 @@ tags:
     description: Your coffee bags. Creating, updating, and deleting them requires premium.
   - name: Canonical
     description: Shared roaster and coffee database. Link your roasters and coffee bags to it with `canonical_roaster_id` and `canonical_coffee_bag_id`. No authentication needed.
+  - name: Community
+    description: Read-only search over the community's shots, with the same visibility rules as the Community page.
 
 paths:
   /me:
@@ -822,6 +824,80 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CanonicalCoffeeBagListResponse"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
+  /community/shots:
+    get:
+      tags: [Community]
+      summary: Search community shots by bean
+      operationId: listCommunityShots
+      description: |
+        Lists community shots for a bean, newest first, with the same visibility rules as the Community page:
+
+        - Public shots are visible to everyone; your own shots (public and private) are included when you authenticate.
+        - Without premium (including unauthenticated requests), only shots uploaded in the last month are listed; premium sees all history.
+
+        At least one of `bean_brand`, `bean_type`, `canonical_coffee_bag_id`, `profile_title`, `grinder_model` or `user_id` is required; `canonical_coffee_bag_id` and `user_id` must be valid UUIDs. Text filters are case-insensitive substring matches. `start_time` and `updated_at` are Unix seconds and are omitted for owners who hide their shot times.
+      security:
+        - OAuth2: [read]
+        - BasicAuth: []
+        - {}
+      parameters:
+        - name: bean_brand
+          in: query
+          description: Roaster, case-insensitive substring.
+          schema: {type: string}
+        - name: bean_type
+          in: query
+          description: Coffee, case-insensitive substring.
+          schema: {type: string}
+        - name: canonical_coffee_bag_id
+          in: query
+          description: Exact canonical bean match.
+          schema: {type: string, format: uuid}
+        - name: profile_title
+          in: query
+          schema: {type: string}
+        - name: grinder_model
+          in: query
+          schema: {type: string}
+        - name: user_id
+          in: query
+          schema: {type: string, format: uuid}
+        - name: min_enjoyment
+          in: query
+          schema: {type: integer, minimum: 0, maximum: 100}
+        - name: max_enjoyment
+          in: query
+          schema: {type: integer, minimum: 0, maximum: 100}
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Items"
+      responses:
+        "200":
+          description: A page of community shots.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      description: A shot's list attributes plus `roast_level` and `canonical_coffee_bag_id`; `user_name` when the owner is public.
+                  paging:
+                    type: object
+                  user_id:
+                    type: ["string", "null"]
+        "400":
+          description: No filter was provided.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: Provide at least one filter
         "429":
           $ref: "#/components/responses/RateLimited"
 
