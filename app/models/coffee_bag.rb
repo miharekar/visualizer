@@ -105,7 +105,7 @@ class CoffeeBag < ApplicationRecord
   def refresh_shot_values
     shots.find_each do
       it.refresh_coffee_bag_fields
-      it.save!
+      it.save!(validate: false)
     end
   end
 
