@@ -20,6 +20,8 @@ module ActiveSupport
 end
 
 class ActionDispatch::IntegrationTest
+  setup { Rails.cache.clear }
+
   def sign_in(user)
     post session_url, params: {email: user.email, password: "password"}
   end

@@ -5,7 +5,6 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
   include Paginatable
 
   setup do
-    Rails.cache.clear
     host! "visualizer.test"
     https!
     @user = create(:user, :premium, timezone: "Ljubljana", journal_enabled: true)

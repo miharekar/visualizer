@@ -3,7 +3,6 @@ require "webauthn/fake_client"
 
 class PasskeysControllerTest < ActionDispatch::IntegrationTest
   setup do
-    Rails.cache.clear
     @client = WebAuthn::FakeClient.new(Rails.configuration.webauthn_origin)
     @user = create(:user)
     challenge = WebAuthn::Credential.options_for_create(user: {id: @user.webauthn_id, name: @user.email}).challenge

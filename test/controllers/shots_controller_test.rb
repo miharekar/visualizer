@@ -4,7 +4,6 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
   include ActionView::RecordIdentifier
 
   setup do
-    Rails.cache.clear
     host! "example.com"
     @user = create(:user, :premium)
     @shot = create(:shot, user: @user)
