@@ -1,7 +1,7 @@
 module Api
   class Api::BaseController < ActionController::Base # rubocop:disable Rails/ApplicationController
-    rate_limit to: 50, within: 1.minute, name: "api-ip-1-minute"
-    rate_limit to: 200, within: 10.minutes, name: "api-ip-10-minutes"
+    rate_limit to: 50, within: 1.minute, name: "api-ip-1-minute", scope: "api"
+    rate_limit to: 200, within: 10.minutes, name: "api-ip-10-minutes", scope: "api"
 
     include ActiveStorage::SetCurrent
     include Authentication
@@ -11,7 +11,7 @@ module Api
     prepend_before_action :add_request_tags
     skip_before_action :verify_authenticity_token
 
-    rate_limit to: 200, within: 10.minutes, name: "api-user-10-minutes", if: -> { Current.user.present? }, by: -> { Current.user.id }
+    rate_limit to: 200, within: 10.minutes, name: "api-user-10-minutes", scope: "api", if: -> { Current.user.present? }, by: -> { Current.user.id }
     rescue_from ActionController::ParameterMissing, with: :render_bad_parameters
     rescue_from ActionController::TooManyRequests, with: :render_rate_limit
     rescue_from ActiveSupport::MessageVerifier::InvalidSignature, with: :render_invalid_image
