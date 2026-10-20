@@ -315,6 +315,28 @@ module Api
       assert_equal [match.id], response.parsed_body["data"].pluck("id")
     end
 
+    test "index filters public shots by canonical coffee bag" do
+      canonical_bag = CanonicalCoffeeBag.create!(name: "Ethiopia Aricha", canonical_roaster: CanonicalRoaster.create!(name: "Square Mile"))
+      linked = FactoryBot.create(:shot, user: public_user, public: true, canonical_coffee_bag: canonical_bag)
+      FactoryBot.create(:shot, user: public_user, public: true)
+
+      get api_shots_url(canonical_coffee_bag_id: canonical_bag.id), as: :json
+      assert_equal [linked.id], response.parsed_body["data"].pluck("id")
+    end
+
+    test "index ID filters match nothing for malformed IDs" do
+      deleted_user = FactoryBot.create(:user, :public)
+      orphan = FactoryBot.create(:shot, user: deleted_user, public: true)
+      deleted_user.destroy!
+      assert_nil orphan.reload.user_id
+      assert_nil orphan.canonical_coffee_bag_id
+
+      %i[user_id canonical_coffee_bag_id].each do |filter|
+        get api_shots_url(filter => "not-a-uuid"), as: :json
+        assert_empty response.parsed_body["data"]
+      end
+    end
+
     test "index with full returns shots without telemetry" do
       shot = FactoryBot.create(:shot, user:, bean_brand: "Luma Coffee")
 

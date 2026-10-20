@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.19.0"
+  version: "1.20.0"
   description: |
     REST API for Visualizer: upload and read espresso shots, and manage roasters and coffee bags.
 
@@ -145,6 +145,7 @@ paths:
         - $ref: "#/components/parameters/ShotBeanNotes"
         - $ref: "#/components/parameters/ShotEspressoNotes"
         - $ref: "#/components/parameters/ShotUserId"
+        - $ref: "#/components/parameters/ShotCanonicalCoffeeBagId"
         - $ref: "#/components/parameters/ShotStartDate"
         - $ref: "#/components/parameters/ShotMinEnjoyment"
         - $ref: "#/components/parameters/ShotMaxEnjoyment"
@@ -310,7 +311,7 @@ paths:
         Send JSON, or `multipart/form-data` to upload an image.
 
         - Premium-only fields are ignored for accounts without premium. If every field you send is ignored, the response is `400`.
-        - Setting `coffee_bag_id` copies the bag's roaster, name, roast date, and roast level into `bean_brand`, `bean_type`, `roast_date`, and `roast_level`. On a shot without a coffee bag, setting `canonical_coffee_bag_id` copies the canonical coffee's roaster and name.
+        - Setting `coffee_bag_id` copies the bag's roaster, name, roast date, and roast level into `bean_brand`, `bean_type`, `roast_date`, and `roast_level`, and the bag's canonical coffee into `canonical_coffee_bag_id`. On a shot with a coffee bag, a `canonical_coffee_bag_id` you send is replaced by the bag's. On a shot without a coffee bag, setting `canonical_coffee_bag_id` copies the canonical coffee's roaster and name.
         - Updates are atomic: if validation fails, nothing changes, including tags.
       security:
         - OAuth2: [write]
@@ -989,7 +990,14 @@ components:
     ShotUserId:
       name: user_id
       in: query
-      description: Only shots of the user with exactly this ID.
+      description: Only shots of the user with exactly this ID. A value that isn't a UUID matches no shots.
+      schema:
+        type: string
+        format: uuid
+    ShotCanonicalCoffeeBagId:
+      name: canonical_coffee_bag_id
+      in: query
+      description: Only shots linked to this canonical coffee, from `GET /canonical_coffee_bags`. A value that isn't a UUID matches no shots.
       schema:
         type: string
         format: uuid

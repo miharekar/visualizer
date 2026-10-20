@@ -111,6 +111,7 @@ module Api
       @shots = @shots.where("updated_at > ?", updated_after) if own_shots? && params[:updated_after].present?
       @shots = @shots.with_all_tag_slugs(params[:tags]) if params[:tags].present?
       @shots = @shots.where(user_id: params[:user_id]) if params[:user_id].present?
+      @shots = @shots.where(canonical_coffee_bag_id: params[:canonical_coffee_bag_id]) if params[:canonical_coffee_bag_id].present?
       apply_standard_filters_to_shots
       @shots = @shots.non_premium unless Current.user&.premium?
       params[:sort] == "updated_at" ? @shots.order(updated_at: :desc) : @shots.by_start_time
