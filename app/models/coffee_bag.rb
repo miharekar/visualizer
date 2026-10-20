@@ -23,7 +23,7 @@ class CoffeeBag < ApplicationRecord
   validates_variable_image :image
   validate :defrosted_date_after_frozen_date
 
-  after_save_commit :refresh_shot_values_later, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id]) }
+  after_save_commit :refresh_shot_values_later, if: -> { saved_changes.keys.intersect?(%w[name roast_date roast_level roaster_id canonical_coffee_bag_id]) }
 
   scope :filter_by_name, ->(name) { where("LOWER(coffee_bags.name) = ?", name.downcase.squish) }
   scope :active, -> { where(archived_at: nil) }
