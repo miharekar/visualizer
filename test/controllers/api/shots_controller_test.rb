@@ -275,6 +275,71 @@ module Api
       assert_equal %w[clock id updated_at], data[shown_shot.id].keys.sort
     end
 
+    test "index with community lists public shots and your own private ones" do
+      hidden_user = FactoryBot.create(:user, :public, hide_shot_times: true)
+      own_private = FactoryBot.create(:shot, user:, public: false)
+      own_public = FactoryBot.create(:shot, user:, public: true)
+      other_public = FactoryBot.create(:shot, user: public_user, public: true)
+      other_private = FactoryBot.create(:shot, user: FactoryBot.create(:user), public: false)
+      hidden_shot = FactoryBot.create(:shot, user: hidden_user, public: true)
+
+      get api_shots_url(community: 1), headers: auth_headers(user), as: :json
+      assert_response :success
+
+      data = response.parsed_body["data"].index_by { it["id"] }
+      assert_equal [own_private, own_public, other_public, hidden_shot].map(&:id).sort, data.keys.sort
+      assert_not_includes data.keys, other_private.id
+      assert_equal ["id"], data[hidden_shot.id].keys
+      assert_equal %w[clock id updated_at], data[other_public.id].keys.sort
+      assert_nil response.parsed_body["paging"]["count"]
+    end
+
+    test "index with community applies the premium cap" do
+      old_shot = FactoryBot.create(:shot, user: public_user, public: true, created_at: 2.months.ago)
+      recent_shot = FactoryBot.create(:shot, user: public_user, public: true)
+
+      get api_shots_url(community: 1), headers: auth_headers(user), as: :json
+      assert_equal [recent_shot.id], response.parsed_body["data"].pluck("id")
+
+      get api_shots_url(community: 1), headers: auth_headers(premium_user), as: :json
+      assert_equal [old_shot.id, recent_shot.id].sort, response.parsed_body["data"].pluck("id").sort
+    end
+
+    test "index filters public shots by bean brand for unauthenticated user" do
+      match = FactoryBot.create(:shot, user: public_user, public: true, bean_brand: "Luma Coffee")
+      FactoryBot.create(:shot, user: public_user, public: true, bean_brand: "Other Roasters")
+
+      get api_shots_url(bean_brand: "luma"), as: :json
+      assert_response :success
+
+      assert_equal [match.id], response.parsed_body["data"].pluck("id")
+    end
+
+    test "index with full returns shots without telemetry" do
+      shot = FactoryBot.create(:shot, user:, bean_brand: "Luma Coffee")
+
+      get api_shots_url(full: 1), headers: auth_headers(user), as: :json
+      assert_response :success
+
+      item = response.parsed_body["data"].first
+      assert_equal shot.id, item["id"]
+      assert_equal "Luma Coffee", item["bean_brand"]
+      assert_not_includes item.keys, "data"
+      assert_not_includes item.keys, "brewdata"
+      assert_not_includes item.keys, "timeframe"
+    end
+
+    test "index with full is rate limited more strictly" do
+      10.times do
+        get api_shots_url(full: 1), headers: auth_headers(user), as: :json
+        assert_response :success
+      end
+
+      get api_shots_url(full: 1), headers: auth_headers(user), as: :json
+      assert_response :too_many_requests
+      assert_equal "Too many requests. Please try again later.", response.parsed_body["error"]
+    end
+
     test "show hides times from other viewers of users who hide them" do
       hidden_user = FactoryBot.create(:user, :public, hide_shot_times: true)
       shot = Shot.from_file(hidden_user, Rails.root.join("test/files/beanconqueror.json").read)

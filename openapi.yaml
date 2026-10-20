@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.18.2"
+  version: "1.19.0"
   description: |
     REST API for Visualizer: upload and read espresso shots, and manage roasters and coffee bags.
 
@@ -26,7 +26,7 @@ info:
 
     Scopes don't include each other: a token with only `write` can't call endpoints that need `read`. Request every scope you need, for example `read write`.
 
-    Some endpoints also work without authentication: public shots, share codes, and canonical search. Authenticating changes their results (for example, `GET /shots` lists your own shots instead of public ones), and invalid credentials, including OAuth tokens without `read`, are ignored rather than rejected.
+    Some endpoints also work without authentication: public shots, share codes, and canonical search. Authenticating changes their results (for example, `GET /shots` lists your own shots instead of public ones, unless you pass `community`), and invalid credentials, including OAuth tokens without `read`, are ignored rather than rejected.
 
     ## Requests
 
@@ -53,6 +53,7 @@ info:
 
     - 50 requests per minute and 200 requests per 10 minutes per IP address.
     - 200 requests per 10 minutes per authenticated user.
+    - `GET /shots` with `full`: 10 requests per minute and 50 requests per 10 minutes per IP address, on top of the limits above.
 
     Requests over a limit return `429`.
 
@@ -114,10 +115,17 @@ paths:
 
         - Unauthenticated: public shots.
         - Authenticated: your own shots, public and private.
+        - Authenticated with `community`: community shots, which are public shots plus your own private ones.
 
-        Without premium, including unauthenticated requests, only shots uploaded in the last month are listed.
+        Without premium, including unauthenticated requests, only shots uploaded in the last month are listed, with or without `community`.
 
-        To sync incrementally, pass the time of your last sync as `updated_after`.
+        To sync incrementally, pass the time of your last sync as `updated_after`. It only applies when listing your own shots.
+
+        To search, pass any of the filter parameters. They work with or without `community`, and combine with each other and with `tags`.
+
+        Items are summaries by default. With `full`, they are the same JSON as `GET /shots/{id}` with `essentials`, without telemetry. `full` requests have stricter rate limits.
+
+        `paging.count` and `paging.pages` are `null` unless you're listing your own shots.
       security:
         - OAuth2: [read]
         - BasicAuth: []
@@ -128,9 +136,21 @@ paths:
         - $ref: "#/components/parameters/ShotSort"
         - $ref: "#/components/parameters/UpdatedAfter"
         - $ref: "#/components/parameters/ShotTags"
+        - $ref: "#/components/parameters/ShotCommunity"
+        - $ref: "#/components/parameters/ShotFull"
+        - $ref: "#/components/parameters/ShotProfileTitle"
+        - $ref: "#/components/parameters/ShotBeanBrand"
+        - $ref: "#/components/parameters/ShotBeanType"
+        - $ref: "#/components/parameters/ShotGrinderModel"
+        - $ref: "#/components/parameters/ShotBeanNotes"
+        - $ref: "#/components/parameters/ShotEspressoNotes"
+        - $ref: "#/components/parameters/ShotUserId"
+        - $ref: "#/components/parameters/ShotStartDate"
+        - $ref: "#/components/parameters/ShotMinEnjoyment"
+        - $ref: "#/components/parameters/ShotMaxEnjoyment"
       responses:
         "200":
-          description: A page of shot summaries.
+          description: A page of shot summaries, or of shots with `full`.
           content:
             application/json:
               schema:
@@ -869,7 +889,7 @@ components:
     Page:
       name: page
       in: query
-      description: Page number, starting at 1. A page past the end returns the last page, except on unauthenticated `GET /shots`, where it's empty.
+      description: Page number, starting at 1. A page past the end returns the last page, except on `GET /shots` when unauthenticated or with `community`, where it's empty.
       schema:
         type: integer
         minimum: 1
@@ -900,7 +920,7 @@ components:
     UpdatedAfter:
       name: updated_after
       in: query
-      description: Only shots updated after this Unix timestamp, in whole seconds. Ignored for unauthenticated requests.
+      description: Only shots updated after this Unix timestamp, in whole seconds. Ignored for unauthenticated requests and with `community`.
       schema:
         type: integer
         minimum: 0
@@ -916,6 +936,83 @@ components:
         items:
           type: string
       example: [basket, high-speed]
+    ShotCommunity:
+      name: community
+      in: query
+      description: Any value. When authenticated, lists community shots (public shots plus your own private ones) instead of only your own. Ignored for unauthenticated requests, which always list public shots.
+      schema:
+        type: string
+      example: "1"
+    ShotFull:
+      name: full
+      in: query
+      description: Any value. Returns each shot as in `GET /shots/{id}` with `essentials`, without telemetry, instead of a summary. Limited to 10 requests per minute and 50 per 10 minutes per IP address.
+      schema:
+        type: string
+      example: "1"
+    ShotProfileTitle:
+      name: profile_title
+      in: query
+      description: Case-insensitive substring match on the profile title.
+      schema:
+        type: string
+    ShotBeanBrand:
+      name: bean_brand
+      in: query
+      description: Case-insensitive substring match on the bean brand.
+      schema:
+        type: string
+    ShotBeanType:
+      name: bean_type
+      in: query
+      description: Case-insensitive substring match on the bean type.
+      schema:
+        type: string
+    ShotGrinderModel:
+      name: grinder_model
+      in: query
+      description: Case-insensitive substring match on the grinder model.
+      schema:
+        type: string
+    ShotBeanNotes:
+      name: bean_notes
+      in: query
+      description: Case-insensitive substring match on the bean notes, as plain text.
+      schema:
+        type: string
+    ShotEspressoNotes:
+      name: espresso_notes
+      in: query
+      description: Case-insensitive substring match on the espresso notes, as plain text.
+      schema:
+        type: string
+    ShotUserId:
+      name: user_id
+      in: query
+      description: Only shots of the user with exactly this ID.
+      schema:
+        type: string
+        format: uuid
+    ShotStartDate:
+      name: start_date
+      in: query
+      description: ISO 8601 date. Only shots that started on this day, in UTC. Invalid values are ignored.
+      schema:
+        type: string
+        format: date
+      example: "2026-10-19"
+    ShotMinEnjoyment:
+      name: min_enjoyment
+      in: query
+      description: Only shots with at least this enjoyment score. Only applies when above 0.
+      schema:
+        type: integer
+    ShotMaxEnjoyment:
+      name: max_enjoyment
+      in: query
+      description: Only shots with at most this enjoyment score. Only applies when below 100.
+      schema:
+        type: integer
     SharedCode:
       name: code
       in: query
@@ -1044,7 +1141,7 @@ components:
       properties:
         count:
           type: [integer, "null"]
-          description: Total number of records. `null` for unauthenticated `GET /shots`.
+          description: Total number of records. `null` for `GET /shots` when unauthenticated or with `community`.
         page:
           type: integer
           description: Page returned.
@@ -1082,10 +1179,10 @@ components:
           format: uuid
         clock:
           type: integer
-          description: Start time as a Unix timestamp in seconds. Omitted in unauthenticated lists for shots of users who hide shot times.
+          description: Start time as a Unix timestamp in seconds. Omitted for other users' shots when their owner hides shot times.
         updated_at:
           type: integer
-          description: Last update as a Unix timestamp in seconds. Omitted in unauthenticated lists for shots of users who hide shot times.
+          description: Last update as a Unix timestamp in seconds. Omitted for other users' shots when their owner hides shot times.
 
     ShotListResponse:
       type: object
@@ -1093,8 +1190,11 @@ components:
       properties:
         data:
           type: array
+          description: Shot summaries, or shots in the default format with `full`.
           items:
-            $ref: "#/components/schemas/ShotSummary"
+            anyOf:
+              - $ref: "#/components/schemas/ShotSummary"
+              - $ref: "#/components/schemas/DefaultShotDetail"
         paging:
           $ref: "#/components/schemas/Paging"
         user_id:

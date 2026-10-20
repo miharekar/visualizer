@@ -47,6 +47,10 @@ class Shot
       json.merge(visualizer_attributes.slice(*%i[start_time updated_at user_name metadata tags profile_url image_url roaster_id coffee_bag_id private_notes fragrance aroma flavor aftertaste acidity bitterness sweetness mouthfeel]))
     end
 
+    def shot_times_hidden?
+      user&.hide_shot_times? && Current.user != user
+    end
+
     private
 
     def visualizer_attributes(notes_format: :html)
@@ -84,10 +88,6 @@ class Shot
 
     def serialized_note(attribute, format:)
       format == :plain_text ? rich_text_plain_text(attribute) : rich_text_html(attribute)
-    end
-
-    def shot_times_hidden?
-      user&.hide_shot_times? && Current.user != user
     end
 
     def add_brew_data(json)

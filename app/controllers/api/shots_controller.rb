@@ -1,6 +1,10 @@
 module Api
   class ShotsController < Api::BaseController
     include Shots::Editing
+    include Filterable
+
+    rate_limit to: 10, within: 1.minute, name: "api-full-1-minute", only: :index, if: -> { params[:full].present? }
+    rate_limit to: 50, within: 10.minutes, name: "api-full-10-minutes", only: :index, if: -> { params[:full].present? }
 
     before_action :ignore_token_without_read_scope, except: %i[upload update destroy]
     before_action :verify_upload_access, only: %i[upload]
@@ -9,9 +13,12 @@ module Api
     before_action :load_users_shot, only: %i[update destroy]
 
     def index
-      shots = shots_for_index.select(:id, :start_time, :user_id, :updated_at).includes(:user)
-      shots, paging = paginate(shots, with_counts: Current.user.present?)
-      data = shots.map { shot_summary(it) }
+      shots, paging = paginate(shots_for_index, with_counts: own_shots?)
+      data = if params[:full].present?
+        shots.with_notes.includes(:information, :tags, :user, coffee_bag: :roaster, image_attachment: :blob).map { it.default_json(include_information: false) }
+      else
+        shots.select(:id, :start_time, :user_id, :updated_at).includes(:user).map { shot_summary(it) }
+      end
       render json: {data:, paging:, user_id: Current.user&.id}
     rescue ArgumentError, RangeError
       render json: {error: "updated_after must be a Unix timestamp in seconds"}, status: :unprocessable_content
@@ -92,7 +99,7 @@ module Api
     private
 
     def shot_summary(shot)
-      if Current.user.nil? && shot.user&.hide_shot_times
+      if shot.shot_times_hidden?
         {id: shot.id}
       else
         {clock: shot.start_time.to_i, id: shot.id, updated_at: shot.updated_at.to_i}
@@ -100,11 +107,17 @@ module Api
     end
 
     def shots_for_index
-      shots = Current.user.present? ? Current.user.shots : Shot.visible
-      shots = shots.where("updated_at > ?", updated_after) if Current.user.present? && params[:updated_after].present?
-      shots = shots.with_all_tag_slugs(params[:tags]) if params[:tags].present?
-      shots = shots.non_premium unless Current.user&.premium?
-      params[:sort] == "updated_at" ? shots.order(updated_at: :desc) : shots.by_start_time
+      @shots = own_shots? ? Current.user.shots : Shot.visible_or_owned_by_id(Current.user&.id)
+      @shots = @shots.where("updated_at > ?", updated_after) if own_shots? && params[:updated_after].present?
+      @shots = @shots.with_all_tag_slugs(params[:tags]) if params[:tags].present?
+      @shots = @shots.where(user_id: params[:user_id]) if params[:user_id].present?
+      apply_standard_filters_to_shots
+      @shots = @shots.non_premium unless Current.user&.premium?
+      params[:sort] == "updated_at" ? @shots.order(updated_at: :desc) : @shots.by_start_time
+    end
+
+    def own_shots?
+      Current.user.present? && params[:community].blank?
     end
 
     def updated_after
