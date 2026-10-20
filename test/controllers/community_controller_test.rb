@@ -26,6 +26,17 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     assert_select "#shot_#{shot.id}"
   end
 
+  test "index filters by values too short for trigram indexes" do
+    shot = create(:shot, public: true, profile_title: "lc blooming")
+    other_shot = create(:shot, public: true, profile_title: "Default")
+
+    get community_index_url(commit: "Search", profile_title: "LC")
+
+    assert_response :success
+    assert_select "#shot_#{shot.id}"
+    assert_select "#shot_#{other_shot.id}", count: 0
+  end
+
   test "index renders Turbo Stream pagination and retains filters" do
     user = create(:user)
     shots = 21.times.map { create(:shot, user:, public: true, start_time: (it + 1).minutes.ago) }

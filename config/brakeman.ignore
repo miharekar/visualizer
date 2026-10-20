@@ -26,13 +26,13 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "ae2af597523506dc91bb14db2ec25561ab088094b7b32a52804353a8c2b37f13",
+      "fingerprint": "b12cb58cb24b9e9044a93682c3336ccb45546616744a37ce0032298910bd4300",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/concerns/filterable.rb",
-      "line": 15,
+      "line": 16,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "@shots.where(\"#{filter} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
+      "code": "@shots.where(\"#{(\"LOWER(#{filter})\" or filter)} ILIKE ?\", \"%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%\")",
       "render_path": null,
       "location": {
         "type": "method",

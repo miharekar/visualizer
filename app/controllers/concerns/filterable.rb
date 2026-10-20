@@ -12,7 +12,8 @@ module Filterable
     FILTERS.each do |filter, options|
       next if params[filter].blank?
 
-      @shots = @shots.where("#{filter} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
+      column = params[filter].scan(/[[:alnum:]]/).size < 3 ? "LOWER(#{filter})" : filter
+      @shots = @shots.where("#{column} ILIKE ?", "%#{ActiveRecord::Base.sanitize_sql_like(params[filter])}%")
     end
     apply_date_and_enjoyment_filters
   end
