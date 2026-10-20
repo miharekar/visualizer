@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_19_051534) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_20_060000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "dblink"
   enable_extension "pg_catalog.plpgsql"
@@ -309,10 +309,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_19_051534) do
     t.integer "bitterness"
     t.index ["airtable_id"], name: "index_shots_on_airtable_id"
     t.index ["bean_brand"], name: "index_shots_on_bean_brand", opclass: :gin_trgm_ops, using: :gin
+    t.index ["bean_notes"], name: "index_shots_on_bean_notes", opclass: :gin_trgm_ops, using: :gin
     t.index ["bean_type"], name: "index_shots_on_bean_type", opclass: :gin_trgm_ops, using: :gin
     t.index ["canonical_coffee_bag_id"], name: "index_shots_on_canonical_coffee_bag_id"
     t.index ["coffee_bag_id"], name: "index_shots_on_coffee_bag_id"
     t.index ["created_at"], name: "index_shots_on_created_at"
+    t.index ["espresso_notes"], name: "index_shots_on_espresso_notes", opclass: :gin_trgm_ops, using: :gin
     t.index ["grinder_model"], name: "index_shots_on_grinder_model", opclass: :gin_trgm_ops, using: :gin
     t.index ["profile_title"], name: "index_shots_on_profile_title", opclass: :gin_trgm_ops, using: :gin
     t.index ["sha"], name: "index_shots_on_sha"
