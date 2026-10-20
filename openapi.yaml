@@ -560,7 +560,7 @@ paths:
       tags: [Roasters]
       summary: Update a roaster
       operationId: updateRoaster
-      description: Updates one of your roasters. Requires premium. Send JSON, or `multipart/form-data` to upload an image.
+      description: Updates one of your roasters. Requires premium. Send JSON, or `multipart/form-data` to upload an image. Renaming a roaster copies its coffee bags' values onto their shots in the background, the same way as setting `coffee_bag_id` on a shot. This updates `updated_at` on the shots that change.
       security:
         - OAuth2: [write]
         - BasicAuth: []
@@ -727,6 +727,8 @@ paths:
         Updates one of your coffee bags. Requires premium. Send JSON, or `multipart/form-data` to upload an image.
 
         To archive a finished bag, set `archived_at`; set it to `null` to restore the bag.
+
+        Changing `name`, `roast_date`, `roast_level`, `roaster_id`, or `canonical_coffee_bag_id` copies the bag's values onto its shots in the background, the same way as setting `coffee_bag_id` on a shot. This updates `updated_at` on the shots that change.
       security:
         - OAuth2: [write]
         - BasicAuth: []
