@@ -241,6 +241,18 @@ module Airtable
       assert_equal "receheiFe9F63F8EG", shot.airtable_id
     end
 
+    test "it reuploads the shot when its airtable record is not found" do
+      stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}/#{@shot.airtable_id}")
+        .to_return(status: 403, body: {error: {type: "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND", message: "Invalid permissions, or the requested model was not found."}}.to_json)
+      stub = stub_request(:patch, "https://api.airtable.com/v0/#{@identity.airtable_info.base_id}/#{@identity.airtable_info.tables["Shots"]["id"]}")
+        .to_return(status: 200, body: {records: [{id: "recNew", fields: {"ID" => @shot.id}}]}.to_json)
+
+      Airtable::Shots.new(@user).upload(@shot)
+
+      assert_requested(stub)
+      assert_equal "recNew", @shot.reload.airtable_id
+    end
+
     test "it does not upload the shot when its coffee bag fails to upload" do
       roaster = create(:roaster, user: @user, airtable_id: "recRoaster")
       @shot.update!(coffee_bag: create(:coffee_bag, roaster:))

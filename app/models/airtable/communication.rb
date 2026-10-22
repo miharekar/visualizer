@@ -10,6 +10,11 @@ module Airtable
       else
         upload_multiple(record.class.where(id: record.id))
       end
+    rescue Airtable::DataError => e
+      raise unless record.airtable_id && e.matches_error_type?("INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND")
+
+      record.update_columns(airtable_id: nil) # rubocop:disable Rails/SkipsModelValidations
+      upload_multiple(record.class.where(id: record.id))
     end
 
     def upload_multiple(records)
