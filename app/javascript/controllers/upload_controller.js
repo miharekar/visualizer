@@ -37,7 +37,8 @@ export default class extends Controller {
     try {
       for (let i = 0; i < files.length; i += BATCH_SIZE) {
         const formData = new FormData()
-        files.slice(i, i + BATCH_SIZE).forEach(file => formData.append("files[]", file))
+        const batch = await Promise.all(files.slice(i, i + BATCH_SIZE).map(async file => new File([await file.arrayBuffer()], file.name)))
+        batch.forEach(file => formData.append("files[]", file))
 
         const response = await post(this.formTarget.action + "?drag=1", {
           body: formData,
@@ -48,7 +49,7 @@ export default class extends Controller {
       }
       Turbo.visit("/shots")
     } catch (error) {
-      appsignal.sendError(error)
+      if (!(error instanceof TypeError)) appsignal.sendError(error)
       this.showError()
     } finally {
       this.loaderTarget.classList.add("hidden")

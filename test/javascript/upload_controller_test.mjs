@@ -24,6 +24,7 @@ async function upload(fileCount, statuses = []) {
       assert.equal(url, "/shots?drag=1")
       result.batches.push(body.getAll("files[]").length)
       const status = statuses.shift() ?? 200
+      if (status instanceof Error) throw status
       return { ok: status < 300, unprocessableEntity: status === 422 }
     }
   }
@@ -35,7 +36,7 @@ async function upload(fileCount, statuses = []) {
     formTarget: { action: "/shots" },
     errorTarget: { innerHTML: "error" }
   })
-  await controller.upload(Array.from({ length: fileCount }, (_, i) => `${i}.shot`))
+  await controller.upload(Array.from({ length: fileCount }, (_, i) => new File([], `${i}.shot`)))
   delete globalThis.document
   return result
 }
@@ -44,5 +45,6 @@ test("uploads files in batches and stops at the first failed batch", async () =>
   assert.deepEqual(await upload(120), { batches: [50, 50, 20], visits: ["/shots"], errors: [] })
   assert.deepEqual(await upload(120, [422]), { batches: [50], visits: ["/shots"], errors: [] })
   assert.deepEqual(await upload(120, [200, 500]), { batches: [50, 50], visits: [], errors: ["error"] })
+  assert.deepEqual(await upload(120, [200, new TypeError("Failed to fetch")]), { batches: [50, 50], visits: [], errors: ["error"] })
   assert.deepEqual(await upload(0), { batches: [], visits: [], errors: [] })
 })
