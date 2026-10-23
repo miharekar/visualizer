@@ -43,6 +43,16 @@ module Parsers
       assert_in_delta(10.146, shot.information.data["espresso_flow_weight"][0])
     end
 
+    test "parses missing timestamp as current time" do
+      travel_to Time.zone.parse("2026-02-24 10:00:00 UTC") do
+        payload = JSON.parse(File.read("test/files/gaggimate-v1.json")).except("timestamp")
+        shot = Shot.from_file(@user, payload.to_json)
+
+        assert shot.valid?
+        assert_equal Time.utc(2026, 2, 24, 10, 0, 0), shot.start_time
+      end
+    end
+
     test "validates v1 data consistency" do
       shot = new_shot("test/files/gaggimate-v1.json")
 

@@ -11,7 +11,7 @@ module Parsers
     EXTRA_LABELS = %w[espresso_weight espresso_flow_weight]
 
     def parse
-      @start_time = Time.at(json["timestamp"]).utc
+      @start_time = json["timestamp"] ? Time.at(json["timestamp"]).utc : Time.current.utc
       @profile_title = has_profile? ? json.dig("profile", "label") : json["profile"]
       @profile_fields = has_profile? ? json["profile"] : {"label" => json["profile"]}
       prepare_data
