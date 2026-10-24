@@ -150,6 +150,22 @@ lexxy-toolbar {
   @apply block w-full font-medium bg-white border rounded-md inset-shadow-xs sm:text-sm text-neutral-700 dark:text-neutral-300 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 focus:outline-hidden focus:ring-oxford-blue-500 focus:border-oxford-blue-500 focus:shadow-none disabled:opacity-50;
 }
 
+.journal-input {
+  @apply focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-sm text-inherit shadow-none placeholder:text-inherit hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800;
+}
+
+.journal-enjoyment {
+  @apply focus:ring-terracotta-500 h-6 w-9! [appearance:textfield] rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white focus:ring-2 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none;
+}
+
+.journal-link {
+  @apply focus:ring-terracotta-500 block w-full rounded px-2 py-1 text-left hover:bg-neutral-100 focus:ring-2 dark:hover:bg-neutral-800;
+}
+
+.journal-action {
+  @apply rounded p-1;
+}
+
 .standard-file-input {
   @apply block w-full text-sm rounded-md cursor-pointer file:cursor-pointer file:mr-2 file:py-2 file:px-4 file:rounded-md file:text-sm file:font-medium file:bg-oxford-blue-50 file:text-oxford-blue-700 hover:file:bg-oxford-blue-100 dark:file:bg-oxford-blue-900/10 dark:file:text-oxford-blue-400 dark:hover:file:bg-oxford-blue-900/20 text-neutral-700 dark:text-neutral-300 dark:bg-neutral-800 focus:outline-none;
 }

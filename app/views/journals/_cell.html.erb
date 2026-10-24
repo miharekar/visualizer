@@ -4,15 +4,15 @@
 <td id="<%= cell_id %>" data-column="<%= field %>"<% if local_assigns[:error].present? %> data-unsaved data-failed<% end %> class="p-1 <%= {"coffee" => "min-w-80", "bean_type" => "w-80 min-w-80 max-w-80"}.fetch(field, "max-w-64") %> <%= 'text-center' if enjoyment %>">
   <% if field == "actions" %>
     <div class="flex items-center gap-1 text-neutral-500 dark:text-neutral-300">
-      <a href="<%= shot_path(shot) %>" title="View shot" class="rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800" data-turbo-frame="_top">
+      <a href="<%= shot_path(shot) %>" title="View shot" class="journal-action hover:bg-neutral-100 dark:hover:bg-neutral-800" data-turbo-frame="_top">
         <%= journal_icon("eye.svg") %>
       </a>
-      <a href="<%= edit_shot_path(shot) %>" title="Edit shot" class="rounded p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800" data-turbo-frame="_top">
+      <a href="<%= edit_shot_path(shot) %>" title="Edit shot" class="journal-action hover:bg-neutral-100 dark:hover:bg-neutral-800" data-turbo-frame="_top">
         <%= journal_icon("pencil.svg") %>
       </a>
       <form class="button_to" method="post" action="<%= shot_path(shot) %>">
         <input type="hidden" name="_method" value="delete">
-        <button type="submit" title="Delete shot" class="cursor-pointer rounded p-1 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950" data-action="modal#confirm" data-title="Delete Shot" data-text="Permanently delete this shot?">
+        <button type="submit" title="Delete shot" class="journal-action cursor-pointer hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950" data-action="modal#confirm" data-title="Delete Shot" data-text="Permanently delete this shot?">
           <%= journal_icon("trash.svg") %>
         </button>
       </form>
@@ -22,16 +22,16 @@
       <%= image_tag shot.image.variant(:thumb), class: "h-8 w-10 rounded object-cover", alt: "Shot photo", loading: "lazy" %>
     <% end %>
   <% elsif editable && (field == "coffee" || field == "tag_list" || Journal::NOTES.include?(field) || Journal::DROPDOWN_FIELDS.include?(field)) %>
-    <a href="<%= edit_journal_path(ids: [shot.id], field: field) %>" title="Edit <%= journal.columns[field] %>" class="focus:ring-terracotta-500 block w-full rounded px-2 py-1 text-left hover:bg-neutral-100 focus:ring-2 dark:hover:bg-neutral-800" data-turbo-frame="journal-editor" data-journal-cell-control>
+    <a href="<%= edit_journal_path(ids: [shot.id], field: field) %>" title="Edit <%= journal.columns[field] %>" class="journal-link" data-turbo-frame="journal-editor" data-journal-cell-control>
       <span class="<%= field == 'coffee' ? 'line-clamp-1' : 'block truncate' %>"><%= journal_display(shot, field).presence || "—" %></span>
     </a>
   <% elsif editable %>
     <% value = local_assigns.fetch(:value) { journal.value(shot, field) } %>
     <% options = journal_input_options(field) %>
     <% if enjoyment %>
-      <input id="<%= cell_id %>_value" name="value" title="<%= journal.columns[field] %>" inputmode="numeric" enterkeyhint="go" placeholder="—"<% if !value.nil? %> value="<%= value %>"<% end %><% if value.present? %> style="background-color: <%= enjoyment_hex(value.to_i) %>;"<% end %> type="<%= options[:type] %>"<% if options[:min] %> min="<%= options[:min] %>"<% end %><% if options[:max] %> max="<%= options[:max] %>"<% end %><% if options[:step] %> step="<%= options[:step] %>"<% end %> class="focus:ring-terracotta-500 h-6 w-9! [appearance:textfield] rounded border-none bg-neutral-100 px-0! py-0! text-center! text-white focus:ring-2 dark:bg-neutral-800 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" data-journal-cell-control>
+      <input id="<%= cell_id %>_value" name="value" title="<%= journal.columns[field] %>" inputmode="numeric" enterkeyhint="go" placeholder="—"<% if !value.nil? %> value="<%= value %>"<% end %><% if value.present? %> style="background-color: <%= enjoyment_hex(value.to_i) %>;"<% end %> type="<%= options[:type] %>"<% if options[:min] %> min="<%= options[:min] %>"<% end %><% if options[:max] %> max="<%= options[:max] %>"<% end %><% if options[:step] %> step="<%= options[:step] %>"<% end %> class="journal-enjoyment" data-journal-cell-control>
     <% else %>
-      <input id="<%= cell_id %>_value" name="value" title="<%= journal.columns[field] %>" enterkeyhint="go" placeholder="—"<% if !value.nil? %> value="<%= value %>"<% end %> type="<%= options[:type] %>"<% if options[:min] %> min="<%= options[:min] %>"<% end %><% if options[:max] %> max="<%= options[:max] %>"<% end %><% if options[:step] %> step="<%= options[:step] %>"<% end %> style="width: <%= [value.to_s.length, 1].max + 3 %>ch" class="focus:border-terracotta-500 focus:ring-terracotta-500 max-w-64 min-w-0 rounded border border-transparent bg-transparent px-2 py-1 text-sm text-inherit shadow-none placeholder:text-inherit hover:border-neutral-200 focus:bg-white focus:ring-1 focus:outline-none dark:hover:border-neutral-700 dark:focus:bg-neutral-800" data-journal-cell-control>
+      <input id="<%= cell_id %>_value" name="value" title="<%= journal.columns[field] %>" enterkeyhint="go" placeholder="—"<% if !value.nil? %> value="<%= value %>"<% end %> type="<%= options[:type] %>"<% if options[:min] %> min="<%= options[:min] %>"<% end %><% if options[:max] %> max="<%= options[:max] %>"<% end %><% if options[:step] %> step="<%= options[:step] %>"<% end %> style="width: <%= [value.to_s.length, 1].max + 3 %>ch" class="journal-input" data-journal-cell-control>
     <% end %>
   <% else %>
     <span class="block px-2 py-1 whitespace-nowrap"><%= journal_display(shot, field).presence || "—" %></span>
