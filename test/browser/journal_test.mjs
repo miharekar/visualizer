@@ -65,7 +65,8 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
         window.journalSubmitEnded = false
         window.releaseJournalBody = null
       }, kind)
-    const bodyHeld = () => page.waitForFunction(() => window.releaseJournalBody && window.journalSubmitEnded)
+    const bodyHeld = () => page.waitForFunction(() => window.releaseJournalBody)
+    const editorBodyHeld = () => page.waitForFunction(() => window.releaseJournalBody && window.journalSubmitEnded)
     const releaseBody = () => page.evaluate(() => window.releaseJournalBody?.())
     const check = async (name, fn) => {
       await t.test(name, async () => {
@@ -111,7 +112,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await ratings.first().press("Enter")
       await bodyHeld()
       assert.equal(await oldInput.evaluate(el => el.readOnly), true, "cell unlocked before stream replacement")
-      assert.equal(await oldInput.evaluate(el => el.form.hasAttribute("data-saving")), true, "pending form lost data-saving")
+      assert.equal(await oldInput.evaluate(el => el.closest("td").hasAttribute("data-saving")), true, "pending cell lost data-saving")
       await page.getByRole("button", { name: "Columns", exact: true }).click()
       const panel = page.locator("#journal-columns-panel")
       await panel.getByRole("button", { name: "Apply", exact: true }).click()
@@ -228,7 +229,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await page.getByText("Not saved. Press Enter to retry.", { exact: true }).waitFor()
       assert.equal(await ratings.first().inputValue(), "87")
       assert.equal(await ratings.first().evaluate(el => el.readOnly), false)
-      assert.equal(await ratings.first().evaluate(el => el.form.hasAttribute("data-unsaved")), true, "failed value must mark form data-unsaved")
+      assert.equal(await ratings.first().evaluate(el => el.closest("td").hasAttribute("data-unsaved")), true, "failed value must mark cell data-unsaved")
       await page.getByRole("button", { name: "Columns", exact: true }).click()
       const panel = page.locator("#journal-columns-panel")
       const keepEdit = page.waitForEvent("dialog").then(prompt => prompt.dismiss())
@@ -292,7 +293,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await dialog.locator("li").filter({ hasText: "Browser Managed Coffee" }).click()
       await holdBody()
       await dialog.getByRole("button", { name: "Save", exact: true }).click()
-      await bodyHeld()
+      await editorBodyHeld()
       assert.equal(await dialog.getByRole("button", { name: "Cancel", exact: true }).isDisabled(), true, "Cancel enabled before stream replacement")
       assert.equal(await page.locator("#journal-coffee-bag").isDisabled(), true)
       await page.keyboard.press("Escape")
@@ -548,7 +549,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       assert.equal(await ratings.first().evaluate(el => el === document.activeElement), true)
       assert.equal(await ratings.first().evaluate(el => el.validity.rangeOverflow), true)
       assert.equal(await ratings.first().inputValue(), "101")
-      assert.equal(await ratings.first().evaluate(el => el.readOnly || el.form.hasAttribute("data-saving")), false)
+      assert.equal(await ratings.first().evaluate(el => el.readOnly || el.closest("td").hasAttribute("data-saving")), false)
       assert.equal(saves, 0)
       await ratings.first().fill("70")
       const duration = page.locator('td[data-column="duration"] input[name="value"]').first()

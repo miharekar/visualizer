@@ -38,11 +38,24 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#journal-results tr##{dom_id(@shot, :journal)}" do
       assert_equal Journal.new(@user).visible_columns, css_select("td[data-column]").pluck("data-column")
       Journal.new(@user).visible_columns.each do |field|
-        assert_select "turbo-frame##{Journal.cell_id(@shot, field)}", count: 1
+        assert_select "td##{Journal.cell_id(@shot, field)}[data-column='#{field}']", count: 1
       end
+      assert_select "td[data-column] turbo-frame, [data-controller], form:not([action='#{shot_path(@shot)}'])", count: 0
+      assert_select "form", count: 1
+      assert_select "td[data-column='actions'] form[action='#{shot_path(@shot)}'] input[name='_method'][value='delete']", count: 1
     end
+    assert_select "tr##{dom_id(@shot, :journal)}[data-id='#{@shot.id}']", count: 1
+    assert_select "turbo-frame#journal-results table[data-controller='journal-table'][data-journal-table-url-value='#{journal_path}'][data-action='input->journal-table#dirty change->journal-table#save keydown->journal-table#navigate']", count: 1
     assert_select "td[data-column='espresso_notes'], td[data-column='private_notes'], td[data-column='tag_list']", count: 0
     assert_select "[method='morph'], [refresh='morph'], meta[name='turbo-refresh-method'][content='morph']", count: 0
+  end
+
+  test "rows render without any visible column" do
+    @user.update!(journal_columns: [])
+    get shots_url
+    assert_response :success
+    assert_select "tr##{dom_id(@shot, :journal)} td", count: 1
+    assert_select "tr##{dom_id(@shot, :journal)} td[data-column]", count: 0
   end
 
   test "GET searches return HTML results and pagination targets their search scoped IDs" do
@@ -107,10 +120,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     update_field("bean_weight", "20")
     assert_response :success
     assert_equal "text/vnd.turbo-stream.html", response.media_type
-    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'bean_weight')}']"
-    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'ratio')}']"
+    assert_select "turbo-stream[action='replace'][target='#{Journal.cell_id(@shot, 'bean_weight')}'] td##{Journal.cell_id(@shot, 'bean_weight')}"
+    assert_select "turbo-stream[action='replace'][target='#{Journal.cell_id(@shot, 'ratio')}']"
     assert_select "turbo-stream[target='#{Journal.cell_id(@shot, 'drink_weight')}']", count: 0
-    assert_select "turbo-stream[action='replace']", count: 0
+    assert_select "turbo-stream[action='update']", count: 0
     assert_equal "20", @shot.reload.bean_weight
     assert_equal "<p><strong>Sweet</strong></p>", @shot.rich_text_html(:espresso_notes)
   end
@@ -138,7 +151,10 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     update_field("espresso_enjoyment", "101")
     assert_response :unprocessable_content
     assert_equal "text/vnd.turbo-stream.html", response.media_type
-    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'espresso_enjoyment')}']"
+    cell_id = Journal.cell_id(@shot, "espresso_enjoyment")
+    assert_select "turbo-stream[action='replace'][target='#{cell_id}']", count: 1
+    assert_select "turbo-stream td##{cell_id}[data-unsaved][data-failed] input##{cell_id}_value[value='101']", count: 1
+    assert_select "turbo-stream td##{cell_id} > p", text: /Espresso enjoyment must be less than or equal to 100/
     assert_includes response.body, "101"
     assert_includes response.body, "Espresso enjoyment must be less than or equal to 100"
   end
@@ -222,7 +238,7 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal bag.id, @shot.reload.coffee_bag_id
     assert_equal bag.name, @shot.bean_type
-    assert_select "turbo-stream[action='update'][target='#{Journal.cell_id(@shot, 'coffee')}']"
+    assert_select "turbo-stream[action='replace'][target='#{Journal.cell_id(@shot, 'coffee')}']"
     assert_select "turbo-stream[target='#{Journal.cell_id(@shot, 'roast_date')}'], turbo-stream[target='#{Journal.cell_id(@shot, 'bean_weight')}']", count: 0
     assert_equal "#{bag.name} - #{bag.roaster.name} (#{bag.roast_date.to_fs(:long)})", Journal.new(@user).value(@shot, "coffee")
     update_field("bean_brand", "Override")
@@ -464,15 +480,16 @@ class JournalsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 85, Journal.new(@user).value(@shot, "espresso_enjoyment")
   end
 
-  test "cell forms keep their shot and field in the URL and rely on Turbo's CSRF header" do
+  test "cells carry no form or token and rely on the CSRF header" do
     ActionController::Base.allow_forgery_protection = true
     get shots_url
-    assert_select "td[data-column='bean_weight'] form[action='#{journal_path(ids: [@shot.id], field: 'bean_weight')}']" do
-      assert_select "input", count: 2
-      assert_select "input[name='_method'][value='patch']"
-      assert_select "input[name='value'][value='18']"
+    cell_id = Journal.cell_id(@shot, "bean_weight")
+    assert_select "td##{cell_id}[data-column='bean_weight']" do
+      assert_select "form", count: 0
+      assert_select "input", count: 1
+      assert_select "input##{cell_id}_value[name='value'][value='18'][enterkeyhint='go']"
     end
-    assert_select "td form input[name='authenticity_token']", count: 0
+    assert_select "td input[name='authenticity_token']", count: 0
     token = css_select("meta[name='csrf-token']").first["content"]
 
     patch journal_url(ids: [@shot.id], field: "bean_weight"), params: {value: "19"}, headers: stream_headers
