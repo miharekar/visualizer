@@ -11,6 +11,11 @@ module JournalHelper
     end
   end
 
+  def journal_icon(name)
+    icons = @journal_icons ||= {}
+    icons[name] ||= inline_svg_tag(name, class: "size-4")
+  end
+
   def journal_display(shot, field)
     if Journal::NOTES.include?(field)
       shot[field].to_s.truncate(90)

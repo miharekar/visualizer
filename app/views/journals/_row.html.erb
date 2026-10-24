@@ -4,9 +4,10 @@
   </td>
   <% journal.visible_columns.each do |field| %>
     <td data-column="<%= field %>" class="p-1 <%= {"coffee" => "min-w-80", "bean_type" => "w-80 min-w-80 max-w-80"}.fetch(field, "max-w-64") %> <%= 'text-center' if field == 'espresso_enjoyment' %>">
-      <%= turbo_frame_tag Journal.cell_id(shot, field) do %>
-        <%= render "journals/cell", shot: shot, field: field %>
-      <% end %>
+      <% cell_id = Journal.cell_id(shot, field) %>
+      <turbo-frame id="<%= cell_id %>">
+        <%= render "journals/cell", shot: shot, field: field, cell_id: cell_id %>
+      </turbo-frame>
     </td>
   <% end %>
 </tr>
