@@ -10,7 +10,7 @@ registerHooks({
 })
 const { default: Selection } = await import("../../app/javascript/controllers/journal_selection_controller.js")
 
-test("selection caps at 100, builds compare link, and resets", () => {
+test("selection caps at 100, builds compare link, and resets", async () => {
   const selection = new Selection()
   const target = () => ({ classList: { toggle() {} } })
   selection.hasCountTarget = selection.hasAllTarget = true
@@ -29,5 +29,20 @@ test("selection caps at 100, builds compare link, and resets", () => {
   assert.equal(selection.compareTarget.href, "/shots/shot-0/compare/shot-1")
   selection.checkboxTargets.splice(1, 1)
   selection.checkboxTargetDisconnected()
+  await null
   assert.equal(selection.countTarget.textContent, "1 selected")
+})
+
+test("rows connecting and disconnecting update the selection once per batch", async () => {
+  const selection = new Selection()
+  let updates = 0
+  selection.select = () => updates++
+  for (let index = 0; index < 30; index++) selection.checkboxTargetConnected()
+  selection.checkboxTargetDisconnected()
+  assert.equal(updates, 0)
+  await null
+  assert.equal(updates, 1)
+  selection.checkboxTargetConnected()
+  await null
+  assert.equal(updates, 2)
 })
