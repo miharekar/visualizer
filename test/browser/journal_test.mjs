@@ -71,6 +71,7 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
       await t.test(name, async () => {
         await page.goto("/shots")
         await ratings.first().waitFor()
+        await page.waitForFunction(() => !document.querySelector('turbo-frame[id^="journal-cursor-"][src]'))
         try {
           await fn()
         } catch (error) {
@@ -158,10 +159,10 @@ test("journal browser regressions", { timeout: 180000 }, async t => {
     })
 
     await check("stale pagination body cannot append into newer search results", async () => {
-      const oldRows = await page.locator("tbody").getAttribute("id")
       await holdBody("pagination")
-      await page.locator("#journal-results > div.relative.overflow-auto").evaluate(el => (el.scrollTop = el.scrollHeight))
+      await search.fill("Browser Journal")
       await page.waitForFunction(() => window.releaseJournalBody)
+      const oldRows = await page.locator("tbody").getAttribute("id")
       await search.fill("Browser Journal 34")
       await page.waitForFunction(() => document.querySelectorAll("tbody tr").length === 1)
       const newRows = await page.locator("tbody").getAttribute("id")

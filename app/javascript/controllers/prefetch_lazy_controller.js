@@ -3,7 +3,9 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     if (this.element.getAttribute("loading") == "lazy") {
-      this.observer = new IntersectionObserver(this.intersect.bind(this), { rootMargin: "0px 0px 1000px 0px" })
+      const margin = "0px 0px 1000px 0px"
+      const options = "scrollMargin" in IntersectionObserver.prototype ? { scrollMargin: margin } : { rootMargin: margin }
+      this.observer = new IntersectionObserver(this.intersect.bind(this), options)
       this.observer.observe(this.element)
     }
   }
