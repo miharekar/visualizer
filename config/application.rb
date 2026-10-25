@@ -28,6 +28,7 @@ module Visualizer
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_storage.analyzers = []
+    config.active_storage.resolve_model_to_route = :rails_storage_proxy
     config.active_storage.variant_processor = :disabled
     config.exceptions_app = routes
     config.log_tags = %i[request_id remote_ip]
