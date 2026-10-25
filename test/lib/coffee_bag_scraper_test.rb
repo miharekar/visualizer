@@ -21,4 +21,12 @@ class CoffeeBagScraperTest < ActiveSupport::TestCase
 
     assert_raises(ArgumentError) { scraper.__send__(:page_content, "https://93.184.216.34") }
   end
+
+  test "falls back to crawlbase when connection times out" do
+    scraper = CoffeeBagScraper.new(create(:user), "https://93.184.216.34", "request-id")
+    stub_request(:get, "https://93.184.216.34/").to_timeout
+    scraper.define_singleton_method(:crawlbase_content) { |_url| "crawlbase content" }
+
+    assert_equal "crawlbase content", scraper.__send__(:page_content, "https://93.184.216.34")
+  end
 end

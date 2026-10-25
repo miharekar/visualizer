@@ -35,7 +35,7 @@ class CoffeeBagScraper
     raise ArgumentError, "URL must be an HTTP or HTTPS URL" unless uri.is_a?(URI::HTTP) && uri.host.present?
 
     response = get_response(uri)
-    if is_blocked?(response)
+    if response.nil? || is_blocked?(response)
       crawlbase_content(url)
     elsif response.is_a?(Net::HTTPRedirection)
       redirected_url = URI.join(url, response["location"]).to_s
@@ -50,9 +50,11 @@ class CoffeeBagScraper
     addresses = Resolv.getaddresses(uri.host)
     raise ArgumentError, "URL must resolve to a public IP address" if addresses.empty? || addresses.any? { private_address?(it) }
 
-    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", ipaddr: addresses.first) do |http|
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", ipaddr: addresses.first, open_timeout: 10) do |http|
       http.get(uri.request_uri)
     end
+  rescue Net::OpenTimeout
+    nil
   end
 
   def private_address?(address)
