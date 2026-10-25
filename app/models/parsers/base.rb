@@ -25,6 +25,8 @@ module Parsers
           Gaggimate.new(file, json)
         elsif json.key?("profile_name") && json.key?("data")
           Meticulous.new(file, json)
+        elsif json.key?("phases") || json.key?("stages")
+          raise InvalidFile, "This is a profile file, not a shot file."
         else
           DecentJson.new(file, json)
         end
@@ -40,11 +42,24 @@ module Parsers
     def self.parse_json(file, retrying: false)
       JSON.parse(file)
     rescue JSON::ParserError
-      raise InvalidFile, "Could not parse the file." if retrying
+      if retrying
+        store_failed_file(file)
+        raise InvalidFile, "Could not parse the file."
+      end
 
       file = file.force_encoding("UTF-8").scrub.gsub(/[\u0000-\u001F\u007F-\u009F]/, "")
       retrying = true
       retry
+    end
+
+    def self.store_failed_file(file)
+      key = "debug/#{Time.current.iso8601}-#{SecureRandom.hex(4)}"
+      ActiveStorage::Blob.service.upload(key, StringIO.new(file))
+      Appsignal.add_tags(failed_file: key)
+      key
+    rescue StandardError => e
+      Appsignal.report_error(e)
+      nil
     end
 
     def initialize(file, json = nil)
@@ -73,6 +88,8 @@ module Parsers
         shot.information.save if shot.information.persisted?
       elsif file.start_with?("advanced_shot")
         shot.errors.add(:base, :profile_file, message: "This is a profile file, not a shot file")
+      elsif shot.errors.any? { it.type != :over_daily_limit }
+        self.class.store_failed_file(file)
       end
       shot
     end
@@ -90,7 +107,8 @@ module Parsers
     rescue SystemStackError, StandardError => e
       raise if Rails.env.development?
 
-      Appsignal.report_error(e)
+      key = self.class.store_failed_file(file)
+      Appsignal.report_error(e) { it.set_tags(failed_file: key) }
       raise InvalidFile, "Could not parse the file."
     end
 

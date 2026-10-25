@@ -114,6 +114,23 @@ module Parsers
       assert_equal "Could not parse the file.", error.message
     end
 
+    test "rejects GaggiMate and Meticulous profile files" do
+      %w[gaggimate-v1.json meticulous.shot.json].each do |fixture|
+        profile = JSON.parse(File.read("test/files/#{fixture}"))["profile"]
+        error = assert_raises(Parsers::Base::InvalidFile) { Shot.from_file(@user, JSON.generate(profile)) }
+        assert_equal "This is a profile file, not a shot file.", error.message
+      end
+    end
+
+    test "stores files that crash the parser" do
+      file = JSON.generate(temperature: 93, id: SecureRandom.uuid)
+
+      error = assert_raises(Parsers::Base::InvalidFile) { Shot.from_file(@user, file) }
+
+      assert_equal "Could not parse the file.", error.message
+      assert(Dir["#{ActiveStorage::Blob.service.root}/**/debug/*"].any? { File.read(it) == file })
+    end
+
     test "rejects an unsupported JSON shape" do
       payload = {
         author: "Pullograph",
