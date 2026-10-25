@@ -46,4 +46,11 @@ class BadRequestMiddlewareIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :moved_permanently
     assert_redirected_to "http://visualizer.coffee/community?search=coffee"
   end
+
+  test "www requests with characters invalid in URIs are redirected" do
+    get "/", env: {"PATH_INFO" => "/blog/[year]/[month]/[slug]"}
+
+    assert_response :moved_permanently
+    assert_redirected_to "http://visualizer.coffee/blog/[year]/[month]/[slug]"
+  end
 end

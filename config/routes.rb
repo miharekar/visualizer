@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  match "(*any)", to: redirect(subdomain: ""), via: :all, constraints: {subdomain: "www"}
+  match "(*any)", to: ->(env) { [301, {"location" => Rack::Request.new(env).url.sub("://www.", "://")}, []] }, via: :all, constraints: {subdomain: "www"}
 
   if Rails.env.local?
     mount Scalar::UI, at: "/apidocs"
