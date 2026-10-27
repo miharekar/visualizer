@@ -121,6 +121,10 @@ class User < ApplicationRecord
     premium? && identities.by_provider(:airtable).exists?
   end
 
+  def alert_airtable_base_full
+    UserMailer.with(user: self).airtable_base_full.deliver_later if Rails.cache.write("airtable_base_full_alert/#{id}", true, expires_in: 1.day, unless_exist: true)
+  end
+
   def coffee_management_enabled?
     premium? && coffee_management_enabled
   end

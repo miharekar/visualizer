@@ -111,7 +111,7 @@ module Airtable
       Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 5, read_timeout: 10) do |http|
         attrs = [uri, data, headers].compact
         response = http.public_send(method, *attrs)
-        raise DataError.new(data:, response:) unless response.is_a?(Net::HTTPSuccess)
+        raise DataError.new(data:, response:, user:) unless response.is_a?(Net::HTTPSuccess)
 
         JSON.parse(response.body)
       end

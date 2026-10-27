@@ -28,6 +28,11 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "Visualizer Premium Feedback"
   end
 
+  def airtable_base_full
+    @user = params[:user]
+    mail to: @user.email, subject: "Your Airtable base is full"
+  end
+
   def upcoming_renewal
     @user = params[:user]
     mail to: @user.email, subject: "Quick heads-up before your renewal"

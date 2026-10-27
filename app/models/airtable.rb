@@ -5,11 +5,12 @@ module Airtable
   class DataError < StandardError
     prepend MemoWise
 
-    attr_reader :data, :response
+    attr_reader :data, :response, :user
 
-    def initialize(data: nil, response: nil)
+    def initialize(data: nil, response: nil, user: nil)
       @data = data
       @response = response
+      @user = user
       Appsignal.set_custom_data(api_data: data, api_response: airtable_body)
       super(airtable_errors.map { |e| "#{e["type"] || e["error"]}: #{e["message"]}" }.join(", "))
     end

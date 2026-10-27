@@ -1,0 +1,28 @@
+<% content_for(:title) { "Your Airtable base is full" } %>
+<% content_for(:preheader) { "New shots aren’t syncing to Airtable. Free up space, or try Journal." } %>
+<tr>
+  <td style="padding: 24px; background-color: #ffffff; border-radius: 16px">
+    <h1 style="margin: 0 0 24px; color: #171717; font-size: 28px; line-height: 36px">
+      Your Airtable base is full
+    </h1>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      Hi!
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      I tried to sync your latest shot to Airtable, but it said no: your base has hit the record limit of its plan. Until you delete some records or upgrade your Airtable workspace, new shots won’t show up there. Your shots on Visualizer are safe, and once there’s room again the ones that missed out will catch up on their own. I’ll mention this at most once a day.
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      <strong>Or skip the sync with Journal.</strong> Journal puts your shots in an editable table right inside Visualizer. You pick your columns, edit values in place, and set the coffee for up to 100 shots at once. It’s included in your Premium, and with no second tool there’s nothing to sync and no Airtable limit to hit. It’s off by default: flip the Journal toggle on <%= link_to "your shot list", shots_url, class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %> (desktop) or tick it in your <%= link_to "profile settings", edit_profile_url, class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>. The Airtable integration isn’t going anywhere, so keep it if you like it.
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      Read how Journal works in <%= link_to "Bending Tables", update_url("bending-the-tables"), class: "hover-no-underline", style: "color: #db3e27; text-decoration-line: underline", target: "_blank" %>.
+    </p>
+    <p style="margin: 0 0 24px; color: #525252; font-size: 16px; line-height: 24px">
+      Reply to this email if you need a hand, it comes straight to me.
+    </p>
+    <p style="margin: 0; color: #525252; font-size: 16px; line-height: 24px">
+      Thanks for using Visualizer! ☕<br>
+      Miha
+    </p>
+  </td>
+</tr>

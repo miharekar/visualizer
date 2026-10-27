@@ -15,7 +15,7 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user:).newsletter
   end
 
-  %i[black_friday cancelled_premium upcoming_renewal].each do |email|
+  %i[black_friday cancelled_premium upcoming_renewal airtable_base_full].each do |email|
     define_method(email) do
       user = User.order("RANDOM()").first
       UserMailer.with(user:).public_send(email)

@@ -8,6 +8,8 @@ class AirtableJob < ApplicationJob
       delay_jitter = determine_jitter_for_delay(delay, self.class.retry_jitter)
       wait = delay + delay_jitter + 1.minute
       retry_job(wait:, queue: :low)
+    elsif airtable_error.matches_error_type?("TOO_MANY_RECORDS_IN_BASE")
+      airtable_error.user.alert_airtable_base_full
     else
       Appsignal.report_error(airtable_error)
     end

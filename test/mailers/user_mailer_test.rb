@@ -32,6 +32,19 @@ class UserMailerTest < ActionMailer::TestCase
     assert_empty document.css("a[href^='/'], img[src^='/']")
   end
 
+  test "airtable base full email links to Journal and the update" do
+    user = create(:user)
+    email = UserMailer.with(user:).airtable_base_full
+    document = Nokogiri::HTML5(email.body.decoded)
+
+    assert_equal [user.email], email.to
+    assert_equal "Your Airtable base is full", email.subject
+    assert document.at_css("a[href='https://visualizer.test/updates/bending-the-tables']")
+    assert document.at_css("a[href='https://visualizer.test/shots']")
+    assert document.at_css("a[href='https://visualizer.test/profile/edit']")
+    assert_nil document.at_css("a[href*='autumn-cleaning']")
+  end
+
   test "newsletter is not delivered to opted out users" do
     user = create(:user, unsubscribed_from: ["newsletter"])
 
