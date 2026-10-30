@@ -71,7 +71,7 @@ bin/rails tailwindcss:watch # usually handled by bin/dev
 
 Image variants run in the `hotcell` Kamal accessory, built from `hotcell/` and pushed as `ghcr.io/miharekar/visualizer-hotcell:latest`. App deploys never touch it. In development `bin/dev` runs it as the `cell` process; restart that after changing `hotcell/`.
 
-Rebuild and reboot it after changing `hotcell/` or `.ruby-version`, after bumping Hot Cell gems, and periodically for libvips and Debian security patches:
+Rebuild and reboot it after changing `hotcell/` or `.ruby-version`, after bumping Hot Cell gems, and periodically for libvips and Ubuntu security patches:
 
 ```bash
 docker buildx build --pull --no-cache --platform linux/amd64,linux/arm64 --build-arg RUBY_VERSION=$(cat .ruby-version) -t ghcr.io/miharekar/visualizer-hotcell:latest --push hotcell

@@ -3,7 +3,7 @@
 
 # CI and Kamal pass the pinned version from .ruby-version.
 ARG RUBY_VERSION
-FROM docker.io/library/ruby:${RUBY_VERSION:+${RUBY_VERSION}-}slim AS base
+FROM docker.io/rubylang/ruby:${RUBY_VERSION:?}-resolute AS base
 
 LABEL org.opencontainers.image.source=https://github.com/miharekar/visualizer
 LABEL org.opencontainers.image.licenses=MIT
@@ -13,6 +13,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
+  apt-get upgrade -y --no-install-recommends && \
   apt-get install --no-install-recommends -y curl libjemalloc2 ca-certificates postgresql-common && \
   ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
@@ -60,7 +61,8 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 FROM base
 
 # Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
+RUN userdel -r ubuntu && \
+  groupadd --system --gid 1000 rails && \
   useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
 USER 1000:1000
 

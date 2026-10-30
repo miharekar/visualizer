@@ -4,16 +4,17 @@
 # A cell carries a Ruby runtime and every gem in its loaded graph, all inside the blast radius, so treat
 # this file as a budget rather than an inventory. Which tools it holds is what decides its blast radius.
 
-# The base image. This tag is mutable: `ruby:3.4-slim` moves as Debian and Ruby publish patches, so a
-# clean build is only as reproducible and as patched as the tag on the day it runs. Build with
-# `docker build --pull` to always take the newest patched base. If you also need to name the exact image
-# you shipped, pin a digest (`FROM ruby:${RUBY_VERSION}-slim@sha256:…`) and refresh it on a schedule; the
-# image scan in CI is what catches a base that has drifted into known-vulnerable either way.
+# The base image. This tag is mutable: `rubylang/ruby:${RUBY_VERSION}-resolute` moves as Ubuntu and Ruby
+# publish patches, so a clean build is only as reproducible and as patched as the tag on the day it runs.
+# Build with `docker build --pull` to always take the newest patched base. If you also need to name the
+# exact image you shipped, pin a digest (`FROM rubylang/ruby:${RUBY_VERSION}-resolute@sha256:…`) and refresh
+# it on a schedule; the image scan in CI is what catches a base that has drifted into known-vulnerable
+# either way.
 ARG RUBY_VERSION
-FROM docker.io/library/ruby:${RUBY_VERSION:+${RUBY_VERSION}-}slim
+FROM docker.io/rubylang/ruby:${RUBY_VERSION:?}-resolute
 
-# Apply Debian's pending security patches. `--pull` takes the newest base tag, and the tag can still be
-# behind an advisory that is already in `trixie-security`, because only a rebuild by docker-library/ruby
+# Apply Ubuntu's pending security patches. `--pull` takes the newest base tag, and the tag can still be
+# behind an advisory that is already in `resolute-security`, because only a rebuild by ruby/docker-images
 # moves it. Upgrading here makes the image's patch level its own rather than upstream's release cadence,
 # and it is what keeps the image scan in CI passing on a fixable vulnerability the base has not picked up
 # yet. It costs a layer and a little build time on every build.
@@ -25,7 +26,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # The cell's user: no home directory and no shell. Pick a uid your host does not also use for a person —
-# without user namespace remapping this uid is the host's uid, and Debian's own range runs to 60000, so
+# without user namespace remapping this uid is the host's uid, and Ubuntu's own range runs to 60000, so
 # 10001 is not outside it. What isolates the cell is the container, not the number.
 RUN groupadd --gid 10001 hotcell && \
     useradd --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin hotcell
