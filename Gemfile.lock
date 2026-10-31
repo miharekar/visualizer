@@ -87,7 +87,7 @@ GEM
       activesupport
       csv
       prism
-    addressable (2.9.0)
+    addressable (2.9.1)
       public_suffix (>= 2.0.2, < 8.0)
     android_key_attestation (0.3.0)
     annotaterb (4.26.0)
@@ -102,7 +102,7 @@ GEM
     auth-sanitizer (0.2.5)
       version_gem (~> 1.1, >= 1.1.16)
     aws-eventstream (1.4.1)
-    aws-partitions (1.1299.1)
+    aws-partitions (1.1300.0)
     aws-sdk-core (3.263.0)
       aws-eventstream (~> 1, >= 1.4.1)
       aws-partitions (~> 1, >= 1.992.0)
@@ -283,7 +283,7 @@ GEM
       railties (>= 7.1)
       stimulus-rails
       turbo-rails
-    msgpack (1.8.6)
+    msgpack (1.8.7)
     multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
     net-http (0.10.0)

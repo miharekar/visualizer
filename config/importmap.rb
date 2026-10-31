@@ -19,7 +19,7 @@ pin "https" # @2.1.0
 pin "match-sorter" # @8.3.0
 pin "remove-accents" # @0.5.0
 pin "stimulus-autocomplete" # @3.1.0
-pin "tslib" # @2.8.1
+pin "tslib" # @2.9.1
 
 pin_all_from "app/javascript/channels", under: "channels"
 pin_all_from "app/javascript/controllers", under: "controllers"
