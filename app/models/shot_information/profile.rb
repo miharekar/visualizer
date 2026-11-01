@@ -8,16 +8,31 @@ class ShotInformation
     TCL_ESCAPES = {"\n" => "\\n", "\t" => "\\t", "\r" => "\\r"}.freeze
     CSV_PROFILE_HEADERS = %w[information_type elapsed pressure current_total_shot_weight flow_in flow_out water_temperature_boiler water_temperature_in water_temperature_basket metatype metadata comment].freeze
 
+    LEGACY_PROFILE_DEFAULTS = {
+      "settings_profile_type" => "settings_2c", "espresso_hold_time" => 15, "preinfusion_time" => 20, "espresso_pressure" => 6.0, "espresso_decline_time" => 30, "pressure_end" => 4.0,
+      "flow_profile_preinfusion" => 4, "flow_profile_preinfusion_time" => 5, "flow_profile_hold" => 2, "flow_profile_hold_time" => 8, "flow_profile_decline" => 1.2, "flow_profile_decline_time" => 17,
+      "flow_profile_minimum_pressure" => 4, "preinfusion_flow_rate" => 4, "preinfusion_stop_pressure" => 4.0, "final_desired_shot_volume" => 42, "final_desired_shot_weight" => 42,
+      "maximum_pressure" => 0, "maximum_flow" => 0, "maximum_pressure_range_advanced" => 0.6, "maximum_flow_range_advanced" => 0.6, "maximum_pressure_range_default" => 0.9,
+      "maximum_flow_range_default" => 1.0, "espresso_temperature_steps_enabled" => 0
+    }.freeze
+    LEGACY_STEP_NUMBERS = %w[temperature pressure flow seconds volume weight].freeze
+    LEGACY_STEP_EXTRAS = %w[pump_mode power mode_max_pressure lever_spring lever_give reserved].freeze
+    LEGACY_EXIT_DEFAULTS = {"exit_pressure_over" => 0, "exit_pressure_under" => 0, "exit_flow_over" => 0, "exit_flow_under" => 0}.freeze
+    LEGACY_EXIT_TYPES = %w[pressure flow power].freeze
+    LEGACY_EXIT_CONDITIONS = %w[over under].freeze
+
     def has_profile?
-      tcl_profile_fields.present? || profile_fields.present?
+      stored_profile_values? || json_steps.present?
     end
 
     memo_wise def tcl_profile_fields
       tcl_profile_fields = profile_fields.except("json")
-      return if tcl_profile_fields.blank?
-      return unless %w[profile_notes advanced_shot].all? { tcl_profile_fields.key?(it) }
 
-      tcl_profile_fields
+      if json_steps.present? && (tcl_profile_fields["advanced_shot"].nil? || !stored_profile_values?)
+        legacy_fields_from_json
+      elsif stored_profile_values? && %w[profile_notes advanced_shot].all? { tcl_profile_fields.key?(it) }
+        tcl_profile_fields
+      end
     end
 
     def tcl_profile
@@ -30,7 +45,7 @@ class ShotInformation
     end
 
     def json_profile
-      if profile_fields.key?("json")
+      if profile_fields["json"].is_a?(Hash)
         json = {}
         JSON_PROFILE_KEYS.each do |key|
           v = profile_fields["json"][key]
@@ -38,7 +53,7 @@ class ShotInformation
           json[key] = v
         end
       else
-        json = profile_fields
+        json = profile_fields.except("json")
       end
       JSON.pretty_generate(json)
     end
@@ -74,6 +89,61 @@ class ShotInformation
     end
 
     private
+
+    def stored_profile_values?
+      profile_fields.except("json").compact_blank.present?
+    end
+
+    def json_steps
+      steps = profile_fields["json"]["steps"] if profile_fields["json"].is_a?(Hash)
+      steps if steps.is_a?(Array) && steps.all?(Hash)
+    end
+
+    def legacy_fields_from_json
+      json = profile_fields["json"]
+      temperature = json_steps.first["temperature"].presence || 0
+
+      fields = LEGACY_PROFILE_DEFAULTS.merge(
+        "profile_title" => json["title"],
+        "author" => json["author"],
+        "profile_notes" => json["notes"],
+        "beverage_type" => json["beverage_type"].presence || "espresso",
+        "profile_language" => json["lang"].presence || "en",
+        "tank_desired_water_temperature" => json["tank_temperature"].presence || 0,
+        "final_desired_shot_weight_advanced" => json["target_weight"].presence || 0,
+        "final_desired_shot_volume_advanced" => json["target_volume"].presence || 0,
+        "final_desired_shot_volume_advanced_count_start" => json["target_volume_count_start"].presence || 0,
+        "espresso_temperature" => temperature,
+        "advanced_shot" => json_steps.map { tcl_element(legacy_step(it)) }.join(" ")
+      )
+      4.times { fields["espresso_temperature_#{it}"] = temperature }
+      fields["profile_filename"] = json["reference_file"] if json["reference_file"].present?
+      fields
+    end
+
+    def legacy_step(step)
+      legacy = {"name" => step["name"], "sensor" => step["sensor"].presence || "coffee", "pump" => step["pump"].presence || "pressure", "transition" => step["transition"].presence || "fast"}
+      LEGACY_STEP_NUMBERS.each { legacy[it] = step[it].presence || 0 }
+      legacy.merge!(legacy_exit(step["exit"]), legacy_limiter(step["limiter"]), step.slice(*LEGACY_STEP_EXTRAS).compact_blank)
+      legacy.map { |key, value| "#{key} #{tcl_element(value)}" }.join(" ")
+    end
+
+    def legacy_exit(exit)
+      if exit.is_a?(Hash) && LEGACY_EXIT_TYPES.include?(exit["type"]) && LEGACY_EXIT_CONDITIONS.include?(exit["condition"])
+        key = "#{exit["type"]}_#{exit["condition"]}"
+        LEGACY_EXIT_DEFAULTS.merge("exit_if" => 1, "exit_type" => key, "exit_#{key}" => exit["value"].presence || 0)
+      else
+        LEGACY_EXIT_DEFAULTS.merge("exit_if" => 0)
+      end
+    end
+
+    def legacy_limiter(limiter)
+      if limiter.is_a?(Hash)
+        {"max_flow_or_pressure" => limiter["value"].presence || 0, "max_flow_or_pressure_range" => limiter["range"].presence || 0.6}
+      else
+        {"max_flow_or_pressure" => 0, "max_flow_or_pressure_range" => 0.6}
+      end
+    end
 
     def tcl_element(value)
       value = value.blank? ? "" : value.to_s

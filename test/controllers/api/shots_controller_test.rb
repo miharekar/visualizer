@@ -181,6 +181,50 @@ module Api
       assert_equal "Only for me", json_response["private_notes"]
     end
 
+    test "shot without a profile has no profile_url and profile download is rejected" do
+      shot = FactoryBot.create(:shot, :with_information, user:)
+      shot.information.update!(profile_fields: Parsers::Base::PROFILE_FIELDS.index_with(nil).merge("json" => nil))
+
+      get api_shot_url(shot), headers: auth_headers(user), as: :json
+      assert_response :success
+      assert_not_includes response.parsed_body.keys, "profile_url"
+
+      get api_shot_profile_url(shot), headers: auth_headers(user)
+      assert_response :unprocessable_content
+      assert_equal "Shot does not have a profile", response.parsed_body["error"]
+
+      get api_shot_profile_url(shot, format: :json), headers: auth_headers(user)
+      assert_response :unprocessable_content
+
+      shot.information.update!(profile_fields: {"profile_title" => "Foo", "profile_notes" => "", "advanced_shot" => "{}"})
+      get api_shot_url(shot), headers: auth_headers(user), as: :json
+      assert_includes response.parsed_body.keys, "profile_url"
+    end
+
+    test "profile download serves tcl for a json-only decent shot" do
+      shot = FactoryBot.create(:shot, :with_information, user:)
+      json = {"title" => "Simple", "steps" => [{"name" => "fill", "pump" => "flow", "flow" => 8, "seconds" => 20, "temperature" => 88}]}
+      shot.information.update!(profile_fields: Parsers::Base::PROFILE_FIELDS.index_with(nil).merge("json" => json))
+
+      get api_shot_url(shot), headers: auth_headers(user), as: :json
+      assert_includes response.parsed_body.keys, "profile_url"
+
+      get api_shot_profile_url(shot), headers: auth_headers(user)
+      assert_response :success
+      assert_equal "application/x-tcl", response.media_type
+      assert_includes response.body, "settings_profile_type settings_2c"
+      assert_includes response.body, "espresso_hold_time 15"
+    end
+
+    test "profile download serves json for a gaggimate-style shot" do
+      shot = FactoryBot.create(:shot, :with_information, user:)
+      shot.information.update!(profile_fields: {"label" => "Foo"})
+
+      get api_shot_profile_url(shot), headers: auth_headers(user)
+      assert_response :success
+      assert_equal "application/json", response.media_type
+    end
+
     test "show returns tasting assessment data when present" do
       shot = FactoryBot.create(
         :shot,
