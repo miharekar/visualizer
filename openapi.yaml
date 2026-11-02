@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Visualizer API
-  version: "1.20.0"
+  version: "1.21.0"
   description: |
     REST API for Visualizer: upload and read espresso shots, and manage roasters and coffee bags.
 
@@ -15,6 +15,8 @@ info:
     Use OAuth for anything you distribute, so your app never handles Visualizer passwords. Access tokens expire after one week; use the refresh token to get a new one.
 
     Send OAuth access tokens in the `Authorization: Bearer` header. Query-string and form parameters such as `access_token` aren't accepted.
+
+    PKCE (RFC 7636) is supported and optional, S256 only. Send `code_challenge` and `code_challenge_method=S256` to `/oauth/authorize`, then `code_verifier` to `/oauth/token`. Once you send a challenge, the token request needs the verifier. Mobile, desktop and browser apps can't keep a secret, so register them as non-confidential and use PKCE.
 
     ### Scopes
 
@@ -856,9 +858,10 @@ components:
       description: Your Visualizer email and password.
     OAuth2:
       type: oauth2
-      description: Authorization code flow. Register an app at https://visualizer.coffee/oauth/applications.
+      description: Authorization code flow, with optional PKCE (S256). Register an app at https://visualizer.coffee/oauth/applications.
       flows:
         authorizationCode:
+          x-usePkce: SHA-256
           authorizationUrl: https://visualizer.coffee/oauth/authorize
           tokenUrl: https://visualizer.coffee/oauth/token
           refreshUrl: https://visualizer.coffee/oauth/token

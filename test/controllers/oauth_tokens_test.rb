@@ -20,4 +20,40 @@ class OauthTokensTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert response.parsed_body["access_token"].present?
   end
+
+  test "authorization code with PKCE needs the right verifier" do
+    verifier = SecureRandom.urlsafe_base64(32)
+    challenge = Base64.urlsafe_encode64(Digest::SHA256.digest(verifier), padding: false)
+    @application.update!(confidential: false)
+    grant = create_grant(code_challenge: challenge, code_challenge_method: "S256")
+
+    post oauth_token_url, params: token_params(grant, code_verifier: "wrong")
+
+    assert_response :bad_request
+    assert_equal "invalid_grant", response.parsed_body["error"]
+
+    post oauth_token_url, params: token_params(grant, code_verifier: verifier)
+
+    assert_response :success
+    assert response.parsed_body["access_token"].present?
+  end
+
+  test "authorization code without PKCE works with client secret" do
+    grant = create_grant
+
+    post oauth_token_url, params: token_params(grant, client_secret: @application.plaintext_secret)
+
+    assert_response :success
+    assert response.parsed_body["access_token"].present?
+  end
+
+  private
+
+  def create_grant(**attributes)
+    Doorkeeper::AccessGrant.create!(application: @application, resource_owner_id: create(:user).id, scopes: "read", expires_in: 10.minutes, redirect_uri: @application.redirect_uri, **attributes)
+  end
+
+  def token_params(grant, **extra)
+    {grant_type: "authorization_code", code: grant.plaintext_token, redirect_uri: @application.redirect_uri, client_id: @application.uid}.merge(extra)
+  end
 end
