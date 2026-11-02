@@ -1,0 +1,74 @@
+<%= content_for :title, "PKCE support for your Visualizer OAuth app" %>
+<%= content_for :preheader, "Visualizer's OAuth server now supports PKCE (optional, S256 only)." %>
+<tr>
+  <td class="sm-px-0" style="width: 100%; padding-left: 24px; padding-right: 24px; text-align: left">
+    <table style="width: 100%;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+          <table style="width: 100%;" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="border-radius: 4px; background-color: #fff; padding: 24px; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05)">
+                <h1 style="margin: 0 0 24px; font-size: 28px; line-height: 32px; color: #000">
+                  PKCE support for your OAuth&nbsp;app
+                </h1>
+                <p style="margin: 0 0 14px; font-size: 16px; color: #000">
+                  You’re getting this because you registered an OAuth app on Visualizer: <%= @applications.map(&:name).to_sentence %>.
+                </p>
+                <p style="margin: 0 0 14px; font-size: 16px; color: #000">
+                  What’s new: Visualizer’s OAuth server now supports PKCE (<a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://datatracker.ietf.org/doc/html/rfc7636">RFC 7636</a>), S256 only. It’s optional. If your app uses the standard authorization code flow with a client secret, you don’t need to change anything.
+                </p>
+                <p style="margin: 0 0 10px; font-size: 16px; color: #000">
+                  What’s changing: until now PKCE parameters were ignored. Now they are checked whenever they are sent. These requests now fail:
+                </p>
+                <ul style="margin: 0 0 14px 20px; padding: 0; font-size: 16px; color: #000">
+                  <li style="margin: 0 0 8px;">A code_challenge without code_challenge_method, or with plain: /oauth/authorize shows an error page (HTTP 400, “The code_challenge_method must be S256.”) instead of redirecting back to your app.</li>
+                  <li style="margin: 0 0 8px;">A code_challenge at authorize followed by a missing code_verifier at /oauth/token: invalid_request.</li>
+                  <li style="margin: 0 0 8px;">A code_challenge at authorize followed by a wrong code_verifier at /oauth/token: invalid_grant.</li>
+                  <li style="margin: 0 0 8px;">A code_verifier at /oauth/token when no code_challenge was sent: invalid_grant.</li>
+                </ul>
+                <p style="margin: 0 0 14px; font-size: 16px; color: #000">
+                  Apps that send PKCE correctly, or not at all, are unaffected.
+                </p>
+                <p style="margin: 0 0 10px; font-size: 16px; color: #000">
+                  How to use it: mobile, desktop and browser apps can’t keep a secret. Mark the app as non-confidential at <a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://visualizer.coffee/oauth/applications">visualizer.coffee/oauth/applications</a> and use PKCE:
+                </p>
+                <ol style="margin: 0 0 14px 20px; padding: 0; font-size: 16px; color: #000">
+                  <li style="margin: 0 0 8px;">Generate a random code_verifier (43–128 characters, per RFC 7636) for every sign-in.</li>
+                  <li style="margin: 0 0 8px;">Compute code_challenge = BASE64URL(SHA256(code_verifier)), without padding.</li>
+                  <li style="margin: 0 0 8px;">Send code_challenge and code_challenge_method=S256 to https://visualizer.coffee/oauth/authorize.</li>
+                  <li style="margin: 0 0 8px;">Send code_verifier with client_id, code, redirect_uri and grant_type=authorization_code to https://visualizer.coffee/oauth/token. Non-confidential apps send no client secret.</li>
+                </ol>
+                <p style="margin: 0 0 14px; font-size: 16px; color: #000">
+                  Most OAuth client libraries do this with a single setting.
+                </p>
+                <p style="margin: 0 0 10px; font-size: 16px; color: #000">
+                  More details:
+                </p>
+                <ul style="margin: 0 0 14px 20px; padding: 0; font-size: 16px; color: #000">
+                  <li style="margin: 0 0 8px;"><a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://apidocs.visualizer.coffee">Visualizer API docs</a> (you can try the PKCE sign-in there)</li>
+                  <li style="margin: 0 0 8px;"><a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://doorkeeper.gitbook.io/guides/ruby-on-rails/pkce-flow">Doorkeeper PKCE guide</a></li>
+                  <li style="margin: 0 0 8px;"><a class="hover-no-underline" target="_blank" style="color: #db3e27; text-decoration-line: underline" href="https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-PKCE-flow">Doorkeeper wiki: Using PKCE flow</a></li>
+                </ul>
+                <p style="margin: 0 0 10px; font-size: 16px; color: #000">
+                  Heads-up for later: we’ll move to Doorkeeper 6 once it’s released. To be ready:
+                </p>
+                <ul style="margin: 0 0 14px 20px; padding: 0; font-size: 16px; color: #000">
+                  <li style="margin: 0 0 8px;">Send client_id and client_secret in the request body or via HTTP Basic, never in the query string.</li>
+                  <li style="margin: 0 0 8px;">Make redirect_uri match a registered URI exactly.</li>
+                  <li style="margin: 0 0 8px;">Don’t use urn:ietf:wg:oauth:2.0:oob.</li>
+                </ul>
+                <p style="margin: 0 0 14px; font-size: 16px; color: #000">
+                  Questions, or something broke? Just reply to this email.
+                </p>
+                <p style="margin: 0; font-size: 16px; color: #000">
+                  Thanks for building on Visualizer!<br>
+                  Miha
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

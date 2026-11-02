@@ -28,6 +28,12 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "Visualizer Premium Feedback"
   end
 
+  def oauth_pkce
+    @user = params[:user]
+    @applications = @user.oauth_applications.order(:name)
+    mail to: @user.email, subject: "PKCE support for your Visualizer OAuth app"
+  end
+
   def airtable_base_full
     @user = params[:user]
     mail to: @user.email, subject: "Your Airtable base is full"

@@ -45,6 +45,17 @@ class UserMailerTest < ActionMailer::TestCase
     assert_nil document.at_css("a[href*='autumn-cleaning']")
   end
 
+  test "oauth pkce email goes to the app owner and links the PKCE guide" do
+    user = create(:user)
+    Doorkeeper::Application.create!(name: "Coffee Companion", owner: user, redirect_uri: "https://example.com/callback")
+    email = UserMailer.with(user:).oauth_pkce
+
+    assert_equal [user.email], email.to
+    assert_equal "PKCE support for your Visualizer OAuth app", email.subject
+    assert_includes email.body.to_s, "Coffee Companion"
+    assert_includes email.body.to_s, "https://doorkeeper.gitbook.io/guides/ruby-on-rails/pkce-flow"
+  end
+
   test "newsletter is not delivered to opted out users" do
     user = create(:user, unsubscribed_from: ["newsletter"])
 

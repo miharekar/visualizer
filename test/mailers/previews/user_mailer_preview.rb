@@ -15,6 +15,11 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.with(user:).newsletter
   end
 
+  def oauth_pkce
+    user = User.where(id: Doorkeeper::Application.select(:owner_id)).first
+    UserMailer.with(user:).oauth_pkce
+  end
+
   %i[black_friday cancelled_premium upcoming_renewal airtable_base_full].each do |email|
     define_method(email) do
       user = User.order("RANDOM()").first
