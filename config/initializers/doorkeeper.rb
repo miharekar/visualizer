@@ -3,6 +3,21 @@ Doorkeeper.configure do
   # Check the list of supported ORMs here: https://github.com/doorkeeper-gem/doorkeeper#orms
   orm :active_record
 
+  # Enable support for multiple database configurations with read replicas.
+  # When enabled, Doorkeeper will wrap database write operations to ensure they
+  # use the primary (writable) database when automatic role switching is enabled.
+  #
+  # For ActiveRecord (Rails 6.1+), this uses `ActiveRecord::Base.connected_to(role: :writing)`.
+  # Other ORM extensions can implement their own primary database targeting logic.
+  #
+  # enable_multiple_database_roles
+  #
+  # This prevents `ActiveRecord::ReadOnlyError` when using read replicas with Rails
+  # automatic role switching. Enable this if your application uses multiple databases
+  # with automatic role switching for read replicas.
+  #
+  # See: https://guides.rubyonrails.org/active_record_multiple_databases.html#activating-automatic-role-switching
+
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     Current.session = Session.find_by(id: cookies.signed[:session_id])
@@ -16,7 +31,7 @@ Doorkeeper.configure do
   # file then you need to declare this block in order to restrict access to the web interface for
   # adding oauth authorized applications. In other case it will return 403 Forbidden response
   # every time somebody will try to access the admin web interface.
-
+  #
   admin_authenticator do
     Current.session = Session.find_by(id: cookies.signed[:session_id])
     next true if Current.user&.developer?
@@ -90,7 +105,7 @@ Doorkeeper.configure do
   # It is RECOMMENDED to set expiration time explicitly.
   # Prefer access_token_expires_in 100.years or similar,
   # which would be functionally equivalent and avoid the risk of unexpected behavior by callers.
-
+  #
   access_token_expires_in 1.week
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
@@ -119,7 +134,7 @@ Doorkeeper.configure do
   # Defaults to +ActionController::Base+ unless +api_only+ is set, which changes the default to
   # +ActionController::API+. The return value of this option must be a stringified class name.
   # See https://doorkeeper.gitbook.io/guides/configuration/other-configurations#custom-controllers
-
+  #
   base_controller "ApplicationController"
 
   # Reuse access token for the same resource owner within an application (disabled by default).
@@ -224,7 +239,7 @@ Doorkeeper.configure do
   # `client` - the OAuth client application (see Doorkeeper::OAuth::Client)
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
-
+  #
   use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
@@ -232,13 +247,13 @@ Doorkeeper.configure do
   # a registered application
   # NOTE: you must also run the rails g doorkeeper:application_owner generator
   # to provide the necessary support
-
+  #
   enable_application_owner confirmation: false
 
   # Define access token scopes for your provider
   # For more information go to
   # https://doorkeeper.gitbook.io/guides/ruby-on-rails/scopes
-
+  #
   default_scopes :read
   optional_scopes :upload, :write
 
@@ -262,6 +277,14 @@ Doorkeeper.configure do
   # falls back to the `:client_id` and `:client_secret` params from the `params` object.
   # Check out https://github.com/doorkeeper-gem/doorkeeper/wiki/Changing-how-clients-are-authenticated
   # for more information on customization
+  #
+  # NOTE: configuring a callable extractor opts the request out of the RFC 6749
+  # §2.3 checks that reject a request authenticating the client with more than
+  # one method, or presenting more than one client identity. A callable may
+  # legitimately overlap the built-in extractors, and the extractors after the
+  # matching one are never called, so what they would have returned is unknown.
+  # Prefer the symbol extractors unless you need something they cannot express;
+  # a callable has to reject such a request itself.
   #
   # client_credentials :from_basic, :from_params
 
@@ -288,10 +311,13 @@ Doorkeeper.configure do
   # Specify what redirect URI's you want to block during Application creation.
   # Any redirect URI is allowed by default.
   #
-  # You can use this option in order to forbid URI's with 'javascript' scheme
+  # Redirect URIs with a script scheme (`javascript`, `vbscript`, `data`) are
+  # always rejected, regardless of this option.
+  #
+  # You can use this option in order to forbid URI's of a particular host
   # for example.
   #
-  # forbid_redirect_uri { |uri| uri.scheme.to_s.downcase == 'javascript' }
+  # forbid_redirect_uri { |uri| uri.host == 'example.com' }
 
   # Allows to set blank redirect URIs for Applications in case Doorkeeper configured
   # to use URI-less OAuth grant flows like Client Credentials or Resource Owner
