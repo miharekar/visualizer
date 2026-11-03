@@ -75,4 +75,8 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "journal screenshot keeps the digest the Bending Tables update links to" do
+    assert_equal "/assets/premium/journal-e66df470.png", ActionController::Base.helpers.asset_path("premium/journal.png"), "The Bending Tables update and the Journal newsletter link to this exact file, so add new screenshots under a new name"
+  end
 end
