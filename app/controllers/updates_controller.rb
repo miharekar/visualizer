@@ -13,7 +13,7 @@ class UpdatesController < ApplicationController
 
   def feed
     @updates = Update.with_rich_text_body_and_embeds.order(published_at: :desc).limit(20)
-    render formats: :rss
+    render formats: :rss if stale?(etag: @updates)
   end
 
   def show

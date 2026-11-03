@@ -59,4 +59,20 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
     assert_equal ["#{request.base_url}/premium#journal", "#{update_url(@update.slug)}#fn:1", "https://example.org/x", "mailto:a@b.co"], body.css("a").pluck("href")
     assert_equal "#{request.base_url}/assets/premium/journal.png", body.at_css("img")["src"]
   end
+
+  test "feed is only rendered again after an update changes" do
+    get feed_updates_url(format: :rss)
+    etag = response.etag
+    ActiveRecord::Base.connection.clear_query_cache
+
+    assert_no_queries_match(/action_text_rich_texts/) do
+      get feed_updates_url(format: :rss), headers: {"If-None-Match" => etag}
+    end
+    assert_response :not_modified
+
+    @update.update!(body: "<p>After</p>")
+    get feed_updates_url(format: :rss), headers: {"If-None-Match" => etag}
+
+    assert_response :success
+  end
 end
