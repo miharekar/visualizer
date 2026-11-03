@@ -46,4 +46,17 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
     assert_select "lexxy-editor[attachments='true']"
     assert_includes response.body, image_url
   end
+
+  test "feed carries the full body with absolute links" do
+    @update.update!(body: %(<p><a href="/premium#journal">a</a> <a href="#fn:1">b</a> <a href="https://example.org/x">c</a> <a href="mailto:a@b.co">d</a></p><img src="/assets/premium/journal.png">))
+
+    get feed_updates_url(format: :rss)
+
+    assert_response :success
+    encoded = Nokogiri::XML(response.body).at_xpath("//item/content:encoded", "content" => "http://purl.org/rss/1.0/modules/content/")
+    body = Nokogiri::HTML5.fragment(encoded.text)
+
+    assert_equal ["#{request.base_url}/premium#journal", "#{update_url(@update.slug)}#fn:1", "https://example.org/x", "mailto:a@b.co"], body.css("a").pluck("href")
+    assert_equal "#{request.base_url}/assets/premium/journal.png", body.at_css("img")["src"]
+  end
 end
