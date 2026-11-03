@@ -3,7 +3,7 @@ xml.rss version: "2.0" do
   xml.channel do
     xml.title "Shots by #{@user.display_name}"
     xml.description "These are the latest shots by #{@user.display_name}."
-    xml.link feed_person_url(@user, format: :rss)
+    xml.link person_url(@user.slug)
     xml.lastBuildDate @shots.first.start_time.rfc822 if @shots.present? && !@user.hide_shot_times?
 
     @shots.each do |shot|

@@ -3,7 +3,7 @@ xml.rss version: "2.0", "xmlns:content" => "http://purl.org/rss/1.0/modules/cont
   xml.channel do
     xml.title "Visualizer Updates"
     xml.description "These are the latest updates from Visualizer"
-    xml.link feed_updates_url
+    xml.link updates_url
     xml.lastBuildDate @updates.first.published_at.rfc822
     xml.tag! "atom:link", href: feed_updates_url(format: "rss"), rel: "self", type: "application/rss+xml"
 
