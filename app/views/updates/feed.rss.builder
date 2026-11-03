@@ -4,7 +4,7 @@ xml.rss version: "2.0", "xmlns:content" => "http://purl.org/rss/1.0/modules/cont
     xml.title "Visualizer Updates"
     xml.description "These are the latest updates from Visualizer"
     xml.link updates_url
-    xml.lastBuildDate @updates.first.published_at.rfc822
+    xml.lastBuildDate @updates.first.published_at.rfc822 if @updates.present?
     xml.tag! "atom:link", href: feed_updates_url(format: "rss"), rel: "self", type: "application/rss+xml"
 
     @updates.each do |update|
