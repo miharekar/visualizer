@@ -155,4 +155,5 @@ Rails.application.routes.draw do
   match "/500", to: "errors#internal_server_error", via: :all
   match "/503", to: "errors#service_unavailable", via: :all
   get "/up" => "rails/health#show", :as => :rails_health_check
+  get "/up/db" => "health#show", :as => :db_health_check
 end
