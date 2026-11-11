@@ -16,7 +16,7 @@ pin "highcharts" # @13.1.1
 pin "highcharts/highcharts-more", to: "highcharts--highcharts-more.js" # @13.1.1
 pin "highcharts/modules/annotations", to: "highcharts--modules--annotations.js" # @13.1.1
 pin "https" # @2.1.0
-pin "match-sorter" # @8.3.0
+pin "match-sorter" # @8.3.1
 pin "remove-accents" # @0.5.0
 pin "stimulus-autocomplete" # @3.1.0
 pin "tslib" # @2.9.1
