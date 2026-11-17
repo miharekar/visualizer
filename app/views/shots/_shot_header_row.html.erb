@@ -21,32 +21,24 @@
         </h1>
         <div class="min-w-2 grow"></div>
         <div class="lg:max-w-1/2">
-          <div class="mt-3 flex items-center lg:mt-0">
-            <%= render "share" %>
-            <%= render "related_shots", related_shots: @related_shots, shot: @shot if @related_shots.present? %>
+          <div class="mt-3 flex flex-col sm:flex-row sm:items-center lg:mt-0">
+            <div class="flex items-center">
+              <%= render "copy_url" %>
+              <%= render "share" %>
+            </div>
+            <% if @related_shots.present? %>
+              <div class="mt-3 flex sm:mt-0 sm:flex-1">
+                <%= render "related_shots", related_shots: @related_shots, shot: @shot %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
     <% else %>
       <div class="flex min-w-full flex-col items-center sm:flex-row">
         <div class="flex items-center">
+          <%= render "copy_url" %>
           <% if owner %>
-            <div id="clipboard-success" class="hidden">
-              <%= render Notification.new(type: :default, heading: "URL copied to clipboard", timeout: 3000) %>
-            </div>
-            <div class="mr-3 flex" data-controller="clipboard">
-              <input class="hidden" size="1" type="text" value="<%= request.url %>" readonly data-clipboard-target="source" autocomplete="off">
-              <a class="inline-flex cursor-pointer rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900" data-action="clipboard#copy" href="#" title="Copy URL to clipboard" data-clipboard-target="container">
-                <svg class="-mr-1 -ml-1 size-4 text-neutral-500 dark:text-neutral-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="copy">
-                  <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                  <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                </svg>
-                <svg class="text-terracotta-500 dark:text-terracotta-300 -mr-1 -ml-1 hidden size-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-clipboard-target="check">
-                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                  <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            </div>
             <div class="mr-3">
               <a class="inline-flex cursor-pointer rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm shadow-sm hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:hover:bg-neutral-900" href="<%= edit_shot_path %>">
                 <%= inline_svg_tag "pencil.svg", class: "-mr-1 -ml-1 size-4 text-neutral-500 dark:text-neutral-300" %>

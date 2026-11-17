@@ -79,6 +79,48 @@ class ShotsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Comparison"
   end
 
+  test "compare renders the copy URL button for signed-in and signed-out viewers" do
+    comparison = create(:shot, user: @user, duration: 30)
+    url = "#{shot_url(@shot)}/compare/#{comparison.id}"
+
+    get url
+    assert_select "[data-controller='clipboard'] input[value='#{url}']"
+
+    delete session_url
+    get url
+    assert_response :success
+    assert_select "[data-controller='clipboard'] input[value='#{url}']"
+  end
+
+  test "show renders the copy URL button for every viewer" do
+    public_shot = create(:shot, user: create(:user, :public), public: true)
+    private_shot = create(:shot, user: create(:user), public: true)
+
+    assert_copy_url = lambda do |shot|
+      get shot_url(shot)
+      assert_response :success
+      assert_select "[data-controller='clipboard'] input[value='#{shot_url(shot)}']", count: 1
+      assert_select "#clipboard-success", count: 1
+    end
+
+    [@shot, public_shot, private_shot].each(&assert_copy_url)
+
+    delete session_url
+    [public_shot, private_shot].each(&assert_copy_url)
+  end
+
+  test "edit and delete stay owner-only" do
+    other_shot = create(:shot, user: create(:user), public: true)
+
+    get shot_url(@shot)
+    assert_select "a[href='#{edit_shot_path(@shot)}']"
+    assert_select "form[action='#{shot_path(@shot)}'] input[name='_method'][value='delete']"
+
+    get shot_url(other_shot)
+    assert_select "a[href='#{edit_shot_path(other_shot)}']", count: 0
+    assert_select "form[action='#{shot_path(other_shot)}']", count: 0
+  end
+
   test "compare select lists the viewer's shots, not the owner's" do
     owner = create(:user)
     owner_shot = create(:shot, user: owner)
