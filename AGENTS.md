@@ -41,7 +41,7 @@ bin/ci                                  # CI pipeline (style, security, tests, s
 env RAILS_ENV=test bin/rails db:seed:replant # must pass in CI
 ```
 
-`bin/ci` runs: bin/setup --skip-server, RuboCop, bundler-audit, importmap audit, Brakeman, Gitleaks audit, Rails tests, JavaScript tests, and `db:seed:replant`.
+`bin/ci` runs: bin/setup --skip-server, RuboCop, bundler-audit, importmap audit, Brakeman, Betterleaks audit, Rails tests, JavaScript tests, and `db:seed:replant`.
 Use `PARALLEL_WORKERS=10` for Rails test runs and `bin/ci`; default CPU-count parallelism can exhaust local Postgres connections.
 Parser fixtures for upload/tests live in `test/files/`.
 
@@ -63,7 +63,7 @@ bin/rubocop            # rubocop-rails-omakase baseline
 bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error
 bin/bundler-audit
 bin/importmap audit
-bin/gitleaks-audit
+bin/betterleaks-audit
 bin/rails tailwindcss:watch # usually handled by bin/dev
 ```
 
@@ -163,7 +163,7 @@ bin/ci                 # full CI pipeline
 - When adding Airtable table fields, update the Airtable metadata factory stub in `test/factories/airtable_infos.rb` so tests do not issue unstubbed field-creation requests.
 - When adding attributes to Airtable-synced models (`Airtablable`), also update the corresponding mapper under `app/models/airtable/` (for example `STANDARD_FIELDS` and `FIELD_OPTIONS`) so sync stays bidirectional. Rich text notes are the deliberate exception: they sit in `OUTBOUND_ONLY_FIELDS` and are pushed to Airtable as plain text, but edits made in Airtable are never synced back.
 - Keep secrets in `.env`/Rails credentials or `.mise.toml`; never commit keys or S3/Lemon Squeezy secrets.
-- When touching auth/billing/dependencies, run `bin/ci` or at least RuboCop + security checks (Brakeman, Bundler Audit, Importmap audit, Gitleaks).
+- When touching auth/billing/dependencies, run `bin/ci` or at least RuboCop + security checks (Brakeman, Bundler Audit, Importmap audit, Betterleaks).
 
 ## Coding style guidelines
 

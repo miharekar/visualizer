@@ -1,0 +1,6 @@
+prefilter = '''
+matchesAny(attributes["path"], [`(?:^|/)(?:\.git|log|tmp)/|^(?:\./)?storage/`])
+'''
+
+[extend]
+useDefault = true

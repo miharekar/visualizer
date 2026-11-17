@@ -4,7 +4,7 @@ import Appsignal from "@appsignal/javascript"
 import { installErrorHandler } from "@appsignal/stimulus"
 
 const isProduction = document.documentElement.dataset.environment === "production"
-const appsignal = new Appsignal({ key: isProduction ? "cc9d5ef7-ee02-49a4-8645-fde2bb614bc5" : null }) // gitleaks:allow
+const appsignal = new Appsignal({ key: isProduction ? "cc9d5ef7-ee02-49a4-8645-fde2bb614bc5" : null })
 const application = Application.start()
 installErrorHandler(appsignal, application)
 application.register("autocomplete", Autocomplete)

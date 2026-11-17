@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if ! which betterleaks > /dev/null 2>&1 ; then
+  echo "betterleaks is not installed, please install it first" 1>&2
+  exit 1
+fi
+
+mkdir -p tmp
+if ! betterleaks fs . --config .betterleaks.toml --redact=50 --validate=false --analyze=false -o tmp/betterleaks-report.json ; then
+  echo "betterleaks found potential secrets, please check tmp/betterleaks-report.json" 1>&2
+  exit 1
+fi
+
+exit 0
