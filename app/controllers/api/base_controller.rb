@@ -35,11 +35,25 @@ module Api
 
     def session_from_basic
       authenticate_with_http_basic do |email, password|
-        user = User.authenticate_by(email: email.downcase, password:)
+        user = basic_auth_user(email, password)
         next unless user
 
         Session.new(user:)
       end
+    end
+
+    def basic_auth_user(email, password)
+      user = User.find_by(email:)
+      return user if user && Rails.cache.exist?(basic_auth_cache_key(user, password))
+
+      user = User.authenticate_by(email:, password:)
+      Rails.cache.write(basic_auth_cache_key(user, password), true, expires_in: 1.hour) if user
+      user
+    end
+
+    def basic_auth_cache_key(user, password)
+      digest = OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, "#{user.id}:#{user.password_digest}:#{password}")
+      "api-basic-auth/#{digest}"
     end
 
     def verify_read_access
