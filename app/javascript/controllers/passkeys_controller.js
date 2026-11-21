@@ -29,7 +29,7 @@ export default class extends Controller {
     } catch (error) {
       if (this.duplicateRegistrationError(error)) return this.showNotification("passkey-already-registered")
       if (this.expectedWebAuthnError(error)) return
-      if (this.expectedPasskeyRequestError(error)) return this.showNotification("passkey-error")
+      if (this.expectedPasskeyRequestError(error) || this.credentialManagerError(error)) return this.showNotification("passkey-error")
       appsignal.sendError(error)
       console.error("Passkey registration failed", error)
       this.showNotification("passkey-error")
@@ -72,7 +72,7 @@ export default class extends Controller {
       if (res?.redirect_to) window.location.href = res.redirect_to
     } catch (error) {
       if (this.expectedWebAuthnError(error)) return
-      if (this.expectedPasskeyRequestError(error)) return this.showNotification("passkey-error")
+      if (this.expectedPasskeyRequestError(error) || this.credentialManagerError(error)) return this.showNotification("passkey-error")
 
       appsignal.sendError(error)
       console.error("Passkey sign-in failed", error)
@@ -131,6 +131,10 @@ export default class extends Controller {
 
   expectedPasskeyRequestError(error) {
     return error?.name === "PasskeyRequestError"
+  }
+
+  credentialManagerError(error) {
+    return error?.name === "NotReadableError"
   }
 
   duplicateRegistrationError(error) {
