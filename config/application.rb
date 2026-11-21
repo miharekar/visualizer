@@ -2,6 +2,7 @@ require_relative "boot"
 require_relative "../lib/bad_request_middleware"
 require_relative "../lib/cloudflare_remote_ip"
 require_relative "../lib/extensions/ip_addr"
+require_relative "../lib/legacy_multipart_content_type"
 
 require "rails/all"
 
@@ -34,6 +35,7 @@ module Visualizer
     config.log_tags = %i[request_id remote_ip]
     config.middleware.insert_after ActionDispatch::RemoteIp, CloudflareRemoteIp
     config.middleware.insert_before Rack::MethodOverride, BadRequestMiddleware
+    config.middleware.insert_before BadRequestMiddleware, LegacyMultipartContentType
     config.mission_control.jobs.http_basic_auth_enabled = false
 
     initializer "hotcell.variant_transformer", after: "active_storage.configs" do

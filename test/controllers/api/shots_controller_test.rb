@@ -538,6 +538,17 @@ module Api
       assert_equal user.id, shot.user_id
     end
 
+    test "upload accepts multipart content type with comma separated parameters" do
+      boundary = "--------1763700000"
+      file_content = Rails.root.join("test/files/20210921T085910.shot").read
+      body = "--#{boundary}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"file.shot\"\r\nContent-Type: application/octet-stream\r\n\r\n#{file_content}\r\n--#{boundary}--\r\n"
+
+      post upload_api_shots_url, headers: auth_headers(user).merge("Content-Type" => "multipart/form-data, charset=utf-8, boundary=#{boundary}"), params: body
+
+      assert_response :success
+      assert_equal user.id, Shot.find(response.parsed_body["id"]).user_id
+    end
+
     test "upload accepts JSON POST with raw body" do
       file_content = JSON.parse(Rails.root.join("test/files/beanconqueror.json").read)
 
