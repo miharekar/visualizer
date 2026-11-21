@@ -16,6 +16,29 @@ class CommunityControllerTest < ActionDispatch::IntegrationTest
     }, response.parsed_body)
   end
 
+  test "autocomplete directs JSON requests to the API documentation" do
+    user = create(:user, public: true, name: "Zebra Brewer")
+
+    get autocomplete_community_index_url(filter: :user, q: user.name, format: :json)
+
+    assert_response :not_acceptable
+    assert_equal "application/json", response.media_type
+    assert_equal({
+      "error" => "This is not an API endpoint.",
+      "api_docs" => "https://apidocs.visualizer.coffee"
+    }, response.parsed_body)
+  end
+
+  test "autocomplete renders HTML for stimulus-autocomplete" do
+    user = create(:user, public: true, name: "Zebra Brewer")
+
+    get autocomplete_community_index_url(filter: :user, q: "zebra"), headers: {"Accept" => "*/*", "X-Requested-With" => "XMLHttpRequest"}
+
+    assert_response :success
+    assert_equal "text/html", response.media_type
+    assert_select "li[role=option][data-autocomplete-value='#{user.id}']", text: /Zebra Brewer/
+  end
+
   test "index renders HTML search with wildcard accept" do
     shot = create(:shot, public: true)
 

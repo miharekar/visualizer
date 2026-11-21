@@ -28,7 +28,11 @@ class CommunityController < ApplicationController
 
     @filter = params[:filter].to_sym
     @values = values_for_query(@filter, params[:q])
-    render layout: false
+
+    respond_to do |format|
+      format.html { render layout: false }
+      format.json { render_api_endpoint_error }
+    end
   end
 
   def trending
